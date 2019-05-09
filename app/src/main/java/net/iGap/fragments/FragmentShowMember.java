@@ -22,13 +22,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -36,6 +39,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddModerator;
@@ -51,6 +55,7 @@ import net.iGap.interfaces.OnGroupGetMemberList;
 import net.iGap.interfaces.OnGroupKickAdmin;
 import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupKickModerator;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -81,7 +86,6 @@ import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -89,10 +93,11 @@ import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
+import static net.iGap.G.context;
 import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin, OnGroupKickAdmin, OnGroupAddModerator, OnGroupKickModerator, OnGroupKickMember, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelAddModerator, OnChannelKickModerator, OnChannelKickMember {
+public class FragmentShowMember extends BaseFragment implements  ToolbarListener , OnGroupAddAdmin, OnGroupKickAdmin, OnGroupAddModerator, OnGroupKickModerator, OnGroupKickMember, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelAddModerator, OnChannelKickModerator, OnChannelKickMember {
 
     public static final String ROOMIDARGUMENT = "ROOMID_ARGUMENT";
     public static final String MAINROOL = "MAIN_ROOL";
@@ -123,6 +128,10 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
     private boolean isDeleteMemberList = true;
     private ProtoGlobal.Room.Type roomType;
     private boolean isOne = true;
+
+    private HelperToolbar mHelperToolbar;
+    private TextView mBtnAdd ;
+
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         Bundle bundle = new Bundle();
@@ -172,6 +181,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
 
         if (getArguments() != null) {
 
+
             view.findViewById(R.id.rootShowMember).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -185,6 +195,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
             selectedRole = getArguments().getString(SELECTEDROLE);
             //isNeedGetMemberList = getArguments().getBoolean(ISNEEDGETMEMBERLIST);
             isNeedGetMemberList = true;
+            Log.i("iGap", "onCreateView: hi"+selectedRole);
 
             roomType = RealmRoom.detectType(mRoomID);
 
@@ -205,6 +216,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                     }, 100);
                 }
             }
+
         }
     }
 
@@ -403,8 +415,54 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
 
     private void initComponent(View view) {
 
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setLogoShown(true)
+                .setSearchBoxShown(true)
+                .setListener(this);
+
+        LinearLayout layoutToolbar = view.findViewById(R.id.fcm_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
+
+        mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
+
+        //change toolbar title and set Add button text
+        if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())){
+
+            mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.member));
+            mBtnAdd.setVisibility(View.GONE);
+            view.findViewById(R.id.fcm_splitter_add).setVisibility(View.GONE);
+
+        } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())){
+
+            mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.list_admin));
+            mBtnAdd.setText(context.getResources().getString(R.string.add_admin));
+
+        } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())){
+
+            mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.list_modereator));
+            mBtnAdd.setText(context.getResources().getString(R.string.add_modereator));
+
+        }
+
+        mBtnAdd.setOnClickListener( v -> {
+
+          if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())
+                  || selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())){
+
+              openFragmentForAdd(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
+
+          }else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())){
+
+              //share link
+          }
+
+
+        });
+
         final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.member_txt_titleToolbar);
-        final EditText edtSearch = (EditText) view.findViewById(R.id.menu_edt_search);
+        final EditText edtSearch = mHelperToolbar.getEditTextSearch();
         final RippleView txtClose = (RippleView) view.findViewById(R.id.menu_ripple_search);
         final RippleView txtSearch = (RippleView) view.findViewById(R.id.member_edtSearch);
 
@@ -606,6 +664,38 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
 
     @Override
     public void onTimeOut() {
+
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        popBackStackFragment();
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+
+        mHelperToolbar.setSearchEditableMode(true);
+        openKeyBoard();
+
+    }
+
+    private void openFragmentForAdd(String SelectedRole) {
+        FragmentShowMember fragment1 = FragmentShowMember.newInstance1(fragment, mRoomID, role.toString(), G.userId, SelectedRole, true);
+        new HelperFragment(fragment1).setReplace(false).load(false);
+    }
+
+
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+
+        if (mHelperToolbar.getEditTextSearch().getText().toString().trim().length() > 0){
+            mHelperToolbar.getEditTextSearch().setText("");
+        }else {
+            InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            mHelperToolbar.setSearchEditableMode(false);
+        }
 
     }
 
@@ -1208,4 +1298,5 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
             }
         }
     }
+
 }
