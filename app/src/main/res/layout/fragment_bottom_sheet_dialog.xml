@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="bottomSheetViewModel"
             type="net.iGap.dialog.bottomsheet.BottomSheetViewModel" />
@@ -23,17 +24,28 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent=".34" />
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/bottomSheetList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
     </android.support.constraint.ConstraintLayout>
 
