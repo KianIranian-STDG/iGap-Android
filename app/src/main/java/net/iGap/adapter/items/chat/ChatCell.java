@@ -52,7 +52,7 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
-         * init avatar image
+         * init avatar userAvatarIv
          * */
         CircleImageView avatarImageView = new CircleImageView(G.context);
         avatarImageView.setId(R.id.iv_chatCell_userAvatar);
@@ -61,7 +61,7 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
-         * init chat icon(channel,group,pv,mute and unMute)
+         * init chat icon(channel,group,pv,muteRoomTv and unMute)
          * */
         MaterialDesignTextView chatIcon = new MaterialDesignTextView(G.context);
         chatIcon.setId(R.id.tv_chatCell_chatIcon);
@@ -71,7 +71,7 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
-         * init room name
+         * init room roomNameTv
          * */
         EmojiTextViewE roomName = new EmojiTextViewE(G.context);
         roomName.setId(R.id.tv_chatCell_roomName);
@@ -93,7 +93,7 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
-         * init last message sender name
+         * init last message sender roomNameTv
          * drafts
          * you
          *
@@ -126,7 +126,7 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
-         * init last message content type (image,file,voice)
+         * init last message content type (userAvatarIv,file,voice)
          * sticker
          * photo caption
          * gif caption

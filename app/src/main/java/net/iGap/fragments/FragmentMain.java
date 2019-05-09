@@ -16,12 +16,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,7 +35,6 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -75,7 +72,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -94,13 +90,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.realm.ObjectChangeSet;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollection;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
-import io.realm.RealmModel;
-import io.realm.RealmObjectChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -225,7 +218,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     private void initRecycleView() {
 
         if (mView != null) {
-            mRecyclerView = (RecyclerView) mView.findViewById(R.id.cl_recycler_view_contact);
+            mRecyclerView = mView.findViewById(R.id.cl_recycler_view_contact);
             // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
             mRecyclerView.setItemAnimator(null);
             mRecyclerView.setItemViewCacheSize(0);
@@ -381,11 +374,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - G.latestHearBeatTime);
 
-        if (difference >= Config.HEART_BEAT_CHECKING_TIME_OUT) {
-            return true;
-        }
+        return difference >= Config.HEART_BEAT_CHECKING_TIME_OUT;
 
-        return false;
     }
 
     //***************************************************************************************************************************
@@ -567,10 +557,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     //}
 
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
-        if (realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded()) {
-            return true;
-        }
-        return false;
+        return realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded();
     }
 
     //fastAdapter
@@ -738,11 +725,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         }
 
 
-        if (roomList.size() == 0) {
-            isThereAnyMoreItemToLoad = false;
-        } else {
-            isThereAnyMoreItemToLoad = true;
-        }
+        isThereAnyMoreItemToLoad = roomList.size() != 0;
 
         putChatToDatabase(roomList);
 
@@ -1080,11 +1063,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
             final boolean isMyCloud;
 
-            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId) {
-                isMyCloud = true;
-            } else {
-                isMyCloud = false;
-            }
+            isMyCloud = mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId;
 
             if (mInfo.isValid()) {
 
@@ -1092,42 +1071,13 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
                 if (isMyCloud) {
 
-                    if (holder.txtCloud == null) {
+                    // TODO: 5/9/19 add cloud svg
+                    holder.image.setImageDrawable(getResources().getDrawable(R.drawable.bank_dey_pec));
 
-                        MaterialDesignTextView cs_txt_contact_initials = new MaterialDesignTextView(context);
-                        cs_txt_contact_initials.setId(R.id.cs_txt_contact_initials);
-                        cs_txt_contact_initials.setGravity(Gravity.CENTER);
-                        cs_txt_contact_initials.setText(context.getResources().getString(R.string.md_cloud));
-                        if (G.isDarkTheme) {
-                            cs_txt_contact_initials.setTextColor(Color.parseColor(G.textSubTheme));
-                        } else {
-                            cs_txt_contact_initials.setTextColor(Color.parseColor("#ad333333"));
-                        }
-
-                        ViewMaker.setTextSize(cs_txt_contact_initials, R.dimen.dp32);
-                        LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), i_Dp(R.dimen.dp52));
-                        layout_936.gravity = Gravity.CENTER;
-                        layout_936.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
-                        cs_txt_contact_initials.setVisibility(View.GONE);
-                        cs_txt_contact_initials.setLayoutParams(layout_936);
-
-                        holder.txtCloud = cs_txt_contact_initials;
-
-                        holder.rootChat.addView(cs_txt_contact_initials, 0);
-                    }
-
-                    holder.txtCloud.setVisibility(View.VISIBLE);
-                    holder.image.setVisibility(View.GONE);
                 } else {
-
-                    if (holder.txtCloud != null) {
-                        holder.txtCloud.setVisibility(View.GONE);
-                    }
-
                     if (holder.image.getVisibility() == View.GONE) {
                         holder.image.setVisibility(View.VISIBLE);
                     }
-
                     setAvatar(mInfo, holder);
                 }
 
@@ -1154,19 +1104,13 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                  */
 
                 if (mInfo.isPinned()) {
-//                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
-
-                    //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
-
                     if (mInfo.isFromPromote()) {
-                        //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
                         holder.txtPinIcon.setVisibility(View.VISIBLE);
                     }
 
                 } else {
-//                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme));
                     holder.txtPinIcon.setVisibility(View.GONE);
                 }
 
@@ -1179,21 +1123,14 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                     holder.txtPinIcon.setVisibility(View.GONE);
                     holder.txtUnread.getTextView().setText(mInfo.getUnreadCount() + "");
 
-//                    if (HelperCalander.isPersianUnicode) {
                     holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
-//                    } else {
-//                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
-//                    }
 
                     if (mInfo.getMute()) {
-//                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
                         holder.txtUnread.setBadgeColor(getResources().getColor(R.color.gray_9d));
                     } else {
                         if (G.isDarkTheme) {
-//                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(Theme.default_notificationColor));
                             holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         } else {
-//                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
                             holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         }
                     }
@@ -1214,18 +1151,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 holder.txtUnread.getTextView().setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getTextView().getText().toString()));
             }
         }
-
-
-   /*     private boolean isBot(long userId) {
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), userId);
-            if (realmRegisteredInfo != null) {
-                if (realmRegisteredInfo.isBot()) {
-                    return true;
-                } else
-                    return false;
-            } else
-                return false;
-        }*/
 
 
         private String subStringInternal(String text) {
@@ -1261,12 +1186,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(mInfo.getDraft().getMessage());
                 holder.txtLastMessage.setText(subStringInternal(AbstractMessage.removeBoldMark(mInfo.getDraft().getMessage(), boldPlaces)));
                 holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
-
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
                 holder.lastMessageSender.setTextColor(getResources().getColor(R.color.red));
-//                holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
-
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
 
@@ -1330,21 +1252,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                             _type = mInfo.getLastMessage().getMessageType();
                             String fileText = mInfo.getLastMessage().getMessage();
 
-                            //don't use from reply , in reply message just get type and fileText from main message
-                            //try {
-                            //    if (mInfo.getLastMessage().getReplyTo() != null) {
-                            //        tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
-                            //        if (tmp != null) {
-                            //            _type = tmp;
-                            //        }
-                            //        //if (mInfo.getLastMessage().getReplyTo().getMessage() != null) {
-                            //        //    fileText = mInfo.getLastMessage().getReplyTo().getMessage();
-                            //        //}
-                            //    }
-                            //} catch (NullPointerException e) {
-                            //    e.printStackTrace();
-                            //}
-                            //
                             try {
                                 if (mInfo.getLastMessage().getForwardMessage() != null) {
                                     tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
@@ -1479,7 +1386,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             protected EmojiTextViewE name;
             protected MaterialDesignTextView mute;
             protected RealmRoom mInfo;
-            private ViewGroup rootChat;
             private EmojiTextViewE txtLastMessage;
             private EmojiTextViewE txtLastMessageFileText;
             private MaterialDesignTextView txtChatIcon;
@@ -1489,7 +1395,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             private BadgeView txtUnread;
             private EmojiTextViewE lastMessageSender;
             private ImageView txtTic;
-            private MaterialDesignTextView txtCloud;
 
 
             public ViewHolder(View view) {
@@ -1498,32 +1403,27 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 /**
                  * user avatar image
                  * */
-                image = (CircleImageView) view.findViewById(R.id.iv_chatCell_userAvatar);
+                image = view.findViewById(R.id.iv_chatCell_userAvatar);
 
                 /**
                  * user name
                  * */
-                name = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_roomName);
+                name = view.findViewById(R.id.tv_chatCell_roomName);
                 name.setTypeface(G.typeface_IRANSansMobile_Bold);
 
-                /**
-                 * root chat cell
-                 * */
-                rootChat = (ViewGroup) view.findViewById(R.id.cl_chatCell_root);
-
-                txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_secondTextView);
-                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_thirdTextView);
+                txtLastMessage = view.findViewById(R.id.tv_chatCell_secondTextView);
+                txtLastMessageFileText = view.findViewById(R.id.tv_chatCell_thirdTextView);
 
                 /**
                  * channel or group icon
                  * */
-                txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.tv_chatCell_chatIcon);
+                txtChatIcon = view.findViewById(R.id.tv_chatCell_chatIcon);
                 txtChatIcon.setTypeface(G.typeface_Fontico);
 
                 /**
                  * sended message time
                  * */
-                txtTime = ((TextView) view.findViewById(R.id.tv_chatCell_messageData));
+                txtTime = view.findViewById(R.id.tv_chatCell_messageData);
                 txtTime.setTypeface(G.typeface_IRANSansMobile);
 
                 /**
@@ -1537,7 +1437,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 /**
                  * verify imageView
                  * */
-                imgVerifyRoom = (AppCompatImageView) view.findViewById(R.id.tv_chatCell_verify);
+                imgVerifyRoom = view.findViewById(R.id.tv_chatCell_verify);
 
                 /**
                  * unread text counter
@@ -1548,51 +1448,47 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 /**
                  * mute icon
                  * */
-                mute = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_mute);
+                mute = view.findViewById(R.id.iv_chatCell_mute);
 
                 /**
                  * last message sender name
                  * */
-                lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_firstTextView);
+                lastMessageSender = view.findViewById(R.id.tv_chatCell_firstTextView);
                 lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
 
 
-                txtTic = (ImageView) view.findViewById(R.id.iv_chatCell_messageStatus);
-
-                txtCloud = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_contact_initials);
-
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (ActivityMain.isMenuButtonAddShown) {
-                            mComplete.complete(true, "closeMenuButton", "");
-                        } else {
-                            if (mInfo.isValid() && G.fragmentActivity != null) {
-
-                                boolean openChat = true;
-
-                                if (G.twoPaneMode) {
-                                    Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
-                                    if (fragment != null) {
-
-                                        FragmentChat fm = (FragmentChat) fragment;
-                                        if (fm.isAdded() && fm.mRoomId == mInfo.getId()) {
-                                            openChat = false;
-                                        } else {
-                                            removeFromBaseFragment(fragment);
-                                        }
+                txtTic = view.findViewById(R.id.iv_chatCell_messageStatus);
 
 
+                view.setOnClickListener(v -> {
+
+                    if (ActivityMain.isMenuButtonAddShown) {
+                        mComplete.complete(true, "closeMenuButton", "");
+                    } else {
+                        if (mInfo.isValid() && G.fragmentActivity != null) {
+
+                            boolean openChat = true;
+
+                            if (G.twoPaneMode) {
+                                Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
+                                if (fragment != null) {
+
+                                    FragmentChat fm = (FragmentChat) fragment;
+                                    if (fm.isAdded() && fm.mRoomId == mInfo.getId()) {
+                                        openChat = false;
+                                    } else {
+                                        removeFromBaseFragment(fragment);
                                     }
+
+
                                 }
+                            }
 
-                                if (openChat) {
-                                    new GoToChatActivity(mInfo.getId()).startActivity();
+                            if (openChat) {
+                                new GoToChatActivity(mInfo.getId()).startActivity();
 
-                                    if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
-                                    }
+                                if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                                    ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
                                 }
                             }
                         }

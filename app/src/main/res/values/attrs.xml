@@ -127,17 +127,10 @@
     <attr name="background_color" format="color" />
     <attr name="corner_radius" format="integer" />
     <attr name="default_item" format="integer" />
-    <attr name="selected_color" format="color" />
-    <attr name="unselected_color" format="color" />
-    <attr name="selected_size" format="dimension" />
-    <attr name="unselected_size" format="dimension" />
   </declare-styleable>
 
   <declare-styleable name="TabItem">
-    <attr name="select_color" format="color" />
-    <attr name="unselect_color" format="color" />
-    <attr name="tab_icon" format="string" />
-    <attr name="select_size" format="dimension" />
-    <attr name="unselect_size" format="dimension" />
+      <attr name="selected_icon" format="reference" />
+      <attr name="unselected_icon" format="reference" />
   </declare-styleable>
 </resources>

@@ -221,41 +221,51 @@
                 <net.iGap.libs.bottomNavigation.BottomNavigation
                     android:id="@+id/bn_main_bottomNavigation"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
+                    android:layout_height="54dp"
                     android:layout_alignParentBottom="true"
-                    app:corner_radius="25"
-                    app:default_item="0"
-                    app:unselect_color="@color/gray_300">
+                    app:background_color="#EEEEEE"
+                    app:corner_radius="35"
+                    app:default_item="0">
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:tab_icon="@string/md_chat_tab" />
+                        android:padding="@dimen/dp12"
+                        app:selected_icon="@drawable/ic_chat_selected"
+                        app:unselected_icon="@drawable/ic_chat_unselected" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:layout_width="0dp"
+                        android:padding="@dimen/dp12"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:selected_icon="@drawable/ic_app_selected"
+                        app:unselected_icon="@drawable/ic_app_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:tab_icon="@string/md_apps" />
+                        android:padding="@dimen/dp12"
+                        app:selected_icon="@drawable/ic_call_selected"
+                        app:unselected_icon="@drawable/ic_call_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:tab_icon="@string/md_phone" />
+                        android:padding="@dimen/dp12"
+                        app:selected_icon="@drawable/ic_contact_selected"
+                        app:unselected_icon="@drawable/ic_contact_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:tab_icon="@string/md_play_rounded_button" />
-
-                    <net.iGap.libs.bottomNavigation.TabItem
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:tab_icon="@string/md_channel_icon" />
+                        android:padding="@dimen/dp12"
+                        app:selected_icon="@drawable/ic_me_selected"
+                        app:unselected_icon="@drawable/ic_me_unselected" />
                 </net.iGap.libs.bottomNavigation.BottomNavigation>
 
             </RelativeLayout>

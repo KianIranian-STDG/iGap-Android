@@ -1,12 +1,18 @@
 package net.iGap.libs.bottomNavigation;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
@@ -27,12 +33,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     private int defaultItem;
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
-
     private int backgroundColor;
-    private int selectedColor;
-    private int unSelectedColor;
-    private float selectedSize;
-    private float unSelectedSize;
 
 
     public BottomNavigation(Context context) {
@@ -45,9 +46,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         init(attrs);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public BottomNavigation(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
+        setElevation(2f);
     }
 
 
@@ -60,6 +63,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         setMinimumHeight(Utils.dpToPx(56));
         setOrientation(HORIZONTAL);
         setWeightSum(5);
+
     }
 
     @Override
@@ -76,10 +80,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                 } else {
                     final TabItem tabItem = (TabItem) getChildAt(i);
                     tabItem.setPosition(i);
-                    tabItem.setSelectedColor(selectedColor);
-                    tabItem.setSelectedSize(selectedSize);
-                    tabItem.setUnSelectedColor(unSelectedColor);
-                    tabItem.setUnSelectedSize(unSelectedSize);
                     tabItems.add(tabItem);
                     tabItem.setOnItemSelected(this);
                 }
@@ -97,10 +97,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                 backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
                 defaultItem = typedArray.getInt(R.styleable.BottomNavigation_default_item, 0);
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
-                selectedColor = typedArray.getColor(R.styleable.BottomNavigation_selected_color, getResources().getColor(R.color.selected_color));
-                unSelectedColor = typedArray.getColor(R.styleable.BottomNavigation_unselected_color, getResources().getColor(R.color.unSelected_color));
-                selectedSize = typedArray.getDimension(R.styleable.BottomNavigation_selected_size, 20);
-                unSelectedSize = typedArray.getDimension(R.styleable.BottomNavigation_unselected_size, 14);
             } finally {
                 typedArray.recycle();
             }
@@ -122,6 +118,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void dispatchDraw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -131,6 +128,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private Path roundedRect(float left, float top, float right, float bottom, float rx, float ry, boolean justTop) {
         Path path = new Path();
         if (rx < 0) rx = 0;
@@ -161,6 +159,13 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
         path.rLineTo(0, -heightMinusCorners);
         path.close();
+
+        setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setConvexPath(path);
+            }
+        });
 
         return path;
     }

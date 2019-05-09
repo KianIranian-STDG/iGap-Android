@@ -1386,7 +1386,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         boolean isRtl = HelperCalander.isPersianUnicode;
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
         bottomNavigation.setCurrentItem(0);
-        bottomNavigation.setBackgroundColor(Color.parseColor(G.appBarColor));
         bottomNavigation.setOnItemChangeListener(itemId -> {
             mViewPager.setCurrentItem(itemId);
         });
