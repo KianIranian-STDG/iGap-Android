@@ -9,12 +9,8 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.databinding.ObservableField;
+import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableInt;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -22,95 +18,94 @@ import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentRegistrationNicknameBinding;
+import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.ReagentFragment;
+import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperUploadFile;
+import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.module.FileUploadStructure;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
 
 import io.realm.Realm;
 
-public class FragmentRegistrationNicknameViewModel {
+public class FragmentRegistrationNicknameViewModel implements OnUserAvatarResponse {
 
-    public final static String ARG_USER_ID = "arg_user_id";
-    public long userId = 0;
-    public ObservableField<String> callBackEdtNikeName = new ObservableField<>("");
-    public ObservableField<String> edtNikeNameHint = new ObservableField<>(G.context.getResources().getString(R.string.pu_nikname_profileUser));
+    public long userId;
+    private boolean existAvatar = false;
+    private String pathImageUser;
+    private int idAvatar;
+    public MutableLiveData<Integer> progressValue = new MutableLiveData<>();
+    public MutableLiveData<String> avatarImagePath = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showErrorName = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showErrorLastName = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
-    public ObservableInt edtNikeNameColor = new ObservableInt(G.context.getResources().getColor(R.color.black_register));
-    public ObservableInt lineBelowEditTextColor = new ObservableInt(G.context.getResources().getColor(R.color.border_editText));
-    private FragmentRegistrationNicknameBinding fragmentRegistrationNicknameBinding;
-    private TextInputLayout txtInputNickName;
 
-
-    public FragmentRegistrationNicknameViewModel(Bundle arguments, FragmentRegistrationNicknameBinding fragmentRegistrationNicknameBinding) {
-
-        this.fragmentRegistrationNicknameBinding = fragmentRegistrationNicknameBinding;
-        getInfo(arguments);
-
-    }
-
-    public void watcher(CharSequence s) {
-
-        txtInputNickName.setErrorEnabled(true);
-        txtInputNickName.setError("");
-        txtInputNickName.setHintTextAppearance(R.style.remove_error_appearance);
-        edtNikeNameColor.set(G.context.getResources().getColor(R.color.border_editText));
-        lineBelowEditTextColor.set(G.context.getResources().getColor(android.R.color.black));
-
-
-    }
-
-    public void OnClickBtnLetsGo(View v) {
-
+    public FragmentRegistrationNicknameViewModel(Long userId) {
+        this.userId = userId;
+        //ToDo: create repository and move this to that
         Realm realm = Realm.getDefaultInstance();
-        final String nickName = callBackEdtNikeName.get();
-        if (!nickName.equals("")) {
-//            //showProgressBar();
-            G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    setNickName();
-                }
-            });
-
-            // TODO: 4/14/19 add Representer fragment
-
-
-        } else {
-            G.handler.post(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void run() {
-                    txtInputNickName.setErrorEnabled(true);
-                    txtInputNickName.setError(G.fragmentActivity.getResources().getString(R.string.Toast_Write_NickName));
-                    txtInputNickName.setHintTextAppearance(R.style.error_appearance);
-                    edtNikeNameColor.set(G.context.getResources().getColor(R.color.red));
-                    lineBelowEditTextColor.set(G.context.getResources().getColor(R.color.red));
-                }
-            });
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo != null) {
+            RealmAvatar.deleteAvatarWithOwnerId(G.userId);
         }
-
         realm.close();
+        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
+            pathImageUser = path;
+            int lastUploadedAvatarId = idAvatar + 1;
+            prgVisibility.set(View.VISIBLE);
+            HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress < 100) {
+                        G.handler.post(() -> progressValue.setValue(progress));
+                    } else {
+                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                    }
+                }
 
+                @Override
+                public void OnError() {
+                    prgVisibility.set(View.GONE);
+                }
+            });
+        };
+        G.onUserAvatarResponse = this;
     }
 
-
-    private void getInfo(Bundle arguments) {
-        if (arguments != null) {
-            userId = (int) arguments.getLong(ARG_USER_ID, -1);
-            delete();
+    public void selectAvatarOnClick() {
+        if (!existAvatar) {
+            showDialog.setValue(true);
         }
-        txtInputNickName = fragmentRegistrationNicknameBinding.puTxtInputNikeName;
+    }
+
+    public void OnClickBtnLetsGo(String name, String lastName) {
+        Realm realm = Realm.getDefaultInstance();
+        if (name.length() > 0) {
+            showErrorName.setValue(false);
+            if (lastName.length() > 0) {
+                showErrorLastName.setValue(false);
+                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                realm.executeTransaction(realm1 -> setNickName(name, lastName));
+            } else {
+                showErrorLastName.setValue(true);
+            }
+            // TODO: 4/14/19 add Representer fragment
+        } else {
+            showErrorName.setValue(true);
+        }
+        realm.close();
     }
 
 
-    private void setNickName() {
+    private void setNickName(String name, String lastName) {
         G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
             @Override
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
@@ -119,124 +114,73 @@ public class FragmentRegistrationNicknameViewModel {
 
             @Override
             public void onUserProfileNickNameError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
+                G.handler.post(() -> prgVisibility.set(View.GONE));
             }
 
             @Override
             public void onUserProfileNickNameTimeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
+                G.handler.post(() -> prgVisibility.set(View.GONE));
             }
         };
-        new RequestUserProfileSetNickname().userProfileNickName(callBackEdtNikeName.get());
+        new RequestUserProfileSetNickname().userProfileNickName(name);
     }
 
     private void getUserInfo() {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                G.displayName = user.getDisplayName();
-
-                                RealmUserInfo.putOrUpdate(realm, user);
-
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-//                                        G.onUserInfoResponse = null;
-                                        hideProgressBar();
-//                                        Intent intent = new Intent(context, ActivityMain.class);
-//                                        intent.putExtra(ARG_USER_ID, user.getId());
-//                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                        G.context.startActivity(intent);
-//                                        G.fragmentActivity.finish();
-
-                                        ReagentFragment reagentFragment = ReagentFragment.newInstance(true);
-                                        FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
-                                        reagentFragment.userId = user.getId();
-                                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                        transaction.replace(R.id.ar_layout_root, reagentFragment);
-                                        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
-                                        transaction.commitAllowingStateLoss();
-                                    }
-                                });
-                            }
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(realm1 -> {
+                        G.displayName = user.getDisplayName();
+                        RealmUserInfo.putOrUpdate(realm1, user);
+                        G.handler.post(() -> {
+                            prgVisibility.set(View.GONE);
+                            ReagentFragment reagentFragment = ReagentFragment.newInstance(true);
+                            FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
+                            reagentFragment.userId = user.getId();
+                            FragmentTransaction transaction = fragmentManager.beginTransaction();
+                            transaction.replace(R.id.ar_layout_root, reagentFragment);
+                            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+                            transaction.commitAllowingStateLoss();
                         });
-                        realm.close();
-                    }
+                    });
+                    realm.close();
                 });
             }
 
             @Override
             public void onUserInfoTimeOut() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
+                G.handler.post(() -> prgVisibility.set(View.GONE));
             }
 
             @Override
             public void onUserInfoError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
+                G.handler.post(() -> prgVisibility.set(View.GONE));
             }
         };
         new RequestUserInfo().userInfo(G.userId);
     }
 
-    private void delete() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            RealmAvatar.deleteAvatarWithOwnerId(G.userId);
-        }
-        realm.close();
+    @Override
+    public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
+        HelperAvatar.avatarAdd(G.userId, pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
+            existAvatar = true;
+            prgVisibility.set(View.GONE);
+            avatarImagePath.setValue(avatarPath);
+        }));
     }
 
-    public void showProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                prgVisibility.set(View.VISIBLE);
-                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        });
+    @Override
+    public void onAvatarAddTimeOut() {
+        prgVisibility.set(View.GONE);
     }
 
-    public void hideProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                prgVisibility.set(View.GONE);
-                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-            }
-        });
+    @Override
+    public void onAvatarError() {
+        prgVisibility.set(View.GONE);
     }
 
 }
