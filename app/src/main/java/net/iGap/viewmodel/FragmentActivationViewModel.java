@@ -138,7 +138,7 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
             /**
              * return view for step one and two because now start registration again from step one
              */
-/*
+            /*
             // return step one
             prgVerifyConnectVisibility.set(View.VISIBLE);
             txtIconVerifyConnectVisibility.set(View.GONE);
@@ -148,8 +148,9 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
             txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
 
             //rg_txt_verify_sms.setTextAppearance(G.context, Typeface.NORMAL);
+            */
 
-            requestRegister();*/
+            requestRegister();
         }
     }
 

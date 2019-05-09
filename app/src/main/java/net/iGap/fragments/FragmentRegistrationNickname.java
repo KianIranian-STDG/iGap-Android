@@ -1,179 +1,105 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
-import net.iGap.helper.HelperAvatar;
-import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.EditTextAdjustPan;
-import net.iGap.module.FileUploadStructure;
-import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
-import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FragmentRegistrationNickname extends BaseFragment implements OnUserAvatarResponse {
+public class FragmentRegistrationNickname extends BaseFragment {
 
     public final static String ARG_USER_ID = "arg_user_id";
-    public static boolean IsDeleteFile;
-    public static Bitmap decodeBitmapProfile = null;
-    private TextView txtTitle;
-    private net.iGap.module.CircleImageView btnSetImage;
-    private Uri uriIntent;
-    private String pathImageUser;
-    private int idAvatar;
-    private boolean existAvatar = false;
-
-
-    private FragmentRegistrationNicknameViewModel fragmentRegistrationNicknameViewModel;
-    private FragmentRegistrationNicknameBinding fragmentRegistrationNicknameBinding;
+    private FragmentRegistrationNicknameViewModel viewModel;
+    private FragmentRegistrationNicknameBinding binding;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        fragmentRegistrationNicknameBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_registration_nickname, container, false);
-        return fragmentRegistrationNicknameBinding.getRoot();
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_registration_nickname, container, false);
+        viewModel = new FragmentRegistrationNicknameViewModel(getArguments() != null ? getArguments().getLong(ARG_USER_ID, -1) : -1);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(getActivity());
+        return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
-
-        ProgressBar prgWait = fragmentRegistrationNicknameBinding.prg;
+        ProgressBar prgWait = binding.prg;
         AppUtils.setProgresColler(prgWait);
 
-        txtTitle = fragmentRegistrationNicknameBinding.puTitleToolbar;
+        AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage, Color.parseColor(G.appBarColor));
 
-        Typeface titleTypeface;
-        if (!HelperCalander.isPersianUnicode) {
-            titleTypeface = G.typeface_neuropolitical;
-        } else {
-            titleTypeface = G.typeface_IRANSansMobile;
-        }
-        txtTitle.setTypeface(titleTypeface);
-
-        btnSetImage = fragmentRegistrationNicknameBinding.puProfileCircleImage;
-
-        AndroidUtils.setBackgroundShapeColor(btnSetImage, Color.parseColor(G.appBarColor));
-        btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
-            @Override
-            public void onClick(View view) {
-                if (!existAvatar) {
-                    startDialog();
-                }
+        viewModel.progressValue.observe(this, integer -> {
+            if (integer != null) {
+                binding.prg.setProgress(integer);
+            }
+        });
+        viewModel.showErrorName.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                binding.name.setErrorEnabled(true);
+                binding.name.setError(G.fragmentActivity.getResources().getString(R.string.Toast_Write_NickName));
+                binding.name.setHintTextAppearance(R.style.error_appearance);
+            } else {
+                binding.name.setErrorEnabled(false);
+                binding.name.setError("");
             }
         });
 
-        //        txtInputNickName.setHint("Nickname");
-
-        final EditTextAdjustPan edtNikName = fragmentRegistrationNicknameBinding.puEdtNikeName;
-
-        edtNikName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+        viewModel.showErrorLastName.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                binding.lastName.setErrorEnabled(true);
+                binding.lastName.setError(G.fragmentActivity.getResources().getString(R.string.Toast_Write_NickName));
+                binding.lastName.setHintTextAppearance(R.style.error_appearance);
+            } else {
+                binding.lastName.setErrorEnabled(false);
+                binding.lastName.setError("");
             }
         });
 
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
-            @Override
-            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-
-                pathImageUser = path;
-
-                int lastUploadedAvatarId = idAvatar + 1;
-
-                fragmentRegistrationNicknameViewModel.showProgressBar();
-                HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(int progress, FileUploadStructure struct) {
-                        if (progress < 100) {
-                            fragmentRegistrationNicknameBinding.prg.setProgress(progress);
-                        } else {
-                            new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                        }
-                    }
-
-                    @Override
-                    public void OnError() {
-                        fragmentRegistrationNicknameViewModel.hideProgressBar();
-                    }
-                });
+        viewModel.showDialog.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                startDialog();
             }
-        };
-
-    }
-
-    private void initDataBinding() {
-
-        fragmentRegistrationNicknameViewModel = new FragmentRegistrationNicknameViewModel(getArguments(), fragmentRegistrationNicknameBinding);
-        fragmentRegistrationNicknameBinding.setFragmentRegistrationNicknameViewModel(fragmentRegistrationNicknameViewModel);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        G.onUserAvatarResponse = this;
+        });
     }
 
     @Override
@@ -181,13 +107,14 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
 
-            if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
+            if (FragmentEditImage.textImageList != null)
+                FragmentEditImage.textImageList.clear();
             if (FragmentEditImage.itemGalleryList != null)
                 FragmentEditImage.itemGalleryList.clear();
 
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
-                    String path = "";
+                    String path;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         path = AttachFile.mCurrentPhotoPath;
                     } else {
@@ -198,14 +125,12 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                     FragmentEditImage.insertItemList(path, false);
                     G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, FragmentEditImage.newInstance(path, false, true, 0))
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     if (data != null) {
                         if (data.getData() == null) {
                             return;
                         }
-
                         FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                         G.fragmentActivity.getSupportFragmentManager().beginTransaction().
                                 add(R.id.ar_layout_root, FragmentEditImage.newInstance(null, false, true, 0))
@@ -215,7 +140,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             }
         }
     }
-
 
     public void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -259,90 +183,40 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
         MaterialDialog.Builder imageDialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture))
                 .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .items(R.array.profile)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+                .itemsCallback((dialog, view, which, text) -> {
+                    switch (which) {
+                        case 0:
+                            useGallery();
+                            dialog.dismiss();
+                            break;
+                        case 1:
+                            if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                try {
+                                    HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                                        @Override
+                                        public void Allow() {
+                                            // this dialog show 2 way for choose image : gallery and camera
+                                            dialog.dismiss();
+                                            useCamera();
+                                        }
 
-                        switch (which) {
-                            case 0: {
-                                useGallery();
-                                dialog.dismiss();
-                                break;
-                            }
-                            case 1: {
-                                if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                    try {
-                                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                            @Override
-                                            public void Allow() {
-                                                // this dialog show 2 way for choose image : gallery and camera
-                                                dialog.dismiss();
-                                                useCamera();
-                                            }
+                                        @Override
+                                        public void deny() {
 
-                                            @Override
-                                            public void deny() {
-
-                                            }
-                                        });
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else {
-
-                                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), false);
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-                                break;
+                            } else {
+
+                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), false);
                             }
-                        }
+                            break;
                     }
                 });
         if (!(G.fragmentActivity).isFinishing()) {
             imageDialog.show();
         }
     }
-
-    private void setImage(String path) {
-        if (path != null) {
-
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), btnSetImage);
-            btnSetImage.setPadding(0, 0, 0, 0);
-            //Bitmap bitmap = BitmapFactory.decodeFile(path);
-            //btnSetImage.setImageBitmap(bitmap);
-        }
-    }
-
-    /**
-     * ************************************ Callbacks ************************************
-     */
-
-    @Override
-    public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-
-        HelperAvatar.avatarAdd(G.userId, pathImageUser, avatar, new OnAvatarAdd() {
-            @Override
-            public void onAvatarAdd(final String avatarPath) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        existAvatar = true;
-                        fragmentRegistrationNicknameViewModel.hideProgressBar();
-                        setImage(avatarPath);
-                    }
-                });
-            }
-        });
-    }
-
-    @Override
-    public void onAvatarAddTimeOut() {
-        fragmentRegistrationNicknameViewModel.hideProgressBar();
-    }
-
-    @Override
-    public void onAvatarError() {
-        fragmentRegistrationNicknameViewModel.hideProgressBar();
-    }
-
 }
