@@ -1385,11 +1385,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         boolean isRtl = HelperCalander.isPersianUnicode;
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
-        bottomNavigation.setCurrentItem(0);
-        bottomNavigation.setOnItemChangeListener(itemId -> {
-            mViewPager.setCurrentItem(itemId);
-        });
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -1398,13 +1393,33 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             @Override
             public void onPageSelected(int i) {
-                bottomNavigation.setCurrentItem(i);
+                if (isRtl) {
+                    if (i == 2)
+                        bottomNavigation.setCurrentItem(0);
+                    if (i == 1)
+                        bottomNavigation.setCurrentItem(1);
+                    if (i == 0)
+                        bottomNavigation.setCurrentItem(2);
+                } else
+                    bottomNavigation.setCurrentItem(i);
             }
 
             @Override
             public void onPageScrollStateChanged(int i) {
 
             }
+        });
+
+        bottomNavigation.setOnItemChangeListener(itemId -> {
+            if (isRtl) {
+                if (itemId == 2)
+                    mViewPager.setCurrentItem(0);
+                if (itemId == 1)
+                    mViewPager.setCurrentItem(1);
+                if (itemId == 0)
+                    mViewPager.setCurrentItem(2);
+            } else
+                mViewPager.setCurrentItem(itemId);
         });
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
