@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,19 +24,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * SAMPLE OF USAGE ARE AT BOTTOM OF THIS FILE
- *   1 = create root view at the xml (LinearLayout)
- *   2 = get create object of this class and set details then call getView()
- *   3 = attach view to xml root toolbar view
- *   4 = implement toolbar listener based on your usage
- * */
+ * 1 = create root view at the xml (LinearLayout)
+ * 2 = get create object of this class and set details then call getView()
+ * 3 = attach view to xml root toolbar view
+ * 4 = implement toolbar listener based on your usage
+ */
 public class HelperToolbar {
 
     private ImageView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatUserName, mTxtChatSeenStatus;
-    private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat;
+    private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
     private RelativeLayout mSearchBox;
-    private TextView mTxtSearch ;
-    private EditText mEdtSearch ;
+    private TextView mTxtSearch;
+    private AppCompatTextView groupName, groupMemberCount;
+    private EditText mEdtSearch;
 
     private LayoutInflater mInflater;
     private Context mContext;
@@ -52,6 +54,7 @@ public class HelperToolbar {
     private boolean isCounterShown;
     private boolean isInChatRoom;
     private boolean isCallModeEnable;
+    private boolean isGroupProfile;
     private MaterialDesignTextView mBtnClearSearch;
 
     private HelperToolbar() {
@@ -138,6 +141,11 @@ public class HelperToolbar {
 
     public HelperToolbar setListener(ToolbarListener listener) {
         this.mToolbarListener = listener;
+        return this;
+    }
+
+    public HelperToolbar setGroupProfile(boolean groupProfile) {
+        this.isGroupProfile = groupProfile;
         return this;
     }
 
@@ -228,13 +236,15 @@ public class HelperToolbar {
 
         setCallModeVisibility(result, isCallModeEnable);
 
+        setGroupProfileVisibility(result, isGroupProfile);
+
         return result;
 
     }
 
-    public boolean setSearchEditableMode(boolean state){
+    public boolean setSearchEditableMode(boolean state) {
 
-        if (state){
+        if (state) {
 
             mTxtSearch.setVisibility(View.GONE);
             mEdtSearch.setVisibility(View.VISIBLE);
@@ -242,7 +252,7 @@ public class HelperToolbar {
             mEdtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
             mEdtSearch.requestFocus();
 
-        }else {
+        } else {
 
             //mEdtSearch.setText("");
             mBtnClearSearch.setVisibility(View.GONE);
@@ -292,6 +302,18 @@ public class HelperToolbar {
 
     public ImageView getRightButton() {
         return mRightBtn;
+    }
+
+    public AppCompatTextView getGroupName(){
+        return groupName;
+    }
+
+    public AppCompatTextView getGroupMemberCount() {
+        return groupMemberCount;
+    }
+
+    public CircleImageView getGroupAvatar() {
+        return groupAvatar;
     }
 
     /*************************************************************/
@@ -368,6 +390,28 @@ public class HelperToolbar {
         }
     }
 
+    private void setGroupProfileVisibility(View view, boolean visible) {
+        if (visible) {
+            groupAvatar.setVisibility(View.VISIBLE);
+            groupName.setVisibility(View.VISIBLE);
+            groupMemberCount.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.view_toolbar_main_constraint).setLayoutParams(
+                    new ConstraintLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            mContext.getResources().getDimensionPixelSize(R.dimen.dp160)
+                    ));
+            view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
+                    new ConstraintLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            mContext.getResources().getDimensionPixelSize(R.dimen.dp160)
+                    ));
+        } else {
+            groupAvatar.setVisibility(View.GONE);
+            groupName.setVisibility(View.GONE);
+            groupMemberCount.setVisibility(View.GONE);
+        }
+    }
+
     private void setBigAvatarVisibility(View view, boolean isShown) {
 
         if (isShown) {
@@ -438,7 +482,11 @@ public class HelperToolbar {
         mSearchBox = view.findViewById(R.id.view_toolbar_search_layout);
         mTxtSearch = view.findViewById(R.id.view_toolbar_search_layout_txt);
         mEdtSearch = view.findViewById(R.id.view_toolbar_search_layout_edt_input);
-        mBtnClearSearch  = view.findViewById(R.id.view_toolbar_search_layout_btn_clear);
+        mBtnClearSearch = view.findViewById(R.id.view_toolbar_search_layout_btn_clear);
+
+        groupAvatar = view.findViewById(R.id.groupAvatar);
+        groupName = view.findViewById(R.id.groupName);
+        groupMemberCount = view.findViewById(R.id.groupMemberCount);
     }
 
     /**
@@ -448,7 +496,7 @@ public class HelperToolbar {
      * 3 = attach view to xml root toolbar view
      * 4 = implement toolbar listener based on your usage
      */
-    private void sampleOfUsage(){
+    private void sampleOfUsage() {
 
 /*
         mToolbarLayout = findViewById(R.id.main_activity_toolbar);

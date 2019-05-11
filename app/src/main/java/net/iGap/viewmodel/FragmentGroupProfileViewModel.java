@@ -1,5 +1,6 @@
 package net.iGap.viewmodel;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -78,8 +80,11 @@ import net.iGap.proto.ProtoGroupCheckUsername;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
+import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmChatRoom;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
+import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -96,6 +101,8 @@ import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.request.RequestUserInfo;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,12 +113,38 @@ import io.realm.RealmModel;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
+import static net.iGap.R.string.array_Default;
 
 /**
  * Created by amir on 15/12/2017.
  */
 
 public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
+
+    private static final int DEFAULT = 0;
+    private static final int ENABLE = 1;
+    private static final int DISABLE = 2;
+
+    public MutableLiveData<String> callbackGroupName = new MutableLiveData<>();
+    public MutableLiveData<String> callbackMemberNumber = new MutableLiveData<>();
+    public ObservableField<String> notificationState = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
+    private int realmNotification = 0;
+    private RealmNotificationSetting realmNotificationSetting;
+    public ObservableField<Integer> sharedPhotoVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedPhotoCount = new MutableLiveData<>();
+    public ObservableField<Integer> sharedVideoVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedVideoCount = new MutableLiveData<>();
+    public ObservableField<Integer> sharedAudioVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedAudioCount = new MutableLiveData<>();
+    public ObservableField<Integer> sharedVoiceVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedVoiceCount = new MutableLiveData<>();
+    public ObservableField<Integer> sharedGifVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedGifCount = new MutableLiveData<>();
+    public ObservableField<Integer> sharedFileVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedFileCount = new MutableLiveData<>();
+    public ObservableField<Integer> sharedLinkVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedLinkCount = new MutableLiveData<>();
+
 
     public static final String FRAGMENT_TAG = "FragmentGroupProfile";
     private static final String ROOM_ID = "RoomId";
@@ -120,8 +153,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public long roomId;
     public GroupChatRole role;
     public boolean isPrivate;
-    public ObservableField<String> callbackGroupName = new ObservableField<>("");
-    public ObservableField<String> callbackMemberNumber = new ObservableField<>("");
     public ObservableField<String> callbackGroupLink = new ObservableField<>("");
     public ObservableField<SpannableStringBuilder> callbackGroupDescription = new ObservableField<>();
     public ObservableField<String> callbackGroupShearedMedia = new ObservableField<>("");
@@ -140,7 +171,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     private AppBarLayout appBarLayout;
     private FloatingActionButton fab;
     private String tmp = "";
-    private String title;
+    /*private String title;*/
     private String description;
     private String initials;
     private String inviteLink;
@@ -176,17 +207,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     }
 
     public void onClickRippleMenu(View view) {
-
-        /*LinearLayout layoutDialog = new LinearLayout(G.context);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutDialog.setOrientation(LinearLayout.VERTICAL);
-        layoutDialog.setBackgroundColor(G.context.getResources().getColor(android.R.color.white));
-        TextView text2 = new AppCompatTextView(G.context);
-        TextView text3 = new AppCompatTextView(G.context);
-
-        text2.setTextColor(G.context.getResources().getColor(android.R.color.black));
-        text3.setTextColor(G.context.getResources().getColor(android.R.color.black));*/
-
         List<String> items = new ArrayList<>();
         items.add(context.getString(R.string.clear_history));
         if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
@@ -196,9 +216,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 items.add(context.getString(R.string.group_title_convert_to_private));
             }
         }
-
         new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
-            if (items.get(position).equals(context.getString(R.string.clear_history))){
+            if (items.get(position).equals(context.getString(R.string.clear_history))) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -208,7 +227,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                         }
                     }
                 }).negativeText(R.string.no).show();
-            }else if (items.get(position).equals(context.getString(R.string.group_title_convert_to_public)) || items.get(position).equals(context.getString(R.string.group_title_convert_to_private))){
+            } else if (items.get(position).equals(context.getString(R.string.group_title_convert_to_public)) || items.get(position).equals(context.getString(R.string.group_title_convert_to_private))) {
                 isPopup = true;
                 if (isPrivate) {
                     convertToPublic(view);
@@ -219,7 +238,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         }).show();
     }
 
-    public void onClickRippleGroupAvatar(View v) {
+    public void onClickRippleGroupAvatar() {
         if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
             FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
             fragment.appBarLayout = fab;
@@ -228,11 +247,11 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         }
     }
 
-    public void onClickGroupName(View v) {
+    /*public void onClickGroupName(View v) {
         ChangeGroupName(v);
-    }
+    }*/
 
-    public void onClickGroupLink(View v) {
+    /*public void onClickGroupLink(View v) {
         isPopup = false;
 
         if (role == GroupChatRole.OWNER) {
@@ -244,13 +263,13 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         } else {
             dialogCopyLink();
         }
-    }
+    }*/
 
-    public void onClickGroupDescription(View v) {
+    /*public void onClickGroupDescription(View v) {
         if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
             ChangeGroupDescription();
         }
-    }
+    }*/
 
     public void onClickGroupShearedMedia(View v) {
 
@@ -308,9 +327,23 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             if (FragmentGroupProfile.onBackFragment != null)
                 FragmentGroupProfile.onBackFragment.onBack();
             return;
+        } else if (realmRoom.getGroupRoom() != null) {
+            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+            if (realmGroupRoom != null) {
+                if (realmGroupRoom.getRealmNotificationSetting() == null) {
+                    setRealm(Realm.getDefaultInstance(), realmGroupRoom, null, null);
+                } else {
+                    realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                }
+                getRealm();
+                realmNotification = realmNotificationSetting.getNotification();
+                Log.wtf("view model", "value: " + realmNotification);
+            }
         }
+
+
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-        title = realmRoom.getTitle();
+        callbackGroupName.setValue(realmRoom.getTitle());
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
@@ -319,8 +352,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         isPrivate = realmGroupRoom.isPrivate();
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         description = realmGroupRoom.getDescription();
-
-        callbackGroupName.set(title);
         SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
         if (ds != null) {
             callbackGroupDescription.set(ds);
@@ -367,9 +398,21 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         }
 
 
-        callbackMemberNumber.set(participantsCountLabel);
+        callbackMemberNumber.setValue(participantsCountLabel);
         if (HelperCalander.isPersianUnicode) {
-            callbackMemberNumber.set(HelperCalander.convertToUnicodeFarsiNumber(callbackMemberNumber.get()));
+            callbackMemberNumber.setValue(HelperCalander.convertToUnicodeFarsiNumber(callbackMemberNumber.getValue()));
+        }
+
+        switch (realmNotification) {
+            case DEFAULT:
+                notificationState.set(G.fragmentActivity.getResources().getString(R.string.array_Default));
+                break;
+            case ENABLE:
+                notificationState.set(G.fragmentActivity.getResources().getString(R.string.array_enable));
+                break;
+            case DISABLE:
+                notificationState.set(G.fragmentActivity.getResources().getString(R.string.array_Disable));
+                break;
         }
 
         setTextGroupLik();
@@ -626,7 +669,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     }
 
     public void onResume() {
-
         mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
 
@@ -641,10 +683,64 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                                 if (((RealmRoom) element).isValid()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
                                     if (HelperCalander.isPersianUnicode) {
-                                        callbackGroupShearedMedia.set(HelperCalander.convertToUnicodeFarsiNumber(countText));
-                                    } else {
-                                        callbackGroupShearedMedia.set(countText);
+                                        countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                                     }
+                                    if (countText == null || countText.length() == 0) {
+                                        countText = context.getString(R.string.there_is_no_sheared_media);
+                                    } else {
+                                        String[] countList = countText.split("\n");
+                                        int countOFImage = Integer.parseInt(countList[0]);
+                                        int countOFVIDEO = Integer.parseInt(countList[1]);
+                                        int countOFAUDIO = Integer.parseInt(countList[2]);
+                                        int countOFVOICE = Integer.parseInt(countList[3]);
+                                        int countOFGIF = Integer.parseInt(countList[4]);
+                                        int countOFFILE = Integer.parseInt(countList[5]);
+                                        int countOFLink = Integer.parseInt(countList[6]);
+
+                                        if (countOFImage > 0) {
+                                            sharedPhotoVisibility.set(View.VISIBLE);
+                                            sharedPhotoCount.setValue(countOFImage);
+                                        } else {
+                                            sharedPhotoVisibility.set(View.GONE);
+                                        }
+                                        if (countOFVIDEO > 0) {
+                                            sharedVideoVisibility.set(View.VISIBLE);
+                                            sharedVideoCount.setValue(countOFVIDEO);
+                                        } else {
+                                            sharedVideoVisibility.set(View.GONE);
+                                        }
+                                        if (countOFAUDIO > 0) {
+                                            sharedAudioVisibility.set(View.VISIBLE);
+                                            sharedAudioCount.setValue(countOFAUDIO);
+                                        } else {
+                                            sharedAudioVisibility.set(View.GONE);
+                                        }
+                                        if (countOFVOICE > 0) {
+                                            sharedVoiceVisibility.set(View.VISIBLE);
+                                            sharedVoiceCount.setValue(countOFVOICE);
+                                        } else {
+                                            sharedVoiceVisibility.set(View.GONE);
+                                        }
+                                        if (countOFGIF > 0) {
+                                            sharedGifVisibility.set(View.VISIBLE);
+                                            sharedGifCount.setValue(countOFGIF);
+                                        } else {
+                                            sharedGifVisibility.set(View.GONE);
+                                        }
+                                        if (countOFFILE > 0) {
+                                            sharedFileVisibility.set(View.VISIBLE);
+                                            sharedFileCount.setValue(countOFFILE);
+                                        } else {
+                                            sharedFileVisibility.set(View.GONE);
+                                        }
+                                        if (countOFLink > 0) {
+                                            sharedLinkVisibility.set(View.VISIBLE);
+                                            sharedLinkCount.setValue(countOFLink);
+                                        } else {
+                                            sharedLinkVisibility.set(View.GONE);
+                                        }
+                                    }
+                                    Log.wtf("view model", "value of count: " + countText);
                                 }
                             }
                         });
@@ -1079,9 +1175,9 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        callbackMemberNumber.set(memberCount);
+                        callbackMemberNumber.setValue(memberCount);
                         if (HelperCalander.isPersianUnicode) {
-                            callbackMemberNumber.set(HelperCalander.convertToUnicodeFarsiNumber(callbackMemberNumber.get()));
+                            callbackMemberNumber.setValue(HelperCalander.convertToUnicodeFarsiNumber(callbackMemberNumber.getValue()));
                         }
                     }
                 });
@@ -1120,7 +1216,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         };
     }
 
-    private void ChangeGroupName(final View view) {
+    /*private void ChangeGroupName(final View view) {
 
         final LinearLayout layoutUserName = new LinearLayout(G.fragmentActivity);
         layoutUserName.setOrientation(LinearLayout.VERTICAL);
@@ -1156,7 +1252,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
-        final String finalUserName = callbackGroupName.get();
+        final String finalUserName = callbackGroupName.getValue();
         edtUserName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1177,7 +1273,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             }
         });
 
-        G.onGroupEdit = new OnGroupEdit() {
+        *//*G.onGroupEdit = new OnGroupEdit() {
             @Override
             public void onGroupEdit(long roomId, String name, String description) {
                 hideProgressBar();
@@ -1187,7 +1283,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 } else {
                     callbackGroupDescription.set(new SpannableStringBuilder(""));
                 }
-                callbackGroupName.set(name);
+                callbackGroupName.setValue(name);
             }
 
             @Override
@@ -1206,7 +1302,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                     }
                 });
             }
-        };
+        };*//*
 
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1236,9 +1332,9 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         });
 
         dialog.show();
-    }
+    }*/
 
-    private void ChangeGroupDescription() {
+    /*private void ChangeGroupDescription() {
         MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.group_description).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).alwaysCallInputCallback().widgetColor(Color.parseColor(G.appBarColor)).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1256,7 +1352,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                                     callbackGroupDescription.set(new SpannableStringBuilder(""));
                                 }
 
-                                callbackGroupName.set(name);
+                                callbackGroupName.setValue(name);
                             }
                         });
                     }
@@ -1272,7 +1368,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                     }
                 };
 
-                new RequestGroupEdit().groupEdit(roomId, callbackGroupName.get(), tmp);
+                new RequestGroupEdit().groupEdit(roomId, callbackGroupName.getValue(), tmp);
             }
         }).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.fragmentActivity.getResources().getString(R.string.please_enter_group_description), callbackGroupDescription.get().toString(), new MaterialDialog.InputCallback() {
             @Override
@@ -1299,7 +1395,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 AndroidUtils.closeKeyboard(v);
             }
         });
-    }
+    }*/
 
     class CreatePopUpMessage {
 
@@ -1324,7 +1420,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 }
             } else if (role == GroupChatRole.ADMIN) {
 
-                /**
+                /*
                  *  ----------- Admin ---------------
                  *  1- admin dose'nt access set another admin
                  *  2- admin can set moderator
@@ -1392,5 +1488,12 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         }
     }
 
-
+    private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom, final RealmChannelRoom realmChannelRoom, final RealmChatRoom realmChatRoom) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(@NotNull Realm realm) {
+                realmNotificationSetting = RealmNotificationSetting.put(realm, realmChatRoom, realmGroupRoom, realmChannelRoom);
+            }
+        });
+    }
 }

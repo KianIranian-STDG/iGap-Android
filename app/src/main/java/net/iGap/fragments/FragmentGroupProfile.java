@@ -1,26 +1,16 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -28,15 +18,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
-import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -44,13 +32,12 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarDelete;
 import net.iGap.interfaces.OnGroupAvatarResponse;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
-import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestGroupAvatarAdd;
@@ -59,8 +46,12 @@ import net.iGap.request.RequestGroupKickMember;
 import net.iGap.request.RequestGroupKickModerator;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /*
  * This is the source code of iGap for Android
@@ -76,15 +67,15 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
     public static OnBackFragment onBackFragment;
-    NestedScrollView nestedScrollView;
+    /*NestedScrollView nestedScrollView;*/
     AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
-    private AppBarLayout appBarLayout;
+    /*private AppBarLayout appBarLayout;*/
     private String pathSaveImage;
-    private ProgressBar prgWait;
+    /*private ProgressBar prgWait;*/
     private Fragment fragment;
-    private FragmentGroupProfileViewModel fragmentGroupProfileViewModel;
-    private ActivityGroupProfileBinding fragmentGroupProfileBinding;
+    private FragmentGroupProfileViewModel viewModel;
+    private ActivityGroupProfileBinding binding;
 
 
     public static FragmentGroupProfile newInstance(long roomId, Boolean isNotJoin) {
@@ -98,16 +89,45 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentGroupProfileBinding = DataBindingUtil.inflate(inflater, R.layout.activity_group_profile, container, false);
-        return attachToSwipeBack(fragmentGroupProfileBinding.getRoot());
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_group_profile, container, false);
+        viewModel = new FragmentGroupProfileViewModel(this, getArguments());
+        binding.setFragmentGroupProfileViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
+        HelperToolbar t = HelperToolbar.create().setContext(getContext())
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_more_toolbar, R.drawable.ic_edit_toolbar)
+                .setGroupProfile(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        viewModel.onClickRippleMenu(view);
+                    }
+
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        new HelperFragment(EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
+                    }
+                });
+        binding.toolbar.addView(t.getView());
+        imvGroupAvatar = t.getGroupAvatar();
+        imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
+
+        viewModel.callbackGroupName.observe(this, s -> t.getGroupName().setText(s));
+
+        viewModel.callbackMemberNumber.observe(this, s -> t.getGroupMemberCount().setText(String.format("%s %s", s, getString(R.string.member))));
 
         fragment = this;
         onBackFragment = new OnBackFragment() {
@@ -137,9 +157,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     @Override
                     public void OnProgress(int progress, FileUploadStructure struct) {
                         if (progress < 100) {
-                            prgWait.setProgress(progress);
+                            binding.loading.setProgress(progress);
                         } else {
-                            new RequestGroupAvatarAdd().groupAvatarAdd(fragmentGroupProfileViewModel.roomId, struct.token);
+                            new RequestGroupAvatarAdd().groupAvatarAdd(viewModel.roomId, struct.token);
                         }
                     }
 
@@ -153,26 +173,22 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     }
 
-    private void initDataBinding() {
-        fragmentGroupProfileViewModel = new FragmentGroupProfileViewModel(this, getArguments());
-        fragmentGroupProfileBinding.setFragmentGroupProfileViewModel(fragmentGroupProfileViewModel);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-
-        fragmentGroupProfileViewModel.onResume();
+        viewModel.onResume();
+        //ToDo: change code. this code is so bad
 
     }
 
-    @Override
+    /*Change group avatar result*/
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /**
-         * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
-         * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
-         */
+        *//**
+     * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
+     * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
+     *//*
         if (G.isPassCode) ActivityMain.isUseCamera = true;
 
         if (resultCode == Activity.RESULT_OK) {
@@ -211,7 +227,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     break;
             }
         }
-    }
+    }*/
 
     /**
      * ************************************** methods **************************************
@@ -220,73 +236,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     private void initComponent(final View view) {
 
-        nestedScrollView = fragmentGroupProfileBinding.groupNestedScroll;
-        prgWait = fragmentGroupProfileBinding.agpPrgWaitingAddContact;
-        AppUtils.setProgresColler(prgWait);
+        AppUtils.setProgresColler(binding.loading);
 
-        //        txtGroupDescription.setText(HelperUrl.setUrlLink(description, true, false, null, true));
-        fragmentGroupProfileBinding.agpTxtGroupDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        appBarLayout = (fragmentGroupProfileBinding.agpAppbar);
-        imvGroupAvatar = fragmentGroupProfileBinding.agpImvGroupAvatar;
-
-        //CollapsingToolbarLayout collapsingToolbarLayout = fragmentGroupProfileBinding.agpColapsingToolbar;
-        //collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        //collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
-
-        //
-
-        final TextView titleToolbar = fragmentGroupProfileBinding.agpTxtTitleToolbar;
-        final ViewGroup viewGroup = fragmentGroupProfileBinding.apgParentLayoutCircleImage;
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-                if (verticalOffset < -5) {
-                    viewGroup.setVisibility(View.GONE);
-                    titleToolbar.setVisibility(View.VISIBLE);
-                    viewGroup.animate().alpha(0).setDuration(500);
-                    titleToolbar.animate().alpha(1).setDuration(250);
-                } else {
-                    titleToolbar.setVisibility(View.GONE);
-                    viewGroup.setVisibility(View.VISIBLE);
-                    titleToolbar.animate().alpha(0).setDuration(250);
-                    viewGroup.animate().alpha(1).setDuration(500);
-                }
-            }
-        });
-
-        FloatingActionButton fab = fragmentGroupProfileBinding.agpFabSetPic;
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fab.setColorFilter(Color.WHITE);
-
-        if (fragmentGroupProfileViewModel.role == GroupChatRole.OWNER || fragmentGroupProfileViewModel.role == GroupChatRole.ADMIN) {
-            fab.setVisibility(View.VISIBLE);
-            //
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //
-                    startDialogSelectPicture(R.array.profile);
-                }
-            });
-        } else {
-            fab.setVisibility(View.GONE);
-        }
-        //
-
-        //final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.agp_toggle_member_can_add_member);
-        //toggleButton.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        if (toggleButton.isChecked()) {
-        //
-        //        } else {
-        //
-        //        }
-        //    }
-        //});
-
-        //
         FragmentShowAvatars.onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
@@ -296,7 +247,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     mAvatarId = Long.parseLong(messageOne);
                 }
 
-                HelperAvatar.avatarDelete(fragmentGroupProfileViewModel.roomId, mAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
+                HelperAvatar.avatarDelete(viewModel.roomId, mAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
                     @Override
                     public void latestAvatarPath(final String avatarPath) {
                         G.handler.post(new Runnable() {
@@ -395,13 +346,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     }
 
     private void showAvatar() {
-        HelperAvatar.getAvatar(fragmentGroupProfileViewModel.roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
+        HelperAvatar.getAvatar(viewModel.roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (fragmentGroupProfileViewModel.roomId != ownerId)
+                        if (viewModel.roomId != ownerId)
                             return;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                     }
@@ -413,7 +364,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (fragmentGroupProfileViewModel.roomId != ownerId)
+                        if (viewModel.roomId != ownerId)
                             return;
                         imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
@@ -426,8 +377,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (prgWait != null) {
-                    prgWait.setVisibility(View.VISIBLE);
+                if (binding.loading != null) {
+                    binding.loading.setVisibility(View.VISIBLE);
                     G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
@@ -438,7 +389,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                prgWait.setVisibility(View.GONE);
+                binding.loading.setVisibility(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
@@ -535,7 +486,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                new RequestGroupKickAdmin().groupKickAdmin(fragmentGroupProfileViewModel.roomId, memberID);
+                new RequestGroupKickAdmin().groupKickAdmin(viewModel.roomId, memberID);
             }
         }).show();
     }
@@ -548,7 +499,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestGroupKickMember().groupKickMember(fragmentGroupProfileViewModel.roomId, memberID);
+                new RequestGroupKickMember().groupKickMember(viewModel.roomId, memberID);
             }
         }).show();
     }
@@ -558,11 +509,10 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestGroupKickModerator().groupKickModerator(fragmentGroupProfileViewModel.roomId, memberID);
+                new RequestGroupKickModerator().groupKickModerator(viewModel.roomId, memberID);
             }
         }).show();
     }
-
 
     public interface OnBackFragment {
         void onBack();
