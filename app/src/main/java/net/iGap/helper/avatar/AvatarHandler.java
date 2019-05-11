@@ -219,6 +219,17 @@ public class AvatarHandler {
     // ******************************************* End *********************************************
 
     public void getAvatar(BaseParam baseParam) {
+
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    getAvatar(baseParam);
+                }
+            });
+            return;
+        }
+
         if (baseParam.imageView == null || baseParam.avatarId == null) {
             return;
         }
