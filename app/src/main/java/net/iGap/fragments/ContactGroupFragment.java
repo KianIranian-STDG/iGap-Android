@@ -310,7 +310,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         } else {
             for (StructContactInfo contact : contacts) {
                 if (contact != null) {
-                    items.add(new ContactItemGroup().setContact(contact).withIdentifier(contact.peerId));
+                    items.add(new ContactItemGroup(avatarHandler).setContact(contact).withIdentifier(contact.peerId));
 
                     Uri uri = null;
                     if (contact.avatar != null && contact.avatar.getFile() != null && contact.avatar.getFile().getLocalThumbnailPath() != null) {

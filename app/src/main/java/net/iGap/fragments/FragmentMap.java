@@ -40,7 +40,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -58,27 +57,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 
 import io.realm.Realm;
 
@@ -366,37 +361,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     }
 
     private void setAvatar(long id) {
-
-        HelperAvatar.getAvatar(id, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (id != ownerId)
-                            return;
-                        //   if (!isCloudRoom) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgProfile);
-                        //     }
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (id != ownerId)
-                            return;
-                        //   if (!isCloudRoom && imvUserPicture != null) {
-                        imgProfile.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
-                        //    }
-                    }
-                });
-            }
-        });
-
+        avatarHandler.getAvatar(new ParamWithAvatarType(imgProfile, id).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 
     //****************************************************************************************************

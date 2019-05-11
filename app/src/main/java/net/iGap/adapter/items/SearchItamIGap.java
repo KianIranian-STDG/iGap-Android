@@ -19,10 +19,9 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.EmojiTextViewE;
@@ -34,6 +33,11 @@ import java.util.List;
 public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.ViewHolder> {
     ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item;
     private Typeface typeFaceIcon;
+    private AvatarHandler avatarHandler;
+
+    public SearchItamIGap(AvatarHandler avatarHandler) {
+        this.avatarHandler = avatarHandler;
+    }
 
     public ProtoClientSearchUsername.ClientSearchUsernameResponse.Result getItem() {
         return item;
@@ -61,58 +65,12 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
         holder.txtIcon.setVisibility(View.GONE);
 
         if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
-
-            HelperAvatar.getAvatar(item.getUser().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long roomId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getUser().getId() == roomId)
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color, final long roomId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getUser().getId() == roomId)
-                                holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUser().getId()).avatarType(AvatarHandler.AvatarType.USER));
 
             holder.name.setText(item.getUser().getDisplayName());
             holder.lastSeen.setText(item.getUser().getUsername());
         } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
-
-            HelperAvatar.getAvatar(item.getRoom().getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long roomId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getRoom().getId() == roomId)
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color, final long roomId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getRoom().getId() == roomId)
-                                holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getRoom().getId()).avatarType(AvatarHandler.AvatarType.ROOM));
 
             holder.name.setText(item.getRoom().getTitle());
 

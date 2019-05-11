@@ -1,12 +1,12 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,14 +37,13 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.helper.AvatarHandler;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
@@ -69,7 +68,6 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
-import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -77,7 +75,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -96,20 +93,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.realm.ObjectChangeSet;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollection;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
-import io.realm.RealmModel;
-import io.realm.RealmObjectChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
-import static net.iGap.G.fragmentActivity;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -1412,26 +1405,13 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
         private void setAvatar(final RealmRoom mInfo, ViewHolder holder) {
             long idForGetAvatar;
-            AvatarHandler.AvatarType avatarType;
             if (mInfo.getType() == CHAT) {
                 idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                avatarType = AvatarHandler.AvatarType.USER;
             } else {
                 idForGetAvatar = mInfo.getId();
-                avatarType = AvatarHandler.AvatarType.ROOM;
             }
-
-            avatarHandler.getAvatar(holder.image, null, idForGetAvatar, avatarType, false,
-                    HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor()), true, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                }
-
-                @Override
-                public void onShowInitials(String initials, String color, long idForGetAvatar) {
-
-                }
-            });
+            Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor());
+            avatarHandler.getAvatar(new ParamWithInitBitmap(holder.image, idForGetAvatar).initBitmap(init));
         }
 
         private void setChatIcon(RealmRoom mInfo, MaterialDesignTextView textView) {

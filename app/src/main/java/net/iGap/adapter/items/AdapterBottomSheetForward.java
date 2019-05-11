@@ -19,10 +19,8 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperAvatar;
-import net.iGap.helper.HelperImageBackColor;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.structs.StructBottomSheetForward;
@@ -38,10 +36,11 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
 
     public StructBottomSheetForward mList;
     public boolean isChecked = false;
+    private AvatarHandler avatarHandler;
 
-    public AdapterBottomSheetForward(StructBottomSheetForward mList) {
+    public AdapterBottomSheetForward(StructBottomSheetForward mList, AvatarHandler avatarHandler) {
         this.mList = mList;
-
+        this.avatarHandler = avatarHandler;
     }
 
 //    @Override
@@ -128,70 +127,20 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
 
     private void setAvatar(final StructBottomSheetForward mInfo, CircleImageView imageView) {
         long idForGetAvatar;
-        HelperAvatar.AvatarType avatarType;
+        AvatarHandler.AvatarType avatarType;
         if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
             idForGetAvatar = mInfo.getPeer_id();
-            avatarType = HelperAvatar.AvatarType.USER;
+            avatarType = AvatarHandler.AvatarType.USER;
         } else {
             idForGetAvatar = mInfo.getId();
-            avatarType = HelperAvatar.AvatarType.ROOM;
+            avatarType = AvatarHandler.AvatarType.ROOM;
         }
 
-        final long idForGetAvatarOriginal = idForGetAvatar;
-
-        HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (idForGetAvatar == idForGetAvatarOriginal ) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(String initials, String color, long idForGetAvatar) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (idForGetAvatar == idForGetAvatarOriginal ) {
-                            imageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
-                        }
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(imageView, idForGetAvatar).avatarSize(R.dimen.dp52).avatarType(avatarType));
     }
 
     private void setAvatarContact(final ViewHolder holder, final long userId) {
-
-        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (userId == ownerId) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.imgSrc);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (userId == ownerId)
-                            holder.imgSrc.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.imgSrc.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(holder.imgSrc, userId).avatarType(AvatarHandler.AvatarType.USER));
     }
 
     @Override

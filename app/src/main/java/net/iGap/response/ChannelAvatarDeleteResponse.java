@@ -11,7 +11,8 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.proto.ProtoChannelAvatarDelete;
 
 public class ChannelAvatarDeleteResponse extends MessageHandler {
@@ -36,7 +37,9 @@ public class ChannelAvatarDeleteResponse extends MessageHandler {
         if (G.onChannelAvatarDelete != null) {
             G.onChannelAvatarDelete.onChannelAvatarDelete(builder.getRoomId(), builder.getId());
         } else {
-            HelperAvatar.avatarDelete(builder.getRoomId(), builder.getId(), HelperAvatar.AvatarType.ROOM, null);
+            if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
+                G.currentActivity.avatarHandler.avatarDelete(new ParamWithAvatarType(null, builder.getRoomId()).avatarType(AvatarHandler.AvatarType.ROOM), builder.getId());
+            }
         }
     }
 

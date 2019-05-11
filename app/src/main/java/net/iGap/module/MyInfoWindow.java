@@ -12,10 +12,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -41,8 +41,9 @@ public class MyInfoWindow extends InfoWindow {
     private Marker marker;
     private boolean isCallEnable = false;
     private boolean isVideoCallEnable = false;
+    private AvatarHandler avatarHandler;
 
-    public MyInfoWindow(MapView mapView, Marker marker, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity) {
+    public MyInfoWindow(MapView mapView, Marker marker, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity, AvatarHandler avatarHandler) {
         super(R.layout.empty_info_map, mapView);
         this.map = mapView;
         this.marker = marker;
@@ -50,6 +51,7 @@ public class MyInfoWindow extends InfoWindow {
         this.hasComment = hasComment;
         this.fragmentiGapMap = fragmentiGapMap;
         this.mActivity = mActivity;
+        this.avatarHandler = avatarHandler;
     }
 
     public MyInfoWindow(int layoutResId, MapView mapView) {
@@ -207,32 +209,7 @@ public class MyInfoWindow extends InfoWindow {
                 txtComment.performClick();
             }
         });
-
-        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long roomId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (userId != roomId)
-                            return;
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), avatar);
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long roomId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (userId != roomId)
-                            return;
-                        avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(avatar, userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
         if (hasComment) {
             G.onGeoGetComment = new OnGeoGetComment() {

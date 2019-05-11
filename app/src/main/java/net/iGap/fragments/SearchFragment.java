@@ -403,7 +403,7 @@ public class SearchFragment extends BaseFragment {
                 if (item.type == SearchType.header) {
                     items.add(new SearchItemHeader().setText(item.name).withIdentifier(index++));
                 } else {
-                    items.add(new SearchItem().setContact(item).withIdentifier(index++));
+                    items.add(new SearchItem(avatarHandler).setContact(item).withIdentifier(index++));
                 }
             }
         }

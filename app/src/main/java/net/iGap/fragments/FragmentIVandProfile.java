@@ -14,14 +14,11 @@ import android.widget.LinearLayout;
 import net.iGap.databinding.FragmentIvandProfileBinding;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
-import net.iGap.helper.HelperImageBackColor;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
-import org.paygear.wallet.WalletActivity;
 
 public class FragmentIVandProfile extends FragmentToolBarBack {
     private FragmentIvandProfileBinding binding;
@@ -62,29 +59,7 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
     }
 
     private void setImage() {
-        HelperAvatar.getAvatar(G.userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                if (avatarPath != null) {
-                    G.handler.post(() -> {
-                        if (G.userId != ownerId)
-                            return;
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), profileImage);
-                    });
-                }
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(() -> {
-                    if (G.userId != ownerId)
-                        return;
-                    profileImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) profileImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
-                });
-            }
-        });
-
-
+        avatarHandler.getAvatar(new ParamWithAvatarType(profileImage, G.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     @Override

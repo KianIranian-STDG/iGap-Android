@@ -32,10 +32,11 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnCallLogClear;
@@ -58,7 +59,6 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.webrtc.WebRTC;
 
-import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -750,30 +750,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             }
 
             viewHolder.name.setText(item.getPeer().getDisplayName());
-
-            HelperAvatar.getAvatarCall(item.getPeer(), item.getPeer().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getPeer().getId() == ownerId)
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color, final long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getPeer().getId() == ownerId)
-                                viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, item.getPeer().getId()).registeredUser(item.getPeer()).avatarType(AvatarHandler.AvatarType.USER));
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

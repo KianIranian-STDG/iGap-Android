@@ -33,7 +33,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -318,8 +317,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-
-        HelperAvatar.avatarAdd(G.userId, pathImageUser, avatar, new OnAvatarAdd() {
+        avatarHandler.avatarAdd(G.userId, pathImageUser, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
 

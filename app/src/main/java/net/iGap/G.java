@@ -35,6 +35,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import net.iGap.activities.ActivityCustomError;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
@@ -107,7 +108,7 @@ public class G extends MultiDexApplication {
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
     public static HashMap<Integer, Integer> priorityActionId = new HashMap<>();
-    public static Activity currentActivity;
+    public static ActivityEnhanced currentActivity;
     public static FragmentActivity fragmentActivity;
     public static String latestActivityName;
     public static File IMAGE_NEW_GROUP;
