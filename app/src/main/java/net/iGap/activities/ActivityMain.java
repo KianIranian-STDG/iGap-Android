@@ -132,6 +132,7 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
+import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.module.AndroidUtils;
@@ -330,6 +331,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (ActivityCall.stripLayoutChat != null) {
                 ActivityCall.stripLayoutChat.setVisibility(View.GONE);
             }
+        }
+    }
+
+    public static void doIvandScore(String content, Activity activity) {
+        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
+            @Override
+            public void onSetActivitiesReady(String message, boolean isOk) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
+                        dialog.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = G.context.getString(R.string.error_submit_qr_code);
+                        if (majorCode == 10183 && minorCode == 2) {
+                            message = G.context.getString(R.string.E_10183);
+                        }
+
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
+                        dialog.show();
+                    }
+                });
+            }
+        });
+
+        if (!isSend) {
+            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
         }
     }
 
@@ -939,41 +975,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public static void doIvandScore(String content, Activity activity) {
-        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
-            @Override
-            public void onSetActivitiesReady(String message, boolean isOk) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
-                        dialog.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String message = G.context.getString(R.string.error_submit_qr_code);
-                        if (majorCode == 10183 && minorCode == 2) {
-                            message = G.context.getString(R.string.E_10183);
-                        }
-
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
-                        dialog.show();
-                    }
-                });
-            }
-        });
-
-        if (!isSend) {
-            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
-        }
-    }
-
     private void checkKeepMedia() {
 
         final int keepMedia = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
@@ -1298,6 +1299,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mViewPager = findViewById(R.id.viewpager);
         boolean isRtl = HelperCalander.isPersianUnicode;
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
+        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
+            @Override
+            public int callCount() {
+                return 50;
+            }
+
+            @Override
+            public int messageCount() {
+                return 18;
+            }
+
+            @Override
+            public int badgeColor() {
+                return getResources().getColor(R.color.red);
+            }
+        });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {

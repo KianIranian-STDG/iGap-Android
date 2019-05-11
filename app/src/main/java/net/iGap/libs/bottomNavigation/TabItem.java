@@ -57,14 +57,19 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             badgeView = new BadgeView(getContext());
 
         imageView.setId(R.id.bottomIcon);
-
+        RelativeLayout.LayoutParams badgeParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams iconParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         iconParams.addRule(CENTER_IN_PARENT);
         imageView.setLayoutParams(iconParams);
+        if (isRtl) {
+            badgeParams.addRule(RelativeLayout.LEFT_OF, imageView.getId());
+            badgeParams.setMargins(0, i_Dp(R.dimen.dp4), -16, i_Dp(R.dimen.dp4));
+        } else {
+            badgeParams.addRule(RelativeLayout.RIGHT_OF, imageView.getId());
+            badgeParams.setMargins(-16, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
+        }
 
-        RelativeLayout.LayoutParams badgeParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        badgeParams.addRule(RelativeLayout.RIGHT_OF, imageView.getId());
-        badgeParams.setMargins(-16, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
         badgeView.setLayoutParams(badgeParams);
         badgeView.setBadgeColor(getResources().getColor(R.color.red));
 
@@ -154,6 +159,9 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         }
     }
 
+    public void setBadgeColor(int color) {
+        badgeView.setBadgeColor(color);
+    }
 
     public int i_Dp(int dpSrc) {
         return (int) context.getResources().getDimension(dpSrc);

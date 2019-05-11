@@ -1,6 +1,5 @@
 package net.iGap.libs.bottomNavigation;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -21,6 +20,7 @@ import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
+import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -37,63 +37,17 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
     private int backgroundColor;
-    private int messageCount = 100;
-    private int callCount = 1;
-
-
-    public BottomNavigation(Context context) {
-        super(context);
-        init(null);
-    }
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public BottomNavigation(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(attrs);
-    }
-
-
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
         setMinimumHeight(Utils.dpToPx(56));
         setOrientation(HORIZONTAL);
         setWeightSum(5);
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        for (int i = 0; i < getChildCount(); i++) {
-            final TabItem tabItem = (TabItem) getChildAt(i);
-            tabItem.setPosition(i);
-
-            switch (i) {
-                case 0:
-                    tabItem.setBadgeCount(100);
-                    break;
-                case 1:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 2:
-                    tabItem.setBadgeCount(999999999);
-                    break;
-                case 3:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 4:
-                    tabItem.setBadgeCount(0);
-                    break;
-            }
-
-            tabItems.add(tabItem);
-            tabItem.setOnItemSelected(this);
-
-        }
     }
 
     private void parseAttr(AttributeSet attributeSet) {
@@ -110,9 +64,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
-    public int getDefaultItem() {
-        return defaultItem;
-    }
 
     @Override
     public void selectedItem(final int position) {
@@ -227,6 +178,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
+    public int getDefaultItem() {
+        return defaultItem;
+    }
+
     public void setOnItemChangeListener(OnItemChangeListener onItemChangeListener) {
         this.onItemChangeListener = onItemChangeListener;
         onItemChangeListener.onSelectedItemChanged(tabItems.get(defaultItem).getPosition());
@@ -235,5 +190,33 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     @Override
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public void setOnBottomNavigationBadge(OnBottomNavigationBadge callBack) {
+        for (int i = 0; i < getChildCount(); i++) {
+            final TabItem tabItem = (TabItem) getChildAt(i);
+            tabItem.setPosition(i);
+
+            switch (i) {
+                case 0:
+                    tabItem.setBadgeCount(callBack.messageCount());
+                    break;
+                case 1:
+                    tabItem.setBadgeCount(0);
+                    break;
+                case 2:
+                    tabItem.setBadgeCount(callBack.callCount());
+                    break;
+                case 3:
+                    tabItem.setBadgeCount(0);
+                    break;
+                case 4:
+                    tabItem.setBadgeCount(0);
+                    break;
+            }
+            tabItem.setBadgeColor(callBack.badgeColor());
+            tabItems.add(tabItem);
+            tabItem.setOnItemSelected(this);
+        }
     }
 }
