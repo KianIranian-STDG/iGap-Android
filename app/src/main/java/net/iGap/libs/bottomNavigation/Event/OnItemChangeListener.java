@@ -5,6 +5,6 @@
 package net.iGap.libs.bottomNavigation.Event;
 
 public interface OnItemChangeListener {
-    void onSelectedItemChanged(int itemId);
+    void onSelectedItemChanged(int i);
 
 }

@@ -1,13 +1,17 @@
 package net.iGap.libs.bottomNavigation;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -16,6 +20,7 @@ import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
+import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -26,67 +31,23 @@ import java.util.List;
 public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     public static final String TAG = "BottomNavigation";
-
     private OnItemChangeListener onItemChangeListener;
     private List<TabItem> tabItems = new ArrayList<>();
-
     private int defaultItem;
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
     private int backgroundColor;
-
-
-    public BottomNavigation(Context context) {
-        super(context);
-        init(null);
-    }
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public BottomNavigation(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(attrs);
-        setElevation(2f);
-    }
-
-
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
-        setupViews();
-    }
-
-    private void setupViews() {
         setMinimumHeight(Utils.dpToPx(56));
         setOrientation(HORIZONTAL);
         setWeightSum(5);
-
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        setupChildren();
-    }
-
-    private void setupChildren() {
-        if (getChildCount() > 0) {
-            for (int i = 0; i < getChildCount(); i++) {
-                if (!(getChildAt(i) instanceof TabItem)) {
-                    throw new RuntimeException(TAG + "only accept tab item as child.");
-                } else {
-                    final TabItem tabItem = (TabItem) getChildAt(i);
-                    tabItem.setPosition(i);
-                    tabItems.add(tabItem);
-                    tabItem.setOnItemSelected(this);
-                }
-            }
-        } else {
-            throw new RuntimeException(TAG + " can't be empty!");
-        }
     }
 
     private void parseAttr(AttributeSet attributeSet) {
@@ -103,9 +64,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
-    public int getDefaultItem() {
-        return defaultItem;
-    }
 
     @Override
     public void selectedItem(final int position) {
@@ -125,7 +83,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         paint.setColor(backgroundColor);
         canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius, true), paint);
         super.dispatchDraw(canvas);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -167,7 +124,33 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             }
         });
 
+
         return path;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private Bitmap shadow(Path path) {
+        Bitmap viewHolder = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ALPHA_8);
+        Canvas canvas = new Canvas(viewHolder);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(getResources().getColor(R.color.black));
+        paint.setAlpha(155);
+        canvas.drawPath(path, paint);
+        RenderScript script = RenderScript.create(getContext());
+        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(script, Element.U8(script));
+        Allocation input = Allocation.createCubemapFromBitmap(script, viewHolder);
+        Allocation output = Allocation.createTyped(script, input.getType());
+        blur.setRadius(15f);
+        blur.setInput(input);
+        blur.forEach(output);
+        output.copyTo(viewHolder);
+
+        script.destroy();
+        input.destroy();
+        output.destroy();
+        blur.destroy();
+
+        return viewHolder;
     }
 
 
@@ -195,6 +178,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
+    public int getDefaultItem() {
+        return defaultItem;
+    }
+
     public void setOnItemChangeListener(OnItemChangeListener onItemChangeListener) {
         this.onItemChangeListener = onItemChangeListener;
         onItemChangeListener.onSelectedItemChanged(tabItems.get(defaultItem).getPosition());
@@ -203,5 +190,34 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     @Override
     public void setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public void setOnBottomNavigationBadge(OnBottomNavigationBadge callBack) {
+        for (int i = 0; i < getChildCount(); i++) {
+            final TabItem tabItem = (TabItem) getChildAt(i);
+            tabItem.setPosition(i);
+
+            switch (i) {
+                case 0:
+                    tabItem.setBadgeCount(0);
+                    break;
+                case 1:
+                    tabItem.setBadgeCount(callBack.callCount());
+                    break;
+                case 2:
+                    tabItem.setBadgeCount(callBack.messageCount());
+                    break;
+                case 3:
+                    tabItem.setBadgeCount(0);
+                    break;
+                case 4:
+                    tabItem.setBadgeCount(0);
+                    break;
+            }
+
+            tabItem.setBadgeColor(callBack.badgeColor());
+            tabItems.add(tabItem);
+            tabItem.setOnItemSelected(this);
+        }
     }
 }

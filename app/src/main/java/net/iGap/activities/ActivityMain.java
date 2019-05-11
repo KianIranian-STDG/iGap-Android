@@ -103,6 +103,7 @@ import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
@@ -131,7 +132,9 @@ import net.iGap.interfaces.OnVerifyNewDevice;
 import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
+import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.module.AndroidUtils;
@@ -200,7 +203,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -330,6 +333,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (ActivityCall.stripLayoutChat != null) {
                 ActivityCall.stripLayoutChat.setVisibility(View.GONE);
             }
+        }
+    }
+
+    public static void doIvandScore(String content, Activity activity) {
+        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
+            @Override
+            public void onSetActivitiesReady(String message, boolean isOk) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
+                        dialog.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = G.context.getString(R.string.error_submit_qr_code);
+                        if (majorCode == 10183 && minorCode == 2) {
+                            message = G.context.getString(R.string.E_10183);
+                        }
+
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
+                        dialog.show();
+                    }
+                });
+            }
+        });
+
+        if (!isSend) {
+            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
         }
     }
 
@@ -939,41 +977,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public static void doIvandScore(String content, Activity activity) {
-        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
-            @Override
-            public void onSetActivitiesReady(String message, boolean isOk) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
-                        dialog.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String message = G.context.getString(R.string.error_submit_qr_code);
-                        if (majorCode == 10183 && minorCode == 2) {
-                            message = G.context.getString(R.string.E_10183);
-                        }
-
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
-                        dialog.show();
-                    }
-                });
-            }
-        });
-
-        if (!isSend) {
-            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
-        }
-    }
-
     private void checkKeepMedia() {
 
         final int keepMedia = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
@@ -1298,6 +1301,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mViewPager = findViewById(R.id.viewpager);
         boolean isRtl = HelperCalander.isPersianUnicode;
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
+        // TODO: 5/11/19 add call and message unread counter
+        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
+            @Override
+            public int callCount() {
+                return 5200;
+            }
+
+            @Override
+            public int messageCount() {
+                return RealmRoom.getAllUnreadCount();
+            }
+
+            @Override
+            public int badgeColor() {
+                return G.context.getResources().getColor(R.color.red);
+            }
+        });
+
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -1307,14 +1329,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onPageSelected(int i) {
                 if (isRtl) {
-                    if (i == 2)
+                    if (i == 4)
                         bottomNavigation.setCurrentItem(0);
-                    if (i == 1)
+                    if (i == 3)
                         bottomNavigation.setCurrentItem(1);
-                    if (i == 0)
+                    if (i == 2)
                         bottomNavigation.setCurrentItem(2);
+                    if (i == 1)
+                        bottomNavigation.setCurrentItem(3);
+                    if (i == 0)
+                        bottomNavigation.setCurrentItem(4);
                 } else
                     bottomNavigation.setCurrentItem(i);
+//                addToolBar(i);
             }
 
             @Override
@@ -1323,73 +1350,70 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        bottomNavigation.setOnItemChangeListener(itemId -> {
+        bottomNavigation.setOnItemChangeListener(i -> {
             if (isRtl) {
-                if (itemId == 2)
-                    mViewPager.setCurrentItem(0);
-                if (itemId == 1)
-                    mViewPager.setCurrentItem(1);
-                if (itemId == 0)
-                    mViewPager.setCurrentItem(2);
-            } else
-                mViewPager.setCurrentItem(itemId);
+                if (i == 4)
+                    bottomNavigation.setCurrentItem(0);
+                if (i == 3)
+                    bottomNavigation.setCurrentItem(1);
+                if (i == 2)
+                    bottomNavigation.setCurrentItem(2);
+                if (i == 1)
+                    bottomNavigation.setCurrentItem(3);
+                if (i == 0)
+                    bottomNavigation.setCurrentItem(4);
+            } else {
+                mViewPager.setCurrentItem(i);
+//                addToolBar(i);
+            }
         });
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
+        mViewPager.setOffscreenPageLimit(5);
 
         if (HelperCalander.isPersianUnicode) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+            G.handler.postDelayed(() -> {
+                fragmentCall = FragmentCall.newInstance(true);
+                pages.add(fragmentCall);
 
+                pages.add(DiscoveryFragment.newInstance(0));
+                pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
+                sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
-                    fragmentCall = FragmentCall.newInstance(true);
-                    pages.add(fragmentCall);
-
-                    pages.add(DiscoveryFragment.newInstance(0));
-
-                    /* pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));*/
-                    /*  pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));*/
-                    /*      pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));*/
-
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
-                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
-                    mViewPager.setCurrentItem(2);
-                    setViewPagerSelectedItem();
-                    findViewById(R.id.loadingContent).setVisibility(View.GONE);
-                }
+                mViewPager.setOffscreenPageLimit(5);
+                setViewPagerSelectedItem();
+                findViewById(R.id.loadingContent).setVisibility(View.GONE);
             }, 400);
+
         } else {
 
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
+            G.handler.postDelayed(() -> {
 
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
-                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
+                pages.add(RegisteredContactsFragment.newInstance());
+                fragmentCall = FragmentCall.newInstance(true);
+                pages.add(fragmentCall);
+                pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
 
-                    findViewById(R.id.loadingContent).setVisibility(View.GONE);
 
-                }
+                sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                mViewPager.setAdapter(sampleFragmentPagerAdapter);
+
+                findViewById(R.id.loadingContent).setVisibility(View.GONE);
+
             }, 400);
 
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+            G.handler.postDelayed(() -> {
 
-                    fragmentCall = FragmentCall.newInstance(true);
-                    pages.add(DiscoveryFragment.newInstance(0));
-                    pages.add(fragmentCall);
+                pages.add(DiscoveryFragment.newInstance(0));
+                pages.add(new FragmentSetting());
+                mViewPager.getAdapter().notifyDataSetChanged();
 
-                    mViewPager.getAdapter().notifyDataSetChanged();
+                setViewPagerSelectedItem();
 
-                    setViewPagerSelectedItem();
-
-                }
             }, 800);
         }
+
 
         MaterialDesignTextView txtMenu = findViewById(R.id.am_btn_menu);
 
@@ -1409,25 +1433,51 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private int bottomNavigationAdapter(int pos, boolean rtl) {
-        if (rtl) {
-            switch (pos) {
-                case 0:
-                    return 4;
-                case 1:
-                    return 3;
-                case 2:
-                    return 2;
-                case 3:
-                    return 1;
-                case 4:
-                    return 0;
-            }
-        } else {
-            return pos;
+    private void addToolBar(int i) {
+        RelativeLayout container = findViewById(R.id.rootToolbar);
+        switch (i) {
+            case 0:
+                break;
+            case 1:
+                View callToolbar = HelperToolbar.create()
+                        .setContext(this)
+                        .setLogoShown(true)
+                        .setCallEnable(true)
+                        .getView();
+                container.removeAllViews();
+                container.addView(callToolbar);
+                break;
+            case 2:
+                View roomToolbar = HelperToolbar.create()
+                        .setContext(this)
+                        .setLogoShown(false)
+                        .setCounterShown(true)
+                        .setLeftIcon(R.drawable.hamburger_menu)
+                        .setBigCenterAvatarShown(true)
+                        .setRightIcons(R.drawable.ic_tab_search)
+                        .getView();
+
+                container.removeAllViews();
+                container.addView(roomToolbar);
+                break;
+            case 3:
+                View discoveryToolbar = HelperToolbar.create()
+                        .setContext(this)
+                        .setLogoShown(true)
+                        .setSearchBoxShown(true)
+                        .setRightSmallAvatarShown(true)
+                        .getView();
+                container.removeAllViews();
+                container.addView(discoveryToolbar);
+
+                break;
+            case 4:
+                break;
         }
-        return pos;
+
     }
+
+
 
     /**
      * send client condition

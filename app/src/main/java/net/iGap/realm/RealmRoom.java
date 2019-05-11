@@ -18,7 +18,6 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnClientGetRoomMessage;
-import net.iGap.module.BotInit;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -31,7 +30,6 @@ import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -1621,6 +1619,30 @@ public class RealmRoom extends RealmObject {
         realm.close();
         return ar;
     }
+
+
+    public static int getAllUnreadCount() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        int all = 0, chat = 0, group = 0, channel = 0;
+        for (RealmRoom rm : results) {
+            switch (rm.getType()) {
+                case CHANNEL:
+                    channel += rm.getUnreadCount();
+                    break;
+                case CHAT:
+                    chat += rm.getUnreadCount();
+                    break;
+                case GROUP:
+                    group += rm.getUnreadCount();
+                    break;
+            }
+            all += rm.getUnreadCount();
+        }
+        realm.close();
+        return all;
+    }
+
 
     public static void setPromote(Long id, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type type) {
 

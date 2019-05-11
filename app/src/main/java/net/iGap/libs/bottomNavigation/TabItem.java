@@ -6,11 +6,18 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 
-public class TabItem extends android.support.v7.widget.AppCompatImageView implements View.OnClickListener {
+import static net.iGap.G.context;
+
+public class TabItem extends RelativeLayout implements View.OnClickListener {
 
     private final String TAG = "TabItem";
 
@@ -19,8 +26,11 @@ public class TabItem extends android.support.v7.widget.AppCompatImageView implem
 
     private Drawable selectedIcon;
     private Drawable unSelectedIcon;
+    private ImageView imageView;
+    private BadgeView badgeView;
     private int position;
     private boolean active = false;
+    private boolean isRtl = G.isAppRtl;
 
 
     public TabItem(Context context) {
@@ -40,6 +50,31 @@ public class TabItem extends android.support.v7.widget.AppCompatImageView implem
 
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
+
+        if (imageView == null)
+            imageView = new ImageView(getContext());
+        if (badgeView == null)
+            badgeView = new BadgeView(getContext());
+
+        imageView.setId(R.id.bottomIcon);
+        RelativeLayout.LayoutParams badgeParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams iconParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        iconParams.addRule(CENTER_IN_PARENT);
+        imageView.setLayoutParams(iconParams);
+        if (isRtl) {
+            badgeParams.addRule(RelativeLayout.LEFT_OF, imageView.getId());
+            badgeParams.setMargins(0, i_Dp(R.dimen.dp4), -16, i_Dp(R.dimen.dp4));
+        } else {
+            badgeParams.addRule(RelativeLayout.RIGHT_OF, imageView.getId());
+            badgeParams.setMargins(-16, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
+        }
+
+        badgeView.setLayoutParams(badgeParams);
+        badgeView.setBadgeColor(getResources().getColor(R.color.red));
+
+        addView(imageView);
+        addView(badgeView);
         setOnClickListener(this);
     }
 
@@ -61,7 +96,7 @@ public class TabItem extends android.support.v7.widget.AppCompatImageView implem
     }
 
     private void setupViews() {
-        setImageDrawable(selectedIcon);
+        imageView.setImageDrawable(selectedIcon);
         if (position == bottomNavigation.getDefaultItem())
             active = true;
         setSelected(active);
@@ -99,9 +134,9 @@ public class TabItem extends android.support.v7.widget.AppCompatImageView implem
             active = isActive;
         }
         if (active) {
-            setImageDrawable(selectedIcon);
+            imageView.setImageDrawable(selectedIcon);
         } else {
-            setImageDrawable(unSelectedIcon);
+            imageView.setImageDrawable(unSelectedIcon);
         }
     }
 
@@ -109,4 +144,26 @@ public class TabItem extends android.support.v7.widget.AppCompatImageView implem
         this.onItemSelected = onItemSelected;
     }
 
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    public void setBadgeCount(int count) {
+        badgeView.getTextView().setText(String.valueOf(count));
+        badgeView.getTextView().setTextSize(9);
+        badgeView.getTextView().setSingleLine(true);
+        if (count == 0) {
+            badgeView.setVisibility(GONE);
+        } else if (count > 99) {
+            badgeView.getTextView().setText("+99");
+        }
+    }
+
+    public void setBadgeColor(int color) {
+        badgeView.setBadgeColor(color);
+    }
+
+    public int i_Dp(int dpSrc) {
+        return (int) context.getResources().getDimension(dpSrc);
+    }
 }

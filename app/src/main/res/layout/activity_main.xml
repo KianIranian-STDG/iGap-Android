@@ -32,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@id/bn_main_bottomNavigation">
 
-
                     <net.iGap.module.MyAppBarLayout
                         android:id="@+id/appBarLayout"
                         android:layout_width="match_parent"
@@ -228,42 +227,42 @@
                     app:default_item="0">
 
                     <net.iGap.libs.bottomNavigation.TabItem
+                        android:id="@+id/ti_main_contact"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:padding="@dimen/dp12"
+                        app:selected_icon="@drawable/ic_contact_selected"
+                        app:unselected_icon="@drawable/ic_contact_unselected" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:id="@+id/ti_main_call"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:selected_icon="@drawable/ic_call_selected"
+                        app:unselected_icon="@drawable/ic_call_unselected" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:id="@+id/ti_main_chat"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         app:selected_icon="@drawable/ic_chat_selected"
                         app:unselected_icon="@drawable/ic_chat_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
+                        android:id="@+id/ti_main_dashboard"
                         android:layout_width="0dp"
-                        android:padding="@dimen/dp12"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:selected_icon="@drawable/ic_app_selected"
                         app:unselected_icon="@drawable/ic_app_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
+                        android:id="@+id/ti_main_setting"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:padding="@dimen/dp12"
-                        app:selected_icon="@drawable/ic_call_selected"
-                        app:unselected_icon="@drawable/ic_call_unselected" />
-
-                    <net.iGap.libs.bottomNavigation.TabItem
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:padding="@dimen/dp12"
-                        app:selected_icon="@drawable/ic_contact_selected"
-                        app:unselected_icon="@drawable/ic_contact_unselected" />
-
-                    <net.iGap.libs.bottomNavigation.TabItem
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:padding="@dimen/dp12"
                         app:selected_icon="@drawable/ic_me_selected"
                         app:unselected_icon="@drawable/ic_me_unselected" />
                 </net.iGap.libs.bottomNavigation.BottomNavigation>
@@ -312,6 +311,7 @@
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="@dimen/dp280"
+        android:visibility="gone"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="false">

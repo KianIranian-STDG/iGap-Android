@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -454,7 +453,7 @@ public class HelperToolbar {
         mToolbarLayout = findViewById(R.id.main_activity_toolbar);
 
         //chat view when user select items in chat room
-        View toolbarView = new HelperToolbar()
+        View toolbarView = new HelperToolbar.create()
                 .setContext(this)
                 .setLeftIcon(R.drawable.close)
                 .setRightIcons(R.drawable.add, R.drawable.back, R.drawable.close, R.drawable.edit)
