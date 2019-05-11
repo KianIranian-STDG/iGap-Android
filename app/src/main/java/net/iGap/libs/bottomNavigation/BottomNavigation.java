@@ -3,11 +3,16 @@ package net.iGap.libs.bottomNavigation;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -26,14 +31,14 @@ import java.util.List;
 public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     public static final String TAG = "BottomNavigation";
-
     private OnItemChangeListener onItemChangeListener;
     private List<TabItem> tabItems = new ArrayList<>();
-
     private int defaultItem;
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
     private int backgroundColor;
+    private int messageCount = 100;
+    private int callCount = 1;
 
 
     public BottomNavigation(Context context) {
@@ -50,42 +55,44 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     public BottomNavigation(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
-        setElevation(2f);
     }
 
 
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
-        setupViews();
-    }
-
-    private void setupViews() {
         setMinimumHeight(Utils.dpToPx(56));
         setOrientation(HORIZONTAL);
         setWeightSum(5);
-
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        setupChildren();
-    }
+        for (int i = 0; i < getChildCount(); i++) {
+            final TabItem tabItem = (TabItem) getChildAt(i);
+            tabItem.setPosition(i);
 
-    private void setupChildren() {
-        if (getChildCount() > 0) {
-            for (int i = 0; i < getChildCount(); i++) {
-                if (!(getChildAt(i) instanceof TabItem)) {
-                    throw new RuntimeException(TAG + "only accept tab item as child.");
-                } else {
-                    final TabItem tabItem = (TabItem) getChildAt(i);
-                    tabItem.setPosition(i);
-                    tabItems.add(tabItem);
-                    tabItem.setOnItemSelected(this);
-                }
+            switch (i) {
+                case 0:
+                    tabItem.setBadgeCount(100);
+                    break;
+                case 1:
+                    tabItem.setBadgeCount(0);
+                    break;
+                case 2:
+                    tabItem.setBadgeCount(999999999);
+                    break;
+                case 3:
+                    tabItem.setBadgeCount(0);
+                    break;
+                case 4:
+                    tabItem.setBadgeCount(0);
+                    break;
             }
-        } else {
-            throw new RuntimeException(TAG + " can't be empty!");
+
+            tabItems.add(tabItem);
+            tabItem.setOnItemSelected(this);
+
         }
     }
 
@@ -125,7 +132,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         paint.setColor(backgroundColor);
         canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius, true), paint);
         super.dispatchDraw(canvas);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -167,7 +173,33 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             }
         });
 
+
         return path;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private Bitmap shadow(Path path) {
+        Bitmap viewHolder = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ALPHA_8);
+        Canvas canvas = new Canvas(viewHolder);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(getResources().getColor(R.color.black));
+        paint.setAlpha(155);
+        canvas.drawPath(path, paint);
+        RenderScript script = RenderScript.create(getContext());
+        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(script, Element.U8(script));
+        Allocation input = Allocation.createCubemapFromBitmap(script, viewHolder);
+        Allocation output = Allocation.createTyped(script, input.getType());
+        blur.setRadius(15f);
+        blur.setInput(input);
+        blur.forEach(output);
+        output.copyTo(viewHolder);
+
+        script.destroy();
+        input.destroy();
+        output.destroy();
+        blur.destroy();
+
+        return viewHolder;
     }
 
 
