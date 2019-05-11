@@ -32,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@id/bn_main_bottomNavigation">
 
-
                     <net.iGap.module.MyAppBarLayout
                         android:id="@+id/appBarLayout"
                         android:layout_width="match_parent"
@@ -232,19 +231,11 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:selected_icon="@drawable/ic_chat_selected"
-                        app:unselected_icon="@drawable/ic_chat_unselected" />
+                        app:selected_icon="@drawable/ic_contact_selected"
+                        app:unselected_icon="@drawable/ic_contact_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_call"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:selected_icon="@drawable/ic_app_selected"
-                        app:unselected_icon="@drawable/ic_app_unselected" />
-
-                    <net.iGap.libs.bottomNavigation.TabItem
-                        android:id="@+id/ti_main_chat"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -252,12 +243,20 @@
                         app:unselected_icon="@drawable/ic_call_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
+                        android:id="@+id/ti_main_chat"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:selected_icon="@drawable/ic_chat_selected"
+                        app:unselected_icon="@drawable/ic_chat_unselected" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_dashboard"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:selected_icon="@drawable/ic_contact_selected"
-                        app:unselected_icon="@drawable/ic_contact_unselected" />
+                        app:selected_icon="@drawable/ic_app_selected"
+                        app:unselected_icon="@drawable/ic_app_unselected" />
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_setting"
@@ -312,6 +311,7 @@
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="@dimen/dp280"
+        android:visibility="gone"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="false">

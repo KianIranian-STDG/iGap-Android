@@ -199,13 +199,13 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
             switch (i) {
                 case 0:
-                    tabItem.setBadgeCount(callBack.messageCount());
-                    break;
-                case 1:
                     tabItem.setBadgeCount(0);
                     break;
-                case 2:
+                case 1:
                     tabItem.setBadgeCount(callBack.callCount());
+                    break;
+                case 2:
+                    tabItem.setBadgeCount(callBack.messageCount());
                     break;
                 case 3:
                     tabItem.setBadgeCount(0);
@@ -214,6 +214,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                     tabItem.setBadgeCount(0);
                     break;
             }
+
             tabItem.setBadgeColor(callBack.badgeColor());
             tabItems.add(tabItem);
             tabItem.setOnItemSelected(this);
