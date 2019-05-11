@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.ImageView;
 
 import net.iGap.G;
@@ -51,20 +50,29 @@ import static net.iGap.realm.RealmAvatar.getLastAvatar;
  */
 public class AvatarHandler {
 
+    private class CacheValue {
+        public Bitmap bitmap;
+        long fileId;
+
+        CacheValue(Bitmap bitmap, Long fileId) {
+            this.bitmap = bitmap;
+            this.fileId = fileId;
+        }
+    }
+
     private HashSet<AvatarHandler> allAvatarHandler = new HashSet<>();
 
     private ConcurrentHashMap<ImageView, ImageHashValue> imageViewHashValue;
     private ConcurrentHashMap<Long, HashSet<ImageView>> avatarHashImages;
 
-    private static ConcurrentHashMap<Long, Bitmap> avatarCache = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Long, CacheValue> avatarCache = new ConcurrentHashMap<>();
     private static ArrayList<Long> limitedList = new ArrayList<>();
 
-    private static ConcurrentHashMap<Long, Bitmap> avatarCacheMain = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Long, CacheValue> avatarCacheMain = new ConcurrentHashMap<>();
     private static ArrayList<Long> limitedListMain = new ArrayList<>();
 
     private final Object mutex;
     private final Object mutex2;
-    private final Object mutex3;
     private HashMap<Long, Boolean> mRepeatList = new HashMap<>();
     private ArrayList<String> reDownloadFiles = new ArrayList<>();
 
@@ -73,7 +81,6 @@ public class AvatarHandler {
         this.avatarHashImages = new ConcurrentHashMap<>();
         this.mutex = new Object();
         this.mutex2 = new Object();
-        this.mutex3 = new Object();
     }
 
     public void registerChangeFromOtherAvatarHandler() {
@@ -88,43 +95,47 @@ public class AvatarHandler {
         }
     }
 
-    private void notifyAll(String avatarPath, long avatarId, boolean isMain) {
-        notifyMe(avatarPath, avatarId, isMain);
-        notifyOther(avatarPath, avatarId, isMain);
+    private void notifyAll(String avatarPath, long avatarId, boolean isMain, long fileId) {
+        notifyMe(avatarPath, avatarId, isMain, fileId);
+        notifyOther(avatarPath, avatarId, isMain, fileId);
     }
 
-    private void notifyOther(String avatarPath, long avatarId, boolean isMain) {
+    private void notifyOther(String avatarPath, long avatarId, boolean isMain, long fileId) {
         synchronized (mutex2) {
             for (AvatarHandler avatarHandler : allAvatarHandler) {
                 if (!avatarHandler.equals(this)) {
-                    avatarHandler.notifyMe(avatarPath, avatarId, isMain);
+                    avatarHandler.notifyMe(avatarPath, avatarId, isMain, fileId);
                 }
             }
         }
     }
 
-    private void notifyMe(String avatarPath, long avatarId, boolean isMain) {
+    private void notifyMe(String avatarPath, long avatarId, boolean isMain, long fileId) {
         final Bitmap bmImg = BitmapFactory.decodeFile(avatarPath);
         if (bmImg != null) {
-            synchronized (mutex3) {
+            synchronized (mutex) {
                 ArrayList<Long> myLimitedList;
-                ConcurrentHashMap<Long, Bitmap> myAvatarCache;
+                ConcurrentHashMap<Long, CacheValue> myAvatarCache;
+                int limit;
                 if (isMain) {
                     myAvatarCache = avatarCacheMain;
                     myLimitedList = limitedListMain;
+                    limit = 15;
                 } else {
                     myAvatarCache = avatarCache;
                     myLimitedList = limitedList;
+                    limit = 20;
                 }
 
-                myAvatarCache.put(avatarId, bmImg);
+                myAvatarCache.put(avatarId, new CacheValue(bmImg, fileId));
                 int index = myLimitedList.indexOf(avatarId);
                 if (index < 0) {
-                    if (myLimitedList.size() > 20) {
-                        myLimitedList.remove(0);
+                    if (myLimitedList.size() > limit) {
+                        Long ss = myLimitedList.remove(0);
+                        myAvatarCache.remove(ss);
                     }
                     myLimitedList.add(avatarId);
-                } else {
+                } else if (myLimitedList.size() - 1 != index){
                     Collections.swap(myLimitedList, myLimitedList.size() - 1, index);
                 }
             }
@@ -169,12 +180,13 @@ public class AvatarHandler {
                         }
 
                         String avatarPath = copyAvatar(src, avatar);
-                        RealmAvatar.putOrUpdate(realm, ownerId, avatar).getFile().setLocalFilePath(avatarPath);
+                        RealmAvatar a = RealmAvatar.putOrUpdate(realm, ownerId, avatar);
+                        a.getFile().setLocalFilePath(avatarPath);
 
                         if (onAvatarAdd != null && avatarPath != null) {
                             onAvatarAdd.onAvatarAdd(avatarPath);
                         }
-                        AvatarHandler.this.notifyAll(avatarPath, ownerId, true);
+                        AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId());
                     }
                 });
                 realm.close();
@@ -211,34 +223,47 @@ public class AvatarHandler {
             return;
         }
 
-        if (baseParam.useCache) {
-            Bitmap cacheValue;
-            if (baseParam.showMain) {
-                cacheValue = avatarCacheMain.get(baseParam.avatarId);
-            } else {
-                cacheValue = avatarCache.get(baseParam.avatarId);
-            }
-
-            if (cacheValue != null) {
-                baseParam.imageView.setImageBitmap(cacheValue);
-                if (baseParam.onAvatarChange != null)
-                    baseParam.onAvatarChange.onChange(true);
-                return;
-            }
-        }
-
         synchronized (mutex) {
-            if (baseParam instanceof ParamWithAvatarType) {
-                String[] initialsStart = showInitials(baseParam.avatarId, ((ParamWithAvatarType) baseParam).avatarType);
-                if (initialsStart != null) {
-                    Bitmap image = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(((ParamWithAvatarType) baseParam).avatarSize), initialsStart[0], initialsStart[1]);
-                    baseParam.imageView.setImageBitmap(image);
-                    if (baseParam.onInitSet != null)
-                        baseParam.onInitSet.OnInitSet();
+            Bitmap cacheValue = null;
+            if (baseParam.useCache) {
+                CacheValue mainCache = avatarCacheMain.get(baseParam.avatarId);
+                CacheValue thumbnailCache = avatarCache.get(baseParam.avatarId);
+
+                if (baseParam.showMain) {
+                    if (mainCache == null) {
+                        if (thumbnailCache != null) {
+                            cacheValue = thumbnailCache.bitmap;
+                        }
+                    } else {
+                        if (thumbnailCache == null) {
+                            cacheValue = mainCache.bitmap;
+                        } else {
+                            if (mainCache.fileId == thumbnailCache.fileId) {
+                                cacheValue = mainCache.bitmap;
+                            } else {
+                                cacheValue = thumbnailCache.bitmap;
+                            }
+                        }
+                    }
+                } else {
+                    if (thumbnailCache != null)
+                        cacheValue = thumbnailCache.bitmap;
                 }
-            } else if (baseParam instanceof ParamWithInitBitmap){
-                baseParam.imageView.setImageBitmap(((ParamWithInitBitmap) baseParam).initAvatar);
             }
+            if (cacheValue == null) {
+                if (baseParam instanceof ParamWithAvatarType) {
+                    String[] initialsStart = showInitials(baseParam.avatarId, ((ParamWithAvatarType) baseParam).avatarType);
+                    if (initialsStart != null) {
+                        cacheValue = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(((ParamWithAvatarType) baseParam).avatarSize), initialsStart[0], initialsStart[1]);
+                    }
+                } else if (baseParam instanceof ParamWithInitBitmap){
+                    cacheValue = ((ParamWithInitBitmap) baseParam).initAvatar;
+                }
+            }
+
+            baseParam.imageView.setImageBitmap(cacheValue);
+            if (baseParam.onInitSet != null)
+                baseParam.onInitSet.OnInitSet();
 
             ImageHashValue imageHashValue = imageViewHashValue.get(baseParam.imageView);
             if (imageHashValue != null) {
@@ -283,10 +308,10 @@ public class AvatarHandler {
 
             if (baseParam.showMain && realmAvatar.getFile().isFileExistsOnLocal()) {
                 final String path = realmAvatar.getFile().getLocalFilePath();
-                notifyAll(path, baseParam.avatarId, true);
+                notifyAll(path, baseParam.avatarId, true, realmAvatar.getFile().getId());
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 final String path = realmAvatar.getFile().getLocalThumbnailPath();
-                notifyAll(path, baseParam.avatarId, false);
+                notifyAll(path, baseParam.avatarId, false, realmAvatar.getFile().getId());
             } else {
 
                 new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
@@ -294,6 +319,7 @@ public class AvatarHandler {
                     public void onDownload(final String filepath, final String token) {
 
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
+                        final ArrayList<Long> fileIdList = new ArrayList<>();
                         Realm realm = Realm.getDefaultInstance();
 
                         realm.executeTransaction(new Realm.Transaction() {
@@ -302,13 +328,14 @@ public class AvatarHandler {
                                 for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
                                     realmAvatar1.getFile().setLocalThumbnailPath(filepath);
                                     ownerIdList.add(realmAvatar1.getOwnerId());
+                                    fileIdList.add(realmAvatar1.getFile().getId());
                                 }
                             }
                         });
 
                         realm.close();
-                        for (long ownerId : ownerIdList) {
-                            AvatarHandler.this.notifyAll(filepath, ownerId, false);
+                        for (int i = 0; i < ownerIdList.size(); i++) {
+                            AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i));
                         }
                         ownerIdList.clear();
                     }
