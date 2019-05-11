@@ -1472,4 +1472,7 @@
     <string name="change_language_title">تغییر زبان برنامه</string>
     <string name="terms_condition_title">قوانین و مقررات</string>
     <string name="welcome_title">به آیگپ خوش آمدید</string>
+    <string name="add_modereator">Add Moderator</string>
+    <string name="add_admin">Add Admin</string>
+
 </resources>

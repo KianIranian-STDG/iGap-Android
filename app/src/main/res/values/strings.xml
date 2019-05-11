@@ -381,7 +381,9 @@
     <string name="unknown_artist">Unknown Artist</string>
     <string name="add_new_member">Add New Members</string>
     <string name="set_admin">Assign Admin</string>
+    <string name="add_admin">Add Admin</string>
     <string name="set_modereator">Assign Moderator</string>
+    <string name="add_modereator">Add Moderator</string>
     <string name="set_kick">Kick out</string>
     <string name="member_can_add_new_member">Members Can Add New Members</string>
     <string name="notificaion_and_sound">Notifications and Sounds</string>
