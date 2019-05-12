@@ -259,7 +259,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         fab.setColorFilter(Color.WHITE);
 
         if (fragmentGroupProfileViewModel.role == GroupChatRole.OWNER || fragmentGroupProfileViewModel.role == GroupChatRole.ADMIN) {
-            fab.setVisibility(View.VISIBLE);
+            fab.show();
             //
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -269,7 +269,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 }
             });
         } else {
-            fab.setVisibility(View.GONE);
+            fab.hide();
         }
         //
 
