@@ -45,7 +45,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
-        setMinimumHeight(Utils.dpToPx(56));
+        setMinimumHeight(Utils.dpToPx(60));
         setOrientation(HORIZONTAL);
         setWeightSum(5);
     }
@@ -56,7 +56,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
             try {
                 backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
-                defaultItem = typedArray.getInt(R.styleable.BottomNavigation_default_item, 0);
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
             } finally {
                 typedArray.recycle();
@@ -66,7 +65,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
 
     @Override
-    public void selectedItem(final int position) {
+    public void selectedTabItem(final int position) {
         if (position != selectedItemPosition) {
             selectedItemPosition = position;
             onSelectedItemChanged();
@@ -155,6 +154,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
 
     public void setCurrentItem(int position) {
+        defaultItem = position;
         for (int i = 0; i < tabItems.size(); i++) {
             if (tabItems.get(i).getPosition() == position) {
                 if (position != selectedItemPosition) {
@@ -182,9 +182,14 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         return defaultItem;
     }
 
+    public void setDefaultItem(int defaultItem) {
+        this.defaultItem = defaultItem;
+        this.selectedItemPosition = defaultItem;
+    }
+
     public void setOnItemChangeListener(OnItemChangeListener onItemChangeListener) {
+        onItemChangeListener.onSelectedItemChanged(defaultItem);
         this.onItemChangeListener = onItemChangeListener;
-        onItemChangeListener.onSelectedItemChanged(tabItems.get(defaultItem).getPosition());
     }
 
     @Override
@@ -196,6 +201,9 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         for (int i = 0; i < getChildCount(); i++) {
             final TabItem tabItem = (TabItem) getChildAt(i);
             tabItem.setPosition(i);
+            tabItem.setBadgeColor(callBack.badgeColor());
+            tabItems.add(tabItem);
+            tabItem.setOnTabItemSelected(this);
 
             switch (i) {
                 case 0:
@@ -214,10 +222,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                     tabItem.setBadgeCount(0);
                     break;
             }
-
-            tabItem.setBadgeColor(callBack.badgeColor());
-            tabItems.add(tabItem);
-            tabItem.setOnItemSelected(this);
         }
     }
 }

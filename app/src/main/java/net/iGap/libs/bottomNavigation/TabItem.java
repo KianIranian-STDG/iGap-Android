@@ -22,7 +22,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     private final String TAG = "TabItem";
 
     private BottomNavigation bottomNavigation;
-    private OnItemSelected onItemSelected;
+    private OnItemSelected onTabItemSelected;
 
     private Drawable selectedIcon;
     private Drawable unSelectedIcon;
@@ -125,8 +125,8 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (onItemSelected != null)
-            onItemSelected.selectedItem(position);
+        if (onTabItemSelected != null)
+            onTabItemSelected.selectedTabItem(position);
     }
 
     public void setSelected(boolean isActive) {
@@ -140,8 +140,8 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         }
     }
 
-    public void setOnItemSelected(OnItemSelected onItemSelected) {
-        this.onItemSelected = onItemSelected;
+    public void setOnTabItemSelected(OnItemSelected onItemSelected) {
+        this.onTabItemSelected = onItemSelected;
     }
 
     public void setImageView(ImageView imageView) {
@@ -161,6 +161,10 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
     public void setBadgeColor(int color) {
         badgeView.setBadgeColor(color);
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public int i_Dp(int dpSrc) {

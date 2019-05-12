@@ -5,5 +5,5 @@
 package net.iGap.libs.bottomNavigation.Event;
 
 public interface OnItemSelected {
-    void selectedItem(int position);
+    void selectedTabItem(int position);
 }

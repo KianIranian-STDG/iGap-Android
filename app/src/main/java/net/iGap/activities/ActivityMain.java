@@ -1280,28 +1280,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private void setViewPagerSelectedItem() {
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-
-            }
-        }, 100);
-    }
-
     //******************************************************************************************************************************
 
     private void initTabStrip() {
 
         mViewPager = findViewById(R.id.viewpager);
         boolean isRtl = HelperCalander.isPersianUnicode;
+
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
-        // TODO: 5/11/19 add call and message unread counter
+        bottomNavigation.setDefaultItem(2);
         bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
             @Override
             public int callCount() {
@@ -1341,7 +1328,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         bottomNavigation.setCurrentItem(4);
                 } else
                     bottomNavigation.setCurrentItem(i);
-//                addToolBar(i);
             }
 
             @Override
@@ -1353,18 +1339,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         bottomNavigation.setOnItemChangeListener(i -> {
             if (isRtl) {
                 if (i == 4)
-                    bottomNavigation.setCurrentItem(0);
+                    mViewPager.setCurrentItem(0);
                 if (i == 3)
-                    bottomNavigation.setCurrentItem(1);
+                    mViewPager.setCurrentItem(1);
                 if (i == 2)
-                    bottomNavigation.setCurrentItem(2);
+                    mViewPager.setCurrentItem(2);
                 if (i == 1)
-                    bottomNavigation.setCurrentItem(3);
+                    mViewPager.setCurrentItem(3);
                 if (i == 0)
-                    bottomNavigation.setCurrentItem(4);
+                    mViewPager.setCurrentItem(4);
             } else {
                 mViewPager.setCurrentItem(i);
-//                addToolBar(i);
             }
         });
 
@@ -1373,17 +1358,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (HelperCalander.isPersianUnicode) {
             G.handler.postDelayed(() -> {
-                fragmentCall = FragmentCall.newInstance(true);
-                pages.add(fragmentCall);
-
+                pages.add(new FragmentSetting());
                 pages.add(DiscoveryFragment.newInstance(0));
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
+                fragmentCall = FragmentCall.newInstance(true);
+                pages.add(fragmentCall);
+                pages.add(RegisteredContactsFragment.newInstance());
+
+
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
-                mViewPager.setOffscreenPageLimit(5);
-                setViewPagerSelectedItem();
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
+                mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
             }, 400);
 
         } else {
@@ -1394,24 +1381,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-
+                pages.add(DiscoveryFragment.newInstance(0));
+                pages.add(new FragmentSetting());
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
-
+                mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
 
             }, 400);
-
-            G.handler.postDelayed(() -> {
-
-                pages.add(DiscoveryFragment.newInstance(0));
-                pages.add(new FragmentSetting());
-                mViewPager.getAdapter().notifyDataSetChanged();
-
-                setViewPagerSelectedItem();
-
-            }, 800);
         }
 
 
