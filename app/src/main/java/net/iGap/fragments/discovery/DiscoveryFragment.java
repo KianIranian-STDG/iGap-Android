@@ -36,6 +36,8 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
     private int page;
+    private View view;
+    private boolean isInit = false;
     DiscoveryAdapter adapterDiscovery;
 
     public static DiscoveryFragment newInstance(int page) {
@@ -46,7 +48,17 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         return discoveryFragment;
     }
 
-    public DiscoveryFragment() {
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !isInit) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    init();
+                }
+            }, 400);
+        }
     }
 
     @Override
@@ -66,18 +78,29 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
         page = getArguments().getInt("page");
         if (page == 0){
             setSwipeBackEnable(false);
-        }
-        adapterDiscovery = new DiscoveryAdapter(getActivity(), new ArrayList<>());
-        emptyRecycle = view.findViewById(R.id.emptyRecycle);
-
-        if (page == 0) {
             appBarLayout.setVisibility(View.GONE);
         }
 
+        init();
+    }
+
+    private void init() {
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
+        adapterDiscovery = new DiscoveryAdapter(getActivity(), new ArrayList<>());
+        emptyRecycle = view.findViewById(R.id.emptyRecycle);
+        rcDiscovery = view.findViewById(R.id.rcDiscovery);
+
+        if (!getUserVisibleHint()) {
+            setRefreshing(true);
+            return;
+        }
+        isInit = true;
+//        setRefreshing(false);
+
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -100,7 +123,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
             }
         });
 
-        rcDiscovery = view.findViewById(R.id.rcDiscovery);
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
         rcDiscovery.setAdapter(adapterDiscovery);

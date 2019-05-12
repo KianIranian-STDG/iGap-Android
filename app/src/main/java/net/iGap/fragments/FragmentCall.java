@@ -271,16 +271,22 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
     private boolean isInit = false;
 
     private void init() {
+
+        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
+        fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+
         if (!getUserVisibleHint()) {
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
             view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
             view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
+            fabContactList.hide();
             return;
         }
         isInit = true;
         view.findViewById(R.id.pb_load).setVisibility(View.GONE);
         view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);
         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+        fabContactList.show();
 
         //G.onCallLogClear = this;
         //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
@@ -450,9 +456,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
         };
 
         realm.close();
-
-        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
-        fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         fabContactList.setOnClickListener(new View.OnClickListener() {
             @Override
