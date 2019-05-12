@@ -53,7 +53,7 @@ public class FragmentRegistrationNickname extends BaseFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_registration_nickname, container, false);
-        viewModel = new FragmentRegistrationNicknameViewModel(getArguments() != null ? getArguments().getLong(ARG_USER_ID, -1) : -1);
+        viewModel = new FragmentRegistrationNicknameViewModel(getArguments() != null ? getArguments().getLong(ARG_USER_ID, -1) : -1, avatarHandler);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getActivity());
         return binding.getRoot();

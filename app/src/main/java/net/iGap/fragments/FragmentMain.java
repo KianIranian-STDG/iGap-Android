@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -35,13 +36,12 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
-import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
@@ -1321,26 +1321,14 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
         private void setAvatar(final RealmRoom mInfo, ViewHolder holder) {
             long idForGetAvatar;
-            AvatarHandler.AvatarType avatarType;
             if (mInfo.getType() == CHAT) {
                 idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                avatarType = AvatarHandler.AvatarType.USER;
             } else {
                 idForGetAvatar = mInfo.getId();
-                avatarType = AvatarHandler.AvatarType.ROOM;
             }
 
-            avatarHandler.getAvatar(holder.image, null, idForGetAvatar, avatarType, false,
-                    HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor()), true, new OnAvatarGet() {
-                        @Override
-                        public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                        }
-
-                        @Override
-                        public void onShowInitials(String initials, String color, long idForGetAvatar) {
-
-                        }
-                    });
+            Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor());
+            avatarHandler.getAvatar(new ParamWithInitBitmap(holder.image, idForGetAvatar).initBitmap(init));
         }
 
         private void setChatIcon(RealmRoom mInfo, MaterialDesignTextView textView) {

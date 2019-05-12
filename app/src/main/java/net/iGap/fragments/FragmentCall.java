@@ -34,7 +34,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -62,6 +61,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.webrtc.WebRTC;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;

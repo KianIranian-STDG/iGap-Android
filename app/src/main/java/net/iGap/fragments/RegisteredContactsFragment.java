@@ -46,7 +46,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -56,18 +55,17 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
@@ -1052,60 +1050,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         }
 
         private void setAvatar(final RecyclerView.ViewHolder viewHolder, final long userId) {
-
             if (viewHolder instanceof ViewHolder) {
-
                 ViewHolder holder = (ViewHolder) viewHolder;
-                HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(final String avatarPath, long ownerId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (userId == ownerId)
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                            }
-                        });
-                    }
+                avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
 
-                    @Override
-                    public void onShowInitials(final String initials, final String color, final long ownerId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (userId == ownerId)
-                                    holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
-                        });
-                    }
-                });
-
-            }else if (viewHolder instanceof ViewHolderCall){
-
+            } else if (viewHolder instanceof ViewHolderCall){
                 ViewHolderCall holder = (ViewHolderCall) viewHolder;
-                HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                        @Override
-                        public void onAvatarGet(final String avatarPath, long ownerId) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (userId == ownerId)
-                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onShowInitials(final String initials, final String color, final long ownerId) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (userId == ownerId)
-                                        holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                                }
-                            });
-                        }
-                    });
+                avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
             }
         }
 

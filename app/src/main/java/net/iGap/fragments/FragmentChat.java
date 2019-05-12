@@ -130,18 +130,14 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.PaymentFragment;
 import net.iGap.fragments.emoji.add.DialogAddSticker;
-import net.iGap.fragments.emoji.add.FragmentAddStickers;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
-import net.iGap.helper.AvatarHandler;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -160,6 +156,9 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
@@ -171,7 +170,6 @@ import net.iGap.interfaces.ISendPosition;
 import net.iGap.interfaces.IUpdateLogItem;
 import net.iGap.interfaces.LocationListener;
 import net.iGap.interfaces.OnActivityChatStart;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnBackgroundChanged;
 import net.iGap.interfaces.OnBotClick;
 import net.iGap.interfaces.OnChannelAddMessageReaction;
@@ -2768,7 +2766,7 @@ public class FragmentChat extends BaseFragment
             sendMoney.setVisibility(View.GONE);
         }
 
-        mAdapter = new MessagesAdapter<>(this, this, this);
+        mAdapter = new MessagesAdapter<>(this, this, this, avatarHandler);
 
         mAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
             @Override
@@ -4954,36 +4952,9 @@ public class FragmentChat extends BaseFragment
      */
     @Override
     public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
-
-        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (roomId != ownerId)
-                            return;
-                        if (!isCloudRoom) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (roomId != ownerId)
-                            return;
-                        if (!isCloudRoom && imvUserPicture != null) {
-                            imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    }
-                });
-            }
-        });
+        if (!isCloudRoom) {
+            avatarHandler.getAvatar(new ParamWithAvatarType(imvUserPicture, roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+        }
     }
 
     @Override
@@ -5193,18 +5164,8 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
-        avatarHandler.getAvatar(imvUserPicture, null, idForGetAvatar, type, true,
-                HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), realmRoom.getInitials(), realmRoom.getColor()), false, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(String avatarPath, long avatarId) {
-
-                    }
-
-                    @Override
-                    public void onShowInitials(String initials, String color, long avatarId) {
-
-                    }
-                });
+        Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), realmRoom.getInitials(), realmRoom.getColor());
+        avatarHandler.getAvatar(new ParamWithInitBitmap(imvUserPicture, idForGetAvatar).initBitmap(init).showMain());
     }
 
     private void resetAndGetFromEnd() {
@@ -7504,7 +7465,7 @@ public class FragmentChat extends BaseFragment
         }
 
         for (int i = 0; i < mListBottomSheetForward.size(); i++) {
-            fastItemAdapterForward.add(new AdapterBottomSheetForward(mListBottomSheetForward.get(i)).withIdentifier(100 + i));
+            fastItemAdapterForward.add(new AdapterBottomSheetForward(mListBottomSheetForward.get(i), avatarHandler).withIdentifier(100 + i));
         }
 
         G.handler.postDelayed(new Runnable() {

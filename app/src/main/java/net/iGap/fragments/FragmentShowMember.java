@@ -31,16 +31,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddModerator;
 import net.iGap.interfaces.OnChannelGetMemberList;
@@ -57,7 +54,6 @@ import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupKickModerator;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
@@ -1157,29 +1153,7 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
 
             setRoleStarColor(holder.roleStar, mContact);
 
-            HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(String avatarPath, long userId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mContact.peerId == userId)
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color, final long userId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mContact.peerId == userId)
-                                holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
             if (mContact.status != null) {
                 if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {

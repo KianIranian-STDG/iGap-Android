@@ -20,8 +20,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.ReagentFragment;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
@@ -41,6 +41,7 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
     private boolean existAvatar = false;
     private String pathImageUser;
     private int idAvatar;
+    private AvatarHandler avatarHandler;
     public MutableLiveData<Integer> progressValue = new MutableLiveData<>();
     public MutableLiveData<String> avatarImagePath = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorName = new MutableLiveData<>();
@@ -48,8 +49,9 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
     public MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
 
-    public FragmentRegistrationNicknameViewModel(Long userId) {
+    public FragmentRegistrationNicknameViewModel(Long userId, AvatarHandler avatarHandler) {
         this.userId = userId;
+        this.avatarHandler = avatarHandler;
         //ToDo: create repository and move this to that
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -166,7 +168,7 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-        HelperAvatar.avatarAdd(G.userId, pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
+        avatarHandler.avatarAdd(G.userId, pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
             existAvatar = true;
             prgVisibility.set(View.GONE);
             avatarImagePath.setValue(avatarPath);

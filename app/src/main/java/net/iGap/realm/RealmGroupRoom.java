@@ -32,6 +32,7 @@ public class RealmGroupRoom extends RealmObject {
     private boolean isPrivate;
     private String username;
 
+
     public static RealmGroupRoom putIncomplete(Realm realm, ProtoGlobal.GroupRoom.Role role, String description, String participantsCountLabel) {
         RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
         if (role == ProtoGlobal.GroupRoom.Role.OWNER) {
