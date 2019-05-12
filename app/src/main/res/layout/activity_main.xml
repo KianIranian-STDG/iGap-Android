@@ -223,8 +223,7 @@
                     android:layout_height="54dp"
                     android:layout_alignParentBottom="true"
                     app:background_color="#EEEEEE"
-                    app:corner_radius="35"
-                    app:default_item="0">
+                    app:corner_radius="35">
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_contact"
@@ -311,10 +310,10 @@
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="@dimen/dp280"
-        android:visibility="gone"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="false">
+        android:fitsSystemWindows="false"
+        android:visibility="gone">
 
         <include layout="@layout/layout_menu" />
 

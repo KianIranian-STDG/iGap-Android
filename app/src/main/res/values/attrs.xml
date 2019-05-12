@@ -126,7 +126,6 @@
   <declare-styleable name="BottomNavigation">
     <attr name="background_color" format="color" />
     <attr name="corner_radius" format="integer" />
-    <attr name="default_item" format="integer" />
   </declare-styleable>
 
   <declare-styleable name="TabItem">
