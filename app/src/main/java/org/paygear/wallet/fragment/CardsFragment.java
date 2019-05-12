@@ -13,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -228,7 +230,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         titleLayout.setGravity(Gravity.CENTER_VERTICAL);
         appBarView.addView(titleLayout);
 
-        appBarImage = new ImageView(context);
+        appBarImage = new AppCompatImageView(context);
         int dp40 = RaadCommonUtils.getPx(40, context);
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp40, dp40);
         imageParams.rightMargin = dp16;
@@ -236,7 +238,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         appBarImage.setLayoutParams(imageParams);
         titleLayout.addView(appBarImage);
 
-        appBarTitle = new TextView(context);
+        appBarTitle = new AppCompatTextView(context);
         appBarTitle.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         //appBarTitle.setGravity(Gravity.CENTER);
@@ -599,7 +601,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         layout.setPadding(dp16, dp8, dp16, dp16);
         cardsLayout.addView(layout);
 
-        TextView title2 = new TextView(context);
+        TextView title2 = new AppCompatTextView(context);
         LinearLayout.LayoutParams title2Params = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         title2Params.weight = 1.0f;
@@ -617,7 +619,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         addCardLayout.setPadding(dp8, dp8, dp8, dp8);
         layout.addView(addCardLayout);
 
-        ImageView addCard = new ImageView(context);
+        AppCompatImageView addCard = new AppCompatImageView(context);
         addCard.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ViewCompat.setBackground(addCard, RaadCommonUtils.getRectShape(context, R.color.add_card_plus_back, 12, 0));
@@ -660,7 +662,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         cardsLayout.addView(cardView);
         viewItems.add(cardView);
 
-        TextView textView = new TextView(context);
+        TextView textView = new AppCompatTextView(context);
         CardView.LayoutParams textViewParams = new CardView.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textViewParams.gravity = Gravity.CENTER;

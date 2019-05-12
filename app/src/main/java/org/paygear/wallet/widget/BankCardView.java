@@ -6,6 +6,8 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -68,7 +70,7 @@ public class BankCardView extends CardView {
         setRadius(RaadCommonUtils.getPx(8, context));
         setPreventCornerOverlap(false);
 
-        mBackImage = new ImageView(context);
+        mBackImage = new AppCompatImageView(context);
         mBackImage.setLayoutParams(new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         int dp1 = RaadCommonUtils.getPx(1, context);
@@ -92,7 +94,7 @@ public class BankCardView extends CardView {
         //logoLayout.setBackgroundColor(Color.argb(80, 255, 255, 255));
         addView(logoLayout);
 
-        mTopCardNumberText = new TextView(context);
+        mTopCardNumberText = new AppCompatTextView(context);
         LinearLayout.LayoutParams cardNumberTitleParams = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardNumberTitleParams.weight = 1;
@@ -104,7 +106,7 @@ public class BankCardView extends CardView {
         //mTopCardNumberText.setPadding(dp8, 0, dp8, 0);
         logoLayout.addView(mTopCardNumberText);
 
-        mTitleText = new TextView(context);
+        mTitleText = new AppCompatTextView(context);
         mTitleText.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         //mTitleText.setGravity(Gravity.CENTER);
@@ -114,7 +116,7 @@ public class BankCardView extends CardView {
         //mTitleText.setPadding(dp8, 0, dp8, 0);
         logoLayout.addView(mTitleText);
 
-        mLogoImage = new ImageView(context);
+        mLogoImage = new AppCompatImageView(context);
         int dp56 = RaadCommonUtils.getPx(56, context);
         LinearLayout.LayoutParams bankLogoImageParams = new LinearLayout.LayoutParams(dp56, dp56);
         mLogoImage.setLayoutParams(bankLogoImageParams);
@@ -131,7 +133,7 @@ public class BankCardView extends CardView {
         cardNumberLayout.setPadding(dp16, 0, dp16, 0);
         addView(cardNumberLayout);
 
-        centerCardNumberLayout = new TextView(context);
+        centerCardNumberLayout = new AppCompatTextView(context);
         cardNumberLayout.setOrientation(LinearLayout.HORIZONTAL);
         CardView.LayoutParams centerCardNumerLayoutParams = new CardView.LayoutParams(
                 CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
@@ -145,7 +147,7 @@ public class BankCardView extends CardView {
         centerCardNumberLayout.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
 
 
-        mCardNumberText1 = new TextView(context);
+        mCardNumberText1 = new AppCompatTextView(context);
         LinearLayout.LayoutParams cardNum1Params = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardNum1Params.weight = 1.0f;
@@ -156,7 +158,7 @@ public class BankCardView extends CardView {
         mCardNumberText1.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
         cardNumberLayout.addView(mCardNumberText1);
 
-        mCardNumberText2 = new TextView(context);
+        mCardNumberText2 = new AppCompatTextView(context);
         LinearLayout.LayoutParams cardNum2Params = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardNum2Params.weight = 1.0f;
@@ -167,7 +169,7 @@ public class BankCardView extends CardView {
         mCardNumberText2.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText2);
 
-        mCardNumberText3 = new TextView(context);
+        mCardNumberText3 = new AppCompatTextView(context);
         LinearLayout.LayoutParams cardNum3Params = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardNum3Params.weight = 1.0f;
@@ -178,7 +180,7 @@ public class BankCardView extends CardView {
         mCardNumberText3.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText3);
 
-        mCardNumberText4 = new TextView(context);
+        mCardNumberText4 = new AppCompatTextView(context);
         LinearLayout.LayoutParams cardNum4Params = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardNum4Params.weight = 1.0f;

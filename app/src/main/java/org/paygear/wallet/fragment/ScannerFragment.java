@@ -17,6 +17,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -411,7 +413,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         titleLayout.setGravity(Gravity.CENTER_VERTICAL);
         appBarView.addView(titleLayout);
 
-        appBarImage = new ImageView(context);
+        appBarImage = new AppCompatImageView(context);
         int dp40 = RaadCommonUtils.getPx(40, context);
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp40, dp40);
         imageParams.rightMargin = dp16;
@@ -419,7 +421,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         appBarImage.setLayoutParams(imageParams);
         titleLayout.addView(appBarImage);
 
-        appBarTitle = new TextView(context);
+        appBarTitle = new AppCompatTextView(context);
         appBarTitle.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         //appBarTitle.setGravity(Gravity.CENTER);
@@ -446,7 +448,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         contentLayout.addView(layout);
         showingTipText = layout;
 
-        TextView tipText = new TextView(context);
+        TextView tipText = new AppCompatTextView(context);
         LinearLayout.LayoutParams tipTextParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tipTextParams.gravity = gravity;

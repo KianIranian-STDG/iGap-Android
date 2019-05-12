@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:background="@color/fragment_back"
-    tools:context=".fragment.CardFragment">
+    tools:context="org.paygear.wallet.fragment.CardFragment">
 
   <!--<android.support.v7.widget.CardView-->
   <!--android:layout_width="match_parent"-->

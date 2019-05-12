@@ -457,13 +457,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         registerReceiver(audioManagerReciver, ringgerFilter);
 
 
-        RaadApp.onLanguageWallet = new OnLanguageWallet() {
-            @Override
-            public String detectLanguage() {
-                return G.selectedLanguage;
-            }
-        };
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
                 isChinesPhone();

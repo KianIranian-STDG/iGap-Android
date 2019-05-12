@@ -8,7 +8,7 @@
     android:background="@color/fragment_back"
     android:orientation="vertical"
     android:clickable="true"
-    tools:context=".fragment.ScannerFragment">
+    tools:context="org.paygear.wallet.fragment.ScannerFragment">
 
     <!--<android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
             android:layout_height="180dp"
             android:layout_centerInParent="true"
             android:layout_margin="16dp"
-            android:src="@drawable/scanner_frame" />
+            app:srcCompat="@drawable/scanner_frame" />
 
         <!--  <ImageView
               android:layout_width="56dp"

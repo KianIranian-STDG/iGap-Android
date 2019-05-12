@@ -17,6 +17,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -997,7 +998,7 @@ public class CashOutRequestFragment extends Fragment {
             TextView textView;
             if (view == null) {
                 int dp8 = RaadCommonUtils.getPx(8, getContext());
-                textView = new TextView(getContext());
+                textView = new AppCompatTextView(getContext());
                 textView.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 //textView.setGravity(Gravity.CENTER);

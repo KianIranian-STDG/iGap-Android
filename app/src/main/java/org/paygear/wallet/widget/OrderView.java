@@ -3,6 +3,8 @@ package org.paygear.wallet.widget;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -73,7 +75,7 @@ public class OrderView extends LinearLayout {
         imageFrame.setLayoutParams(imageFrameParams);
         addView(imageFrame);
 
-        image = new ImageView(context);
+        image = new AppCompatImageView(context);
         image.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         imageFrame.addView(image);
@@ -96,7 +98,7 @@ public class OrderView extends LinearLayout {
         textsLayout.setPadding(dp8, 0, dp8, 0);
         addView(textsLayout);
 
-        title = new TextView(context);
+        title = new AppCompatTextView(context);
         LayoutParams titleParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT);
         //par.gravity = Gravity.CENTER_VERTICAL;
@@ -106,7 +108,7 @@ public class OrderView extends LinearLayout {
         title.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         textsLayout.addView(title);
 
-        subtitle = new TextView(context);
+        subtitle = new AppCompatTextView(context);
         LayoutParams subtitleParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT);
         //par.gravity = Gravity.CENTER_VERTICAL;
@@ -116,7 +118,7 @@ public class OrderView extends LinearLayout {
         subtitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         textsLayout.addView(subtitle);
 
-        date = new TextView(context);
+        date = new AppCompatTextView(context);
         LayoutParams dateParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT);
         //par.gravity = Gravity.CENTER_VERTICAL;
@@ -126,7 +128,7 @@ public class OrderView extends LinearLayout {
         date.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         textsLayout.addView(date);
 
-        price = new TextView(context);
+        price = new AppCompatTextView(context);
         LayoutParams priceParams = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         priceParams.gravity = Gravity.CENTER_VERTICAL;
