@@ -33,6 +33,8 @@ public class Type5ViewHolder extends BaseViewHolder {
         img0.setImageDrawable(null);
         img1.setImageDrawable(null);
         img2.setImageDrawable(null);
+        if (item.discoveryFields == null || item.discoveryFields.size() < 3)
+            return;
         loadImage(img0, item.discoveryFields.get(0).imageUrl);
         loadImage(img1, item.discoveryFields.get(1).imageUrl);
         loadImage(img2, item.discoveryFields.get(2).imageUrl);

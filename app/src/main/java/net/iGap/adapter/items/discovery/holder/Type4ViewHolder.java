@@ -29,6 +29,8 @@ public class Type4ViewHolder extends BaseViewHolder {
     public void bindView(DiscoveryItem item) {
         img0.setImageDrawable(null);
         img1.setImageDrawable(null);
+        if (item.discoveryFields == null || item.discoveryFields.size() < 2)
+            return;
         loadImage(img0, item.discoveryFields.get(0).imageUrl);
         loadImage(img1, item.discoveryFields.get(1).imageUrl);
 

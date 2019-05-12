@@ -789,7 +789,9 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initMain();
+                if (getActivity() != null && !getActivity().isFinishing() && isAdded()) {
+                    initMain();
+                }
             }
         }, Config.FAST_START_PAGE_TIME);
     }
@@ -4664,7 +4666,7 @@ public class FragmentChat extends BaseFragment
         }
         boolean shareLinkIsOn = false;
         RealmRoom room = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
-        if (room.getChannelRoom() != null && !room.getChannelRoom().isPrivate()) {
+        if (room != null && room.getChannelRoom() != null && !room.getChannelRoom().isPrivate()) {
              shareLinkIsOn = true;
         }
 

@@ -24,6 +24,8 @@ public class Type1ViewHolder extends BaseViewHolder {
     @Override
     public void bindView(DiscoveryItem item) {
         img0.setImageDrawable(null);
+        if (item.discoveryFields == null || item.discoveryFields.size() < 1)
+            return;
         loadImage(img0, item.discoveryFields.get(0).imageUrl);
 
         card0.setOnClickListener(new View.OnClickListener() {

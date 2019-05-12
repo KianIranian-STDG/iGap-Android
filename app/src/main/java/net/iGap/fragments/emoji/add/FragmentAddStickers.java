@@ -1,6 +1,7 @@
 package net.iGap.fragments.emoji.add;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -194,9 +195,11 @@ public class FragmentAddStickers extends BaseFragment {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Glide.with(context)
-                                        .load(path)
-                                        .into(holder.imgSticker);
+                                if (context != null && !((Activity) context).isFinishing() && isAdded()) {
+                                    Glide.with(context)
+                                            .load(path)
+                                            .into(holder.imgSticker);
+                                }
                             }
                         });
                     }
