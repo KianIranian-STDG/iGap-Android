@@ -157,10 +157,130 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));
     }
 
+    private View view;
+
     @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
+        init();
+
+    }
+
+    public void showContactListForCall() {
+        final Fragment fragment = RegisteredContactsFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("TITLE", "call");
+        bundle.putBoolean("ACTION", true);
+        fragment.setArguments(bundle);
+
+        try {
+            //G.fragmentActivity.getSupportFragmentManager()
+            //    .beginTransaction()
+            //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+            //    .addToBackStack(null)
+            //    .replace(R.id.fragmentContainer, fragment)
+            //    .commit();
+
+            new HelperFragment(fragment).setReplace(false).load();
+
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    private void getLogListWithOffset() {
+
+        if (G.isSecure && G.userLogin) {
+            isSendRequestForLoading = true;
+            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getLogListWithOffset();
+                }
+            }, 1000);
+        }
+
+    }
+
+    //*************************************************************************************************************
+
+    public void openDialogMenu() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View view = dialog.getCustomView();
+
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
+
+        final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
+        txtClear.setText(G.fragmentActivity.getResources().getString(R.string.clean_log));
+
+        TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
+        iconClear.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
+
+        ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
+        root1.setVisibility(View.VISIBLE);
+
+        root1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                if (G.userLogin) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                            positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Realm realm = Realm.getDefaultInstance();
+                            try {
+                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                                imgCallEmpty.setVisibility(View.VISIBLE);
+                                empty_call.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                realm.close();
+                            }
+                        }
+                    }).negativeText(R.string.B_cancel).show();
+                } else {
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCallLogClear() {
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        if (mAdapter != null) {
+        //            mAdapter.clear();
+        //        }
+        //    }
+        //});
+    }
+
+    //*************************************************************************************************************
+    private boolean isInit = false;
+
+    private void init() {
+        if (!getUserVisibleHint()) {
+            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+            view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
+            view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
+            return;
+        }
+        isInit = true;
+        view.findViewById(R.id.pb_load).setVisibility(View.GONE);
+        view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
 
         //G.onCallLogClear = this;
         //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
@@ -192,12 +312,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
 
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setItemViewCacheSize(1000);
         mRecyclerView.setItemAnimator(null);
-
-        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(G.fragmentActivity, 6000);
-
-        mRecyclerView.setLayoutManager(layoutManager);
+        LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        mRecyclerView.setLayoutManager(linearVertical);
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -349,7 +466,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
 
         if (openInMain) {
 
-            fabContactList.setVisibility(View.GONE);
+            fabContactList.hide();
 
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
 
@@ -377,108 +494,22 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             });
 
         }
-    }
 
-    public void showContactListForCall() {
-        final Fragment fragment = RegisteredContactsFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", "call");
-        bundle.putBoolean("ACTION", true);
-        fragment.setArguments(bundle);
-
-        try {
-            //G.fragmentActivity.getSupportFragmentManager()
-            //    .beginTransaction()
-            //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            //    .addToBackStack(null)
-            //    .replace(R.id.fragmentContainer, fragment)
-            //    .commit();
-
-            new HelperFragment(fragment).setReplace(false).load();
-
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
-
-    private void getLogListWithOffset() {
-
-        if (G.isSecure && G.userLogin) {
-            isSendRequestForLoading = true;
-            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getLogListWithOffset();
-                }
-            }, 1000);
-        }
-
-    }
-
-    //*************************************************************************************************************
-
-    public void openDialogMenu() {
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View view = dialog.getCustomView();
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
-        txtClear.setText(G.fragmentActivity.getResources().getString(R.string.clean_log));
-
-        TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
-        iconClear.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-
-        ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
-        root1.setVisibility(View.VISIBLE);
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-
-                if (G.userLogin) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                            positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Realm realm = Realm.getDefaultInstance();
-                            try {
-                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
-                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                                imgCallEmpty.setVisibility(View.VISIBLE);
-                                empty_call.setVisibility(View.VISIBLE);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                realm.close();
-                            }
-                        }
-                    }).negativeText(R.string.B_cancel).show();
-                } else {
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                }
-            }
-        });
     }
 
     @Override
-    public void onCallLogClear() {
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        if (mAdapter != null) {
-        //            mAdapter.clear();
-        //        }
-        //    }
-        //});
-    }
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !isInit) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
-    //*************************************************************************************************************
+                    init();
+                }
+            }, 800);
+        }
+    }
 
     /**
      * ***********************************************************************************
