@@ -31,14 +31,13 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
@@ -319,30 +318,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             if (HelperCalander.isPersianUnicode) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
-
-            HelperAvatar.getAvatar(registeredInfo.getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (registeredInfo.getId() == ownerId)
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color, final long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (registeredInfo.getId() == ownerId)
-                                viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, registeredInfo.getId()).avatarType(AvatarHandler.AvatarType.USER));
 
             viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
             viewHolder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {

@@ -33,8 +33,8 @@ import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.TimeItem;
-import net.iGap.eventbus.ErrorHandler;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
@@ -58,6 +58,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
+    public AvatarHandler avatarHandler;
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
@@ -82,11 +83,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
-    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener) {
+    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         iMessageItem = iMessageItemListener;
         onChatMessageRemove = chatMessageRemoveListener;
-
+        this.avatarHandler = avatarHandler;
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
         setHasStableIds(true);
 

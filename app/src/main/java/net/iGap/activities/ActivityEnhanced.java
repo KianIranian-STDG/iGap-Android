@@ -37,6 +37,7 @@ import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.UserStatusController;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
@@ -53,6 +54,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 public class ActivityEnhanced extends AppCompatActivity {
 
+    public AvatarHandler avatarHandler;
     public boolean isOnGetPermission = false;
     BroadcastReceiver mybroadcast = new BroadcastReceiver() {
         //When Event is published, onReceive method is called
@@ -92,6 +94,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
 
+        avatarHandler = new AvatarHandler();
         setThemeSetting();
 
 
@@ -268,11 +271,13 @@ public class ActivityEnhanced extends AppCompatActivity {
         UserStatusController.getInstance().setOnline();
 
         super.onStart();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        avatarHandler.unregisterChangeFromOtherAvatarHandler();
 
         if (!G.isScrInFg || !G.isChangeScrFg) {
             G.isAppInFg = false;

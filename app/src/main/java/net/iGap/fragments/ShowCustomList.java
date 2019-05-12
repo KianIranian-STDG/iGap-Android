@@ -183,7 +183,7 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
 
         for (StructContactInfo contact : contacts) {
             if (contact != null) {
-                items.add(new ContactItemGroup().setContact(contact).withIdentifier(contact.peerId));
+                items.add(new ContactItemGroup(avatarHandler).setContact(contact).withIdentifier(contact.peerId));
                 Uri uri = null;
                 if (contact.avatar != null && contact.avatar.getFile() != null && contact.avatar.getFile().getLocalThumbnailPath() != null) {
                     uri = Uri.fromFile(new File(contact.avatar.getFile().getLocalThumbnailPath()));

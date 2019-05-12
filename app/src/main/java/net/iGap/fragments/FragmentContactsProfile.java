@@ -110,7 +110,7 @@ public class FragmentContactsProfile extends BaseFragment {
     }
 
     private void initDataBinding() {
-        fragmentContactsProfileViewModel = new FragmentContactsProfileViewModel(fragmentContactsProfileBinding, roomId, userId, enterFrom);
+        fragmentContactsProfileViewModel = new FragmentContactsProfileViewModel(fragmentContactsProfileBinding, roomId, userId, enterFrom, avatarHandler);
         fragmentContactsProfileBinding.setViewModel(fragmentContactsProfileViewModel);
     }
 

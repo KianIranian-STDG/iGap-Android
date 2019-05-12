@@ -14,12 +14,10 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,16 +28,14 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentSettingBinding;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarAdd;
-import net.iGap.interfaces.OnAvatarDelete;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserAvatarResponse;
@@ -85,7 +81,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private EmojiTextViewE txtNickName;
     private Uri uriIntent;
     private long idAvatar;
-    private Realm mRealm;
     private FragmentSettingBinding fragmentSettingBinding;
     private FragmentSettingViewModel fragmentSettingViewModel;
 
@@ -191,26 +186,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 if (messageOne != null && !messageOne.equals("")) {
                     mAvatarId = Long.parseLong(messageOne);
                 }
-
-                HelperAvatar.avatarDelete(fragmentSettingViewModel.userId, mAvatarId, HelperAvatar.AvatarType.USER, new OnAvatarDelete() {
-                    @Override
-                    public void latestAvatarPath(final String avatarPath) {
-                        setImage(avatarPath);
-                    }
-
-                    @Override
-                    public void showInitials(final String initials, final String color) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                fragmentSettingBinding.stImgCircleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) fragmentSettingBinding.stImgCircleImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
-                                if (G.onChangeUserPhotoListener != null) {
-                                    G.onChangeUserPhotoListener.onChangePhoto(null);
-                                }
-                            }
-                        });
-                    }
-                });
+                avatarHandler.avatarDelete(new ParamWithAvatarType(fragmentSettingBinding.stImgCircleImage, fragmentSettingViewModel.userId)
+                        .avatarType(AvatarHandler.AvatarType.USER), mAvatarId);
             }
         };
 
@@ -263,7 +240,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         if (pathSaveImage == null) {
             setAvatar();
         } else {
-            HelperAvatar.avatarAdd(fragmentSettingViewModel.userId, pathSaveImage, avatar, new OnAvatarAdd() {
+
+            avatarHandler.avatarAdd(fragmentSettingViewModel.userId, pathSaveImage, avatar, new OnAvatarAdd() {
                 @Override
                 public void onAvatarAdd(final String avatarPath) {
 
@@ -468,48 +446,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         }
     }
 
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-        return mRealm;
-    }
-
-    private int counterCheckAvatar = 0;
-
     private void setAvatar() {
-        HelperAvatar.getAvatar(fragmentSettingViewModel.userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (fragmentSettingViewModel.userId != ownerId)
-                            return;
-
-                        if (avatarPath != null) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), fragmentSettingBinding.stImgCircleImage);
-                        } else if (counterCheckAvatar < 4) {
-                            setAvatar();
-                            counterCheckAvatar++;
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (fragmentSettingViewModel.userId != ownerId)
-                            return;
-
-                        fragmentSettingBinding.stImgCircleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) fragmentSettingBinding.stImgCircleImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(fragmentSettingBinding.stImgCircleImage, fragmentSettingViewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     private void setImage(String path) {

@@ -40,12 +40,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
@@ -818,32 +820,8 @@ public class HelperUrl {
                 TextView txtMemberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
                 txtMemberNumber.setText(finalMemberNumber);
 
-                HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(final String avatarPath, long roomId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (room.getId() != roomId)
-                                    return;
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onShowInitials(String initials, String color, long roomId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (room.getId() != roomId)
-                                    return;
-                                imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
-                        });
-                    }
-                });
                 if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing() && !G.currentActivity.isFinishing()) {
+                    G.currentActivity.avatarHandler.getAvatar(new ParamWithAvatarType(imageView[0], room.getId()).avatarType(AvatarHandler.AvatarType.ROOM));
                     dialog.show();
                 }
             }
@@ -1277,7 +1255,7 @@ public class HelperUrl {
         if (action == null || intent.getData() == null) return;
 
         if (action.equals(Intent.ACTION_VIEW)) {
-            G.currentActivity = activity;
+            G.currentActivity = (ActivityEnhanced) activity;
             showIndeterminateProgressDialog();
             checkConnection(intent.getData(), 0);
         }

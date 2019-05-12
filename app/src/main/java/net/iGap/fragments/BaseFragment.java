@@ -22,11 +22,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
-import net.iGap.helper.AvatarHandler;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.HelperFragment;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
-import net.iGap.module.AttachFile;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
@@ -47,8 +46,20 @@ public class BaseFragment extends SwipeBackFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        avatarHandler.unregisterChangeFromOtherAvatarHandler();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        avatarHandler = new AvatarHandler(getFragmentManager());
+        avatarHandler = new AvatarHandler();
         checkFont();
         super.onCreate(savedInstanceState);
 

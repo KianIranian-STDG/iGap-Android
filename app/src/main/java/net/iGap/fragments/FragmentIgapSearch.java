@@ -329,7 +329,7 @@ public class FragmentIgapSearch extends BaseFragment {
                                 }
                             }
 
-                            items.add(new SearchItamIGap().setItem(item).withIdentifier(index++));
+                            items.add(new SearchItamIGap(avatarHandler).setItem(item).withIdentifier(index++));
                         }
                         itemAdapter.clear();
                         itemAdapter.add(items);

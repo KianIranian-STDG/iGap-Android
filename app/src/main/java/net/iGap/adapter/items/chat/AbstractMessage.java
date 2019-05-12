@@ -20,18 +20,13 @@ import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.text.HtmlCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +48,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
@@ -61,9 +55,10 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnProgressUpdate;
 import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.MessageProgress;
@@ -526,31 +521,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 //  String[] initialize =
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
-                HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(final String avatarPath, long ownerId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (ownerId == Long.parseLong(mMessage.senderID)) {
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), copyMessageSenderAvatar);
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onShowInitials(final String initials, final String color, final long ownerId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (ownerId == Long.parseLong(mMessage.senderID)) {
-                                    copyMessageSenderAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                                }
-                             }
-                        });
-                    }
-                });
+                mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, Long.parseLong(mMessage.senderID)).avatarType(AvatarHandler.AvatarType.USER));
                 //if (initialize != null && initialize[0] != null && initialize[1] != null) {
                 //    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
                 //        net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));

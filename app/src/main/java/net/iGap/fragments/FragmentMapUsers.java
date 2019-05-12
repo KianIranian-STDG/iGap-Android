@@ -17,12 +17,11 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.MaterialDesignTextView;
@@ -400,29 +399,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
             }
 
-            HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, final long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getUserId() == ownerId)
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color, final long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.getUserId() == ownerId)
-                                holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
 
             realm.close();
         }

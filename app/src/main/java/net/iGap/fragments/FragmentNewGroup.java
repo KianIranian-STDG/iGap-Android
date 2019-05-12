@@ -39,7 +39,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
@@ -398,7 +397,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
 
-        HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
+        avatarHandler.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
 
