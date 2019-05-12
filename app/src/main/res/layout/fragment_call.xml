@@ -6,12 +6,12 @@
   android:layout_height="match_parent"
   style="?backgroundColorSettingTheme"
   android:clickable="true"
-
   android:orientation="vertical"
   tools:ignore="MissingPrefix">
 
 
   <android.support.design.widget.AppBarLayout
+      android:visibility="gone"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -20,6 +20,7 @@
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/green"
+      android:visibility="gone"
       android:layoutDirection="ltr"
       android:orientation="horizontal">
 
@@ -72,6 +73,13 @@
 
   </android.support.design.widget.AppBarLayout>
 
+  <LinearLayout
+      android:id="@+id/fc_layout_toolbar"
+      android:layout_width="match_parent"
+      android:orientation="horizontal"
+      android:layout_height="@dimen/toolbar_height">
+
+  </LinearLayout>
 
   <FrameLayout
     android:layout_width="match_parent"

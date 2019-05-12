@@ -41,7 +41,7 @@
                             android:id="@+id/rootToolbar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layout_scrollFlags="scroll|enterAlways">
+                            app:layout_scrollFlags="snap">
 
                             <android.support.v7.widget.Toolbar
                                 android:id="@+id/main_toolbar"
@@ -49,8 +49,7 @@
                                 android:layout_height="wrap_content"
                                 app:contentInsetLeft="0dp"
                                 app:contentInsetStart="0dp"
-
-                                >
+                                android:visibility="gone">
 
 
                                 <LinearLayout

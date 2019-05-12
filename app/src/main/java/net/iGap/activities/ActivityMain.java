@@ -1363,7 +1363,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (i == 0)
                     bottomNavigation.setCurrentItem(4);
             } else {
-                mViewPager.setCurrentItem(i);
+                mViewPager.setCurrentItem(i , false);
 //                addToolBar(i);
             }
         });

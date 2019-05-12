@@ -38,9 +38,11 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnCallLogClear;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -72,7 +74,7 @@ import io.realm.Sort;
 import static net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-public class FragmentCall extends BaseFragment implements OnCallLogClear {
+public class FragmentCall extends BaseFragment implements OnCallLogClear , ToolbarListener {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
     public FloatingActionButton fabContactList;
@@ -92,6 +94,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
     //private CallAdapterA mAdapter;
 
     private TextView mBtnAllCalls , mBtnMissedCalls ;
+    private HelperToolbar mHelperToolbar;
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
 
@@ -195,6 +198,16 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             }
         });
 
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setLogoShown(true)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemViewCacheSize(1000);
@@ -444,6 +457,17 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             }, 1000);
         }
 
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        openDialogMenu();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+        showContactListForCall();
     }
 
     //*************************************************************************************************************
