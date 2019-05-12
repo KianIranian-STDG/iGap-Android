@@ -18,6 +18,7 @@ import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.BindingAdapter;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.ReagentFragment;
 import net.iGap.helper.HelperAvatar;
@@ -42,7 +43,7 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
     private String pathImageUser;
     private int idAvatar;
     public MutableLiveData<Integer> progressValue = new MutableLiveData<>();
-    public MutableLiveData<String> avatarImagePath = new MutableLiveData<>();
+    public MutableLiveData<BindingAdapter.AvatarImage> avatarImagePath = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorName = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorLastName = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
@@ -169,7 +170,7 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
         HelperAvatar.avatarAdd(G.userId, pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
             existAvatar = true;
             prgVisibility.set(View.GONE);
-            avatarImagePath.setValue(avatarPath);
+            avatarImagePath.setValue(new BindingAdapter.AvatarImage(avatarPath, false, null));
         }));
     }
 

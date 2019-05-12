@@ -35,7 +35,6 @@ import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
-import net.iGap.module.enums.EnumCustomMessageId;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;
@@ -197,12 +196,12 @@ public class RealmRoomMessage extends RealmObject {
         return isImageOrVideo;
     }
 
-    public static long findCustomMessageId(long roomId, EnumCustomMessageId customMessageId, int count) {
+    public static long findCustomMessageId(long roomId,int count) {
         long messageId = 0;
         Realm realm = Realm.getDefaultInstance();
-        if (customMessageId == EnumCustomMessageId.FROM_BEGIN) {
+        if (count == 0) {
             messageId = 0;
-        } else if (customMessageId == EnumCustomMessageId.FROM_NOW) {
+        } else if (count == -1) {
             RealmRoomMessage realmRoomMessage = RealmRoomMessage.findLastMessage(realm, roomId);
             if (realmRoomMessage != null) {
                 messageId = realmRoomMessage.getMessageId();

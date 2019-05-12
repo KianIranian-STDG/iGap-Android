@@ -304,6 +304,10 @@ public class HelperToolbar {
         return mRightBtn;
     }
 
+    public ImageView getM2RightBtn(){
+        return m2RightBtn;
+    }
+
     public AppCompatTextView getGroupName(){
         return groupName;
     }

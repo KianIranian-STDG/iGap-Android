@@ -121,6 +121,10 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         new HelperFragment(EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
                     }
                 });
+        // because actionbar not in this view do that and not correct in viewModel
+        if (viewModel.isNotJoin){
+            t.getM2RightBtn().setVisibility(View.GONE);
+        }
         binding.toolbar.addView(t.getView());
         imvGroupAvatar = t.getGroupAvatar();
         imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
@@ -185,7 +189,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        *//**
+        /**
      * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
      * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
      *//*
@@ -277,7 +281,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     //dialog for choose pic from gallery or camera
     private void startDialogSelectPicture(int r) {
-
         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {

@@ -19,7 +19,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -30,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,7 +39,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentGroupProfile;
@@ -58,7 +55,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.OnGroupCheckUsername;
 import net.iGap.interfaces.OnGroupDelete;
-import net.iGap.interfaces.OnGroupEdit;
 import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupLeft;
 import net.iGap.interfaces.OnGroupRemoveUsername;
@@ -69,10 +65,7 @@ import net.iGap.interfaces.OnSelectedList;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.Contacts;
-import net.iGap.module.DialogAnimation;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MEditText;
-import net.iGap.module.enums.EnumCustomMessageId;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -94,7 +87,6 @@ import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupCheckUsername;
 import net.iGap.request.RequestGroupDelete;
-import net.iGap.request.RequestGroupEdit;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
@@ -187,7 +179,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     private RealmRoom mRoom;
     private Realm realmGroupProfile;
     private Fragment fragment;
-    private boolean isNotJoin = false;
+    public boolean isNotJoin = false;
     private String memberCount;
 
 
@@ -794,7 +786,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                     @Override
                     public void run() {
                         for (int i = 0; i < list.size(); i++) {
-                            new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(roomId, EnumCustomMessageId.convertType(type), countForShowLastMessage));
+                            new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(roomId, countForShowLastMessage));
                         }
                     }
                 });
