@@ -9,12 +9,26 @@
     tools:ignore="MissingPrefix">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/cl_recycler_view_contact"
-        style="?backgroundColorSettingTheme"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:overScrollMode="never"
         android:layout_height="match_parent"
-        android:overScrollMode="never" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/amr_layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height_root_with_search"
+            android:orientation="horizontal"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cl_recycler_view_contact"
+            style="?backgroundColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 
     <ProgressBar

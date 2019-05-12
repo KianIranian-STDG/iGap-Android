@@ -201,10 +201,10 @@ public class HelperToolbar {
 
         if (!isRightSmallAvatarShown) {
             mAvatarSmall.setVisibility(View.GONE);
-            mAvatarSmall.setOnClickListener(v -> mToolbarListener.onSmallAvatarClickListener(v));
 
         } else {
             mAvatarSmall.setVisibility(View.VISIBLE);
+            mAvatarSmall.setOnClickListener(v -> mToolbarListener.onSmallAvatarClickListener(v));
         }
 
         if (isInChatRoom) {

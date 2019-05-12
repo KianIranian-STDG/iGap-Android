@@ -38,10 +38,14 @@ import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
@@ -55,6 +59,7 @@ import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.floatingAddButton.ArcMenu;
@@ -109,7 +114,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements ToolbarListener ,ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
@@ -126,6 +131,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     private String switcher;
     private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
+
+    private HelperToolbar mHelperToolbar ;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -213,6 +220,17 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 initRecycleView();
             }
         }, 10);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                .setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setLogoShown(true)
+                .setSearchBoxShown(true)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
     }
 
     private void initRecycleView() {
@@ -976,6 +994,39 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             }
         } catch (Exception e) {
             HelperLog.setErrorLog(e);
+        }
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+        Fragment fragment = SearchFragment.newInstance();
+
+        try {
+            new HelperFragment(fragment).load();
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+        final Fragment fragment = RegisteredContactsFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("TITLE", "ADD");
+        fragment.setArguments(bundle);
+
+        try {
+
+            new HelperFragment(fragment).load();
+
+        } catch (Exception e) {
+            e.getStackTrace();
         }
     }
 

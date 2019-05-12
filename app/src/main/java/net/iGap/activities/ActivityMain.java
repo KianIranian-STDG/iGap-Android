@@ -89,6 +89,7 @@ import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
+import net.iGap.fragments.filterImage.NonSwipeableViewPager;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
@@ -148,6 +149,7 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.MyPhonStateService;
+import net.iGap.module.NotSwipeableViewPager;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
@@ -246,7 +248,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ProgressBar contentLoading;
     private Realm mRealm;
     private boolean isNeedToRegister = false;
-    private ViewPager mViewPager;
+    private NotSwipeableViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<>();
     private String phoneNumber;
     private TextView itemCash;
@@ -1285,6 +1287,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initTabStrip() {
 
         mViewPager = findViewById(R.id.viewpager);
+        mViewPager.setPagingEnabled(false);
         boolean isRtl = HelperCalander.isPersianUnicode;
 
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
