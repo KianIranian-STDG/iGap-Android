@@ -45,6 +45,9 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         Bundle bundle = new Bundle();
         bundle.putInt("page", page);
         discoveryFragment.setArguments(bundle);
+        if (page == 0) {
+            discoveryFragment.isSwipeBackEnable = false;
+        }
         return discoveryFragment;
     }
 
@@ -58,15 +61,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                     init();
                 }
             }, 400);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (page == 0) {
-            setSwipeBackEnable(false);
-            appBarLayout.setVisibility(View.GONE);
         }
     }
 
@@ -89,8 +83,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         page = getArguments().getInt("page");
-        if (page == 0){
-            setSwipeBackEnable(false);
+        if (page == 0) {
             appBarLayout.setVisibility(View.GONE);
         }
 
