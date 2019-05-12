@@ -276,10 +276,12 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
         fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         if (!getUserVisibleHint()) {
-            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
-            view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
-            view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
-            fabContactList.hide();
+            if (!isInit) {
+                view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+                view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
+                view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
+                fabContactList.hide();
+            }
             return;
         }
         isInit = true;
