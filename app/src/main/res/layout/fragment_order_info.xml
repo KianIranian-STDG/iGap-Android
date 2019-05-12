@@ -7,7 +7,7 @@
     android:id="@+id/rootView"
     android:background="@android:color/white"
     android:clickable="true"
-    tools:context=".fragment.OrderInfoFragment">
+    tools:context="org.paygear.wallet.fragment.OrderInfoFragment">
 
 <!--    <android.support.v7.widget.CardView
         android:id="@+id/app_bar_layout"

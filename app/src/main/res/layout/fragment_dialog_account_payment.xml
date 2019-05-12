@@ -104,7 +104,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"
-                        android:src="@drawable/ic_action_remove_white" />
+                        card_view:srcCompat="@drawable/ic_action_remove_white" />
 
                     <ImageView
                         android:id="@+id/plus"
@@ -115,7 +115,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"
-                        android:src="@drawable/ic_action_add_white" />
+                        card_view:srcCompat="@drawable/ic_action_add_white" />
 
                 </RelativeLayout>
 

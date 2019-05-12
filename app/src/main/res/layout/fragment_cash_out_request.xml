@@ -5,7 +5,7 @@
   android:id="@+id/rootView"
     android:layout_height="match_parent"
     android:background="@color/fragment_back"
-    tools:context=".fragment.CashOutRequestFragment">
+    tools:context="org.paygear.wallet.fragment.CashOutRequestFragment">
 
     <ScrollView
         android:layout_width="match_parent"

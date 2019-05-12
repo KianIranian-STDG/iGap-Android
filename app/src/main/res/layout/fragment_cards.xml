@@ -1,4 +1,4 @@
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
 
@@ -41,7 +41,7 @@
         android:background="#00ffffff"
         android:padding="8dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_action_back_white" />
+        app:srcCompat="@drawable/ic_action_back_white" />
 
       <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/setting_button"

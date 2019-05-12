@@ -1,4 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
   <data>
 
@@ -33,7 +34,7 @@
           android:background="#00ffffff"
           android:padding="8dp"
           android:scaleType="centerInside"
-          android:src="@drawable/ic_action_back_white" />
+          app:srcCompat="@drawable/ic_action_back_white" />
       </ir.radsense.raadcore.app.RaadToolBar>
 
     <LinearLayout
