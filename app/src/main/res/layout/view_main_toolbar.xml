@@ -24,6 +24,7 @@
             android:layout_marginRight="8dp"
             android:padding="5dp"
             android:visibility="gone"
+            android:src="@mipmap/ic_launcher"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp"
             app:layout_constraintEnd_toEndOf="parent"

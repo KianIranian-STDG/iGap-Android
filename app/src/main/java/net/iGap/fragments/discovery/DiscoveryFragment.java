@@ -27,16 +27,21 @@ import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 
-public class DiscoveryFragment extends FragmentToolBarBack {
+import static net.iGap.G.context;
+
+public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarListener {
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
     private int page;
     DiscoveryAdapter adapterDiscovery;
+    private HelperToolbar mHelperToolbar;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
@@ -99,6 +104,17 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                 }
             }
         });
+
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                //.setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setLogoShown(true)
+                .setRightSmallAvatarShown(true)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
 
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
@@ -201,5 +217,15 @@ public class DiscoveryFragment extends FragmentToolBarBack {
             }.getType());
             setAdapterData(discoveryArrayList, title);
         }
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        
+    }
+
+    @Override
+    public void onSmallAvatarClickListener(View view) {
+
     }
 }

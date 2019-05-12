@@ -6,6 +6,17 @@
     style="?backgroundColorSettingTheme"
     android:layoutDirection="ltr">
 
+
+    <LinearLayout
+        android:id="@+id/fd_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="0dp"
@@ -13,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toBottomOf="@+id/fd_layout_toolbar" >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcDiscovery"
@@ -38,6 +49,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/fd_layout_toolbar" />
 
 </android.support.constraint.ConstraintLayout>
