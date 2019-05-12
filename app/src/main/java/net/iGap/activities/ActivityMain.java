@@ -1387,6 +1387,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 mViewPager.setOffscreenPageLimit(5);
                 setViewPagerSelectedItem();
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
+
+
             }, 400);
 
         } else {

@@ -27,6 +27,7 @@
             android:src="@mipmap/ic_launcher"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,8 +39,10 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:contentDescription="@null"
+            android:layout_marginBottom="10dp"
             android:padding="@dimen/toolbar_icon_padding"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +55,9 @@
             android:layout_marginRight="4dp"
             android:contentDescription="@null"
             android:padding="@dimen/toolbar_icon_padding"
+            android:layout_marginBottom="10dp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_1"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,7 +70,9 @@
             android:layout_marginRight="4dp"
             android:contentDescription="@null"
             android:padding="@dimen/toolbar_icon_padding"
+            android:layout_marginBottom="10dp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_2"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,7 +85,9 @@
             android:layout_marginRight="4dp"
             android:contentDescription="@null"
             android:padding="@dimen/toolbar_icon_padding"
+            android:layout_marginBottom="10dp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,6 +102,8 @@
             android:contentDescription="@null"
             android:padding="@dimen/toolbar_icon_padding"
             android:visibility="visible"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -128,7 +139,9 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:visibility="visible"
+            android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -162,6 +175,8 @@
             android:padding="3dp"
             android:src="@mipmap/ic_launcher"
             android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp"
             app:layout_constraintStart_toEndOf="@id/view_toolbar_btn_left"
