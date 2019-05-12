@@ -710,6 +710,28 @@ public class FragmentEditImage extends BaseFragment {
         return itemGalleryList;
     }
 
+    public static ArrayList<StructBottomSheet> insertItemList(String path, boolean isSelected,CompleteEditImage completeEdit) {
+
+        if (itemGalleryList == null) {
+            itemGalleryList = new ArrayList<>();
+        }
+
+        if (!HelperPermission.grantedUseStorage()) {
+            return itemGalleryList;
+        }
+        StructBottomSheet item = new StructBottomSheet();
+        item.setId(itemGalleryList.size());
+        item.setPath(path);
+        item.setText("");
+        item.isSelected = isSelected;
+        itemGalleryList.add(0, item);
+        textImageList.put(path, item);
+
+        completeEditImage= completeEdit;
+
+        return itemGalleryList;
+    }
+
     private void serCropAndFilterImage(String path) {
 
         int po = (viewPager.getCurrentItem());

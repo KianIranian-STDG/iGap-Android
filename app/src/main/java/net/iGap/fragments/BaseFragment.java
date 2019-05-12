@@ -150,7 +150,7 @@ public class BaseFragment extends SwipeBackFragment {
     }
 
 
-    private void hideKeyboard() {
+    protected void hideKeyboard() {
         View view = G.fragmentActivity.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);

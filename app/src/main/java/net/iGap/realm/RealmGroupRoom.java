@@ -31,6 +31,7 @@ public class RealmGroupRoom extends RealmObject {
     private String invite_token;
     private boolean isPrivate;
     private String username;
+    private int startFrom;
 
 
     public static RealmGroupRoom putIncomplete(Realm realm, ProtoGlobal.GroupRoom.Role role, String description, String participantsCountLabel) {
@@ -234,6 +235,18 @@ public class RealmGroupRoom extends RealmObject {
         } catch (Exception e) {
             this.username = HelperString.getUtf8String(username);
         }
+    }
+
+    public int getStartFrom() {
+        return startFrom;
+    }
+
+    public void setStartFrom(int startFrom) {
+        this.startFrom = startFrom;
+    }
+
+    public static void setStartFrom(long id) {
+
     }
 
     public boolean isPrivate() {

@@ -1279,12 +1279,9 @@ public class RealmRoom extends RealmObject {
     }
 
     public String getSharedMediaCount() {
+        return sharedMediaCount;
 
-        if (sharedMediaCount == null || sharedMediaCount.length() == 0) {
-            return context.getString(R.string.there_is_no_sheared_media);
-        }
-
-        String countList[] = sharedMediaCount.split("\n");
+        /*String[] countList = sharedMediaCount.split("\n");
         try {
 
             int countOFImage = Integer.parseInt(countList[0]);
@@ -1322,9 +1319,7 @@ public class RealmRoom extends RealmObject {
         } catch (Exception e) {
 
             return sharedMediaCount;
-        }
-
-
+        }*/
     }
 
     public void setSharedMediaCount(String sharedMediaCount) {

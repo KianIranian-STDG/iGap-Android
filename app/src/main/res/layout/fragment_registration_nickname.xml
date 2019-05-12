@@ -68,7 +68,7 @@
             android:onClick="@{()->viewModel.selectAvatarOnClick()}"
             android:src="@mipmap/pu_camera"
             app:civ_border_width="0dp"
-            app:imagePath="@{viewModel.avatarImagePath}"
+            app:avatarImage="@{viewModel.avatarImagePath}"
             app:layout_constraintBottom_toTopOf="@id/pu_btn_letsGo"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toRightOf="@id/name"
