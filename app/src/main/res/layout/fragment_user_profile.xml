@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.FragmentUserProfile">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp20">
+
+        <RelativeLayout
+            android:id="@+id/fup_avatar_box"
+            android:layout_width="0dp"
+            android:layout_height="190dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="1dp">
+
+                <ImageView
+                    android:id="@+id/fup_bg_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/test_bg" />
+
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/fup_user_image"
+            android:layout_width="@dimen/dp130"
+            android:layout_height="@dimen/dp130"
+            android:layout_marginLeft="@dimen/dp36"
+            android:layout_marginRight="@dimen/dp36"
+            android:src="@drawable/avatar"
+            app:layout_constraintBottom_toBottomOf="@id/fup_avatar_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_avatar_box" />
+
+        <TextView
+            android:id="@+id/fup_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp24"
+            android:layout_marginRight="@dimen/dp24"
+            android:layout_marginBottom="@dimen/dp10"
+            android:fontFamily="@font/main_font"
+            android:singleLine="true"
+            android:text="Alireza Nazari"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/fup_avatar_box"
+            app:layout_constraintStart_toEndOf="@id/fup_user_image" />
+
+        <TextView
+            android:id="@+id/fup_user_tel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp6"
+            android:fontFamily="@font/main_font"
+            android:singleLine="true"
+            android:text="+98 910 2677509"
+            android:textColor="@color/gray_4c"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/fup_user_name"
+            app:layout_constraintTop_toBottomOf="@id/fup_avatar_box" />
+
+        <TextView
+            android:id="@+id/fup_user_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp6"
+            android:fontFamily="@font/main_font"
+            android:singleLine="true"
+            android:text="Android Developer"
+            android:textColor="@color/gray_4c"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/fup_user_name"
+            app:layout_constraintTop_toBottomOf="@id/fup_user_tel" />
+
+        <LinearLayout
+            android:id="@+id/fup_btn_cloud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@id/fup_btn_settings"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_user_image">
+
+            <ImageView
+                android:layout_width="@dimen/fup_items_icon_size"
+                android:layout_height="@dimen/fup_items_icon_size"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/ic_cloud" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp6"
+                android:text="Cloud"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fup_btn_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@id/fup_btn_add"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/fup_btn_cloud"
+            app:layout_constraintTop_toTopOf="@id/fup_btn_cloud">
+
+            <ImageView
+                android:layout_width="@dimen/fup_items_icon_size"
+                android:layout_height="@dimen/fup_items_icon_size"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/settings" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp6"
+                android:text="@string/settings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fup_btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/fup_btn_settings"
+            app:layout_constraintTop_toTopOf="@id/fup_btn_cloud">
+
+            <ImageView
+                android:layout_width="@dimen/fup_items_icon_size"
+                android:layout_height="@dimen/fup_items_icon_size"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/invite_friend_ico" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp6"
+                android:text="@string/Add"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/fup_splitter_1"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_4c"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp20"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_cloud"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/fup_btn_credit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintEnd_toStartOf="@id/fup_splitter_2"
+            app:layout_constraintTop_toBottomOf="@id/fup_splitter_1"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/dp20">
+
+            <ImageView
+                android:id="@+id/fup_btn_credit_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/ic_wallet"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/fup_btn_credit_lbl"/>
+
+            <TextView
+                android:id="@+id/fup_btn_credit_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp6"
+                android:text="@string/credit"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize"
+                app:layout_constraintStart_toEndOf="@id/fup_btn_credit_icon"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fup_btn_credit_icon"
+                app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit_icon" />
+
+            <TextView
+                android:id="@+id/fup_txt_credit_amount"
+                android:textColor="@color/gray_4c"
+                android:textSize="@dimen/fup_items_textSize"
+                android:text="25.000 Toman"
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_marginTop="@dimen/dp10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/main_font"
+                app:layout_constraintTop_toBottomOf="@id/fup_btn_credit_icon"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_credit_icon"
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_credit_lbl"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@id/fup_btn_credit"
+            app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit"
+            app:layout_constraintStart_toEndOf="@id/fup_btn_credit"
+            app:layout_constraintEnd_toStartOf="@id/fup_btn_score"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            android:background="@color/gray_4c"
+            android:id="@+id/fup_splitter_2"/>
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/fup_btn_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/fup_btn_credit"
+            app:layout_constraintStart_toEndOf="@id/fup_splitter_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread">
+
+            <ImageView
+                android:id="@+id/fup_btn_score_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/ic_rate_img"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/fup_btn_score_lbl"/>
+
+            <TextView
+                android:id="@+id/fup_btn_score_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp6"
+                android:text="Score"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize"
+                app:layout_constraintStart_toEndOf="@id/fup_btn_score_icon"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fup_btn_score_icon"
+                app:layout_constraintBottom_toBottomOf="@id/fup_btn_score_icon" />
+
+            <TextView
+                android:id="@+id/fup_txt_score"
+                android:textColor="@color/gray_4c"
+                android:textSize="@dimen/fup_items_textSize"
+                android:text="356"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/dp10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/main_font"
+                app:layout_constraintTop_toBottomOf="@id/fup_btn_score_icon"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_score_icon"
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_score_lbl"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+
+        <View
+            android:id="@+id/fup_splitter_3"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_4c"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp20"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_credit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/fup_btn_invite_friends"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_splitter_3">
+
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/ic_add_new_group"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Invite_Friends"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fup_btn_qr_scanner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_invite_friends">
+
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/qr_logo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/QrCode_Scan"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fup_btn_nearBy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_qr_scanner">
+
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/fup_items_icon_padding"
+                app:srcCompat="@drawable/ic_location_black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/igap_nearby"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/fup_btn_dark_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy">
+
+            <View
+                android:id="@+id/fup_btn_dark_view_handler_view"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/fup_items_icon_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/st_dark_theme"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:layout_toRightOf="@id/fup_btn_dark_view_handler_view"
+                android:layout_toEndOf="@id/fup_btn_dark_view_handler_view"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/fup_btn_language"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_dark_mode">
+
+            <View
+                android:id="@+id/fup_btn_language_view_handler_view"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/fup_items_icon_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/language"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:layout_toRightOf="@id/fup_btn_language_view_handler_view"
+                android:layout_toEndOf="@id/fup_btn_language_view_handler_view"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+            <TextView
+                android:id="@+id/fup_txt_selected_language"
+                android:textSize="@dimen/fup_items_textSize"
+                android:textColor="@color/gray_4c"
+                android:text="English"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fup_btn_faq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_language">
+
+            <View
+                android:id="@+id/fup_btn_faq_view_handler_view"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/fup_items_icon_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/iGap_FAQ"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:layout_toRightOf="@id/fup_btn_faq_view_handler_view"
+                android:layout_toEndOf="@id/fup_btn_faq_view_handler_view"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fup_btn_logout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_faq">
+
+            <View
+                android:id="@+id/fup_btn_logout_view_handler_view"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="@dimen/fup_items_icon_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/logout"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:layout_toRightOf="@id/fup_btn_logout_view_handler_view"
+                android:layout_toEndOf="@id/fup_btn_logout_view_handler_view"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+        </RelativeLayout>
+
+
+        <View
+            android:id="@+id/fup_splitter_4"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_4c"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp20"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_logout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+        <RelativeLayout
+            android:id="@+id/fup_btn_version"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_splitter_4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/app_version"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:fontFamily="@font/main_font"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fup_items_textSize" />
+
+            <TextView
+                android:textSize="@dimen/fup_items_textSize"
+                android:textColor="@color/gray_4c"
+                android:text="1.5.0.4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

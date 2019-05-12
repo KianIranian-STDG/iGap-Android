@@ -83,6 +83,7 @@ import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentToolBarBack;
+import net.iGap.fragments.FragmentUserProfile;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
@@ -1411,7 +1412,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.handler.postDelayed(() -> {
 
                 pages.add(DiscoveryFragment.newInstance(0));
-                pages.add(new FragmentSetting());
+                pages.add(new FragmentUserProfile());
                 mViewPager.getAdapter().notifyDataSetChanged();
 
                 setViewPagerSelectedItem();
