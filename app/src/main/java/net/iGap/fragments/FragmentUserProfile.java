@@ -20,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -126,6 +127,7 @@ public class FragmentUserProfile extends Fragment implements OnUserInfoMyClient 
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         String textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
         mLanguageTxt.setText(textLanguage);
+        mAppVersionTxt.setText(BuildConfig.VERSION_NAME);
 
     }
 

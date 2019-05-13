@@ -16,7 +16,7 @@
         <RelativeLayout
             android:id="@+id/fup_avatar_box"
             android:layout_width="0dp"
-            android:layout_height="190dp"
+            android:layout_height="160dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -140,7 +140,7 @@
                 android:layout_width="@dimen/fup_items_icon_size"
                 android:layout_height="@dimen/fup_items_icon_size"
                 android:padding="@dimen/fup_items_icon_padding"
-                app:srcCompat="@drawable/settings" />
+                app:srcCompat="@drawable/ic_settings" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -300,8 +300,8 @@
             <TextView
                 android:id="@+id/fup_txt_score"
                 android:textColor="@color/gray_4c"
-                android:textSize="@dimen/fup_items_textSize"
-                android:text="356"
+                android:textSize="14sp"
+                android:text=""
                 android:gravity="center"
                 android:layout_marginTop="@dimen/dp10"
                 android:layout_width="wrap_content"
@@ -333,7 +333,7 @@
             android:orientation="horizontal"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -366,7 +366,7 @@
             android:orientation="horizontal"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -399,7 +399,7 @@
             android:orientation="horizontal"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -432,7 +432,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy">
@@ -477,7 +477,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_dark_mode">
@@ -521,7 +521,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_language">
@@ -554,7 +554,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_faq">
@@ -602,7 +602,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp16"
             android:layout_marginBottom="@dimen/dp20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
