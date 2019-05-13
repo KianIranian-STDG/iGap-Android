@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.helper.LooperThreadHelper;
 import net.iGap.proto.ProtoClientGetRoomList;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmClientCondition;
@@ -68,7 +69,12 @@ public class ClientGetRoomListResponse extends MessageHandler {
         pendingRequest.remove(identity.offset);
         if (identity.offset == 0 && retryCountZeroOffset < 10) {
             retryCountZeroOffset++;
-            new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
+            LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
+                }
+            }, retryCountZeroOffset * 300);
         }
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
