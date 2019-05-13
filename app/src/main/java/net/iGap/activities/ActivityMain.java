@@ -1394,7 +1394,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pages.add(new FragmentUserProfile());
                 mViewPager.getAdapter().notifyDataSetChanged();
 
-                setViewPagerSelectedItem();
+                //setViewPagerSelectedItem();
 
             }, 800);
         }
