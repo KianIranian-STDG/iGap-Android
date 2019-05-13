@@ -155,6 +155,23 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
         }
     }
 
+    private boolean isInit = false;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !isInit) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    init();
+                }
+            }, 800);
+        }
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -165,10 +182,36 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));
     }
 
+    private View view;
+
     @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
+
+        init();
+    }
+
+    private void init() {
+        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
+        fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+
+        if (!getUserVisibleHint()) {
+            if (!isInit) {
+                view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+                view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
+                view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
+                fabContactList.hide();
+            }
+            return;
+        }
+
+        isInit = true;
+        view.findViewById(R.id.pb_load).setVisibility(View.GONE);
+        view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+        fabContactList.show();
 
         //G.onCallLogClear = this;
         //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
@@ -210,12 +253,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
         layoutToolbar.addView(mHelperToolbar.getView());
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setItemViewCacheSize(1000);
         mRecyclerView.setItemAnimator(null);
-
-        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(G.fragmentActivity, 6000);
-
-        mRecyclerView.setLayoutManager(layoutManager);
+        LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        mRecyclerView.setLayoutManager(linearVertical);
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -352,9 +392,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
 
         realm.close();
 
-        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
-        fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
         fabContactList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -367,7 +404,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
 
         if (openInMain) {
 
-            fabContactList.setVisibility(View.GONE);
+            fabContactList.hide();
 
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
 

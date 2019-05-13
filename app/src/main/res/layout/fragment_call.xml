@@ -142,6 +142,14 @@
       app:elevation="@dimen/dp6"
       app:srcCompat="@drawable/ic_call_black_24dp" />
 
+    <ProgressBar
+        android:id="@+id/pb_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:padding="@dimen/dp4"
+        android:visibility="visible" />
 
     <ProgressBar
       android:id="@+id/fc_progress_bar_waiting"
@@ -153,6 +161,7 @@
       android:visibility="gone" />
 
     <LinearLayout
+      android:id="@+id/empty_layout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center"

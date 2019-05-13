@@ -194,8 +194,8 @@ public class FragmentRemoveSticker extends BaseFragment {
                             new MaterialDialog.Builder(getActivity())
                                     .title(getResources().getString(R.string.remove_sticker))
                                     .content(getResources().getString(R.string.remove_sticker_text))
-                                    .positiveText(getString(org.paygear.wallet.R.string.yes))
-                                    .negativeText(getString(org.paygear.wallet.R.string.no))
+                                    .positiveText(getString(R.string.yes))
+                                    .negativeText(getString(R.string.no))
                                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override
                                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

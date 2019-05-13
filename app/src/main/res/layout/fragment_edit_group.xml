@@ -45,7 +45,7 @@
                 android:id="@+id/imageLoading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{viewModel.showImageProgress ? View.VISIBLE : View.GONE}"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
                 app:layout_constraintLeft_toLeftOf="@id/groupAvatar"
                 app:layout_constraintRight_toRightOf="@id/groupAvatar"

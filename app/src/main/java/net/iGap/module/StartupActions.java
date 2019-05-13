@@ -27,6 +27,7 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFillLookUpClass;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.realm.RealmDataUsage;
@@ -102,20 +103,28 @@ public final class StartupActions {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
-                RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                for (RealmRoom room : realmRooms)
-                {
-                    RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
-                    if (room.getLastMessage() != null) {
-                        roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
-                    }
+                try {
+                    long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
+                    RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                    for (RealmRoom room : realmRooms)
+                    {
+                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
+                        if (room.getLastMessage() != null) {
+                            roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                        }
 
-                    RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                            .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
-                            .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
-                    for (RealmRoomMessage var : realmRoomMessages)
-                        var.removeFromRealm(realm);
+                        RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                                .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
+                        for (RealmRoomMessage var : realmRoomMessages)
+                            var.removeFromRealm(realm);
+                    }
+                } catch (OutOfMemoryError error) {
+                    error.printStackTrace();
+                    HelperLog.setErrorLog(error.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    HelperLog.setErrorLog(e);
                 }
             }
         });

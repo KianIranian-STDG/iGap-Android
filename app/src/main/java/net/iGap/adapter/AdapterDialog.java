@@ -74,7 +74,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
 
         viewHolder.countryCode.setText(structCountry.getCountryCode());
         viewHolder.countryName.setText(structCountry.getName());
-        viewHolder.countyImage.setImageResource(R.mipmap.ic_launcher_round/*structCountry.getFlag()*/);
+        viewHolder.countyImage.setImageResource(R.mipmap.icon_rounded/*structCountry.getFlag()*/);
         return convertView;
     }
 

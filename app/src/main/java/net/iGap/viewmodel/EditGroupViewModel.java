@@ -10,11 +10,12 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGroupDelete;
 import net.iGap.interfaces.OnGroupEdit;
@@ -75,7 +76,6 @@ public class EditGroupViewModel extends ViewModel {
     private int realmNotification = 0;
     private String initials;
 
-
     public EditGroupViewModel(Long roomId) {
         this.roomId = roomId;
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -119,28 +119,6 @@ public class EditGroupViewModel extends ViewModel {
         } else {
             callBackDeleteLeaveGroup.set(G.fragmentActivity.getResources().getString(R.string.left_group));
         }*/
-        //ToDo: move To repository
-        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(() -> {
-                    if (roomId != ownerId)
-                        return;
-                    showImageProgress.setValue(false);
-                    avatarImage.setValue(new BindingAdapter.AvatarImage(avatarPath, false, null));
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(() -> {
-                    if (roomId != ownerId)
-                        return;
-                    showImageProgress.setValue(false);
-                    avatarImage.setValue(new BindingAdapter.AvatarImage(initials, true, color));
-                });
-            }
-        });
 
         //ToDo: add this code to repository
         RealmResults<RealmMember> realmMembers = RealmMember.filterRole(roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());

@@ -119,6 +119,11 @@
             -->
 
         </activity>
+
+        <activity
+            android:name="org.paygear.wallet.WalletActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

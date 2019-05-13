@@ -22,6 +22,7 @@ public abstract class FragmentToolBarBack extends BaseFragment {
     protected MyAppBarLayout appBarLayout;
     protected TextView titleTextView;
     protected TextView menu_item1;
+    protected boolean isSwipeBackEnable = true;
 
     @Nullable
     @Override
@@ -30,7 +31,11 @@ public abstract class FragmentToolBarBack extends BaseFragment {
 
         LinearLayout view = (LinearLayout) inflater.inflate(R.layout.toolbar_back_fragment, container, false);
         onCreateViewBody(inflater, view, savedInstanceState);
-        return attachToSwipeBack(view);
+        if (isSwipeBackEnable) {
+            return attachToSwipeBack(view);
+        } else {
+            return view;
+        }
     }
 
     public abstract void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState);

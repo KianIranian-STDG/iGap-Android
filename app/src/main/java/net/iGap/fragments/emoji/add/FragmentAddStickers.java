@@ -1,6 +1,7 @@
 package net.iGap.fragments.emoji.add;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -194,9 +195,11 @@ public class FragmentAddStickers extends BaseFragment {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Glide.with(context)
-                                        .load(path)
-                                        .into(holder.imgSticker);
+                                if (context != null && !((Activity) context).isFinishing() && isAdded()) {
+                                    Glide.with(context)
+                                            .load(path)
+                                            .into(holder.imgSticker);
+                                }
                             }
                         });
                     }
@@ -260,8 +263,8 @@ public class FragmentAddStickers extends BaseFragment {
                             new MaterialDialog.Builder(getActivity())
                                     .title(getResources().getString(R.string.add_sticker))
                                     .content(getResources().getString(R.string.add_sticker_text))
-                                    .positiveText(getString(org.paygear.wallet.R.string.yes))
-                                    .negativeText(getString(org.paygear.wallet.R.string.no))
+                                    .positiveText(getString(R.string.yes))
+                                    .negativeText(getString(R.string.no))
                                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override
                                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

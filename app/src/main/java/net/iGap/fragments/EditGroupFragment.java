@@ -47,6 +47,8 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupDelete;
 import net.iGap.interfaces.OnGroupLeft;
@@ -117,6 +119,8 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        avatarHandler.getAvatar(new ParamWithAvatarType(binding.groupAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())

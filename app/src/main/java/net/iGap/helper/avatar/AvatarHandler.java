@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import net.iGap.G;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnDownload;
@@ -96,8 +97,12 @@ public class AvatarHandler {
     }
 
     private void notifyAll(String avatarPath, long avatarId, boolean isMain, long fileId) {
-        notifyMe(avatarPath, avatarId, isMain, fileId);
-        notifyOther(avatarPath, avatarId, isMain, fileId);
+        try {
+            notifyMe(avatarPath, avatarId, isMain, fileId);
+            notifyOther(avatarPath, avatarId, isMain, fileId);
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+        }
     }
 
     private void notifyOther(String avatarPath, long avatarId, boolean isMain, long fileId) {
@@ -120,11 +125,11 @@ public class AvatarHandler {
                 if (isMain) {
                     myAvatarCache = avatarCacheMain;
                     myLimitedList = limitedListMain;
-                    limit = 15;
+                    limit = 1;
                 } else {
                     myAvatarCache = avatarCache;
                     myLimitedList = limitedList;
-                    limit = 20;
+                    limit = 15;
                 }
 
                 myAvatarCache.put(avatarId, new CacheValue(bmImg, fileId));
@@ -139,7 +144,10 @@ public class AvatarHandler {
                     Collections.swap(myLimitedList, myLimitedList.size() - 1, index);
                 }
             }
+        } else {
+            HelperLog.setErrorLog("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain);
         }
+
         G.handler.post(new Runnable() {
             @Override
             public void run() {
