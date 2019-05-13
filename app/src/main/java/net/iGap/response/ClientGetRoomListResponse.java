@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.proto.ProtoClientGetRoomList;
 import net.iGap.proto.ProtoError;
@@ -25,6 +26,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public RequestClientGetRoomList.IdentityGetRoomList identity;
+    public static int retryCountZeroOffset = 0;
 
     public ClientGetRoomListResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
@@ -48,6 +50,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
 
         if (identity.offset != 0)
             pendingRequest.remove(identity.offset);
+        else
+            retryCountZeroOffset = 0;
     }
 
     @Override
@@ -62,6 +66,10 @@ public class ClientGetRoomListResponse extends MessageHandler {
     public void error() {
         super.error();
         pendingRequest.remove(identity.offset);
+        if (identity.offset == 0 && retryCountZeroOffset < 10) {
+            retryCountZeroOffset++;
+            new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
+        }
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
