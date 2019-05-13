@@ -1355,7 +1355,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (HelperCalander.isPersianUnicode) {
             G.handler.postDelayed(() -> {
-                pages.add(new FragmentSetting());
+                pages.add(new FragmentUserProfile());
                 pages.add(DiscoveryFragment.newInstance(0));
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 fragmentCall = FragmentCall.newInstance(true);
@@ -1379,7 +1379,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 pages.add(DiscoveryFragment.newInstance(0));
-                pages.add(new FragmentSetting());
+              //  pages.add(new FragmentSetting());
+                pages.add(new FragmentUserProfile());
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
@@ -1391,7 +1392,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.handler.postDelayed(() -> {
 
                 pages.add(DiscoveryFragment.newInstance(0));
-                pages.add(new FragmentUserProfile());
                 mViewPager.getAdapter().notifyDataSetChanged();
 
                 //setViewPagerSelectedItem();

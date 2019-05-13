@@ -29,7 +29,6 @@ import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -37,6 +36,8 @@ import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -96,6 +97,7 @@ public class FragmentUserProfile extends Fragment implements OnUserInfoMyClient 
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
+    private AvatarHandler avatarHandler;
 
 
     public FragmentUserProfile() {
@@ -519,33 +521,8 @@ public class FragmentUserProfile extends Fragment implements OnUserInfoMyClient 
     }
 
     public void setImage() {
-        HelperAvatar.getAvatar(G.userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                if (avatarPath != null) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (G.userId != ownerId)
-                                return;
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), mAvatar);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (G.userId != ownerId)
-                            return;
-                        mAvatar.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) mAvatar.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler = new AvatarHandler();
+        avatarHandler.getAvatar(new ParamWithAvatarType(mAvatar, G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
         G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
             @Override

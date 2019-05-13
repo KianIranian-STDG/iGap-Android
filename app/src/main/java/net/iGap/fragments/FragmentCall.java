@@ -190,7 +190,23 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
 
+        addToolbar();
         init();
+    }
+
+    private void addToolbar() {
+
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setLogoShown(true)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
+
     }
 
     private void init() {
@@ -241,16 +257,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
             }
         });
 
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setRightIcons(R.drawable.ic_add_toolbar)
-                .setLogoShown(true)
-                .setListener(this);
-
-        ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
