@@ -339,8 +339,7 @@ public class HelperNotification {
             mBitmapIcon = BitmapFactory.decodeResource(null, R.mipmap.icon);
 
             if (countUniqueChat == 1 || settingValue.separateNotification) {
-
-                RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, messageList.get(0).senderId).findFirst();
+                RealmAvatar realmAvatarPath = RealmAvatar.getLastAvatar(messageList.get(0).senderId, realm);
                 if (realmAvatarPath != null) {
                     if (realmAvatarPath.getFile().isFileExistsOnLocal()) {
                         avatarPath = realmAvatarPath.getFile().getLocalFilePath();
