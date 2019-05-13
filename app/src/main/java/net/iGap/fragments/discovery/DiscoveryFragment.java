@@ -49,6 +49,10 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("page", page);
+        if (page == 0) {
+            discoveryFragment.isSwipeBackEnable = false;
+        }
+
         discoveryFragment.setArguments(bundle);
         return discoveryFragment;
     }
