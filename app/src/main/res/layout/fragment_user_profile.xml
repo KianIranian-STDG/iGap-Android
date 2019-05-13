@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".fragments.FragmentUserProfile">
 
     <android.support.constraint.ConstraintLayout
@@ -43,8 +44,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/fup_user_image"
-            android:layout_width="@dimen/dp130"
-            android:layout_height="@dimen/dp130"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp100"
             android:layout_marginLeft="@dimen/dp36"
             android:layout_marginRight="@dimen/dp36"
             android:src="@drawable/avatar"
@@ -232,7 +233,7 @@
             <TextView
                 android:id="@+id/fup_txt_credit_amount"
                 android:textColor="@color/gray_4c"
-                android:textSize="@dimen/fup_items_textSize"
+                android:textSize="14sp"
                 android:text="25.000 Toman"
                 android:gravity="center"
                 android:singleLine="true"
@@ -241,8 +242,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/main_font"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_credit_icon"
-                app:layout_constraintStart_toStartOf="@id/fup_btn_credit_icon"
-                app:layout_constraintEnd_toEndOf="@id/fup_btn_credit_lbl"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -456,9 +457,13 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/fup_items_textSize" />
 
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ToggleButton
+                android:id="@+id/fup_switch_dark_mode"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp40"
+                android:background="@drawable/st_switch_button"
+                android:textOff=""
+                android:textOn=""
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true" />
@@ -615,6 +620,7 @@
                 android:textSize="@dimen/fup_items_textSize" />
 
             <TextView
+                android:id="@+id/fup_txt_app_version"
                 android:textSize="@dimen/fup_items_textSize"
                 android:textColor="@color/gray_4c"
                 android:text="1.5.0.4"
