@@ -98,6 +98,9 @@
   <dimen name="md_title_textsize" tools:override="true">18dp</dimen>
   <dimen name="md_content_padding_bottom" tools:override="true">6dp</dimen>
   <dimen name="ivand_profile_icon_padding">5dp</dimen>
+  <dimen name="fup_items_textSize">16sp</dimen>
+  <dimen name="fup_items_icon_padding">@dimen/dp4</dimen>
+  <dimen name="fup_items_icon_size">50dp</dimen>
 
 
   <dimen name="coupon_qr_size">140dp</dimen>
