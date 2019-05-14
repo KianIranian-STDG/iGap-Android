@@ -62,7 +62,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         super.bindView(holder, payloads);
 
         holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
-
+        holder.imgMapPosition.setImageResource(R.drawable.map);
         RealmRoomMessageLocation item = null;
 
         if (mMessage.forwardedFrom != null) {
@@ -81,19 +81,18 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
             if (new File(path).exists()) {
                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgMapPosition);
             } else {
-                if (mMessage.sendType == MyType.SendType.recvive || type == ProtoGlobal.Room.Type.CHANNEL) {
-                    holder.imgMapPosition.setImageResource(R.drawable.map);
-                } else {
-
-                    RealmRoomMessageLocation finalItem1 = item;
-                    FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
-                        @Override
-                        public void getBitmap(Bitmap bitmap) {
+                RealmRoomMessageLocation finalItem1 = item;
+                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
+                    @Override
+                    public void getBitmap(Bitmap bitmap) {
+                        if (bitmap == null) {
+                            holder.imgMapPosition.setImageResource(R.drawable.map);
+                        } else {
                             holder.imgMapPosition.setImageBitmap(bitmap);
                             AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
                         }
-                    });
-                }
+                    }
+                });
             }
 
             final RealmRoomMessageLocation finalItem = item;
