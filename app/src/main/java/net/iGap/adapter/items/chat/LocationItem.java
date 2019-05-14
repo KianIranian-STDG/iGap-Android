@@ -29,6 +29,7 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -80,14 +81,19 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
             if (new File(path).exists()) {
                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgMapPosition);
             } else {
-                RealmRoomMessageLocation finalItem1 = item;
-                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
-                    @Override
-                    public void getBitmap(Bitmap bitmap) {
-                        holder.imgMapPosition.setImageBitmap(bitmap);
-                        AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
-                    }
-                });
+                if (mMessage.sendType == MyType.SendType.recvive || type == ProtoGlobal.Room.Type.CHANNEL) {
+                    holder.imgMapPosition.setImageResource(R.drawable.map);
+                } else {
+
+                    RealmRoomMessageLocation finalItem1 = item;
+                    FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
+                        @Override
+                        public void getBitmap(Bitmap bitmap) {
+                            holder.imgMapPosition.setImageBitmap(bitmap);
+                            AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
+                        }
+                    });
+                }
             }
 
             final RealmRoomMessageLocation finalItem = item;
