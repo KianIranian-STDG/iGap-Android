@@ -11,7 +11,7 @@
 package net.iGap;
 
 import android.accounts.Account;
-import android.app.Activity;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -417,6 +417,8 @@ public class G extends MultiDexApplication {
     public static OnCountryCode onCountryCode;
     //public static LocationListenerResponse locationListenerResponse;
     private Tracker mTracker;
+
+    public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {

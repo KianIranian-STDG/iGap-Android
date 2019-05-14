@@ -127,6 +127,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                 .setLogoShown(true)
                 .setLeftIcon(R.drawable.ic_back_btn)
                 .setRightIcons(R.drawable.ic_checked)
+                .setDefaultTitle(G.context.getResources().getString(R.string.tab_edit))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -140,7 +141,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                     }
                 });
         binding.toolbar.addView(mHelperToolbar.getView());
-        mHelperToolbar.getTextViewLogo().setText(R.string.tab_edit);
+        //mHelperToolbar.getTextViewLogo().setText(R.string.tab_edit);
 
         attachFile = new AttachFile(G.fragmentActivity);
 

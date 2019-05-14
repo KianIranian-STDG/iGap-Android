@@ -294,7 +294,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         fragmentNewGroupViewModel.titleToolbar.observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                mHelperToolbar.getTextViewLogo().setText(s);
+                mHelperToolbar.setDefaultTitle(s);
             }
         });
 

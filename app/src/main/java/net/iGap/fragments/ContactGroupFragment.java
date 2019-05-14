@@ -115,20 +115,22 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 .setContext(G.context)
                 .setLeftIcon(R.drawable.ic_back_btn)
                 .setRightIcons(R.drawable.ic_checked)
+                .setDefaultTitle(G.context.getResources().getString(R.string.new_group))
                 .setListener(this)
                 .setLogoShown(true);
 
 
         LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
         toolbarLayout.addView(mHelperToolbar.getView());
-        mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_group));
+//        mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_group));
 
 
         //txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
         //txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));
 
         if (typeCreate.equals("CHANNEL")) {
-            mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_channel));
+            mHelperToolbar.setDefaultTitle(G.context.getResources().getString(R.string.new_channel));
+            //mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_channel));
         }
 
         //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);

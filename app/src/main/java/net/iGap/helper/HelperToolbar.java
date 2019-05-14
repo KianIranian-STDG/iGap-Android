@@ -4,9 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.enums.ConnectionState;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,6 +59,7 @@ public class HelperToolbar {
     private boolean isCallModeEnable;
     private boolean isGroupProfile;
     private MaterialDesignTextView mBtnClearSearch;
+    private String defaultTitleText = null;
 
     private HelperToolbar() {
     }
@@ -139,6 +143,17 @@ public class HelperToolbar {
         return this;
     }
 
+    public HelperToolbar setDefaultTitle(String title){
+
+        this.defaultTitleText = title ;
+
+        if (mTxtLogo != null){
+            mTxtLogo.setText(title);
+        }
+
+        return this;
+    }
+
     public HelperToolbar setListener(ToolbarListener listener) {
         this.mToolbarListener = listener;
         return this;
@@ -152,6 +167,11 @@ public class HelperToolbar {
     public View getView() {
 
         if (mContext == null) throw new IllegalArgumentException("Context can not be null");
+
+        //set default title name if user not set
+        if (defaultTitleText == null || defaultTitleText.trim().equals("")){
+            defaultTitleText = mContext.getResources().getString(R.string.app_name);
+        }
 
         View result = getInflater(R.layout.view_main_toolbar);
         setNormalSizeToRootViews(result);
@@ -238,6 +258,38 @@ public class HelperToolbar {
 
         setGroupProfileVisibility(result, isGroupProfile);
 
+        G.connectionStateMutableLiveData.observe(G.fragmentActivity, new android.arch.lifecycle.Observer<ConnectionState>() {
+            @Override
+            public void onChanged(@Nullable ConnectionState connectionState) {
+
+                if (mTxtLogo != null && connectionState != null){
+
+                    if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp16) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(R.string.waiting_for_network);
+
+                    } else if (connectionState == ConnectionState.CONNECTING) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(R.string.connecting);
+
+                    } else if (connectionState == ConnectionState.UPDATING) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+
+                        mTxtLogo.setText(R.string.updating);
+
+                    } else if (connectionState == ConnectionState.IGAP) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(defaultTitleText);
+
+                    } else {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(defaultTitleText);
+                    }
+
+                }
+
+            }
+        });
         return result;
 
     }
@@ -491,6 +543,8 @@ public class HelperToolbar {
         groupAvatar = view.findViewById(R.id.groupAvatar);
         groupName = view.findViewById(R.id.groupName);
         groupMemberCount = view.findViewById(R.id.groupMemberCount);
+
+        mTxtLogo.setText(defaultTitleText);
     }
 
     /**

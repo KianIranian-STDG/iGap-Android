@@ -110,13 +110,14 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
                 .setContext(G.context)
                 .setLeftIcon(R.drawable.ic_back_btn)
                 .setRightIcons(R.drawable.ic_checked)
+                .setDefaultTitle(G.context.getResources().getString(R.string.add_new_member))
                 .setListener(this)
                 .setLogoShown(true);
 
 
         LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
         toolbarLayout.addView(mHelperToolbar.getView());
-        mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.add_new_member));
+        //mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.add_new_member));
 
         TextView btnInviteViaLink = view.findViewById(R.id.fcg_lbl_add_member);
         btnInviteViaLink.setText(G.context.getResources().getString(R.string.channel_link_hint_revoke));

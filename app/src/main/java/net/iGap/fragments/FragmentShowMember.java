@@ -426,18 +426,18 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
         //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())){
 
-            mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.member));
+            mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
             mBtnAdd.setVisibility(View.GONE);
             view.findViewById(R.id.fcm_splitter_add).setVisibility(View.GONE);
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())){
 
-            mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.list_admin));
+            mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_admin));
             mBtnAdd.setText(context.getResources().getString(R.string.add_admin));
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())){
 
-            mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.list_modereator));
+            mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_modereator));
             mBtnAdd.setText(context.getResources().getString(R.string.add_modereator));
 
         }

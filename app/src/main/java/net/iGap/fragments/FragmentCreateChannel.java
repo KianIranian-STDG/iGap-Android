@@ -70,12 +70,13 @@ public class FragmentCreateChannel extends BaseFragment implements ToolbarListen
                 .setLogoShown(true)
                 .setRightIcons(R.drawable.ic_checked)
                 .setLeftIcon(R.drawable.ic_back_btn)
+                .setDefaultTitle(G.context.getResources().getString(R.string.new_channel))
                 .setListener(this);
 
         LinearLayout layoutToolbar = fragmentCreateChannelBinding.fchLayoutToolbar;
         layoutToolbar.addView(mHelperToolbar.getView());
 
-        mHelperToolbar.getTextViewLogo().setText(G.context.getString(R.string.new_channel));
+        //mHelperToolbar.getTextViewLogo().setText(G.context.getString(R.string.new_channel));
 
     }
 
