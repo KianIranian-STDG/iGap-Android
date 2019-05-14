@@ -78,6 +78,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
         ReagentFragment reagentFragment = new ReagentFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean("isNeedCloseActivity", isNeedCloseActivity);
+        reagentFragment.isSwipeBackEnable = !isNeedCloseActivity;
         reagentFragment.setArguments(bundle);
         return reagentFragment;
     }
