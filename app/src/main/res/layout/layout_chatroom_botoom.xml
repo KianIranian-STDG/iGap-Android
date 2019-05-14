@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?backgroundColorSettingTheme"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/backround_chatroom_root"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <View
+        style="?lineColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/tv_chatRoom_emoji"
+        style="?emojiChat"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
+        android:paddingBottom="@dimen/dp8"
+        android:text="@string/md_emoticon_with_happy_face"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:textSize="@dimen/dp20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <net.iGap.module.EmojiEditTextE
+        android:id="@+id/et_chatRoom_writeMessage"
+        style="?emojiChat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
+        android:background="@drawable/backround_chatroom_edittext"
+        android:gravity="bottom"
+        android:hint="@string/type_message"
+        android:imeOptions="flagNoExtractUi"
+        android:maxLines="4"
+        android:paddingTop="@dimen/dp4"
+        android:paddingBottom="@dimen/dp4"
+        android:textSize="@dimen/dp16"
+        app:emojiSize="@dimen/dp22"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_chatRoom_botAction"
+        app:layout_constraintStart_toEndOf="@+id/tv_chatRoom_emoji"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/tv_chatRoom_botAction"
+        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:text="@string/md_bot"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:textSize="@dimen/dp20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_chatRoom_send"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/btn_chatRoom_send"
+        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="bottom|end|right"
+        android:padding="@dimen/dp8"
+        android:text="@string/md_send_button"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:textSize="@dimen/dp20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ll_chatRoom_send" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_chatRoom_send"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/vtn_chatRoom_attach"
+            style="?emojiChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/dp8"
+            android:rotation="135"
+            android:text="@string/md_attachment_clip"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textSize="@dimen/dp20" />
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/btn_chatRoom_mic"
+            style="?emojiChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/dp8"
+            android:text="@string/md_voice_message_microphone_button"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textSize="@dimen/dp20" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

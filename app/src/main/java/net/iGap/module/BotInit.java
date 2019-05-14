@@ -257,7 +257,7 @@ public class BotInit implements View.OnClickListener {
                         botActionList.add(_row);
                         try {
                             if (btnShowBot != null)
-                                btnShowBot.setVisibility(View.INVISIBLE);
+                                btnShowBot.setVisibility(View.GONE);
                         } catch (Exception e) {
                         }
                     }
@@ -290,8 +290,9 @@ public class BotInit implements View.OnClickListener {
 
     private void init(View rootView) {
 
-        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
-        btnShowBot.setVisibility(View.INVISIBLE);
+//        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot = rootView.findViewById(R.id.tv_chatRoom_botAction);
+        btnShowBot.setVisibility(View.GONE);
 
         layoutBot = rootView.findViewById(R.id.layout_bot);
 
@@ -310,7 +311,9 @@ public class BotInit implements View.OnClickListener {
             return;
         }*/
 
-        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
+//        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot = rootView.findViewById(R.id.tv_chatRoom_botAction);
+
 
         if (gone) {
             layoutBot.setVisibility(View.GONE);

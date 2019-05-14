@@ -822,7 +822,7 @@
 
         <include
             android:id="@+id/layout_attach_file"
-            layout="@layout/layout_attach_file" />
+            layout="@layout/layout_chatroom_botoom" />
 
         <include
             android:id="@+id/layout_bot"

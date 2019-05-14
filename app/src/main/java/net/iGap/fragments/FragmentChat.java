@@ -1,8 +1,6 @@
 package net.iGap.fragments;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -37,6 +35,7 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
@@ -133,11 +132,11 @@ import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.PaymentFragment;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.DialogAddSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
-import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -201,7 +200,6 @@ import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnMessageReceive;
 import net.iGap.interfaces.OnPathAdapterBottomSheet;
 import net.iGap.interfaces.OnPinedMessage;
-import net.iGap.interfaces.OnReport;
 import net.iGap.interfaces.OnSetAction;
 import net.iGap.interfaces.OnUpdateUserOrRoomInfo;
 import net.iGap.interfaces.OnUpdateUserStatusInChangePage;
@@ -437,7 +435,7 @@ public class FragmentChat extends BaseFragment
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
-    private MaterialDesignTextView sendMoney;
+    //    private MaterialDesignTextView sendMoney;
     //  private MaterialDesignTextView btnReplaySelected;
     private RippleView rippleDeleteSelected;
     private RippleView rippleReplaySelected;
@@ -2689,9 +2687,11 @@ public class FragmentChat extends BaseFragment
         });
 
 
-        imvSmileButton = rootView.findViewById(R.id.chl_imv_smile_button);
+//        imvSmileButton = rootView.findViewById(R.id.chl_imv_smile_button);
+        imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
 
-        edtChat = rootView.findViewById(R.id.chl_edt_chat);
+//        edtChat = rootView.findViewById(R.id.chl_edt_chat);
+        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         edtChat.requestFocus();
 
         edtChat.setOnClickListener(new View.OnClickListener() {
@@ -2706,7 +2706,8 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        imvSendButton = rootView.findViewById(R.id.chl_imv_send_button);
+//        imvSendButton = rootView.findViewById(R.id.chl_imv_send_button);
+        imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
         if (G.isDarkTheme) {
             imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
         } else {
@@ -2714,12 +2715,15 @@ public class FragmentChat extends BaseFragment
         }
 
 
-        imvAttachFileButton = rootView.findViewById(R.id.chl_imv_attach_button);
-        layoutAttachBottom = rootView.findViewById(R.id.layoutAttachBottom);
+//        imvAttachFileButton = rootView.findViewById(R.id.chl_imv_attach_button);
+        imvAttachFileButton = rootView.findViewById(R.id.vtn_chatRoom_attach);
+        layoutAttachBottom = rootView.findViewById(R.id.ll_chatRoom_send);
+//        layoutAttachBottom = rootView.findViewById(R.id.layoutAttachBottom);
 
-        imvMicButton = rootView.findViewById(R.id.chl_imv_mic_button);
+//        imvMicButton = rootView.findViewById(R.id.chl_imv_mic_button);
+        imvMicButton = rootView.findViewById(R.id.btn_chatRoom_mic);
 
-        sendMoney = rootView.findViewById(R.id.chl_imv_sendMoney_button);
+//        sendMoney = rootView.findViewById(R.id.chl_imv_sendMoney_button);
 
         if (isBot) {
             botInit = new BotInit(rootView, false);
@@ -2762,11 +2766,11 @@ public class FragmentChat extends BaseFragment
         }
 
 
-        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
-            sendMoney.setVisibility(View.VISIBLE);
-        } else {
-            sendMoney.setVisibility(View.GONE);
-        }
+//        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+//            sendMoney.setVisibility(View.VISIBLE);
+//        } else {
+//            sendMoney.setVisibility(View.GONE);
+//        }
 
         mAdapter = new MessagesAdapter<>(this, this, this, avatarHandler);
 
@@ -3280,12 +3284,12 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        sendMoney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPaymentDialog();
-            }
-        });
+//        sendMoney.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showPaymentDialog();
+//            }
+//        });
 
 
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
@@ -5963,7 +5967,8 @@ public class FragmentChat extends BaseFragment
                 if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
 
                     ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
-                    layoutAttachBottom = rootView.findViewById(R.id.layoutAttachBottom);
+//                    layoutAttachBottom = rootView.findViewById(R.id.layoutAttachBottom);
+                    layoutAttachBottom = rootView.findViewById(R.id.ll_chatRoom_send);
                     imvSendButton = rootView.findViewById(R.id.chl_imv_send_button);
                 }
 
@@ -5977,26 +5982,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private void sendButtonVisibility(boolean visibility) {
-        layoutAttachBottom.animate().alpha(visibility ? 0F : 1F).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
-            }
-        }).start();
-        imvSendButton.animate().alpha(visibility ? 1F : 0F).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imvSendButton.clearAnimation();
-                        imvSendButton.setVisibility(visibility ? View.VISIBLE : View.GONE);
-                    }
-                });
-            }
-        }).start();
+        layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
+        imvSendButton.clearAnimation();
+        imvSendButton.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -7126,7 +7114,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initLayoutChannelFooter() {
-        LinearLayout layoutAttach = rootView.findViewById(R.id.layout_attach_file);
+        ConstraintLayout layoutAttach = rootView.findViewById(R.id.layout_attach_file);
         if (layoutMute == null) {
             layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
         }
