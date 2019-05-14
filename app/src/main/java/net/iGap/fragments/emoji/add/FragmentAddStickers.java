@@ -99,10 +99,11 @@ public class FragmentAddStickers extends BaseFragment {
         RecyclerView rcvSettingPage = view.findViewById(R.id.rcvSettingPage);
         adapterSettingPage = new AdapterSettingPage(getActivity(), new ArrayList<>());
         rcvSettingPage.setAdapter(adapterSettingPage);
+        final LinearLayoutManager layoutManager = new  LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(G.fragmentActivity, DeviceUtils.getScreenHeight(G.fragmentActivity));
-        rcvSettingPage.setLayoutManager(preCachingLayoutManager);
-        scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {
+        rcvSettingPage.setLayoutManager(layoutManager);
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
@@ -117,8 +118,6 @@ public class FragmentAddStickers extends BaseFragment {
         };
 
         rcvSettingPage.addOnScrollListener(scrollListener);
-        rcvSettingPage.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rcvSettingPage.setHasFixedSize(true);
 
     }
 
@@ -126,14 +125,14 @@ public class FragmentAddStickers extends BaseFragment {
 
         mAPIService = ApiEmojiUtils.getAPIService();
 
-        mAPIService.getCategoryStickers(stickerCategory.getId(), page, limit).enqueue(new Callback<StructSticker>() {
+        mAPIService.getCategoryStickers(stickerCategory.getId(), page * limit, limit).enqueue(new Callback<StructSticker>() {
             @Override
             public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
                 progressBar.setVisibility(View.GONE);
                 if (response.body() != null) {
                     if (response.body().getOk() && response.body().getData().size() > 0) {
                         List<StructGroupSticker> data = response.body().getData();
-                        adapterSettingPage.updateAdapter(data);
+                        adapterSettingPage.addData(data);
                         page++;
                     }
                 }
@@ -226,8 +225,8 @@ public class FragmentAddStickers extends BaseFragment {
             return mData.size();
         }
 
-        public void updateAdapter(List<StructGroupSticker> data) {
-            this.mData = data;
+        public void addData(List<StructGroupSticker> data) {
+            this.mData.addAll(data);
             notifyDataSetChanged();
         }
 

@@ -41,6 +41,7 @@ import net.iGap.Theme;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.interfaces.IResendMessage;
@@ -701,6 +702,7 @@ public final class AppUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            HelperLog.setErrorLog(e);
         }
     }
 
@@ -720,6 +722,7 @@ public final class AppUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
+            HelperLog.setErrorLog(e);
         }
     }
 

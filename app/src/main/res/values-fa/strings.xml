@@ -678,6 +678,7 @@
     <string name="please_enter_code_for_verify">کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
     <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
+    <string name="share_video_from_igap">به اشتراک گذاشتن ویدیو از آی‌گپ</string>
     <string name="TERMINATE">لغو</string>
     <string name="iGap_version">آیگپ اندروید نسخه</string>
     <string name="Bazzar">کافه بازار</string>

@@ -459,11 +459,15 @@ public class FragmentShowImage extends BaseFragment {
             File file = new File(path);
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("image/*");
-                //+Realm realm = Realm.getDefaultInstance();
                 AppUtils.shareItem(intent, StructMessageInfo.convert(getRealm(), roomMessage));
-                //putExtra(intent, StructMessageInfo.convert(getRealm(), roomMessage));
-                startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                    intent.setType("video/*");
+                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_video_from_igap)));
+                } else {
+                    intent.setType("image/*");
+                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                }
+
             }
         }
     }

@@ -119,6 +119,18 @@ public class FragmentActivation extends BaseFragment {
         viewModel.cancelTimer();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void startSMSListener() {
         try {
             smsReceiver = new SMSReceiver();
@@ -147,10 +159,6 @@ public class FragmentActivation extends BaseFragment {
                     Log.e(TAG, error);
                 }
             });
-
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
-            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
 
             SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
 

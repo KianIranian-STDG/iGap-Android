@@ -790,7 +790,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
                     viewHolder.timeDuration.setText(R.string.miss);
                     break;
                 case CANCELED:
-
+                    viewHolder.icon.setText(R.string.md_call_made);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setText(R.string.not_answer);
