@@ -693,6 +693,7 @@
     <string name="please_enter_code_for_verify">"Enter Code."</string>
     <string name="server_do_not_response">Server don\'t response</string>
     <string name="share_image_from_igap">Share image from iGap</string>
+    <string name="share_video_from_igap">Share video from iGap</string>
     <string name="TERMINATE">"TERMINATE"</string>
     <string name="iGap_version">"iGap Android Client V"</string>
     <string name="Bazzar">"Bazaar"</string>
