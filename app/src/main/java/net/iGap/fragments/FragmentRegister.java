@@ -206,10 +206,6 @@ public class FragmentRegister extends BaseFragment {
                 }
             });
 
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
-            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
-
             SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
 
             Task<Void> task = client.startSmsRetriever();
@@ -302,6 +298,18 @@ public class FragmentRegister extends BaseFragment {
         unregisterReceiver();
         fragmentRegisterViewModel.onStop();
         super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public enum Reason {
