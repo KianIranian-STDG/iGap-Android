@@ -200,7 +200,7 @@ public class LastSeenTimeUtil {
         long difference = (currentTime - (time * DateUtils.SECOND_IN_MILLIS));
         //difference = -(70 * DateUtils.MINUTE_IN_MILLIS);
         if (TimeUnit.MILLISECONDS.toMinutes(difference) <= 0) {
-            return G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
+            return G.context.getResources().getString(R.string.last_seen_recently);
         }
 
         /*else if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 61) {
