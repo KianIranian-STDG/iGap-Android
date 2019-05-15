@@ -215,7 +215,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             if (title.equals("New Chat")) {
                 title = G.context.getString(R.string.New_Chat);
             } else if (title.equals("Contacts")) {
-                title = G.context.getString(contacts);
+                title = G.fragmentActivity.getString(R.string.contacts);
             } else if (title.equals("call")) {
                 title = G.context.getString(R.string.call_with);
             }
