@@ -12,6 +12,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.discovery.DiscoveryFragment;
 
 import java.util.ArrayList;
 
@@ -218,6 +219,11 @@ public class HelperFragment {
                     if (keepMain) {
                         if (fragment.getClass().getName().equals(FragmentMain.class.getName())) {
                             continue;
+                        }
+                        if (fragment.getClass().getName().equals(DiscoveryFragment.class.getName())) {
+                            if (fragment.getArguments().getInt("page") == 0) {
+                                continue;
+                            }
                         }
                         if (fragment instanceof FragmentCall) {
                             if (fragment.getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN)) {
