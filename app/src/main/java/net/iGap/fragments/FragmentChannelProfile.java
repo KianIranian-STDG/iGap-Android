@@ -1,82 +1,57 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUploadFile;
-import net.iGap.helper.ImageHelper;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.OnAvatarChange;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnAvatarAdd;
-import net.iGap.interfaces.OnAvatarDelete;
-import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarDelete;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.CircleImageView;
-import net.iGap.module.FileUploadStructure;
-import net.iGap.module.SUID;
-import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
 
-public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarAdd, OnChannelAvatarDelete {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class FragmentChannelProfile extends BaseFragment implements /*OnChannelAvatarAdd,*/ OnChannelAvatarDelete {
 
 
     public static final String FRAGMENT_TAG = "FragmentChannelProfile";
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
     public static OnBackFragment onBackFragment;
-    private static ProgressBar prgWait;
-    private CircleImageView imgCircleImageView;
-    private TextView titleToolbar;
     private String pathSaveImage;
     private AttachFile attachFile;
-    private Fragment fragment;
-    private FragmentChannelProfileViewModel fragmentChannelProfileViewModel;
-    private ActivityProfileChannelBinding fragmentProfileChannelBinding;
+    private FragmentChannelProfileViewModel viewModel;
+    private ActivityProfileChannelBinding binding;
+
+    private CircleImageView imvChannelAvatar;
 
 
     public static FragmentChannelProfile newInstance(long roomId, Boolean isNotJoin) {
@@ -90,75 +65,74 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        fragmentProfileChannelBinding = DataBindingUtil.inflate(inflater, R.layout.activity_profile_channel, container, false);
-        return attachToSwipeBack(fragmentProfileChannelBinding.getRoot());
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_profile_channel, container, false);
+        long t = -1;
+        boolean v = false;
+        if (getArguments() != null) {
+            t = getArguments().getLong(ROOM_ID);
+            v = getArguments().getBoolean(IS_NOT_JOIN);
+        }
+        viewModel = new FragmentChannelProfileViewModel(t, v);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
-        fragment = this;
-        G.onChannelAvatarAdd = this;
-        G.onChannelAvatarDelete = this;
+        //ToDo:Move to edit channel fragment
+        /*G.onChannelAvatarAdd = this;
+        G.onChannelAvatarDelete = this;*/
 
+        HelperToolbar t = HelperToolbar.create().setContext(getContext())
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_more_toolbar, R.drawable.ic_edit_toolbar)
+                .setGroupProfile(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
 
-        FloatingActionButton fab = fragmentProfileChannelBinding.pchFabAddToChannel;
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        showPopUp();
+                    }
 
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fab.setColorFilter(Color.WHITE);
-
-        prgWait = fragmentProfileChannelBinding.agpPrgWaiting;
-        AppUtils.setProgresColler(prgWait);
-
-        onBackFragment = new OnBackFragment() {
-            @Override
-            public void onBack() {
-                popBackStackFragment();
-            }
-        };
-
-        AppBarLayout appBarLayout = fragmentProfileChannelBinding.pchAppbar;
-
-        titleToolbar = fragmentProfileChannelBinding.pchTxtTitleToolbar;
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-                ViewGroup viewGroup = fragmentProfileChannelBinding.pchRootCircleImage;
-                if (verticalOffset < -5) {
-                    viewGroup.animate().alpha(0).setDuration(700);
-                    viewGroup.setVisibility(View.GONE);
-                    titleToolbar.setVisibility(View.VISIBLE);
-                    titleToolbar.animate().alpha(1).setDuration(300);
-                } else {
-                    viewGroup.setVisibility(View.VISIBLE);
-                    viewGroup.animate().alpha(1).setDuration(700);
-                    titleToolbar.setVisibility(View.GONE);
-                    titleToolbar.animate().alpha(0).setDuration(500);
-                }
-            }
-        });
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                startDialogSelectPicture(R.array.profile);
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        new HelperFragment(EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
+                    }
+                });
+        // because actionbar not in this view do that and not correct in viewModel
+        /*if (isNotJoin) {
+            settingVisibility.set(View.GONE);
+        }*/
+        if (viewModel.isNotJoin) {
+            t.getM2RightBtn().setVisibility(View.GONE);
+        }
+        binding.toolbar.addView(t.getView());
+        imvChannelAvatar = t.getGroupAvatar();
+        imvChannelAvatar.setOnClickListener(v -> viewModel.onClickCircleImage());
+        viewModel.channelName.observe(this, s -> t.getGroupName().setText(s));
+        viewModel.subscribersCount.observe(this, s -> t.getGroupMemberCount().setText(String.format("%s %s", s, getString(R.string.subscribers_title))));
+        viewModel.menuPopupVisibility.observe(this, integer -> {
+            if (integer != null) {
+                t.getRightButton().setVisibility(integer);
             }
         });
 
-        imgCircleImageView = fragmentProfileChannelBinding.pchImgCircleImage;
+        onBackFragment = this::popBackStackFragment;
 
-        fragmentProfileChannelBinding.txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
         attachFile = new AttachFile(G.fragmentActivity);
 
+        AppUtils.setProgresColler(binding.loading);
         setAvatar();
 
-        FragmentShowAvatars.onComplete = new OnComplete() {
+        /*FragmentShowAvatars.onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
@@ -182,10 +156,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                     }
                 });
             }
-        };
-
-
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
+        };*/
+        /*FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
             public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
                 pathSaveImage = null;
@@ -210,31 +182,25 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                     }
                 });
             }
-        };
-
-    }
-
-    private void initDataBinding() {
-        fragmentChannelProfileViewModel = new FragmentChannelProfileViewModel(getArguments(), this);
-        fragmentProfileChannelBinding.setFragmentChannelProfileViewModel(fragmentChannelProfileViewModel);
+        };*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        fragmentChannelProfileViewModel.onResume();
+        /*viewModel.onResume();*/
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        fragmentChannelProfileViewModel.onStop();
+        viewModel.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        fragmentChannelProfileViewModel.onDestroy();
+        viewModel.onDestroy();
     }
 
     @Override
@@ -247,12 +213,30 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     }
 
     private void setAvatar() {
-        avatarHandler.getAvatar(new ParamWithAvatarType(imgCircleImageView, fragmentChannelProfileViewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(imvChannelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 
+    private void showPopUp() {
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.add_to_home_screen));
+        /*if (viewModel.isPrivate) {
+            items.add(G.fragmentActivity.getString(R.string.channel_title_convert_to_public));
+        } else {
+            items.add(G.fragmentActivity.getString(R.string.channel_title_convert_to_private));
+        }*/
+        new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
+            /*isPopup = true;
+            if (viewModel.isPrivate) {
+                convertToPublic(view);
+            } else {
+                convertToPrivate();
+            }*/
+        }).show();
+    }
 
+    //Todo: Move to edit channel fragment
     //********** select picture
-    private void startDialogSelectPicture(int r) {
+    /*private void startDialogSelectPicture(int r) {
 
         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
@@ -290,9 +274,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 }
             }
         }).show();
-    }
+    }*/
 
-    private void useCamera() {
+    //todo: move to edit channel fragment
+    /*private void useCamera() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
@@ -307,19 +292,21 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
 
     ////************************************************** interfaces
     //
     ////***On Add Avatar Response From Server
 
-    @Override
+    /*@Override
     public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
-        /**
-         * if another account do this action we haven't avatar source and have
-         * to download avatars . for do this action call HelperAvatar.getAvatar
-         */
+        */
+
+    /**
+     * if another account do this action we haven't avatar source and have
+     * to download avatars . for do this action call HelperAvatar.getAvatar
+     *//*
 
         hideProgressBar();
         if (pathSaveImage == null) {
@@ -340,25 +327,24 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             });
             pathSaveImage = null;
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onAvatarAddError() {
         hideProgressBar();
-    }
+    }*/
 
     //***On Avatar Delete
-
     @Override
     public void onChannelAvatarDelete(final long roomId, final long avatarId) {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                avatarHandler.avatarDelete(new ParamWithAvatarType(imgCircleImageView, roomId)
+                avatarHandler.avatarDelete(new ParamWithAvatarType(imvChannelAvatar, roomId)
                         .avatarType(AvatarHandler.AvatarType.ROOM).turnOffCache().onAvatarChange(new OnAvatarChange() {
                             @Override
                             public void onChange(boolean fromCache) {
-                                imgCircleImageView.setPadding(0, 0, 0, 0);
+                                imvChannelAvatar.setPadding(0, 0, 0, 0);
                             }
                         }), avatarId);
             }
@@ -367,7 +353,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
     @Override
     public void onError(int majorCode, int minorCode) {
-        hideProgressBar();
+        viewModel.showLoading.setValue(false);
         G.handler.post(new Runnable() {
             @Override
             public void run() {
@@ -379,7 +365,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
     @Override
     public void onTimeOut() {
-        hideProgressBar();
+        viewModel.showLoading.setValue(false);
         G.handler.post(new Runnable() {
             @Override
             public void run() {
@@ -397,8 +383,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             @Override
             public void run() {
                 if (new File(imagePath).exists()) {
-                    imgCircleImageView.setPadding(0, 0, 0, 0);
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
+                    imvChannelAvatar.setPadding(0, 0, 0, 0);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imvChannelAvatar);
                 }
             }
         });
@@ -409,14 +395,14 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
     //*** onActivityResult
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    /*@Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)  {
         super.onActivityResult(requestCode, resultCode, data);
 
-        /**
+        /*
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
-         */
+         *//*
         if (G.isPassCode) ActivityMain.isUseCamera = true;
 
         if (resultCode == Activity.RESULT_OK) {
@@ -452,45 +438,39 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                     break;
             }
         }
-    }
+    }*/
 
 
     //********* kick user from roles
     public void kickMember(final Long peerId) {
-
         new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestChannelKickMember().channelKickMember(fragmentChannelProfileViewModel.roomId, peerId);
+                new RequestChannelKickMember().channelKickMember(viewModel.roomId, peerId);
             }
         }).show();
-
     }
 
     public void kickModerator(final Long peerId) {
-
         new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestChannelKickModerator().channelKickModerator(fragmentChannelProfileViewModel.roomId, peerId);
+                new RequestChannelKickModerator().channelKickModerator(viewModel.roomId, peerId);
             }
         }).show();
     }
 
     public void kickAdmin(final Long peerId) {
-
         new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                new RequestChannelKickAdmin().channelKickAdmin(fragmentChannelProfileViewModel.roomId, peerId);
+                new RequestChannelKickAdmin().channelKickAdmin(viewModel.roomId, peerId);
             }
         }).show();
-
-
     }
 
-    private void showProgressBar() {
+    /*private void showProgressBar() {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
@@ -500,9 +480,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 }
             }
         });
-    }
+    }*/
 
-    private void hideProgressBar() {
+    /*private void hideProgressBar() {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
@@ -512,7 +492,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 }
             }
         });
-    }
+    }*/
 
     public interface OnBackFragment {
         void onBack();

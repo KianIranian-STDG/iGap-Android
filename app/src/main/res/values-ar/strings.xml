@@ -2707,4 +2707,9 @@
     <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length as 5 characters.</string>
     <string name="add_modereator">Add Moderator</string>
     <string name="add_admin">Add Admin</string>
+    <string name="subscribers_title">subscribers</string>
+    <string name="invite_link_title">invite link</string>
+    <string name="add_to_home_screen">Add to Home screen</string>
+    <string name="channel_type">Channel Type</string>
+    <string name="sign_message_title">Sign Messages</string>
 </resources>

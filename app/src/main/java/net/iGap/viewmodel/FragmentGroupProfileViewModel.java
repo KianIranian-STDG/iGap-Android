@@ -122,7 +122,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public ObservableField<String> notificationState = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     private int realmNotification = 0;
     private RealmNotificationSetting realmNotificationSetting;
-    public ObservableField<Integer> sharedPhotoVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> sharedPhotoVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> sharedPhotoCount = new MutableLiveData<>();
     public ObservableField<Integer> sharedVideoVisibility = new ObservableField<>(View.GONE);
     public MutableLiveData<Integer> sharedVideoCount = new MutableLiveData<>();
@@ -690,10 +690,10 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                                         int countOFLink = Integer.parseInt(countList[6]);
 
                                         if (countOFImage > 0) {
-                                            sharedPhotoVisibility.set(View.VISIBLE);
+                                            sharedPhotoVisibility.setValue(View.VISIBLE);
                                             sharedPhotoCount.setValue(countOFImage);
                                         } else {
-                                            sharedPhotoVisibility.set(View.GONE);
+                                            sharedPhotoVisibility.setValue(View.GONE);
                                         }
                                         if (countOFVIDEO > 0) {
                                             sharedVideoVisibility.set(View.VISIBLE);
