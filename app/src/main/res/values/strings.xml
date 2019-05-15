@@ -876,6 +876,7 @@
     <string name="am">AM</string>
     <string name="message_selected">Message(s) Selected</string>
     <string name="messages_selected">Message(s) Selected</string>
+    <string name="item_selected"> item Selected</string>
     <string name="forward_message">Forward message</string>
     <string name="file_not_download_yet">File Not Downloaded Yet</string>
     <string name="navigation_drawer_open">Open</string>

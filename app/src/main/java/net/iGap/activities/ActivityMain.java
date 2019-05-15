@@ -90,7 +90,6 @@ import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.filterImage.NonSwipeableViewPager;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
@@ -180,7 +179,6 @@ import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
-import org.paygear.wallet.OnLanguageWallet;
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
@@ -2298,6 +2296,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             typeface = titleTypeface;
                         }
                         G.connectionState = connectionStateR;
+
+                        G.connectionStateMutableLiveData.postValue(connectionStateR);
+
+
                         if (connectionStateR == ConnectionState.WAITING_FOR_NETWORK) {
                             txtIgap.setText(R.string.waiting_for_network);
                             txtIgap.setTypeface(typeface, Typeface.BOLD);
@@ -2329,6 +2331,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             typeface = titleTypeface;
                         }
                         G.connectionState = ConnectionState.UPDATING;
+                        G.connectionStateMutableLiveData.postValue(ConnectionState.UPDATING);
+
                         txtIgap.setText(R.string.updating);
                         txtIgap.setTypeface(typeface, Typeface.BOLD);
                     }
@@ -2343,6 +2347,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                  */
                 if (G.connectionState == ConnectionState.UPDATING) {
                     G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
+                    G.connectionStateMutableLiveData.postValue(ConnectionState.IGAP);
+
+
                 }
             }
         };

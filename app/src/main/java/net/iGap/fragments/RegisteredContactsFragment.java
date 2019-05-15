@@ -43,6 +43,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -131,9 +132,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     private HelperToolbar mHelperToolbar;
     private boolean isToolbarInEditMode = false ;
-    private int mPageMode = 0 ; // 0 = new chat , 1 = contact , 2 = call , 4 = add new
+    private int mPageMode = 0 ; // 0 = new chat , 1 = contact , 2 = call , 3 = add new
     private LinearLayout btnAddNewChannel , btnAddNewGroup , btnAddSecretChat ;
     private LinearLayout btnAddNewGroupCall, btnAddNewContact , btnDialNumber ;
+
+    private ViewGroup mLayoutMultiSelected ;
+    private TextView mTxtSelectedCount ;
+    private ImageView mBtnDeleteSelected ;
+    private MaterialDesignTextView mBtnCancelSelected ;
+    private int mNumberOfSelectedCounter ;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -227,6 +234,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         btnAddNewGroup = view.findViewById(R.id.menu_layout_add_new_group);
         btnAddNewChannel = view.findViewById(R.id.menu_layout_add_new_channel);
         edtSearch = mHelperToolbar.getEditTextSearch();
+
+        mLayoutMultiSelected = view.findViewById(R.id.fc_layout_selected_mode);
+        mTxtSelectedCount = view.findViewById(R.id.fc_selected_mode_txt_counter);
+        mBtnDeleteSelected = view.findViewById(R.id.fc_selected_mode_btn_delete);
+        mBtnCancelSelected = view.findViewById(R.id.fc_selected_mode_btn_cancel);
 
         Bundle bundle = this.getArguments();
         String title = null;
@@ -469,9 +481,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 if (!isMultiSelect) {
                     isMultiSelect = true;
                     refreshAdapter(0, true);
-                    if (mActionMode == null) {
-                        mActionMode = G.fragmentActivity.startActionMode(mActionModeCallback);
+
+                    if (!mLayoutMultiSelected.isShown()){
+                        setPageShowingMode(4);
+
                     }
+
                 }
                 multi_select(position);
             }
@@ -600,6 +615,85 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         btnAddNewGroupCall.setOnClickListener(v -> {});
 
         btnAddNewContact.setOnClickListener(this::onRightIconClickListener);
+
+        mBtnDeleteSelected.setOnClickListener( v -> {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
+                        new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
+                    }
+
+                     setPageShowingMode(mPageMode);
+                    isMultiSelect = false;
+                    isLongClick = false;
+                    selectedList.clear();
+                    refreshAdapter(0, true);
+
+                }
+            }).negativeText(R.string.B_cancel).show();
+
+        });
+
+        mBtnCancelSelected.setOnClickListener(v -> {
+            setPageShowingMode(mPageMode);
+            mActionMode = null;
+            isMultiSelect = false;
+            isLongClick = false;
+            selectedList.clear();
+            refreshAdapter(0, true);
+            toolbar.setVisibility(View.VISIBLE);
+        });
+    }
+
+    private void setPageShowingMode(int mode){
+
+        if ( mode == 0 || mode == 1) { //contact mode
+
+            btnAddNewGroupCall.setVisibility(View.GONE);
+            btnAddNewContact.setVisibility(View.GONE);
+            btnDialNumber.setVisibility(View.GONE);
+            vgInviteFriend.setVisibility(View.VISIBLE);
+            btnAddNewChannel.setVisibility(View.GONE);
+            btnAddNewGroup.setVisibility(View.GONE);
+            btnAddSecretChat.setVisibility(View.GONE);
+            mLayoutMultiSelected.setVisibility(View.GONE);
+
+        }else if (mode == 2) { // call mode
+
+            btnAddNewGroupCall.setVisibility(View.VISIBLE);
+            btnAddNewContact.setVisibility(View.VISIBLE);
+            btnDialNumber.setVisibility(View.VISIBLE);
+            vgInviteFriend.setVisibility(View.GONE);
+            btnAddNewChannel.setVisibility(View.GONE);
+            btnAddNewGroup.setVisibility(View.GONE);
+            btnAddSecretChat.setVisibility(View.GONE);
+            mLayoutMultiSelected.setVisibility(View.GONE);
+
+        } else if (mode == 3) { // add mode
+
+            btnAddNewChannel.setVisibility(View.VISIBLE);
+            btnAddNewGroup.setVisibility(View.VISIBLE);
+            btnAddSecretChat.setVisibility(View.VISIBLE);
+            vgInviteFriend.setVisibility(View.GONE);
+            btnAddNewGroupCall.setVisibility(View.GONE);
+            btnAddNewContact.setVisibility(View.GONE);
+            btnDialNumber.setVisibility(View.GONE);
+            mLayoutMultiSelected.setVisibility(View.GONE);
+
+        }else if (mode == 4) {//edit mode
+
+            btnAddNewChannel.setVisibility(View.GONE);
+            btnAddNewGroup.setVisibility(View.GONE);
+            btnAddSecretChat.setVisibility(View.GONE);
+            vgInviteFriend.setVisibility(View.GONE);
+            btnAddNewGroupCall.setVisibility(View.GONE);
+            btnAddNewContact.setVisibility(View.GONE);
+            btnDialNumber.setVisibility(View.GONE);
+            mLayoutMultiSelected.setVisibility(View.VISIBLE);
+
+        }
     }
 
     private void hideProgress() {
@@ -1721,7 +1815,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     // Add/Remove the item from/to the list
 
     public void multi_select(int position) {
-        if (mActionMode != null) {
+        if (mLayoutMultiSelected.isShown()) {
 
             if (results.get(position) == null) {
                 return;
@@ -1734,9 +1828,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }
 
             if (selectedList.size() > 0) {
-                mActionMode.setTitle("" + selectedList.size());
+                mTxtSelectedCount.setText(selectedList.size() + " " + context.getResources().getString(R.string.item_selected));
             } else {
-                mActionMode.setTitle("");
+                mTxtSelectedCount.setText(selectedList.size() + " " + context.getResources().getString(R.string.item_selected));
             }
             refreshAdapter(position, false);
         }
@@ -1812,7 +1906,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         void onClick(View view, int position);
     }
 
-    //todo : nazari
 
     @Override //btn edit
     public void onLeftIconClickListener(View view) {

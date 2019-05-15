@@ -247,12 +247,13 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                 .setContext(context)
                 .setLeftIcon(R.drawable.ic_back_btn)
                 .setRightIcons(R.drawable.ic_checked)
+                .setDefaultTitle(G.context.getResources().getString(R.string.menu_add_contact))
                 .setLogoShown(true)
                 .setListener(this);
 
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.menu_add_contact));
+       // mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.menu_add_contact));
     }
 
     private void isEnableSetButton() {

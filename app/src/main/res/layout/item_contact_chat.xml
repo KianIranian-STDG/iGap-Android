@@ -21,7 +21,6 @@
             android:id="@+id/iv_itemContactChat_checkBox"
             android:layout_width="@dimen/dp36"
             android:layout_height="@dimen/dp36"
-            android:layout_marginRight="@dimen/dp20"
             android:layout_marginLeft="@dimen/dp20"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -29,7 +28,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginStart="@dimen/dp24"
-            android:layout_marginLeft="@dimen/dp24"
+            android:layout_marginLeft="@dimen/dp16"
             android:background="@drawable/shape_background_profile_sample"/>
 
 

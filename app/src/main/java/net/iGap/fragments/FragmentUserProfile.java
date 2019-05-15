@@ -80,7 +80,7 @@ import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 
-public class FragmentUserProfile extends Fragment implements OnUserInfoMyClient , RefreshWalletBalance , EventListener {
+public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyClient , RefreshWalletBalance , EventListener {
 
     private View mView ;
     
@@ -97,7 +97,6 @@ public class FragmentUserProfile extends Fragment implements OnUserInfoMyClient 
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
-    private AvatarHandler avatarHandler;
 
 
     public FragmentUserProfile() {
@@ -521,7 +520,6 @@ public class FragmentUserProfile extends Fragment implements OnUserInfoMyClient 
     }
 
     public void setImage() {
-        avatarHandler = new AvatarHandler();
         avatarHandler.getAvatar(new ParamWithAvatarType(mAvatar, G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
         G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
