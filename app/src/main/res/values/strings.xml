@@ -1768,4 +1768,11 @@
     <string name="refound">money transferred to your wallet</string>
     <string name="Recently_Sticker">Recently</string>
     <string name="Favorite_Sticker">Favorite</string>
+    <string name="subscribers_title">Subscribers</string>
+    <string name="invite_link_title">invite link</string>
+    <string name="add_to_home_screen">Add to Home screen</string>
+    <string name="channel_type">Channel Type</string>
+    <string name="sign_message_title">Sign Messages</string>
+    <string name="sign_channel_message_description">Add names of the admins to the messages they post.</string>
+    <string name="recent_action">Recent Actions</string>
 </resources>

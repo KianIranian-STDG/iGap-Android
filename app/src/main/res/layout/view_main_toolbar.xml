@@ -41,7 +41,7 @@
             android:layout_marginBottom="10dp"
             android:padding="@dimen/toolbar_icon_padding"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/groupAvatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,46 +49,40 @@
             android:id="@+id/view_toolbar_btn_right_2"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
             android:contentDescription="@null"
             android:padding="@dimen/toolbar_icon_padding"
-            android:layout_marginBottom="10dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/view_toolbar_btn_right_1"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/view_toolbar_btn_right_1" />
 
         <ImageView
             android:id="@+id/view_toolbar_btn_right_3"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
             android:contentDescription="@null"
             android:padding="@dimen/toolbar_icon_padding"
-            android:layout_marginBottom="10dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/view_toolbar_btn_right_1"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_2"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/view_toolbar_btn_right_1" />
 
         <ImageView
             android:id="@+id/view_toolbar_btn_right_4"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
             android:contentDescription="@null"
             android:padding="@dimen/toolbar_icon_padding"
-            android:layout_marginBottom="10dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/view_toolbar_btn_right_1"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/view_toolbar_btn_right_1" />
 
         <ImageView
             android:id="@+id/view_toolbar_btn_left"
@@ -101,7 +95,7 @@
             android:padding="@dimen/toolbar_icon_padding"
             android:visibility="visible"
             android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/groupAvatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

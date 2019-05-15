@@ -3,7 +3,6 @@ package net.iGap.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.text.SpannableStringBuilder;
-import android.view.View;
 import android.view.WindowManager;
 
 import net.iGap.G;
@@ -14,9 +13,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGroupDelete;
 import net.iGap.interfaces.OnGroupEdit;
 import net.iGap.interfaces.OnGroupLeft;

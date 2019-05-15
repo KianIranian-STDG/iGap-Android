@@ -1769,4 +1769,9 @@
     <string name="welcome_title">به آیگپ خوش آمدید</string>
     <string name="add_modereator">Add Moderator</string>
     <string name="add_admin">Add Admin</string>
+    <string name="subscribers_title">subscribers</string>
+    <string name="invite_link_title">invite link</string>
+    <string name="add_to_home_screen">Add to Home screen</string>
+    <string name="channel_type">Channel Type</string>
+    <string name="sign_message_title">Sign Messages</string>
 </resources>
