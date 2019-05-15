@@ -334,6 +334,16 @@ public class HelperLogMessage {
                 String temp = log.message + "  " + LogMessageTypeString;
                 strBuilder.append(temp);
                 break;
+            case USER_JOINED:
+            case USER_DELETED:
+                if (HelperCalander.isPersianUnicode) {
+                    strBuilder.clear();
+                    strBuilder.append("\u200F");
+                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    strBuilder.append(LogMessageTypeString);
+                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                }
+                break;
             case UNRECOGNIZED:
                 strBuilder.clear();
                 break;
