@@ -1773,4 +1773,18 @@
     <string name="sign_message_title">Sign Messages</string>
     <string name="sign_channel_message_description">Add names of the admins to the messages they post.</string>
     <string name="recent_action">Recent Actions</string>
+    <string name="get_money_title">Get Money</string>
+    <string name="payment_for">for</string>
+    <string name="payment_continue_title">continue</string>
+    <string name="shabe_title">Shaba Card</string>
+    <string name="bank_account_charge">Account Charge</string>
+    <string name="last_ten_transaction">Last 10 transaction</string>
+    <string name="Inventory">Inventory</string>
+    <string name="pay_bills_title">Pay Bills</string>
+    <string name="mobile_bills_title">Mobile Bills</string>
+    <string name="bills">Bills</string>
+    <string name="charge_amount">Charge amount</string>
+    <string name="buy_internet_package_title">Buy Internet Package</string>
+    <string name="charity_title">Charity</string>
+    <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
 </resources>

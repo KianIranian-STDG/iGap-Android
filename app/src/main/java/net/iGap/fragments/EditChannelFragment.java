@@ -198,12 +198,9 @@ public class EditChannelFragment extends BaseFragment {
                 showPopUp(aBoolean);
             }
         });
-        viewModel.showDeleteChannelDialog.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean!=null) {
-                    deleteChannel(aBoolean);
-                }
+        viewModel.showDeleteChannelDialog.observe(this, aBoolean -> {
+            if (aBoolean!=null) {
+                deleteChannel(aBoolean);
             }
         });
         onBackFragment = this::popBackStackFragment;

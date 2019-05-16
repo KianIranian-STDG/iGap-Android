@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="net.iGap.dialog.payment.getmoney.GetMoneyViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/lineViewTop"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/bottomSheetHeaderLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".34" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/pageTitle"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="8dp"
+            android:text="@string/get_money_title"
+            android:textColor="@color/green"
+            app:layout_constraintLeft_toRightOf="@id/actionInfo"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/actionInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onActionInfoClick()}"
+            android:text="@string/md_round_info_button"
+            app:layout_constraintBottom_toBottomOf="@id/pageTitle"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/pageTitle" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/nameOrPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="8dp"
+            android:hint="@string/name"
+            app:errorEnabled="@{viewModel.nameOrPhoneEnableError}"
+            app:errorText="@{viewModel.nameOrPhoneErrorMessage}"
+            app:layout_constraintTop_toBottomOf="@id/pageTitle">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/nameOrPhoneNumberEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="90dp"
+                android:paddingLeft="90dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/cardIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onCardIconClick()}"
+            android:text="@string/md_igap_credit_card"
+            app:layout_constraintBottom_toBottomOf="@id/nameOrPhoneNumber"
+            app:layout_constraintLeft_toLeftOf="@id/nameOrPhoneNumber" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/personIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onPersonIconClick()}"
+            android:text="@string/md_igap_credit_card"
+            app:layout_constraintBottom_toBottomOf="@id/cardIcon"
+            app:layout_constraintLeft_toRightOf="@id/cardIcon" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/price_rial"
+            app:errorEnabled="@{viewModel.amountEnableError}"
+            app:errorText="@{viewModel.amountErrorMessage}"
+            app:layout_constraintLeft_toLeftOf="@id/nameOrPhoneNumber"
+            app:layout_constraintRight_toRightOf="@id/nameOrPhoneNumber"
+            app:layout_constraintTop_toBottomOf="@id/nameOrPhoneNumber">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/amountEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/getMoneyFor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/payment_for"
+            app:errorEnabled="@{viewModel.forDetailEnableError()}"
+            app:errorText="@{viewModel.forDetailErrorMessage()}"
+            app:layout_constraintLeft_toLeftOf="@id/nameOrPhoneNumber"
+            app:layout_constraintRight_toRightOf="@id/nameOrPhoneNumber"
+            app:layout_constraintTop_toBottomOf="@id/amount">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/getMoneyForEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:onClick="@{()->viewModel.onContinueButtonClick(nameOrPhoneNumberEditText.getEditableText().toString(),amountEditText.getEditableText().toString(),getMoneyForEditText.getEditableText().toString())}"
+            android:text="@string/payment_continue_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/getMoneyFor"
+            app:layout_constraintWidth_percent=".5" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

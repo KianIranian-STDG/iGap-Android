@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.content.Context" />
+        <variable
+            name="viewModel"
+            type="net.iGap.dialog.payment.paybills.PayBillsViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/lineViewTop"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/bottomSheetHeaderLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".34" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/pageTitle"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="8dp"
+            android:text="@string/pay_bills_title"
+            android:textColor="@color/green"
+            app:layout_constraintLeft_toRightOf="@id/actionInfo"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/actionInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onActionInfoClick()}"
+            android:text="@string/md_round_info_button"
+            app:layout_constraintBottom_toBottomOf="@id/pageTitle"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/pageTitle" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/mobileBills"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onMobileBillsClick()}"
+            android:padding="8dp"
+            android:text="@string/mobile_bills_title"
+            android:textColor="@color/send_money_type"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/billsMode"
+            app:layout_constraintTop_toBottomOf="@id/pageTitle"
+            app:setSelected="@{viewModel.mobileBillsModeIsSelected}" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/send_money_type"
+            app:layout_constraintLeft_toLeftOf="@id/mobileBills"
+            app:layout_constraintRight_toRightOf="@id/mobileBills"
+            app:layout_constraintTop_toBottomOf="@id/mobileBills"
+            app:setSelected="@{viewModel.mobileBillsModeIsSelected}" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/billsMode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onBillsClick()}"
+            android:padding="8dp"
+            android:text="@string/bills"
+            android:textColor="@color/send_money_type"
+            app:layout_constraintBottom_toBottomOf="@id/mobileBills"
+            app:layout_constraintLeft_toRightOf="@id/mobileBills"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/mobileBills"
+            app:setSelected="@{!viewModel.mobileBillsModeIsSelected}" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/send_money_type"
+            app:layout_constraintLeft_toLeftOf="@id/billsMode"
+            app:layout_constraintRight_toRightOf="@id/billsMode"
+            app:layout_constraintTop_toBottomOf="@id/billsMode"
+            app:setSelected="@{!viewModel.mobileBillsModeIsSelected}" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/scanBarCode"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:onClick="@{()->viewModel.onScanBarcodeClick()}"
+            android:text="@string/md_barcode_scan"
+            android:textSize="@dimen/dp40"
+            app:layout_constraintBottom_toTopOf="@id/v"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/phoneNumberOrId"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintWidth_percent=".2" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_barcode"
+            app:layout_constraintBottom_toBottomOf="@id/operatorOrId"
+            app:layout_constraintLeft_toLeftOf="@id/scanBarCode"
+            app:layout_constraintRight_toRightOf="@id/scanBarCode"
+            app:layout_constraintTop_toBottomOf="@id/scanBarCode" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phoneNumberOrId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="8dp"
+            android:hint="@{context.getString(viewModel.phoneOrId)}"
+            app:errorEnabled="@{viewModel.phoneOrIdEnableError}"
+            app:errorText="@{viewModel.phoneOrIdErrorMessage}"
+            app:layout_constraintLeft_toRightOf="@id/scanBarCode"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mobileBills">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/phoneNumberOrIdEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:paddingStart="50dp"
+                android:paddingLeft="50dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/cardIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onPersonIconClick()}"
+            android:text="@string/md_igap_credit_card"
+            app:layout_constraintBottom_toBottomOf="@id/phoneNumberOrId"
+            app:layout_constraintLeft_toLeftOf="@id/phoneNumberOrId" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/operatorOrId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@{context.getString(viewModel.operatorOrId)}"
+            app:errorEnabled="@{viewModel.operatorOrIdMessageEnable}"
+            app:errorText="@{viewModel.operatorOrIdErrorMessage}"
+            app:layout_constraintLeft_toLeftOf="@id/phoneNumberOrId"
+            app:layout_constraintRight_toRightOf="@id/phoneNumberOrId"
+            app:layout_constraintTop_toBottomOf="@id/phoneNumberOrId">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/operatorOrIdEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:onClick="@{()->viewModel.onContinueButtonClick(phoneNumberOrIdEditText.getEditableText().toString(),operatorOrIdEditText.getEditableText().toString())}"
+            android:text="@string/payment_continue_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/operatorOrId"
+            app:layout_constraintWidth_percent=".5" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
