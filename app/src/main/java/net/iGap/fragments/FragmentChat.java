@@ -57,7 +57,9 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.LayoutDirection;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -153,6 +155,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
@@ -211,6 +214,7 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.interfaces.OpenBottomSheetItem;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -372,7 +376,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
-        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick {
+        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick , ToolbarListener {
 
     public static FinishActivity finishActivity;
     public static OnComplete onMusicListener;
@@ -608,6 +612,9 @@ public class FragmentChat extends BaseFragment
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
+
+    private HelperToolbar mHelperToolbar;
+    private ViewGroup layoutToolbar ;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -862,12 +869,12 @@ public class FragmentChat extends BaseFragment
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
             FragmentShearedMedia.list.clear();
         }
-
         canUpdateAfterDownload = true;
 
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                initToolbar();
                 initLayoutHashNavigationCallback();
                 showSpamBar();
 
@@ -942,7 +949,7 @@ public class FragmentChat extends BaseFragment
                         RealmRoom room = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
                             if (txtName == null) {
-                                txtName = rootView.findViewById(R.id.chl_txt_name);
+                                txtName = mHelperToolbar.getTextViewChatUserName();
                             }
                             txtName.setText(room.getTitle());
                         }
@@ -1067,8 +1074,9 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isCloudRoom) {
+            //todo : add cloud image to toolbar
             rootView.findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
-            rootView.findViewById(R.id.chl_imv_user_picture).setVisibility(View.GONE);
+            mHelperToolbar.getUserAvatarChat().setVisibility(View.GONE);
         } else {
             setAvatar();
         }
@@ -1078,6 +1086,21 @@ public class FragmentChat extends BaseFragment
         }
 
         registerListener();
+    }
+
+    private void initToolbar() {
+
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_more_toolbar ,R.drawable.ic_voice_call , R.drawable.ic_video_call)
+                .setLogoShown(false)
+                .setChatRoom(true)
+                .setListener(this);
+
+        //just for skipping crash when name set to toolbar at onResume()
+        mHelperToolbar.getView() ;
     }
 
     @Override
@@ -1471,6 +1494,21 @@ public class FragmentChat extends BaseFragment
      */
     private void startPageFastInitialize() {
 
+        //add toolbar
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_more_toolbar ,R.drawable.ic_voice_call , R.drawable.ic_video_call)
+                .setLogoShown(false)
+                .setChatRoom(true)
+                .setListener(this);
+
+        layoutToolbar = rootView.findViewById(R.id.ac_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
+
+
+
         attachFile = new AttachFile(G.fragmentActivity);
         backGroundSeenList.clear();
 
@@ -1485,14 +1523,25 @@ public class FragmentChat extends BaseFragment
             pageSettings();
 
             // avi = (AVLoadingIndicatorView)  rootView.findViewById(R.id.avi);
-            txtName = rootView.findViewById(R.id.chl_txt_name);
-            txtLastSeen = rootView.findViewById(R.id.chl_txt_last_seen);
+            txtName = mHelperToolbar.getTextViewChatUserName();
+            txtLastSeen = mHelperToolbar.getTextViewChatSeenStatus();
             viewGroupLastSeen = rootView.findViewById(R.id.chl_txt_viewGroup_seen);
-            imvUserPicture = rootView.findViewById(R.id.chl_imv_user_picture);
-            txtVerifyRoomIcon = rootView.findViewById(R.id.ac_txt_verify);
+            imvUserPicture = mHelperToolbar.getUserAvatarChat();
+            txtVerifyRoomIcon = mHelperToolbar.getChatVerify();
             txtVerifyRoomIcon.setVisibility(View.GONE);
 
-            /**
+
+            //set layout direction to views
+
+            if (G.selectedLanguage.equals("en")) {
+                txtName.setGravity(Gravity.LEFT);
+                txtLastSeen.setGravity(Gravity.LEFT);
+            } else {
+                txtName.setGravity(Gravity.RIGHT);
+                txtLastSeen.setGravity(Gravity.RIGHT);
+            }
+
+                        /**
              * need this info for load avatar
              */
             if (realmRoom != null) {
@@ -2433,8 +2482,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initComponent() {
+
         toolbar = rootView.findViewById(R.id.toolbar);
-        iconMute = rootView.findViewById(R.id.imgMutedRoom);
+        iconMute = mHelperToolbar.getChatMute();
         RippleView rippleBackButton = rootView.findViewById(R.id.chl_ripple_back_Button);
 
         //+final Realm realm = Realm.getDefaultInstance();
@@ -2445,39 +2495,29 @@ public class FragmentChat extends BaseFragment
             isMuteNotification = realmRoom.getMute();
         }
 
+        //gone video , voice button call then if status was ok visible them
+        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
+
         if (chatType == CHAT && !isChatReadOnly) {
 
             if (G.userId != chatPeerId && !isBot) {
-
-                RippleView rippleCall = rootView.findViewById(R.id.acp_ripple_call);
-                RippleView rippleVideoCall = rootView.findViewById(R.id.acp_ripple_video_call);
 
                 // gone or visible view call
                 RealmCallConfig callConfig = getRealmChat().where(RealmCallConfig.class).findFirst();
                 if (callConfig != null) {
                     if (callConfig.isVoice_calling()) {
-                        rippleCall.setVisibility(View.VISIBLE);
-                        rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-                            @Override
-                            public void onComplete(RippleView rippleView) {
-                                FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                            }
-                        });
+                        mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+
                     } else {
-                        rippleCall.setVisibility(View.GONE);
+                        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
                     }
 
                     if (callConfig.isVideo_calling()) {
-                        rippleVideoCall.setVisibility(View.VISIBLE);
-                        rippleVideoCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-                            @Override
-                            public void onComplete(RippleView rippleView) {
-                                FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-                            }
-                        });
+                        mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
 
                     } else {
-                        rippleVideoCall.setVisibility(View.GONE);
+                        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
                     }
 
                 } else {
@@ -3096,7 +3136,7 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        imvUserPicture = rootView.findViewById(R.id.chl_imv_user_picture);
+        imvUserPicture = mHelperToolbar.getUserAvatarChat();
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -6263,6 +6303,8 @@ public class FragmentChat extends BaseFragment
      * init layout hashtak for up and down
      */
     private void initHashView() {
+
+
         ll_navigateHash = rootView.findViewById(R.id.ac_ll_hash_navigation);
         btnUpHash = rootView.findViewById(R.id.ac_btn_hash_up);
         btnDownHash = rootView.findViewById(R.id.ac_btn_hash_down);
@@ -9432,5 +9474,217 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    @Override
+    public void onLeftIconClickListener(View view) {
+        if (webViewChatPage != null) {
+            closeWebViewForSpecialUrlChat(false);
+            return;
+        }
+        closeKeyboard(view);
+        popBackStackFragment();
+    }
 
+    @Override
+    public void onChatAvatarClickListener(View view) {
+
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.Search));
+        items.add(getString(R.string.clear_history));
+        items.add(getString(R.string.delete_chat));
+        items.add(getString(R.string.mute_notification));
+        items.add(getString(R.string.chat_to_group));
+        items.add(getString(R.string.clean_up));
+        items.add(getString(R.string.export_chat));
+
+        if (chatType == CHAT) {
+            if (!isChatReadOnly && !blockUser && !isBot) {
+            } else {
+                items.remove(getString(R.string.chat_to_group));
+                items.remove(getString(R.string.export_chat));
+            }
+        } else {
+            items.remove(getString(R.string.delete_chat));
+            items.remove(getString(R.string.chat_to_group));
+
+            if (chatType == GROUP && isPublicGroup) {
+                items.remove(getString(R.string.clear_history));
+            }
+
+            if (chatType == CHANNEL) {
+                items.remove(getString(R.string.clear_history));
+                items.remove(getString(R.string.export_chat));
+            }
+            if (channelRole != ChannelChatRole.OWNER || groupRole != GroupChatRole.OWNER || isNotJoin) {
+                items.add(getString(R.string.report));
+            } else {
+                items.remove(getString(R.string.report));
+            }
+        }
+
+        //+Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom1 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom1 != null) {
+
+                /*if (realmRoom.getMute()) {
+                    txtMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.unmute_notification));
+                    iconMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.md_unMuted));
+                } else {
+                    txtMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.mute_notification));
+                    iconMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
+                }*/
+        } else {
+            items.remove(getString(R.string.clear_history));
+            items.remove(getString(R.string.delete_chat));
+            items.remove(getString(R.string.mute_notification));
+            items.remove(getString(R.string.chat_to_group));
+            items.remove(getString(R.string.clean_up));
+        }
+
+        if (isNotJoin) {
+            items.remove(getString(R.string.clear_history));
+            items.remove(getString(R.string.mute_notification));
+            items.remove(getString(R.string.clean_up));
+        }
+
+        if (RealmRoom.isNotificationServices(mRoomId)) {
+            items.remove(getString(R.string.report));
+        }
+
+        if (RealmRoom.isBot(chatPeerId)) {
+            items.remove(getString(R.string.delete_chat));
+        }
+
+
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+            items.add(getString(R.string.SendMoney));
+        } else {
+            items.remove(getString(R.string.SendMoney));
+        }
+
+        if (isBot) {
+            if (webViewChatPage != null) {
+                items.remove(getString(R.string.Search));
+                items.remove(getString(R.string.clear_history));
+                items.remove(getString(R.string.delete_chat));
+                items.remove(getString(R.string.mute_notification));
+                items.remove(getString(R.string.chat_to_group));
+                items.remove(getString(R.string.clean_up));
+                items.remove(getString(R.string.SendMoney));
+                items.remove(getString(R.string.export_chat));
+                items.add(getString(R.string.stop));
+            }
+        }
+
+        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            if (items.get(position).equals(getString(R.string.Search))) {
+                initLayoutSearchNavigation();
+                rootView.findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
+                ll_Search.setVisibility(View.VISIBLE);
+                if (!initHash) {
+                    initHash = true;
+                    initHashView();
+                }
+                edtSearchMessage.requestFocus();
+            } else if (items.get(position).equals(getString(R.string.clear_history))) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        onSelectRoomMenu("txtClearHistory", mRoomId);
+                    }
+                }).negativeText(R.string.no).show();
+            } else if (items.get(position).equals(getString(R.string.delete_chat))) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        onSelectRoomMenu("txtDeleteChat", mRoomId);
+                    }
+                }).negativeText(R.string.no).show();
+            } else if (items.get(position).equals(getString(R.string.mute_notification))) {
+                onSelectRoomMenu("txtMuteNotification", mRoomId);
+            } else if (items.get(position).equals(getString(R.string.chat_to_group))) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //finish();
+                        finishChat();
+                        dialog.dismiss();
+                        G.handler.post(() -> G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId));
+                    }
+                }).show();
+            } else if (items.get(position).equals(getString(R.string.clean_up))) {
+                RealmRoomMessage.ClearAllMessage(getRealmChat(), false, mRoomId);
+                resetMessagingValue();
+                setDownBtnGone();
+                recyclerView.addOnScrollListener(scrollListener);
+                saveMessageIdPositionState(0);
+                /**
+                 * get history from server
+                 */
+                topMore = true;
+                getOnlineMessage(0, UP);
+            } else if (items.get(position).equals(getString(R.string.report))) {
+                dialogReport(false, 0);
+            } else if (items.get(position).equals(getString(R.string.SendMoney))) {
+                showPaymentDialog();
+            } else if (items.get(position).equals(getString(R.string.export_chat))) {
+                if (HelperPermission.grantedUseStorage()) {
+                    exportChat();
+                } else {
+                    try {
+                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                            @Override
+                            public void Allow() {
+                                exportChat();
+                            }
+
+                            @Override
+                            public void deny() {
+                                Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (items.get(position).equals(getString(R.string.stop))) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //   onSelectRoomMenu("txtClearHistory", mRoomId);
+                        closeWebViewForSpecialUrlChat(true);
+                        //  popBackStackFragment();
+
+                    }
+                }).negativeText(R.string.no).show();
+            }
+        });
+        topSheetDialog.show();
+
+            /*final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+            View v = dialog.getCustomView();
+
+            DialogAnimation.animationUp(dialog);
+            dialog.show();*/
+
+    }
+
+    @Override
+    public void onSecondRightIconClickListener(View view) {
+        FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+    }
+
+    @Override
+    public void onThirdRightIconClickListener(View view) {
+        FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+    }
+
+    @Override
+    public void onFourthRightIconClickListener(View view) {
+
+    }
 }
