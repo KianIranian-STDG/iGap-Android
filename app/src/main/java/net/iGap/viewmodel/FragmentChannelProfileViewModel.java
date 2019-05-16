@@ -156,15 +156,6 @@ public class FragmentChannelProfileViewModel
             isReactionStatus.set(false);
         }*/
 
-        //todo: move to edit channel fragment
-        /*if (role == ChannelChatRole.OWNER) {
-            showLayoutReactStatus.set(View.VISIBLE);
-            G.onChannelUpdateReactionStatus = this;
-        } else {
-            showLayoutReactStatus.set(View.GONE);
-            G.onChannelUpdateReactionStatus = null;
-        }*/
-
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -232,28 +223,6 @@ public class FragmentChannelProfileViewModel
             isCheckedSignature.set(false);
         }*/
 
-        /*G.onChannelUpdateSignature = new OnChannelUpdateSignature() {
-            @Override
-            public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
-                // handle realm to response class
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (isCheckedSignature.get()) {
-                            isCheckedSignature.set(false);
-                        } else {
-                            isCheckedSignature.set(true);
-                        }
-                    }
-                });
-            }
-        };*/
         attachFile = new AttachFile(G.fragmentActivity);
         /*initRecycleView();*/
         /*showAdminOrModeratorList();*/
@@ -753,28 +722,6 @@ public class FragmentChannelProfileViewModel
 
     }*/
 
-    //todo: move to channel edit fragment
-    /*private void editChannelResponse(long roomIdR, final String name, final String description) {
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                hideProgressBar();
-                callbackChannelName.set(name);
-
-                SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
-                if (spannableStringBuilder != null) {
-                    callbackChannelDescription.set(spannableStringBuilder);
-                } else {
-                    callbackChannelDescription.set(new SpannableStringBuilder(""));
-                }
-
-                prgWaitingVisibility.set(View.GONE);
-                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        });
-    }*/
-
     //********** channel edit name and description
 
     private void editChannelRequest(String name, String description) {
@@ -802,20 +749,6 @@ public class FragmentChannelProfileViewModel
     //***On Add Avatar Response From Server
 
     //***Edit Channel
-
-    /*@Override
-    public void onChannelDelete(long roomId) {
-        closeActivity();
-    }*/
-
-    //***Delete Channel
-
-    /*@Override
-    public void onChannelLeft(long roomId, long memberId) {
-        closeActivity();
-    }*/
-
-    //***Left Channel
 
     private void closeActivity() {
         G.handler.post(new Runnable() {

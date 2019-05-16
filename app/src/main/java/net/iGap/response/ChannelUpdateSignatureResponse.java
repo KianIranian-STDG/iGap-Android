@@ -34,6 +34,9 @@ public class ChannelUpdateSignatureResponse extends MessageHandler {
         super.handler();
         ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse.Builder builder = (ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse.Builder) message;
         RealmRoom.updateSignature(builder.getRoomId(), builder.getSignature());
+        if (G.onChannelUpdateSignature != null){
+            G.onChannelUpdateSignature.onChannelUpdateSignatureResponse(builder.getRoomId(),builder.getSignature());
+        }
     }
 
     @Override
