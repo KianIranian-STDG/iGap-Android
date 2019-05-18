@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,10 +21,12 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.CircleImageView;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.enums.ConnectionState;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * SAMPLE OF USAGE ARE AT BOTTOM OF THIS FILE
@@ -35,12 +38,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class HelperToolbar {
 
     private ImageView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
-    private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatUserName, mTxtChatSeenStatus;
+    private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
+    private EmojiTextViewE mTxtChatUserName ;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch;
     private AppCompatTextView groupName, groupMemberCount;
     private EditText mEdtSearch;
+    private AppCompatImageView mChatVerifyIcon ;
+    private MaterialDesignTextView mChatMuteIcon ;
 
     private LayoutInflater mInflater;
     private Context mContext;
@@ -238,13 +244,13 @@ public class HelperToolbar {
 
         if (isInChatRoom) {
             mAvatarChat.setVisibility(View.VISIBLE);
-            mTxtChatUserName.setVisibility(View.VISIBLE);
+            result.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.VISIBLE);
             mTxtChatSeenStatus.setVisibility(View.VISIBLE);
             mAvatarChat.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
 
         } else {
             mAvatarChat.setVisibility(View.GONE);
-            mTxtChatUserName.setVisibility(View.GONE);
+            result.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.GONE);
             mTxtChatSeenStatus.setVisibility(View.GONE);
         }
 
@@ -324,7 +330,7 @@ public class HelperToolbar {
         return mTxtCallStatus;
     }
 
-    public TextView getTextViewChatUserName() {
+    public EmojiTextViewE getTextViewChatUserName() {
         return mTxtChatUserName;
     }
 
@@ -356,8 +362,20 @@ public class HelperToolbar {
         return mRightBtn;
     }
 
-    public ImageView getM2RightBtn(){
+    public ImageView getSecondRightButton(){
         return m2RightBtn;
+    }
+
+    public ImageView getThirdRightButton() {
+        return m3RightBtn;
+    }
+
+    public ImageView getFourthRightButton() {
+        return m4RightBtn;
+    }
+
+    public CircleImageView getUserAvatarChat() {
+        return mAvatarChat;
     }
 
     public AppCompatTextView getGroupName(){
@@ -370,6 +388,14 @@ public class HelperToolbar {
 
     public CircleImageView getGroupAvatar() {
         return groupAvatar;
+    }
+
+    public AppCompatImageView getChatVerify() {
+        return mChatVerifyIcon;
+    }
+
+    public MaterialDesignTextView getChatMute() {
+        return mChatMuteIcon;
     }
 
     /*************************************************************/
@@ -526,6 +552,8 @@ public class HelperToolbar {
 
         mTxtCounter = view.findViewById(R.id.view_toolbar_txt_counter);
         mTxtChatUserName = view.findViewById(R.id.view_toolbar_chat_txt_userName);
+        mChatVerifyIcon = view.findViewById(R.id.view_toolbar_chat_txt_verify);
+        mChatMuteIcon = view.findViewById(R.id.view_toolbar_chat_txt_isMute);
         mTxtChatSeenStatus = view.findViewById(R.id.view_toolbar_chat_txt_seen_status);
         mTxtLogo = view.findViewById(R.id.view_toolbar_logo);
         mTxtBigAvatarUserName = view.findViewById(R.id.view_toolbar_txt_below_big_avatar_user_name);

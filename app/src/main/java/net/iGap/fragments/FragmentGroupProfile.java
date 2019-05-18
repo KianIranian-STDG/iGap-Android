@@ -35,6 +35,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructBottomSheet;
@@ -50,7 +51,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.HashMap;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /*
  * This is the source code of iGap for Android
@@ -122,7 +122,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 });
         // because actionbar not in this view do that and not correct in viewModel
         if (viewModel.isNotJoin){
-            t.getM2RightBtn().setVisibility(View.GONE);
+            t.getSecondRightButton().setVisibility(View.GONE);
         }
         binding.toolbar.addView(t.getView());
         imvGroupAvatar = t.getGroupAvatar();
