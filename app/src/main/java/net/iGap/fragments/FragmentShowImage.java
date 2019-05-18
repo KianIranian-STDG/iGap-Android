@@ -173,9 +173,9 @@ public class FragmentShowImage extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (appBarLayout != null) {
+        /*if (appBarLayout != null) {
             appBarLayout.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     @Override

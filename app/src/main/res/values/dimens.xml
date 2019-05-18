@@ -4,6 +4,7 @@
 
   <dimen name="toolbar_radius">10dp</dimen>
   <dimen name="toolbar_height">74dp</dimen>
+  <dimen name="margin_for_below_layouts_of_toolbar">64dp</dimen>
   <dimen name="toolbar_height_call_state">80dp</dimen>
   <dimen name="toolbar_height_with_search">74dp</dimen>
   <dimen name="toolbar_height_root_with_search">94dp</dimen>
@@ -106,6 +107,9 @@
   <dimen name="coupon_qr_size">140dp</dimen>
   <dimen name="app_bar_card_view_elevation">0dp</dimen>
   <dimen name="image">64dp</dimen>
+    <dimen name="multi_select_icon_size">17sp</dimen>
+  <dimen name="multi_select_icon_margin">5dp</dimen>
+  <dimen name="multi_select_icon_height">40dp</dimen>
 
 
 </resources>
