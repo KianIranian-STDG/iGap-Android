@@ -275,7 +275,7 @@ public class HelperLogMessage {
             case MEMBER_KICKED:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
-                    strBuilder.append("\u200E");
+                    strBuilder.append("\u200F");
                     insertClickSpanLink(strBuilder, targetName, true, targetId);
                     strBuilder.append(G.context.getString(R.string.prefix));
                     insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
@@ -285,7 +285,7 @@ public class HelperLogMessage {
             case MEMBER_LEFT:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
-                    strBuilder.append("\u200E");
+                    strBuilder.append("\u200F");
                     insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(LogMessageTypeString);
@@ -306,7 +306,7 @@ public class HelperLogMessage {
             case MEMBER_JOINED_BY_INVITE_LINK:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
-                    strBuilder.append("\u200E");
+                    strBuilder.append("\u200F");
                     insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                     strBuilder.append(finalTypeRoom);
@@ -333,6 +333,16 @@ public class HelperLogMessage {
                 strBuilder.clear();
                 String temp = log.message + "  " + LogMessageTypeString;
                 strBuilder.append(temp);
+                break;
+            case USER_JOINED:
+            case USER_DELETED:
+                if (HelperCalander.isPersianUnicode) {
+                    strBuilder.clear();
+                    strBuilder.append("\u200F");
+                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    strBuilder.append(LogMessageTypeString);
+                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                }
                 break;
             case UNRECOGNIZED:
                 strBuilder.clear();
