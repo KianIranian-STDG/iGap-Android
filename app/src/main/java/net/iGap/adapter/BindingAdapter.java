@@ -1,5 +1,8 @@
 package net.iGap.adapter;
 
+import android.support.annotation.StringRes;
+import android.support.design.widget.TextInputLayout;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -22,15 +25,26 @@ public class BindingAdapter {
         }
     }
 
-    public static class AvatarImage{
+    public static class AvatarImage {
 
         public AvatarImage(String imagePath, boolean showCharacterImage, String backgroundColor) {
             this.imagePath = imagePath;
             this.showCharacterImage = showCharacterImage;
             this.backgroundColor = backgroundColor;
         }
+
         String imagePath;
         boolean showCharacterImage;
         String backgroundColor;
+    }
+
+    @android.databinding.BindingAdapter("app:errorText")
+    public static void setErrorMessage(TextInputLayout view, @StringRes int errorMessage) {
+        view.setError(view.getContext().getString(errorMessage));
+    }
+
+    @android.databinding.BindingAdapter("app:setSelected")
+    public static void setErrorMessage(View view, boolean isSelected) {
+        view.setSelected(isSelected);
     }
 }

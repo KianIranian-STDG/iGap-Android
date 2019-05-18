@@ -3,18 +3,23 @@ package net.iGap.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.EditChannelFragment;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarDelete;
+import net.iGap.interfaces.OnChannelDelete;
 import net.iGap.interfaces.OnChannelEdit;
+import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
 import net.iGap.interfaces.OnComplete;
@@ -40,10 +45,10 @@ import io.realm.Realm;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 
-public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus {
+public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete, OnChannelLeft, OnChannelEdit {
 
     public MutableLiveData<String> avatarImage = new MutableLiveData<>();
-    public MutableLiveData<String> groupName = new MutableLiveData<>();
+    public MutableLiveData<String> channelName = new MutableLiveData<>();
     public MutableLiveData<SpannableStringBuilder> channelDescription = new MutableLiveData<>();
     public MutableLiveData<String> channelType = new MutableLiveData<>();
     public MutableLiveData<Boolean> isSignedMessage = new MutableLiveData<>();
@@ -84,67 +89,61 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         /*G.onChannelKickAdmin = this;*/
         /*G.onChannelAddModerator = this;*/
         /*G.onChannelKickModerator = this;*/
-        /*G.onChannelDelete = this;*/
-        /*G.onChannelLeft = this;*/
-        /*G.onChannelEdit = this;*/
+        G.onChannelDelete = this;
+        G.onChannelLeft = this;
+        G.onChannelEdit = this;
         /*G.onChannelRevokeLink = this;*/
 
-        FragmentShowAvatars.onComplete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-                long mAvatarId = 0;
-                if (messageOne != null && !messageOne.equals("")) {
-                    mAvatarId = Long.parseLong(messageOne);
+        FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
+            long mAvatarId = 0;
+            if (messageOne != null && !messageOne.equals("")) {
+                mAvatarId = Long.parseLong(messageOne);
+            }
+
+            final long finalMAvatarId = mAvatarId;
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //todo: fixed it
+                    /*avatarHandler.avatarDelete(new ParamWithAvatarType(imgCircleImageView, fragmentChannelProfileViewModel.roomId)
+                            .avatarType(AvatarHandler.AvatarType.ROOM).turnOffCache().onAvatarChange(new OnAvatarChange() {
+                                @Override
+                                public void onChange(boolean fromCache) {
+                                    imgCircleImageView.setPadding(0, 0, 0, 0);
+                                }
+                            }), finalMAvatarId);*/
+                }
+            });
+        };
+        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
+            pathSaveImage = null;
+            pathSaveImage = path;
+            long avatarId = SUID.id().get();
+            long lastUploadedAvatarId = avatarId + 1L;
+
+            isShowLoading.setValue(true);
+            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress < 100) {
+                        /*prgWait.setProgress(progress);*/
+                    } else {
+                        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
+                    }
                 }
 
-                final long finalMAvatarId = mAvatarId;
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //todo: fixed it
-                        /*avatarHandler.avatarDelete(new ParamWithAvatarType(imgCircleImageView, fragmentChannelProfileViewModel.roomId)
-                                .avatarType(AvatarHandler.AvatarType.ROOM).turnOffCache().onAvatarChange(new OnAvatarChange() {
-                                    @Override
-                                    public void onChange(boolean fromCache) {
-                                        imgCircleImageView.setPadding(0, 0, 0, 0);
-                                    }
-                                }), finalMAvatarId);*/
-                    }
-                });
-            }
-        };
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
-            @Override
-            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-                pathSaveImage = null;
-                pathSaveImage = path;
-                long avatarId = SUID.id().get();
-                long lastUploadedAvatarId = avatarId + 1L;
-
-                isShowLoading.setValue(true);
-                HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(int progress, FileUploadStructure struct) {
-                        if (progress < 100) {
-                            /*prgWait.setProgress(progress);*/
-                        } else {
-                            new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
-                        }
-                    }
-
-                    @Override
-                    public void OnError() {
-                        isShowLoading.setValue(false);
-                    }
-                });
-            }
+                @Override
+                public void OnError() {
+                    isShowLoading.setValue(false);
+                }
+            });
         };
         G.onChannelEdit = new OnChannelEdit() {
             @Override
             public void onChannelEdit(final long roomId, final String name, final String description) {
                 G.handler.post(() -> {
                     isShowLoading.setValue(false);
-                    groupName.setValue(name);
+                    channelName.setValue(name);
                 });
             }
 
@@ -175,7 +174,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         isSignedMessage.setValue(realmChannelRoom.isSignature());
         isReactionMessage.setValue(realmChannelRoom.isReactionStatus());
         String description = realmChannelRoom.getDescription();
-        groupName.setValue(realmRoom.getTitle());
+        channelName.setValue(realmRoom.getTitle());
         linkUsername = realmChannelRoom.getUsername();
         inviteLink = realmChannelRoom.getInviteLink();
         /*isVerifiedChannel.setValue(realmChannelRoom.isVerified());*/
@@ -235,19 +234,22 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             @Override
             public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
                 // handle realm to response class
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        isShowLoading.setValue(false);
+                    }
+                });
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isSignedMessage.getValue() != null) {
-                            if (isSignedMessage.getValue()) {
-                                isSignedMessage.setValue(false);
-                            } else {
-                                isSignedMessage.setValue(true);
-                            }
+                G.handler.post(() -> {
+                    if (isSignedMessage.getValue() != null) {
+                        if (isSignedMessage.getValue()) {
+                            isSignedMessage.setValue(false);
+                        } else {
+                            isSignedMessage.setValue(true);
                         }
                     }
                 });
@@ -287,6 +289,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     }
 
     public void onReactionMessageCheckedChange(boolean state) {
+        Log.wtf("viewModel", "value of state: " + state);
         if (state != isReactionMessage.getValue()) {
             if (state) {
                 new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, false);
@@ -365,6 +368,35 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     }
 
     @Override
+    public void onChannelDelete(long roomId) {
+        closeActivity();
+    }
+
+    @Override
+    public void onChannelLeft(long roomId, long memberId) {
+        closeActivity();
+    }
+
+    @Override
+    public void onChannelEdit(long roomId, String name, String description) {
+        editChannelResponse(roomId, name, description);
+    }
+
+    private void editChannelResponse(long roomIdR, final String name, final String description) {
+        G.handler.post(() -> {
+            isShowLoading.setValue(false);
+            channelName.setValue(name);
+            SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
+            if (spannableStringBuilder != null) {
+                channelDescription.setValue(spannableStringBuilder);
+            } else {
+                channelDescription.setValue(new SpannableStringBuilder(""));
+            }
+            G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        });
+    }
+
+    @Override
     public void onError(int majorCode, int minorCode) {
 
     }
@@ -383,7 +415,16 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
     @Override
     public void OnChannelUpdateReactionStatusError() {
+        G.handler.post(() -> isShowLoading.setValue(false));
+    }
 
+    @Override
+    public void OnChannelUpdateReactionStatusResponse(long roomId, boolean status) {
+        G.handler.post(() -> {
+            if (roomId == EditChannelViewModel.this.roomId) {
+                isShowLoading.setValue(false);
+            }
+        });
     }
 
     public void setPrivate(boolean aPrivate) {
@@ -391,15 +432,11 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         channelType.setValue(isPrivate ? G.context.getString(R.string.private_channel) : G.context.getString(R.string.public_channel));
     }
 
-    @Override
-    public void OnChannelUpdateReactionStatusResponse(long roomId, boolean status) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (roomId == EditChannelViewModel.this.roomId) {
-                    isReactionMessage.setValue(status);
-                }
-                isShowLoading.setValue(false);
+    private void closeActivity() {
+        G.handler.post(() -> {
+            isShowLoading.setValue(false);
+            if (FragmentChat.finishActivity != null) {
+                FragmentChat.finishActivity.finishActivity();
             }
         });
     }
