@@ -2641,7 +2641,7 @@ public class FragmentChat extends BaseFragment
             TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
                 if (items.get(position).equals(getString(R.string.Search))) {
                     initLayoutSearchNavigation();
-                    rootView.findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
+                    layoutToolbar.setVisibility(View.GONE);
                     ll_Search.setVisibility(View.VISIBLE);
                     if (!initHash) {
                         initHash = true;
@@ -7401,7 +7401,7 @@ public class FragmentChat extends BaseFragment
                     //  deSelectMessage(selectedPosition);
                     edtSearchMessage.setText("");
                     ll_Search.setVisibility(View.GONE);
-                    rootView.findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
+                    layoutToolbar.setVisibility(View.VISIBLE);
                     //  ll_navigate_Message.setVisibility(View.GONE);
                     // viewAttachFile.setVisibility(View.VISIBLE);
 
@@ -9583,7 +9583,7 @@ public class FragmentChat extends BaseFragment
         TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
             if (items.get(position).equals(getString(R.string.Search))) {
                 initLayoutSearchNavigation();
-                rootView.findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
+                layoutToolbar.setVisibility(View.GONE);
                 ll_Search.setVisibility(View.VISIBLE);
                 if (!initHash) {
                     initHash = true;
