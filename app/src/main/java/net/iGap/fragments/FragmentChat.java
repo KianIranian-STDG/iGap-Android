@@ -1074,10 +1074,11 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isCloudRoom) {
-            //todo : add cloud image to toolbar
-            rootView.findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.VISIBLE);
             mHelperToolbar.getUserAvatarChat().setVisibility(View.GONE);
         } else {
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.GONE);
+            mHelperToolbar.getUserAvatarChat().setVisibility(View.VISIBLE);
             setAvatar();
         }
 
@@ -3137,7 +3138,7 @@ public class FragmentChat extends BaseFragment
         });
 
         imvUserPicture = mHelperToolbar.getUserAvatarChat();
-        imvUserPicture.setOnClickListener(new View.OnClickListener() {
+       /* imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToProfile();
@@ -3156,7 +3157,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 goToProfile();
             }
-        });
+        });*/
 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -4227,9 +4228,11 @@ public class FragmentChat extends BaseFragment
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
         if (isCloudRoom) {
-            rootView.findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.VISIBLE);
             imvUserPicture.setVisibility(View.GONE);
         } else {
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.GONE);
+            imvUserPicture.setVisibility(View.VISIBLE);
             setAvatar();
         }
     }
@@ -9486,7 +9489,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChatAvatarClickListener(View view) {
-
+        goToProfile();
     }
 
     @Override

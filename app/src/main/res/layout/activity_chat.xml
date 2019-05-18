@@ -16,11 +16,21 @@
         android:orientation="vertical">
 
 
+        <LinearLayout
+            android:id="@+id/ac_layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="horizontal"/>
+
+
+        <!--dont use-->
         <net.iGap.module.MyAppBarLayout
             android:id="@+id/ac_appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/iGapColor"
+            android:visibility="gone"
             app:popupTheme="@style/ThemeOverlay.AppCompat">
 
             <LinearLayout
@@ -29,12 +39,6 @@
                 android:layout_height="@dimen/toolbar_height"
                 android:elevation="4dp"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/ac_layout_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
 
                 <LinearLayout
                     android:visibility="gone"
