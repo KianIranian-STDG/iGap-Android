@@ -205,5 +205,7 @@
     <color name="remove_card_button_selected">#c72847</color>
 
     <color name="tip_text_back">#2196f3</color>
+  <color name="score_view_stroke">#D1B31F</color>
+  <color name="rank_view_stroke">#A7468D</color>
 
 </resources>

@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -38,7 +37,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGeoGetConfiguration;
@@ -135,7 +133,6 @@ public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyCli
     private void setListenerToViews() {
 
         mCloudBtn.setOnClickListener( v -> {
-
             chatGetRoom(G.userId);
         });
 
@@ -176,12 +173,9 @@ public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyCli
                 intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                 startActivityForResult(intent, ActivityMain.WALLET_REQUEST_CODE);
             }
-
         });
 
-        mScoreBtn.setOnClickListener( v -> {
-
-        });
+        mScoreBtn.setOnClickListener( v -> new HelperFragment(new FragmentUserScore()).setReplace(false).load());
 
         mInviteFriendBtn.setOnClickListener( v -> {
             Intent sendIntent = new Intent();
@@ -193,7 +187,6 @@ public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyCli
         });
 
         mLanguageBtn.setOnClickListener( v -> {
-
             new HelperFragment(new FragmentLanguage()).setReplace(false).load();
         });
 
@@ -266,7 +259,6 @@ public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyCli
     }
 
     private void getLogout() {
-
         new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.log_out))
                 .content(R.string.content_log_out)
                 .positiveText(getResources().getString(R.string.B_ok))
