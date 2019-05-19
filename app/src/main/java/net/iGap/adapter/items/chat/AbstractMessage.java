@@ -619,21 +619,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (realmRegisteredInfo != null) {
                 final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(realmRegisteredInfo.getDisplayName());
 
-                //_tv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                //    @Override
-                //    public void onGlobalLayout() {
-                //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                //            _tv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                //        } else {
-                //            _tv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                //        }
-                //
-                //        if (_tv.getWidth() < mContainer.getWidth()) {
-                //            _tv.setWidth(mContainer.getWidth());
-                //        }
-                //    }
-                //});
-
                 _tv.measure(0, 0);       //must call measure!
                 int maxWith = 0;
                 maxWith = _tv.getMeasuredWidth() + i_Dp(R.dimen.dp40);
@@ -641,7 +626,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (minWith < maxWith) {
                     minWith = maxWith;
                 }
-                //abolfazl min
                 holder.getChatBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
                 holder.getChatBloke().addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
@@ -778,19 +762,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
-        /**
-         * LinearLayout timeLayout = (LinearLayout) mHolder.getContentBloke().getParent();
-        timeLayout.setGravity(Gravity.LEFT);
-         */
-
         if (holder instanceof ChatItemWithTextHolder) {
             ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        /**
-         * ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
-         ((LinearLayout.LayoutParams) mHolder.getContentBloke().getLayoutParams()).gravity = Gravity.LEFT;*/
 
         if (G.isDarkTheme) {
             setTextColor(mHolder.getTicTv(), R.color.white);
@@ -834,21 +810,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).gravity = Gravity.RIGHT;
 
-        /**
-         ((LinearLayout.LayoutParams) mHolder.getContentBloke().getLayoutParams()).gravity = Gravity.RIGHT;
-         LinearLayout timeLayout = (LinearLayout) mHolder.getContentBloke().getParent();
-         timeLayout.setGravity(Gravity.RIGHT);
-
-         */
-
-
-        //  TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
-
         if (holder instanceof ChatItemWithTextHolder) {
             ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
         }
-        //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
-
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
         if (mMessage.status != null) {
@@ -872,7 +836,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             mHolder.getTicTv().setVisibility(View.VISIBLE);
         } else {
-//            setTextColor(imgTick, Color.parseColor(G.txtIconCheck));
             mHolder.getTicTv().setColorFilter(Color.parseColor(G.txtIconCheck));
         }
 
@@ -884,16 +847,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         GradientDrawable circleDarkColor = (GradientDrawable) ((View) mHolder.getContentBloke().getParent()).getBackground();
         circleDarkColor.setColor(Color.parseColor(G.bubbleChatSend));
-
-        /**
-         * add main layout margin to prevent getting match parent completely
-         * set to getItemContainer() not itemView because of selecting item foreground
-         */
         ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
         ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
 
-        //((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.getContentBloke()).getLayoutParams())).rightMargin = (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
-        //((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.getContentBloke()).getLayoutParams())).leftMargin = 0;
     }
 
     @CallSuper

@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
@@ -52,14 +52,14 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         holder.image.setTag(getCacheId(mMessage));
         super.bindView(holder, payloads);
 
-        ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(0);
+        holder.getChatBloke().setBackgroundResource(0);
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (FragmentChat.isInSelectionMode){
-                        holder.itemView.performLongClick();
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
                 } else {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
@@ -111,7 +111,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             image.setLayoutParams(layout_758);
             getContentBloke().addView(frameLayout);
             frameLayout.addView(image);
-            image.reserveSpace(180,180,ProtoGlobal.Room.Type.CHAT);
+            image.reserveSpace(180, 180, ProtoGlobal.Room.Type.CHAT);
 
             progress = getProgressBar(0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
