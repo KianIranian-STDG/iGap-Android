@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.arch.lifecycle.Observer;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
@@ -51,6 +52,8 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnReport;
@@ -76,6 +79,8 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserReport;
 import net.iGap.viewmodel.FragmentContactsProfileViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,9 +97,9 @@ public class FragmentContactsProfile extends BaseFragment {
     private static final String ROOM_ID = "RoomId";
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
-    private long userId = 0;
-    private long roomId = 0;
-    private String enterFrom;
+    /*private long userId = 0;
+    private long roomId = 0;*/
+    private String enterFrom = "";
     private String report;
     private FragmentContactsProfileBinding fragmentContactsProfileBinding;
     private FragmentContactsProfileViewModel fragmentContactsProfileViewModel;
@@ -109,42 +114,40 @@ public class FragmentContactsProfile extends BaseFragment {
         return fragment;
     }
 
-    private void initDataBinding() {
-        fragmentContactsProfileViewModel = new FragmentContactsProfileViewModel(fragmentContactsProfileBinding, roomId, userId, enterFrom, avatarHandler);
-        fragmentContactsProfileBinding.setViewModel(fragmentContactsProfileViewModel);
-    }
-
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentContactsProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_contacts_profile, container, false);
         return attachToSwipeBack(fragmentContactsProfileBinding.getRoot());
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle extras = getArguments();
-        userId = extras.getLong(PEER_ID);
-        roomId = extras.getLong(ROOM_ID);
-        enterFrom = extras.getString(ENTER_FROM);
-        if (enterFrom == null) {
-            enterFrom = "";
+        long userId = 0;
+        long roomId = 0;
+
+        if (getArguments() != null) {
+            userId = getArguments().getLong(PEER_ID);
+            roomId = getArguments().getLong(ROOM_ID);
+            enterFrom = getArguments().getString(ENTER_FROM);
         }
 
-        initDataBinding();
+        fragmentContactsProfileViewModel = new FragmentContactsProfileViewModel(roomId, userId, enterFrom, avatarHandler);
+        fragmentContactsProfileBinding.setViewModel(fragmentContactsProfileViewModel);
 
-        fragmentContactsProfileBinding.chiRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        fragmentContactsProfileViewModel.goBack.observe(this, new Observer<Boolean>() {
             @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean != null && aBoolean) {
+                    popBackStackFragment();
+                }
             }
         });
 
-        fragmentContactsProfileBinding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        /*fragmentContactsProfileBinding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
         fragmentContactsProfileBinding.chiFabSetPic.setColorFilter(Color.WHITE);
-
         fragmentContactsProfileBinding.chiFabSetPic.setOnClickListener(new View.OnClickListener() { //fab button
             @Override
             public void onClick(View view) {
@@ -189,9 +192,9 @@ public class FragmentContactsProfile extends BaseFragment {
                     popBackStackFragment();
                 }
             }
-        });
+        });*/
 
-        if (fragmentContactsProfileViewModel.showNumber.get()) {
+        /*if (fragmentContactsProfileViewModel.showNumber.get()) {
             fragmentContactsProfileBinding.chiLayoutNickname.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -359,9 +362,9 @@ public class FragmentContactsProfile extends BaseFragment {
                     dialog.show();
                 }
             });
-        }
+        }*/
 
-        fragmentContactsProfileBinding.chiAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        /*fragmentContactsProfileBinding.chiAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 ViewGroup viewGroup = fragmentContactsProfileBinding.chiRootCircleImage;
@@ -381,63 +384,89 @@ public class FragmentContactsProfile extends BaseFragment {
                     fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.animate().alpha(0).setDuration(500);
                 }
             }
-        });
+        });*/
 
-        fragmentContactsProfileBinding.chiRippleMenuPopup.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+        fragmentContactsProfileViewModel.showMenu.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
                 showPopUp();
             }
         });
 
-        fragmentContactsProfileBinding.chiLayoutPhoneNumber.setOnClickListener(new View.OnClickListener() {
+        fragmentContactsProfileViewModel.showPhoneNumberDialog.observe(this, new Observer<Boolean>() {
             @Override
-            public void onClick(View v) {
-                try {
-                    HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
-                        @Override
-                        public void Allow() throws IOException {
-                            showPopupPhoneNumber(fragmentContactsProfileBinding.chiLayoutPhoneNumber, fragmentContactsProfileViewModel.phone.get());
-                        }
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean!=null&&aBoolean){
+                    try {
+                        HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
+                            @Override
+                            public void Allow() {
+                                showPopupPhoneNumber(fragmentContactsProfileBinding.phoneNumber, fragmentContactsProfileViewModel.phone.get());
+                            }
 
-                        @Override
-                        public void deny() {
+                            @Override
+                            public void deny() {
 
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
 
-        fragmentContactsProfileBinding.chiLayoutSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
+        /*fragmentContactsProfileBinding.chiLayoutSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
                 new HelperFragment(FragmentShearedMedia.newInstance(fragmentContactsProfileViewModel.shearedId)).setReplace(false).load();
             }
-        });
+        });*/
 
-        fragmentContactsProfileBinding.chiTxtClearChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog(G.fragmentActivity.getResources().getString(R.string.clear_this_chat), G.fragmentActivity.getResources().getString(R.string.clear), G.fragmentActivity.getResources().getString(R.string.cancel));
+        fragmentContactsProfileViewModel.showClearChatDialog.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
             }
         });
 
-        fragmentContactsProfileBinding.chiTxtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fragmentContactsProfileViewModel.goToCustomNotificationPage.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
                 bundle.putString("PAGE", "CONTACT");
-                bundle.putLong("ID", roomId);
+                bundle.putLong("ID", fragmentContactsProfileViewModel.roomId);
                 fragmentNotification.setArguments(bundle);
                 new HelperFragment(fragmentNotification).setReplace(false).load();
             }
         });
 
-        getUserInfo(); // client should send request for get user info because need to update user online timing
+        fragmentContactsProfileViewModel.setAvatar.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                avatarHandler.getAvatar(new ParamWithAvatarType(fragmentContactsProfileBinding.profileAvatar, fragmentContactsProfileViewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+            }
+        });
+
+        fragmentContactsProfileViewModel.showDeleteContactDialog.observe(this, aBoolean -> {
+            if (aBoolean!=null&&aBoolean){
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        fragmentContactsProfileViewModel.deleteContact();
+                    }
+                }).negativeText(R.string.B_cancel).show();
+            }
+        });
+
+        fragmentContactsProfileViewModel.showDialogReportContact.observe(this, aBoolean -> {
+            if (aBoolean!=null&&aBoolean){
+                openDialogReport();
+            }
+        });
+
+        fragmentContactsProfileViewModel.showDialogStartSecretChat.observe(this, aBoolean -> {
+            if (aBoolean!=null&&aBoolean){
+                Toast.makeText(getContext(),"secret chat",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -468,7 +497,6 @@ public class FragmentContactsProfile extends BaseFragment {
      * ************************************ methods ************************************
      */
     private void showPopupPhoneNumber(View v, String number) {
-
         try {
             boolean isExist = false;
             Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
@@ -483,29 +511,26 @@ public class FragmentContactsProfile extends BaseFragment {
             }
 
             if (isExist) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                String call = "+" + Long.parseLong(fragmentContactsProfileViewModel.phone.get());
-                                try {
-                                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                    callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
-                                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(callIntent);
-                                } catch (Exception ex) {
-                                    ex.getStackTrace();
-                                }
-                                break;
-                            case 1:
-                                String copy;
-                                copy = fragmentContactsProfileViewModel.phone.get();
-                                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
-                                clipboard.setPrimaryClip(clip);
-                                break;
-                        }
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback((dialog, view, which, text) -> {
+                    switch (which) {
+                        case 0:
+                            String call = "+" + Long.parseLong(fragmentContactsProfileViewModel.phone.get());
+                            try {
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
+                                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(callIntent);
+                            } catch (Exception ex) {
+                                ex.getStackTrace();
+                            }
+                            break;
+                        case 1:
+                            String copy;
+                            copy = fragmentContactsProfileViewModel.phone.get();
+                            ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                            clipboard.setPrimaryClip(clip);
+                            break;
                     }
                 }).show();
             } else {
@@ -597,68 +622,24 @@ public class FragmentContactsProfile extends BaseFragment {
     }
 
     private void showPopUp() {
-
-        List<String> items = new ArrayList<>();
-        if (G.userId != userId) {
-            if (fragmentContactsProfileViewModel.isBlockUser) {
-                items.add(getString(R.string.un_block_user));
-            } else {
-                items.add(getString(R.string.block_user));
-            }
-        }
-        items.add(getString(R.string.clear_history));
-        if (G.userId != userId && !fragmentContactsProfileViewModel.disableDeleteContact) {
-            items.add(getString(R.string.delete_contact));
-        }
-        if (!RealmRoom.isNotificationServices(roomId)) {
-            items.add(getString(R.string.report));
-        }
-        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.un_block_user)) || items.get(position).equals(getString(R.string.block_user))) {
-                blockOrUnblockUser();
-            } else if (items.get(position).equals(getString(R.string.clear_history))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        if (FragmentChat.onComplete != null) {
-                            FragmentChat.onComplete.complete(false, roomId + "", "");
-                        }
-                    }
-                }).negativeText(R.string.B_cancel).show();
-            } else if (items.get(position).equals(getString(R.string.delete_contact))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        deleteContact();
-                    }
-                }).negativeText(R.string.B_cancel).show();
-            } else if (items.get(position).equals(getString(R.string.report))) {
-                openDialogReport();
-            }
-        }).show();
+        new TopSheetDialog(getContext()).setListData(fragmentContactsProfileViewModel.items, -1, position -> fragmentContactsProfileViewModel.onMenuItemClick(position)).show();
     }
 
     private void openDialogReport() {
-
+        //todo: fixed on click and handle in viewModel get list menu from viewModel
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.st_Spam));
         items.add(getString(R.string.st_Abuse));
         items.add(getString(R.string.st_FakeAccount));
         items.add(getString(R.string.st_Other));
-
         new BottomSheetFragment().setData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.st_Spam))){
-                new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.SPAM, "");
-            }
-            else if (items.get(position).equals(getString(R.string.st_Abuse))){
-                new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
-            }
-            else if (items.get(position).equals(getString(R.string.st_FakeAccount))){
-                new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
-            }
-            else if (items.get(position).equals(getString(R.string.st_Other))){
+            if (items.get(position).equals(getString(R.string.st_Spam))) {
+                new RequestUserReport().userReport(fragmentContactsProfileViewModel.userId, ProtoUserReport.UserReport.Reason.SPAM, "");
+            } else if (items.get(position).equals(getString(R.string.st_Abuse))) {
+                new RequestUserReport().userReport(fragmentContactsProfileViewModel.userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
+            } else if (items.get(position).equals(getString(R.string.st_FakeAccount))) {
+                new RequestUserReport().userReport(fragmentContactsProfileViewModel.userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
+            } else if (items.get(position).equals(getString(R.string.st_Other))) {
                 final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -672,12 +653,7 @@ public class FragmentContactsProfile extends BaseFragment {
                             positive.setEnabled(false);
                         }
                     }
-                }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new RequestUserReport().userReport(roomId, ProtoUserReport.UserReport.Reason.OTHER, report);
-                    }
-                }).negativeText(R.string.cancel).build();
+                }).positiveText(R.string.ok).onPositive((dialog, which) -> new RequestUserReport().userReport(fragmentContactsProfileViewModel.roomId, ProtoUserReport.UserReport.Reason.OTHER, report)).negativeText(R.string.cancel).build();
 
                 final View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -686,67 +662,23 @@ public class FragmentContactsProfile extends BaseFragment {
 
                 dialogReport.show();
             }
-        }).show(getFragmentManager(),"bottom sheet");
+        }).show(getFragmentManager(), "bottom sheet");
 
         G.onReport = () -> error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
 
     }
 
-    private void blockOrUnblockUser() {
-
-        if (fragmentContactsProfileViewModel.isBlockUser) {
-
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsUnblock().userContactsUnblock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-
-        } else {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsBlock().userContactsBlock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-        }
-    }
-
     private void showAlertDialog(String message, String positive, String negative) { // alert dialog for block or clear user
-
         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(message).positiveText(positive).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
                 clearHistory();
                 if (FragmentChat.onComplete != null) {
-                    FragmentChat.onComplete.complete(false, roomId + "", "");
+                    FragmentChat.onComplete.complete(false, fragmentContactsProfileViewModel.roomId + "", "");
                 }
             }
         }).negativeText(negative).show();
-    }
-
-    private void deleteContact() {
-        G.onUserContactdelete = new OnUserContactDelete() {
-            @Override
-            public void onContactDelete() {
-                /**
-                 * get user info after delete it for show nickname
-                 */
-                getUserInfo();
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-        };
-        new RequestUserContactsDelete().contactsDelete(fragmentContactsProfileViewModel.phone.get());
-    }
-
-    private void getUserInfo() {
-        new RequestUserInfo().userInfo(userId);
     }
 
     private void clearHistory() {
@@ -757,12 +689,7 @@ public class FragmentContactsProfile extends BaseFragment {
         if (isAdded()) {
             try {
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
+                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), view -> snack.dismiss());
                 snack.show();
             } catch (IllegalStateException e) {
                 e.getStackTrace();
