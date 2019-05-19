@@ -77,13 +77,11 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteDownContainer.setOrientation(LinearLayout.HORIZONTAL);
         voteDownContainer.setGravity(Gravity.CENTER);
 
-
         chatBloke = new ConstraintLayout(getContext());
         chatBloke.setId(R.id.ll_chatItem_chatBloke);
 
         contentBloke = new LinearLayout(getContext());
         contentBloke.setId(R.id.ll_chatItem_contentBloke);
-
 
         voteDownTv = new AppCompatTextView(getContext());
         voteUpTv = new AppCompatTextView(getContext());
@@ -249,7 +247,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         ViewMaker.setTextSize(v, sizeSrc);
     }
 
-
     protected void setLayoutDirection(View view, int direction) {
         ViewMaker.setLayoutDirection(view, direction);
     }
@@ -319,29 +316,8 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return cslm_view_left_dis;
     }
 
-
     public LinearLayout getVoteContainer() {
         return voteContainer;
-    }
-
-    public TextView getEyeIconTv() {
-        return eyeIconTv;
-    }
-
-    public void setViewContainerVisibility(boolean visibility) {
-        if (visibility) {
-            viewContainer.setVisibility(View.VISIBLE);
-        } else {
-            viewContainer.setVisibility(View.GONE);
-        }
-    }
-
-    public MaterialDesignTextView getVoteDownIcon() {
-        return voteDownIcon;
-    }
-
-    public MaterialDesignTextView getVoteUpIcon() {
-        return voteUpIcon;
     }
 
     public LinearLayout getViewContainer() {

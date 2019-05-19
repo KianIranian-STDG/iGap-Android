@@ -546,7 +546,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         mHolder.getVoteContainer().setVisibility(View.GONE);
-        mHolder.setViewContainerVisibility(false);
+        mHolder.getViewContainer().setVisibility(View.GONE);
         if (!(holder instanceof StickerItem.ViewHolder)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
                 showVote(holder, getRealmChat());
@@ -572,7 +572,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     private void showVote(VH holder, Realm realm) {
         // add layout seen in channel
-        ((NewChatItemHolder) holder).setViewContainerVisibility(true);
+        ((NewChatItemHolder) holder).getViewContainer().setVisibility(View.VISIBLE);
         voteAction(((NewChatItemHolder) holder), getRealmChat());
         getChannelMessageState();
     }
