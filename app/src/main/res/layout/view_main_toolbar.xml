@@ -129,6 +129,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:visibility="visible"
+            android:maxLength="28"
+            android:singleLine="true"
             android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

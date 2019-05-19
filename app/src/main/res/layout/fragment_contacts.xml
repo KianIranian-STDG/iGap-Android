@@ -9,182 +9,18 @@
     tools:ignore="MissingPrefix">
 
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/fc_layot_title"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="wrap_content"
-        app:elevation="0dp">
-
-
-        <LinearLayout
-            android:id="@+id/frg_contact_ll_toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height_root_with_search"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layoutDirection="ltr"
-            android:orientation="horizontal">
-
-            <!--view added at runtime with toolbar helper-->
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layoutDirection="ltr"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <net.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/menu_ripple_txtBack"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="0"
-                app:rv_ripplePadding="5dp">
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/menu_txtBack"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/md_back_arrow"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@color/whit_background" />
-            </net.iGap.libs.rippleeffect.RippleView>
-
-            <TextView
-                android:id="@+id/menu_txt_titleToolbar"
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center|left"
-                android:singleLine="true"
-                android:text="@string/igap"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/dp18"
-                android:visibility="visible" />
-
-            <net.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/menu_sync"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="100">
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/menu_btn_sync"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="center"
-                    android:text="@string/md_igap_sync"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/dp28"
-                    android:visibility="visible" />
-
-            </net.iGap.libs.rippleeffect.RippleView>
-
-            <net.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/menu_edtSearch"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="100">
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/menu_btn_search"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="center"
-                    android:text="@string/md_searching_magnifying_glass"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/dp28"
-                    android:visibility="visible" />
-
-            </net.iGap.libs.rippleeffect.RippleView>
-
-            <EditText
-                android:id="@+id/menu_edt_search"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:autoText="false"
-                android:background="@null"
-                android:hint="@string/search"
-                android:paddingStart="@dimen/dp8"
-                android:paddingLeft="@dimen/dp8"
-                android:paddingEnd="@dimen/dp8"
-                android:paddingRight="@dimen/dp8"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textColorHint="#dededd"
-                android:textCursorDrawable="@drawable/white_cursor_color"
-                android:textSize="@dimen/dp15"
-                android:visibility="gone" />
-
-            <net.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/menu_ripple_close"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="100"
-                app:rv_ripplePadding="5dp">
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/menu_btn_close"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:text="@string/md_close_button"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="#dededd"
-                    android:textSize="@dimen/dp26" />
-
-            </net.iGap.libs.rippleeffect.RippleView>
-        </LinearLayout>
-
-
-    </android.support.design.widget.AppBarLayout>
-
-
     <android.support.design.widget.CoordinatorLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fc_layot_title">
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
 
         <net.iGap.module.MyAppBarLayout
             android:id="@+id/appBarLayout"
             style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp10"
+            android:background="@android:color/transparent"
             app:elevation="0dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat">
 
@@ -192,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingTop="@dimen/dp10"
                 app:layout_scrollFlags="scroll|enterAlways">
 
 
@@ -537,7 +374,8 @@
 
         </net.iGap.module.MyAppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v4.widget.NestedScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/nestedScrollContact"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -607,6 +445,171 @@
     </android.support.design.widget.CoordinatorLayout>
 
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/fc_layot_title"
+        android:layout_width="match_parent"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+
+        <LinearLayout
+            android:id="@+id/frg_contact_ll_toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height_root_with_search"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layoutDirection="ltr"
+            android:orientation="horizontal">
+
+            <!--view added at runtime with toolbar helper-->
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp60"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layoutDirection="ltr"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <net.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/menu_ripple_txtBack"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="0"
+                app:rv_ripplePadding="5dp">
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/menu_txtBack"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/md_back_arrow"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@color/whit_background" />
+            </net.iGap.libs.rippleeffect.RippleView>
+
+            <TextView
+                android:id="@+id/menu_txt_titleToolbar"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:singleLine="true"
+                android:text="@string/igap"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dp18"
+                android:visibility="visible" />
+
+            <net.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/menu_sync"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="100">
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/menu_btn_sync"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:text="@string/md_igap_sync"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dp28"
+                    android:visibility="visible" />
+
+            </net.iGap.libs.rippleeffect.RippleView>
+
+            <net.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/menu_edtSearch"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="100">
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/menu_btn_search"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:text="@string/md_searching_magnifying_glass"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dp28"
+                    android:visibility="visible" />
+
+            </net.iGap.libs.rippleeffect.RippleView>
+
+            <EditText
+                android:id="@+id/menu_edt_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autoText="false"
+                android:background="@null"
+                android:hint="@string/search"
+                android:paddingStart="@dimen/dp8"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingEnd="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#dededd"
+                android:textCursorDrawable="@drawable/white_cursor_color"
+                android:textSize="@dimen/dp15"
+                android:visibility="gone" />
+
+            <net.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/menu_ripple_close"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="100"
+                app:rv_ripplePadding="5dp">
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/menu_btn_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:text="@string/md_close_button"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="#dededd"
+                    android:textSize="@dimen/dp26" />
+
+            </net.iGap.libs.rippleeffect.RippleView>
+        </LinearLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
     <ProgressBar
         android:id="@+id/prgWaiting_addContact"
         android:layout_width="wrap_content"
@@ -614,4 +617,5 @@
         android:layout_centerInParent="true"
         android:indeterminate="true"
         android:visibility="visible" />
+
 </RelativeLayout>

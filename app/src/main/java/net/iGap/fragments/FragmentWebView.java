@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IOnBackPressed;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
 
 public class FragmentWebView extends FragmentToolBarBack implements IOnBackPressed {
@@ -30,6 +33,8 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     Handler delayHandler = new Handler();
     Runnable taskMakeVisibleWebViewWithDelay;
     CustomWebViewClient customWebViewClient;
+
+    private HelperToolbar mHelperToolbar;
 
     public static FragmentWebView newInstance(String url) {
         FragmentWebView discoveryFragment = new FragmentWebView();
@@ -47,6 +52,9 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setupToolbar(view);
+
         url = getArguments().getString("url");
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             url = "http://" + url;
@@ -77,6 +85,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         });
 
         titleTextView.setText(G.context.getString(R.string.igap));
+        mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.clearCache(true);
@@ -99,6 +108,26 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         customWebViewClient = new CustomWebViewClient();
         webView.setWebViewClient(customWebViewClient);
         webView.loadUrl(url);
+    }
+
+    private void setupToolbar(View view) {
+
+        appBarLayout.setVisibility(View.GONE);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fwv_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
+
     }
 
     private void setWebViewVisibleWithDelay() {
@@ -164,6 +193,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 webViewError.setVisibility(View.VISIBLE);
                 webView.setVisibility(View.GONE);
                 titleTextView.setText(G.context.getString(R.string.igap));
+                mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
                 HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
             }
         }
@@ -192,6 +222,11 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             super.onPageFinished(view, url);
             if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
                 titleTextView.setText(view.getTitle());
+                if (view.getTitle().length() > 23){
+                    mHelperToolbar.setDefaultTitle(view.getTitle().substring(0 , 23) + "...");
+                }else {
+                    mHelperToolbar.setDefaultTitle(view.getTitle());
+                }
             }
 
         }
