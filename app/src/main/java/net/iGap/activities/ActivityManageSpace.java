@@ -5,24 +5,30 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityManageSpaceBinding;
 import net.iGap.fragments.FragmentDataUsage;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.viewmodel.ActivityManageSpaceViewModel;
 
-public class ActivityManageSpace extends ActivityEnhanced {
+public class ActivityManageSpace extends ActivityEnhanced implements ToolbarListener {
+
+    ActivityManageSpaceBinding activityManageSpaceBinding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityManageSpaceBinding activityManageSpaceBinding = DataBindingUtil.setContentView(this, R.layout.activity_manage_space);
+        activityManageSpaceBinding = DataBindingUtil.setContentView(this, R.layout.activity_manage_space);
         ActivityManageSpaceViewModel activityManageSpaceViewModel = new ActivityManageSpaceViewModel(this);
         activityManageSpaceBinding.setActivityManageSpaceViewModel(activityManageSpaceViewModel);
 
+        setupToolbar();
 
         activityManageSpaceBinding.vgMobileDataUsage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,14 +65,24 @@ public class ActivityManageSpace extends ActivityEnhanced {
         });
 
 
-        activityManageSpaceBinding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+    }
 
-            @Override
-            public void onComplete(RippleView rippleView) {
-                finish();
-            }
-        });
+    private void setupToolbar() {
 
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setLogoShown(true)
+                .setDefaultTitle(G.context.getResources().getString(R.string.data_storage))
+                .setListener(this);
+
+        activityManageSpaceBinding.amsLayoutToolbar.addView(mHelperToolbar.getView());
+
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        finish();
     }
 
 }

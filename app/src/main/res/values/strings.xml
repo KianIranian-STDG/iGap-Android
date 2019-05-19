@@ -1767,4 +1767,6 @@
     <string name="refound">money transferred to your wallet</string>
     <string name="Recently_Sticker">Recently</string>
     <string name="Favorite_Sticker">Favorite</string>
+    <string name="disk_and_network_usage">Disk and Network Usage</string>
+    <string name="cache">Cache</string>
 </resources>

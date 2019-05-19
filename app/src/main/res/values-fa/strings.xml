@@ -1768,4 +1768,7 @@
     <string name="welcome_title">به آیگپ خوش آمدید</string>
     <string name="add_modereator">Add Moderator</string>
     <string name="add_admin">Add Admin</string>
+    <string name="disk_and_network_usage">Disk and Network Usage</string>
+    <string name="cache">Cache</string>
+
 </resources>

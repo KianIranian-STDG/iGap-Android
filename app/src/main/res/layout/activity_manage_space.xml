@@ -28,10 +28,16 @@
     tools:context="net.iGap.activities.ActivityManageSpace"
     tools:ignore="MissingPrefix">
 
+    <LinearLayout
+        android:id="@+id/ams_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:orientation="horizontal"/>
 
     <android.support.design.widget.AppBarLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:visibility="gone">
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/asn_toolbar"
@@ -100,6 +106,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
+        <TextView
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:layout_marginTop="@dimen/dp16"
+            android:paddingBottom="@dimen/dp16"
+            android:singleLine="true"
+            android:text="@string/disk_and_network_usage"
+            style="?textTitleColorSettingTheme"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            android:visibility="visible" />
+
         <LinearLayout
             android:id="@+id/vgMobileDataUsage"
             android:layout_width="match_parent"
@@ -126,10 +152,7 @@
 
 
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            style="?lineColorSettingTheme" />
+
         <LinearLayout android:id="@+id/vgWifiDataUsage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp52"
@@ -155,10 +178,8 @@
 
 
         </LinearLayout>
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme" />
+
+
         <LinearLayout
           android:id="@+id/st_layout_keepMedia"
           android:layout_width="match_parent"
@@ -194,23 +215,17 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@{activityManageSpaceViewModel.callbackKeepMedia}"
-            android:textColor="@color/toolbar_background"
+            android:textColor="@color/setting_items_value_color"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
         </LinearLayout>
 
 
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme" />
-
-
         <RelativeLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="?backgroundColorSettingTheme">
+          style="?backgroundColorSettingTheme"
+            android:visibility="gone">
 
           <com.uncopt.android.widget.text.justify.JustifiedTextView
             fontPath="fonts/IRANSansMobile.ttf"
@@ -225,7 +240,28 @@
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
-          style="?lineColorSettingTheme" />
+          style="?lineColorSettingTheme"
+          android:layout_margin="@dimen/dp10"/>
+
+
+        <TextView
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:paddingBottom="@dimen/dp16"
+            android:singleLine="true"
+            android:text="@string/cache"
+            style="?textTitleColorSettingTheme"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            android:visibility="visible" />
+
 
         <LinearLayout
           android:id="@+id/st_layout_clearCache"
@@ -260,7 +296,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@{activityManageSpaceViewModel.callbackClearCache}"
-            android:textColor="@color/toolbar_background"
+            android:textColor="@color/setting_items_value_color"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
 
@@ -269,15 +305,11 @@
 
         </LinearLayout>
 
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme" />
-
         <RelativeLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="?backgroundColorSettingTheme_2">
+          style="?backgroundColorSettingTheme_2"
+            android:visibility="gone">
 
           <com.uncopt.android.widget.text.justify.JustifiedTextView
             fontPath="fonts/IRANSansMobile.ttf"
@@ -288,11 +320,6 @@
             style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp12" />
         </RelativeLayout>
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme" />
 
         <LinearLayout
           android:id="@+id/st_layout_cleanUp"
@@ -326,22 +353,17 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@{activityManageSpaceViewModel.callbackCleanUp}"
-            android:textColor="@color/toolbar_background"
+            android:textColor="@color/setting_items_value_color"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
 
         </LinearLayout>
 
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme" />
-
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          android:visibility="gone"
           style="?backgroundColorSettingTheme_2">
 
           <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -354,12 +376,6 @@
             android:textSize="@dimen/dp12" />
         </RelativeLayout>
 
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
-          android:visibility="@{safeUnbox(activityManageSpaceViewModel.showLayoutSdk)}" />
 
         <LinearLayout
           style="?backgroundColorSettingTheme_2"
