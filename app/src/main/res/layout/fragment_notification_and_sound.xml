@@ -358,7 +358,7 @@
           android:paddingTop="@dimen/dp8"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextView
+          <TextView
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -602,7 +602,7 @@
           android:paddingTop="@dimen/dp8"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextView
+          <TextView
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -901,13 +901,14 @@
           android:paddingTop="@dimen/dp8"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextView
+          <TextView
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingRight="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
+            android:paddingBottom="@dimen/dp16"
             android:text="@string/st_title_other"
             android:textColor="@color/black"
             android:textSize="@dimen/dp16"
@@ -983,7 +984,7 @@
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
+              android:paddingTop="@dimen/dp1"
               android:text="@string/st_text_keep_alive_service"
               android:textSize="@dimen/dp13"
               android:textStyle="normal" />
@@ -1153,7 +1154,7 @@
           android:paddingTop="@dimen/dp8"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextView
+          <TextView
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

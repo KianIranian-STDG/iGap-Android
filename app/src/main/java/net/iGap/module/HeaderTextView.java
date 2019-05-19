@@ -22,16 +22,16 @@ public class HeaderTextView extends AppCompatTextView {
 
     public HeaderTextView(Context context) {
         super(context);
-        //this.setTextColor(Color.parseColor(G.headerTextColor));
+        this.setTextColor(Color.parseColor(G.headerTextColor));
     }
 
     public HeaderTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        //this.setTextColor(Color.parseColor(G.headerTextColor));
+        this.setTextColor(Color.parseColor(G.headerTextColor));
     }
 
     public HeaderTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        //this.setTextColor(Color.parseColor(G.headerTextColor));
+        this.setTextColor(Color.parseColor(G.headerTextColor));
     }
 }
