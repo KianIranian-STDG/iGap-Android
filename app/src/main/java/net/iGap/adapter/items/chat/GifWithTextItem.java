@@ -12,14 +12,12 @@ package net.iGap.adapter.items.chat;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -28,7 +26,6 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.LocalFileType;
@@ -40,7 +37,6 @@ import net.iGap.realm.RealmRoomMessageFields;
 import java.io.File;
 import java.util.List;
 
-import io.realm.Realm;
 import pl.droidsonroids.gif.GifDrawable;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -200,7 +196,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
-            m_container.addView(frameLayout);
+            getContentBloke().addView(frameLayout);
 
             if (withText) {
                 setLayoutMessageContainer();

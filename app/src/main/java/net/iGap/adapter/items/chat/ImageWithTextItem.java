@@ -10,8 +10,6 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,11 +17,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -32,15 +25,11 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
-import java.io.InputStream;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -124,7 +113,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_758);
             image.setCornerRadius(HelperRadius.computeRadius());
-            m_container.addView(frameLayout);
+            getContentBloke().addView(frameLayout);
             if (withText) {
                 setLayoutMessageContainer();
             }

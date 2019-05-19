@@ -5,17 +5,14 @@ import android.graphics.PorterDuff;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentChat;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.MaterialDesignTextView;
 
@@ -30,15 +27,16 @@ import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp52;
 
 public class ChatItemHolder extends RecyclerView.ViewHolder {
-    LinearLayout contentContainer;
-    LinearLayout mainContainer;
-    LinearLayout m_container;
-    LinearLayout csl_ll_time;
+    LinearLayout contentContainer; //red
+    LinearLayout mainContainer; //white
+    LinearLayout m_container;  //banafsh
+    LinearLayout csl_ll_time; //abi
     LinearLayout lyt_see;
     LinearLayout lyt_vote;
     LinearLayout lyt_vote_up;
     LinearLayout lyt_vote_down;
     LinearLayout lyt_signature;
+    LinearLayout chatBloke;
     AppCompatTextView txt_vote_down;
     AppCompatTextView txt_vote_up;
     AppCompatTextView txt_signature;
@@ -61,11 +59,11 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
 
         LinearLayout.LayoutParams layout_584 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        LinearLayout linearLayout_683 = new LinearLayout(context);
-        linearLayout_683.setOrientation(VERTICAL);
-        linearLayout_683.setLayoutParams(layout_584);
+        chatBloke = new LinearLayout(context);
+        chatBloke.setOrientation(VERTICAL);
+        chatBloke.setLayoutParams(layout_584);
 
-        mainContainer.addView(linearLayout_683);
+        mainContainer.addView(chatBloke);
 
         LinearLayout.LayoutParams layout_617 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -75,7 +73,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         contentContainer.setLayoutParams(layout_617);
         contentContainer.setPadding(ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4));
 
-        linearLayout_683.addView(contentContainer);
+        chatBloke.addView(contentContainer);
 
 
         ////Time////
@@ -290,7 +288,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         ////////end/////
         lyt_see.setVisibility(View.GONE);
 
-        linearLayout_683.addView(csl_ll_time, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        chatBloke.addView(csl_ll_time, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         csl_ll_time.addView(lyt_see, 0);
         csl_ll_time.addView(lyt_vote, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -304,34 +302,41 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
 
         contentContainer.addView(m_container);
 
+
+        contentContainer.setBackgroundColor(context.getResources().getColor(R.color.germez));
+        mainContainer.setBackgroundColor(context.getResources().getColor(R.color.sefid));
+        m_container.setBackgroundColor(context.getResources().getColor(R.color.banafsh));
+        csl_ll_time.setBackgroundColor(context.getResources().getColor(R.color.abi));
+        chatBloke.setBackgroundColor(context.getResources().getColor(R.color.gahveii));
+        cslm_view_left_dis.setBackgroundColor(context.getResources().getColor(R.color.red));
+
+
         ((ViewGroup) itemView).addView(mainContainer);
 
         lyt_vote_up.setOnLongClickListener(getLongClickPerform());
         lyt_vote_down.setOnLongClickListener(getLongClickPerform());
 
-        mainContainer.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (!FragmentChat.isInSelectionMode && (
-                        ChatItemHolder.this instanceof VoiceItem.ViewHolder)
-                ) {
-                    return true;
-                }
-
-                itemView.performLongClick();
-                return true;
-            }
-        });
+// mainContainer.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                if (!FragmentChat.isInSelectionMode && (ChatItemHolder.this instanceof VoiceItem.ViewHolder)) {
+//                    return true;
+//                }
+//
+//                itemView.performLongClick();
+//                return true;
+//            }
+//        });
     }
 
-    private View.OnLongClickListener getLongClickPerform(){
+    private View.OnLongClickListener getLongClickPerform() {
         return view -> {
             itemView.performLongClick();
             return true;
         };
     }
 
-    protected void setLayoutDirection(View view, int direction){
+    protected void setLayoutDirection(View view, int direction) {
         ViewMaker.setLayoutDirection(view, direction);
     }
 
@@ -339,7 +344,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         return ViewMaker.i_Dp(dpSrc);
     }
 
-    protected void setTextSize(TextView v, int sizeSrc){
+    protected void setTextSize(TextView v, int sizeSrc) {
         ViewMaker.setTextSize(v, sizeSrc);
     }
 
@@ -351,7 +356,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         return ViewMaker.dpToPixel(dp);
     }
 
-    protected MessageProgress getProgressBar(int sizeSrc){
+    protected MessageProgress getProgressBar(int sizeSrc) {
         return ViewMaker.getProgressBar(sizeSrc);
     }
 

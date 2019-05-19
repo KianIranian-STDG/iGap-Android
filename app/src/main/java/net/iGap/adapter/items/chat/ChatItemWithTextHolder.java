@@ -9,7 +9,7 @@ import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.module.EmojiTextViewE;
 
-public class ChatItemWithTextHolder extends ChatItemHolder {
+public class ChatItemWithTextHolder extends NewChatItemHolder {
     private LinearLayout layoutMessageContainer;
     EmojiTextViewE messageView;
     LinearLayout BtnContainer;
@@ -38,7 +38,7 @@ public class ChatItemWithTextHolder extends ChatItemHolder {
                 if (FragmentChat.isInSelectionMode) {
                     itemView.performLongClick();
                 } else {
-                    mainContainer.performClick();
+                    getItemContainer().performClick();
                 }
 
             }
@@ -57,12 +57,12 @@ public class ChatItemWithTextHolder extends ChatItemHolder {
     protected void setLayoutMessageContainer(LinearLayout.LayoutParams layout_param) {
         initViews();
         layoutMessageContainer.setLayoutParams(layout_param);
-        m_container.addView(layoutMessageContainer);
+        getContentBloke().addView(layoutMessageContainer);
     }
 
     protected void setLayoutMessageContainer() {
         initViews();
-        m_container.addView(layoutMessageContainer);
+        getContentBloke().addView(layoutMessageContainer);
     }
 
     public void addButtonLayout(LinearLayout view) {

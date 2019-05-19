@@ -10,10 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -34,14 +27,11 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 import static java.lang.Boolean.TRUE;
 import static net.iGap.module.AndroidUtils.suitablePath;
@@ -156,7 +146,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             frameLayout_642.addView(duration);
             progress = getProgressBar(0);
             frameLayout_642.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
-            m_container.addView(frameLayout_642);
+            getContentBloke().addView(frameLayout_642);
             if (withText) {
                 setLayoutMessageContainer();
             }

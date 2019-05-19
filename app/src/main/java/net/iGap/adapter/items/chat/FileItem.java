@@ -14,13 +14,11 @@ import android.graphics.Color;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -35,8 +33,6 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 import static android.graphics.Typeface.BOLD;
 import static android.view.Gravity.CENTER;
@@ -194,7 +190,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             linearLayout_780.addView(cslf_txt_file_size);
             linearLayout_784.addView(frameLayout);
             linearLayout_784.addView(linearLayout_780);
-            m_container.addView(linearLayout_784);
+            getContentBloke().addView(linearLayout_784);
 
             setLayoutMessageContainer();
 

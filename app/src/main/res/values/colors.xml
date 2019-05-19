@@ -206,4 +206,19 @@
 
     <color name="tip_text_back">#2196f3</color>
 
+
+    <color name="germez">#f44336</color>
+    <color name="sorati">#E91E63</color>
+    <color name="banafsh">#9C27B0</color>
+    <color name="abi">#2196F3</color>
+    <color name="sabzetire">#009688</color>
+    <color name="sabz">#4CAF50</color>
+    <color name="zard">#FFEB3B</color>
+    <color name="narenji">#FF9800</color>
+    <color name="narenjitire">#FF5722</color>
+    <color name="gahveii">#795548</color>
+    <color name="siah">#212121</color>
+    <color name="sefid">#FFFFFF</color>
+
+
 </resources>

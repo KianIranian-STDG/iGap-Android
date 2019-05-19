@@ -16,7 +16,6 @@ import android.os.Build;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +24,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -44,8 +42,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 
 import java.io.File;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
@@ -287,7 +283,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends NewChatItemHolder implements IThumbNailItem, IProgress {
 
         protected MessageProgress progress;
         protected AppCompatImageView thumbnail;
@@ -401,7 +397,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             audioPlayerViewContainer.addView(txt_Timer);
             linearLayout_197.addView(audioPlayerViewContainer);
 
-            m_container.addView(linearLayout_197);
+            getContentBloke().addView(linearLayout_197);
         }
 
         @Override

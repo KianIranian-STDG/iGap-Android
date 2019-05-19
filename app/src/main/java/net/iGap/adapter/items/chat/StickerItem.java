@@ -93,7 +93,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IProgress, IThumbNailItem{
+    protected static class ViewHolder extends NewChatItemHolder implements IProgress, IThumbNailItem {
         protected ReserveSpaceRoundedImageView image;
         protected MessageProgress progress;
 
@@ -109,7 +109,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
             LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_758);
-            m_container.addView(frameLayout);
+            getContentBloke().addView(frameLayout);
             frameLayout.addView(image);
             image.reserveSpace(180,180,ProtoGlobal.Room.Type.CHAT);
 

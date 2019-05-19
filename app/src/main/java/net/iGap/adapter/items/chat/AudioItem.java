@@ -17,16 +17,13 @@ import android.os.Build;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import static android.support.design.R.id.center;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -46,10 +43,9 @@ import net.iGap.proto.ProtoGlobal;
 import java.io.File;
 import java.util.List;
 
-import io.realm.Realm;
-
 import static android.R.attr.left;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
+import static android.support.design.R.id.center;
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
 import static android.view.Gravity.CENTER_HORIZONTAL;
@@ -499,7 +495,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             audioPlayerViewContainer.addView(txt_Timer);
             linearLayout_39.addView(audioPlayerViewContainer);
             audioBox.addView(linearLayout_39);
-            m_container.addView(audioBox);
+            getContentBloke().addView(audioBox);
 
             LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it
             setLayoutMessageContainer(layout_992);
