@@ -94,8 +94,12 @@ public class HelperUrl {
     public static int LinkColorDark = Color.CYAN;
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
-    private static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
-    private static Pattern patternMessageLink2 = Pattern.compile("igap://resolve\\?domain=(.*)&post=([0-9]*)");
+    public static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
+    public static Pattern patternMessageLink2 = Pattern.compile("igap://resolve\\?domain=(.*)&post=([0-9]*)");
+
+    public static Pattern patternRoom1 = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)");
+    public static Pattern patternRoom2 = Pattern.compile("igap://resolve\\?domain=(.*)");
+    public static Pattern patternRoom3 = Pattern.compile("igap://join\\?domain=(.*)");
 
     private static boolean isIgapLink(String text) {
         return text.matches("(https?\\:\\/\\/)?igap.net/(.*)");
@@ -134,6 +138,25 @@ public class HelperUrl {
         }
 
         return strBuilder;
+    }
+
+    public static boolean handleAppUrl(String url) {
+        Matcher matcher2 = HelperUrl.patternMessageLink2.matcher(url);
+        Matcher matcher4 = HelperUrl.patternRoom2.matcher(url);
+        Matcher matcher5 = HelperUrl.patternRoom3.matcher(url);
+        if (matcher2.find()) {
+            String username = matcher2.group(1);
+            long messageId = Long.parseLong(matcher2.group(2));
+            checkUsernameAndGoToRoomWithMessageId(username, HelperUrl.ChatEntry.profile, messageId);
+            return true;
+        } else if (matcher4.find()) {
+            checkUsernameAndGoToRoom(matcher4.group(1), HelperUrl.ChatEntry.profile);
+            return true;
+        } else if (matcher5.find()) {
+            checkAndJoinToRoom(matcher5.group(1));
+            return true;
+        }
+        return false;
     }
 
     private static boolean isTextLink(String text) {
