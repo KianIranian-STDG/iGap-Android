@@ -96,8 +96,6 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.context;
-import static net.iGap.R.string.contacts;
 
 public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete, OnPhoneContact {
 
@@ -836,13 +834,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
             final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());
             if (realmRegisteredInfo != null) {
-                viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
                 if (realmRegisteredInfo.getStatus() != null) {
                     if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                         viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), realmRegisteredInfo.getLastSeen(), false));
                     } else {
                         if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
                         }
                         viewHolder.subtitle.setText(realmRegisteredInfo.getStatus());
                     }
@@ -1369,7 +1367,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         }
     }
 
-    private class AddAsync extends AsyncTask<Void, Void, Void> {
+    private class AddAsync extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
 
         private ArrayList<StructListOfContact> contacts;
         private boolean isEnd;
@@ -1380,14 +1378,8 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
+        protected ArrayList<StructListOfContact> doInBackground(Void... params) {
             for (int i = 0; i < contacts.size(); i++) {
-                //   fastItemAdapter.add(new AdapterListContact(contacts.get(i).getDisplayName(), contacts.get(i).getPhone()).withIdentifier(index++));
 
                 String s = contacts.get(i).getPhone();
                 s = s.replaceAll("\\A0|\\+|\\-?", "");
@@ -1396,16 +1388,12 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 if (!s.startsWith("98"))
                     s = "98" + s;
                 contacts.get(i).setPhone(s);
-                //  phoneContactsList.add(contacts.get(i));
-
             }
-
-            //   getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
-            RealmResults<RealmContacts> mList = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
 
             ArrayList<StructListOfContact> slc = new ArrayList();
-
 
             for (int i = 0; i < contacts.size(); i++) {
                 boolean helpIndex = false;
@@ -1419,25 +1407,20 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                     slc.add(contacts.get(i));
                 }
             }
+            realm.close();
 
+            return slc;
+        }
 
-            //  phoneContactsList.clear();
+        @Override
+        protected void onPostExecute(ArrayList<StructListOfContact> slc) {
             phoneContactsList.addAll(slc);
-
-     /*       Collections.sort(phoneContactsList, new Comparator<StructListOfContact>() {
-                @Override
-                public int compare(StructListOfContact o1, StructListOfContact o2) {
-                    String s1 = o1.displayName;
-                    String s2 = o2.displayName;
-                    return s1.compareToIgnoreCase(s2);
-                }
-            });*/
 
             adapterListContact.notifyDataSetChanged();
             if (isEnd) {
                 prgWaitingLiadList.setVisibility(View.GONE);
             }
-            super.onPostExecute(aVoid);
+            super.onPostExecute(slc);
         }
     }
 
