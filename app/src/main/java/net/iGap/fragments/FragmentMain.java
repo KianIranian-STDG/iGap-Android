@@ -102,6 +102,7 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import yogesh.firzen.mukkiasevaigal.M;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
@@ -1112,6 +1113,16 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
                 return;
             }
 
+            if ( holder.getAdapterPosition() == 0){
+                ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT , i_Dp(R.dimen.dp80));
+                lp.setMargins(0 , i_Dp(R.dimen.dp24) , 0 , 0);
+                holder.root.setLayoutParams(lp);
+            }else {
+                ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT , i_Dp(R.dimen.dp80));
+                lp.setMargins(0 , 0 , 0 , 0);
+                holder.root.setLayoutParams(lp);
+            }
+
             final boolean isMyCloud;
 
             isMyCloud = mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId;
@@ -1434,11 +1445,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
             private BadgeView txtUnread;
             private EmojiTextViewE lastMessageSender;
             private ImageView txtTic;
+            private View root ;
 
 
             public ViewHolder(View view) {
                 super(view);
 
+                root = view ;
                 /**
                  * user avatar image
                  * */

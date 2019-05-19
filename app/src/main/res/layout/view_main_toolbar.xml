@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view_toolbar_root_constraint"
     android:layout_width="match_parent"
+    android:background="@android:color/transparent"
     android:layout_height="@dimen/toolbar_height_root_with_search">
 
     <android.support.constraint.ConstraintLayout
@@ -153,20 +154,43 @@
             app:layout_constraintTop_toBottomOf="@+id/view_toolbar_logo" />
 
         <!--chat views-->
-        <net.iGap.module.CircleImageView
-            android:id="@+id/view_toolbar_user_chat_avatar"
+        <RelativeLayout
+            android:id="@+id/view_toolbar_user_chat_avatar_layout"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/view_toolbar_btn_left"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            android:visibility="gone"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/view_toolbar_btn_left"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="gone">
+
+            <net.iGap.module.CircleImageView
+                android:id="@+id/view_toolbar_user_chat_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/view_toolbar_user_cloud_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="4dp"
+                android:layout_centerInParent="true"
+                android:singleLine="true"
+                android:text="@string/md_cloud"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
+                android:textColor="#ffffff"
+                android:textSize="28sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/view_toolbar_chat_layout_userName"
@@ -181,8 +205,8 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
-            app:layout_constraintStart_toEndOf="@+id/view_toolbar_user_chat_avatar"
-            app:layout_constraintTop_toTopOf="@+id/view_toolbar_user_chat_avatar">
+            app:layout_constraintStart_toEndOf="@+id/view_toolbar_user_chat_avatar_layout"
+            app:layout_constraintTop_toTopOf="@+id/view_toolbar_user_chat_avatar_layout">
 
 
             <net.iGap.module.EmojiTextViewE

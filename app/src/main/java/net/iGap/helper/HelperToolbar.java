@@ -47,6 +47,7 @@ public class HelperToolbar {
     private EditText mEdtSearch;
     private AppCompatImageView mChatVerifyIcon ;
     private MaterialDesignTextView mChatMuteIcon ;
+    private MaterialDesignTextView mCloudChatIcon ;
 
     private LayoutInflater mInflater;
     private Context mContext;
@@ -243,13 +244,16 @@ public class HelperToolbar {
         }
 
         if (isInChatRoom) {
-            mAvatarChat.setVisibility(View.VISIBLE);
+            result.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.VISIBLE);
             result.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.VISIBLE);
             mTxtChatSeenStatus.setVisibility(View.VISIBLE);
             mAvatarChat.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
+            mCloudChatIcon.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
+            mTxtChatUserName.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
+            mTxtChatSeenStatus.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
 
         } else {
-            mAvatarChat.setVisibility(View.GONE);
+            result.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.GONE);
             result.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.GONE);
             mTxtChatSeenStatus.setVisibility(View.GONE);
         }
@@ -264,38 +268,8 @@ public class HelperToolbar {
 
         setGroupProfileVisibility(result, isGroupProfile);
 
-        G.connectionStateMutableLiveData.observe(G.fragmentActivity, new android.arch.lifecycle.Observer<ConnectionState>() {
-            @Override
-            public void onChanged(@Nullable ConnectionState connectionState) {
+        toolBarTitleHandler();
 
-                if (mTxtLogo != null && connectionState != null){
-
-                    if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp16) / mContext.getResources().getDisplayMetrics().density));
-                        mTxtLogo.setText(R.string.waiting_for_network);
-
-                    } else if (connectionState == ConnectionState.CONNECTING) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
-                        mTxtLogo.setText(R.string.connecting);
-
-                    } else if (connectionState == ConnectionState.UPDATING) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
-
-                        mTxtLogo.setText(R.string.updating);
-
-                    } else if (connectionState == ConnectionState.IGAP) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
-                        mTxtLogo.setText(defaultTitleText);
-
-                    } else {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
-                        mTxtLogo.setText(defaultTitleText);
-                    }
-
-                }
-
-            }
-        });
         return result;
 
     }
@@ -378,6 +352,10 @@ public class HelperToolbar {
         return mAvatarChat;
     }
 
+    public MaterialDesignTextView getCloudChatIcon() {
+        return mCloudChatIcon;
+    }
+
     public AppCompatTextView getGroupName(){
         return groupName;
     }
@@ -399,6 +377,43 @@ public class HelperToolbar {
     }
 
     /*************************************************************/
+
+    private void toolBarTitleHandler() {
+
+        G.connectionStateMutableLiveData.observe(G.fragmentActivity, new android.arch.lifecycle.Observer<ConnectionState>() {
+            @Override
+            public void onChanged(@Nullable ConnectionState connectionState) {
+
+                if (mTxtLogo != null && connectionState != null){
+
+                    if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp16) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(R.string.waiting_for_network);
+
+                    } else if (connectionState == ConnectionState.CONNECTING) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(R.string.connecting);
+
+                    } else if (connectionState == ConnectionState.UPDATING) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+
+                        mTxtLogo.setText(R.string.updating);
+
+                    } else if (connectionState == ConnectionState.IGAP) {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(defaultTitleText);
+
+                    } else {
+                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
+                        mTxtLogo.setText(defaultTitleText);
+                    }
+
+                }
+
+            }
+        });
+
+    }
 
     private void setNormalSizeToRootViews(View view) {
 
@@ -558,6 +573,7 @@ public class HelperToolbar {
         mTxtLogo = view.findViewById(R.id.view_toolbar_logo);
         mTxtBigAvatarUserName = view.findViewById(R.id.view_toolbar_txt_below_big_avatar_user_name);
         mTxtCallStatus = view.findViewById(R.id.view_toolbar_txt_call_status);
+        mCloudChatIcon = view.findViewById(R.id.view_toolbar_user_cloud_avatar);
 
         mAvatarSmall = view.findViewById(R.id.view_toolbar_user_small_avatar);
         mAvatarChat = view.findViewById(R.id.view_toolbar_user_chat_avatar);

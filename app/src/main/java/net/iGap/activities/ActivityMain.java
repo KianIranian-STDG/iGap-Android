@@ -1344,7 +1344,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (i == 0)
                     mViewPager.setCurrentItem(4);
             } else {
-                mViewPager.setCurrentItem(i);
+                mViewPager.setCurrentItem(i , false);
             }
         });
 

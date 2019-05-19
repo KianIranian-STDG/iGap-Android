@@ -441,8 +441,6 @@ public class FragmentChat extends BaseFragment
     private MaterialDesignTextView imvMicButton;
     //    private MaterialDesignTextView sendMoney;
     //  private MaterialDesignTextView btnReplaySelected;
-    private RippleView rippleDeleteSelected;
-    private RippleView rippleReplaySelected;
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
     private CircleImageView imvUserPicture;
@@ -477,7 +475,9 @@ public class FragmentChat extends BaseFragment
     private LinearLayout ll_Search;
     private LinearLayout layoutAttachBottom;
     private LinearLayout ll_attach_text;
-    private LinearLayout ll_AppBarSelected;
+    private ConstraintLayout ll_AppBarSelected;
+    private MaterialDesignTextView mBtnCopySelected , mBtnForwardSelected , mBtnReplySelected , mBtnDeleteSelected ;
+    private TextView mTxtSelectedCounter;
     private LinearLayout toolbar;
     // private LinearLayout ll_navigate_Message;
     private LinearLayout ll_navigateHash;
@@ -1072,10 +1072,11 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isCloudRoom) {
-            //todo : add cloud image to toolbar
-            rootView.findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.VISIBLE);
             mHelperToolbar.getUserAvatarChat().setVisibility(View.GONE);
         } else {
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.GONE);
+            mHelperToolbar.getUserAvatarChat().setVisibility(View.VISIBLE);
             setAvatar();
         }
 
@@ -2637,7 +2638,7 @@ public class FragmentChat extends BaseFragment
             TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
                 if (items.get(position).equals(getString(R.string.Search))) {
                     initLayoutSearchNavigation();
-                    rootView.findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
+                    layoutToolbar.setVisibility(View.GONE);
                     ll_Search.setVisibility(View.VISIBLE);
                     if (!initHash) {
                         initHash = true;
@@ -3141,7 +3142,7 @@ public class FragmentChat extends BaseFragment
         });
 
         imvUserPicture = mHelperToolbar.getUserAvatarChat();
-        imvUserPicture.setOnClickListener(new View.OnClickListener() {
+       /* imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToProfile();
@@ -3160,7 +3161,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 goToProfile();
             }
-        });
+        });*/
 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3795,22 +3796,22 @@ public class FragmentChat extends BaseFragment
         //   Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
             FragmentChat.isInSelectionMode = true;
-            toolbar.setVisibility(View.GONE);
-            rippleReplaySelected.setVisibility(View.VISIBLE);
+            //toolbar.setVisibility(View.GONE);
+            mBtnReplySelected.setVisibility(View.VISIBLE);
 
-            txtNumberOfSelected.setText(selectedCount + "");
+            mTxtSelectedCounter.setText(selectedCount + " " + context.getResources().getString(R.string.item_selected));
 
             if (HelperCalander.isPersianUnicode) {
-                txtNumberOfSelected.setText(convertToUnicodeFarsiNumber(txtNumberOfSelected.getText().toString()));
+                mTxtSelectedCounter.setText(convertToUnicodeFarsiNumber(mTxtSelectedCounter.getText().toString()));
             }
 
             if (selectedCount > 1) {
-                rippleReplaySelected.setVisibility(View.INVISIBLE);
+                mBtnReplySelected.setVisibility(View.INVISIBLE);
             } else {
 
                 if (chatType == CHANNEL) {
                     if (channelRole == ChannelChatRole.MEMBER) {
-                        rippleReplaySelected.setVisibility(View.INVISIBLE);
+                        mBtnReplySelected.setVisibility(View.INVISIBLE);
                     }
                 }
             }
@@ -3834,29 +3835,29 @@ public class FragmentChat extends BaseFragment
                     // if user clicked on any message which he wasn't its sender, remove edit mList option
                     if (chatType == CHANNEL) {
                         if (channelRole == ChannelChatRole.MEMBER) {
-                            rippleReplaySelected.setVisibility(View.INVISIBLE);
-                            rippleDeleteSelected.setVisibility(View.GONE);
+                            mBtnReplySelected.setVisibility(View.INVISIBLE);
+                            mBtnDeleteSelected.setVisibility(View.GONE);
                             isAllSenderId = false;
                         }
                         final long senderId = G.userId;
                         ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
-                                rippleDeleteSelected.setVisibility(View.GONE);
+                                mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
                             } else if (channelRole == ChannelChatRole.MODERATOR) {
                                 if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                    mBtnDeleteSelected.setVisibility(View.GONE);
                                     isAllSenderId = false;
                                 }
                             } else if (channelRole == ChannelChatRole.ADMIN) {
                                 if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                    mBtnDeleteSelected.setVisibility(View.GONE);
                                     isAllSenderId = false;
                                 }
                             }
                         } else {
-                            rippleDeleteSelected.setVisibility(View.VISIBLE);
+                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
                         }
                     } else if (chatType == GROUP) {
 
@@ -3865,30 +3866,30 @@ public class FragmentChat extends BaseFragment
 
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
-                                rippleDeleteSelected.setVisibility(View.GONE);
+                                mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
                             } else if (groupRole == GroupChatRole.MODERATOR) {
                                 if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                    mBtnDeleteSelected.setVisibility(View.GONE);
                                     isAllSenderId = false;
                                 }
                             } else if (groupRole == GroupChatRole.ADMIN) {
                                 if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                    mBtnDeleteSelected.setVisibility(View.GONE);
                                     isAllSenderId = false;
                                 }
                             }
                         } else {
-                            rippleDeleteSelected.setVisibility(View.VISIBLE);
+                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
                         }
                     } else if (realmRoom.getReadOnly()) {
-                        rippleReplaySelected.setVisibility(View.INVISIBLE);
+                        mBtnReplySelected.setVisibility(View.INVISIBLE);
                     }
                 }
             }
 
             if (!isAllSenderId) {
-                rippleDeleteSelected.setVisibility(View.GONE);
+                mBtnDeleteSelected.setVisibility(View.GONE);
             }
 
             //realm.close();
@@ -4231,9 +4232,11 @@ public class FragmentChat extends BaseFragment
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
         if (isCloudRoom) {
-            rootView.findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.VISIBLE);
             imvUserPicture.setVisibility(View.GONE);
         } else {
+            mHelperToolbar.getCloudChatIcon().setVisibility(View.GONE);
+            imvUserPicture.setVisibility(View.VISIBLE);
             setAvatar();
         }
     }
@@ -7184,122 +7187,118 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initAppbarSelected() {
-        ll_AppBarSelected = rootView.findViewById(R.id.chl_ll_appbar_selelected);
+        ll_AppBarSelected = rootView.findViewById(R.id.ac_layout_selected_item);
+
+        mTxtSelectedCounter = rootView.findViewById(R.id.ac_layout_selected_txt_counter);
+        mBtnCopySelected = rootView.findViewById(R.id.ac_layout_selected_btn_copy);
+        mBtnForwardSelected = rootView.findViewById(R.id.ac_layout_selected_btn_forward);
+        mBtnReplySelected = rootView.findViewById(R.id.ac_layout_selected_btn_reply);
+        mBtnDeleteSelected = rootView.findViewById(R.id.ac_layout_selected_btn_delete);
+
 
         RippleView rippleCloseAppBarSelected = rootView.findViewById(R.id.chl_ripple_close_layout);
         rippleCloseAppBarSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
                 mAdapter.deselect();
-                toolbar.setVisibility(View.VISIBLE);
                 ll_AppBarSelected.setVisibility(View.GONE);
                 clearReplyView();
             }
         });
 
         //  btnReplaySelected = (MaterialDesignTextView)  rootView.findViewById(R.id.chl_btn_replay_selected);
-        rippleReplaySelected = rootView.findViewById(R.id.chl_ripple_replay_selected);
+        //mBtnReplySelected = rootView.findViewById(R.id.chl_ripple_replay_selected);
 
         if (chatType == CHANNEL) {
             if (channelRole == ChannelChatRole.MEMBER) {
-                rippleReplaySelected.setVisibility(View.INVISIBLE);
+                mBtnReplySelected.setVisibility(View.INVISIBLE);
             }
         } else {
-            rippleReplaySelected.setVisibility(View.VISIBLE);
+            mBtnReplySelected.setVisibility(View.VISIBLE);
         }
-        rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
-                    replay(mAdapter.getSelectedItems().iterator().next().mMessage);
-                }
+        mBtnReplySelected.setOnClickListener(v -> {
+            if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
+                replay(mAdapter.getSelectedItems().iterator().next().mMessage);
             }
         });
-        RippleView rippleCopySelected = rootView.findViewById(R.id.chl_ripple_copy_selected);
-        rippleCopySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+        mBtnCopySelected.setOnClickListener( v -> {
 
-                copySelectedItemTextToClipboard();
-            }
+            copySelectedItemTextToClipboard();
+            
         });
-        RippleView rippleForwardSelected = rootView.findViewById(R.id.chl_ripple_forward_selected);
-        rippleForwardSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                // forward selected messages to room list for selecting room
-                if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
-                    onForwardClick(null);
-                }
+        
+        mBtnForwardSelected.setOnClickListener( v -> {
+           
+            // forward selected messages to room list for selecting room
+            if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
+                onForwardClick(null);
             }
+            
         });
-        rippleDeleteSelected = rootView.findViewById(R.id.chl_ripple_delete_selected);
-        rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+        
+        mBtnDeleteSelected.setOnClickListener(v-> {
 
-                final ArrayList<Long> list = new ArrayList<Long>();
-                bothDeleteMessageId = new ArrayList<Long>();
+            final ArrayList<Long> list = new ArrayList<Long>();
+            bothDeleteMessageId = new ArrayList<Long>();
 
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (final AbstractMessage item : mAdapter.getSelectedItems()) {
-                            try {
-                                if (item != null && item.mMessage != null && item.mMessage.messageID != null) {
-                                    Long messageId = parseLong(item.mMessage.messageID);
-                                    list.add(messageId);
-                                    if (RealmRoomMessage.isBothDelete(item.mMessage.time)) {
-                                        bothDeleteMessageId.add(messageId);
-                                    }
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    for (final AbstractMessage item : mAdapter.getSelectedItems()) {
+                        try {
+                            if (item != null && item.mMessage != null && item.mMessage.messageID != null) {
+                                Long messageId = parseLong(item.mMessage.messageID);
+                                list.add(messageId);
+                                if (RealmRoomMessage.isBothDelete(item.mMessage.time)) {
+                                    bothDeleteMessageId.add(messageId);
                                 }
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
                             }
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
                         }
+                    }
 
-                        final String count = list.size() + "";
+                    final String count = list.size() + "";
 
 
-                        if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
-                            // show both Delete check box
+                    if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
+                        // show both Delete check box
 
-                            String delete;
-                            String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
-                            if (HelperCalander.isPersianUnicode) {
-                                delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
+                        String delete;
+                        String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
+                        if (HelperCalander.isPersianUnicode) {
+                            delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
 
-                            } else {
-                                delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
+                        } else {
+                            delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
 
+                        }
+                        new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                if (!dialog.isPromptCheckBoxChecked()) {
+                                    bothDeleteMessageId = null;
+                                }
+
+                                RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
+                                deleteSelectedMessageFromAdapter(list);
                             }
-                            new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        }).checkBoxPrompt(textCheckBox, false, null).show();
+
+                    } else {
+                        if (!G.fragmentActivity.isFinishing()) {
+                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    if (!dialog.isPromptCheckBoxChecked()) {
-                                        bothDeleteMessageId = null;
-                                    }
-
+                                    bothDeleteMessageId = null;
                                     RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
                                     deleteSelectedMessageFromAdapter(list);
                                 }
-                            }).checkBoxPrompt(textCheckBox, false, null).show();
-
-                        } else {
-                            if (!G.fragmentActivity.isFinishing()) {
-                                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        bothDeleteMessageId = null;
-                                        RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
-                                        deleteSelectedMessageFromAdapter(list);
-                                    }
-                                }).show();
-                            }
+                            }).show();
                         }
                     }
-                });
-            }
+                }
+            });
         });
         txtNumberOfSelected = G.fragmentActivity.findViewById(R.id.chl_txt_number_of_selected);
 
@@ -7389,7 +7388,7 @@ public class FragmentChat extends BaseFragment
                     //  deSelectMessage(selectedPosition);
                     edtSearchMessage.setText("");
                     ll_Search.setVisibility(View.GONE);
-                    rootView.findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
+                    layoutToolbar.setVisibility(View.VISIBLE);
                     //  ll_navigate_Message.setVisibility(View.GONE);
                     // viewAttachFile.setVisibility(View.VISIBLE);
 
@@ -9474,7 +9473,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChatAvatarClickListener(View view) {
-
+        goToProfile();
     }
 
     @Override
@@ -9571,7 +9570,7 @@ public class FragmentChat extends BaseFragment
         TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
             if (items.get(position).equals(getString(R.string.Search))) {
                 initLayoutSearchNavigation();
-                rootView.findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
+                layoutToolbar.setVisibility(View.GONE);
                 ll_Search.setVisibility(View.VISIBLE);
                 if (!initHash) {
                     initHash = true;
