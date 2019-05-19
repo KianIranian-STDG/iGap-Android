@@ -90,9 +90,9 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         page = getArguments().getInt("page");
-        if (page == 0) {
+        //if (page == 0) {
             appBarLayout.setVisibility(View.GONE);
-        }
+        //}
 
         init();
     }
@@ -142,6 +142,10 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
                 .setLogoShown(true)
                 .setRightSmallAvatarShown(true)
                 .setListener(this);
+
+        if (page != 0){
+            mHelperToolbar.setLeftIcon(R.drawable.ic_back_btn);
+        }
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
@@ -232,6 +236,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
         adapterDiscovery.setDiscoveryList(discoveryArrayList);
         titleTextView.setText(title);
+        if (page != 0 ) mHelperToolbar.setDefaultTitle(title);
         adapterDiscovery.notifyDataSetChanged();
     }
 
@@ -250,7 +255,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
 
     @Override
     public void onLeftIconClickListener(View view) {
-        
+        popBackStackFragment();
     }
 
     @Override
