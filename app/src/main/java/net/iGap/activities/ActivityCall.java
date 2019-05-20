@@ -47,6 +47,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnHoldBackgroundChanegeListener;
@@ -588,6 +589,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
      */
 
     private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
+        UserStatusController.getInstance().setOnline();
         if (canClick) {
             layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);
