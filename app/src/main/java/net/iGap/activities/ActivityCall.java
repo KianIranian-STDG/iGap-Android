@@ -175,7 +175,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        canSetUserStatus = false;
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
