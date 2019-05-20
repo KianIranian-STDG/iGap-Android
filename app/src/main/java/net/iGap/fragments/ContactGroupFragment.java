@@ -44,6 +44,7 @@ import net.iGap.R;
 import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnChannelAddMember;
 import net.iGap.interfaces.OnContactsGetList;
@@ -80,13 +81,15 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private String typeCreate;
     private List<ContactChip> mContactList = new ArrayList<>();
     private int sizeTextEditText = 0;
-    private List<StructContactInfo> contacts;
+    private List<StructContactInfo> contacts = new ArrayList<>();
+    public static List<StructContactInfo> selectedContacts = new ArrayList<>();
     private boolean isRemove = true;
 
     private HelperToolbar mHelperToolbar;
 
 
     public static ContactGroupFragment newInstance() {
+        selectedContacts.clear();
         return new ContactGroupFragment();
     }
 
@@ -100,6 +103,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        selectedContacts.clear();
         G.onContactsGetList = this;
 
         hideProgressBar(); // some times touch screen remind lock so this method do unlock
@@ -399,6 +403,18 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 }
             }
         } else if (typeCreate.equals("GROUP")) { // addMemberGroup
+
+            if (roomId == -127){
+
+                setupSelectedList();
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle_ = new Bundle();
+                bundle_.putString("TYPE", "NewGroup");
+                fragment.setArguments(bundle_);
+                new HelperFragment(fragment).setReplace(false).load(true);
+                return;
+            }
+
             G.onGroupAddMember = new OnGroupAddMember() {
                 @Override
                 public void onGroupAddMember(Long roomId, Long UserId) {
@@ -417,6 +433,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                     }
                 }
             };
+
+
             /**
              * request add member for group
              *
@@ -436,6 +454,15 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             }
         }
 
+    }
+
+    private void setupSelectedList() {
+        for (int i = 0; i < contacts.size(); i++) {
+            if (contacts.get(i).isSelected) {
+
+                selectedContacts.add(contacts.get(i));
+            }
+        }
     }
 
 

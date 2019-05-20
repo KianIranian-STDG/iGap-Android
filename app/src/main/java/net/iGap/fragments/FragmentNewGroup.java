@@ -25,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
@@ -49,6 +51,7 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -60,12 +63,15 @@ import net.iGap.module.FileUploadStructure;
 import net.iGap.module.LinedEditText;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestGroupAddMember;
 import net.iGap.viewmodel.FragmentNewGroupViewModel;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -91,6 +97,11 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     private String specialRequests;
     private String pathSaveImage;
 
+    private int countAddMemberResponse = 0;
+    private int countMember = 0;
+    private int countAddMemberRequest = 0;
+
+    private long createdRoomId = 0 ;
     private HelperToolbar mHelperToolbar;
 
     public static FragmentNewGroup newInstance() {
@@ -110,6 +121,13 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         initDataBinding();
         initComponent(view);
+
+        Bundle bundle = getArguments();
+
+        if ( bundle.getString("TYPE") != null && bundle.getString("TYPE").equals("NewGroup")){
+            initGroupMembersRecycler();
+        }
+
 
         //fragmentNewGroupViewModel.onClickCancel();
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
@@ -161,9 +179,25 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         ;
     }
 
+    private void initGroupMembersRecycler() {
+
+        for (int i = 0 ; i < ContactGroupFragment.selectedContacts.size() ; i++){
+
+            Log.i("nazari", "initGroupMembersRecycler: " + ContactGroupFragment.selectedContacts.get(i).displayName);
+        }
+    }
+
     private void initDataBinding() {
         fragmentNewGroupViewModel = new FragmentNewGroupViewModel(this.getArguments());
         fragmentNewGroupBinding.setFragmentNewGroupVieModel(fragmentNewGroupViewModel);
+
+        fragmentNewGroupViewModel.createdRoomId.observe(this, new Observer<Long>() {
+            @Override
+            public void onChanged(@Nullable Long aLong) {
+                createdRoomId = aLong ;
+                addMembersToGroup();
+            }
+        });
     }
 
     private void showDialogSelectGallery() {
@@ -533,4 +567,72 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     public void onRightIconClickListener(View view) {
         fragmentNewGroupViewModel.onClickNextStep(view);
     }
+
+    private void addMembersToGroup(){
+
+        G.onGroupAddMember = new OnGroupAddMember() {
+            @Override
+            public void onGroupAddMember(Long roomId, Long UserId) {
+                countAddMemberResponse++;
+                countMember++;
+                if (countAddMemberResponse == countAddMemberRequest) {
+                    addMember(roomId, ProtoGlobal.Room.Type.GROUP);
+                }
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                countAddMemberResponse++;
+                if (countAddMemberResponse == countAddMemberRequest) {
+                    addMember(createdRoomId, ProtoGlobal.Room.Type.GROUP);
+                }
+            }
+        };
+
+
+        /**
+         * request add member for group
+         *
+         */
+        countAddMemberRequest = ContactGroupFragment.selectedContacts.size() - 1 ;
+        ArrayList<Long> list = getSelectedList();
+        if (list.size() > 0) {
+            for (long peerId : list) {
+                new RequestGroupAddMember().groupAddMember(createdRoomId, peerId, 0);
+            }
+        } else {
+
+            if (isAdded()) {
+                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+
+                removeFromBaseFragment(FragmentNewGroup.this);
+                new GoToChatActivity(createdRoomId).startActivity();
+            }
+
+        }
+    }
+
+    private ArrayList<Long> getSelectedList() {
+        ArrayList<Long> list = new ArrayList<>();
+
+        for (int i = 0; i < ContactGroupFragment.selectedContacts.size(); i++) {
+            if (ContactGroupFragment.selectedContacts.get(i).isSelected) {
+                countAddMemberRequest++;
+                list.add(ContactGroupFragment.selectedContacts.get(i).peerId);
+            }
+        }
+
+        return list;
+    }
+
+    private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
+        RealmRoom.addOwnerToDatabase(roomId);
+        RealmRoom.updateMemberCount(roomId, roomType, ContactGroupFragment.selectedContacts.size()+ 1); // plus with 1 , for own account
+        if (isAdded()) {
+            removeFromBaseFragment(FragmentNewGroup.this);
+            new GoToChatActivity(roomId).startActivity();
+        }
+    }
+
 }
