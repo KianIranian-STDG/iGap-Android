@@ -26,6 +26,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.CircleImageView;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
@@ -37,7 +38,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentChannelProfile extends BaseFragment implements /*OnChannelAvatarAdd,*/ OnChannelAvatarDelete {
 
@@ -112,7 +112,7 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
             settingVisibility.set(View.GONE);
         }*/
         if (viewModel.isNotJoin) {
-            t.getM2RightBtn().setVisibility(View.GONE);
+            t.getSecondRightButton().setVisibility(View.GONE);
         }
         binding.toolbar.addView(t.getView());
         imvChannelAvatar = t.getGroupAvatar();
