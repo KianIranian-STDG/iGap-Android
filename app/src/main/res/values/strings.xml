@@ -1439,6 +1439,7 @@
     <string name="unknown_type">not supported card</string>
     <string name="order_history">Score History</string>
     <string name="your_point">Your Score:</string>
+    <string name="score_title">Score</string>
 
     <string name="dialog_ok">Ok</string>
     <string name="error_submit_qr_code">There is an error with the request!</string>
