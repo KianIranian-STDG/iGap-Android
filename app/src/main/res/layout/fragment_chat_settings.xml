@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="chatSettingsVM"
+            type="net.iGap.viewmodel.FragmentChatSettingViewModel" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        style="?backgroundColorSettingTheme"
+        tools:context=".fragments.FragmentChatSettings"
+        tools:ignore="MissingPrefix">
+
+        <LinearLayout
+            android:id="@+id/fcs_layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="?backgroundColorSettingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp8"
+                    android:visibility="visible">
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingBottom="@dimen/dp16"
+                        android:text="@string/st_title_message"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dp16"
+                        android:textStyle="normal" />
+
+                    <!--
+                                android:onClick="@{chatSettingsVM::onClickMessageTextSize}"
+                    -->
+
+
+                    <LinearLayout
+                        android:id="@+id/st_layout_messageTextSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
+                            android:text="@string/st_title_message_textSize"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp16"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginRight="@dimen/dp16"
+                            android:layout_marginBottom="@dimen/dp16"
+                            android:orientation="horizontal">
+
+
+                            <SeekBar
+                                android:id="@+id/st_seekbar_messageTextSize"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/st_txt_messageTextSize_number"
+                                style="?textSubColorSettingTheme"
+                                fontPath="fonts/IRANSansMobile.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@{chatSettingsVM.callbackTextSize , default=16}"
+                                android:textColor="@color/setting_items_value_color"
+                                android:textSize="@dimen/dp15"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/st_txt_chatBackground"
+                        style="?textTitleColorSettingTheme"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:gravity="center_vertical"
+                        android:onClick="@{chatSettingsVM::onClickChatBackground}"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
+                        android:text="@string/st_chatBackground"
+                        android:textSize="@dimen/dp15"
+                        android:textStyle="normal" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp52"
+                        android:onClick="@{chatSettingsVM::onClickShowVote}"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/as_txt_show_vote"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="@string/show_vote_layout_in_channel"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                        <ToggleButton
+                            android:id="@+id/as_toggle_show_vote"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isShowVote)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedShowVote(checked)}"
+                            android:textOff=""
+                            android:textOn=""
+
+                            />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp52"
+                        android:onClick="@{chatSettingsVM::onClickSenderNameGroup}"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/as_txt_show_sender_name_group"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="@string/show_sender_name_in_group"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                        <ToggleButton
+                            android:id="@+id/as_toggle_show_sender_name_group"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isSenderNameGroup)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedSenderNameGroup(checked)}"
+                            android:textOff=""
+                            android:textOn="" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:onClick="@{chatSettingsVM::onClickSendEnter}"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/st_txt_sendEnter"
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/st_send_by_enter"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                        <ToggleButton
+                            android:id="@+id/st_toggle_sendEnter"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isSendEnter)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedSendEnter(checked)}"
+                            android:textOff=""
+                            android:textOn="" />
+
+                    </LinearLayout>
+
+
+                    <!--this part is gone-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:onClick="@{chatSettingsVM::onClickAppBrowser}"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true">
+
+                            <ToggleButton
+                                android:id="@+id/st_toggle_inAppBrowser"
+                                android:layout_width="@dimen/dp44"
+                                android:layout_height="@dimen/dp40"
+                                android:background="@drawable/st_switch_button"
+                                android:checked="@{safeUnbox(chatSettingsVM.isInAppBrowser)}"
+                                android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedAppBrowser(checked)}"
+                                android:textOff=""
+                                android:textOn="" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/st_txt_inAppBrowser"
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/st_inApp_Browser"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <View
+                    style="?lineColorSettingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"/>
+
+                <LinearLayout
+                    style="?backgroundColorSettingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp4"
+                    android:visibility="visible">
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingBottom="@dimen/dp16"
+                        android:text="@string/st_title_Media"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dp16"
+                        android:textStyle="normal" />
+
+                    <!--this part is Gone-->
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true">
+
+                            <ToggleButton
+                                android:id="@+id/st_toggle_enableAnimation"
+                                android:layout_width="@dimen/dp44"
+                                android:layout_height="@dimen/dp40"
+                                android:background="@drawable/st_switch_button"
+                                android:textOff=""
+                                android:textOn="" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/st_txt_enableAnimation"
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/st_Enable_Animation"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:onClick="@{chatSettingsVM::onClickCompress}"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/stsp_txt_compress"
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/st_compress"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+
+                        <ToggleButton
+                            android:id="@+id/stsp_toggle_compress"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isCompress)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCompress(checked)}"
+                            android:textOff=""
+                            android:textOn="" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:onClick="@{chatSettingsVM::onClickTrim}"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/stsp_txt_trim"
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/st_trim"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+
+                        <ToggleButton
+                            android:id="@+id/stsp_toggle_trim"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isTrim)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedTrim(checked)}"
+                            android:textOff=""
+                            android:textOn="" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:onClick="@{chatSettingsVM::onClickDefaultVideo}"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/stsp_txt_open_default_player"
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/dp4"
+                            android:text="@string/open_default_player"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                        <ToggleButton
+                            android:id="@+id/stsp_toggle_open_default_player"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isDefaultPlayer)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedDefaultVideo(checked)}"
+                            android:textOff=""
+                            android:textOn="" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp52"
+                        android:onClick="@{chatSettingsVM::onClickCrop}"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/stsp_txt_crop"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="@string/st_crop"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                        <ToggleButton
+                            android:id="@+id/stsp_toggle_crop"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isCrop)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCrop(checked)}"
+                            android:textOff=""
+                            android:textOn="" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp52"
+                        android:onClick="@{chatSettingsVM::onClickCameraButtonSheet}"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/stsp_txt_cameraBottomSheet"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="@string/st_cameraBottomSheet"
+                            android:textSize="@dimen/dp15"
+                            android:textStyle="normal" />
+
+                        <ToggleButton
+                            android:id="@+id/stsp_toggle_cameraBottomSheet"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:checked="@{safeUnbox(chatSettingsVM.isCameraButtonSheet)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCameraButtonSheet(checked)}"
+                            android:textOff=""
+                            android:textOn="" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>

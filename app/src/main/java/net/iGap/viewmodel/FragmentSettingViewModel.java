@@ -49,6 +49,7 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentBio;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChatBackground;
+import net.iGap.fragments.FragmentChatSettings;
 import net.iGap.fragments.FragmentData;
 import net.iGap.fragments.FragmentDeleteAccount;
 import net.iGap.fragments.FragmentIVandProfile;
@@ -932,6 +933,12 @@ public class FragmentSettingViewModel {
     public void onClickDataShams(View view) {
 
         new HelperFragment(new FragmentData()).setReplace(false).load();
+
+    }
+
+    public void onClickChatSetting(View view) {
+
+        new HelperFragment(new FragmentChatSettings()).setReplace(false).load();
 
     }
 

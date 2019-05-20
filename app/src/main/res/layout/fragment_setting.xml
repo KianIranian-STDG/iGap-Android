@@ -651,6 +651,36 @@
 
           </RelativeLayout>
 
+          <View
+            style="?lineColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+
+          <RelativeLayout
+            android:id="@+id/st_layout_chat_settings"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48">
+
+            <TextView
+              style="?textTitleColorSettingTheme"
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"
+              android:layout_alignParentTop="true"
+              android:gravity="center_vertical"
+              android:onClick="@{fragmentSettingViewModel::onClickChatSetting}"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
+              android:paddingTop="@dimen/dp8"
+              android:text="@string/chat_setting"
+              android:textSize="@dimen/dp15"
+              android:textStyle="normal" />
+
+          </RelativeLayout>
+
 
           <View
             style="?lineColorSettingTheme"
