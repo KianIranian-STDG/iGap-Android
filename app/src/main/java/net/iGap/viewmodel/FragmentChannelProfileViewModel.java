@@ -1066,15 +1066,22 @@ public class FragmentChannelProfileViewModel
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
+                if (majorCode == 5) {
+                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+                } else {
+                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.server_error), false);
+                }
             }
         };
 
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.channel_title_convert_to_private)).content(G.fragmentActivity.getResources().getString(R.string.channel_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
+                if (G.userLogin) {
+                    new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
+                } else {
+                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+                }
             }
         }).negativeText(R.string.no).show();
     }
