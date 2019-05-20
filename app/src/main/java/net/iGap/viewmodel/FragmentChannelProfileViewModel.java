@@ -1165,7 +1165,15 @@ public class FragmentChannelProfileViewModel
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
+                if (majorCode == 5) {
+                    positive.setEnabled(false);
+                    inputUserName.setErrorEnabled(true);
+                    inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.network_error));
+                } else {
+                    positive.setEnabled(false);
+                    inputUserName.setErrorEnabled(true);
+                    inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.server_error));
+                }
             }
 
             @Override
@@ -1207,8 +1215,14 @@ public class FragmentChannelProfileViewModel
 
 
                 if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
-                    String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
-                    new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                    if (G.userLogin) {
+                        String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
+                        new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                    } else {
+                        positive.setEnabled(false);
+                        inputUserName.setErrorEnabled(true);
+                        inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.network_error));
+                    }
                 } else {
                     positive.setEnabled(false);
                     inputUserName.setErrorEnabled(true);
@@ -1238,6 +1252,9 @@ public class FragmentChannelProfileViewModel
             public void onError(final int majorCode, int minorCode, final int time) {
 
                 switch (majorCode) {
+                    case 5 :
+                        HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+
                     case 457:
                         G.handler.post(new Runnable() {
                             @Override
@@ -1259,9 +1276,12 @@ public class FragmentChannelProfileViewModel
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
-                new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
+                if (G.userLogin) {
+                    String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
+                    new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
+                } else {
+                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+                }
             }
         });
 
