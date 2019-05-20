@@ -41,6 +41,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityEnhanced;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
@@ -50,6 +51,7 @@ import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
+import net.iGap.libs.Tuple;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
@@ -667,6 +669,8 @@ public class HelperUrl {
             return linkInfo;
         }
 
+        ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(text);
+        text = AbstractMessage.removeBoldMark(text, boldPlaces);
 
         linkInfo += analysisAtSignLinkInfo(text);
 
