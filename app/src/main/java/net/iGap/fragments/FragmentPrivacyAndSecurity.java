@@ -18,8 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPrivacyAndSecurityBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.request.RequestUserContactsGetBlockedList;
@@ -34,6 +37,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
     private FragmentPrivacyAndSecurityViewModel fragmentPrivacyAndSecurityViewModel;
     private FragmentPrivacyAndSecurityBinding fragmentPrivacyAndSecurityBinding;
+    private HelperToolbar mHelperToolbar;
 
 
     public FragmentPrivacyAndSecurity() {
@@ -58,6 +62,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();
+        setupToolbar();
 
         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
 
@@ -79,6 +84,23 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
         new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
 
+    }
+
+    private void setupToolbar() {
+        
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setDefaultTitle(G.context.getResources().getString(R.string.st_title_Privacy_Security))
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+        
+        fragmentPrivacyAndSecurityBinding.fpsLayoutToolbar.addView(mHelperToolbar.getView());
     }
 
     private void initDataBinding() {

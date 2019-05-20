@@ -22,6 +22,8 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentNotificationAndSoundViewModel;
@@ -40,6 +42,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     private FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding;
     private FragmentNotificationAndSoundViewModel fragmentNotificationAndSoundViewModel;
+    private HelperToolbar mHelperToolbar;
 
 
     public FragmentNotificationAndSound() {
@@ -59,6 +62,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding();
+
+        setupToolbar();
 
         fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -120,6 +125,23 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 }).show();
             }
         });
+    }
+
+    private void setupToolbar() {
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setDefaultTitle(G.context.getResources().getString(R.string.notificaion_and_sound))
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        fragmentNotificationAndSoundBinding.fnsLayoutToolbar.addView(mHelperToolbar.getView());
     }
 
     private void initDataBinding() {

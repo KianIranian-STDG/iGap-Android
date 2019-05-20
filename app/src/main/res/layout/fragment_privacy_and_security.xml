@@ -23,11 +23,17 @@
     tools:context="net.iGap.fragments.FragmentPrivacyAndSecurity"
     tools:ignore="MissingPrefix">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/fps_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"/>
 
     <android.support.design.widget.AppBarLayout
       android:id="@+id/stps_backgroundToolbar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:visibility="gone">
 
       <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -87,7 +93,7 @@
     <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/stps_backgroundToolbar"
+      android:layout_below="@+id/fps_layout_toolbar"
       android:layout_marginTop="1dp"
 
       >
@@ -218,16 +224,17 @@
           style="?backgroundColorSettingTheme"
           android:orientation="vertical">
 
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
+          <TextView
+            fontPath="fonts/IRANSansMobil.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
+            android:paddingBottom="@dimen/dp16"
             android:text="@string/privacy"
-            android:textSize="@dimen/dp18"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
 
@@ -238,8 +245,8 @@
             android:layout_height="@dimen/dp40"
             android:gravity="center_vertical|start"
             android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickBlocked}"
-            android:paddingLeft="@dimen/dp8"
-            android:paddingRight="@dimen/dp8"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/Block_Users"
             style="?textTitleColorSettingTheme"
@@ -259,8 +266,8 @@
               android:layout_height="match_parent"
               android:layout_weight=".5"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/who_can_see_my_avatar"
               style="?textTitleColorSettingTheme"
@@ -273,11 +280,12 @@
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeMyAvatar , default=@string/everybody}"
               style="?textSubColorSettingTheme"
+              android:textColor="@color/setting_items_value_color"
               android:textSize="@dimen/dp14"
               android:textStyle="normal"
 
@@ -299,8 +307,8 @@
               android:layout_height="match_parent"
               android:layout_weight=".5"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:singleLine="true"
               android:text="@string/who_can_invite_you_to_channel_s"
@@ -314,11 +322,12 @@
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteChannel , default=@string/everybody}"
               style="?textSubColorSettingTheme"
+              android:textColor="@color/setting_items_value_color"
               android:textSize="@dimen/dp14"
               android:textStyle="normal"
 
@@ -338,8 +347,8 @@
               android:layout_height="match_parent"
               android:layout_weight=".5"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:singleLine="true"
               android:text="@string/who_can_invite_you_to_group_s"
@@ -353,11 +362,12 @@
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteGroup , default=@string/everybody}"
               style="?textSubColorSettingTheme"
+              android:textColor="@color/setting_items_value_color"
               android:textSize="@dimen/dp14"
               android:textStyle="normal"
 
@@ -377,8 +387,8 @@
               android:layout_height="match_parent"
               android:layout_weight=".5"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/who_is_allowed_to_voice_call"
               style="?textTitleColorSettingTheme"
@@ -391,11 +401,12 @@
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVoiceCall , default=@string/everybody}"
               style="?textSubColorSettingTheme"
+              android:textColor="@color/setting_items_value_color"
               android:textSize="@dimen/dp14"
               android:textStyle="normal"
 
@@ -415,8 +426,8 @@
               android:layout_height="match_parent"
               android:layout_weight=".5"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/who_is_allowed_to_video_call"
               style="?textTitleColorSettingTheme"
@@ -429,11 +440,12 @@
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVideoCall , default=@string/everybody}"
               style="?textSubColorSettingTheme"
+              android:textColor="@color/setting_items_value_color"
               android:textSize="@dimen/dp14"
               android:textStyle="normal"
 
@@ -453,8 +465,8 @@
               android:layout_height="match_parent"
               android:layout_weight=".5"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/last_seen"
               style="?textTitleColorSettingTheme"
@@ -467,11 +479,12 @@
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeLastSeen , default=@string/everybody}"
               style="?textSubColorSettingTheme"
+              android:textColor="@color/setting_items_value_color"
               android:textSize="@dimen/dp14"
               android:textStyle="normal" />
           </LinearLayout>
@@ -479,6 +492,14 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="?lineColorSettingTheme"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"/>
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -500,17 +521,17 @@
             android:textStyle="normal"
             android:visibility="gone" />
 
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
+          <TextView
+            fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:paddingBottom="@dimen/dp8"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/Security"
-            android:textSize="@dimen/dp18"
+            android:textSize="@dimen/dp16"
+            android:textColor="@color/black"
             android:textStyle="normal" />
 
           <View
@@ -540,19 +561,13 @@
             android:layout_height="@dimen/dp40"
             android:gravity="center_vertical|start"
             android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickPassCode}"
-            android:paddingLeft="@dimen/dp8"
-            android:paddingRight="@dimen/dp8"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/two_step_pass_code"
             style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp14"
             android:textStyle="normal" />
-
-          <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            style="?lineColorSettingTheme"
-            android:visibility="visible" />
 
           <TextView
             android:id="@+id/stps_twoStepVerification"
@@ -561,19 +576,13 @@
             android:layout_height="@dimen/dp40"
             android:gravity="center_vertical|start"
             android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickTwoStepVerification}"
-            android:paddingLeft="@dimen/dp8"
-            android:paddingRight="@dimen/dp8"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/two_step_verification"
             style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp14"
             android:textStyle="normal" />
-
-          <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            style="?lineColorSettingTheme"
-            android:visibility="visible" />
 
           <TextView
             android:id="@+id/stps_activitySessions"
@@ -582,8 +591,8 @@
             android:layout_height="@dimen/dp40"
             android:gravity="center_vertical|start"
             android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickActivitySessions}"
-            android:paddingLeft="@dimen/dp8"
-            android:paddingRight="@dimen/dp8"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/Active_Sessions"
             style="?textTitleColorSettingTheme"
@@ -597,23 +606,32 @@
           <!--/>-->
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="?lineColorSettingTheme"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"/>
+
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           style="?backgroundColorSettingTheme"
           android:orientation="vertical">
 
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
+          <TextView
+            fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/dp8"
+            android:paddingBottom="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
-            android:paddingTop="@dimen/dp12"
+            android:paddingTop="@dimen/dp16"
             android:text="@string/Account_Self_destruction"
-            android:textSize="@dimen/dp18"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
           <LinearLayout
@@ -629,8 +647,8 @@
               android:layout_height="match_parent"
               android:layout_weight=".5"
               android:gravity="center_vertical|start"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/if_you_are_away_for"
               style="?textTitleColorSettingTheme"
@@ -644,10 +662,11 @@
               android:layout_height="match_parent"
               android:gravity="center_vertical|start"
               android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp8"
+              android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSelfDestruction , default=@string/year_1}"
               style="?textSubColorSettingTheme"
+              android:textColor="@color/setting_items_value_color"
               android:textSize="@dimen/dp14"
               android:textStyle="normal"
 
@@ -659,7 +678,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
-            android:padding="@dimen/dp8"
+            android:padding="@dimen/dp16"
             android:text="@string/desc_self_destroy"
             style="?textSubColorSettingTheme"
             android:textSize="@dimen/dp12"
