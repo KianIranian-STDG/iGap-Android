@@ -244,6 +244,193 @@
           android:layout_margin="@dimen/dp10"/>
 
 
+      <LinearLayout
+          style="?backgroundColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingTop="@dimen/dp4"
+          android:visibility="visible">
+
+        <TextView
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp16"
+            android:paddingTop="@dimen/dp12"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:text="@string/auto_download_media"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp16"
+            android:textStyle="normal" />
+
+
+        <TextView
+            android:id="@+id/st_txt_autoDownloadData"
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:gravity="center_vertical"
+            android:onClick="@{activityManageSpaceViewModel::onClickAutoDownloadData}"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="@string/st_auto_download_data"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+
+        <TextView
+            android:id="@+id/st_txt_autoDownloadWifi"
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:gravity="center_vertical"
+            android:onClick="@{activityManageSpaceViewModel::onClickAutoDownloadWifi}"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:text="@string/st_auto_download_wifi"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+
+        <TextView
+            android:id="@+id/st_txt_autoDownloadRoaming"
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:gravity="center_vertical"
+            android:onClick="@{activityManageSpaceViewModel::onClickAutoDownloadRoaming}"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:text="@string/st_auto_download_roaming"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+
+
+        <!--this part is Gone-->
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/dp16"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingStart="@dimen/dp16"
+            android:visibility="gone">
+
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_centerInParent="true">
+
+            <ToggleButton
+                android:id="@+id/st_toggle_enableAnimation"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp40"
+                android:background="@drawable/st_switch_button"
+                android:textOff=""
+                android:textOn="" />
+          </LinearLayout>
+
+          <TextView
+              android:id="@+id/st_txt_enableAnimation"
+              style="?textTitleColorSettingTheme"
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_centerInParent="true"
+              android:gravity="center_vertical"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/st_Enable_Animation"
+              android:textSize="@dimen/dp15"
+              android:textStyle="normal" />
+
+
+        </RelativeLayout>
+
+      </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="?lineColorSettingTheme"
+            android:layout_margin="@dimen/dp10"/>
+
+        <LinearLayout
+            style="?backgroundColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dp4"
+            android:visibility="visible">
+
+          <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingBottom="@dimen/dp16"
+              android:paddingTop="@dimen/dp12"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
+              android:text="@string/auto_play_media"
+              android:textColor="@color/black"
+              android:textSize="@dimen/dp16"
+              android:textStyle="normal" />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:onClick="@{activityManageSpaceViewModel::onClickAutoGif}"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/dp16"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingStart="@dimen/dp16">
+
+          <TextView
+              android:id="@+id/st_txt_autoGif"
+              style="?textTitleColorSettingTheme"
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/st_auto_gif"
+              android:textSize="@dimen/dp15"
+              android:textStyle="normal" />
+
+          <ToggleButton
+              android:id="@+id/st_toggle_autoGif"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:checked="@{safeUnbox(activityManageSpaceViewModel.isAutoGif)}"
+              android:onCheckedChanged="@{(switch, checked) -> activityManageSpaceViewModel.onCheckedChangeAutoGif(checked)}"
+              android:textOff=""
+              android:textOn="" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          style="?lineColorSettingTheme"
+          android:layout_margin="@dimen/dp10"/>
+
+
         <TextView
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"

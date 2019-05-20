@@ -2710,5 +2710,7 @@
     <string name="item_selected"> item Selected</string>
     <string name="disk_and_network_usage">Disk and Network Usage</string>
     <string name="cache">Cache</string>
+    <string name="auto_play_media">Auto-play Media</string>
+    <string name="auto_download_media">Auto-download Media</string>
 
 </resources>
