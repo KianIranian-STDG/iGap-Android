@@ -295,7 +295,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance1(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false);
+        FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false , true);
         new HelperFragment(fragment).setReplace(false).load();
     }
 

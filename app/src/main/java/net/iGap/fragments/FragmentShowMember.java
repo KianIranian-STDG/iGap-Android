@@ -52,10 +52,12 @@ import net.iGap.interfaces.OnGroupGetMemberList;
 import net.iGap.interfaces.OnGroupKickAdmin;
 import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupKickModerator;
+import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
@@ -74,7 +76,10 @@ import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestChannelGetMemberList;
+import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
@@ -100,6 +105,7 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
     public static final String USERID = "USER_ID";
     public static final String SELECTEDROLE = "SELECTED_ROLE";
     public static final String ISNEEDGETMEMBERLIST = "IS_NEED_GET_MEMBER_LIST";
+    public static final String ISGROUP = "IS_GROUP";
     public static List<StructMessageInfo> lists = new ArrayList<>();
     public static OnComplete infoUpdateListenerCount;
     private static Fragment fragment;
@@ -125,8 +131,10 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
     private ProtoGlobal.Room.Type roomType;
     private boolean isOne = true;
 
+    private Realm realmGroupProfile;
     private HelperToolbar mHelperToolbar;
     private TextView mBtnAdd ;
+    private boolean isGroup;
 
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
@@ -149,6 +157,20 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
         bundle.putLong(USERID, userid);
         bundle.putString(SELECTEDROLE, selectedRole);
         bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
+        FragmentShowMember fragmentShowMember = new FragmentShowMember();
+        fragmentShowMember.setArguments(bundle);
+        return fragmentShowMember;
+    }
+
+    public static FragmentShowMember newInstance2(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList , boolean isGroup) {
+        fragment = frg;
+        Bundle bundle = new Bundle();
+        bundle.putLong(ROOMIDARGUMENT, roomId);
+        bundle.putString(MAINROOL, mainrool);
+        bundle.putLong(USERID, userid);
+        bundle.putString(SELECTEDROLE, selectedRole);
+        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
+        bundle.putBoolean(ISGROUP, isGroup);
         FragmentShowMember fragmentShowMember = new FragmentShowMember();
         fragmentShowMember.setArguments(bundle);
         return fragmentShowMember;
@@ -192,6 +214,12 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
             //isNeedGetMemberList = getArguments().getBoolean(ISNEEDGETMEMBERLIST);
             isNeedGetMemberList = true;
             Log.i("iGap", "onCreateView: hi"+selectedRole);
+
+            try {
+                isGroup = getArguments().getBoolean(ISGROUP);
+            }catch (Exception e){
+
+            }
 
             roomType = RealmRoom.detectType(mRoomID);
 
@@ -427,8 +455,12 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())){
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
-            mBtnAdd.setVisibility(View.GONE);
-            view.findViewById(R.id.fcm_splitter_add).setVisibility(View.GONE);
+
+            if (isGroup){
+                mBtnAdd.setText(context.getResources().getString(R.string.add_new_member));
+            }else{
+                mBtnAdd.setText(context.getResources().getString(R.string.add_new_subscriber));
+            }
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())){
 
@@ -451,7 +483,7 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
 
           }else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())){
 
-              //share link
+              goToAddMember();
           }
 
 
@@ -557,6 +589,46 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
         };
 
         mRecyclerView.addOnScrollListener(scrollListener);
+    }
+
+    private void goToAddMember() {
+
+            List<StructContactInfo> userList = Contacts.retrieve(null);
+            RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), mRoomID);
+
+            for (int i = 0; i < memberList.size(); i++) {
+                for (int j = 0; j < userList.size(); j++) {
+                    if (userList.get(j).peerId == memberList.get(i).getPeerId()) {
+                        userList.remove(j);
+                        break;
+                    }
+                }
+            }
+
+            Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
+                @Override
+                public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+
+                    if (isGroup) {
+                        for (int i = 0; i < list.size(); i++) {
+                            new RequestGroupAddMember().groupAddMember(mRoomID, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(mRoomID, countForShowLastMessage));
+                        }
+                    }else {
+                        for (int i = 0; i < list.size(); i++) {
+                            new RequestChannelAddMember().channelAddMember(mRoomID, list.get(i).peerId);
+                        }
+                    }
+                }
+            });
+
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("DIALOG_SHOWING", true);
+            bundle.putLong("COUNT_MESSAGE", 0);
+            fragment.setArguments(bundle);
+
+            new HelperFragment(fragment).setReplace(false).load();
+
+
     }
 
     private void loadMoreMember() {
@@ -1271,6 +1343,14 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
                 btnMenu = (MaterialDesignTextView) itemView.findViewById(R.id.cigp_moreButton);
             }
         }
+    }
+
+
+    private Realm getRealm() {
+        if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
+            realmGroupProfile = Realm.getDefaultInstance();
+        }
+        return realmGroupProfile;
     }
 
 }
