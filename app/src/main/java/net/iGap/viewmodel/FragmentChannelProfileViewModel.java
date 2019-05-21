@@ -38,6 +38,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -164,7 +165,7 @@ public class FragmentChannelProfileViewModel
     private boolean isSignature;
     private boolean isPopup = false;
     private boolean isNeedGetMemberList = true;
-    private Fragment fragment;
+    private FragmentChannelProfile fragment;
     private Realm realmChannelProfile;
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
@@ -1053,6 +1054,7 @@ public class FragmentChannelProfileViewModel
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        hideProgressBar();
                         isPrivate = true;
                         if (inviteLink == null || inviteLink.isEmpty() || inviteLink.equals("https://")) {
                             new RequestChannelRevokeLink().channelRevokeLink(roomId);
@@ -1066,11 +1068,17 @@ public class FragmentChannelProfileViewModel
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                if (majorCode == 5) {
-                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
-                } else {
-                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.server_error), false);
-                }
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+                        if (majorCode == 5) {
+                            HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+                        } else {
+                            HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.server_error), false);
+                        }
+                    }
+                });
             }
         };
 
@@ -1078,6 +1086,7 @@ public class FragmentChannelProfileViewModel
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 if (G.userLogin) {
+                    showProgressBar();
                     new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
                 } else {
                     HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
@@ -1134,6 +1143,13 @@ public class FragmentChannelProfileViewModel
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutUserName.addView(inputUserName, layoutParams);
+        ProgressBar progressBar = new ProgressBar(G.fragmentActivity);
+        LinearLayout.LayoutParams progParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        progParams.gravity = Gravity.CENTER;
+        progressBar.setLayoutParams(progParams);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.GONE);
+        layoutUserName.addView(progressBar);
 
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
@@ -1245,6 +1261,8 @@ public class FragmentChannelProfileViewModel
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        positive.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
 
                         isPrivate = false;
                         dialog.dismiss();
@@ -1257,21 +1275,22 @@ public class FragmentChannelProfileViewModel
 
             @Override
             public void onError(final int majorCode, int minorCode, final int time) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        positive.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
+                        switch (majorCode) {
+                            case 5 :
+                                HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
 
-                switch (majorCode) {
-                    case 5 :
-                        HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
-
-                    case 457:
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                            case 457:
                                 if (dialog.isShowing()) dialog.dismiss();
                                 dialogWaitTime(R.string.limit_for_set_username, time, majorCode);
-                            }
-                        });
-                        break;
-                }
+                                break;
+                        }
+                    }
+                });
             }
 
             @Override
@@ -1283,10 +1302,14 @@ public class FragmentChannelProfileViewModel
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fragment.closeKeyboard(view);
                 if (G.userLogin) {
                     String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
+                    progressBar.setVisibility(View.VISIBLE);
+                    positive.setEnabled(false);
                     new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
                 }
             }

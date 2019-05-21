@@ -28,15 +28,6 @@
     tools:ignore="MissingPrefix">
 
 
-    <ProgressBar
-      android:id="@+id/agp_prgWaiting_addContact"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center"
-      android:indeterminate="true"
-      android:visibility="@{safeUnbox(fragmentGroupProfileViewModel.prgWaitingVisibility)}" />
-
     <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -747,6 +738,15 @@
         app:layout_anchorGravity="bottom|right|end" />
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <ProgressBar
+        android:id="@+id/agp_prgWaiting_addContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="@{safeUnbox(fragmentGroupProfileViewModel.prgWaitingVisibility)}" />
 
   </RelativeLayout>
 </layout>
