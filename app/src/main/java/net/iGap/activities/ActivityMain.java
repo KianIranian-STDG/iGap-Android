@@ -1844,7 +1844,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                G.onUserSessionLogout = new OnUserSessionLogout() {
+                                new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
                                     @Override
                                     public void onUserSessionLogout() {
 
@@ -1872,8 +1872,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                             }
                                         });
                                     }
-                                };
-                                new RequestUserSessionLogout().userSessionLogout();
+                                });
                             }
                         })
                         .show();

@@ -1,84 +1,63 @@
 package net.iGap.fragments;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.databinding.FragmentFinancialServicesBinding;
+import net.iGap.viewmodel.FinancialServicesViewModel;
 
-public class FragmentFinancialServices extends BaseFragment {
+import org.jetbrains.annotations.NotNull;
 
-    public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
-    boolean openInMain = false;
+public class FragmentFinancialServices extends FragmentToolBarBack {
 
-    public static FragmentFinancialServices newInstance(boolean openInFragmentMain) {
+    private FragmentFinancialServicesBinding binding;
+    private FinancialServicesViewModel viewModel;
+
+    public static FragmentFinancialServices newInstance() {
         FragmentFinancialServices fragmentFinancialServices = new FragmentFinancialServices();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(OPEN_IN_FRAGMENT_MAIN, openInFragmentMain);
-        fragmentFinancialServices.setArguments(bundle);
         return fragmentFinancialServices;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_financial_services, container, false);
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_financial_services, root, true);
+        viewModel = new FinancialServicesViewModel();
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
-
-        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
-
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        binding.walletPriceView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
+            public void onGlobalLayout() {
+                // Ensure you call it only once
+                binding.walletPriceValue.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                ConstraintSet set = new ConstraintSet();
+                set.clone(binding.root);
+                set.constrainCircle(binding.walletPointer.getId(), binding.walletPriceView.getId(), binding.walletPriceView.getWidth() / 2, 0);
+                set.applyTo(binding.root);
             }
         });
 
-
-        TextView txtTop = view.findViewById(R.id.top);
-        txtTop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = "https://taps.io/get-top";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+        viewModel.walletPointerPosition.observe(this, integer -> {
+            if (integer != null) {
+                ConstraintSet set = new ConstraintSet();
+                set.clone(binding.root);
+                set.constrainCircle(binding.walletPointer.getId(), binding.walletPriceView.getId(), binding.walletPriceView.getWidth() / 2, integer);
+                set.applyTo(binding.root);
             }
         });
 
-
-        TextView txtPagear = view.findViewById(R.id.paygear);
-        txtPagear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = "https://taps.io/get-paygear";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
-        });
-
-
-        if (openInMain) {
-            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
-
-        }
 
     }
 

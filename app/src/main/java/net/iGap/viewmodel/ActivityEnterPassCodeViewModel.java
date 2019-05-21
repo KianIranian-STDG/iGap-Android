@@ -310,7 +310,7 @@ public class ActivityEnterPassCodeViewModel {
     }
 
     private void logout(final View v) {
-        G.onUserSessionLogout = new OnUserSessionLogout() {
+        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
             public void onUserSessionLogout() {
                 G.handler.post(new Runnable() {
@@ -337,9 +337,7 @@ public class ActivityEnterPassCodeViewModel {
                     }
                 });
             }
-        };
-
-        new RequestUserSessionLogout().userSessionLogout();
+        });
         HelperLogout.logout();
     }
 

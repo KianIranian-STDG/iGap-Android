@@ -268,7 +268,7 @@ public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyCli
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        G.onUserSessionLogout = new OnUserSessionLogout() {
+                        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
                             @Override
                             public void onUserSessionLogout() {
 
@@ -296,8 +296,7 @@ public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyCli
                                     }
                                 });
                             }
-                        };
-                        new RequestUserSessionLogout().userSessionLogout();
+                        });
                     }
                 })
                 .show();

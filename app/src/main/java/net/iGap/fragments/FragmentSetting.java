@@ -3,21 +3,18 @@ package net.iGap.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,10 +24,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.activities.ActivityManageSpace;
 import net.iGap.databinding.FragmentSettingBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -39,7 +39,7 @@ import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserAvatarResponse;
-import net.iGap.interfaces.OnUserIVandGetScore;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -48,23 +48,15 @@ import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
-import net.iGap.request.RequestUserIVandGetScore;
-import net.iGap.request.RequestUserProfileGetBio;
-import net.iGap.request.RequestUserProfileGetEmail;
-import net.iGap.request.RequestUserProfileGetGender;
-import net.iGap.request.RequestUserProfileGetRepresentative;
 import net.iGap.viewmodel.FragmentSettingViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-
-import io.realm.Realm;
-
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 /**
@@ -74,15 +66,17 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
     public static String pathSaveImage;
     public static DateType dateType;
-    public static onRemoveFragmentSetting onRemoveFragmentSetting;
-    public static onClickBack onClickBack;
+    /*public static onRemoveFragmentSetting onRemoveFragmentSetting;*/
+    /*public static onClickBack onClickBack;*/
     public ProgressBar prgWait;
     private SharedPreferences sharedPreferences;
     private EmojiTextViewE txtNickName;
     private Uri uriIntent;
     private long idAvatar;
-    private FragmentSettingBinding fragmentSettingBinding;
-    private FragmentSettingViewModel fragmentSettingViewModel;
+
+    private View submitButton;
+    private FragmentSettingBinding binding;
+    private FragmentSettingViewModel viewModel;
 
     public FragmentSetting() {
         // Required empty public constructor
@@ -90,91 +84,98 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentSettingBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
-        return attachToSwipeBack(fragmentSettingBinding.getRoot());
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
+        viewModel = new FragmentSettingViewModel();
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);
-        realm.close();
 
-        if (isIntroduce) {
-            new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
-                @Override
-                public void onRepresent(String phoneNumber) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
-                    } catch (Exception e) {
-                    }
-                }
-
-                @Override
-                public void onFailed() {
-                }
-            });
-        }
-
-        initDataBinding();
-
-        AppUtils.setProgresColler(fragmentSettingBinding.stPrgWaitingAddContact);
-
-        new RequestUserProfileGetGender().userProfileGetGender();
-        new RequestUserProfileGetEmail().userProfileGetEmail();
-        new RequestUserProfileGetBio().getBio();
-
-        final TextView titleToolbar = fragmentSettingBinding.stTxtTitleToolbar;
-        final ViewGroup viewGroup = fragmentSettingBinding.stParentLayoutCircleImage;
-        fragmentSettingBinding.stAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, final int verticalOffset) {
-
-                G.handler.post(new Runnable() {
+        HelperToolbar t = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_checked)
+                .setDefaultTitle(getString(R.string.settings))
+                .setLogoShown(false)
+                .setCounterShown(true)
+                .setListener(new ToolbarListener() {
                     @Override
-                    public void run() {
-                        if (verticalOffset < -5) {
-                            viewGroup.animate().alpha(0).setDuration(500);
-                            titleToolbar.animate().alpha(1).setDuration(250);
-                            viewGroup.clearAnimation();
-                            titleToolbar.clearAnimation();
-                            titleToolbar.setVisibility(View.VISIBLE);
-                            viewGroup.setVisibility(View.GONE);
-                        } else {
-
-                            titleToolbar.animate().alpha(0).setDuration(250);
-                            viewGroup.animate().alpha(1).setDuration(500);
-                            viewGroup.clearAnimation();
-                            titleToolbar.clearAnimation();
-                            viewGroup.setVisibility(View.VISIBLE);
-                            titleToolbar.setVisibility(View.GONE);
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
                         }
                     }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+
+                    }
                 });
+        binding.toolbar.addView(t.getView());
+        submitButton = t.getRightButton();
+        submitButton.setVisibility(View.GONE);
+
+        viewModel.goToShowAvatar.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.setting);
+                new HelperFragment(fragment).setReplace(false).load();
             }
         });
 
-        onClickBack = new onClickBack() {
+        viewModel.showDialogDeleteAccount.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                showDeleteAccountDialog();
+            }
+        });
+
+        viewModel.goToManageSpacePage.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                startActivity(new Intent(G.fragmentActivity, ActivityManageSpace.class));
+            }
+        });
+
+        viewModel.showDialogLogout.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                showDialogLogout();
+            }
+        });
+
+        viewModel.showError.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
+            }
+        });
+
+        viewModel.showSubmitButton.observe(this, aBoolean -> {
+            if (aBoolean != null) {
+                Log.wtf("fragment setting","value of show visibility: "+aBoolean);
+                submitButton.setVisibility(aBoolean ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        viewModel.showDialogChooseImage.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                startDialog();
+            }
+        });
+
+        AppUtils.setProgresColler(binding.loading);
+
+
+
+
+        /*onClickBack = new onClickBack() {
             @Override
             public void back() {
                 G.fragmentActivity.onBackPressed();
             }
-        };
-
-
-        fragmentSettingBinding.stFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fragmentSettingBinding.stFabSetPic.setColorFilter(Color.WHITE);
-
-        fragmentSettingBinding.stFabSetPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startDialog(R.array.profile);
-            }
-        });
+        };*/
 
 
         FragmentShowAvatars.onComplete = new OnComplete() {
@@ -186,7 +187,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 if (messageOne != null && !messageOne.equals("")) {
                     mAvatarId = Long.parseLong(messageOne);
                 }
-                avatarHandler.avatarDelete(new ParamWithAvatarType(fragmentSettingBinding.stImgCircleImage, fragmentSettingViewModel.userId)
+                avatarHandler.avatarDelete(new ParamWithAvatarType(binding.userAvatar, viewModel.userId)
                         .avatarType(AvatarHandler.AvatarType.USER), mAvatarId);
             }
         };
@@ -198,12 +199,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 pathSaveImage = path;
                 long lastUploadedAvatarId = idAvatar + 1L;
 
-                showProgressBar();
+                viewModel.showLoading.setValue(true);
                 HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
                     @Override
                     public void OnProgress(int progress, FileUploadStructure struct) {
                         if (progress < 100) {
-                            fragmentSettingBinding.stPrgWaitingAddContact.setProgress(progress);
+                            binding.loading.setProgress(progress);
                         } else {
                             new RequestUserAvatarAdd().userAddAvatar(struct.token);
                         }
@@ -211,7 +212,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                     @Override
                     public void OnError() {
-                        hideProgressBar();
+                        viewModel.showLoading.setValue(false);
                     }
                 });
             }
@@ -220,12 +221,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         setAvatar();
 
 
-        onRemoveFragmentSetting = new onRemoveFragmentSetting() {
+        /*onRemoveFragmentSetting = new onRemoveFragmentSetting() {
             @Override
             public void removeFragment() {
                 removeFromBaseFragment(FragmentSetting.this);
             }
-        };
+        };*/
 
 
     }
@@ -241,16 +242,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             setAvatar();
         } else {
 
-            avatarHandler.avatarAdd(fragmentSettingViewModel.userId, pathSaveImage, avatar, new OnAvatarAdd() {
+            avatarHandler.avatarAdd(viewModel.userId, pathSaveImage, avatar, new OnAvatarAdd() {
                 @Override
                 public void onAvatarAdd(final String avatarPath) {
-
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideProgressBar();
-                            setImage(avatarPath);
-                        }
+                    G.handler.post(() -> {
+                        viewModel.showLoading.setValue(false);
+                        setImage(avatarPath);
                     });
                 }
             });
@@ -260,12 +257,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
     @Override
     public void onAvatarAddTimeOut() {
-        hideProgressBar();
+        viewModel.showLoading.setValue(false);
     }
 
     @Override
     public void onAvatarError() {
-        hideProgressBar();
+        viewModel.showLoading.setValue(false);
     }
 
     @Override
@@ -277,14 +274,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onResume() {
         super.onResume();
-        fragmentSettingViewModel.onResume();
-        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
+        viewModel.onResume();
+        /*new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(int score) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        fragmentSettingViewModel.updateIvandScore(score);
+                        viewModel.updateIvandScore(score);
                     }
                 });
             }
@@ -293,14 +290,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             public void onError() {
 
             }
-        });
+        });*/
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        fragmentSettingViewModel.onPause();
+        viewModel.onPause();
 
     }
 
@@ -348,13 +345,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onStop() {
         super.onStop();
-        fragmentSettingViewModel.onStop();
+        viewModel.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        fragmentSettingViewModel.onDestroy();
+        viewModel.onDestroy();
     }
 
 
@@ -371,14 +368,9 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         //super.onSaveInstanceState(outState);
     }
 
-    private void initDataBinding() {
-        fragmentSettingViewModel = new FragmentSettingViewModel(this, fragmentSettingBinding);
-        fragmentSettingBinding.setFragmentSettingViewModel(fragmentSettingViewModel);
-    }
+    private void startDialog() {
 
-    private void startDialog(int r) {
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(r).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
@@ -405,7 +397,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                             public void Allow() {
                                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                 intent.setType("image/*");
-                                startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                                startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                             }
 
                             @Override
@@ -447,40 +439,99 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     }
 
     private void setAvatar() {
-        avatarHandler.getAvatar(new ParamWithAvatarType(fragmentSettingBinding.stImgCircleImage, fragmentSettingViewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(binding.userAvatar, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     private void setImage(String path) {
         if (path != null) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), fragmentSettingBinding.stImgCircleImage);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), binding.userAvatar);
             if (G.onChangeUserPhotoListener != null) {
                 G.onChangeUserPhotoListener.onChangePhoto(path);
             }
         }
     }
 
-    private void showProgressBar() {
+    /*private void showProgressBar() {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (fragmentSettingBinding.stPrgWaitingAddContact != null) {
-                    fragmentSettingBinding.stPrgWaitingAddContact.setVisibility(View.VISIBLE);
+                if (binding.stPrgWaitingAddContact != null) {
+                    binding.stPrgWaitingAddContact.setVisibility(View.VISIBLE);
                     G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
-    }
+    }*/
 
-    private void hideProgressBar() {
+    /*private void hideProgressBar() {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (fragmentSettingBinding.stPrgWaitingAddContact != null) {
-                    fragmentSettingBinding.stPrgWaitingAddContact.setVisibility(View.GONE);
+                if (binding.stPrgWaitingAddContact != null) {
+                    binding.stPrgWaitingAddContact.setVisibility(View.GONE);
                     G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
+    }*/
+
+    private void showDialogLogout() {
+        final MaterialDialog inDialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.dialog_content_custom, true).build();
+        View v = inDialog.getCustomView();
+
+        inDialog.show();
+
+        TextView txtTitle = v.findViewById(R.id.txtDialogTitle);
+        txtTitle.setText(getString(R.string.log_out));
+
+        TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
+        iconTitle.setText(R.string.md_exit_app);
+
+        TextView txtContent = v.findViewById(R.id.txtDialogContent);
+        txtContent.setText(R.string.content_log_out);
+
+        TextView txtCancel = v.findViewById(R.id.txtDialogCancel);
+        TextView txtOk = v.findViewById(R.id.txtDialogOk);
+
+        txtOk.setOnClickListener(v1 -> {
+            inDialog.dismiss();
+            viewModel.logout();
+        });
+
+        txtCancel.setOnClickListener(v12 -> inDialog.dismiss());
+    }
+
+    private void showDeleteAccountDialog() {
+        final MaterialDialog inDialog = new MaterialDialog.Builder(getContext()).customView(R.layout.dialog_content_custom, true).build();
+        View v = inDialog.getCustomView();
+
+        inDialog.show();
+
+        TextView txtTitle = v.findViewById(R.id.txtDialogTitle);
+        txtTitle.setText(getString(R.string.delete_account));
+
+        TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
+        iconTitle.setText(R.string.md_delete_acc);
+
+        TextView txtContent = v.findViewById(R.id.txtDialogContent);
+        String text = getString(R.string.delete_account_text) + "\n" + getString(R.string.delete_account_text_desc);
+        txtContent.setText(text);
+
+        TextView txtCancel = v.findViewById(R.id.txtDialogCancel);
+        TextView txtOk = v.findViewById(R.id.txtDialogOk);
+
+
+        txtOk.setOnClickListener(v1 -> {
+            inDialog.dismiss();
+            FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("PHONE", viewModel.phoneNumber);
+            fragmentDeleteAccount.setArguments(bundle);
+            new HelperFragment(fragmentDeleteAccount).setReplace(false).load();
+        });
+
+        txtCancel.setOnClickListener(v12 -> inDialog.dismiss());
     }
 
     public interface DateType {
@@ -488,11 +539,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         void dataName(String type);
     }
 
-    public interface onRemoveFragmentSetting {
+   /* public interface onRemoveFragmentSetting {
 
         void removeFragment();
 
-    }
+    }*/
 
     public interface onClickBack {
 

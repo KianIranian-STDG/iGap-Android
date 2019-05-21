@@ -207,7 +207,7 @@ public class FragmentActiveSessions extends BaseFragment {
                                 prgWaiting.setVisibility(View.VISIBLE);
                                 G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                                G.onUserSessionLogout = new OnUserSessionLogout() {
+                                new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
                                     @Override
                                     public void onUserSessionLogout() {
 
@@ -246,9 +246,7 @@ public class FragmentActiveSessions extends BaseFragment {
                                             }
                                         });
                                     }
-                                };
-
-                                new RequestUserSessionLogout().userSessionLogout();
+                                });
                             }
                         }).show();
                     } else {
