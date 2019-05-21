@@ -92,7 +92,8 @@ public class FragmentRegister extends BaseFragment {
         edtCodeNumber = fragmentRegisterBinding.countyCode;
         edtPhoneNumber = fragmentRegisterBinding.phoneNumber;
 
-        SpannableString ss = new SpannableString("قوانین و مقررات را می پذیرم");
+        String t = String.format(getString(R.string.terms_and_condition),getString(R.string.terms_and_condition_clickable));
+        SpannableString ss = new SpannableString(t);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NotNull View textView) {
@@ -105,7 +106,7 @@ public class FragmentRegister extends BaseFragment {
                 ds.setUnderlineText(false);
             }
         };
-        ss.setSpan(clickableSpan, 0, 15, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan, t.indexOf(getString(R.string.terms_and_condition_clickable)), t.indexOf(getString(R.string.terms_and_condition_clickable)) + getString(R.string.terms_and_condition_clickable).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         fragmentRegisterBinding.conditionText.setText(ss);
         fragmentRegisterBinding.conditionText.setMovementMethod(LinkMovementMethod.getInstance());

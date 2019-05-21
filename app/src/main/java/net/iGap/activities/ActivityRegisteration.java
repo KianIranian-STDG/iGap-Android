@@ -7,9 +7,11 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegistrationNickname;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.module.StartupActions;
 
 import java.io.IOException;
@@ -42,6 +44,23 @@ public class ActivityRegisteration extends ActivityEnhanced {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        G.onRefreshActivity = new OnRefreshActivity() {
+            @Override
+            public void refresh(String changeLanguag) {
+
+                G.isUpdateNotificaionColorMain = false;
+                G.isUpdateNotificaionColorChannel = false;
+                G.isUpdateNotificaionColorGroup = false;
+                G.isUpdateNotificaionColorChat = false;
+                G.isUpdateNotificaionCall = false;
+
+                new HelperFragment().removeAll(false);
+
+                ActivityRegisteration.this.recreate();
+
+            }
+        };
     }
 
     private void startApp() {

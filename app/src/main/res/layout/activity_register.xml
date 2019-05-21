@@ -29,7 +29,7 @@
                 android:id="@+id/logo"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:src="@mipmap/logo"
+                android:src="@drawable/logo"
                 app:layout_constraintBottom_toTopOf="@id/description"
                 app:layout_constraintDimensionRatio="16:9"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -148,7 +148,9 @@
                 android:checked="@{fragmentRegisterViewModel.termsAndConditionIsChecked}"
                 android:onCheckedChanged="@{(v,isChecked)->fragmentRegisterViewModel.termsOnCheckChange(isChecked)}"
                 app:layout_constraintBottom_toTopOf="@id/registerButton"
-                app:layout_constraintRight_toRightOf="@id/rg_btn_choseCountry"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".16"
                 app:layout_constraintTop_toBottomOf="@id/phoneNumber" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -157,7 +159,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="@id/conditionCheckBox"
                 app:layout_constraintBottom_toBottomOf="@id/conditionCheckBox"
-                app:layout_constraintRight_toLeftOf="@id/conditionCheckBox"/>
+                app:layout_constraintStart_toEndOf="@id/conditionCheckBox"/>
 
             <android.support.design.button.MaterialButton
                 android:id="@+id/registerButton"

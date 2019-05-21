@@ -2735,5 +2735,7 @@
     <string name="auto_play_media">Auto-play Media</string>
     <string name="auto_download_media">Auto-download Media</string>
     <string name="chat_setting">Chat Settings</string>
+    <string name="terms_and_condition">أقبل %s</string>
+    <string name="terms_and_condition_clickable">القواعد واللوائح</string>
 
 </resources>
