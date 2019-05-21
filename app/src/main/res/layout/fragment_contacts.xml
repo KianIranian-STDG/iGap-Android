@@ -67,7 +67,6 @@
                         android:id="@+id/fc_selected_mode_txt_counter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2 item selected"
                         android:textColor="@color/black"
                         android:fontFamily="@font/main_font"
                         android:layout_centerVertical="true"
