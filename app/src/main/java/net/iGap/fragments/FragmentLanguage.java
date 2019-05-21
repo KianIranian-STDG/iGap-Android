@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentLanguageBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentLanguageViewModel;
 
 /**
@@ -17,7 +20,7 @@ import net.iGap.viewmodel.FragmentLanguageViewModel;
  */
 public class FragmentLanguage extends BaseFragment {
 
-
+    private HelperToolbar mHelperToolbar ;
     public static boolean languageChanged = false;
     private FragmentLanguageViewModel fragmentLanguageViewModel;
     private FragmentLanguageBinding fragmentLanguageBinding;
@@ -40,13 +43,25 @@ public class FragmentLanguage extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();
-        fragmentLanguageBinding.stnsRippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // mActivity.getSupportFragmentManager().popBackStack();
-                popBackStackFragment();
-            }
-        });
+        initToolbar();
+
+    }
+
+    private void initToolbar() {
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.language))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        fragmentLanguageBinding.flLayoutToolbar.addView(mHelperToolbar.getView());
     }
 
     private void initDataBinding() {
