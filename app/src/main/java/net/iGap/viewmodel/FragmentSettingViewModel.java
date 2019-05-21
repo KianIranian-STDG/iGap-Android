@@ -9,11 +9,15 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.databinding.InverseMethod;
 import android.databinding.ObservableField;
 import android.graphics.Color;
 import android.net.Uri;
@@ -49,7 +53,6 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentBio;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChatBackground;
-import net.iGap.fragments.FragmentChatSettings;
 import net.iGap.fragments.FragmentData;
 import net.iGap.fragments.FragmentDeleteAccount;
 import net.iGap.fragments.FragmentIVandProfile;
@@ -75,7 +78,6 @@ import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.AttachFile;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MEditText;
 import net.iGap.module.SHP_SETTING;
@@ -89,7 +91,11 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileCheckUsername;
+import net.iGap.request.RequestUserProfileGetBio;
+import net.iGap.request.RequestUserProfileGetEmail;
+import net.iGap.request.RequestUserProfileGetGender;
 import net.iGap.request.RequestUserProfileGetRepresentative;
+import net.iGap.request.RequestUserProfileSetBio;
 import net.iGap.request.RequestUserProfileSetEmail;
 import net.iGap.request.RequestUserProfileSetGender;
 import net.iGap.request.RequestUserProfileSetNickname;
@@ -98,23 +104,63 @@ import net.iGap.request.RequestUserSessionLogout;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 
-import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
-import static net.iGap.G.onRefreshActivity;
-import static net.iGap.R.string.log_out;
 
-public class FragmentSettingViewModel {
+public class FragmentSettingViewModel extends ViewModel {
+
+    public MutableLiveData<String> name = new MutableLiveData<>();
+    public MutableLiveData<String> userName = new MutableLiveData<>();
+    public MutableLiveData<String> bio = new MutableLiveData<>();
+    public MutableLiveData<String> email = new MutableLiveData<>();
+    public MutableLiveData<String> birthDate = new MutableLiveData<>();
+    public MutableLiveData<Integer> gender = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
+
+    public LiveData<Boolean> getUsernameErrorEnable() {
+        return usernameErrorEnable;
+    }
+
+    public LiveData<Integer> getUsernameErrorMessage() {
+        return usernameErrorMessage;
+    }
+
+    public LiveData<Boolean> getEmailErrorEnable() {
+        return emailErrorEnable;
+    }
+
+    public LiveData<Integer> getEmailErrorMessage() {
+        return emailErrorMessage;
+    }
+
+    private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
+    private MutableLiveData<Integer> usernameErrorMessage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
+    private MutableLiveData<Integer> emailErrorMessage = new MutableLiveData<>();
+    //ui
+    public MutableLiveData<Boolean> goToShowAvatar = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogDeleteAccount = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToManageSpacePage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogLogout = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showSubmitButton = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();
+
+    public String phoneNumber;
+    private String currentName;
+    private String currentUserName;
+    private String currentUserEmail;
+    private int currentGender;
+    private String currentBio;
+    private String currentBirthDate;
+    public long userId;
 
     public static String pathSaveImage;
-    public static int KEY_AD_DATA_PHOTO = -1;
+    /*public static int KEY_AD_DATA_PHOTO = -1;
     public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
     public static int KEY_AD_DATA_VIDEO = -1;
     public static int KEY_AD_DATA_FILE = -1;
@@ -131,61 +177,189 @@ public class FragmentSettingViewModel {
     public static int KEY_AD_ROAMING_VIDEO = -1;
     public static int KEY_AD_ROAMING_FILE = -1;
     public static int KEY_AD_ROAMING_MUSIC = -1;
-    public static int KEY_AD_ROAMINGN_GIF = -1;
+    public static int KEY_AD_ROAMINGN_GIF = -1;*/
     static boolean isActiveRun = false;
-    private static SharedPreferences sharedPreferences;
-    private static FragmentSettingBinding fragmentSettingBinding;
-    public long userId;
-    public ObservableField<String> callbackSetName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.first_name));
-    public ObservableField<String> callbackTextSize = new ObservableField<>("16");
-    public ObservableField<String> callbackSetTitleName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.first_name));
-    public ObservableField<String> callbackGander = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.set_gender));
-    public ObservableField<String> callbackSetUserName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_username));
-    public ObservableField<String> callbackSetEmail = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.set_email));
-    public ObservableField<String> callbackSetPhoneNumber = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_phoneNumber));
-    public ObservableField<String> callbackSetRepresent = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_represent));
-    public ObservableField<String> callbackSetBio = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_bio));
-    public ObservableField<String> callbackSetIVand = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_ivand_text_setting) + " -");
-    public ObservableField<String> callbackLanguage = new ObservableField<>("English");
-    public ObservableField<String> callbackDataShams = new ObservableField<>("Miladi");
-    public ObservableField<String> callbackVersionApp = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.iGap_version));
-    public ObservableField<Boolean> isAutoRotate = new ObservableField<>();
-    public ObservableField<Boolean> isMultiTab = new ObservableField<>();
-    public ObservableField<Boolean> isShowVote = new ObservableField<>();
-    public ObservableField<Boolean> isSenderNameGroup = new ObservableField<>();
-    public ObservableField<Boolean> isSendEnter = new ObservableField<>();
-    public ObservableField<Boolean> isInAppBrowser = new ObservableField<>();
-    public ObservableField<Boolean> isThemeDark = new ObservableField<>();
-    public ObservableField<Boolean> isSaveGallery = new ObservableField<>();
-    public ObservableField<Boolean> isAutoGif = new ObservableField<>();
-    public ObservableField<Boolean> isCompress = new ObservableField<>();
-    public ObservableField<Boolean> isTrim = new ObservableField<>();
-    public ObservableField<Boolean> isDefaultPlayer = new ObservableField<>();
-    public ObservableField<Boolean> isCrop = new ObservableField<>();
-    public ObservableField<Boolean> isTime = new ObservableField<>();
+    /*private static SharedPreferences sharedPreferences;*/
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
-    public ObservableField<Integer> isAutoThemeDark = new ObservableField<>(View.GONE);
-    public ObservableField<Integer> isGoneLayoutColor = new ObservableField<>(View.VISIBLE);
-    boolean isCheckedThemeDark;
+    /*boolean isCheckedThemeDark;*/
     private int poRbDialogTextSize = -1;
     private Uri uriIntent;
     private long idAvatar;
-    private String userName;
-    private String phoneName;
-    private String userEmail;
-    private String bio;
+
     private Realm mRealm;
     private RealmUserInfo realmUserInfo;
     private RealmPrivacy realmPrivacy;
     private RealmRegisteredInfo mRealmRegisteredInfo;
-    private FragmentSetting fragmentSetting;
-    private int[] fontSizeArray = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+    /*private int[] fontSizeArray = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};*/
 
 
-    public FragmentSettingViewModel(FragmentSetting fragmentSetting, FragmentSettingBinding fragmentSettingBinding) {
-        this.fragmentSetting = fragmentSetting;
-        this.fragmentSettingBinding = fragmentSettingBinding;
-        getInfo();
+    public FragmentSettingViewModel() {
+
+        //what is request ?!
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);
+        realm.close();
+
+        if (isIntroduce) {
+            new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
+                @Override
+                public void onRepresent(String phoneNumber) {
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
+                    } catch (Exception e) {
+                    }
+                }
+
+                @Override
+                public void onFailed() {
+                }
+            });
+        }
+
+        new RequestUserProfileGetGender().userProfileGetGender();
+        new RequestUserProfileGetEmail().userProfileGetEmail();
+        new RequestUserProfileGetBio().getBio();
+
+        usernameErrorMessage.setValue(R.string.is_empty);
+        emailErrorMessage.setValue(R.string.is_empty);
+        /*realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();*/
+        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo == null) {
+            G.fragmentActivity.onBackPressed();
+            return;
+        }
+
+        Log.wtf("view Model", "call updateUserInfoUI from constrictor");
+        updateUserInfoUI(realmUserInfo);
+
+
+        /*if (realmPrivacy == null) {
+            RealmPrivacy.updatePrivacy("", "", "", "", "", "");
+        }*/
+        /*sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);*/
+
+        /*String textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+        callbackLanguage.set(textLanguage);*/
+
+        /*int checkedEnableCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1);
+        isCrop.set(getBoolean(checkedEnableCrop));*/
+
+        /*boolean checkCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
+        isCameraButtonSheet.set(checkCameraButtonSheet);*/
+
+        /*int checkedEnableVote = sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1);
+        isShowVote.set(getBoolean(checkedEnableVote));*/
+
+        /*int checkedEnablShowSenderInGroup = sharedPreferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0);
+        isSenderNameGroup.set(getBoolean(checkedEnablShowSenderInGroup));*/
+
+        /*int checkedEnableCompress = sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1);
+        isCompress.set(getBoolean(checkedEnableCompress));*/
+
+        /*int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
+        switch (typeData) {
+            case 0:
+                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.miladi));
+                break;
+            case 1:
+                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.shamsi));
+                break;
+            case 2:
+                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.ghamari));
+                break;
+        }*/
+
+        /*FragmentSetting.dateType = new FragmentSetting.DateType() {
+            @Override
+            public void dataName(String type) {
+                callbackDataShams.set(type);
+            }
+        };*/
+
+        /*boolean checkedEnableAutoRotate = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+        isAutoRotate.set(checkedEnableAutoRotate);*/
+
+        /*boolean checkedEnableMultiTab = sharedPreferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
+        isMultiTab.set(checkedEnableMultiTab);*/
+
+        /*boolean checkedEnableTime = sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
+        isTime.set(checkedEnableTime);*/
+
+        /*poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - 11;
+        String textSize = "" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
+        callbackTextSize.set(textSize);
+        if (HelperCalander.isPersianUnicode) {
+            callbackTextSize.set(HelperCalander.convertToUnicodeFarsiNumber(callbackTextSize.get()));
+        }*/
+
+        /*int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+        isSendEnter.set(getBoolean(checkedSendByEnter));*/
+
+        /*int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+        isInAppBrowser.set(getBoolean(checkedInAppBrowser));*/
+
+
+        /*boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+        isThemeDark.set(checkedThemeDark);
+        if (isThemeDark.get()) {
+            isAutoThemeDark.set(View.VISIBLE);
+        } else {
+            isAutoThemeDark.set(View.GONE);
+        }*/
+
+        /*if (G.isDarkTheme) {
+            isGoneLayoutColor.set(View.GONE);
+        } else {
+            isGoneLayoutColor.set(View.VISIBLE);
+        }*/
+
+
+        /*int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
+        isAutoGif.set(getBoolean(checkedAutoGif));*/
+
+        /*int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+        isSaveGallery.set(getBoolean(checkedSaveToGallery));*/
+
+
+        /*int checkedEnableTrim = sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1);
+        isTrim.set(getBoolean(checkedEnableTrim));*/
+
+        /*int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
+        isDefaultPlayer.set(getBoolean(checkedEnableDefaultPlayer));*/
+
+        /*callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());*/
+    }
+
+    private void updateUserInfoUI(RealmUserInfo userInfo) {
+        if (checkValidationForRealm(userInfo)) {
+            userId = userInfo.getUserId();
+            currentName = userInfo.getUserInfo().getDisplayName();
+            currentUserName = userInfo.getUserInfo().getUsername();
+            currentUserEmail = userInfo.getEmail();
+            currentBio = userInfo.getUserInfo().getBio();
+            phoneNumber = userInfo.getUserInfo().getPhoneNumber();
+            ProtoGlobal.Gender userGender = userInfo.getGender();
+            if (userGender != null) {
+                if (userGender == ProtoGlobal.Gender.MALE) {
+                    currentGender = R.id.male;
+                } else if (userGender == ProtoGlobal.Gender.FEMALE) {
+                    currentGender = R.id.female;
+                }
+            } else {
+                currentGender = -1;
+            }
+            gender.setValue(currentGender);
+            name.setValue(currentName);
+            bio.setValue(currentBio);
+            userName.setValue(currentUserName);
+            email.setValue(currentUserEmail);
+            /*if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
+                callbackSetRepresent.set("");
+            } else {
+                callbackSetRepresent.set(userInfo.getRepresentPhoneNumber());
+            }*/
+        }
     }
 
 
@@ -193,698 +367,243 @@ public class FragmentSettingViewModel {
     //================================Event Listeners================================
     //===============================================================================
 
-
-    public void onClickRippleCircleImage(View view) {
-        FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
-        fragment.appBarLayout = fragmentSettingBinding.stFabSetPic;
-        new HelperFragment(fragment).setReplace(false).load();
+    public void onAvatarClick() {
+        goToShowAvatar.setValue(true);
     }
 
-    public void onClickRippleBack(View v) {
+    public void onAddImageClick() {
+        showDialogChooseImage.setValue(true);
+    }
 
-        G.fragmentActivity.onBackPressed();
+    public void onClickNotifyAndSound() {
+        new HelperFragment(new FragmentNotificationAndSound()).setReplace(false).load();
+    }
+
+    public void onClickPrivacySecurity() {
+        new HelperFragment(new FragmentPrivacyAndSecurity()).setReplace(false).load();
+    }
+
+    public void onClickDataStorage() {
+        goToManageSpacePage.setValue(true);
+    }
+
+    public void onChatSettingClick() {
 
     }
 
-    public void onClickRippleMore(View view) {
-        List<String> items = new ArrayList<>();
-        items.add(G.fragmentActivity.getString(log_out));
-        items.add(G.fragmentActivity.getString(R.string.delete_account));
-
-        new TopSheetDialog(G.fragmentActivity).setListData(items, -1, new BottomSheetItemClickCallback() {
-            @Override
-            public void onClick(int position) {
-                if (items.get(position).equals(G.fragmentActivity.getString(log_out))){
-                    final MaterialDialog inDialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.dialog_content_custom, true).build();
-                    View v = inDialog.getCustomView();
-
-                    inDialog.show();
-
-                    TextView txtTitle = (TextView) v.findViewById(R.id.txtDialogTitle);
-                    txtTitle.setText(G.fragmentActivity.getResources().getString(log_out));
-
-                    TextView iconTitle = (TextView) v.findViewById(R.id.iconDialogTitle);
-                    iconTitle.setText(R.string.md_exit_app);
-
-                    TextView txtContent = (TextView) v.findViewById(R.id.txtDialogContent);
-                    txtContent.setText(R.string.content_log_out);
-
-                    TextView txtCancel = (TextView) v.findViewById(R.id.txtDialogCancel);
-                    TextView txtOk = (TextView) v.findViewById(R.id.txtDialogOk);
-
-                    txtOk.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            inDialog.dismiss();
-
-                            showProgressBar();
-
-                            G.onUserSessionLogout = new OnUserSessionLogout() {
-                                @Override
-                                public void onUserSessionLogout() {
-
-                                    G.handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            HelperLogout.logout();
-                                            hideProgressBar();
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onError() {
-
-                                }
-
-                                @Override
-                                public void onTimeOut() {
-                                    G.handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            hideProgressBar();
-                                            if (view != null) {
-
-                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-
-                                            }
-                                        }
-                                    });
-                                }
-                            };
-
-                            new RequestUserSessionLogout().userSessionLogout();
-                        }
-                    });
-
-                    txtCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            inDialog.dismiss();
-                        }
-                    });
-                } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.delete_account))){
-                    final MaterialDialog inDialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.dialog_content_custom, true).build();
-                    View v = inDialog.getCustomView();
-
-                    inDialog.show();
-
-                    TextView txtTitle = (TextView) v.findViewById(R.id.txtDialogTitle);
-                    txtTitle.setText(G.fragmentActivity.getResources().getString(R.string.delete_account));
-
-                    TextView iconTitle = (TextView) v.findViewById(R.id.iconDialogTitle);
-                    iconTitle.setText(R.string.md_delete_acc);
-
-                    TextView txtContent = (TextView) v.findViewById(R.id.txtDialogContent);
-                    String text = G.fragmentActivity.getResources().getString(R.string.delete_account_text) + "\n" + G.fragmentActivity.getResources().getString(R.string.delete_account_text_desc);
-                    txtContent.setText(text);
-
-                    TextView txtCancel = (TextView) v.findViewById(R.id.txtDialogCancel);
-                    TextView txtOk = (TextView) v.findViewById(R.id.txtDialogOk);
-
-
-                    txtOk.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            inDialog.dismiss();
-                            FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
-
-                            Bundle bundle = new Bundle();
-                            bundle.putString("PHONE", callbackSetPhoneNumber.get());
-                            fragmentDeleteAccount.setArguments(bundle);
-                            new HelperFragment(fragmentDeleteAccount).setReplace(false).load();
-                        }
-                    });
-
-                    txtCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            inDialog.dismiss();
-                        }
-                    });
-                }
-            }
-        }).show();
+    public void onLogoutClick() {
+        showDialogLogout.setValue(true);
     }
 
-    public void onClickNickname(View view) {
-
-
-        final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
-        layoutNickname.setOrientation(LinearLayout.VERTICAL);
-
-        String splitNickname[] = callbackSetName.get().split(" ");
-        String firsName = "";
-        String lastName = "";
-        StringBuilder stringBuilder = null;
-        if (splitNickname.length > 1) {
-
-            lastName = splitNickname[splitNickname.length - 1];
-            stringBuilder = new StringBuilder();
-            for (int i = 0; i < splitNickname.length - 1; i++) {
-
-                stringBuilder.append(splitNickname[i]).append(" ");
-            }
-            firsName = stringBuilder.toString();
-        } else {
-            firsName = splitNickname[0];
-        }
-        final View viewFirstName = new View(G.fragmentActivity);
-        viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
-        final EmojiEditTextE edtFirstName = new EmojiEditTextE(G.fragmentActivity);
-        edtFirstName.setHint(G.fragmentActivity.getResources().getString(R.string.fac_First_Name));
-        edtFirstName.setText(firsName);
-        edtFirstName.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        edtFirstName.setTypeface(G.typeface_IRANSansMobile);
-        edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        edtFirstName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtFirstName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        edtFirstName.setPadding(0, 8, 0, 8);
-        edtFirstName.setSingleLine(true);
-        inputFirstName.addView(edtFirstName);
-        inputFirstName.addView(viewFirstName, viewParams);
-        final View viewLastName = new View(G.fragmentActivity);
-        viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtFirstName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-
-        TextInputLayout inputLastName = new TextInputLayout(G.fragmentActivity);
-        final EmojiEditTextE edtLastName = new EmojiEditTextE(G.fragmentActivity);
-        edtLastName.setHint(G.fragmentActivity.getResources().getString(R.string.fac_Last_Name));
-        edtLastName.setText(lastName);
-        edtLastName.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        edtLastName.setTypeface(G.typeface_IRANSansMobile);
-        edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        edtLastName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        edtLastName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtLastName.setPadding(0, 8, 0, 8);
-        edtLastName.setSingleLine(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtLastName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-        inputLastName.addView(edtLastName);
-        inputLastName.addView(viewLastName, viewParams);
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, 15);
-        LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lastNameLayoutParams.setMargins(0, 15, 0, 10);
-
-        layoutNickname.addView(inputFirstName, layoutParams);
-        layoutNickname.addView(inputLastName, lastNameLayoutParams);
-
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity)
-                        .title(G.fragmentActivity.getResources().getString(R.string.st_nickname))
-                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
-                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
-
-        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        positive.setEnabled(false);
-
-        final String finalFirsName = firsName;
-        edtFirstName.addTextChangedListener(new TextWatcher() {
+    public void logout() {
+        showLoading.setValue(true);
+        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                if (!edtFirstName.getText().toString().equals(finalFirsName)) {
-                    positive.setEnabled(true);
-                } else {
-                    positive.setEnabled(false);
-                }
-            }
-        });
-
-        final String finalLastName = lastName;
-        edtLastName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (!edtLastName.getText().toString().equals(finalLastName)) {
-                    positive.setEnabled(true);
-                } else {
-                    positive.setEnabled(false);
-                }
-            }
-        });
-
-        edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-
-        edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-
-        positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showProgressBar();
-                G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
-                    @Override
-                    public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                        //setAvatar();
-
-                        RealmRoom.updateChatTitle(userId, nickName);
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideProgressBar();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onUserProfileNickNameError(int majorCode, int minorCode) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideProgressBar();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onUserProfileNickNameTimeOut() {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideProgressBar();
-                            }
-                        });
-                    }
-                };
-
-
-                String fullName = "";
-                if (edtFirstName.length() == 0) {
-                    fullName = " " + " " + edtLastName.getText().toString().trim();
-                }
-                if (edtLastName.length() == 0) {
-                    fullName = edtFirstName.getText().toString().trim() + " " + " ";
-                }
-                if (edtLastName.length() > 0 && edtFirstName.length() > 0) {
-                    fullName = edtFirstName.getText().toString().trim() + " " + edtLastName.getText().toString().trim();
-                }
-
-                new RequestUserProfileSetNickname().userProfileNickName(fullName);
-
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
-    public void onClickUserName(View view) {
-
-        final LinearLayout layoutUserName = new LinearLayout(G.fragmentActivity);
-        layoutUserName.setOrientation(LinearLayout.VERTICAL);
-
-        final View viewUserName = new View(G.fragmentActivity);
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        final TextInputLayout inputUserName = new TextInputLayout(G.fragmentActivity);
-        final MEditText edtUserName = new MEditText(G.fragmentActivity);
-        edtUserName.setHint(G.fragmentActivity.getResources().getString(R.string.st_username));
-        edtUserName.setText(callbackSetUserName.get());
-        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        edtUserName.setTypeface(G.typeface_IRANSansMobile);
-        edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        edtUserName.setPadding(0, 8, 0, 8);
-        edtUserName.setSingleLine(true);
-        inputUserName.addView(edtUserName);
-        inputUserName.addView(viewUserName, viewParams);
-
-        viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtUserName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        layoutUserName.addView(inputUserName, layoutParams);
-
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
-
-        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        positive.setEnabled(false);
-
-        final String finalUserName = userName;
-        edtUserName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                if (HelperString.regexCheckUsername(editable.toString())) {
-                    new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
-                } else {
-                    inputUserName.setErrorEnabled(true);
-                    inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.INVALID));
-                    positive.setEnabled(false);
-                }
-            }
-        });
-        G.onUserProfileCheckUsername = new OnUserProfileCheckUsername() {
-            @Override
-            public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
-                            if (!edtUserName.getText().toString().equals(finalUserName)) {
-                                positive.setEnabled(true);
-                            } else {
-                                positive.setEnabled(false);
-                            }
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("");
-                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
-
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.INVALID));
-                            positive.setEnabled(false);
-                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.TAKEN));
-                            positive.setEnabled(false);
-                        }
-                    }
+            public void onUserSessionLogout() {
+                G.handler.post(() -> {
+                    HelperLogout.logout();
+                    showLoading.setValue(false);
                 });
             }
 
             @Override
-            public void Error(int majorCode, int minorCode) {
+            public void onError() {
 
             }
-        };
 
-        positive.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                showProgressBar();
-                new RequestUserProfileUpdateUsername().userProfileUpdateUsername(edtUserName.getText().toString());
+            public void onTimeOut() {
+                G.handler.post(() -> {
+                    showLoading.setValue(false);
+                    showError.setValue(true);
+                });
             }
         });
+    }
 
-        G.onUserProfileUpdateUsername = new OnUserProfileUpdateUsername() {
+    public void onDeleteAccountClick() {
+        showDialogDeleteAccount.setValue(true);
+    }
+
+    public void nameTextChangeListener(String newName) {
+        if (!newName.equals(currentName)) {
+            showSubmitButton.setValue(true);
+        } else {
+            if (currentBio.equals(bio.getValue()) && currentUserEmail.equals(email.getValue()) && currentUserName.equals(userName.getValue()) && currentGender == gender.getValue()) {
+                showSubmitButton.setValue(false);
+            }
+        }
+    }
+
+    private void sendRequestSetName() {
+        showLoading.setValue(true);
+        new RequestUserProfileSetNickname().userProfileNickName(name.getValue(), new OnUserProfileSetNickNameResponse() {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName, String initials) {
+                //setAvatar();
+                RealmRoom.updateChatTitle(userId, nickName);
+                G.handler.post(() -> showLoading.setValue(false));
+            }
+
+            @Override
+            public void onUserProfileNickNameError(int majorCode, int minorCode) {
+                G.handler.post(() -> showLoading.setValue(false));
+            }
+
+            @Override
+            public void onUserProfileNickNameTimeOut() {
+                G.handler.post(() -> showLoading.setValue(false));
+            }
+        });
+    }
+
+    public void usernameTextChangeListener(String newUsername) {
+        if (HelperString.regexCheckUsername(newUsername)) {
+            new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
+                @Override
+                public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
+                    G.handler.post(() -> {
+                        if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
+                            showSubmitButton.setValue(!currentUserName.equals(userName.getValue()));
+                            usernameErrorEnable.setValue(true);
+                            usernameErrorMessage.setValue(R.string.is_empty);
+                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
+                            usernameErrorMessage.setValue(R.string.INVALID);
+                            usernameErrorEnable.setValue(true);
+                            showSubmitButton.setValue(false);
+                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
+                            usernameErrorMessage.setValue(R.string.TAKEN);
+                            usernameErrorEnable.setValue(true);
+                            showSubmitButton.setValue(false);
+                        }
+                    });
+                }
+
+                @Override
+                public void Error(int majorCode, int minorCode) {
+
+                }
+            });
+        } else {
+            usernameErrorEnable.setValue(true);
+            usernameErrorMessage.setValue(R.string.INVALID);
+            showSubmitButton.setValue(false);
+        }
+    }
+
+    private void sendRequestSetUsername() {
+        showLoading.setValue(true);
+        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.getValue(), new OnUserProfileUpdateUsername() {
             @Override
             public void onUserProfileUpdateUsername(final String username) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
-                        hideProgressBar();
-                    }
-                });
+                G.handler.post(() -> showLoading.setValue(false));
             }
 
             @Override
             public void Error(final int majorCode, int minorCode, final int time) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        switch (majorCode) {
-                            case 175:
-                                if (dialog.isShowing()) dialog.dismiss();
-                                hideProgressBar();
-                                dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
-                                break;
-                        }
+                G.handler.post(() -> {
+                    if (majorCode == 175) {
+                        showLoading.setValue(false);
+                        dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                     }
                 });
             }
 
             @Override
             public void timeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
-            }
-        };
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean b) {
-                        if (b) {
-                            viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                        } else {
-                            viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                        }
-                    }
-                });
+                G.handler.post(() -> showLoading.setValue(false));
             }
         });
-        // check each word with server
-        dialog.show();
-
-
     }
 
-    public void onClickGander(View view) {
-
-        int position = -1;
-
-        try {
-            if (getRealm().where(RealmUserInfo.class).findFirst().getGender().getNumber() == 1) {
-                position = 0;
-            } else if (getRealm().where(RealmUserInfo.class).findFirst().getGender().getNumber() == 2) {
-                position = 1;
-            } else {
-                position = -1;
-            }
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-
-        G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
-            @Override
-            public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-                hideProgressBar();
-            }
-
-            @Override
-            public void Error(int majorCode, int minorCode) {
-                hideProgressBar();
-            }
-
-            @Override
-            public void onTimeOut() {
-                hideProgressBar();
-            }
-        };
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_Gander)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.array_gander).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                switch (which) {
-                    case 0: {
-                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
-                        break;
-                    }
-                    case 1: {
-                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
-                        break;
-                    }
-                }
-                return false;
-            }
-        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                showProgressBar();
-            }
-        }).show();
-
-    }
-
-    public void onClickSetEmail(View view) {
-        final LinearLayout layoutEmail = new LinearLayout(G.fragmentActivity);
-        layoutEmail.setOrientation(LinearLayout.VERTICAL);
-
-        final View viewEmail = new View(G.fragmentActivity);
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        final TextInputLayout inputEmail = new TextInputLayout(G.fragmentActivity);
-        final MEditText edtEmail = new MEditText(G.fragmentActivity);
-        edtEmail.setHint(G.fragmentActivity.getResources().getString(R.string.set_email));
-        edtEmail.setTypeface(G.typeface_IRANSansMobile);
-        edtEmail.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-
-        if (callbackSetEmail.get() == null || callbackSetEmail.get().equals(G.fragmentActivity.getResources().getString(R.string.set_email))) {
-            edtEmail.setText("");
+    public void emailTextChangeListener(String newEmail) {
+        if (!newEmail.equals(currentUserEmail)) {
+            showSubmitButton.setValue(true);
+            emailErrorMessage.setValue(R.string.is_empty);
+            emailErrorEnable.setValue(false);
         } else {
-            edtEmail.setText(callbackSetEmail.get());
+            if (currentName.equals(name.getValue()) && currentUserName.equals(userName.getValue()) && currentBio.equals(bio.getValue()) && currentGender == gender.getValue()) {
+                showSubmitButton.setValue(false);
+            }
         }
+    }
 
-        edtEmail.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtEmail.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        edtEmail.setPadding(0, 8, 0, 8);
-        edtEmail.setSingleLine(true);
-        inputEmail.addView(edtEmail);
-        inputEmail.addView(viewEmail, viewParams);
-
-        viewEmail.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtEmail.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        layoutEmail.addView(inputEmail, layoutParams);
-
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
-
-        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        positive.setEnabled(false);
-
-        final String finalEmail = userEmail;
-        edtEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                if (!edtEmail.getText().toString().equals(finalEmail)) {
-                    positive.setEnabled(true);
-                } else {
-                    positive.setEnabled(false);
-                }
-                inputEmail.setErrorEnabled(true);
-                inputEmail.setError("");
-            }
-        });
-
-        positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                showProgressBar();
-                new RequestUserProfileSetEmail().setUserProfileEmail(edtEmail.getText().toString());
-            }
-        });
-
-        edtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewEmail.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    viewEmail.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-
-        G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
+    private void sendRequestSetEmail() {
+        showLoading.setValue(true);
+        new RequestUserProfileSetEmail().setUserProfileEmail(email.getValue(), new OnUserProfileSetEmailResponse() {
             @Override
             public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
-                hideProgressBar();
+                G.handler.post(() -> showLoading.setValue(false));
             }
 
             @Override
             public void Error(int majorCode, int minorCode) {
-                hideProgressBar();
-                if (majorCode == 114 && minorCode == 1) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            inputEmail.setErrorEnabled(true);
-                            positive.setEnabled(false);
-                            inputEmail.setError("" + G.fragmentActivity.getResources().getString(R.string.error_email));
-                        }
-                    });
-                } else if (majorCode == 115) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            inputEmail.setErrorEnabled(true);
-                            positive.setEnabled(false);
-                            inputEmail.setError("" + G.fragmentActivity.getResources().getString(R.string.error_email));
-                        }
-                    });
-                }
+                G.handler.post(() -> {
+                    showLoading.setValue(false);
+                    if (majorCode == 114 && minorCode == 1) {
+                        emailErrorMessage.setValue(R.string.error_email);
+                        emailErrorEnable.setValue(true);
+                        showSubmitButton.setValue(false);
+                    } else if (majorCode == 115) {
+                        emailErrorEnable.setValue(true);
+                        showSubmitButton.setValue(false);
+                        emailErrorMessage.setValue(R.string.error_email);
+                    }
+                });
             }
 
             @Override
             public void onTimeOut() {
-                hideProgressBar();
+                G.handler.post(() -> showLoading.setValue(false));
             }
-        };
-
-        dialog.show();
+        });
     }
 
-    public void onClickPhoneNumber(View view) {
-
+    public void bioTextChangeListener(String newBio) {
+        if (!currentBio.equals(newBio)) {
+            showSubmitButton.setValue(true);
+        } else {
+            if (currentName.equals(name.getValue()) && currentUserName.equals(userName.getValue()) && currentUserEmail.equals(email.getValue()) && currentGender == gender.getValue()) {
+                showSubmitButton.setValue(false);
+            }
+        }
     }
 
-    public void onClickRepresent(View view) {
+    private void sendRequestSetBio() {
+        new RequestUserProfileSetBio().setBio(bio.getValue());
+    }
+
+    public void onCheckedListener(int checkedId) {
+        if (checkedId != currentGender) {
+            showSubmitButton.setValue(true);
+        } else {
+            if (currentName.equals(name.getValue()) && currentUserName.equals(userName.getValue()) && currentUserEmail.equals(email.getValue()) && currentBio.equals(bio.getValue())) {
+                showSubmitButton.setValue(false);
+            }
+        }
+    }
+
+    private void sendRequestSetGender() {
+        showLoading.setValue(true);
+        new RequestUserProfileSetGender().setUserProfileGender(gender.getValue() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
+            @Override
+            public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
+                G.handler.post(() -> showLoading.setValue(false));
+            }
+
+            @Override
+            public void Error(int majorCode, int minorCode) {
+                G.handler.post(() -> showLoading.setValue(false));
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(() -> showLoading.setValue(false));
+            }
+        });
+    }
+
+    /*public void onClickRepresent(View view) {
         if (RequestUserProfileGetRepresentative.numberOfPendingRequest == 0) {
             if (callbackSetRepresent.get().equals("")) {
                 new HelperFragment(ReagentFragment.newInstance(false)).setReplace(false).load();
@@ -892,61 +611,31 @@ public class FragmentSettingViewModel {
         } else {
             HelperError.showSnackMessage(G.context.getString(R.string.try_later), false);
         }
-    }
+    }*/
 
-    public void onClickBio(View view) {
-
-        FragmentBio fragmentBio = new FragmentBio();
-        Bundle bundle = new Bundle();
-        bundle.putString("BIO", callbackSetBio.get());
-        fragmentBio.setArguments(bundle);
-        new HelperFragment(fragmentBio).setReplace(false).load();
-
-    }
-
-    public void onClickIVand(View view) {
+    /*public void onClickIVand(View view) {
         new HelperFragment(new FragmentIVandProfile()).setReplace(false).load();
-    }
+    }*/
 
-    public void onClickNotifyAndSound(View view) {
 
-        new HelperFragment(new FragmentNotificationAndSound()).setReplace(false).load();
-
-    }
-
-    public void onClickPrivacySecurity(View view) {
-        new HelperFragment(new FragmentPrivacyAndSecurity()).setReplace(false).load();
-    }
-
-    public void onClickDataStorage(View view) {
-
-        fragmentSetting.startActivity(new Intent(G.fragmentActivity, ActivityManageSpace.class));
-
-    }
-
-    public void onClickLanguage(View view) {
-
+    //todo:move to page chat setting
+    /*public void onClickLanguage(View view) {
         new HelperFragment(new FragmentLanguage()).setReplace(false).load();
+    }*/
 
-    }
-
-    public void onClickDataShams(View view) {
-
+    //todo:move to page chat setting
+    /*public void onClickDataShams(View view) {
         new HelperFragment(new FragmentData()).setReplace(false).load();
+    }*/
 
-    }
 
-    public void onClickChatSetting(View view) {
-
-        new HelperFragment(new FragmentChatSettings()).setReplace(false).load();
-
-    }
-
-    public void onClickAutoRotate(View view) {
+    //todo:move to page chat setting
+    /*public void onClickAutoRotate(View view) {
         isAutoRotate.set(!isAutoRotate.get());
-    }
+    }*/
 
-    public void onCheckedChangedAutoRotate(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedChangedAutoRotate(boolean isChecked) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isAutoRotate.set(isChecked);
@@ -960,9 +649,10 @@ public class FragmentSettingViewModel {
             editor.apply();
             fragmentSetting.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         }
-    }
+    }*/
 
-    public void onClickMessageTextSize(View view) {
+    //todo:move to page chat setting
+    /*public void onClickMessageTextSize(View view) {
 
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_title_message_textSize))
                 .titleGravity(GravityEnum.START)
@@ -991,17 +681,20 @@ public class FragmentSettingViewModel {
                 })
                 .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                 .show();
-    }
+    }*/
 
-    public void onClickChatBackground(View view) {
+    //todo:move to page chat setting
+    /*public void onClickChatBackground(View view) {
         new HelperFragment(FragmentChatBackground.newInstance()).setReplace(false).load();
-    }
+    }*/
 
-    public void onClickShowVote(View view) {
+    //todo:move to page chat setting
+    /*public void onClickShowVote(View view) {
         isShowVote.set(!isShowVote.get());
-    }
+    }*/
 
-    public void onCheckedChangedShowVote(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedChangedShowVote(boolean isChecked) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isShowVote.set(isChecked);
         if (isChecked) {
@@ -1013,9 +706,10 @@ public class FragmentSettingViewModel {
             editor.apply();
             G.showVoteChannelLayout = false;
         }
-    }
+    }*/
 
-    public void onClickMultiTab(View view) {
+    //todo:move to page chat setting
+    /*public void onClickMultiTab(View view) {
 
 //        isMultiTab.set(!isMultiTab.get());
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1038,9 +732,10 @@ public class FragmentSettingViewModel {
 //        if (FragmentSetting.onRemoveFragmentSetting != null)
 //            FragmentSetting.onRemoveFragmentSetting.removeFragment();
 
-    }
+    }*/
 
-    public void onClickTime(View view) {
+    //todo:move to page chat setting
+    /*public void onClickTime(View view) {
 
         isTime.set(!isTime.get());
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1058,20 +753,23 @@ public class FragmentSettingViewModel {
         if (G.onNotifyTime != null) {
             G.onNotifyTime.notifyTime();
         }
-    }
+    }*/
 
-    public void onCheckedChangedMultiTab(boolean isChecked) {
-
-
-    }
+    //todo:move to page chat setting
+    /*public void onCheckedChangedMultiTab(boolean isChecked) {
 
 
-    public void onClickSenderNameGroup(View view) {
+    }*/
+
+
+    //todo:move to page chat setting
+    /*public void onClickSenderNameGroup(View view) {
 
         isSenderNameGroup.set(!isSenderNameGroup.get());
-    }
+    }*/
 
-    public void onCheckedChangedSenderNameGroup(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedChangedSenderNameGroup(boolean isChecked) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isSenderNameGroup.set(isChecked);
@@ -1085,15 +783,17 @@ public class FragmentSettingViewModel {
             G.showSenderNameInGroup = false;
         }
 
-    }
+    }*/
 
-    public void onClickSendEnter(View view) {
+    //todo:move to page chat setting
+    /*public void onClickSendEnter(View view) {
 
         isSendEnter.set(!isSendEnter.get());
-    }
+    }*/
 
 
-    public void onCheckedChangedSendEnter(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedChangedSendEnter(boolean isChecked) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isSendEnter.set(isChecked);
@@ -1103,15 +803,17 @@ public class FragmentSettingViewModel {
             editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         }
         editor.apply();
-    }
+    }*/
 
-    public void onClickAppBrowser(View view) {
+    //todo:move to page chat setting
+    /*public void onClickAppBrowser(View view) {
 
         isInAppBrowser.set(!isInAppBrowser.get());
-    }
+    }*/
 
 
-    public void onCheckedAppBrowser(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedAppBrowser(boolean isChecked) {
 
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1123,14 +825,16 @@ public class FragmentSettingViewModel {
         }
         editor.apply();
 
-    }
+    }*/
 
 
-    public void onClickThemeColor(View v) {
+    //todo:move to page chat setting
+    /*public void onClickThemeColor(View v) {
         new HelperFragment(new FragmentThemColor()).setReplace(false).load();
-    }
+    }*/
 
-    public void onClickAutoDownloadData(View view) {
+    //todo:move to page chat setting
+    /*public void onClickAutoDownloadData(View view) {
 
 
         KEY_AD_DATA_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
@@ -1177,9 +881,10 @@ public class FragmentSettingViewModel {
             }
         }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
 
-    }
+    }*/
 
-    public void onClickAutoDownloadWifi(View view) {
+    //todo:move to page chat setting
+    /*public void onClickAutoDownloadWifi(View view) {
 
         KEY_AD_WIFI_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
         KEY_AD_WIFI_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
@@ -1228,9 +933,10 @@ public class FragmentSettingViewModel {
             }
         }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).show();
 
-    }
+    }*/
 
-    public void onClickAutoDownloadRoaming(View view) {
+    //todo:move to page chat setting
+    /*public void onClickAutoDownloadRoaming(View view) {
 
         KEY_AD_ROAMING_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
         KEY_AD_ROAMING_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
@@ -1277,13 +983,15 @@ public class FragmentSettingViewModel {
                 return true;
             }
         }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
-    }
+    }*/
 
-    public void onClickAutoGif(View view) {
+    //todo:move to page chat setting
+    /*public void onClickAutoGif(View view) {
         isAutoGif.set(!isAutoGif.get());
-    }
+    }*/
 
-    public void onCheckedChangeAutoGif(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedChangeAutoGif(boolean isChecked) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isAutoGif.set(isChecked);
@@ -1295,14 +1003,16 @@ public class FragmentSettingViewModel {
             editor.apply();
         }
 
-    }
+    }*/
 
-    public void onClickSaveGallery(View view) {
+    //todo:move to page chat setting
+    /*public void onClickSaveGallery(View view) {
 
         isSaveGallery.set(!isSaveGallery.get());
-    }
+    }*/
 
-    public void onCheckedChangedSaveGallery(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedChangedSaveGallery(boolean isChecked) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isSaveGallery.set(isChecked);
         if (isChecked) {
@@ -1315,13 +1025,15 @@ public class FragmentSettingViewModel {
             editor.apply();
         }
 
-    }
+    }*/
 
-    public void onClickCompress(View view) {
+    //todo:move to page chat setting
+    /*public void onClickCompress(View view) {
         isCompress.set(!isCompress.get());
-    }
+    }*/
 
-    public void onCheckedChangedCompress(boolean isChecked) {
+    //todo:move to page chat setting
+    /*public void onCheckedChangedCompress(boolean isChecked) {
 
         isCompress.set(isChecked);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1333,13 +1045,13 @@ public class FragmentSettingViewModel {
             editor.apply();
         }
 
-    }
-
-    public void onClickTrim(View view) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onClickTrim(View view) {
         isTrim.set(!isTrim.get());
-    }
-
-    public void onCheckedChangedTrim(boolean isChecked) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onCheckedChangedTrim(boolean isChecked) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isTrim.set(isChecked);
@@ -1351,13 +1063,13 @@ public class FragmentSettingViewModel {
             editor.apply();
         }
 
-    }
-
-    public void onClickDefaultVideo(View view) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onClickDefaultVideo(View view) {
         isDefaultPlayer.set(!isDefaultPlayer.get());
-    }
-
-    public void onCheckedDefaultVideo(boolean isChecked) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onCheckedDefaultVideo(boolean isChecked) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isDefaultPlayer.set(isChecked);
         if (isChecked) {
@@ -1367,13 +1079,13 @@ public class FragmentSettingViewModel {
             editor.putInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0);
             editor.apply();
         }
-    }
-
-    public void onClickCrop(View view) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onClickCrop(View view) {
         isCrop.set(!isCrop.get());
-    }
-
-    public void onCheckedChangedCrop(boolean isChecked) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onCheckedChangedCrop(boolean isChecked) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isCrop.set(isChecked);
         if (isChecked) {
@@ -1384,13 +1096,13 @@ public class FragmentSettingViewModel {
             editor.apply();
         }
 
-    }
-
-    public void onClickCameraButtonSheet(View v) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onClickCameraButtonSheet(View v) {
         isCameraButtonSheet.set(!isCameraButtonSheet.get());
-    }
-
-    public void onCheckedChangedCameraButtonSheet(boolean isChecked) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onCheckedChangedCameraButtonSheet(boolean isChecked) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         isCameraButtonSheet.set(isChecked);
         if (isChecked) {
@@ -1401,10 +1113,9 @@ public class FragmentSettingViewModel {
             editor.apply();
         }
 
-    }
-
-
-    public void onClickiGapHome(View view) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onClickiGapHome(View view) {
         final String link;
         if (HelperCalander.isPersianUnicode) {
             link = "https://www.igap.net/fa";
@@ -1412,9 +1123,9 @@ public class FragmentSettingViewModel {
             link = "https://www.igap.net/";
         }
         HelperUrl.openBrowser(link);
-    }
-
-    public void onClickPrivacyBlog(View view) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onClickPrivacyBlog(View view) {
 
         final String blogLink;
         if (HelperCalander.isPersianUnicode) {
@@ -1424,14 +1135,9 @@ public class FragmentSettingViewModel {
         }
 
         HelperUrl.openBrowser(blogLink);
-    }
-    //public void onClickFabSetPic(View view) {
-    //
-    //    //startDialog(R.array.profile);
-    //}
-
-
-    public void onClickTicket(View view) {
+    }*/
+    //todo:move to page chat setting
+    /*public void onClickTicket(View view) {
 
         final String supportLink;
         if (HelperCalander.isPersianUnicode) {
@@ -1441,185 +1147,18 @@ public class FragmentSettingViewModel {
         }
         HelperUrl.openBrowser(supportLink);
 
-    }
-
-
-    private void getInfo() {
-
-        realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();
-        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-
-        if (realmUserInfo == null) {
-            G.fragmentActivity.onBackPressed();
-            return;
-        }
-
-        updateUserInfoUI(realmUserInfo);
-
-
-        if (realmPrivacy == null) {
-            RealmPrivacy.updatePrivacy("", "", "", "", "", "");
-        }
-        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        String textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
-        callbackLanguage.set(textLanguage);
-
-        int checkedEnableCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1);
-        isCrop.set(getBoolean(checkedEnableCrop));
-
-        boolean checkCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
-        isCameraButtonSheet.set(checkCameraButtonSheet);
-
-        int checkedEnableVote = sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1);
-        isShowVote.set(getBoolean(checkedEnableVote));
-
-        int checkedEnablShowSenderInGroup = sharedPreferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0);
-        isSenderNameGroup.set(getBoolean(checkedEnablShowSenderInGroup));
-
-        int checkedEnableCompress = sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1);
-        isCompress.set(getBoolean(checkedEnableCompress));
-
-        int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
-        switch (typeData) {
-            case 0:
-                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.miladi));
-                break;
-            case 1:
-                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.shamsi));
-                break;
-            case 2:
-                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.ghamari));
-                break;
-        }
-
-        FragmentSetting.dateType = new FragmentSetting.DateType() {
-            @Override
-            public void dataName(String type) {
-                callbackDataShams.set(type);
-            }
-        };
-
-        boolean checkedEnableAutoRotate = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
-        isAutoRotate.set(checkedEnableAutoRotate);
-
-        boolean checkedEnableMultiTab = sharedPreferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
-        isMultiTab.set(checkedEnableMultiTab);
-
-        boolean checkedEnableTime = sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
-        isTime.set(checkedEnableTime);
-
-        poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - 11;
-        String textSize = "" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
-        callbackTextSize.set(textSize);
-
-        if (HelperCalander.isPersianUnicode) {
-            callbackTextSize.set(HelperCalander.convertToUnicodeFarsiNumber(callbackTextSize.get()));
-        }
-
-        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-        isSendEnter.set(getBoolean(checkedSendByEnter));
-
-        int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-        isInAppBrowser.set(getBoolean(checkedInAppBrowser));
-
-
-        boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-        isThemeDark.set(checkedThemeDark);
-        if (isThemeDark.get()) {
-            isAutoThemeDark.set(View.VISIBLE);
-        } else {
-            isAutoThemeDark.set(View.GONE);
-        }
-
-        if (G.isDarkTheme) {
-            isGoneLayoutColor.set(View.GONE);
-        } else {
-            isGoneLayoutColor.set(View.VISIBLE);
-        }
-
-
-        int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
-        isAutoGif.set(getBoolean(checkedAutoGif));
-
-        int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
-        isSaveGallery.set(getBoolean(checkedSaveToGallery));
-
-
-        int checkedEnableTrim = sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1);
-        isTrim.set(getBoolean(checkedEnableTrim));
-
-        int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
-        isDefaultPlayer.set(getBoolean(checkedEnableDefaultPlayer));
-
-        callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());
-
-
-    }
-
-    public void updateIvandScore(int score) {
+    }*/
+    //todo:move to page chat setting
+    /*public void updateIvandScore(int score) {
         callbackSetIVand.set(G.currentActivity.getString(R.string.st_ivand_text_setting) + " " + score);
-    }
-
-    private void updateUserInfoUI(RealmUserInfo userInfo) {
-        if (checkValidationForRealm(userInfo)) {
-            userId = userInfo.getUserId();
-            String nickName = userInfo.getUserInfo().getDisplayName();
-            userName = userInfo.getUserInfo().getUsername();
-            phoneName = userInfo.getUserInfo().getPhoneNumber();
-            ProtoGlobal.Gender userGender = userInfo.getGender();
-            userEmail = userInfo.getEmail();
-            bio = userInfo.getUserInfo().getBio();
-            if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
-                callbackSetRepresent.set("");
-            } else {
-                callbackSetRepresent.set(userInfo.getRepresentPhoneNumber());
-            }
-
-            if (nickName != null) {
-                callbackSetName.set(nickName);
-                callbackSetTitleName.set(nickName);
-            }
-            if (bio != null) {
-                callbackSetBio.set(bio);
-            }
-
-            if (userName != null) callbackSetUserName.set(userName);
-
-            if (phoneName != null) callbackSetPhoneNumber.set(phoneName);
-
-            if (HelperCalander.isPersianUnicode) {
-                callbackSetPhoneNumber.set(HelperCalander.convertToUnicodeFarsiNumber(callbackSetPhoneNumber.get()));
-            }
-
-            if (userGender != null) {
-                if (userGender == ProtoGlobal.Gender.MALE) {
-                    callbackGander.set(G.fragmentActivity.getResources().getString(R.string.Male));
-                } else if (userGender == ProtoGlobal.Gender.FEMALE) {
-                    callbackGander.set(G.fragmentActivity.getResources().getString(R.string.Female));
-                }
-            } else {
-                callbackGander.set(G.fragmentActivity.getResources().getString(R.string.set_gender));
-            }
-
-            if (userEmail != null && userEmail.length() > 0) {
-                callbackSetEmail.set(userEmail);
-            } else {
-                callbackSetEmail.set(G.fragmentActivity.getResources().getString(R.string.set_email));
-            }
-        }
-    }
-
+    }*/
 
     private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
-        if (realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded()) {
-            return true;
-        }
-        return false;
+        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
     }
 
 
-    private void useCamera() {
+    /*private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
                 new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(fragmentSetting);
@@ -1641,7 +1180,7 @@ public class FragmentSettingViewModel {
                 Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 
 
     private Realm getRealm() {
@@ -1649,30 +1188,6 @@ public class FragmentSettingViewModel {
             mRealm = Realm.getDefaultInstance();
         }
         return mRealm;
-    }
-
-    private void showProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (fragmentSettingBinding.stPrgWaitingAddContact != null) {
-                    fragmentSettingBinding.stPrgWaitingAddContact.setVisibility(View.VISIBLE);
-                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-            }
-        });
-    }
-
-    private void hideProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (fragmentSettingBinding.stPrgWaitingAddContact != null) {
-                    fragmentSettingBinding.stPrgWaitingAddContact.setVisibility(View.GONE);
-                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-            }
-        });
     }
 
     private void dialogWaitTime(int title, long time, int majorCode) {
@@ -1714,41 +1229,7 @@ public class FragmentSettingViewModel {
         return true;
     }
 
-
-//    private void showSetDefaultColorDialog() {
-//
-//        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.set_color_to_default).content(R.string.color_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-//            @Override
-//            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//
-//                SharedPreferences.Editor editor;
-//                if (sharedPreferences == null) {
-//                    SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-//                    editor = sharedPreferences.edit();
-//                } else {
-//                    editor = sharedPreferences.edit();
-//
-//                }
-//                editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Config.DEFAULT);
-//                editor.apply();
-//
-//                Config.setThemeColor();
-//
-//                if (G.onRefreshActivity != null) {
-//                    G.isRestartActivity = true;
-//                    G.onRefreshActivity.refresh("");
-//                }
-//
-//            }
-//        }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative(new MaterialDialog.SingleButtonCallback() {
-//            @Override
-//            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//
-//            }
-//        }).show();
-//    }
-
-    private String getAppVersion() {
+    /*private String getAppVersion() {
 
         PackageManager manager = context.getPackageManager();
         PackageInfo info = null;
@@ -1758,11 +1239,11 @@ public class FragmentSettingViewModel {
             e.printStackTrace();
         }
         return info.versionName;
-    }
+    }*/
 
 
     public void onResume() {
-        G.onUserAvatarResponse = fragmentSetting;
+        /*G.onUserAvatarResponse = fragmentSetting;*/
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
@@ -1772,23 +1253,19 @@ public class FragmentSettingViewModel {
             return;
         }
 
-        realmUserInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
-            @Override
-            public void onChange(RealmModel realmModel) {
-                updateUserInfoUI((RealmUserInfo) realmModel);
-            }
-        });
+        /*realmUserInfo.addChangeListener(realmModel -> {
+            Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
+            updateUserInfoUI((RealmUserInfo) realmModel);
+        });*/
 
         mRealmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), G.userId);
         if (mRealmRegisteredInfo != null) {
-            mRealmRegisteredInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
-                @Override
-                public void onChange(RealmModel realmModel) {
-                    updateUserInfoUI(realmUserInfo);
-                }
+            mRealmRegisteredInfo.addChangeListener(realmModel -> {
+                Log.wtf("view Model", "call updateUserInfoUI from =mRealmRegisteredInfo change listener");
+                updateUserInfoUI(realmUserInfo);
             });
-
-            updateUserInfoUI(realmUserInfo);
+            /*Log.wtf("view Model", "call updateUserInfoUI from =mRealmRegisteredInfo not null");
+            updateUserInfoUI(realmUserInfo);*/
         }
     }
 

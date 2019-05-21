@@ -10,13 +10,14 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.proto.ProtoUserSessionLogout;
 
 public class RequestUserSessionLogout {
 
-    public void userSessionLogout() {
+    public void userSessionLogout(OnUserSessionLogout callback) {
         ProtoUserSessionLogout.UserSessionLogout.Builder builder = ProtoUserSessionLogout.UserSessionLogout.newBuilder();
-        RequestWrapper requestWrapper = new RequestWrapper(127, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(127, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

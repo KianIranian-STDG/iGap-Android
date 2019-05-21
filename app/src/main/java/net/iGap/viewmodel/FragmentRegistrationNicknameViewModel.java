@@ -109,7 +109,7 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
 
 
     private void setNickName(String name, String lastName) {
-        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
+        new RequestUserProfileSetNickname().userProfileNickName(name + " " + lastName, new OnUserProfileSetNickNameResponse() {
             @Override
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
                 getUserInfo();
@@ -124,8 +124,7 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
             public void onUserProfileNickNameTimeOut() {
                 G.handler.post(() -> prgVisibility.set(View.GONE));
             }
-        };
-        new RequestUserProfileSetNickname().userProfileNickName(name);
+        });
     }
 
     private void getUserInfo() {

@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.proto.ProtoUserProfileNickname;
 
 public class RequestUserProfileSetNickname {
 
-    public void userProfileNickName(String nickName) {
+    public void userProfileNickName(String nickName, OnUserProfileSetNickNameResponse callback) {
         ProtoUserProfileNickname.UserProfileSetNickname.Builder userProfileNickName = ProtoUserProfileNickname.UserProfileSetNickname.newBuilder();
         userProfileNickName.setNickname(nickName);
 
-        RequestWrapper requestWrapper = new RequestWrapper(105, userProfileNickName);
+        RequestWrapper requestWrapper = new RequestWrapper(105, userProfileNickName,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

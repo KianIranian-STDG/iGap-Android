@@ -221,8 +221,8 @@ public class G extends MultiDexApplication {
     public static OnReceivePageInfoTOS onReceivePageInfoTOS;
     public static OnReceivePageInfoWalletAgreement onReceivePageInfoWalletAgreement;
     public static OnUserLogin onUserLogin;
-    public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;
-    public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;
+    /*public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;*/
+    /*public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;*/
     public static OnUserProfileSetNickNameResponse onUserProfileSetNickNameResponse;
     public static OnInfoCountryResponse onInfoCountryResponse;
     public static OnInfoTime onInfoTime;
@@ -259,8 +259,8 @@ public class G extends MultiDexApplication {
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
     public static OnUserDelete onUserDelete;
-    public static OnUserProfileCheckUsername onUserProfileCheckUsername;
-    public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
+    /*public static OnUserProfileCheckUsername onUserProfileCheckUsername;*/
+    /*public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;*/
     public static OnGroupGetMemberList onGroupGetMemberList;
     public static OnUserGetDeleteToken onUserGetDeleteToken;
     public static OnGroupDelete onGroupDelete;
@@ -274,7 +274,7 @@ public class G extends MultiDexApplication {
     public static OnSetActionInRoom onSetActionInRoom;
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionTerminate onUserSessionTerminate;
-    public static OnUserSessionLogout onUserSessionLogout;
+    /*public static OnUserSessionLogout onUserSessionLogout;*/
     //    public static UpdateListAfterKick updateListAfterKick;
     public static OnHelperSetAction onHelperSetAction;
     public static OnChannelCreate onChannelCreate;
