@@ -61,5 +61,18 @@
         app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"
         app:layout_constraintTop_toBottomOf="@+id/tv_itemContactChat_userName" />
 
+    <TextView
+        android:fontFamily="@font/main_font"
+        android:visibility="gone"
+        android:id="@+id/tv_itemContactChat_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:text="@string/Remove"
+        app:layout_constraintTop_toTopOf="@id/tv_itemContactChat_userName"
+        app:layout_constraintBottom_toBottomOf="@id/tv_itemContactChat_userPhoneNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp24"/>
 
 </android.support.constraint.ConstraintLayout>

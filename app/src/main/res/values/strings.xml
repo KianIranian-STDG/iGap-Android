@@ -1797,4 +1797,6 @@
     <string name="chat_setting">Chat Settings</string>
     <string name="add_bank_card">Add Your Card Here!</string>
     <string name="chat_setting_title">Chat Setting</string>
+    <string name="refresh">Refresh</string>
+    <string name="mark_as_several">Mark as several</string>
 </resources>

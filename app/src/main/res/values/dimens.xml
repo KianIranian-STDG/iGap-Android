@@ -11,8 +11,8 @@
   <dimen name="toolbar_height_root_with_search">94dp</dimen>
   <dimen name="toolbar_height_with_avatar">94dp</dimen>
   <dimen name="toolbar_height_root_with_avatar">164dp</dimen>
-  <dimen name="toolbar_icon_size">40dp</dimen>
-  <dimen name="toolbar_icon_padding">10dp</dimen>
+  <dimen name="toolbar_icon_size">56dp</dimen>
+  <dimen name="toolbar_icon_padding">16dp</dimen>
 
   <dimen name="toolbar_icon_margin">4dp</dimen>
   <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>

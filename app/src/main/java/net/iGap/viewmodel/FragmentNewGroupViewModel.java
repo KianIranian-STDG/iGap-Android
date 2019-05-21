@@ -70,6 +70,7 @@ public class FragmentNewGroupViewModel {
     public ObservableField<Integer> edtDescriptionInputType = new ObservableField<>(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
     public ObservableField<Boolean> nextStepEnable = new ObservableField<>(true);
     private long groomId = 0;
+    public MutableLiveData<Long> createdRoomId = new MutableLiveData<>();
 
 
     public FragmentNewGroupViewModel(Bundle arguments) {
@@ -279,12 +280,13 @@ public class FragmentNewGroupViewModel {
             @Override
             public void onGroupCreate(final long roomIdR) {
 
+                createdRoomId.postValue( roomIdR);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         roomId = roomIdR;
                         hideProgressBar();
-                        getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP);
+//                        getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP);
                     }
                 });
 
@@ -420,5 +422,7 @@ public class FragmentNewGroupViewModel {
                     G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+
+
     }
 }

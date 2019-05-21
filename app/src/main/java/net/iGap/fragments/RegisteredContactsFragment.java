@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -56,6 +57,9 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
@@ -77,6 +81,7 @@ import net.iGap.module.MEditText;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
@@ -86,6 +91,7 @@ import net.iGap.request.RequestUserContactsGetList;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Case;
@@ -590,18 +596,32 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         btnAddNewGroup.setOnClickListener( v -> {
 
-            /*try {
-                G.fragmentActivity.onBackPressed();
-            } catch (Exception e) {
-                e.getStackTrace();
-            }*/
-
-            FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+        /*    FragmentNewGroup fragment = FragmentNewGroup.newInstance();
             Bundle bundle_ = new Bundle();
             bundle_.putString("TYPE", "NewGroup");
             fragment.setArguments(bundle_);
-            new HelperFragment(fragment).setReplace(false).load(true);
+            new HelperFragment(fragment).setReplace(false).load(true);*/
 
+            Fragment fragment = ContactGroupFragment.newInstance();
+            Bundle bundle1 = new Bundle();
+            bundle1.putLong("RoomId", -127);
+            bundle1.putString("LIMIT", "5000");
+            bundle1.putString("TYPE", ProtoGlobal.Room.Type.GROUP.name());
+            bundle1.putBoolean("NewRoom", true);
+            fragment.setArguments(bundle1);
+
+            if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+            new HelperFragment(fragment).setReplace(false).load();
+
+
+            /*if (!G.fragmentActivity.isFinishing()) {
+                G.fragmentActivity.getSupportFragmentManager().popBackStack();
+            }
+
+            if (G.iTowPanModDesinLayout != null) {
+                G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+            }*/
 
 
         });
@@ -1909,7 +1929,23 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     @Override //btn edit
     public void onLeftIconClickListener(View view) {
+        showDialog();
+    }
 
+    private void showDialog(){
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.refresh));
+        items.add(getString(R.string.sync_contact));
+        items.add(getString(R.string.mark_as_several));
+
+        new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (items.get(position).equals(getString(R.string.refresh))) {
+
+                }
+            }
+        }).show(getFragmentManager(),"contactToolbar");
     }
 
     @Override
