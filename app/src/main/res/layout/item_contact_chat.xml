@@ -19,16 +19,17 @@
 
         <CheckBox
             android:id="@+id/iv_itemContactChat_checkBox"
-            android:layout_width="@dimen/dp36"
-            android:layout_height="@dimen/dp36"
-            android:layout_marginLeft="@dimen/dp20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp8"
             android:button="@drawable/check_box_background"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_itemContactChat_profileImage"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
-            android:layout_marginStart="@dimen/dp24"
+            android:layout_marginStart="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
             android:background="@drawable/shape_background_profile_sample"/>
 

@@ -10,7 +10,7 @@
                 android:height="@dimen/dp20"/>
 
             <stroke
-                android:color="@color/black"
+                android:color="@color/gray_6c"
                 android:width="@dimen/dp1"/>
 
             <corners

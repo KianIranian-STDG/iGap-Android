@@ -10,20 +10,20 @@
                 android:height="@dimen/dp20"/>
 
             <stroke
-                android:color="@color/black"
+                android:color="@color/gray_6c"
                 android:width="@dimen/dp1"/>
 
             <corners
-                android:radius="@dimen/dp2"/>
+                android:radius="@dimen/dp4"/>
 
         </shape>
     </item>
 
     <item
-        android:top="@dimen/dp4"
-        android:left="@dimen/dp4"
-        android:right="@dimen/dp4"
-        android:bottom="@dimen/dp4">
+        android:top="@dimen/dp2"
+        android:left="@dimen/dp2"
+        android:right="@dimen/dp2"
+        android:bottom="@dimen/dp2">
         <shape
             android:shape="rectangle">
 
@@ -31,7 +31,7 @@
                 android:color="@color/colorToolbarBackgroundEnd"/>
 
             <corners
-                android:radius="@dimen/dp2"/>
+                android:radius="@dimen/dp4"/>
 
         </shape>
     </item>
