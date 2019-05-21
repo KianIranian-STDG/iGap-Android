@@ -58,6 +58,8 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
@@ -89,6 +91,7 @@ import net.iGap.request.RequestUserContactsGetList;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Case;
@@ -609,7 +612,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
             if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
                 FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-            new HelperFragment(fragment).load();
+            new HelperFragment(fragment).setReplace(false).load();
 
 
             /*if (!G.fragmentActivity.isFinishing()) {
@@ -1926,7 +1929,23 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     @Override //btn edit
     public void onLeftIconClickListener(View view) {
+        showDialog();
+    }
 
+    private void showDialog(){
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.refresh));
+        items.add(getString(R.string.sync_contact));
+        items.add(getString(R.string.mark_as_several));
+
+        new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (items.get(position).equals(getString(R.string.refresh))) {
+
+                }
+            }
+        }).show(getFragmentManager(),"contactToolbar");
     }
 
     @Override

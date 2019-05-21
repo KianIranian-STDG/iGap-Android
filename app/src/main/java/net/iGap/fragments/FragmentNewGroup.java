@@ -20,9 +20,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,8 +33,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,6 +53,8 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
@@ -62,6 +69,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.LinedEditText;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
@@ -74,6 +82,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -83,6 +92,7 @@ import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_
 
 public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener {
 
+    public static RemoveSelectedContact removeSelectedContact ;
     public static long avatarId = 0;
     public static OnRemoveFragmentNewGroup onRemoveFragmentNewGroup;
     //  private String path;
@@ -128,8 +138,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             initGroupMembersRecycler();
         }
 
-
-        //fragmentNewGroupViewModel.onClickCancel();
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
             public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
@@ -158,14 +166,9 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                     }
                 });
             }
-        }
+        };
 
-        ;
-
-
-        onRemoveFragmentNewGroup = new
-
-                OnRemoveFragmentNewGroup() {
+        onRemoveFragmentNewGroup = new OnRemoveFragmentNewGroup() {
                     @Override
                     public void onRemove() {
                         try {
@@ -174,17 +177,20 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                             e.printStackTrace();
                         }
                     }
-                }
-
-        ;
+                };
     }
 
     private void initGroupMembersRecycler() {
 
-        for (int i = 0 ; i < ContactGroupFragment.selectedContacts.size() ; i++){
-
-            Log.i("nazari", "initGroupMembersRecycler: " + ContactGroupFragment.selectedContacts.get(i).displayName);
+        if (ContactGroupFragment.selectedContacts.size() != 0 ){
+            fragmentNewGroupBinding.angLayoutMembers.setVisibility(View.VISIBLE);
         }
+        RecyclerView rv = fragmentNewGroupBinding.angRecyclerViewSelectedContact;
+        rv.setLayoutManager(new LinearLayoutManager(context));
+        SelectedContactAdapter adapter = new SelectedContactAdapter();
+        adapter.setData(ContactGroupFragment.selectedContacts);
+        rv.setAdapter(adapter);
+
     }
 
     private void initDataBinding() {
@@ -542,7 +548,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         return image;
     }
 
-
     public interface OnRemoveFragmentNewGroup {
         void onRemove();
     }
@@ -594,7 +599,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
          * request add member for group
          *
          */
-        countAddMemberRequest = ContactGroupFragment.selectedContacts.size() - 1 ;
+        //countAddMemberRequest = ContactGroupFragment.selectedContacts.size() ;
         ArrayList<Long> list = getSelectedList();
         if (list.size() > 0) {
             for (long peerId : list) {
@@ -603,9 +608,10 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         } else {
 
             if (isAdded()) {
-                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-
+               /* if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();*/
+               popBackStackFragment();
+               popBackStackFragment();
                 removeFromBaseFragment(FragmentNewGroup.this);
                 new GoToChatActivity(createdRoomId).startActivity();
             }
@@ -630,9 +636,85 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         RealmRoom.addOwnerToDatabase(roomId);
         RealmRoom.updateMemberCount(roomId, roomType, ContactGroupFragment.selectedContacts.size()+ 1); // plus with 1 , for own account
         if (isAdded()) {
+            popBackStackFragment();
+            popBackStackFragment();
+            ContactGroupFragment.selectedContacts.clear();
             removeFromBaseFragment(FragmentNewGroup.this);
             new GoToChatActivity(roomId).startActivity();
         }
+    }
+
+    private class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContactAdapter.ViewHolderSelectedContact>{
+
+        private List<StructContactInfo> mItems = new ArrayList<>();
+        private LayoutInflater inflater;
+
+        public SelectedContactAdapter() {
+            inflater = LayoutInflater.from(context);
+        }
+
+        @NonNull
+        @Override
+        public ViewHolderSelectedContact onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
+            View view = inflater.inflate(R.layout.item_contact_chat , viewGroup , false);
+
+            return new ViewHolderSelectedContact(view);
+        }
+
+        public void setData(List<StructContactInfo> mItems) {
+            this.mItems.addAll(mItems);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolderSelectedContact holder, int i) {
+            holder.bindData(mItems.get(i));
+        }
+
+        @Override
+        public int getItemCount() {
+            return mItems.size();
+        }
+
+        public class ViewHolderSelectedContact extends RecyclerView.ViewHolder{
+
+            private TextView txtName , txtPhone ;
+            private de.hdodenhof.circleimageview.CircleImageView imgAvatar ;
+            private TextView btnRemove;
+            private CheckBox chSelected ;
+
+            public ViewHolderSelectedContact(@NonNull View itemView) {
+                super(itemView);
+
+                txtName = itemView.findViewById(R.id.tv_itemContactChat_userName);
+                txtPhone = itemView.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
+                btnRemove = itemView.findViewById(R.id.tv_itemContactChat_remove);
+                imgAvatar = itemView.findViewById(R.id.iv_itemContactChat_profileImage);
+                chSelected = itemView.findViewById(R.id.iv_itemContactChat_checkBox);
+            }
+
+            public void bindData(final StructContactInfo data){
+
+                txtPhone.setVisibility(View.INVISIBLE);
+                chSelected.setVisibility(View.GONE);
+                btnRemove.setVisibility(View.VISIBLE);
+                txtName.setText(data.displayName);
+                avatarHandler.getAvatar(new ParamWithAvatarType(imgAvatar, data.peerId).avatarType(AvatarHandler.AvatarType.USER));
+
+                btnRemove.setOnClickListener(v -> {
+                    mItems.remove(data);
+                    notifyDataSetChanged();
+
+                    if (removeSelectedContact != null)
+                        removeSelectedContact.onRemoved(data);
+                });
+            }
+        }
+    }
+
+    public interface RemoveSelectedContact{
+        void onRemoved(StructContactInfo item);
     }
 
 }

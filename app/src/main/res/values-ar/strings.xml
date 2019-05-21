@@ -2735,5 +2735,7 @@
     <string name="auto_play_media">Auto-play Media</string>
     <string name="auto_download_media">Auto-download Media</string>
     <string name="chat_setting">Chat Settings</string>
+    <string name="refresh">Refresh</string>
+    <string name="mark_as_several">Mark as several</string>
 
 </resources>

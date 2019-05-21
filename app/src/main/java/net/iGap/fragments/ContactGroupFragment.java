@@ -165,8 +165,10 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
                 if (item.mContact.isSelected) {
                     chipsInput.removeChipByLabel(item.mContact.displayName);
+                    selectedContacts.remove(item.mContact);
                 } else {
 
+                    selectedContacts.add(item.mContact);
 
                   Uri uri = null;
                     if (item.mContact.avatar != null && item.mContact.avatar.getFile() != null && item.mContact.avatar.getFile().getLocalThumbnailPath() != null) {
@@ -228,8 +230,26 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             }
         });
 
+        initContactRemoveListener();
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
+    }
+
+    private void initContactRemoveListener() {
+
+        FragmentNewGroup.removeSelectedContact = new FragmentNewGroup.RemoveSelectedContact() {
+            @Override
+            public void onRemoved(StructContactInfo item) {
+
+                try{
+                    chipsInput.removeChipByLabel(item.displayName);
+                    selectedContacts.remove(item);
+                }catch (Exception e){
+
+                }
+
+            }
+        };
     }
 
     @Override
@@ -406,7 +426,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
             if (roomId == -127){
 
-                setupSelectedList();
+                //setupSelectedList();
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle_ = new Bundle();
                 bundle_.putString("TYPE", "NewGroup");

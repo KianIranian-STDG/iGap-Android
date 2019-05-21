@@ -172,18 +172,42 @@
         android:layout_marginLeft="@dimen/dp20"
         android:layout_marginRight="@dimen/dp20"/>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ang_recycler_view_selected_contact"
+    <LinearLayout
+        android:id="@+id/ang_layout_members"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/ang_txt_add_hint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="@dimen/dp6"
-        android:paddingBottom="@dimen/dp6"
-        android:visibility="visible" />
+        android:layout_marginTop="@dimen/dp6">
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/member"
+          android:layout_marginLeft="10dp"
+          android:layout_marginRight="10dp"
+          />
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_margin="10dp"
+          android:background="@{Color.parseColor(G.lineBorder),default=@color/toolbar_background}" />
+
+      <android.support.v7.widget.RecyclerView
+          android:layout_height="match_parent"
+          android:layout_width="match_parent"
+          android:layout_marginLeft="10dp"
+          android:layout_marginRight="10dp"
+          android:id="@+id/ang_recycler_view_selected_contact"
+          android:paddingBottom="@dimen/dp6"
+          android:visibility="visible" />
+
+    </LinearLayout>
 
 
   </android.support.constraint.ConstraintLayout>
