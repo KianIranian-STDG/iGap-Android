@@ -69,6 +69,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGeoCommentResponse;
@@ -79,6 +80,7 @@ import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapUsersGet;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.KeyboardUtils;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
@@ -143,7 +145,7 @@ import static net.iGap.G.inflater;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
 
-public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
+public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
 
     public static final int pageiGapMap = 1;
     public static final int pageUserList = 2;
@@ -211,6 +213,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     static boolean changeState = false;
     private int orientation = G.rotationState;
     private TopSheetDialog dialog;
+
+    private HelperToolbar mHelperToolbar ;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -474,6 +478,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         attentionDialog();
         map = (MapView) view.findViewById(R.id.map);
 
+        initToolbar(view);
         startMap(view);
         //clickDrawMarkActive();
 
@@ -741,6 +746,20 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
         page = 1;
         new RequestGeoGetComment().getComment(userId);
+    }
+
+    private void initToolbar(View view) {
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.igap_nearby))
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_more_toolbar)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fm_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
     }
 
 
@@ -1925,5 +1944,73 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         }
     }
 
+    @Override
+    public void onLeftIconClickListener(View view) {
+        // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
+        if (G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1) != null && G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())) {
+            return;
+        }
 
+        if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
+            rippleMoreMap.setVisibility(View.VISIBLE);
+            fabGps.show();
+            fabStateSwitcher.setVisibility(View.VISIBLE);
+        }
+        if (!isBackPress) {
+            //getActivity().getSupportFragmentManager().popBackStack();
+            G.fragmentActivity.onBackPressed();
+        }
+        closeKeyboard(view);
+        isBackPress = false;
+        page = pageiGapMap;
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.list_user_map));
+        items.add(getString(R.string.nearby));
+        items.add(getString(R.string.map_registration));
+
+        dialog = new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (items.get(position).equals(getString(R.string.list_user_map))){
+                    fabGps.hide();
+                    fabStateSwitcher.setVisibility(View.GONE);
+                    rippleMoreMap.setVisibility(View.GONE);
+                    page = pageUserList;
+                    try {
+                        new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+                else if (items.get(position).equals(getString(R.string.nearby))){
+                    if (location != null && !isSendRequestGeoCoordinate) {
+                        new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                        showProgress(true);
+                        isSendRequestGeoCoordinate = true;
+                    }
+                }
+                else if (items.get(position).equals(getString(R.string.map_registration))){
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            new RequestGeoRegister().register(false);
+
+                        }
+                    }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        }
+                    }).show();
+                }
+            }
+        });
+        dialog.show();
+    }
 }
