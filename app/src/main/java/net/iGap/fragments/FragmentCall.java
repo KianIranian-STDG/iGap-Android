@@ -271,6 +271,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
     private boolean isInit = false;
 
     private void init() {
+        if (view == null) {
+            return;
+        }
 
         fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
         fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
