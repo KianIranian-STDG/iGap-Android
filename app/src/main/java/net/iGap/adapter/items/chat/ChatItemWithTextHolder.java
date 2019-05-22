@@ -1,6 +1,5 @@
 package net.iGap.adapter.items.chat;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,48 +9,12 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.module.EmojiTextViewE;
 
 public class ChatItemWithTextHolder extends NewChatItemHolder {
-    private LinearLayout layoutMessageContainer;
     EmojiTextViewE messageView;
     LinearLayout BtnContainer;
+    private LinearLayout layoutMessageContainer;
 
     public ChatItemWithTextHolder(View view) {
         super(view);
-    }
-
-    private void initViews() {
-        messageView = ViewMaker.makeTextViewMessage();
-        layoutMessageContainer = ViewMaker.getTextView();
-        layoutMessageContainer.addView(messageView);
-
-        BtnContainer = new LinearLayout(G.context);
-        BtnContainer.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        BtnContainer.setLayoutParams(layout_327);
-
-        layoutMessageContainer.addView(BtnContainer);
-
-        messageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("bagi" , "OnClickMessage" + FragmentChat.isInSelectionMode);
-
-                if (FragmentChat.isInSelectionMode) {
-                    itemView.performLongClick();
-                } else {
-                    getItemContainer().performClick();
-                }
-
-            }
-        });
-
-        messageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                itemView.performLongClick();
-                return true;
-            }
-        });
-
     }
 
     protected void setLayoutMessageContainer(LinearLayout.LayoutParams layout_param) {
@@ -71,6 +34,33 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
 
     public void removeButtonLayout() {
         BtnContainer.removeAllViews();
+    }
+
+    private void initViews() {
+        messageView = ViewMaker.makeTextViewMessage();
+        layoutMessageContainer = ViewMaker.getTextView();
+        layoutMessageContainer.addView(messageView);
+
+        BtnContainer = new LinearLayout(G.context);
+        BtnContainer.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        BtnContainer.setLayoutParams(layout_327);
+
+        layoutMessageContainer.addView(BtnContainer);
+
+        messageView.setOnClickListener(view -> {
+            if (FragmentChat.isInSelectionMode) {
+                itemView.performLongClick();
+            } else {
+                getItemContainer().performClick();
+            }
+        });
+
+        messageView.setOnLongClickListener(view -> {
+            itemView.performLongClick();
+            return true;
+        });
+
     }
 
 }
