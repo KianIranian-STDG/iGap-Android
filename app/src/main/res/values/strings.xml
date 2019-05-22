@@ -1292,7 +1292,7 @@
     <string name="SendMoney">Send Money</string>
     <string name="transfer_amount_hint">Enter the transfer amount below :</string>
     <string name="amount_in_rial">Amount in Rial :</string>
-    <string name="pay">pay</string>
+    <string name="pay">Pay</string>
     <string name="transfer_to_dialog">Transfer to :</string>
     <string name="am_money">money</string>
     <string name="trace_number">Trace Number</string>
