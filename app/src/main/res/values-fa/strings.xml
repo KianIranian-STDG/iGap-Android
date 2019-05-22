@@ -1791,9 +1791,11 @@
     <string name="auto_play_media">پخش خودکار محتوا</string>
     <string name="auto_download_media">دانلودخودکار محتوا</string>
     <string name="chat_setting">تنظیمات گفتگو</string>
+    <string name="warning">اخطار</string>
+    <string name="accept_terms_and_condition_error_message">فراموش كردین شرایط و ضوابط را بپذیرید</string>
     <string name="new_channels_rules">اگر یک پیوند دائمی را تنظیم کنید، افراد دیگر قادر به یافتن و پیوستن به کانال شما خواهند بود.\nشما می توانید از a-z، 0-9 و زیرخط استفاده کنید.\nحداقل طول 5 حرف است.</string>
+    <string name="refresh">تازه کردن</string>
     <!--todo: translate these below lines-->
-    <string name="refresh">Refresh</string>
     <string name="mark_as_several">Mark as several</string>
 
 </resources>

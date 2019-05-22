@@ -2731,11 +2731,12 @@
     <string name="auto_play_media">تشغيل الوسائط تلقائيًا</string>
     <string name="auto_download_media">التحميل التلقائي للوسائط</string>
     <string name="chat_setting">إعدادات المحادثة</string>
-    <string name="refresh">Refresh</string>
-    <string name="mark_as_several">Mark as several</string>
+    <string name="refresh">تحديث</string>
+    <string name="mark_as_several">بمناسبة عدة</string>
     <string name="terms_and_condition">أقبل %s</string>
     <string name="terms_and_condition_clickable">القواعد واللوائح</string>
-
+    <string name="warning">تحذير</string>
+    <string name="accept_terms_and_condition_error_message">تنسى قبول الشروط والأحكام</string>
     <!--todo: translate these below lines-->
     <string name="new_channels_rules">إذا قمت بتعيين رابط دائم ، فسيتمكن الأشخاص الآخرون من العثور على قناتك والانضمام إليها.\nيمكنك استخدام أ-ي و 0-9 و الشرطة السفلية.\nالحد الأدنى للطول هو 5 أحرف.</string>
 
