@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FragmentLanguage extends BaseFragment {
 
-    private HelperToolbar mHelperToolbar ;
+    private HelperToolbar mHelperToolbar;
     public static boolean languageChanged = false;
     private FragmentLanguageViewModel fragmentLanguageViewModel;
     private FragmentLanguageBinding fragmentLanguageBinding;
@@ -63,7 +63,11 @@ public class FragmentLanguage extends BaseFragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
+                        if (getArguments() != null && getArguments().containsKey("canSwipeBack")) {
+                            FragmentLanguage.this.removeFromBaseFragment(FragmentLanguage.this);
+                        } else {
+                            popBackStackFragment();
+                        }
                     }
                 });
 
