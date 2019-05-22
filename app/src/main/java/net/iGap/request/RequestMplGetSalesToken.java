@@ -10,19 +10,36 @@
 
 package net.iGap.request;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoMplGetSalesToken;
 
 public class RequestMplGetSalesToken {
 
-    public void mplGetSalesToken(long amount ,long botId ){
+    public interface GetSalesToken {
+        void onSalesToken(String token);
+        void onError(int major, int minor);
+    }
+
+    public boolean mplGetSalesToken(long amount, String description,
+                                    boolean inquiry, long toUserId,
+                                    long invoiceNumber ,GetSalesToken getSalesToken){
         ProtoMplGetSalesToken.MplGetSalesToken.Builder builder = ProtoMplGetSalesToken.MplGetSalesToken.newBuilder();
         builder.setAmount(amount);
-        builder.setBotId(botId);
-        RequestWrapper requestWrapper = new RequestWrapper(9102, builder);
+        builder.setDescription(description);
+        builder.setInquiry(inquiry);
+        builder.setToUserId(toUserId);
+        builder.setInvoiceNumber(invoiceNumber);
+        RequestWrapper requestWrapper = new RequestWrapper(9102, builder, getSalesToken);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            if (G.userLogin) {
+                RequestQueue.sendRequest(requestWrapper);
+                return true;
+            } else {
+                return false;
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
