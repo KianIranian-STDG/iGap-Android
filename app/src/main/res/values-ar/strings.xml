@@ -2701,42 +2701,42 @@
     <string name="new_group_hint">يمكنك تقديم وصف اختياري لمجموعتك.</string>
     <string name="permanent_link">وصلة دائمة</string>
     <string name="change_language_title">غير اللغة</string>
-    <string name="terms_condition_title">قوانین و مقررات</string>
+    <string name="terms_condition_title">القواعد واللوائح</string>
     <string name="welcome_title">مرحبا بكم في IGap</string>
     <string name="add_modereator">أضف المشرف</string>
     <string name="add_admin">إضافة المسؤول</string>
     <string name="subscribers_title">مشتركين</string>
     <string name="invite_link_title">دعوة الرابط</string>
     <string name="add_to_home_screen">إضافة إلى الشاشة الرئيسية</string>
-
-    <!--todo: translate these below lines-->
-    <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length as 5 characters.</string>
     <string name="channel_type">نوع القناة</string>
     <string name="get_money_title">الحصول على المال</string>
-    <string name="payment_continue_title">continue</string>
-    <string name="bank_account_charge">موجودی حساب</string>
-    <string name="sign_message_title">Sign Messages</string>
-    <string name="sign_channel_message_description">Add names of the admins to the messages they post.</string>
-    <string name="recent_action">Recent Actions</string>
-    <string name="payment_for">for</string>
-    <string name="shabe_title">Shaba Card</string>
-    <string name="last_ten_transaction">Last 10 transaction</string>
-    <string name="Inventory">Inventory</string>
-    <string name="pay_bills_title">Pay Bills</string>
-    <string name="mobile_bills_title">Mobile Bills</string>
-    <string name="bills">Bills</string>
-    <string name="charge_amount">Charge amount</string>
-    <string name="buy_internet_package_title">Buy Internet Package</string>
-    <string name="charity_title">Charity</string>
-    <string name="item_selected"> item Selected</string>
-    <string name="disk_and_network_usage">Disk and Network Usage</string>
-    <string name="cache">Cache</string>
-    <string name="auto_play_media">Auto-play Media</string>
-    <string name="auto_download_media">Auto-download Media</string>
-    <string name="chat_setting">Chat Settings</string>
+    <string name="payment_continue_title">استمر</string>
+    <string name="bank_account_charge">رصيد الحساب</string>
+    <string name="sign_message_title">توقيع الرسائل</string>
+    <string name="sign_channel_message_description">أضف أسماء المسؤولين إلى الرسائل التي ينشرونها.</string>
+    <string name="recent_action">الإجراءات الأخيرة</string>
+    <string name="payment_for">إلى</string>
+    <string name="shabe_title">بطاقة إلى شبا</string>
+    <string name="last_ten_transaction">عشرة معاملة آخر</string>
+    <string name="Inventory">المخزون</string>
+    <string name="pay_bills_title">ادفع الفواتير</string>
+    <string name="mobile_bills_title">فواتير المحمول</string>
+    <string name="bills">فواتير</string>
+    <string name="charge_amount">مستوى الشحن</string>
+    <string name="buy_internet_package_title">شراء حزمة الإنترنت</string>
+    <string name="charity_title">الاعمال الخيرية</string>
+    <string name="item_selected">العنصر المحدد</string>
+    <string name="disk_and_network_usage">استخدام القرص والشبكة</string>
+    <string name="cache">مخبأ</string>
+    <string name="auto_play_media">تشغيل الوسائط تلقائيًا</string>
+    <string name="auto_download_media">التحميل التلقائي للوسائط</string>
+    <string name="chat_setting">إعدادات المحادثة</string>
     <string name="refresh">Refresh</string>
     <string name="mark_as_several">Mark as several</string>
     <string name="terms_and_condition">أقبل %s</string>
     <string name="terms_and_condition_clickable">القواعد واللوائح</string>
+
+    <!--todo: translate these below lines-->
+    <string name="new_channels_rules">إذا قمت بتعيين رابط دائم ، فسيتمكن الأشخاص الآخرون من العثور على قناتك والانضمام إليها.\nيمكنك استخدام أ-ي و 0-9 و الشرطة السفلية.\nالحد الأدنى للطول هو 5 أحرف.</string>
 
 </resources>
