@@ -48,6 +48,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
@@ -95,6 +96,7 @@ import net.iGap.request.RequestChannelAddMessageReaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -1921,9 +1923,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
 
+            } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
+                JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                Realm realm = Realm.getDefaultInstance();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+                long peerId;
+                if (room != null && room.getChatRoom() != null) {
+                    peerId = room.getChatRoom().getPeerId();
+                } else {
+                    peerId = Long.parseLong(mMessage.senderID);
+                }
+                realm.close();
+                DirectPayHelper.directPayBot(jsonObject, peerId);
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
 

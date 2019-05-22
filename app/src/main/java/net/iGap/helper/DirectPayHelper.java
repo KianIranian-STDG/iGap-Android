@@ -31,13 +31,19 @@ public class DirectPayHelper {
 
     public static final int requestCodeDirectPay = 4258;
 
-    public static void directPay(JSONObject jsonObject) throws JSONException {
+    public static void directPayBot(JSONObject jsonObject, long botId) throws JSONException {
         boolean inquiry = jsonObject.getBoolean("inquiry");
         long invoiceNumber = jsonObject.getLong("invoiceNumber");
         long price = jsonObject.getLong("price");
         String description = jsonObject.getString("description");
         String title = jsonObject.getString("title");
-        long toId = jsonObject.getLong("toId");
+        long toId;
+        if (botId == -1L) {
+            toId = jsonObject.getLong("toId");
+        } else {
+            toId = botId;
+        }
+
         String pp = String.valueOf(price);
         int k = 0;
         StringBuilder newPP = new StringBuilder();
@@ -89,6 +95,10 @@ public class DirectPayHelper {
             }
         });
 
+    }
+
+    public static void directPay(JSONObject jsonObject) throws JSONException {
+        directPayBot(jsonObject, -1L);
     }
 
     private static void directPay(Activity activity, long amount, String description,
