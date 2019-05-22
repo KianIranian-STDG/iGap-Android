@@ -216,10 +216,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
 
             bottomView.addView(spaceView, LayoutCreator.createFrame(1, LayoutCreator.MATCH_PARENT, CENTER,
-                    dpToPixel(1), 0, dpToPixel(1), 0));
+                    dpToPx(1), 0, dpToPx(1), 0));
 
             linearLayout_780.addView(bottomView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER,
-                    0, dpToPixel(2), 0, 0));
+                    0, dpToPx(2), 0, 0));
 
             bottomView.addView(fileType);
             linearLayout_784.addView(frameLayout);

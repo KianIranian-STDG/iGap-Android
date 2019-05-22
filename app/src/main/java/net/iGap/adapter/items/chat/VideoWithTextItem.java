@@ -131,7 +131,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration.setBackgroundResource(R.drawable.bg_message_image_time);
             duration.setGravity(Gravity.CENTER_VERTICAL);
             duration.setSingleLine(true);
-            duration.setPadding(i_Dp(R.dimen.dp4), dpToPixel(1), i_Dp(R.dimen.dp4), dpToPixel(1));
+            duration.setPadding(i_Dp(R.dimen.dp4), dpToPx(1), i_Dp(R.dimen.dp4), dpToPx(1));
             duration.setText("3:48 (4.5 MB)");
             duration.setAllCaps(TRUE);
             duration.setTextColor(G.context.getResources().getColor(R.color.gray10));
@@ -139,9 +139,9 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             setTypeFace(duration);
             FrameLayout.LayoutParams layout_49 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_49.gravity = Gravity.LEFT | Gravity.TOP;
-            layout_49.bottomMargin = -dpToPixel(2);
-            layout_49.leftMargin = dpToPixel(5);
-            layout_49.topMargin = dpToPixel(7);
+            layout_49.bottomMargin = -dpToPx(2);
+            layout_49.leftMargin = dpToPx(5);
+            layout_49.topMargin = dpToPx(7);
             duration.setLayoutParams(layout_49);
             frameLayout_642.addView(duration);
             progress = getProgressBar(0);

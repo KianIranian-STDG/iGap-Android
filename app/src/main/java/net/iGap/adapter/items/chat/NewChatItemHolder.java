@@ -1,8 +1,10 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -130,11 +132,11 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         contentBloke.setOrientation(LinearLayout.VERTICAL);
 
-        chatBloke.setPadding(dpToPixel(4), dpToPixel(4), dpToPixel(4), dpToPixel(4));
+        chatBloke.setPadding(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4));
 
 
         timeTv.setTextColor(Color.parseColor(G.textBubble));
-        timeTv.setPadding(dpToPixel(2), 0, dpToPixel(2), 0);
+        timeTv.setPadding(dpToPx(2), 0, dpToPx(2), 0);
         timeTv.setSingleLine(true);
         timeTv.setTextAppearance(getContext(), R.style.ChatMessages_Time);
         setTypeFace(timeTv);
@@ -156,7 +158,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.TOP, dpToPixel(6));
+        set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.TOP, dpToPx(6));
 
         set.constrainHeight(ticTv.getId(), i_Dp(R.dimen.dp14));
         set.constrainWidth(ticTv.getId(), i_Dp(R.dimen.dp14));
@@ -167,7 +169,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         set.constrainHeight(timeTv.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(timeTv.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(timeTv.getId(), ConstraintSet.RIGHT, ticTv.getId(), ConstraintSet.LEFT, dpToPixel(4));
+        set.connect(timeTv.getId(), ConstraintSet.RIGHT, ticTv.getId(), ConstraintSet.LEFT, dpToPx(4));
         set.connect(timeTv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
 
@@ -187,27 +189,27 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         set.constrainWidth(viewContainer.getId(), ConstraintSet.WRAP_CONTENT);
 
         viewContainer.addView(viewsLabelTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                Gravity.CENTER, dpToPixel(2), 0, dpToPixel(1), 0));
+                Gravity.CENTER, dpToPx(2), 0, dpToPx(1), 0));
         viewContainer.addView(eyeIconTv, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         set.connect(viewContainer.getId(), ConstraintSet.LEFT, chatBloke.getId(), ConstraintSet.LEFT);
         set.connect(viewContainer.getId(), ConstraintSet.TOP, timeTv.getId(), ConstraintSet.TOP);
         set.connect(viewContainer.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.BOTTOM);
 
-        set.connect(voteContainer.getId(), ConstraintSet.LEFT, viewContainer.getId(), ConstraintSet.RIGHT, dpToPixel(8));
+        set.connect(voteContainer.getId(), ConstraintSet.LEFT, viewContainer.getId(), ConstraintSet.RIGHT, dpToPx(8));
         set.connect(voteContainer.getId(), ConstraintSet.TOP, timeTv.getId(), ConstraintSet.TOP);
         set.connect(voteContainer.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.BOTTOM);
 
         voteUpContainer.addView(voteUpIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                Gravity.CENTER, 0, 0, dpToPixel(1), 0));
+                Gravity.CENTER, 0, 0, dpToPx(1), 0));
         voteUpContainer.addView(voteUpTv);
 
         voteDownContainer.addView(voteDownIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                Gravity.CENTER, 0, 0, dpToPixel(1), 0));
+                Gravity.CENTER, 0, 0, dpToPx(1), 0));
         voteDownContainer.addView(voteDownTv);
 
         voteContainer.addView(voteUpContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                Gravity.CENTER, 0, 0, dpToPixel(2), 0));
+                Gravity.CENTER, 0, 0, dpToPx(2), 0));
         voteContainer.addView(voteDownContainer);
 
         chatBloke.addView(contentBloke);
@@ -236,6 +238,10 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     }
 
+    public static int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
     private View.OnLongClickListener getLongClickPerform() {
         return view -> {
             itemView.performLongClick();
@@ -255,12 +261,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return ViewMaker.i_Dp(dpSrc);
     }
 
+//    protected int dpToPx(int dp) {
+//        return ViewMaker.dpToPx(dp);
+//    }
+
     protected void setTypeFace(TextView v) {
         ViewMaker.setTypeFace(v);
-    }
-
-    protected int dpToPixel(int dp) {
-        return ViewMaker.dpToPixel(dp);
     }
 
     protected MessageProgress getProgressBar(int sizeSrc) {
@@ -332,4 +338,15 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return voteDownContainer;
     }
 
+    public Resources getResources() {
+        return getContext().getResources();
+    }
+
+    public int getColor(int color) {
+        return getResources().getColor(color);
+    }
+
+    public Drawable getDrawable(int drawableId) {
+        return getResources().getDrawable(drawableId);
+    }
 }

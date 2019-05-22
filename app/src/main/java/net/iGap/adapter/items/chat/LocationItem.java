@@ -141,8 +141,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
             mapPosition = new CircleImageView(getContext());
             mapPosition.setId(R.id.thumbnail);
-            mapPosition.setBorderWidth(dpToPixel(1));
-            getContentBloke().addView(mapPosition, LayoutCreator.createFrame(dpToPixel(60), dpToPixel(60)));
+            mapPosition.setBorderWidth(dpToPx(1));
+            getContentBloke().addView(mapPosition, LayoutCreator.createFrame(dpToPx(60), dpToPx(60)));
         }
 
         @Override

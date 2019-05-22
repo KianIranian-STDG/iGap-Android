@@ -116,13 +116,14 @@
     <item name="ll_chatItem_vote" type="id" />
     <item name="tv_chatItem_edited" type="id" />
     <item name="tv_chatItem_status" type="id" />
-
     <item name="ll_chatItem_chatBloke" type="id" />
     <item name="ll_chatItem_contentBloke" type="id" />
     <item name="ll_chatItem_contentDetailBloke" type="id" />
-
     <item name="tv_chatItem_time" type="id" />
     <item name="tv_chatItem_signature" type="id" />
+
+    <!--music item-->
+    <item name="iv_musicItem_cover" type="id" />
 
 
 </resources>
