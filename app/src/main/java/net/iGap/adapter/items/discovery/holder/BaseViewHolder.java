@@ -29,6 +29,7 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
@@ -40,6 +41,8 @@ import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.paygear.wallet.WalletActivity;
 
 import java.io.IOException;
@@ -233,7 +236,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 // coming soon
                 break;
             case PAY_DIRECT:
-                // coming soon
+                try {
+                    JSONObject jsonObject = new JSONObject(discoveryField.value);
+                    DirectPayHelper.directPay(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case CALL: /** tested **/
                 dialPhoneNumber(G.context, discoveryField.value);
