@@ -29,6 +29,7 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -53,7 +54,6 @@ import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
-import static net.iGap.viewmodel.FragmentPaymentViewModel.CallCardToCard;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -263,7 +263,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                 break;
             case CARD_TO_CARD:
-                CallCardToCard();
+                CardToCardHelper.CallCardToCard(G.currentActivity);
                 break;
             case IVANDSCORE:
                 ActivityMain.doIvandScore(discoveryField.value, G.currentActivity);

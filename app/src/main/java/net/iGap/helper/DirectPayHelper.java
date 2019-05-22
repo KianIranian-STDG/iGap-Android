@@ -104,11 +104,11 @@ public class DirectPayHelper {
     private static void directPay(Activity activity, long amount, String description,
                                   boolean inquiry, long toUserId,
                                   long invoiceNumber) {
-        if (G.currentActivity == null || G.currentActivity.isFinishing()) {
+        if (activity == null || activity.isFinishing()) {
             return;
         }
 
-        final ProgressDialog dialog = ProgressDialog.show(G.currentActivity, "",
+        final ProgressDialog dialog = ProgressDialog.show(activity, "",
                 G.context.getString(R.string.please_wait), true);
 
         boolean isSend = new RequestMplGetSalesToken().mplGetSalesToken(amount, description, inquiry, toUserId, invoiceNumber, new RequestMplGetSalesToken.GetSalesToken() {
@@ -117,8 +117,8 @@ public class DirectPayHelper {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.dismiss();
-                        if (activity != null && !activity.isFinishing()) {
+                        if (!activity.isFinishing()) {
+                            dialog.dismiss();
                             Intent intent = new Intent(activity, PaymentInitiator.class);
                             intent.putExtra("Type" , "1");
                             intent.putExtra("Token" , token);

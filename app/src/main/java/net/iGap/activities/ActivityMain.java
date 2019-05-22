@@ -88,6 +88,7 @@ import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
+import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -205,7 +206,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
     public static final int requestCodePaymentCharge = 198;
-    public static final int requestCodeCardToCard = 19800;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
@@ -928,9 +928,33 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
                 break;
 
-            case requestCodeCardToCard:
+            case CardToCardHelper.requestCodeCardToCard:
+                String message = "";
+
+                switch (resultCode) {
+                    case 2:
+                        message = getString(R.string.dialog_canceled);
+                        break;
+                    case 3:
+                        message = getString(R.string.server_error);
+                        break;
+                    case 1:
+                        break;
+                }
                 if (data != null && data.getIntExtra("errorType", 0) != 0) {
-                    showErrorTypeMpl(data.getIntExtra("errorType", 0));
+                    message = getErrorTypeMpl(data.getIntExtra("errorType", 0));
+                } else {
+                    if (data != null && data.getStringExtra("message") != null && !data.getStringExtra("message").equals("")) {
+                        message = data.getStringExtra("message");
+                    }
+                }
+
+                if (data != null && data.getStringExtra("enData") != null && !data.getStringExtra("enData").equals("")) {
+                    CardToCardHelper.setResultOfCardToCard(data.getStringExtra("enData"), 0L, 0, null, message);
+                } else {
+                    if (message.length() > 0) {
+                        HelperError.showSnackMessage(message, false);
+                    }
                 }
 
                 break;
@@ -1078,6 +1102,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void showErrorTypeMpl(int errorType) {
+        String message = getErrorTypeMpl(errorType);
+
+        if (message.length() > 0) {
+            HelperError.showSnackMessage(message, false);
+        }
+    }
+
+    private String getErrorTypeMpl(int errorType) {
         String message = "";
         switch (errorType) {
             case 2:
@@ -1100,9 +1132,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 break;
         }
 
-        if (message.length() > 0) {
-            HelperError.showSnackMessage(message, false);
-        }
+        return message;
     }
 
 
