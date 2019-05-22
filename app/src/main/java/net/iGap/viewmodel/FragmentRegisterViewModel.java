@@ -22,8 +22,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
@@ -57,12 +59,14 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestWrapper;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import io.realm.Realm;
 
-public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword, OnCountryCode {
+public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword {
 
     //ui
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
@@ -145,7 +149,6 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     private int callingCode;
 
     public FragmentRegisterViewModel() {
-        G.onCountryCode = this;
         showConditionErrorDialog.setValue(false);
     }
 
@@ -233,7 +236,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
 
     //Todo:Move To repository
     private void getInfoLocation() {
-        G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
+        new RequestInfoLocation().infoLocation(new OnReceiveInfoLocation() {
             @Override
             public void onReceive(String isoCodeR, final int callingCodeR, final String countryNameR, String patternR, String regexR) {
                 locationFound = true;
@@ -259,14 +262,12 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                     G.handler.post(() -> locationFound = false);
                 }
             }
-        };
-        new RequestInfoLocation().infoLocation();
+        });
     }
 
     public void setCountry(StructCountry country) {
         isShowLoading.set(View.VISIBLE);
-        G.onCountryCode.countryInfo(country);
-        new RequestInfoCountry().infoCountry(isoCode, new OnInfoCountryResponse() {
+        new RequestInfoCountry().infoCountry(country.getAbbreviation(), new OnInfoCountryResponse() {
             @Override
             public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
                 Log.wtf("register view model", "onInfoCountryResponse");
@@ -279,7 +280,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                         edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
                     }
                     regex = regexR;
-                    btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
+                    callbackBtnChoseCountry.set(name);
                     btnStartEnable.set(true);
                 });
             }
@@ -291,6 +292,21 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             }
         });
         callBackEdtPhoneNumber.set("");
+
+        /*isoCode = structCountry.getAbbreviation();
+
+        FragmentRegister.positionRadioButton = structCountry.getId();
+
+        callbackEdtCodeNumber.set("+ " + structCountry.getCountryCode());
+
+        if (structCountry.getPhonePattern() != null || structCountry.getPhonePattern().equals(" ")) {
+            edtPhoneNumberMask.set((structCountry.getPhonePattern().replace("X", "#").replace(" ", "-")));
+        } else {
+            edtPhoneNumberMaskMaxCount.set(18);
+            edtPhoneNumberMask.set("##################");
+        }
+
+        callbackBtnChoseCountry.set(structCountry.getName());*/
     }
 
 
@@ -632,7 +648,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                 userVerify.setCode(Integer.parseInt(verificationCode));
                 userVerify.setUsername(userName);
 
-                RequestWrapper requestWrapper = new RequestWrapper(101, userVerify,new OnUserVerification() {
+                RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
                     @Override
                     public void onUserVerify(final String tokenR, final boolean newUserR) {
                         G.handler.post(() -> {
@@ -1088,30 +1104,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         });
     }
 
-    @Override
-    public void countryInfo(StructCountry structCountry) {
-        isoCode = structCountry.getCountryCode();
-
-        /*if (structCountry.getName() != null) {
-            btnOk.performClick();
-            dialogChooseCountry.dismiss();
-        }*/
-
-        FragmentRegister.positionRadioButton = structCountry.getId();
-
-        callbackEdtCodeNumber.set("+ " + structCountry.getCountryCode());
-
-        if (structCountry.getPhonePattern() != null || structCountry.getPhonePattern().equals(" ")) {
-            edtPhoneNumberMask.set((structCountry.getPhonePattern().replace("X", "#").replace(" ", "-")));
-        } else {
-            edtPhoneNumberMaskMaxCount.set(18);
-            edtPhoneNumberMask.set("##################");
-        }
-
-        callbackBtnChoseCountry.set(structCountry.getName());
-    }
-
-    public void timerFinished(){
+    public void timerFinished() {
         btnStartEnable.set(true);
         btnChoseCountryEnable.set(true);
         edtPhoneNumberEnable.set(true);

@@ -11,16 +11,17 @@
 package net.iGap.request;
 
 import net.iGap.helper.HelperString;
+import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.proto.ProtoInfoLocation;
 import net.iGap.proto.ProtoRequest;
 
 public class RequestInfoLocation {
 
-    public void infoLocation() {
+    public void infoLocation(OnReceiveInfoLocation callback) {
         ProtoInfoLocation.InfoLocation.Builder infoLocation = ProtoInfoLocation.InfoLocation.newBuilder();
         infoLocation.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
 
-        RequestWrapper requestWrapper = new RequestWrapper(500, infoLocation);
+        RequestWrapper requestWrapper = new RequestWrapper(500, infoLocation,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

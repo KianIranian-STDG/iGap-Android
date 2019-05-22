@@ -130,6 +130,9 @@ public class FragmentIntroduce extends BaseFragment {
             }
             if (G.socketConnection) {
                 FragmentLanguage fragment = new FragmentLanguage();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("canSwipeBack",true);
+                fragment.setArguments(bundle);
                 G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
             } else {
                 G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
