@@ -215,16 +215,16 @@ public class G extends MultiDexApplication {
     public static OnConnectionChangeStateChat onConnectionChangeStateChat;
     public static OnUpdating onUpdating;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
-    public static OnUserRegistration onUserRegistration;
+    /*public static OnUserRegistration onUserRegistration;*/
     public static OnClientSearchRoomHistory onClientSearchRoomHistory;
-    public static OnUserVerification onUserVerification;
+    /*public static OnUserVerification onUserVerification;*/
     public static OnReceivePageInfoTOS onReceivePageInfoTOS;
     public static OnReceivePageInfoWalletAgreement onReceivePageInfoWalletAgreement;
     public static OnUserLogin onUserLogin;
     public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;
     public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;
     public static OnUserProfileSetNickNameResponse onUserProfileSetNickNameResponse;
-    public static OnInfoCountryResponse onInfoCountryResponse;
+    /*public static OnInfoCountryResponse onInfoCountryResponse;*/
     public static OnInfoTime onInfoTime;
     public static OnUserContactEdit onUserContactEdit;
     public static OnUserContactDelete onUserContactdelete;
@@ -244,7 +244,7 @@ public class G extends MultiDexApplication {
     public static OnGroupAddAdmin onGroupAddAdmin;
     public static OnGroupAddModerator onGroupAddModerator;
     //    public static OnGroupClearMessage onGroupClearMessage;
-    public static OnGroupEdit onGroupEdit;
+    /*public static OnGroupEdit onGroupEdit;*/
     public static OnGroupKickAdmin onGroupKickAdmin;
     public static OnGroupKickMember onGroupKickMember;
     public static OnGroupKickModerator onGroupKickModerator;
@@ -287,7 +287,7 @@ public class G extends MultiDexApplication {
     public static OnChannelAddModerator onChannelAddModerator;
     public static OnChannelKickModerator onChannelKickModerator;
     public static OnChannelGetMemberList onChannelGetMemberList;
-    public static OnChannelEdit onChannelEdit;
+    /*public static OnChannelEdit onChannelEdit;*/
     public static OnChannelAvatarAdd onChannelAvatarAdd;
     public static OnChannelAvatarDelete onChannelAvatarDelete;
     public static OnChannelCheckUsername onChannelCheckUsername;

@@ -9,65 +9,30 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
 import android.text.Html;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.protobuf.ByteString;
-
-import net.iGap.BuildConfig;
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
-import net.iGap.adapter.AdapterDialog;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentRegister;
-import net.iGap.fragments.FragmentRegistrationNickname;
-import net.iGap.fragments.FragmentSecurityRecovery;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
-import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnInfoCountryResponse;
-import net.iGap.interfaces.OnPushLoginToken;
-import net.iGap.interfaces.OnPushTwoStepVerification;
-import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
@@ -76,11 +41,8 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
-import net.iGap.module.SoftKeyboard;
-import net.iGap.module.enums.Security;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
@@ -90,38 +52,33 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestInfoLocation;
 import net.iGap.request.RequestInfoPage;
-import net.iGap.request.RequestQrCodeNewDevice;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
-import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import io.realm.Realm;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static net.iGap.G.context;
-import static net.iGap.R.color.black_register;
 
 public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword, OnCountryCode {
 
-    private static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
-    private static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
-    private static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
-    private static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
-    private static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
-    private static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
+    //ui
+    public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showConditionErrorDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goNextStep = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showEnteredPhoneNumberError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showChooseCountryDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showConfirmPhoneNumberDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showConnectionErrorDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToMainPage = new MutableLiveData<>();
+    public MutableLiveData<WaitTimeModel> showDialogWaitTime = new MutableLiveData<>();
+
+
     public static String isoCode = "IR";
-    public static TextView btnOk;
-    public static Dialog dialogChooseCountry;
-    public static int positionRadioButton = -1;
-    //Array List for Store List of StructCountry Object
+
     public String regex;
     public boolean isVerify = false;
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.rg_agreement_text_register));
@@ -129,15 +86,12 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
     public ObservableField<String> callBackEdtPhoneNumber = new ObservableField<>("");
     public ObservableField<String> edtPhoneNumberMask = new ObservableField<>("###-###-####");
-    /*public ObservableField<String> CallBackTxtVerifyConnect = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register1));*/
+    public ObservableInt edtPhoneNumberMaskMaxCount = new ObservableInt(11);
+    public ObservableInt isShowLoading = new ObservableInt(View.GONE);
     public ObservableField<String> callBackEdtCheckPassword = new ObservableField<>("");
     public ObservableField<String> edtCheckPasswordHint = new ObservableField<>("");
     public ObservableField<String> callBackTxtVerifySms = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register2));
-    /*public ObservableField<String> callBackTxtVerifyKey = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register3));*/
-    /*public ObservableField<String> callBackTxtIconVerifyConnect = new ObservableField<String>(G.context.getResources().getString(R.string.md_check_symbol));*/
     public ObservableBoolean termsAndConditionIsChecked = new ObservableBoolean(false);
-    public MutableLiveData<Boolean> showConditionErrorDialog = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goNextStep = new MutableLiveData<>();
     public ObservableInt prgVerifyConnectVisibility = new ObservableInt(View.INVISIBLE);
     public ObservableInt txtVerifyTimerVisibility = new ObservableInt(View.INVISIBLE);
     public ObservableInt prgVerifySmsVisibility = new ObservableInt(View.INVISIBLE);
@@ -154,9 +108,6 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     public ObservableInt prgWaitingVisibility = new ObservableInt(View.GONE);
     public ObservableInt rootCheckPasswordVisibility = new ObservableInt(View.GONE);
     public ObservableInt txtAgreementVisibility = new ObservableInt(View.VISIBLE);
-    /*public ObservableInt txtIconVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.grayNew));*/
-    /*public ObservableInt txtVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_dark_verify));*/
-    /*public ObservableInt txtVerifyTimerColor = new ObservableInt(G.context.getResources().getColor(R.color.black));*/
     public ObservableInt edtCodeNumberColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_black_register));
     public ObservableInt imgVerifySmsColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_verify));
     public ObservableInt txtVerifySmsColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_verify));
@@ -172,10 +123,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
     ProtoUserRegister.UserRegisterResponse.Method methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
     private boolean isCallMethodSupported;
-    private MaterialDialog dialogRegistration;
-    private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
-    private Uri image_uriQrCode;
-    private String _resultQrCode;
+    public ArrayList structCountryArrayList = new ArrayList();
     public String phoneNumber;
     public String userName;
     public String authorHash;
@@ -183,62 +131,171 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     private String regexFetchCodeVerification;
     public long userId;
     private boolean newUser;
-    private ArrayList<StructCountry> items = new ArrayList<>();
-    private AdapterDialog adapterDialog;
-    private CountDownTimer CountDownTimerQrCode;
-    private CountDownTimer countDownTimer;
-    private SearchView edtSearchView;
-    private Dialog dialog;
     private int digitCount;
-    private MaterialDialog dialogWait;
     private String verifyCode;
     private boolean isRecoveryByEmail = false;
     private String securityPasswordQuestionOne = "";
     private String securityPasswordQuestionTwo = "";
     private String securityPaternEmail = "";
     private boolean isConfirmedRecoveryEmail;
-    private MaterialDialog dialogQrCode;
-    private FragmentActivity mActivity;
-    private ImageView imgQrCodeNewDevice;
-    private ProgressBar prgQrCodeNewDevice;
-    private FragmentRegister fragmentRegister;
-    private View view;
     private int sendRequestRegister = 0;
-    private EditText edtEnterCodeVerify;
-    private TextView btnEnterManuallyCode;
-    private TextView txtTimer;
-    private TextView btnResondCode = null;
-    private TextView txtShowReason;
-
-    public static final String KEY_SAVE = "SAVE";
-    public static int ONETIME = 1;
-    private String countryName = "", pattern = "", body = null;
+    public int ONETIME = 1;
+    private String countryName = "", pattern = "";
     private boolean locationFound;
     private int callingCode;
 
-    public FragmentRegisterViewModel(FragmentRegister fragmentRegister, View root, FragmentActivity mActivity) {
-        this.fragmentRegister = fragmentRegister;
-        view = root;
-        this.mActivity = mActivity;
+    public FragmentRegisterViewModel() {
         G.onCountryCode = this;
         showConditionErrorDialog.setValue(false);
-        getInfo();
     }
 
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        if (s.toString().startsWith("0")) {
-            Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    callBackEdtPhoneNumber.set("");
-                }
-            }, 30);
+    public void onTextChanged(String s) {
+        if (s.startsWith("0")) {
+            callBackEdtPhoneNumber.set("");
+            showEnteredPhoneNumberStartWithZeroError.setValue(true);
         }
     }
 
-    private void shareQr() {
+    public void onClickChoseCountry() {
+        showChooseCountryDialog.setValue(true);
+    }
+
+    public void termsOnCheckChange(boolean isChecked) {
+        termsAndConditionIsChecked.set(isChecked);
+    }
+
+    public void onClicksStart() {
+        phoneNumber = callBackEdtPhoneNumber.get();
+        if (callBackEdtPhoneNumber.get().length() > 0 && (regex.equals("") || (!regex.equals("") && callBackEdtPhoneNumber.get().replace("-", "").matches(regex)))) {
+            if (termsAndConditionIsChecked.get()) {
+                showConfirmPhoneNumberDialog.setValue(true);
+            } else {
+                showConditionErrorDialog.setValue(true);
+            }
+        } else {
+            showEnteredPhoneNumberStartWithZeroError.setValue(callBackEdtPhoneNumber.get().replace("-", "").matches(regex));
+        }
+    }
+
+    public void confirmPhoneNumber() {
+        isVerify = true;
+        checkVerify();
+    }
+
+    public void saveInstance(String codeNumber, String phoneNumberMask, String phoneNumber, String countryName, String agreement, String regex, int oneTime) {
+        callbackEdtCodeNumber.set(codeNumber);
+        edtPhoneNumberMask.set(phoneNumberMask);
+        callBackEdtPhoneNumber.set(phoneNumber);
+        callbackBtnChoseCountry.set(countryName);
+        callbackTxtAgreement.set(agreement);
+        this.regex = regex;
+        ONETIME = oneTime;
+        if (ONETIME != 1) {
+            getInfo();
+        }
+    }
+
+    private void checkVerify() {
+        if (G.socketConnection) { //connection ok
+            btnStartEnable.set(false);
+            userRegister();
+        } else { // connection error
+            edtPhoneNumberEnable.set(true);
+            showConnectionErrorDialog.setValue(true);
+        }
+    }
+
+    private void userRegister() {
+        isShowLoading.set(View.VISIBLE);
+        requestRegister();
+    }
+
+    //Todo:Move to repository
+    private void getTermsOfServiceBody() {
+        G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
+            @Override
+            public void onReceivePageInfo(final String bodyR) {
+                G.handler.post(() -> {
+                    if (bodyR != null) {
+                        callbackTxtAgreement.set(Html.fromHtml(bodyR).toString());
+                    }
+                });
+                getInfoLocation();
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                getTermsOfServiceBody();
+            }
+        };
+        new RequestInfoPage().infoPage("TOS");
+    }
+
+    //Todo:Move To repository
+    private void getInfoLocation() {
+        G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
+            @Override
+            public void onReceive(String isoCodeR, final int callingCodeR, final String countryNameR, String patternR, String regexR) {
+                locationFound = true;
+                isoCode = isoCodeR;
+                callingCode = callingCodeR;
+                countryName = countryNameR;
+                pattern = patternR;
+                regex = regexR;
+                G.handler.post(() -> {
+                    callbackEdtCodeNumber.set("+" + callingCode);
+                    callbackBtnChoseCountry.set(countryName);
+                    if (pattern != null && !pattern.equals("")) {
+                        edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                    } else {
+                        edtPhoneNumberMask.set("##################");
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                if (majorCode == 500 && minorCode == 1) {
+                    G.handler.post(() -> locationFound = false);
+                }
+            }
+        };
+        new RequestInfoLocation().infoLocation();
+    }
+
+    public void setCountry(StructCountry country) {
+        isShowLoading.set(View.VISIBLE);
+        G.onCountryCode.countryInfo(country);
+        new RequestInfoCountry().infoCountry(isoCode, new OnInfoCountryResponse() {
+            @Override
+            public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
+                Log.wtf("register view model", "onInfoCountryResponse");
+                G.handler.post(() -> {
+                    isShowLoading.set(View.GONE);
+                    callbackEdtCodeNumber.set("+" + callingCode);
+                    if (pattern.equals("")) {
+                        edtPhoneNumberMask.set("##################");
+                    } else {
+                        edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                    }
+                    regex = regexR;
+                    btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
+                    btnStartEnable.set(true);
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                //empty
+                isShowLoading.set(View.GONE);
+            }
+        });
+        callBackEdtPhoneNumber.set("");
+    }
+
+
+    //for qr code
+    /*private void shareQr() {
         if (_resultQrCode == null) {
             return;
         }
@@ -255,9 +312,10 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-    }
+    }*/
 
-    public void onClickQrCode(View v) {
+    //for qr code
+    /*public void onClickQrCode(View v) {
 
         dialogQrCode = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
@@ -331,200 +389,9 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         };
 
 
-    }
+    }*/
 
-    public void onClickChoseCountry() {
-
-        dialogChooseCountry = new Dialog(G.fragmentActivity);
-        dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogChooseCountry.setContentView(R.layout.rg_dialog);
-        dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        int setWidth = (int) (G.context.getResources().getDisplayMetrics().widthPixels * 0.9);
-        int setHeight = (int) (G.context.getResources().getDisplayMetrics().heightPixels * 0.9);
-        dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
-        //
-        final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
-        edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
-
-        txtTitle.setOnClickListener(view -> {
-            edtSearchView.setIconified(false);
-            edtSearchView.setIconifiedByDefault(true);
-            txtTitle.setVisibility(View.GONE);
-        });
-
-        // close SearchView and show title again
-        edtSearchView.setOnCloseListener(() -> {
-            txtTitle.setVisibility(View.VISIBLE);
-            return false;
-        });
-
-        final ViewGroup root = dialogChooseCountry.findViewById(android.R.id.content);
-        InputMethodManager im = (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
-        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-            @Override
-            public void onSoftKeyboardHide() {
-                G.handler.post(() -> {
-                    if (edtSearchView.getQuery().toString().length() > 0) {
-                        edtSearchView.setIconified(false);
-                        edtSearchView.clearFocus();
-                        txtTitle.setVisibility(View.GONE);
-                    } else {
-                        edtSearchView.setIconified(true);
-                        txtTitle.setVisibility(View.VISIBLE);
-                    }
-                    adapterDialog.notifyDataSetChanged();
-                });
-            }
-
-            @Override
-            public void onSoftKeyboardShow() {
-                G.handler.post(() -> txtTitle.setVisibility(View.GONE));
-            }
-        });
-
-        final ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
-        adapterDialog = new AdapterDialog(G.fragmentActivity, items);
-        listView.setAdapter(adapterDialog);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            G.onCountryCode.countryInfo(adapterDialog.getItem(position));
-        });
-
-        final View border = dialogChooseCountry.findViewById(R.id.rg_borderButton);
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i > 0) {
-                    border.setVisibility(View.VISIBLE);
-                } else {
-                    border.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        AdapterDialog.mSelectedVariation = positionRadioButton;
-
-        adapterDialog.notifyDataSetChanged();
-
-        edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-
-                adapterDialog.getFilter().filter(s);
-                return false;
-            }
-        });
-
-        btnOk = dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
-        btnOk.setOnClickListener(v -> {
-            G.onInfoCountryResponse = new OnInfoCountryResponse() {
-                @Override
-                public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
-                    G.handler.post(() -> {
-                        callbackEdtCodeNumber.set("+" + callingCode);
-                        if (pattern.equals("")) {
-                            edtPhoneNumberMask.set("##################");
-                        } else {
-                            edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
-                        }
-                        regex = regexR;
-                        btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
-                        btnStartEnable.set(true);
-                    });
-                }
-
-                @Override
-                public void onError(int majorCode, int minorCode) {
-                    //empty
-                }
-            };
-
-            new RequestInfoCountry().infoCountry(isoCode);
-
-            callBackEdtPhoneNumber.set("");
-            dialogChooseCountry.dismiss();
-        });
-
-        if (!(G.fragmentActivity).isFinishing()) {
-            dialogChooseCountry.show();
-        }
-
-    }
-
-    public void termsOnCheckChange(boolean isChecked) {
-        termsAndConditionIsChecked.set(isChecked);
-    }
-
-    public void onClicksStart() {
-        if ((G.fragmentActivity).isFinishing()) {
-            return;
-        }
-        phoneNumber = callBackEdtPhoneNumber.get();
-        if (callBackEdtPhoneNumber.get().length() > 0 && (regex.equals("") || (!regex.equals("") && callBackEdtPhoneNumber.get().replace("-", "").matches(regex)))) {
-            if (termsAndConditionIsChecked.get()) {
-                new DefaultRoundDialog(G.fragmentActivity).setMessage(G.fragmentActivity.getString(R.string.Re_dialog_verify_number_part1) + "\n" +
-                        callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get() + "\n" + G.fragmentActivity.getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        isVerify = true;
-                        checkVerify();
-                    }
-                }).setNegativeButton(R.string.B_edit, null).show();
-
-                /*dialogRegistration = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.rg_mdialog_text, true).positiveText(G.fragmentActivity.getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        G.handler.postDelayed(() -> {
-                            btnStartBackgroundColor.set(G.context.getResources().getColor(R.color.rg_background_verify));
-                            btnStartColor.set(G.context.getResources().getColor(R.color.rg_border_editText));
-                            btnChoseCountryEnable.set(false);
-                            btnChoseCountryColor.set(G.context.getResources().getColor(R.color.rg_border_editText));
-                            edtPhoneNumberEnable.set(false);
-                            edtPhoneNumberColor.set(G.context.getResources().getColor(R.color.rg_border_editText));
-                            edtCodeNumberEnable.set(false);
-                            edtCodeNumberColor.set(G.context.getResources().getColor(R.color.rg_border_editText));
-                            txtAgreementVisibility.set(View.GONE);
-                            isVerify = true;
-                            checkVerify();
-                        }, 600);
-
-                    }
-                }).build();
-                View view = dialogRegistration.getCustomView();
-                assert view != null;
-                TextView phone = (TextView) view.findViewById(R.id.rg_dialog_txt_number);
-                phone.setText(callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get());
-
-                try {
-                    dialogRegistration.show();
-                } catch (WindowManager.BadTokenException e) {
-                    e.printStackTrace();
-                }*/
-            } else {
-                showConditionErrorDialog.setValue(true);
-            }
-        } else {
-            if (!callBackEdtPhoneNumber.get().replace("-", "").matches(regex)) {
-                new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.phone_number).setMessage(R.string.Toast_Minimum_Characters).setPositiveButton(R.string.B_ok, null).show();
-            } else {
-                new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.phone_number).setMessage(R.string.please_enter_correct_phone_number).setPositiveButton(R.string.B_ok, null).show();
-            }
-        }
-    }
-
-    public void onClickTxtForgotPassword(View v) {
+    /*public void onClickTxtForgotPassword(View v) {
 
         int item;
         if (isConfirmedRecoveryEmail) {
@@ -562,9 +429,9 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         }).show();
 
 
-    }
+    }*/
 
-    public void onClickTxtOk(View v) {
+    /*public void onClickTxtOk(View v) {
         if (callBackEdtCheckPassword.get().length() > 0) {
 
             prgWaitingVisibility.set(View.VISIBLE);
@@ -574,9 +441,9 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         } else {
             error(G.fragmentActivity.getResources().getString(R.string.please_enter_code));
         }
-    }
+    }*/
 
-    private void getInfo() {
+    public void getInfo() {
         G.onSecurityCheckPassword = this;
         G.onRecoverySecurityPassword = this;
         G.onPushLoginToken = (tokenQrCode, userNameR, userIdR, authorHashR) -> {
@@ -585,8 +452,8 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             G.userId = userId = userIdR;
             G.authorHash = authorHash = authorHashR;
             G.handler.post(() -> {
-                if (dialogQrCode != null && dialogQrCode.isShowing())
-                    dialogQrCode.dismiss();
+                /*if (dialogQrCode != null && dialogQrCode.isShowing())
+                    dialogQrCode.dismiss();*/
                 userLogin(token);
             });
         };
@@ -596,20 +463,11 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             userId = userIdR;
             authorHash = authorHashR;
             G.handler.post(() -> {
-                if (dialogQrCode != null && dialogQrCode.isShowing())
-                    dialogQrCode.dismiss();
+                /*if (dialogQrCode != null && dialogQrCode.isShowing())
+                    dialogQrCode.dismiss();*/
             });
             checkPassword("", true);
         };
-
-        G.handler.postDelayed(() -> {
-            if (G.isSecure) {
-                getTermsOfServiceBody();
-                ONETIME = 1;
-            } else {
-                getInfo();
-            }
-        }, 1000);
 
         CountryReader countryReade = new CountryReader();
         StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.context);
@@ -638,7 +496,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
 
         Collections.sort(structCountryArrayList, new CountryListComparator());
 
-        for (int i = 0; i < structCountryArrayList.size(); i++) {
+        /*for (int i = 0; i < structCountryArrayList.size(); i++) {
             if (i < countryNameList.length) {
                 countryNameList[i] = structCountryArrayList.get(i).getName();
                 StructCountry item = new StructCountry();
@@ -649,378 +507,17 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                 item.setAbbreviation(structCountryArrayList.get(i).getAbbreviation());
                 items.add(item);
             }
-        }
-    }
+        }*/
 
-    private void getTermsOfServiceBody() {
-        G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
-            @Override
-            public void onReceivePageInfo(final String bodyR) {
-                body = bodyR;
-                getInfoLocation();
-            }
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-        };
-        new RequestInfoPage().infoPage("TOS");
-    }
-
-    private void getInfoLocation() {
-        G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
-            @Override
-            public void onReceive(String isoCodeR, final int callingCodeR, final String countryNameR, String patternR, String regexR) {
-                locationFound = true;
-                isoCode = isoCodeR;
-                callingCode = callingCodeR;
-                countryName = countryNameR;
-                pattern = patternR;
-                regex = regexR;
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callbackEdtCodeNumber.set("+" + callingCode);
-                        callbackBtnChoseCountry.set(countryName);
-                        if (pattern != null && !pattern.equals("")) {
-                            edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
-                        } else {
-                            edtPhoneNumberMask.set("##################");
-                        }
-                        Log.wtf("Register view model","value of body: "+body);
-                        if (body != null) {
-                            callbackTxtAgreement.set(Html.fromHtml(body).toString());
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                if (majorCode == 500 && minorCode == 1) {
-                    G.handler.post(() -> locationFound = false);
-                }
-            }
-        };
-
-        new RequestInfoLocation().infoLocation();
-    }
-
-    public void saveInstance(Bundle savedInstanceState, Bundle argument) {
-        if (savedInstanceState != null) { // TODO: 12/16/2017
-            // Restore value of members from saved state
-            callbackEdtCodeNumber.set(savedInstanceState.getString(KEY_SAVE_CODENUMBER));
-            edtPhoneNumberMask.set(savedInstanceState.getString(KEY_SAVE_PHONENUMBER_MASK));
-            callBackEdtPhoneNumber.set(savedInstanceState.getString(KEY_SAVE_PHONENUMBER_NUMBER));
-            callbackBtnChoseCountry.set(savedInstanceState.getString(KEY_SAVE_NAMECOUNTRY));
-            callbackTxtAgreement.set(savedInstanceState.getString(KEY_SAVE_AGREEMENT));
-            regex = (savedInstanceState.getString(KEY_SAVE_REGEX));
-            ONETIME = savedInstanceState.getInt(KEY_SAVE);
-            if (ONETIME != 1) {
-                getInfo();
-            }
+        if (G.isSecure) {
+            getTermsOfServiceBody();
+            ONETIME = 1;
         } else {
             getInfo();
         }
     }
 
-    //======= process verify : check internet and sms
-    private void checkVerify() {
-        prgVerifyConnectVisibility.set(View.VISIBLE);
-        if (G.socketConnection) { //connection ok
-            btnStartEnable.set(false);
-            userRegister();
-        } else { // connection error
-            edtPhoneNumberEnable.set(true);
-            new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.error).setMessage(R.string.please_check_your_connenction).setPositiveButton(R.string.ok, null).show();
-        }
-    }
-
-    // error verify sms and open rg_dialog for enter sms code
-    private void errorVerifySms(FragmentRegister.Reason reason) { //when don't receive sms and open rg_dialog for enter code
-        if (G.userLogin || G.currentActivity instanceof ActivityMain) {
-            return;
-        }
-
-        boolean isNeedTimer = true;
-        prgVerifySmsVisibility.set(View.GONE);
-        //imgVerifySmsColor.set(R.mipmap.alert);
-        imgVerifySmsVisibility.set(View.VISIBLE);
-        imgVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_error_red));
-        callBackTxtVerifySms.set(G.context.getResources().getString(R.string.errore_verification_sms));
-        txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_error_red));
-
-        if (dialog == null) {
-            dialog = new Dialog(G.fragmentActivity);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.rg_dialog_verify_code);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setCancelable(false);
-            edtEnterCodeVerify = dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
-            txtShowReason = dialog.findViewById(R.id.txt_show_reason);
-            btnEnterManuallyCode = dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
-            txtTimer = dialog.findViewById(R.id.remindTime);
-            btnResondCode = dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);// resend code
-        }
-
-        edtEnterCodeVerify.setText("");
-
-        btnEnterManuallyCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    txtVerifyTimerVisibility.set(View.INVISIBLE);
-                    verifyCode = edtEnterCodeVerify.getText().toString();
-                    if (verifyCode.length() > 0) {
-                        userVerify(userName, verifyCode);
-                        dialog.dismiss();
-                    } else {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Enter_Code).content(R.string.Toast_Enter_Code).positiveText(R.string.B_ok).show();
-                    }
-                } catch (WindowManager.BadTokenException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-        btnResondCode.setEnabled(false);
-        btnResondCode.setTextColor(G.context.getResources().getColor(R.color.gray_9d));
-        btnResondCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
-                btnResondCode.setTextColor(G.context.getResources().getColor(R.color.gray_9d));
-                btnResondCode.setEnabled(false);
-                txtTimer.setVisibility(View.VISIBLE);
-                userRegister();
-                counterTimer(txtTimer, btnResondCode);
-//                startRegister(v);
-            }
-
-
-        });
-
-        if (reason == FragmentRegister.Reason.SOCKET) {
-            txtShowReason.setText(G.fragmentActivity.getResources().getString(R.string.verify_socket_message));
-            isNeedTimer = false;
-            btnResondCode.setVisibility(View.GONE);
-        } else if (reason == FragmentRegister.Reason.TIME_OUT) {
-            txtShowReason.setText(G.fragmentActivity.getResources().getString(R.string.verify_time_out_message));
-            isNeedTimer = true;
-            btnResondCode.setEnabled(false);
-            btnResondCode.setTextColor(G.context.getResources().getColor(R.color.gray_9d));
-        } else if (reason == FragmentRegister.Reason.INVALID_CODE) {
-            txtShowReason.setText(G.fragmentActivity.getResources().getString(R.string.verify_invalid_code_message));
-            isNeedTimer = false;
-            btnResondCode.setEnabled(true);
-            btnResondCode.setTextColor(G.context.getResources().getColor(R.color.green));
-        }
-
-
-        if (isNeedTimer) {
-            txtTimer.setVisibility(View.VISIBLE);
-            counterTimer(txtTimer, btnResondCode);
-        } else {
-            txtTimer.setVisibility(View.INVISIBLE);
-        }
-
-        try {
-            if (!(G.fragmentActivity).isFinishing()) {
-                dialog.show();
-//                if (dialog.isShowing()) {
-//                    countDownTimer.cancel();
-//                }
-            }
-        } catch (WindowManager.BadTokenException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void counterTimer(TextView txtTimer, TextView btnResondCode) {
-
-        long time = 0;
-        if (BuildConfig.DEBUG) {
-            time = 2 * DateUtils.SECOND_IN_MILLIS;
-        } else {
-            time = 60 * DateUtils.SECOND_IN_MILLIS;
-        }
-
-        CountDownTimer countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
-            public void onTick(long millisUntilFinished) {
-
-                int seconds = (int) ((millisUntilFinished) / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
-
-                txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-
-            }
-
-            public void onFinish() {
-
-                txtTimer.setVisibility(View.INVISIBLE);
-                btnResondCode.setEnabled(true);
-                btnResondCode.setTextColor(G.context.getResources().getColor(R.color.green));
-
-            }
-        };
-
-        countDownTimer.start();
-    }
-
-    private void userRegister() {
-        G.onUserRegistration = new OnUserRegistration() {
-            @Override
-            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR, boolean callMethodSupported) {
-                Log.wtf("view model", "onRegister");
-                G.onUserRegistration = null;
-                isCallMethodSupported = callMethodSupported;
-                digitCount = verifyCodeDigitCount;
-                regexFetchCodeVerification = regex;
-                G.handler.post(() -> {
-                    txtVerifyTimerVisibility.set(View.VISIBLE);
-                    userName = userNameR;
-                    userId = userIdR;
-                    authorHash = authorHashR;
-                    G.smsNumbers = smsNumbersR;
-                    /*if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
-                        errorVerifySms(FragmentRegister.Reason.SOCKET);
-                    } else {
-                        errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
-                    }*/
-                    goNextStep.setValue(true);
-                    /*prgVerifyConnectVisibility.set(View.GONE);
-                    txtIconVerifyConnectVisibility.set(View.VISIBLE);
-                    imgVerifySmsVisibility.set(View.GONE);
-                    txtVerifyConnectColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-                    prgVerifySmsVisibility.set(View.VISIBLE);*/
-                });
-            }
-
-            @Override
-            public void onRegisterError(final int majorCode, int minorCode, int getWait) {
-                try {
-                    final long time = getWait;
-                    if (majorCode == 100 && minorCode == 1) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Invalid countryCode
-                            }
-                        });
-                    } else if (majorCode == 100 && minorCode == 2) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Invalid phoneNumber
-                            }
-                        });
-                    } else if (majorCode == 101) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Invalid phoneNumber
-                            }
-                        });
-                    } else if (majorCode == 135) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
-                                /*new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();*/
-                            }
-                        });
-                    } else if (majorCode == 136) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES, time, majorCode);
-                            }
-                        });
-                    } else if (majorCode == 137) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES_SEND, time, majorCode);
-                            }
-                        });
-                    } else if (majorCode == 5 && minorCode == 1) { // timeout
-                        if (sendRequestRegister <= 2) {
-                            requestRegister();
-                            sendRequestRegister++;
-                        }
-                    } else if (majorCode == 10) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialogWaitTime(R.string.IP_blocked, time, majorCode);
-                            }
-                        });
-                    }
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        };
-
-        requestRegister();
-    }
-
-    private void dialogWaitTime(int title, long time, int majorCode) {
-
-        if (dialog != null && dialog.isShowing()) dialog.dismiss();
-
-        if (G.fragmentActivity.isFinishing()) {
-            return;
-        }
-
-        dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
-                btnStartColor.set(G.context.getResources().getColor(R.color.white));
-                btnStartEnable.set(true);
-                btnChoseCountryEnable.set(true);
-                btnChoseCountryColor.set(G.context.getResources().getColor(black_register));
-                edtPhoneNumberEnable.set(true);
-                edtPhoneNumberColor.set(G.context.getResources().getColor(black_register));
-                edtCodeNumberColor.set(G.context.getResources().getColor(black_register));
-                txtAgreementVisibility.set(View.VISIBLE);
-                layoutVerifyAgreement.set(View.GONE);
-                dialog.dismiss();
-            }
-        }).show();
-
-        View v = dialogWait.getCustomView();
-
-        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
-        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                long seconds = millisUntilFinished / 1000 % 60;
-                long minutes = millisUntilFinished / (60 * 1000) % 60;
-                long hour = millisUntilFinished / (3600 * 1000);
-
-                remindTime.setText(String.format("%02d:%02d:%02d", hour, minutes, seconds));
-                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-            }
-
-            @Override
-            public void onFinish() {
-                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-                remindTime.setText("00:00");
-            }
-        };
-        countWaitTimer.start();
-    }
-
     private void requestRegister() {
-
         if (G.socketConnection) {
             phoneNumber = phoneNumber.replace("-", "");
             ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
@@ -1028,7 +525,91 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             builder.setPhoneNumber(Long.parseLong(phoneNumber));
             builder.setPreferenceMethodValue(methodForReceiveCode.getNumber());
             builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-            RequestWrapper requestWrapper = new RequestWrapper(100, builder);
+            RequestWrapper requestWrapper = new RequestWrapper(100, builder, new OnUserRegistration() {
+                @Override
+                public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR, boolean callMethodSupported) {
+                    isCallMethodSupported = callMethodSupported;
+                    digitCount = verifyCodeDigitCount;
+                    regexFetchCodeVerification = regex;
+                    G.handler.post(() -> {
+                        isShowLoading.set(View.GONE);
+                        txtVerifyTimerVisibility.set(View.VISIBLE);
+                        userName = userNameR;
+                        userId = userIdR;
+                        authorHash = authorHashR;
+                        G.smsNumbers = smsNumbersR;
+                    /*if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
+                        errorVerifySms(FragmentRegister.Reason.SOCKET);
+                    } else {
+                        errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
+                    }*/
+                        goNextStep.setValue(true);
+                    /*prgVerifyConnectVisibility.set(View.GONE);
+                    txtIconVerifyConnectVisibility.set(View.VISIBLE);
+                    imgVerifySmsVisibility.set(View.GONE);
+                    txtVerifyConnectColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+                    prgVerifySmsVisibility.set(View.VISIBLE);*/
+                    });
+                }
+
+                @Override
+                public void onRegisterError(final int majorCode, int minorCode, int getWait) {
+                    try {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                isShowLoading.set(View.GONE);
+                            }
+                        });
+                        final long time = getWait;
+                        if (majorCode == 100 && minorCode == 1) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Invalid countryCode
+                                }
+                            });
+                        } else if (majorCode == 100 && minorCode == 2) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Invalid phoneNumber
+                                }
+                            });
+                        } else if (majorCode == 101) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Invalid phoneNumber
+                                }
+                            });
+                        } else if (majorCode == 135) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+                                    /*new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();*/
+                                }
+                            });
+                        } else if (majorCode == 136) {
+                            G.handler.post(() -> showDialogWaitTime.setValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES, time, majorCode)));
+                        } else if (majorCode == 137) {
+                            G.handler.post(() -> showDialogWaitTime.setValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES_SEND, time, majorCode)));
+                        } else if (majorCode == 5 && minorCode == 1) { // timeout
+                            if (sendRequestRegister <= 2) {
+                                requestRegister();
+                                sendRequestRegister++;
+                            }
+                        } else if (majorCode == 10) {
+                            G.handler.post(() -> showDialogWaitTime.setValue(new WaitTimeModel(R.string.IP_blocked, time, majorCode)));
+                        }
+                    } catch (RuntimeException e) {
+                        e.printStackTrace();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
 
             try {
                 RequestQueue.sendRequest(requestWrapper);
@@ -1036,12 +617,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                 e.printStackTrace();
             }
         } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    requestRegister();
-                }
-            }, 1000);
+            G.handler.postDelayed(this::requestRegister, 1000);
         }
     }
 
@@ -1050,16 +626,111 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
      */
     private void userVerify(final String userName, final String verificationCode) {
         if (G.socketConnection) {
-
             prgVerifyKeyVisibility.set(View.VISIBLE);
-
             try {
-                userVerifyResponse(verificationCode);
                 ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
                 userVerify.setCode(Integer.parseInt(verificationCode));
                 userVerify.setUsername(userName);
 
-                RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
+                RequestWrapper requestWrapper = new RequestWrapper(101, userVerify,new OnUserVerification() {
+                    @Override
+                    public void onUserVerify(final String tokenR, final boolean newUserR) {
+                        G.handler.post(() -> {
+                            callBackTxtVerifySms.set(G.fragmentActivity.getResources().getString(R.string.rg_verify_register2));
+                            prgVerifySmsVisibility.set(View.GONE);
+                            imgVerifySmsVisibility.set(View.VISIBLE);
+                            //imgVerifySmsColor.set(R.mipmap.check);
+                            imgVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+                            txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+
+                            newUser = newUserR;
+                            token = tokenR;
+
+                            prgVerifyKeyVisibility.set(View.GONE);
+                            imgVerifyKeyVisibility.set(View.VISIBLE);
+                            txtVerifyKeColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+
+                            userLogin(token);
+                        });
+                    }
+
+                    @Override
+                    public void onUserVerifyError(final int majorCode, int minorCode, final int time) {
+                        try {
+                            if (majorCode == 184 && minorCode == 1) {
+                                checkPassword(verificationCode, false);
+                            } else if (majorCode == 102 && minorCode == 1) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        /*errorVerifySms(FragmentRegister.Reason.INVALID_CODE);*/
+                                    }
+                                });
+                            } else if (majorCode == 102 && minorCode == 2) {
+                                //empty
+                            } else if (majorCode == 103) {
+                                //empty
+                            } else if (majorCode == 104) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // There is no registered user with given username
+                                        if (!G.fragmentActivity.isFinishing()) {
+                                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_GIVEN_USERNAME).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+                                        }
+                                    }
+                                });
+                            } else if (majorCode == 105) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // User is blocked , You cannot verify the user
+                                        if (!G.fragmentActivity.isFinishing()) {
+                                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+                                        }
+                                    }
+                                });
+                            } else if (majorCode == 106) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Verification code is invalid
+                                        /*errorVerifySms(FragmentRegister.Reason.INVALID_CODE);*/
+                                    }
+                                });
+                            } else if (majorCode == 107) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Verification code is expired
+                                        if (!G.fragmentActivity.isFinishing()) {
+                                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_EXPIRED)
+                                                    .content(R.string.Toast_Number_Block)
+                                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                        @Override
+                                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        }
+                                                    })
+                                                    .positiveText(R.string.B_ok)
+                                                    .show();
+                                        }
+                                    }
+                                });
+                            } else if (majorCode == 108) {
+                                G.handler.post(() -> {
+                                    // Verification code is locked for a while due to too many tries
+                                    showDialogWaitTime.setValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES, time, majorCode));
+                                });
+                            } else if (majorCode == 5 && minorCode == 1) {
+                                userVerify(userName, verifyCode);
+                            }
+                        } catch (RuntimeException e) {
+                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
 
                 RequestQueue.sendRequest(requestWrapper);
             } catch (IllegalAccessException e) {
@@ -1082,115 +753,6 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
 
             requestRegister();
         }
-    }
-
-    private void userVerifyResponse(final String verificationCode) {
-        G.onUserVerification = new OnUserVerification() {
-            @Override
-            public void onUserVerify(final String tokenR, final boolean newUserR) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callBackTxtVerifySms.set(G.fragmentActivity.getResources().getString(R.string.rg_verify_register2));
-                        prgVerifySmsVisibility.set(View.GONE);
-                        imgVerifySmsVisibility.set(View.VISIBLE);
-                        //imgVerifySmsColor.set(R.mipmap.check);
-                        imgVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-                        txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-
-                        newUser = newUserR;
-                        token = tokenR;
-
-                        prgVerifyKeyVisibility.set(View.GONE);
-                        imgVerifyKeyVisibility.set(View.VISIBLE);
-                        txtVerifyKeColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-
-                        userLogin(token);
-                    }
-                });
-            }
-
-            @Override
-            public void onUserVerifyError(final int majorCode, int minorCode, final int time) {
-
-                try {
-                    if (majorCode == 184 && minorCode == 1) {
-                        checkPassword(verificationCode, false);
-                    } else if (majorCode == 102 && minorCode == 1) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                errorVerifySms(FragmentRegister.Reason.INVALID_CODE);
-                            }
-                        });
-                    } else if (majorCode == 102 && minorCode == 2) {
-                        //empty
-                    } else if (majorCode == 103) {
-                        //empty
-                    } else if (majorCode == 104) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // There is no registered user with given username
-                                if (!G.fragmentActivity.isFinishing()) {
-                                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_GIVEN_USERNAME).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
-                                }
-                            }
-                        });
-                    } else if (majorCode == 105) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // User is blocked , You cannot verify the user
-                                if (!G.fragmentActivity.isFinishing()) {
-                                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
-                                }
-                            }
-                        });
-                    } else if (majorCode == 106) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Verification code is invalid
-                                errorVerifySms(FragmentRegister.Reason.INVALID_CODE);
-                            }
-                        });
-                    } else if (majorCode == 107) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Verification code is expired
-                                if (!G.fragmentActivity.isFinishing()) {
-                                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_EXPIRED)
-                                            .content(R.string.Toast_Number_Block)
-                                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                                @Override
-                                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                }
-                                            })
-                                            .positiveText(R.string.B_ok)
-                                            .show();
-                                }
-                            }
-                        });
-                    } else if (majorCode == 108) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Verification code is locked for a while due to too many tries
-                                dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES, time, majorCode);
-                            }
-                        });
-                    } else if (majorCode == 5 && minorCode == 1) {
-                        userVerify(userName, verifyCode);
-                    }
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        };
     }
 
     private void checkPassword(final String verificationCode, final boolean isQrCode) {
@@ -1233,42 +795,34 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
+                G.handler.post(() -> {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
+
+                    prgVerifyServerVisibility.set(View.GONE);
+                    imgVerifyServerVisibility.set(View.VISIBLE);
+
+                    txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+
+                    if (newUser) {
+                        G.handler.post(new Runnable() {
                             @Override
-                            public void execute(Realm realm) {
-                                RealmUserInfo.putOrUpdate(realm, userId, userName, phoneNumber, token, authorHash);
+                            public void run() {
+                                //TODO: change this part
+                                /*FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
+                                fragment.setArguments(bundle);
+                                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                                G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragmentRegister).commitAllowingStateLoss();*/
                             }
                         });
-
-                        prgVerifyServerVisibility.set(View.GONE);
-                        imgVerifyServerVisibility.set(View.VISIBLE);
-
-                        txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-
-                        if (newUser) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //TODO: change this part
-                                    FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                                    fragment.setArguments(bundle);
-                                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragmentRegister).commitAllowingStateLoss();
-                                }
-                            });
-                        } else {
-                            // get user info for set nick name and after from that go to ActivityMain
-                            getUserInfo();
-                            requestUserInfo();
-                        }
-                        realm.close();
+                    } else {
+                        // get user info for set nick name and after from that go to ActivityMain
+                        getUserInfo();
+                        requestUserInfo();
                     }
+                    realm.close();
                 });
             }
 
@@ -1298,31 +852,17 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     }
 
     private void getUserInfo() {
-
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-
                 Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        G.displayName = user.getDisplayName();
-
-                        RealmUserInfo.putOrUpdate(realm, user);
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.onUserInfoResponse = null;
-                                G.currentActivity.finish();
-                                Intent intent = new Intent(context, ActivityMain.class);
-                                intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                G.context.startActivity(intent);
-                            }
-                        });
-                    }
+                realm.executeTransaction(realm1 -> {
+                    G.displayName = user.getDisplayName();
+                    RealmUserInfo.putOrUpdate(realm1, user);
+                    G.handler.post(() -> {
+                        G.onUserInfoResponse = null;
+                        goToMainPage.setValue(true);
+                    });
                 });
                 realm.close();
             }
@@ -1383,18 +923,6 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                 }
             }, 1000);
         }
-    }
-
-    private void closeKeyboard(final View v) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        });
     }
 
     private void dialogWaitTimeVerifyPassword(long time) {
@@ -1459,11 +987,10 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
                 prgWaitingVisibility.set(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 token = tokenR;
-                closeKeyboard(view);
+                closeKeyword.setValue(true);
                 userLogin(token);
             }
         });
@@ -1487,7 +1014,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                closeKeyboard(view);
+                closeKeyword.setValue(true);
                 prgWaitingVisibility.set(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
@@ -1523,11 +1050,9 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
                 prgWaitingVisibility.set(View.GONE);
-
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                closeKeyboard(view);
+                closeKeyword.setValue(true);
             }
         });
     }
@@ -1556,57 +1081,21 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
                 prgWaitingVisibility.set(View.GONE);
-
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                closeKeyboard(view);
+                closeKeyword.setValue(true);
             }
         });
-    }
-
-    public void onStop() {
-
-        try {
-            if (dialogRegistration != null && dialogRegistration.isShowing()) {
-                dialogRegistration.dismiss();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void checkExpireTime(int expireTime) {
-
-        int time = (expireTime - 100) * 1000;
-        if (CountDownTimerQrCode != null) {
-            CountDownTimerQrCode.cancel();
-        }
-        CountDownTimerQrCode = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
-            public void onTick(long millisUntilFinished) {
-
-                //int seconds = (int) ((millisUntilFinished) / 1000);
-                //int minutes = seconds / 60;
-                //seconds = seconds % 60;
-            }
-
-            public void onFinish() {
-                new RequestQrCodeNewDevice().qrCodeNewDevice();
-            }
-        };
-
-        CountDownTimerQrCode.start();
-
     }
 
     @Override
     public void countryInfo(StructCountry structCountry) {
         isoCode = structCountry.getCountryCode();
 
-        if (structCountry.getName() != null) {
+        /*if (structCountry.getName() != null) {
             btnOk.performClick();
             dialogChooseCountry.dismiss();
-        }
+        }*/
 
         FragmentRegister.positionRadioButton = structCountry.getId();
 
@@ -1615,11 +1104,19 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         if (structCountry.getPhonePattern() != null || structCountry.getPhonePattern().equals(" ")) {
             edtPhoneNumberMask.set((structCountry.getPhonePattern().replace("X", "#").replace(" ", "-")));
         } else {
-            FragmentRegister.edtPhoneNumber.setMaxLines(18);
+            edtPhoneNumberMaskMaxCount.set(18);
             edtPhoneNumberMask.set("##################");
         }
 
         callbackBtnChoseCountry.set(structCountry.getName());
+    }
+
+    public void timerFinished(){
+        btnStartEnable.set(true);
+        btnChoseCountryEnable.set(true);
+        edtPhoneNumberEnable.set(true);
+        txtAgreementVisibility.set(View.VISIBLE);
+        layoutVerifyAgreement.set(View.GONE);
     }
 
     public enum Reason {

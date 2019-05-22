@@ -29,6 +29,8 @@ public abstract class MessageHandler {
     public Object message;
     int actionId;
     Object identity;
+    int majorCode = -1;
+    int minorCode = -1;
 
     public MessageHandler(int actionId, Object protoClass, Object identity) {
         this.actionId = actionId;
@@ -64,8 +66,8 @@ public abstract class MessageHandler {
     public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
+        majorCode = errorResponse.getMajorCode();
+        minorCode = errorResponse.getMinorCode();
 
         HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode), false);
 

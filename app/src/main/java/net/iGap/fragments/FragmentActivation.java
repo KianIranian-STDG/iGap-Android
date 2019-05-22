@@ -1,9 +1,12 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.Observer;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
@@ -17,7 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,10 +32,17 @@ import com.google.android.gms.tasks.Task;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
+import net.iGap.viewmodel.FragmentRegisterViewModel;
+import net.iGap.viewmodel.WaitTimeModel;
+
+import java.util.Locale;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class FragmentActivation extends BaseFragment {
 
@@ -100,13 +113,43 @@ public class FragmentActivation extends BaseFragment {
             }
         });
         viewModel.isNewUser.observe(this, aBoolean -> {
-            WelcomeFragment fragment = new WelcomeFragment();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("newUser", aBoolean);
-            bundle.putLong("userId", viewModel.userId);
-            fragment.setArguments(bundle);
-            G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-            G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentActivation.this).commitAllowingStateLoss();
+            if (aBoolean != null) {
+                if (aBoolean) {
+                    WelcomeFragment fragment = new WelcomeFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("newUser", true);
+                    bundle.putLong("userId", viewModel.userId);
+                    fragment.setArguments(bundle);
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentActivation.this).commitAllowingStateLoss();
+                } else {
+                    G.currentActivity.finish();
+                    Intent intent = new Intent(getActivity(), ActivityMain.class);
+                    intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, viewModel.userId);
+                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    G.context.startActivity(intent);
+                }
+            }
+        });
+        viewModel.showWaitDialog.observe(this, waitTimeModel -> {
+            if (waitTimeModel != null) {
+                dialogWaitTime(waitTimeModel);
+            }
+        });
+        viewModel.closeKeyword.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                hideKeyboard();
+            }
+        });
+        viewModel.showEnteredCodeErrorServer.observe(this, integer -> {
+            if (integer != null && getContext() != null) {
+                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(integer).setPositiveButton(R.string.ok, null).show();
+            }
+        });
+        viewModel.clearActivationCode.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                clearActivationCode();
+            }
         });
 
         initialActivationCodeEditor();
@@ -339,12 +382,55 @@ public class FragmentActivation extends BaseFragment {
                             binding.activationCodeEditText3.getEditableText().toString() +
                             binding.activationCodeEditText4.getEditableText().toString() +
                             binding.activationCodeEditText5.getEditableText().toString();
-                    Log.wtf("main", "value: " + message);
                     viewModel.receiveVerifySms(message);
                 } else {
                     binding.activationCodeEditText4.requestFocus();
                 }
             }
         });
+    }
+
+    private void dialogWaitTime(WaitTimeModel data) {
+
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(data.getTitle()).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    viewModel.timerFinished();
+                    dialog.dismiss();
+                }
+            }).show();
+
+            View v = dialogWait.getCustomView();
+
+            final TextView remindTime = v.findViewById(R.id.remindTime);
+            CountDownTimer countWaitTimer = new CountDownTimer(data.getTime() * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    long seconds = millisUntilFinished / 1000 % 60;
+                    long minutes = millisUntilFinished / (60 * 1000) % 60;
+                    long hour = millisUntilFinished / (3600 * 1000);
+
+                    remindTime.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minutes, seconds));
+                    dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                    remindTime.setText("00:00");
+                }
+            };
+            countWaitTimer.start();
+        }
+    }
+
+    private void clearActivationCode() {
+        binding.activationCodeEditText1.setText("");
+        binding.activationCodeEditText2.setText("");
+        binding.activationCodeEditText3.setText("");
+        binding.activationCodeEditText4.setText("");
+        binding.activationCodeEditText5.setText("");
+        binding.activationCodeEditText1.requestFocus();
     }
 }

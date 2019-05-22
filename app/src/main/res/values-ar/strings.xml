@@ -2697,23 +2697,22 @@
     <string name="refound">money transferred to your wallet</string>
     <string name="Recently_Sticker">مؤخرا</string>
     <string name="Favorite_Sticker">مفضل</string>
-
-
-    <!--todo: translate these below lines-->
-    <string name="new_channel_hint">You can provide an optional description for your channel.</string>
-    <string name="new_group_hint">You can provide an optional description for your group.</string>
-    <string name="permanent_link">Permanent Link</string>
+    <string name="new_channel_hint">يمكنك تقديم وصف اختياري لقناتك.</string>
+    <string name="new_group_hint">يمكنك تقديم وصف اختياري لمجموعتك.</string>
+    <string name="permanent_link">وصلة دائمة</string>
     <string name="change_language_title">غير اللغة</string>
     <string name="terms_condition_title">قوانین و مقررات</string>
-    <string name="welcome_title">Welcome To IGap</string>
+    <string name="welcome_title">مرحبا بكم في IGap</string>
+    <string name="add_modereator">أضف المشرف</string>
+    <string name="add_admin">إضافة المسؤول</string>
+    <string name="subscribers_title">مشتركين</string>
+    <string name="invite_link_title">دعوة الرابط</string>
+    <string name="add_to_home_screen">إضافة إلى الشاشة الرئيسية</string>
+
+    <!--todo: translate these below lines-->
     <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length as 5 characters.</string>
-    <string name="add_modereator">Add Moderator</string>
-    <string name="add_admin">Add Admin</string>
-    <string name="subscribers_title">subscribers</string>
-    <string name="invite_link_title">invite link</string>
-    <string name="add_to_home_screen">Add to Home screen</string>
-    <string name="channel_type">Channel Type</string>
-    <string name="get_money_title">Get Money</string>
+    <string name="channel_type">نوع القناة</string>
+    <string name="get_money_title">الحصول على المال</string>
     <string name="payment_continue_title">continue</string>
     <string name="bank_account_charge">موجودی حساب</string>
     <string name="sign_message_title">Sign Messages</string>

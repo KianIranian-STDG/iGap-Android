@@ -1758,24 +1758,24 @@
     <string name="Favorite_Sticker">مورد علاقه</string>
     <string name="item_selected"> مورد انتخاب شده</string>
 
-
-    <!--todo: translate these below lines-->
-    <string name="new_channel_hint">You can provide an optional description for your channel.</string>
-    <string name="new_group_hint">You can provide an optional description for your group.</string>
-    <string name="permanent_link">Permanent Link</string>
-    <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length as 5 characters.</string>
+    <string name="terms_and_condition">%s را می پذیرم</string>
+    <string name="terms_and_condition_clickable">قوانین و مقررات</string>
+    <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
+    <string name="new_channel_hint">شما می توانید توضیحات اختیاری برای کانال خود را ارائه دهید.</string>
+    <string name="new_group_hint">شما می توانید یک توضیح اختیاری برای گروه خود ارائه دهید.</string>
+    <string name="permanent_link">لینک دائمی</string>
     <string name="change_language_title">تغییر زبان برنامه</string>
     <string name="terms_condition_title">قوانین و مقررات</string>
     <string name="welcome_title">به آیگپ خوش آمدید</string>
-    <string name="add_modereator">Add Moderator</string>
-    <string name="add_admin">Add Admin</string>
-    <string name="subscribers_title">subscribers</string>
-    <string name="invite_link_title">invite link</string>
-    <string name="add_to_home_screen">Add to Home screen</string>
-    <string name="channel_type">Channel Type</string>
-    <string name="sign_message_title">Sign Messages</string>
-    <string name="get_money_title">Get Money</string>
-    <string name="payment_continue_title">continue</string>
+    <string name="add_modereator">افزودن مدیر</string>
+    <string name="add_admin">اضافه کردن مدیریت</string>
+    <string name="subscribers_title">مشترکین</string>
+    <string name="invite_link_title">لینک دعوت</string>
+    <string name="add_to_home_screen">افزودن به صفحه اصلی</string>
+    <string name="channel_type">نوع کانال</string>
+    <string name="sign_message_title">امضا پیام ها</string>
+    <string name="get_money_title">دریافت وجه</string>
+    <string name="payment_continue_title">ادامه</string>
     <string name="shabe_title">کارت به شبا</string>
     <string name="bank_account_charge">موجودی حساب</string>
     <string name="last_ten_transaction">ده تراکنش آخر</string>
@@ -1786,12 +1786,12 @@
     <string name="charge_amount">مبلغ شارژ</string>
     <string name="buy_internet_package_title">خرید بسته اینترنتی</string>
     <string name="charity_title">نیکوکاری</string>
-    <string name="disk_and_network_usage">Disk and Network Usage</string>
-    <string name="cache">Cache</string>
-    <string name="auto_play_media">Auto-play Media</string>
-    <string name="auto_download_media">Auto-download Media</string>
-    <string name="chat_setting">Chat Settings</string>
-    <string name="terms_and_condition">%s را می پذیرم</string>
-    <string name="terms_and_condition_clickable">قوانین و مقررات</string>
+    <string name="disk_and_network_usage">استفاده از حافظه و شبکه</string>
+    <string name="cache">کش</string>
+    <string name="auto_play_media">پخش خودکار محتوا</string>
+    <string name="auto_download_media">دانلودخودکار محتوا</string>
+    <string name="chat_setting">تنظیمات گفتگو</string>
+    <string name="new_channels_rules">اگر یک پیوند دائمی را تنظیم کنید، افراد دیگر قادر به یافتن و پیوستن به کانال شما خواهند بود.\nشما می توانید از a-z، 0-9 و زیرخط استفاده کنید.\nحداقل طول 5 حرف است.</string>
+    <!--todo: translate these below lines-->
 
 </resources>

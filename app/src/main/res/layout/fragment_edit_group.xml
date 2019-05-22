@@ -11,293 +11,301 @@
             type="net.iGap.viewmodel.EditGroupViewModel" />
     </data>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/root"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/toolbar"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/groupAvatar"
-                android:layout_width="@dimen/dp68"
-                android:layout_height="@dimen/dp68"
-                android:layout_margin="@dimen/dp32"
-                android:onClick="@{()->viewModel.chooseImage()}"
-                app:avatarImage="@{viewModel.avatarImage}"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/groupNameEditText"
-                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/groupAvatar"
+                    android:layout_width="@dimen/dp68"
+                    android:layout_height="@dimen/dp68"
+                    android:layout_margin="@dimen/dp32"
+                    android:onClick="@{()->viewModel.chooseImage()}"
+                    app:avatarImage="@{viewModel.avatarImage}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/groupNameEditText"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <ProgressBar
-                android:id="@+id/imageLoading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
-                app:layout_constraintLeft_toLeftOf="@id/groupAvatar"
-                app:layout_constraintRight_toRightOf="@id/groupAvatar"
-                app:layout_constraintTop_toTopOf="@id/groupAvatar" />
+                <ProgressBar
+                    android:id="@+id/imageLoading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
+                    app:layout_constraintLeft_toLeftOf="@id/groupAvatar"
+                    app:layout_constraintRight_toRightOf="@id/groupAvatar"
+                    app:layout_constraintTop_toTopOf="@id/groupAvatar" />
 
-            <net.iGap.module.EmojiEditTextE
-                android:id="@+id/groupNameEditText"
-                style="?emojiChat"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:gravity="bottom"
-                android:hint="@string/group_name"
-                android:imeOptions="flagNoExtractUi"
-                android:maxLines="1"
-                android:text="@={viewModel.groupName}"
-                android:textSize="24sp"
-                app:emojiSize="@dimen/dp22"
-                app:layout_constraintBottom_toTopOf="@id/line"
-                app:layout_constraintLeft_toRightOf="@id/groupAvatar"
-                app:layout_constraintRight_toLeftOf="@id/emojiButton" />
+                <net.iGap.module.EmojiEditTextE
+                    android:id="@+id/groupNameEditText"
+                    style="?emojiChat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="bottom"
+                    android:hint="@string/group_name"
+                    android:imeOptions="flagNoExtractUi"
+                    android:maxLines="1"
+                    android:text="@={viewModel.groupName}"
+                    android:textSize="24sp"
+                    app:emojiSize="@dimen/dp22"
+                    app:layout_constraintBottom_toTopOf="@id/line"
+                    app:layout_constraintLeft_toRightOf="@id/groupAvatar"
+                    app:layout_constraintRight_toLeftOf="@id/emojiButton" />
 
-            <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/emojiButton"
-                style="?emojiChat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp16"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:gravity="bottom"
-                android:onClick="@{()->viewModel.onEmojiClickListener()}"
-                android:paddingLeft="@dimen/dp8"
-                android:paddingRight="@dimen/dp8"
-                android:paddingBottom="@dimen/dp8"
-                android:text="@string/md_emoticon_with_happy_face"
-                android:textAppearance="@style/TextIconAppearance.all"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@id/groupNameEditText"
-                app:layout_constraintLeft_toRightOf="@id/groupNameEditText"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/groupNameEditText" />
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/emojiButton"
+                    style="?emojiChat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="bottom"
+                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
+                    android:paddingLeft="@dimen/dp8"
+                    android:paddingRight="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp8"
+                    android:text="@string/md_emoticon_with_happy_face"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/groupNameEditText"
+                    app:layout_constraintLeft_toRightOf="@id/groupNameEditText"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/groupNameEditText" />
 
-            <View
-                android:id="@+id/line"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@color/gray"
-                app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
-                app:layout_constraintLeft_toLeftOf="@id/groupNameEditText"
-                app:layout_constraintRight_toRightOf="@id/emojiButton" />
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"
+                    app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
+                    app:layout_constraintLeft_toLeftOf="@id/groupNameEditText"
+                    app:layout_constraintRight_toRightOf="@id/emojiButton" />
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/groupDescriptionEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:background="@null"
-                android:hint="@string/group_description"
-                app:layout_constraintLeft_toLeftOf="@id/line"
-                app:layout_constraintRight_toRightOf="@id/line"
-                app:layout_constraintTop_toBottomOf="@id/line" />
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/groupDescriptionEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="@null"
+                    android:hint="@string/group_description"
+                    app:layout_constraintLeft_toLeftOf="@id/line"
+                    app:layout_constraintRight_toRightOf="@id/line"
+                    app:layout_constraintTop_toBottomOf="@id/line" />
 
-            <View
-                android:id="@+id/line2"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/dp16"
-                android:background="@color/gray"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
-                app:layout_constraintWidth_percent=".95" />
+                <View
+                    android:id="@+id/line2"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@color/gray"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
+                    app:layout_constraintWidth_percent=".95" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/chatHistoryTitle"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:padding="8dp"
-                android:text="@string/chat_history_for_new_member_title"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line2"
-                app:layout_constraintWidth_percent=".9" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/chatHistoryTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
+                    android:text="@string/chat_history_for_new_member_title"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    app:layout_constraintWidth_percent=".9" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/chatHistoryStatus"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onChatHistoryStatusClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.chatHistoryForNewMemberStatus}"
-                app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
-                app:layout_constraintTop_toBottomOf="@id/chatHistoryTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/chatHistoryStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onChatHistoryStatusClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.chatHistoryForNewMemberStatus}"
+                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
+                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintTop_toBottomOf="@id/chatHistoryTitle" />
 
-            <View
-                android:id="@+id/line3"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/dp16"
-                android:background="@color/gray"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
-                app:layout_constraintWidth_percent=".95" />
+                <View
+                    android:id="@+id/line3"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@color/gray"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
+                    app:layout_constraintWidth_percent=".95" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/permission"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:onClick="@{()->viewModel.onPermissionClick()}"
-                android:padding="8dp"
-                android:text="@string/permissions_title"
-                app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                app:layout_constraintRight_toLeftOf="@id/permissionItems"
-                app:layout_constraintTop_toBottomOf="@id/line3" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/permission"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:onClick="@{()->viewModel.onPermissionClick()}"
+                    android:padding="8dp"
+                    android:text="@string/permissions_title"
+                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
+                    app:layout_constraintRight_toLeftOf="@id/permissionItems"
+                    app:layout_constraintTop_toBottomOf="@id/line3" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/permissionItems"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onPermissionClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.permissionCount}"
-                android:textColor="@color/green"
-                app:layout_constraintBottom_toBottomOf="@id/permission"
-                app:layout_constraintLeft_toRightOf="@id/permission"
-                app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
-                app:layout_constraintTop_toTopOf="@id/permission" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/permissionItems"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onPermissionClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.permissionCount}"
+                    android:textColor="@color/green"
+                    app:layout_constraintBottom_toBottomOf="@id/permission"
+                    app:layout_constraintLeft_toRightOf="@id/permission"
+                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintTop_toTopOf="@id/permission" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/administrators"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:onClick="@{()->viewModel.onAdministratorClick()}"
-                android:padding="8dp"
-                android:text="@string/administrators_title"
-                app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                app:layout_constraintRight_toLeftOf="@id/administratorsCount"
-                app:layout_constraintTop_toBottomOf="@id/permission" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/administrators"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:onClick="@{()->viewModel.onAdministratorClick()}"
+                    android:padding="8dp"
+                    android:text="@string/administrators_title"
+                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
+                    app:layout_constraintRight_toLeftOf="@id/administratorsCount"
+                    app:layout_constraintTop_toBottomOf="@id/permission" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/administratorsCount"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onAdministratorClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.administratorsCount}"
-                android:textColor="@color/green"
-                app:layout_constraintBottom_toBottomOf="@id/administrators"
-                app:layout_constraintLeft_toRightOf="@id/administrators"
-                app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
-                app:layout_constraintTop_toTopOf="@id/administrators" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/administratorsCount"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onAdministratorClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.administratorsCount}"
+                    android:textColor="@color/green"
+                    app:layout_constraintBottom_toBottomOf="@id/administrators"
+                    app:layout_constraintLeft_toRightOf="@id/administrators"
+                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintTop_toTopOf="@id/administrators" />
 
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/moderator"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:onClick="@{()->viewModel.onModeratorClick()}"
-                android:padding="8dp"
-                android:text="@string/moderators_title"
-                app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                app:layout_constraintRight_toLeftOf="@id/moderatorsCount"
-                app:layout_constraintTop_toBottomOf="@id/administrators" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/moderator"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:onClick="@{()->viewModel.onModeratorClick()}"
+                    android:padding="8dp"
+                    android:text="@string/moderators_title"
+                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
+                    app:layout_constraintRight_toLeftOf="@id/moderatorsCount"
+                    app:layout_constraintTop_toBottomOf="@id/administrators" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/moderatorsCount"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onModeratorClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.moderatorsCount}"
-                android:textColor="@color/green"
-                app:layout_constraintBottom_toBottomOf="@id/moderator"
-                app:layout_constraintLeft_toRightOf="@id/moderator"
-                app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
-                app:layout_constraintTop_toTopOf="@id/moderator" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/moderatorsCount"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onModeratorClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.moderatorsCount}"
+                    android:textColor="@color/green"
+                    app:layout_constraintBottom_toBottomOf="@id/moderator"
+                    app:layout_constraintLeft_toRightOf="@id/moderator"
+                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintTop_toTopOf="@id/moderator" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/members"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:onClick="@{()->viewModel.onMemberClick()}"
-                android:padding="8dp"
-                android:text="@string/members"
-                app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                app:layout_constraintRight_toLeftOf="@id/membersCount"
-                app:layout_constraintTop_toBottomOf="@id/moderator" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/members"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:onClick="@{()->viewModel.onMemberClick()}"
+                    android:padding="8dp"
+                    android:text="@string/members"
+                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
+                    app:layout_constraintRight_toLeftOf="@id/membersCount"
+                    app:layout_constraintTop_toBottomOf="@id/moderator" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/membersCount"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onMemberClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.membersCount}"
-                android:textColor="@color/green"
-                app:layout_constraintBottom_toBottomOf="@id/members"
-                app:layout_constraintLeft_toRightOf="@id/members"
-                app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
-                app:layout_constraintTop_toTopOf="@id/members" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/membersCount"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onMemberClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.membersCount}"
+                    android:textColor="@color/green"
+                    app:layout_constraintBottom_toBottomOf="@id/members"
+                    app:layout_constraintLeft_toRightOf="@id/members"
+                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintTop_toTopOf="@id/members" />
 
-            <View
-                android:id="@+id/line4"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/dp16"
-                android:background="@color/gray"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/members"
-                app:layout_constraintWidth_percent=".95" />
+                <View
+                    android:id="@+id/line4"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@color/gray"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/members"
+                    app:layout_constraintWidth_percent=".95" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/leaveGroup"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:onClick="@{()->viewModel.leaveGroupOnClick()}"
-                android:padding="8dp"
-                android:text="@string/Delete_and_leave_Group"
-                android:textColor="@color/red"
-                app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
-                app:layout_constraintTop_toBottomOf="@id/line4" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/leaveGroup"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:onClick="@{()->viewModel.leaveGroupOnClick()}"
+                    android:padding="8dp"
+                    android:text="@string/Delete_and_leave_Group"
+                    android:textColor="@color/red"
+                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
+                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintTop_toBottomOf="@id/line4" />
 
-            <ProgressBar
-                android:id="@+id/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="@{ viewModel.showLoading ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ viewModel.showLoading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.NestedScrollView>
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.constraint.ConstraintLayout>
 </layout>

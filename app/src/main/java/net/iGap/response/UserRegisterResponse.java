@@ -16,6 +16,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 
 import net.iGap.G;
+import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserRegister;
 
@@ -24,7 +25,7 @@ public class UserRegisterResponse extends MessageHandler {
     public int actionId;
     public Object message;
 
-    public UserRegisterResponse(int actionId, Object protoClass, String identity) {
+    public UserRegisterResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -36,9 +37,11 @@ public class UserRegisterResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
-        if (G.onUserRegistration != null)
-            G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash(), builder.getCallMethodSupported());
-
+        if (identity instanceof OnUserRegistration) {
+            ((OnUserRegistration) identity).onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash(), builder.getCallMethodSupported());
+        } else {
+            throw new ClassCastException("identity must be : " + OnUserRegistration.class.getName());
+        }
         G.userId = builder.getUserId();
         G.authorHash = builder.getAuthorHash();
         G.displayName = builder.getUsername();
@@ -61,7 +64,10 @@ public class UserRegisterResponse extends MessageHandler {
         final int minorCode = errorResponse.getMinorCode();
         final int getWait = errorResponse.getWait();
 
-        if (G.onUserRegistration != null)
-            G.onUserRegistration.onRegisterError(majorCode, minorCode, getWait);
+        if (identity instanceof OnUserRegistration) {
+            ((OnUserRegistration) identity).onRegisterError(majorCode, minorCode, getWait);
+        } else {
+            throw new ClassCastException("identity must be : " + OnUserRegistration.class.getName());
+        }
     }
 }

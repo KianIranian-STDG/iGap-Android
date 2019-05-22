@@ -9,279 +9,295 @@
             type="net.iGap.viewmodel.UserScoreViewModel" />
     </data>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/root"
+        <LinearLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/rankView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/dp24"
-                android:background="@drawable/rank_background"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintLeft_toRightOf="@id/scoreView"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent=".4" />
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/userRank"
-                style="@style/TextAppearance.AppCompat.Display1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp8"
-                android:gravity="center"
-                android:text="@{viewModel.userRank}"
-                app:layout_constraintBottom_toTopOf="@id/totalRank"
-                app:layout_constraintLeft_toLeftOf="@id/rankView"
-                app:layout_constraintRight_toRightOf="@id/rankView"
-                app:layout_constraintTop_toTopOf="@id/rankView"
-                app:layout_constraintVertical_chainStyle="packed" />
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/totalRank"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{viewModel.totalRank}"
-                app:layout_constraintBottom_toBottomOf="@id/rankView"
-                app:layout_constraintLeft_toLeftOf="@id/userRank"
-                app:layout_constraintRight_toRightOf="@id/userRank"
-                app:layout_constraintTop_toBottomOf="@id/userRank" />
+                <View
+                    android:id="@+id/rankView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:background="@drawable/rank_background"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toRightOf="@id/scoreView"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".4" />
 
-            <View
-                android:id="@+id/scoreView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/score_background_drawable"
-                app:layout_constraintBottom_toBottomOf="@id/rankView"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/rankView"
-                app:layout_constraintTop_toTopOf="@id/rankView"
-                app:layout_constraintWidth_percent=".4" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/userRank"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:gravity="center"
+                    android:text="@{viewModel.userRank}"
+                    app:layout_constraintBottom_toTopOf="@id/totalRank"
+                    app:layout_constraintLeft_toLeftOf="@id/rankView"
+                    app:layout_constraintRight_toRightOf="@id/rankView"
+                    app:layout_constraintTop_toTopOf="@id/rankView"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/userScore"
-                style="@style/TextAppearance.AppCompat.Display1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp8"
-                android:gravity="center"
-                android:text="@{viewModel.userScore}"
-                app:layout_constraintBottom_toBottomOf="@id/scoreView"
-                app:layout_constraintLeft_toLeftOf="@id/scoreView"
-                app:layout_constraintRight_toRightOf="@id/scoreView"
-                app:layout_constraintTop_toTopOf="@id/scoreView" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/totalRank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{viewModel.totalRank}"
+                    app:layout_constraintBottom_toBottomOf="@id/rankView"
+                    app:layout_constraintLeft_toLeftOf="@id/userRank"
+                    app:layout_constraintRight_toRightOf="@id/userRank"
+                    app:layout_constraintTop_toBottomOf="@id/userRank" />
 
-            <View
-                android:id="@+id/scorePointer"
-                android:layout_width="@dimen/dp16"
-                android:layout_height="@dimen/dp16"
-                android:background="@drawable/score_pointer"
-                app:layout_constraintCircle="@id/scoreView"
-                app:layout_constraintCircleAngle="0"
-                app:layout_constraintCircleRadius="83dp" />
+                <View
+                    android:id="@+id/scoreView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/score_background_drawable"
+                    app:layout_constraintBottom_toBottomOf="@id/rankView"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/rankView"
+                    app:layout_constraintTop_toTopOf="@id/rankView"
+                    app:layout_constraintWidth_percent=".4" />
 
-            <View
-                android:id="@+id/rankPointer"
-                android:layout_width="@dimen/dp16"
-                android:layout_height="@dimen/dp16"
-                android:background="@drawable/rank_pointer"
-                app:layout_constraintCircle="@id/rankView"
-                app:layout_constraintCircleAngle="0"
-                app:layout_constraintCircleRadius="83dp" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/userScore"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:gravity="center"
+                    android:text="@{viewModel.userScore}"
+                    app:layout_constraintBottom_toBottomOf="@id/scoreView"
+                    app:layout_constraintLeft_toLeftOf="@id/scoreView"
+                    app:layout_constraintRight_toRightOf="@id/scoreView"
+                    app:layout_constraintTop_toTopOf="@id/scoreView" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/rankTitle"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp16"
-                android:text="Rank"
-                app:layout_constraintLeft_toLeftOf="@id/rankView"
-                app:layout_constraintRight_toRightOf="@id/rankView"
-                app:layout_constraintTop_toBottomOf="@id/rankView" />
+                <View
+                    android:id="@+id/scorePointer"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:background="@drawable/score_pointer"
+                    app:layout_constraintCircle="@id/scoreView"
+                    app:layout_constraintCircleAngle="0"
+                    app:layout_constraintCircleRadius="83dp" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/scoreTitle"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp16"
-                android:text="Score"
-                app:layout_constraintLeft_toLeftOf="@id/scoreView"
-                app:layout_constraintRight_toRightOf="@id/scoreView"
-                app:layout_constraintTop_toBottomOf="@id/scoreView" />
+                <View
+                    android:id="@+id/rankPointer"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:background="@drawable/rank_pointer"
+                    app:layout_constraintCircle="@id/rankView"
+                    app:layout_constraintCircleAngle="0"
+                    app:layout_constraintCircleRadius="83dp" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/inviteItemTitle"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
-                android:layout_marginLeft="@dimen/dp16"
-                android:padding="8dp"
-                android:text="Invite Friends"
-                app:layout_constraintBottom_toTopOf="@id/paymentItemTitle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/inviteItem"
-                app:layout_constraintTop_toBottomOf="@id/scoreTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/rankTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="Rank"
+                    app:layout_constraintLeft_toLeftOf="@id/rankView"
+                    app:layout_constraintRight_toRightOf="@id/rankView"
+                    app:layout_constraintTop_toBottomOf="@id/rankView" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/inviteItem"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="?attr/selectableItemBackground"
-                android:drawableEnd="@drawable/emoji_add"
-                android:drawableRight="@drawable/emoji_add"
-                android:drawablePadding="@dimen/dp8"
-                android:drawableTint="@color/buttonColor"
-                android:gravity="center"
-                android:onClick="@{()->viewModel.onInviteClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.getInviteFriendsScore}"
-                android:textColor="@color/buttonColor"
-                app:iconTint="@color/buttonColor"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/inviteItemTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/scoreTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="Score"
+                    app:layout_constraintLeft_toLeftOf="@id/scoreView"
+                    app:layout_constraintRight_toRightOf="@id/scoreView"
+                    app:layout_constraintTop_toBottomOf="@id/scoreView" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/paymentItemTitle"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginTop="@dimen/dp8"
-                android:padding="8dp"
-                android:text="Payments"
-                app:layout_constraintBottom_toTopOf="@id/qrCodeItemTitle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/paymentItem"
-                app:layout_constraintTop_toBottomOf="@id/inviteItemTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/inviteItemTitle"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:padding="8dp"
+                    android:text="Invite Friends"
+                    app:layout_constraintBottom_toTopOf="@id/paymentItemTitle"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/inviteItem"
+                    app:layout_constraintTop_toBottomOf="@id/scoreTitle" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/paymentItem"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="?attr/selectableItemBackground"
-                android:drawableEnd="@drawable/emoji_add"
-                android:drawableRight="@drawable/emoji_add"
-                android:drawablePadding="@dimen/dp8"
-                android:drawableTint="@color/buttonColor"
-                android:gravity="center"
-                android:onClick="@{()->viewModel.onPaymentClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.paymentScore}"
-                android:textColor="@color/buttonColor"
-                app:iconTint="@color/buttonColor"
-                app:layout_constraintBottom_toBottomOf="@id/paymentItemTitle"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/paymentItemTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/inviteItem"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/emoji_add"
+                    android:drawableRight="@drawable/emoji_add"
+                    android:drawablePadding="@dimen/dp8"
+                    android:drawableTint="@color/buttonColor"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onInviteClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.getInviteFriendsScore}"
+                    android:textColor="@color/buttonColor"
+                    app:iconTint="@color/buttonColor"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/inviteItemTitle" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/qrCodeItemTitle"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginTop="@dimen/dp8"
-                android:padding="8dp"
-                android:text="Scan QRcode"
-                app:layout_constraintBottom_toTopOf="@id/botsItemTitle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/qrCodeItem"
-                app:layout_constraintTop_toBottomOf="@id/paymentItemTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/paymentItemTitle"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
+                    android:text="Payments"
+                    app:layout_constraintBottom_toTopOf="@id/qrCodeItemTitle"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/paymentItem"
+                    app:layout_constraintTop_toBottomOf="@id/inviteItemTitle" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/qrCodeItem"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="?attr/selectableItemBackground"
-                android:drawableEnd="@drawable/emoji_add"
-                android:drawableRight="@drawable/emoji_add"
-                android:drawablePadding="@dimen/dp8"
-                android:drawableTint="@color/buttonColor"
-                android:gravity="center"
-                android:onClick="@{()->viewModel.onQrCodeClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.qrCodeScore}"
-                android:textColor="@color/buttonColor"
-                app:iconTint="@color/buttonColor"
-                app:layout_constraintBottom_toBottomOf="@id/qrCodeItemTitle"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/qrCodeItemTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/paymentItem"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/emoji_add"
+                    android:drawableRight="@drawable/emoji_add"
+                    android:drawablePadding="@dimen/dp8"
+                    android:drawableTint="@color/buttonColor"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onPaymentClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.paymentScore}"
+                    android:textColor="@color/buttonColor"
+                    app:iconTint="@color/buttonColor"
+                    app:layout_constraintBottom_toBottomOf="@id/paymentItemTitle"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/paymentItemTitle" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/botsItemTitle"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginTop="@dimen/dp8"
-                android:padding="8dp"
-                android:text="Bot &amp; Channels"
-                app:layout_constraintBottom_toTopOf="@id/giftsButton"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/botsItem"
-                app:layout_constraintTop_toBottomOf="@id/qrCodeItemTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/qrCodeItemTitle"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
+                    android:text="Scan QRcode"
+                    app:layout_constraintBottom_toTopOf="@id/botsItemTitle"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/qrCodeItem"
+                    app:layout_constraintTop_toBottomOf="@id/paymentItemTitle" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/botsItem"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="?attr/selectableItemBackground"
-                android:drawableEnd="@drawable/emoji_add"
-                android:drawableRight="@drawable/emoji_add"
-                android:drawablePadding="@dimen/dp8"
-                android:drawableTint="@color/buttonColor"
-                android:gravity="center"
-                android:onClick="@{()->viewModel.onBotsAndChannelClick()}"
-                android:padding="8dp"
-                android:text="@{viewModel.botsScore}"
-                android:textColor="@color/buttonColor"
-                app:iconTint="@color/buttonColor"
-                app:layout_constraintBottom_toBottomOf="@id/botsItemTitle"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/botsItemTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/qrCodeItem"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/emoji_add"
+                    android:drawableRight="@drawable/emoji_add"
+                    android:drawablePadding="@dimen/dp8"
+                    android:drawableTint="@color/buttonColor"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onQrCodeClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.qrCodeScore}"
+                    android:textColor="@color/buttonColor"
+                    app:iconTint="@color/buttonColor"
+                    app:layout_constraintBottom_toBottomOf="@id/qrCodeItemTitle"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/qrCodeItemTitle" />
 
-            <android.support.design.button.MaterialButton
-                android:id="@+id/giftsButton"
-                style="@style/IGapButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onGiftsButtonClick()}"
-                android:text="@string/gift"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/botsItemTitle"
-                app:layout_constraintWidth_percent=".5" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/botsItemTitle"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
+                    android:text="Bot &amp; Channels"
+                    app:layout_constraintBottom_toTopOf="@id/giftsButton"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/botsItem"
+                    app:layout_constraintTop_toBottomOf="@id/qrCodeItemTitle" />
 
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.NestedScrollView>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/botsItem"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/emoji_add"
+                    android:drawableRight="@drawable/emoji_add"
+                    android:drawablePadding="@dimen/dp8"
+                    android:drawableTint="@color/buttonColor"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onBotsAndChannelClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.botsScore}"
+                    android:textColor="@color/buttonColor"
+                    app:iconTint="@color/buttonColor"
+                    app:layout_constraintBottom_toBottomOf="@id/botsItemTitle"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/botsItemTitle" />
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/giftsButton"
+                    style="@style/IGapButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onGiftsButtonClick()}"
+                    android:text="@string/gift"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/botsItemTitle"
+                    app:layout_constraintWidth_percent=".5" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.constraint.ConstraintLayout>
 </layout>
