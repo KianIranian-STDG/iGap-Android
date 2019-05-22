@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
 import net.iGap.G;
@@ -22,12 +21,10 @@ import net.iGap.interfaces.OnChannelEdit;
 import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
-import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AttachFile;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
@@ -38,14 +35,11 @@ import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelEdit;
 import net.iGap.request.RequestChannelUpdateReactionStatus;
 import net.iGap.request.RequestChannelUpdateSignature;
-
-import java.util.HashMap;
-
 import io.realm.Realm;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 
-public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete, OnChannelLeft, OnChannelEdit {
+public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete, OnChannelLeft {
 
     public MutableLiveData<String> avatarImage = new MutableLiveData<>();
     public MutableLiveData<String> channelName = new MutableLiveData<>();
@@ -68,6 +62,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public MutableLiveData<Boolean> showSelectImageDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showConvertChannelDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDeleteChannelDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
 
     public long roomId;
     private boolean isPrivate;
@@ -80,7 +75,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
-        initEmoji.setValue(false);
 
         G.onChannelAvatarAdd = this;
         G.onChannelAvatarDelete = this;
@@ -91,7 +85,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         /*G.onChannelKickModerator = this;*/
         G.onChannelDelete = this;
         G.onChannelLeft = this;
-        G.onChannelEdit = this;
         /*G.onChannelRevokeLink = this;*/
 
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
@@ -137,25 +130,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
                     isShowLoading.setValue(false);
                 }
             });
-        };
-        G.onChannelEdit = new OnChannelEdit() {
-            @Override
-            public void onChannelEdit(final long roomId, final String name, final String description) {
-                G.handler.post(() -> {
-                    isShowLoading.setValue(false);
-                    channelName.setValue(name);
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(() -> isShowLoading.setValue(false));
-            }
-
-            @Override
-            public void onTimeOut() {
-                G.handler.post(() -> isShowLoading.setValue(false));
-            }
         };
 
         realmChannelProfile = Realm.getDefaultInstance();
@@ -270,6 +244,8 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public void onEmojiClickListener() {
         if (initEmoji.getValue() != null) {
             initEmoji.setValue(!initEmoji.getValue());
+        } else {
+            initEmoji.setValue(false);
         }
     }
 
@@ -325,8 +301,34 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     }
 
     public void setData(String channelName, String channelDescription) {
-        new RequestChannelEdit().channelEdit(roomId, channelName, channelDescription);
         isShowLoading.setValue(true);
+        new RequestChannelEdit().channelEdit(roomId, channelName, channelDescription,new OnChannelEdit() {
+            @Override
+            public void onChannelEdit(final long roomId, final String name, final String description) {
+                G.handler.post(() -> {
+                    isShowLoading.setValue(false);
+                    EditChannelViewModel.this.channelName.setValue(name);
+                    SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
+                    if (spannableStringBuilder != null) {
+                        EditChannelViewModel.this.channelDescription.setValue(spannableStringBuilder);
+                    } else {
+                        EditChannelViewModel.this.channelDescription.setValue(new SpannableStringBuilder(""));
+                    }
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    goBack.setValue(true);
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(() -> isShowLoading.setValue(false));
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(() -> isShowLoading.setValue(false));
+            }
+        });
     }
 
     @Override
@@ -375,25 +377,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     @Override
     public void onChannelLeft(long roomId, long memberId) {
         closeActivity();
-    }
-
-    @Override
-    public void onChannelEdit(long roomId, String name, String description) {
-        editChannelResponse(roomId, name, description);
-    }
-
-    private void editChannelResponse(long roomIdR, final String name, final String description) {
-        G.handler.post(() -> {
-            isShowLoading.setValue(false);
-            channelName.setValue(name);
-            SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
-            if (spannableStringBuilder != null) {
-                channelDescription.setValue(spannableStringBuilder);
-            } else {
-                channelDescription.setValue(new SpannableStringBuilder(""));
-            }
-            G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        });
     }
 
     @Override

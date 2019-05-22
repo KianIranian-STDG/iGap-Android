@@ -21,7 +21,6 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,21 +35,14 @@ import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
-import net.iGap.module.SoftKeyboard;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import io.realm.Realm;
-
-import static net.iGap.fragments.FragmentRegister.btnOk;
-import static net.iGap.fragments.FragmentRegister.positionRadioButton;
-import static net.iGap.viewmodel.FragmentRegisterViewModel.dialogChooseCountry;
-import static net.iGap.viewmodel.FragmentRegisterViewModel.isoCode;
 
 public class ReagentFragment extends FragmentToolBarBack implements OnCountryCode, OnUserProfileSetRepresentative {
 
@@ -160,8 +152,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
     }
 
     private void selectCountry() {
-
-        dialogChooseCountry = new Dialog(G.fragmentActivity);
+        /*dialogChooseCountry = new Dialog(G.fragmentActivity);
         dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogChooseCountry.setContentView(R.layout.rg_dialog);
 
@@ -272,7 +263,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
 
         if (!(G.fragmentActivity).isFinishing()) {
             dialogChooseCountry.show();
-        }
+        }*/
     }
 
     private void addCountryList() {
@@ -339,14 +330,14 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
     @Override
     public void countryInfo(StructCountry structCountry) {
         selectCountryBtn.setText(structCountry.getName());
-        countryCodeEt.setText("+ " + String.valueOf(structCountry.getCountryCode()));
+        countryCodeEt.setText(String.format("+ %s", structCountry.getCountryCode()));
         countryCode = structCountry.getCountryCode();
         countryPattern = structCountry.getPhonePattern();
 
-        if (structCountry.getName() != null) {
+        /*if (structCountry.getName() != null) {
             dialogChooseCountry.dismiss();
             btnOk.performClick();
-        }
+        }*/
         setMask(structCountry.getPhonePattern());
     }
 

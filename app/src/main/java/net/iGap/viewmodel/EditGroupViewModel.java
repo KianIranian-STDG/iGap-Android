@@ -138,7 +138,6 @@ public class EditGroupViewModel extends ViewModel {
 
         }
         chatHistoryForNewMemberStatus.setValue(t);
-        initEmoji.setValue(false);
     }
 
     //TODO: move this code to repository
@@ -161,6 +160,8 @@ public class EditGroupViewModel extends ViewModel {
     public void onEmojiClickListener() {
         if (initEmoji.getValue() != null) {
             initEmoji.setValue(!initEmoji.getValue());
+        } else {
+            initEmoji.setValue(false);
         }
     }
 
@@ -184,7 +185,7 @@ public class EditGroupViewModel extends ViewModel {
         showDialogChatHistory.setValue(true);
     }
 
-    public void leaveGroup(){
+    public void leaveGroup() {
         //ToDo:move this code to repository
         G.onGroupLeft = new OnGroupLeft() {
             @Override
@@ -258,41 +259,36 @@ public class EditGroupViewModel extends ViewModel {
 
     public void setData(String newGroupName, String newGroupDescription) {
         //ToDo:Add this code to repository
-        G.onGroupEdit = new OnGroupEdit() {
+        new RequestGroupEdit().groupEdit(roomId, newGroupName, newGroupDescription,new OnGroupEdit() {
             @Override
             public void onGroupEdit(long roomId, String name, String description) {
-                /*hideProgressBar();*/
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        groupName.setValue(name);
-                        SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
-                        if (ds != null) {
-                            groupDescription.setValue(ds.toString());
-                        } else {
-                            groupDescription.setValue("");
-                        }
+                G.handler.post(() -> {
+                    showLoading.setValue(false);
+                    groupName.setValue(name);
+                    SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
+                    if (ds != null) {
+                        groupDescription.setValue(ds.toString());
+                    } else {
+                        groupDescription.setValue("");
                     }
+                    goBack.setValue(true);
                 });
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
+                G.handler.post(()-> showLoading.setValue(false));
             }
 
             @Override
             public void onTimeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //ToDo:move this code to view
-                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
-                    }
+                G.handler.post(() -> {
+                    //ToDo:move this code to view
+                    showLoading.setValue(false);
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
                 });
             }
-        };
-        new RequestGroupEdit().groupEdit(roomId, newGroupName, newGroupDescription);
+        });
     }
 
     public void setEditedImage(String path) {

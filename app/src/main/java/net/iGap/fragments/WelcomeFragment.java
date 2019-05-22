@@ -39,20 +39,12 @@ public class WelcomeFragment extends BaseFragment {
         G.handler.postDelayed(() -> {
             if (getArguments() != null) {
                 long userId = getArguments().getLong("userId");
-                if (getArguments().getBoolean("newUser")) {
-                    FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                    fragment.setArguments(bundle);
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(WelcomeFragment.this).commitAllowingStateLoss();
-                } else {
-                    G.currentActivity.finish();
-                    Intent intent = new Intent(getActivity(), ActivityMain.class);
-                    intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    G.context.startActivity(intent);
-                }
+                FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
+                Bundle bundle = new Bundle();
+                bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
+                fragment.setArguments(bundle);
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(WelcomeFragment.this).commitAllowingStateLoss();
             }
         }, 2000);
     }

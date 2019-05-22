@@ -14,7 +14,7 @@ import static net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture;
 
 public class BindingAdapter {
 
-    @android.databinding.BindingAdapter(value = {"app:avatarImage"})
+    @android.databinding.BindingAdapter(value = {"avatarImage"})
     public static void setAddedAvatarImage(ImageView imageView, AvatarImage avatarImage) {
         if (avatarImage != null && avatarImage.imagePath != null) {
             if (avatarImage.showCharacterImage) {
@@ -38,12 +38,12 @@ public class BindingAdapter {
         String backgroundColor;
     }
 
-    @android.databinding.BindingAdapter("app:errorText")
+    @android.databinding.BindingAdapter("errorText")
     public static void setErrorMessage(TextInputLayout view, @StringRes int errorMessage) {
         view.setError(view.getContext().getString(errorMessage));
     }
 
-    @android.databinding.BindingAdapter("app:setSelected")
+    @android.databinding.BindingAdapter("setSelected")
     public static void setErrorMessage(View view, boolean isSelected) {
         view.setSelected(isSelected);
     }

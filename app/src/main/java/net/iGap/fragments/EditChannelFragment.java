@@ -194,20 +194,26 @@ public class EditChannelFragment extends BaseFragment {
             }
         });
         viewModel.showConvertChannelDialog.observe(this, aBoolean -> {
-            if (aBoolean!=null){
+            if (aBoolean != null) {
                 showPopUp(aBoolean);
             }
         });
         viewModel.showDeleteChannelDialog.observe(this, aBoolean -> {
-            if (aBoolean!=null) {
+            if (aBoolean != null) {
                 deleteChannel(aBoolean);
+            }
+        });
+
+        viewModel.goBack.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                popBackStackFragment();
             }
         });
         onBackFragment = this::popBackStackFragment;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)  {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (G.isPassCode) ActivityMain.isUseCamera = true;
 
@@ -317,7 +323,7 @@ public class EditChannelFragment extends BaseFragment {
             } else {
                 convertToPrivate();
             }
-        }).show(getFragmentManager(),"bottom sheet");
+        }).show(getFragmentManager(), "bottom sheet");
     }
 
     private void convertToPublic() {
@@ -347,7 +353,7 @@ public class EditChannelFragment extends BaseFragment {
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         /*if (isPopup) {*/
-            edtUserName.setText(Config.IGAP_LINK_PREFIX);
+        edtUserName.setText(Config.IGAP_LINK_PREFIX);
         /*} else {
             edtUserName.setText(Config.IGAP_LINK_PREFIX + linkUsername);
         }*/

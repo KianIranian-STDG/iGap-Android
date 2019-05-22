@@ -724,9 +724,9 @@ public class FragmentChannelProfileViewModel
 
     //********** channel edit name and description
 
-    private void editChannelRequest(String name, String description) {
+    /*private void editChannelRequest(String name, String description) {
         new RequestChannelEdit().channelEdit(roomId, name, description);
-    }
+    }*/
 
     private void setToAdmin(Long peerId) {
         new RequestChannelAddAdmin().channelAddAdmin(roomId, peerId);

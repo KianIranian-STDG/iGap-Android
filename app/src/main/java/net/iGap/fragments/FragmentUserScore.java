@@ -2,36 +2,49 @@ package net.iGap.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentUserScoreBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentUserScore extends FragmentToolBarBack {
+public class FragmentUserScore extends BaseFragment {
 
     private UserScoreViewModel viewModel;
     private FragmentUserScoreBinding binding;
 
+    @Nullable
     @Override
-    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_score, root, true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_score, container, false);
         viewModel = new UserScoreViewModel();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        HelperToolbar t = HelperToolbar.create().setContext(getContext())
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.white_transaction_history)
+                .setLogoShown(false)
+                .setCounterShown(true);
+
+        binding.toolbar.addView(t.getView());
 
         binding.scoreView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -44,13 +57,6 @@ public class FragmentUserScore extends FragmentToolBarBack {
                 set.constrainCircle(binding.rankPointer.getId(), binding.rankView.getId(), binding.rankView.getWidth() / 2, 180);
                 set.applyTo(binding.root);
             }
-        });
-
-        titleTextView.setText(R.string.score_title);
-        menu_item1.setText(R.string.md_clearHistory);
-        menu_item1.setVisibility(View.VISIBLE);
-        menu_item1.setOnClickListener(v -> {
-
         });
 
         viewModel.userScorePointer.observe(this, integer -> {

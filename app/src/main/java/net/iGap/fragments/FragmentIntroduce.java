@@ -124,6 +124,19 @@ public class FragmentIntroduce extends BaseFragment {
 
         btnStart.setOnClickListener(view1 -> startRegistration());
 
+        view.findViewById(R.id.changeLanguage).setOnClickListener(v -> {
+            if (!isAdded() || G.fragmentActivity.isFinishing()) {
+                return;
+            }
+            if (G.socketConnection) {
+                FragmentLanguage fragment = new FragmentLanguage();
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
+            } else {
+                G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
+            }
+        });
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) { //set animation for all page

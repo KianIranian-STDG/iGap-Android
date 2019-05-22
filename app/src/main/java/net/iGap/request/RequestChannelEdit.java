@@ -10,18 +10,19 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnChannelEdit;
 import net.iGap.proto.ProtoChannelEdit;
 
 public class RequestChannelEdit {
 
-    public void channelEdit(long roomId, String name, String description) {
+    public void channelEdit(long roomId, String name, String description, OnChannelEdit callback) {
 
         ProtoChannelEdit.ChannelEdit.Builder builder = ProtoChannelEdit.ChannelEdit.newBuilder();
         builder.setRoomId(roomId);
         builder.setName(name);
         builder.setDescription(description.trim());
 
-        RequestWrapper requestWrapper = new RequestWrapper(405, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(405, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

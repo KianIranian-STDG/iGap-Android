@@ -1,16 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.interfaces.OnUserVerification;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserVerify;
 
@@ -18,9 +18,9 @@ public class UserVerifyResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserVerifyResponse(int actionId, Object protoClass, String identity) {
+    public UserVerifyResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -32,8 +32,10 @@ public class UserVerifyResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserVerify.UserVerifyResponse.Builder userVerifyResponse = (ProtoUserVerify.UserVerifyResponse.Builder) message;
-        if (G.onUserVerification != null) {
-            G.onUserVerification.onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser());
+        if (identity instanceof OnUserVerification) {
+            ((OnUserVerification) identity).onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser());
+        } else {
+            throw new ClassCastException("identity must be : " + OnUserVerification.class.getName());
         }
     }
 
@@ -50,8 +52,10 @@ public class UserVerifyResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         int getWait = errorResponse.getWait();
 
-        if (G.onUserVerification != null) {
-            G.onUserVerification.onUserVerifyError(majorCode, minorCode, getWait);
+        if (identity instanceof OnUserVerification) {
+            ((OnUserVerification) identity).onUserVerifyError(majorCode, minorCode, getWait);
+        } else {
+            throw new ClassCastException("identity must be : " + OnUserVerification.class.getName());
         }
     }
 }
