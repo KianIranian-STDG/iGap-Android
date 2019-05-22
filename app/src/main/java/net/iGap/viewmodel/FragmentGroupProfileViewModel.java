@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -124,18 +124,19 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     private RealmNotificationSetting realmNotificationSetting;
     public MutableLiveData<Integer> sharedPhotoVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> sharedPhotoCount = new MutableLiveData<>();
-    public ObservableField<Integer> sharedVideoVisibility = new ObservableField<>(View.GONE);
+    public ObservableInt sharedVideoVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedVideoCount = new MutableLiveData<>();
-    public ObservableField<Integer> sharedAudioVisibility = new ObservableField<>(View.GONE);
+    public ObservableInt sharedAudioVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedAudioCount = new MutableLiveData<>();
-    public ObservableField<Integer> sharedVoiceVisibility = new ObservableField<>(View.GONE);
+    public ObservableInt sharedVoiceVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedVoiceCount = new MutableLiveData<>();
-    public ObservableField<Integer> sharedGifVisibility = new ObservableField<>(View.GONE);
+    public ObservableInt sharedGifVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedGifCount = new MutableLiveData<>();
-    public ObservableField<Integer> sharedFileVisibility = new ObservableField<>(View.GONE);
+    public ObservableInt sharedFileVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedFileCount = new MutableLiveData<>();
-    public ObservableField<Integer> sharedLinkVisibility = new ObservableField<>(View.GONE);
+    public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedLinkCount = new MutableLiveData<>();
+    public ObservableInt noMediaSharedVisibility = new ObservableInt(View.VISIBLE);
 
 
     public static final String FRAGMENT_TAG = "FragmentGroupProfile";
@@ -147,7 +148,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public boolean isPrivate;
     public ObservableField<String> callbackGroupLink = new ObservableField<>("");
     public ObservableField<SpannableStringBuilder> callbackGroupDescription = new ObservableField<>();
-    public ObservableField<String> callbackGroupShearedMedia = new ObservableField<>("");
+    /*public ObservableField<String> callbackGroupShearedMedia = new ObservableField<>("");*/
     public ObservableField<String> callBackDeleteLeaveGroup = new ObservableField<>(G.context.getResources().getString(R.string.Delete_and_leave_Group));
     public ObservableField<String> callbackGroupLinkTitle = new ObservableField<>(G.context.getResources().getString(R.string.group_link));
     public ObservableField<Integer> callbackAddMemberVisibility = new ObservableField<>(View.VISIBLE);
@@ -295,6 +296,32 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         new HelperFragment(fragmentNotification).setReplace(false).load();
     }
 
+    public void addNewMember() {
+        List<StructContactInfo> userList = Contacts.retrieve(null);
+        RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), roomId);
+
+        for (int i = 0; i < memberList.size(); i++) {
+            for (int j = 0; j < userList.size(); j++) {
+                if (userList.get(j).peerId == memberList.get(i).getPeerId()) {
+                    userList.remove(j);
+                    break;
+                }
+            }
+        }
+
+        Fragment fragment = ShowCustomList.newInstance(userList, (result, message, countForShowLastMessage, list) -> {
+            for (int i = 0; i < list.size(); i++) {
+                new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(roomId, countForShowLastMessage));
+            }
+        });
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("DIALOG_SHOWING", true);
+        bundle.putLong("COUNT_MESSAGE", 0);
+        fragment.setArguments(bundle);
+
+        new HelperFragment(fragment).setReplace(false).load();
+    }
 
     //===============================================================================
     //================================Method========================================
@@ -329,7 +356,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 }
                 getRealm();
                 realmNotification = realmNotificationSetting.getNotification();
-                Log.wtf("view model", "value: " + realmNotification);
             }
         }
 
@@ -663,9 +689,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public void onResume() {
         mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
-
             if (changeListener == null) {
-
                 changeListener = new RealmChangeListener<RealmModel>() {
                     @Override
                     public void onChange(final RealmModel element) {
@@ -678,8 +702,10 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                                         countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                                     }
                                     if (countText == null || countText.length() == 0) {
-                                        countText = context.getString(R.string.there_is_no_sheared_media);
+                                        noMediaSharedVisibility.set(View.VISIBLE);
+                                        /*countText = context.getString(R.string.there_is_no_sheared_media);*/
                                     } else {
+                                        noMediaSharedVisibility.set(View.GONE);
                                         String[] countList = countText.split("\n");
                                         int countOFImage = Integer.parseInt(countList[0]);
                                         int countOFVIDEO = Integer.parseInt(countList[1]);
@@ -732,7 +758,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                                             sharedLinkVisibility.set(View.GONE);
                                         }
                                     }
-                                    Log.wtf("view model", "value of count: " + countText);
                                 }
                             }
                         });
@@ -743,8 +768,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             mRoom.addChangeListener(changeListener);
             changeListener.onChange(mRoom);
         } else {
-
-            callbackGroupShearedMedia.set(context.getString(R.string.there_is_no_sheared_media));
+            noMediaSharedVisibility.set(View.VISIBLE);
+            /*callbackGroupShearedMedia.set(context.getString(R.string.there_is_no_sheared_media));*/
         }
     }
 

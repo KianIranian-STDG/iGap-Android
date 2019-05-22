@@ -51,8 +51,6 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
 
-import static net.iGap.G.context;
-
 public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
 
     public ObservableInt videoCallVisibility = new ObservableInt(View.GONE);
@@ -81,7 +79,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public ObservableInt sharedFileCount = new ObservableInt(0);
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
-    public ObservableInt sharedEmptyVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedEmptyVisibility = new ObservableInt(View.VISIBLE);
 
     public MutableLiveData<Boolean> isMuteNotification = new MutableLiveData<>();
     public MutableLiveData<Boolean> isShowReportView = new MutableLiveData<>();
@@ -311,7 +309,6 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             color = registeredInfo.getColor();
             initials = registeredInfo.getInitials();
             userStatus = registeredInfo.getStatus();
-            Log.wtf("viewModel", "value of status: " + userStatus);
             isVerified = registeredInfo.isVerified();
         } else if (realmUser != null) {
             if (realmUser.getDisplay_name() != null && !realmUser.getDisplay_name().equals("")) {
@@ -378,6 +375,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         setUserStatus(userStatus, lastSeenValue);
         setAvatar.setValue(true);
         setAvatar.setValue(true);
+        //todo: change it
         FragmentShearedMedia.getCountOfSharedMedia(shearedId);
     }
 
@@ -513,6 +511,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                         if (countText == null || countText.length() == 0) {
                             sharedEmptyVisibility.set(View.VISIBLE);
                         } else {
+                            sharedEmptyVisibility.set(View.GONE);
                             String[] countList = countText.split("\n");
                             int countOFImage = Integer.parseInt(countList[0]);
                             int countOFVIDEO = Integer.parseInt(countList[1]);
@@ -571,6 +570,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             changeListener.onChange(mRoom);
         } else {
             /*sharedMedia.set(context.getString(R.string.there_is_no_sheared_media));*/
+            sharedEmptyVisibility.set(View.VISIBLE);
         }
     }
 

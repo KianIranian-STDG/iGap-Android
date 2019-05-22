@@ -17,29 +17,27 @@
             type="net.iGap.viewmodel.FragmentGroupProfileViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
+        <LinearLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.design.widget.AppBarLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v4.widget.NestedScrollView
             style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -56,7 +54,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent=".8" />
+                    app:layout_constraintWidth_percent=".9" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/notificationStatus"
@@ -76,20 +74,20 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notificationStatus"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/sharedContentTitle"
                     style="@style/TextAppearance.AppCompat.Title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
                     android:text="@string/chi_shared_Media"
                     android:textColor="@color/black"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider1"
-                    app:layout_constraintWidth_percent=".8" />
+                    app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
+                    app:layout_constraintRight_toRightOf="@id/notificationTitle"
+                    app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/photo"
@@ -253,6 +251,17 @@
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/links" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/noMediaShared"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/there_is_no_sheared_media"
+                    android:visibility="@{fragmentGroupProfileViewModel.noMediaSharedVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/links" />
+
                 <View
                     android:id="@+id/divider2"
                     android:layout_width="0dp"
@@ -261,8 +270,8 @@
                     android:background="@color/gray"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/links"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintTop_toBottomOf="@id/noMediaShared"
+                    app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/addMember"
@@ -270,12 +279,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->fragmentGroupProfileViewModel.addNewMember()}"
                     android:text="@string/add_new_member"
                     android:textColor="@color/black"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider2"
-                    app:layout_constraintWidth_percent=".8" />
+                    app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
+                    app:layout_constraintRight_toRightOf="@id/notificationTitle"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/memberList"
@@ -1023,5 +1033,5 @@
 
         </RelativeLayout>-->
 
-    </android.support.design.widget.CoordinatorLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>
