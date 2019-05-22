@@ -15,6 +15,8 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentLanguageViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -32,14 +34,18 @@ public class FragmentLanguage extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentLanguageBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_language, container, false);
-        return attachToSwipeBack(fragmentLanguageBinding.getRoot());
+        if (getArguments() != null && getArguments().containsKey("canSwipeBack")) {
+            return fragmentLanguageBinding.getRoot();
+        } else {
+            return attachToSwipeBack(fragmentLanguageBinding.getRoot());
+        }
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();

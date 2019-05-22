@@ -214,7 +214,7 @@ public class G extends MultiDexApplication {
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnConnectionChangeStateChat onConnectionChangeStateChat;
     public static OnUpdating onUpdating;
-    public static OnReceiveInfoLocation onReceiveInfoLocation;
+    /*public static OnReceiveInfoLocation onReceiveInfoLocation;*/
     /*public static OnUserRegistration onUserRegistration;*/
     public static OnClientSearchRoomHistory onClientSearchRoomHistory;
     /*public static OnUserVerification onUserVerification;*/
@@ -414,7 +414,7 @@ public class G extends MultiDexApplication {
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
 
-    public static OnCountryCode onCountryCode;
+    /*public static OnCountryCode onCountryCode;*/
     //public static LocationListenerResponse locationListenerResponse;
     private Tracker mTracker;
 

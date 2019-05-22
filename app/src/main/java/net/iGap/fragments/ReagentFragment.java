@@ -87,7 +87,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
 
         isNeedCloseActivity = getArguments().getBoolean("isNeedCloseActivity", true);
         setupViews(view);
-        G.onCountryCode = this;
+        /*G.onCountryCode = this;*/
         G.onUserProfileSetRepresentative = this;
     }
 
