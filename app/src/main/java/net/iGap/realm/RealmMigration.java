@@ -264,14 +264,14 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmRoomMessageWallet = schema.create(RealmRoomMessageWallet.class.getSimpleName())
                     .addField(RealmRoomMessageWalletFields.ID, long.class, FieldAttribute.REQUIRED)
                     .addPrimaryKey(RealmRoomMessageWalletFields.ID)
-                    .addField(RealmRoomMessageWalletFields.FROM_USER_ID, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.TO_USER_ID, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.AMOUNT, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.TRACE_NUMBER, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.INVOICE_NUMBER, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.PAY_TIME, int.class, FieldAttribute.REQUIRED)
+                    .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("toUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("amount", long.class, FieldAttribute.REQUIRED)
+                    .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("invoiceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("payTime", int.class, FieldAttribute.REQUIRED)
                     .addField(RealmRoomMessageWalletFields.TYPE, String.class)
-                    .addField(RealmRoomMessageWalletFields.DESCRIPTION, String.class);
+                    .addField("description", String.class);
 
             RealmObjectSchema realmRoomMessage = schema.get(RealmRoomMessage.class.getSimpleName());
             if (realmRoomMessage != null) {
