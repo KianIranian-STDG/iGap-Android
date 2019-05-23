@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentIntroduce extends BaseFragment {
 
+    private CustomCircleImage circleButton;
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,10 +79,8 @@ public class FragmentIntroduce extends BaseFragment {
         ViewPager viewPager = view.findViewById(R.id.int_viewPager_introduce);
         viewPager.setPageTransformer(true, new ParallaxPageTransformer());
 
-        CustomCircleImage circleButton = view.findViewById(R.id.int_circleButton_introduce);
-        if (circleButton != null) {
-            circleButton.circleButtonCount(3);
-        }
+        circleButton = view.findViewById(R.id.int_circleButton_introduce);
+        circleButton.circleButtonCount(3);
 
         Button btnStart = view.findViewById(R.id.int_btnStart);
 
@@ -98,6 +98,21 @@ public class FragmentIntroduce extends BaseFragment {
                 G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
             } else {
                 G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
+            }
+        });
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) { //set animation for all page
+                circleButton.percentScroll(positionOffset, position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
             }
         });
 
