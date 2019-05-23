@@ -11,87 +11,63 @@
             type="net.iGap.viewmodel.FragmentSettingViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:elevation="4dp"
-                android:gravity="top"
-                android:orientation="horizontal" />
-
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-15dp">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_scrollFlags="scroll">
-
-                    <android.support.design.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="0dp"
-                        app:layout_constraintDimensionRatio="360:150"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/test_bg" />
-                    </android.support.design.card.MaterialCardView>
-
-                    <net.iGap.module.CircleImageView
-                        android:id="@+id/userAvatar"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_margin="24dp"
-                        android:onClick="@{()->viewModel.onAvatarClick()}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintWidth_percent=".2" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/addAvatar"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/circle_white"
-                        android:gravity="center"
-                        android:onClick="@{()->viewModel.onAddImageClick()}"
-                        android:text="@string/md_add_plus_button"
-                        android:textAppearance="@style/TextIconAppearance.all"
-                        android:textColor="@color/md_green_500"
-                        app:layout_constraintBottom_toBottomOf="@id/userAvatar"
-                        app:layout_constraintLeft_toRightOf="@id/userAvatar"
-                        app:layout_constraintRight_toRightOf="@id/userAvatar" />
-                </android.support.constraint.ConstraintLayout>
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
-
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="0dp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <android.support.design.card.MaterialCardView
+                    android:id="@+id/pageHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="-1dp"
+                    app:layout_constraintDimensionRatio="360:150"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/test_bg" />
+                </android.support.design.card.MaterialCardView>
+
+                <net.iGap.module.CircleImageView
+                    android:id="@+id/userAvatar"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="24dp"
+                    android:onClick="@{()->viewModel.onAvatarClick()}"
+                    app:layout_constraintBottom_toBottomOf="@id/pageHeader"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="@id/pageHeader"
+                    app:layout_constraintWidth_percent=".2" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/addAvatar"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/circle_white"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onAddImageClick()}"
+                    android:text="@string/md_add_plus_button"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:textColor="@color/md_green_500"
+                    app:layout_constraintBottom_toBottomOf="@id/userAvatar"
+                    app:layout_constraintEnd_toEndOf="@id/userAvatar"
+                    app:layout_constraintStart_toEndOf="@id/userAvatar" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/name"
@@ -102,7 +78,7 @@
                     android:hint="@string/name"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pageHeader"
                     app:layout_constraintWidth_percent=".9">
 
                     <android.support.design.widget.TextInputEditText
@@ -212,7 +188,7 @@
                     android:layout_marginTop="@dimen/dp16"
                     android:padding="4dp"
                     android:text="@string/set_gender"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
+                    app:layout_constraintStart_toStartOf="@id/name"
                     app:layout_constraintTop_toBottomOf="@id/birthDate" />
 
                 <RadioGroup
@@ -223,8 +199,8 @@
                     android:onCheckedChanged="@{(group,checkId)->viewModel.onCheckedListener(checkId)}"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="@id/gender"
-                    app:layout_constraintLeft_toRightOf="@id/gender"
-                    app:layout_constraintRight_toRightOf="@id/name"
+                    app:layout_constraintEnd_toEndOf="@id/name"
+                    app:layout_constraintStart_toEndOf="@id/gender"
                     app:layout_constraintTop_toTopOf="@id/gender">
 
                     <android.support.v7.widget.AppCompatRadioButton
@@ -349,19 +325,30 @@
                     app:layout_constraintRight_toRightOf="@id/name"
                     app:layout_constraintTop_toBottomOf="@id/logout" />
 
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="@{viewModel.showLoading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v4.widget.NestedScrollView>
 
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="@{viewModel.showLoading ? View.VISIBLE : View.GONE}" />
-    </android.support.design.widget.CoordinatorLayout>
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <!--<android.support.design.widget.CoordinatorLayout
         android:id="@+id/st_layoutParent"

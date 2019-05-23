@@ -19,6 +19,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.databinding.InverseMethod;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -114,12 +115,12 @@ import static net.iGap.G.context;
 
 public class FragmentSettingViewModel extends ViewModel {
 
-    public MutableLiveData<String> name = new MutableLiveData<>();
-    public MutableLiveData<String> userName = new MutableLiveData<>();
-    public MutableLiveData<String> bio = new MutableLiveData<>();
-    public MutableLiveData<String> email = new MutableLiveData<>();
-    public MutableLiveData<String> birthDate = new MutableLiveData<>();
-    public MutableLiveData<Integer> gender = new MutableLiveData<>();
+    public ObservableField<String> name = new ObservableField<>("");
+    public ObservableField<String> userName = new ObservableField<>("");
+    public ObservableField<String> bio = new ObservableField<>("");
+    public ObservableField<String> email = new ObservableField<>("");
+    public ObservableField<String> birthDate = new ObservableField<>("");
+    public ObservableInt gender = new ObservableInt(-1);
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
 
     public LiveData<Boolean> getUsernameErrorEnable() {
@@ -195,6 +196,7 @@ public class FragmentSettingViewModel extends ViewModel {
 
 
     public FragmentSettingViewModel() {
+
 
         //what is request ?!
         Realm realm = Realm.getDefaultInstance();
@@ -350,11 +352,11 @@ public class FragmentSettingViewModel extends ViewModel {
             } else {
                 currentGender = -1;
             }
-            gender.setValue(currentGender);
-            name.setValue(currentName);
-            bio.setValue(currentBio);
-            userName.setValue(currentUserName);
-            email.setValue(currentUserEmail);
+            gender.set(currentGender);
+            name.set(currentName);
+            bio.set(currentBio);
+            userName.set(currentUserName);
+            email.set(currentUserEmail);
             /*if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
                 callbackSetRepresent.set("");
             } else {
@@ -430,7 +432,7 @@ public class FragmentSettingViewModel extends ViewModel {
         if (!newName.equals(currentName)) {
             showSubmitButton.setValue(true);
         } else {
-            if (currentBio.equals(bio.getValue()) && currentUserEmail.equals(email.getValue()) && currentUserName.equals(userName.getValue()) && currentGender == gender.getValue()) {
+            if (currentBio.equals(bio.get()) && currentUserEmail.equals(email.get()) && currentUserName.equals(userName.get()) && currentGender == gender.get()) {
                 showSubmitButton.setValue(false);
             }
         }
@@ -438,7 +440,7 @@ public class FragmentSettingViewModel extends ViewModel {
 
     private void sendRequestSetName() {
         showLoading.setValue(true);
-        new RequestUserProfileSetNickname().userProfileNickName(name.getValue(), new OnUserProfileSetNickNameResponse() {
+        new RequestUserProfileSetNickname().userProfileNickName(name.get(), new OnUserProfileSetNickNameResponse() {
             @Override
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
                 //setAvatar();
@@ -465,7 +467,7 @@ public class FragmentSettingViewModel extends ViewModel {
                 public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
                     G.handler.post(() -> {
                         if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
-                            showSubmitButton.setValue(!currentUserName.equals(userName.getValue()));
+                            showSubmitButton.setValue(!currentUserName.equals(userName.get()));
                             usernameErrorEnable.setValue(true);
                             usernameErrorMessage.setValue(R.string.is_empty);
                         } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
@@ -494,7 +496,7 @@ public class FragmentSettingViewModel extends ViewModel {
 
     private void sendRequestSetUsername() {
         showLoading.setValue(true);
-        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.getValue(), new OnUserProfileUpdateUsername() {
+        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
             @Override
             public void onUserProfileUpdateUsername(final String username) {
                 G.handler.post(() -> showLoading.setValue(false));
@@ -523,7 +525,7 @@ public class FragmentSettingViewModel extends ViewModel {
             emailErrorMessage.setValue(R.string.is_empty);
             emailErrorEnable.setValue(false);
         } else {
-            if (currentName.equals(name.getValue()) && currentUserName.equals(userName.getValue()) && currentBio.equals(bio.getValue()) && currentGender == gender.getValue()) {
+            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentBio.equals(bio.get()) && currentGender == gender.get()) {
                 showSubmitButton.setValue(false);
             }
         }
@@ -531,7 +533,7 @@ public class FragmentSettingViewModel extends ViewModel {
 
     private void sendRequestSetEmail() {
         showLoading.setValue(true);
-        new RequestUserProfileSetEmail().setUserProfileEmail(email.getValue(), new OnUserProfileSetEmailResponse() {
+        new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
             @Override
             public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
                 G.handler.post(() -> showLoading.setValue(false));
@@ -564,21 +566,21 @@ public class FragmentSettingViewModel extends ViewModel {
         if (!currentBio.equals(newBio)) {
             showSubmitButton.setValue(true);
         } else {
-            if (currentName.equals(name.getValue()) && currentUserName.equals(userName.getValue()) && currentUserEmail.equals(email.getValue()) && currentGender == gender.getValue()) {
+            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentGender == gender.get()) {
                 showSubmitButton.setValue(false);
             }
         }
     }
 
     private void sendRequestSetBio() {
-        new RequestUserProfileSetBio().setBio(bio.getValue());
+        new RequestUserProfileSetBio().setBio(bio.get());
     }
 
     public void onCheckedListener(int checkedId) {
         if (checkedId != currentGender) {
             showSubmitButton.setValue(true);
         } else {
-            if (currentName.equals(name.getValue()) && currentUserName.equals(userName.getValue()) && currentUserEmail.equals(email.getValue()) && currentBio.equals(bio.getValue())) {
+            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentBio.equals(bio.get())) {
                 showSubmitButton.setValue(false);
             }
         }
@@ -586,7 +588,7 @@ public class FragmentSettingViewModel extends ViewModel {
 
     private void sendRequestSetGender() {
         showLoading.setValue(true);
-        new RequestUserProfileSetGender().setUserProfileGender(gender.getValue() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
+        new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
             @Override
             public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
                 G.handler.post(() -> showLoading.setValue(false));
