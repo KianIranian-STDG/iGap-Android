@@ -12,21 +12,16 @@ package net.iGap.adapter.items.chat;
 
 import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -59,6 +54,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     private static final String PAUSE = "pause";
 
     private String playMode = PAUSE;
+    private boolean firstPlay = true;
+
 
     public VoiceItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -95,24 +92,28 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         holder.waveView.setTag(mMessage.messageID);
 
-        holder.messageTime = HelperCalander.getClocktime(mMessage.time, false);
+//        holder.messageTime = HelperCalander.getClocktime(mMessage.time, false);
 
 
         ValueAnimator anim = ValueAnimator.ofInt(0, 100);
         anim.setDuration((long) ((mMessage.attachment.duration) / 0.001));
-        Log.i("aabolfazl", "bindView: " + (mMessage.attachment.duration) / 0.001);
         anim.addUpdateListener(animation -> {
             int animProgress = (Integer) animation.getAnimatedValue();
             holder.waveView.setProgress(animProgress);
+
         });
+
 
         holder.complete = (result, messageOne, MessageTow) -> {
 
             if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
                 if (messageOne.equals("play")) {
                     holder.btnPlayMusic.setText(R.string.md_play_arrow);
+
+
                 } else if (messageOne.equals("pause")) {
                     holder.btnPlayMusic.setText(R.string.md_pause_button);
+
                 } else if (messageOne.equals("updateTime")) {
 
                     if (result) {
@@ -174,14 +175,31 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 holder.mTimeMusic = MusicPlayer.musicTime;
             }
 
-            if (payloads.equals(PLAY)) {
+            if (playMode.equals(PLAY)) {
                 playMode = PAUSE;
-                anim.cancel();
+
+                G.handler.postDelayed(() -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        anim.pause();
+                    } else
+                        anim.cancel();
+                }, 100);
+
             } else if (playMode.equals(PAUSE)) {
                 playMode = PLAY;
-                anim.start();
-            }
 
+                if (firstPlay) {
+                    anim.start();
+                } else {
+                    G.handler.postDelayed(() -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            anim.resume();
+                        } else
+                            anim.start();
+                    }, 100);
+                }
+                firstPlay = false;
+            }
 
         });
 
@@ -222,6 +240,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             MusicPlayer.onCompleteChat = holder.complete;
 
 //            holder.waveView.setProgress(MusicPlayer.musicProgress);
+            anim.start();
 
             if (MusicPlayer.musicProgress > 0) {
                 holder.txt_Timer.setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
@@ -255,14 +274,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         if (mMessage.isSenderMe() && ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColor), PorterDuff.Mode.SRC_IN);
+//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColor), PorterDuff.Mode.SRC_IN);
             }
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.iGapColor), android.graphics.PorterDuff.Mode.SRC_IN);
+//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.iGapColor), android.graphics.PorterDuff.Mode.SRC_IN);
         } else {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
             }
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
+//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
         holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
@@ -275,18 +294,18 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
             }
 
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
+//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
             holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
             holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
         } else {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
             }
 
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
+//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
             holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
             holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
         }
@@ -301,9 +320,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         protected MessageProgress progress;
         protected AppCompatImageView thumbnail;
-        //protected ImageView tic;
         protected AppCompatTextView btnPlayMusic;
-        protected SeekBar musicSeekbar;
         protected OnComplete complete;
         protected AppCompatTextView txt_Timer;
         protected AppCompatTextView author;
@@ -316,7 +333,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private AudioWave waveView;
-        private String messageTime;
 
         public ViewHolder(View view) {
             super(view);
@@ -328,7 +344,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             author = new AppCompatTextView(G.context);
             author.setId(R.id.cslv_txt_author);
-            author.setText("recorded voice");
             author.setTextColor(Color.parseColor(G.textBubble));
             author.setSingleLine(true);
             setTextSize(author, R.dimen.dp14);
@@ -345,11 +360,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             setTextSize(btnPlayMusic, R.dimen.dp20);
             btnPlayMusic.setTypeface(G.typeface_Fontico);
 
-            musicSeekbar = new SeekBar(G.context);
-            musicSeekbar.setId(R.id.csla_seekBar1);
-            LinearLayout.LayoutParams layout_652 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-            musicSeekbar.setLayoutParams(layout_652);
-
             txt_Timer = new AppCompatTextView(G.context);
             txt_Timer.setId(R.id.csla_txt_timer);
             txt_Timer.setTextColor(getColor(R.color.gray));
@@ -362,6 +372,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             waveView = new AudioWave(getContext());
             waveView.setId(R.id.wv_voiceItem_progress);
+
 
             Date currentTime = Calendar.getInstance().getTime();
             String value = currentTime.toString();
