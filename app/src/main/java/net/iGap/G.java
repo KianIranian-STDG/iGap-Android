@@ -387,6 +387,7 @@ public class G extends MultiDexApplication {
     public static Typeface typeface_IRANSansMobile;
     public static Typeface typeface_IRANSansMobile_Bold;
     public static Typeface typeface_Fontico;
+    public static Typeface typeface_FonticonNew;
     public static Typeface typeface_neuropolitical;
     public static boolean isPassCode;
     public static FingerPrint fingerPrint;

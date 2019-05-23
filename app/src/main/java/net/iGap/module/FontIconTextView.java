@@ -11,7 +11,6 @@
 package net.iGap.module;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -19,8 +18,6 @@ import android.view.Gravity;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.Emojione;
-
-import java.lang.reflect.Type;
 
 public class FontIconTextView extends AppCompatTextView {
 
@@ -41,10 +38,9 @@ public class FontIconTextView extends AppCompatTextView {
 
     private void init(Context context) {
 
-        Typeface tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/font_icon.ttf");
-        setTypeface(tf);
+        setTypeface(G.typeface_FonticonNew);
         setGravity(Gravity.CENTER);
-
     }
+
 
 }

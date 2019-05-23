@@ -144,6 +144,11 @@ public class BaseFragment extends SwipeBackFragment {
             G.typeface_Fontico = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
         }
 
+
+        if (G.typeface_FonticonNew == null) {
+            G.typeface_FonticonNew = Typeface.createFromAsset(G.context.getAssets(), "fonts/font_icon.ttf");
+        }
+
         if (G.typeface_neuropolitical == null) {
             G.typeface_neuropolitical = Typeface.createFromAsset(G.context.getAssets(), "fonts/neuropolitical.ttf");
         }

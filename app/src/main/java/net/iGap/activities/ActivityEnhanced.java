@@ -316,6 +316,10 @@ public class ActivityEnhanced extends AppCompatActivity {
             G.typeface_Fontico = Typeface.createFromAsset(getAssets(), "fonts/iGap-Fontico.ttf");
         }
 
+        if (G.typeface_FonticonNew == null) {
+            G.typeface_FonticonNew = Typeface.createFromAsset(getAssets(), "fonts/font_icon.ttf");
+        }
+
         if (G.typeface_neuropolitical == null) {
             G.typeface_neuropolitical = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
         }
