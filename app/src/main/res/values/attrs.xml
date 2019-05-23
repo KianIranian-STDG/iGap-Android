@@ -132,4 +132,40 @@
       <attr name="selected_icon" format="reference" />
       <attr name="unselected_icon" format="reference" />
   </declare-styleable>
+
+  <!--circle-->
+  <declare-styleable name="CircleSeekBar">
+    <attr name="csb_progress" format="integer"/>
+    <attr name="csb_min" format="integer"/>
+    <attr name="csb_max" format="integer"/>
+    <attr name="csb_step" format="integer"/>
+
+    <attr name="csb_thumbDrawable" format="reference"/>
+    <attr name="csb_thumbSize" format="dimension" />
+
+    <attr name="csb_progressColor" format="color"/>
+    <attr name="csb_progressWidth" format="dimension"/>
+
+    <attr name="csb_arcColor" format="color"/>
+    <attr name="csb_arcWidth" format="dimension"/>
+
+    <attr name="csb_textSize" format="dimension"/>
+    <attr name="csb_textColor" format="color"/>
+
+    <attr name="csb_isShowText" format="boolean" />
+
+  </declare-styleable>
+
+  <declare-styleable name="AudioWave">
+    <attr format="color" name="waveColor"/>
+    <attr format="dimension" name="chunkWidth"/>
+    <attr format="dimension" name="chunkHeight"/>
+    <attr format="dimension" name="minChunkHeight"/>
+    <attr format="dimension" name="chunkRadius"/>
+    <attr format="dimension" name="chunkSpacing"/>
+    <attr format="float" name="progress"/>
+    <attr format="boolean" name="animateExpansion"/>
+    <attr format="boolean" name="touchable"/>
+  </declare-styleable>
+
 </resources>

@@ -10,10 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -34,14 +27,11 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 import static java.lang.Boolean.TRUE;
 import static net.iGap.module.AndroidUtils.suitablePath;
@@ -141,7 +131,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration.setBackgroundResource(R.drawable.bg_message_image_time);
             duration.setGravity(Gravity.CENTER_VERTICAL);
             duration.setSingleLine(true);
-            duration.setPadding(i_Dp(R.dimen.dp4), dpToPixel(1), i_Dp(R.dimen.dp4), dpToPixel(1));
+            duration.setPadding(i_Dp(R.dimen.dp4), dpToPx(1), i_Dp(R.dimen.dp4), dpToPx(1));
             duration.setText("3:48 (4.5 MB)");
             duration.setAllCaps(TRUE);
             duration.setTextColor(G.context.getResources().getColor(R.color.gray10));
@@ -149,14 +139,14 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             setTypeFace(duration);
             FrameLayout.LayoutParams layout_49 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_49.gravity = Gravity.LEFT | Gravity.TOP;
-            layout_49.bottomMargin = -dpToPixel(2);
-            layout_49.leftMargin = dpToPixel(5);
-            layout_49.topMargin = dpToPixel(7);
+            layout_49.bottomMargin = -dpToPx(2);
+            layout_49.leftMargin = dpToPx(5);
+            layout_49.topMargin = dpToPx(7);
             duration.setLayoutParams(layout_49);
             frameLayout_642.addView(duration);
             progress = getProgressBar(0);
             frameLayout_642.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
-            m_container.addView(frameLayout_642);
+            getContentBloke().addView(frameLayout_642);
             if (withText) {
                 setLayoutMessageContainer();
             }

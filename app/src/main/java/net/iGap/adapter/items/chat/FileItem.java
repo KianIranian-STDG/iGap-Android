@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -25,6 +24,7 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
@@ -35,8 +35,6 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 import static android.graphics.Typeface.BOLD;
 import static android.view.Gravity.CENTER;
@@ -89,14 +87,19 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             holder.thumbnail.setVisibility(View.VISIBLE);
             if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
+                holder.fileType.setText("PDF");
             } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".txt")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
+                holder.fileType.setText("TXT");
             } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".exe")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
+                holder.fileType.setText("EXE");
             } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".doc") || roomMessage.getAttachment().getName().toLowerCase().endsWith(".docs") || roomMessage.getAttachment().getName().toLowerCase().endsWith(".docx")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
+                holder.fileType.setText("DOC");
             } else {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
+                holder.fileType.setText("FILE");
             }
         }
     }
@@ -132,9 +135,11 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         protected AppCompatTextView cslf_txt_file_size;
         protected AppCompatImageView thumbnail;
         protected MessageProgress progress;
+        private TextView fileType;
 
         public ViewHolder(View view) {
             super(view);
+
 
             LinearLayout linearLayout_784 = new LinearLayout(G.context);
             linearLayout_784.setGravity(Gravity.CENTER_VERTICAL);
@@ -180,6 +185,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name.setLayoutParams(layout_1000);
             linearLayout_780.addView(cslf_txt_file_name);
 
+            LinearLayout bottomView = new LinearLayout(getContext());
+            bottomView.setGravity(Gravity.CENTER);
+            bottomView.setOrientation(HORIZONTAL);
+
             cslf_txt_file_size = new AppCompatTextView(G.context);
             cslf_txt_file_size.setId(R.id.fileSize);
             cslf_txt_file_size.setSingleLine(true);
@@ -188,13 +197,34 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_size.setTextColor(Color.parseColor(G.textBubble));
             setTextSize(cslf_txt_file_size, R.dimen.dp10);
             setTypeFace(cslf_txt_file_size);
-            LinearLayout.LayoutParams layout_958 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layout_958.topMargin = 3;
-            cslf_txt_file_size.setLayoutParams(layout_958);
-            linearLayout_780.addView(cslf_txt_file_size);
+            bottomView.addView(cslf_txt_file_size);
+//            LinearLayout.LayoutParams layout_958 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//            layout_958.topMargin = 3;
+//            cslf_txt_file_size.setLayoutParams(layout_958);
+
+            View spaceView = new View(getContext());
+            spaceView.setBackgroundColor(Color.parseColor(G.textBubble));
+
+
+            fileType = new TextView(getContext());
+            fileType.setSingleLine(true);
+            fileType.setText("3.2 mb");
+            fileType.setAllCaps(TRUE);
+            fileType.setTextColor(Color.parseColor(G.textBubble));
+            setTextSize(fileType, R.dimen.dp10);
+            setTypeFace(fileType);
+
+
+            bottomView.addView(spaceView, LayoutCreator.createFrame(1, LayoutCreator.MATCH_PARENT, CENTER,
+                    dpToPx(1), 0, dpToPx(1), 0));
+
+            linearLayout_780.addView(bottomView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER,
+                    0, dpToPx(2), 0, 0));
+
+            bottomView.addView(fileType);
             linearLayout_784.addView(frameLayout);
             linearLayout_784.addView(linearLayout_780);
-            m_container.addView(linearLayout_784);
+            getContentBloke().addView(linearLayout_784);
 
             setLayoutMessageContainer();
 

@@ -87,7 +87,6 @@ import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MaterialDesignTextView;
@@ -583,7 +582,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
                 dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
                 *//* DialogAnimation.animationUp(dialog);*//*
-                dialog.getWindow().setLayout(ViewMaker.dpToPixel(220), WindowManager.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setLayout(ViewMaker.dpToPx(220), WindowManager.LayoutParams.WRAP_CONTENT);
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int height = displayMetrics.heightPixels;
@@ -595,10 +594,10 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
                 if (G.selectedLanguage.equals("en")) {
                     wmlp.gravity = Gravity.TOP | Gravity.LEFT;
 
-                    wmlp.x = ViewMaker.dpToPixel(10);   //x position
+                    wmlp.x = ViewMaker.dpToPx(10);   //x position
                 } else {
                     wmlp.gravity = Gravity.TOP | Gravity.RIGHT;
-                    wmlp.x = ViewMaker.dpToPixel(10);   //x position
+                    wmlp.x = ViewMaker.dpToPx(10);   //x position
                 }
 
 
@@ -607,18 +606,18 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
 
               *//*  if (orientation==0){
                    if (G.isLandscape)
-                       wmlp.y = ViewMaker.dpToPixel(160);
+                       wmlp.y = ViewMaker.dpToPx(160);
                        else
-                       wmlp.y = ViewMaker.dpToPixel(400);
+                       wmlp.y = ViewMaker.dpToPx(400);
 
                 }else *//*
                 if (orientation == 1 || orientation == 0) {
                     //Do some stuff
-                    wmlp.y = ViewMaker.dpToPixel(400);   //y
+                    wmlp.y = ViewMaker.dpToPx(400);   //y
 
                 } else if (orientation == 2) {
                     //Do some stuff
-                    wmlp.y = ViewMaker.dpToPixel(160);   //y
+                    wmlp.y = ViewMaker.dpToPx(160);   //y
                 }
 
                 dialog.show();
