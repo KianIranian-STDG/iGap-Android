@@ -555,7 +555,6 @@
     <string name="phone_selected_for_send">شماره تلفن انتخاب شده</string>
     <string name="crop_selected_for_send">تصویر انتخاب شده</string>
     <string name="location_message">پیام مکانی</string>
-    <string name="wallet_message">تراکنش کیف پول</string>
     <string name="chat_to_group">انتقال گفتگو به گروه</string>
     <string name="last_seen_at">آخرین بار دیده شده در</string>
     <string name="long_time_ago">خیلی وقت پیش</string>
@@ -713,6 +712,7 @@
     <string name="description_optional">توضیح (اختیاری)</string>
     <string name="enter_the_code_here">کد را اینجا وارد کنید.</string>
     <string name="transfer_to">انتقال به</string>
+    <string name="transfer_to_wallet">انتقال به کیف پول</string>
     <string name="price">قیمت</string>
     <string name="amunt">مقدار</string>
     <string name="email_optional">ایمیل (اختیاری)</string>
@@ -1304,12 +1304,12 @@
     <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
     <string name="result_4">پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول</string>
 
-    <string name="wallet_from">از:</string>
-    <string name="wallet_to">به:</string>
-    <string name="wallet_amount">مبلغ:</string>
-    <string name="wallet_trace">کد پیگیری:</string>
-    <string name="wallet_invoice">فاکتور:</string>
-    <string name="wallet_data">تاریخ:</string>
+    <string name="wallet_from">از</string>
+    <string name="wallet_to">به</string>
+    <string name="wallet_amount">مبلغ</string>
+    <string name="wallet_trace">کد پیگیری</string>
+    <string name="wallet_invoice">فاکتور</string>
+    <string name="wallet_data">تاریخ</string>
     <string name="wallet_desc">---توضیحات پرداخت---</string>
     <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">اعتبار شما: </string>
@@ -1754,4 +1754,18 @@
     <string name="refound">سند اصلاح واریز  مبلغ به کیف پول</string>
     <string name="Recently_Sticker">به تازگی</string>
     <string name="Favorite_Sticker">مورد علاقه</string>
+
+    <string name="wallet_message">پیام کیف پول</string>
+    <string name="unknown_message">این پیام پشتیبانی نمی شود!</string>
+    <string name="card_to_card_message">پیام کارت به کارت</string>
+    <string name="payment_message">پیام پرداخت</string>
+
+    <string name="WALLET_TRANSFER_MONEY">انتقال وجه کیف پول</string>
+    <string name="CARD_TRANSFER_MONEY">انتقال وجه کارت به کارت</string>
+    <string name="PAYMENT_TRANSFER_MONEY">پرداخت</string>
+    <string name="card_number_dest">شماره کارت مقصد</string>
+    <string name="source_bank">بانک مبدا</string>
+    <string name="cardToCardRrn">شماره صورتحساب</string>
+    <string name="cardToCardTrace">شماره پیگیری</string>
+    <string name="WalletRrnNumber">شماره مرجع</string>
 </resources>

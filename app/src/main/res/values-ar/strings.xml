@@ -1025,8 +1025,6 @@
 
     <string name="location_message">رسالة الموقع </string>
 
-    <string name="wallet_message">معاملة المحفظة</string>
-
     <string name="chat_to_group">نقل المحادثة إلى المجموعة </string>
 
     <string name="last_seen_at">آخر ظهور في </string>
@@ -1323,6 +1321,8 @@
     <string name="enter_the_code_here">أدخل الرمز هنا.</string>
 
     <string name="transfer_to">انتقال به</string>
+
+    <string name="transfer_to_wallet">نقل إلى المحفظة</string>
 
     <string name="price">السعر </string>
 
@@ -2246,12 +2246,12 @@
     <string name="result_3">لا تعرف نتيجة الدفع فترة المحفظة للمراجع أو الاتصال بالدعم.</string>
     <string name="result_4">تم الدفع بنجاح. تحقق أكثر في قسم محفوظات المحفظة.</string>
 
-    <string name="wallet_from">من عند:</string>
-    <string name="wallet_to">إلى:</string>
-    <string name="wallet_amount">كمية:</string>
-    <string name="wallet_trace">تتبع عدد:</string>
-    <string name="wallet_invoice">رقم الفاتورة:</string>
-    <string name="wallet_data">وقت الدفع:</string>
+    <string name="wallet_from">من عند</string>
+    <string name="wallet_to">إلى</string>
+    <string name="wallet_amount">كمية</string>
+    <string name="wallet_trace">تتبع عدد</string>
+    <string name="wallet_invoice">رقم الفاتورة</string>
+    <string name="wallet_data">وقت الدفع</string>
     <string name="wallet_desc">---وصف---</string>
     <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">رصيدك: </string>
@@ -2694,4 +2694,19 @@
     <string name="refound">money transferred to your wallet</string>
     <string name="Recently_Sticker">مؤخرا</string>
     <string name="Favorite_Sticker">مفضل</string>
+
+    <string name="wallet_message">رسالة المحفظة</string>
+    <string name="unknown_message">هذه الرسالة غير مدعومة!</string>
+    <string name="card_to_card_message">بطاقة إلى رسالة بطاقة</string>
+    <string name="payment_message">رسالة الدفع</string>
+
+    <string name="WALLET_TRANSFER_MONEY">محفظة تحويل الأموال</string>
+    <string name="CARD_TRANSFER_MONEY">بطاقة إلى بطاقة تحويل الأموال</string>
+    <string name="PAYMENT_TRANSFER_MONEY">دفع تحويل الأموال</string>
+    <string name="card_number_dest">رقم بطاقة الوجهة</string>
+    <string name="source_bank">بنك المصدر</string>
+    <string name="cardToCardRrn">رقم الفواتير</string>
+    <string name="cardToCardTrace">تتبع عدد</string>
+    <string name="WalletRrnNumber">الرقم المرجعي</string>
+
 </resources>

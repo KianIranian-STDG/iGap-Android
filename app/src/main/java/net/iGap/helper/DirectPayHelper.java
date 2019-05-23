@@ -31,6 +31,25 @@ public class DirectPayHelper {
 
     public static final int requestCodeDirectPay = 4258;
 
+    public static String convertNumberToPriceRial(long number) {
+        String pp = String.valueOf(number);
+        int k = 0;
+        StringBuilder newPP = new StringBuilder();
+        for (int i = pp.length() - 1; i > -1; i--) {
+            k ++;
+            newPP.insert(0, pp.charAt(i));
+            if (k % 3 == 0 && i != 0) {
+                newPP.insert(0, ",");
+            }
+        }
+
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(newPP.toString()) +  " " + G.currentActivity.getString(R.string.rial);
+        } else {
+            return newPP.toString() +  " " + G.currentActivity.getString(R.string.rial);
+        }
+    }
+
     public static void directPayBot(JSONObject jsonObject, long botId) throws JSONException {
         boolean inquiry = jsonObject.getBoolean("inquiry");
         long invoiceNumber = jsonObject.getLong("invoiceNumber");
@@ -44,23 +63,7 @@ public class DirectPayHelper {
             toId = botId;
         }
 
-        String pp = String.valueOf(price);
-        int k = 0;
-        StringBuilder newPP = new StringBuilder();
-        for (int i = pp.length() - 1; i > -1; i--) {
-            k ++;
-            newPP.insert(0, pp.charAt(i));
-            if (k % 3 == 0) {
-                newPP.insert(0, ",");
-            }
-        }
-
-        if (HelperCalander.isPersianUnicode) {
-            newPP = new StringBuilder(HelperCalander.convertToUnicodeFarsiNumber(newPP.toString()));
-        }
-
-        String content = newPP +  " " + G.currentActivity.getString(R.string.rial);
-
+        String content = convertNumberToPriceRial(price);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.pay_direct_dialog, true).build();
 
