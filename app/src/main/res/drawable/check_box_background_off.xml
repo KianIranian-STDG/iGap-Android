@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item>
+    <item
+        android:top="@dimen/dp4"
+        android:left="@dimen/dp4"
+        android:right="@dimen/dp4"
+        android:bottom="@dimen/dp4">
         <shape
             android:shape="rectangle">
 

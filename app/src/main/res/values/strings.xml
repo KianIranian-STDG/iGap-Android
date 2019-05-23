@@ -1802,4 +1802,7 @@
     <string name="refresh">Refresh</string>
     <string name="mark_as_several">Mark as several</string>
     <string name="add_new_subscriber">Add Subscriber</string>
+    <string name="cloud">Cloud</string>
+    <string name="score">Score</string>
+    <string name="Credit">Credit</string>
 </resources>
