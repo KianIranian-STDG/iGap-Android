@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -134,6 +135,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
     private ProgressBar pbLoading;
 
     private HelperToolbar mHelperToolbar ;
+    private boolean isChatMultiSelectEnable = false ;
+    private onChatCellClick onChatCellLongClicked ;
+    private RoomAdapter roomsAdapter;
+    private ViewGroup mLayoutMultiSelectedActions ;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -142,41 +147,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         fragment.setArguments(bundle);
         return fragment;
     }
-
-/*    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (isVisibleToUser) {
-            switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
-            //   if (HelperCalander.isPersianUnicode) {
-
-            if (switcher.equals("1") && channelSwitcher == 0) {
-                channelSwitcher = 1;
-                initRecycleView();
-            } else if (switcher.equals("2") && groupSwitcher == 0) {
-                groupSwitcher = 1;
-                initRecycleView();
-            } else if (switcher.equals("3") && chatSwitcher == 0) {
-                if (mainType!=null){
-                    initRecycleView();
-                }
-
-            }
-            else if (switcher.equals("3") && chatSwitcher == 0) {
-                chatSwitcher = 1;
-                initRecycleView();
-            } else if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
-                allSwitcher = 1;
-                initRecycleView();
-            } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
-                allSwitcher = 1;
-                initRecycleView();
-            }
-
-        }
-
-    }*/
 
     @Nullable
     @Override
@@ -204,6 +174,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
         progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
+        mLayoutMultiSelectedActions = view.findViewById(R.id.amr_layout_selected_actions);
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
         viewById.setVisibility(View.GONE);
@@ -232,6 +203,25 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
 
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
+
+        onChatCellLongClicked = new onChatCellClick() {
+            @Override
+            public void onClicked(View v, int position) {
+
+
+                refreshChatList(0 , true);
+            }
+        };
+    }
+
+    private void refreshChatList(int pos, boolean isRefreshAll) {
+
+        if ( isRefreshAll ){
+            roomsAdapter.notifyDataSetChanged();
+        }else {
+            roomsAdapter.notifyItemChanged(pos);
+        }
+
     }
 
     private void initRecycleView() {
@@ -268,7 +258,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         }
 
 
-        final RoomAdapter roomsAdapter = new RoomAdapter(results, this, viewById, pbLoading);
+        roomsAdapter = new RoomAdapter(results, this, viewById, pbLoading);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
             @Override
@@ -1001,6 +991,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
     @Override
     public void onLeftIconClickListener(View view) {
 
+        mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
+        ViewGroup.MarginLayoutParams marginLayoutParams =
+                (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
+        marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_room_selected_mode), 0, 10);
+        mRecyclerView.setLayoutParams(marginLayoutParams);
+        isChatMultiSelectEnable = true ;
+        refreshChatList(0 , true);
     }
 
     @Override
@@ -1107,6 +1104,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int i) {
 
+            if (isChatMultiSelectEnable){
+                holder.chSelected.setVisibility(View.VISIBLE);
+            }else{
+                holder.chSelected.setVisibility(View.GONE);
+            }
 
             final RealmRoom mInfo = holder.mInfo = getItem(i);
             if (mInfo == null) {
@@ -1446,6 +1448,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
             private EmojiTextViewE lastMessageSender;
             private ImageView txtTic;
             private View root ;
+            private CheckBox chSelected ;
 
 
             public ViewHolder(View view) {
@@ -1456,6 +1459,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
                  * user avatar image
                  * */
                 image = view.findViewById(R.id.iv_chatCell_userAvatar);
+
+                chSelected = view.findViewById(R.id.iv_itemContactChat_checkBox);
 
                 /**
                  * user name
@@ -1514,36 +1519,48 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
 
                 view.setOnClickListener(v -> {
 
-                    if (ActivityMain.isMenuButtonAddShown) {
-                        mComplete.complete(true, "closeMenuButton", "");
-                    } else {
-                        if (mInfo.isValid() && G.fragmentActivity != null) {
+                    if (isChatMultiSelectEnable){
 
-                            boolean openChat = true;
+                        if (chSelected.isChecked()){
+                            chSelected.setChecked(false);
+                        }else {
+                            chSelected.setChecked(true);
+                        }
 
-                            if (G.twoPaneMode) {
-                                Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
-                                if (fragment != null) {
+                    }else {
 
-                                    FragmentChat fm = (FragmentChat) fragment;
-                                    if (fm.isAdded() && fm.mRoomId == mInfo.getId()) {
-                                        openChat = false;
-                                    } else {
-                                        removeFromBaseFragment(fragment);
+                        if (ActivityMain.isMenuButtonAddShown) {
+                            mComplete.complete(true, "closeMenuButton", "");
+                        } else {
+                            if (mInfo.isValid() && G.fragmentActivity != null) {
+
+                                boolean openChat = true;
+
+                                if (G.twoPaneMode) {
+                                    Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
+                                    if (fragment != null) {
+
+                                        FragmentChat fm = (FragmentChat) fragment;
+                                        if (fm.isAdded() && fm.mRoomId == mInfo.getId()) {
+                                            openChat = false;
+                                        } else {
+                                            removeFromBaseFragment(fragment);
+                                        }
+
+
                                     }
-
-
                                 }
-                            }
 
-                            if (openChat) {
-                                new GoToChatActivity(mInfo.getId()).startActivity();
+                                if (openChat) {
+                                    new GoToChatActivity(mInfo.getId()).startActivity();
 
-                                if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                                    ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                                    if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                                    }
                                 }
                             }
                         }
+
                     }
                 });
 
@@ -1584,5 +1601,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         }
     }
 
+    private interface onChatCellClick{
+        void onClicked(View v , int position);
+    }
 
 }

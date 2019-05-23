@@ -12,6 +12,8 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -50,13 +52,21 @@ public class ChatCell extends ConstraintLayout {
         pinView.setBackground(drawable);
         addView(pinView);
 
+        /**
+         * add check box
+         */
+        CheckBox cellCheckbox = new CheckBox(G.context);
+        cellCheckbox.setId(R.id.iv_itemContactChat_checkBox);
+        cellCheckbox.setButtonDrawable(R.drawable.check_box_background);
+        cellCheckbox.setPadding(16 , 0 , 0 , 0 );
+        addView(cellCheckbox);
 
         /**
          * init avatar userAvatarIv
          * */
         CircleImageView avatarImageView = new CircleImageView(G.context);
         avatarImageView.setId(R.id.iv_chatCell_userAvatar);
-        avatarImageView.setPadding(isRtl ? 32 : 16, 16, isRtl ? 16 : 32, 16);
+        avatarImageView.setPadding(isRtl ? 16 : 0, 16, isRtl ? 0 : 16, 16);
         addView(avatarImageView);
 
 
@@ -197,13 +207,20 @@ public class ChatCell extends ConstraintLayout {
          * */
 
 
+        set.constrainHeight(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
+
+        set.connect(cellCheckbox.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+        set.connect(cellCheckbox.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        set.connect(cellCheckbox.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
+                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT , 16);
+
         set.constrainHeight(avatarImageView.getId(), i_Dp(R.dimen.dp68));
         set.constrainWidth(avatarImageView.getId(), i_Dp(R.dimen.dp68));
 
         set.connect(avatarImageView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
         set.connect(avatarImageView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-        set.connect(avatarImageView.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
-                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT);
+        set.connect(avatarImageView.getId(), ConstraintSet.START, cellCheckbox.getId(), ConstraintSet.END);
 
         set.constrainHeight(chatIcon.getId(), i_Dp(R.dimen.dp18));
         set.constrainWidth(chatIcon.getId(), i_Dp(R.dimen.dp18));

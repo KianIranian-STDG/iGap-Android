@@ -19,8 +19,8 @@
             android:id="@+id/cl_recycler_view_contact"
             style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_search"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_search"/>
 
         <LinearLayout
             android:id="@+id/amr_layout_toolbar"
@@ -28,6 +28,71 @@
             android:layout_height="@dimen/toolbar_height_root_with_search"
             android:layout_alignParentTop="true"
             android:orientation="horizontal"/>
+
+        <LinearLayout
+            android:id="@+id/amr_layout_selected_actions"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_below="@id/amr_layout_toolbar">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:background="@color/gray_300"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:text="Read All"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:background="@color/gray_300"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:text="Make as Read"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:background="@color/gray_300"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:text="Delete"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:background="@color/gray_300"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:text="Clear Cache"/>
+
+
+
+        </LinearLayout>
 
     </RelativeLayout>
 
