@@ -18,6 +18,9 @@ repositories {
 
 apply plugin: 'realm-android'
 
+apply plugin : 'kotlin-android'
+
+
 android {
     compileSdkVersion 28
 

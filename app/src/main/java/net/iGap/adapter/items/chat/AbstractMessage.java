@@ -519,13 +519,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 messageSenderAvatar.setOnLongClickListener(getLongClickPerform(holder));
 
-                //  String[] initialize =
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
                 mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, Long.parseLong(mMessage.senderID)).avatarType(AvatarHandler.AvatarType.USER));
-                //if (initialize != null && initialize[0] != null && initialize[1] != null) {
-                //    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                //        net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));
-                //}
             }
         }
         /**
