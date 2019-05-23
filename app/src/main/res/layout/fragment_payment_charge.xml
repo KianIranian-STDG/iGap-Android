@@ -162,9 +162,10 @@
           android:onCheckedChanged="@{fragmentPaymentChargeViewModel::checkBoxTarabordChanged}"
           android:text="@string/trabord"
           android:textColor="@{G.isDarkTheme ?Color.WHITE:@color/gray_4c,default=@color/gray_4c}"
-          android:buttonTint="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-          android:textSize="@dimen/dp16" />
+          android:textSize="@dimen/dp16"
+          android:button="@drawable/check_box_background" />
 
+        <!--android:buttonTint="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
         <LinearLayout
           android:layout_width="match_parent"
