@@ -1532,12 +1532,13 @@ public class FragmentChat extends BaseFragment
 
             //set layout direction to views
 
+            //todo : set gravity right for arabic and persian
             if (G.selectedLanguage.equals("en")) {
                 txtName.setGravity(Gravity.LEFT);
                 txtLastSeen.setGravity(Gravity.LEFT);
             } else {
-                txtName.setGravity(Gravity.RIGHT);
-                txtLastSeen.setGravity(Gravity.RIGHT);
+                txtName.setGravity(Gravity.LEFT);
+                txtLastSeen.setGravity(Gravity.LEFT);
             }
 
                         /**
