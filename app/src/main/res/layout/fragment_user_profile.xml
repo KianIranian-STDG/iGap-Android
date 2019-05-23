@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp6"
-                android:text="Cloud"
+                android:text="@string/cloud"
                 android:textColor="@color/black"
                 android:textSize="@dimen/fup_items_textSize" />
 
@@ -217,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp6"
-                android:text="@string/credit"
+                android:text="@string/Credit"
                 android:textColor="@color/black"
                 android:textSize="@dimen/fup_items_textSize"
                 app:layout_constraintStart_toEndOf="@id/fup_btn_credit_icon"
@@ -284,7 +284,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp6"
-                android:text="Score"
+                android:text="@string/score"
                 android:textColor="@color/black"
                 android:textSize="@dimen/fup_items_textSize"
                 app:layout_constraintStart_toEndOf="@id/fup_btn_score_icon"

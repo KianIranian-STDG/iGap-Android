@@ -1793,7 +1793,11 @@
     <string name="chat_setting">تنظیمات گفتگو</string>
     <string name="new_channels_rules">اگر یک پیوند دائمی را تنظیم کنید، افراد دیگر قادر به یافتن و پیوستن به کانال شما خواهند بود.\nشما می توانید از a-z، 0-9 و زیرخط استفاده کنید.\nحداقل طول 5 حرف است.</string>
     <!--todo: translate these below lines-->
-    <string name="refresh">Refresh</string>
-    <string name="mark_as_several">Mark as several</string>
-
+    <string name="refresh">رفرش</string>
+    <string name="mark_as_several">انتخاب چندتایی</string>
+    <string name="chat_setting_title">تنظیمات صفحه گفتگو</string>
+    <string name="add_new_subscriber">افزودن دنبال کننده</string>
+    <string name="cloud">فضای ابری</string>
+    <string name="score">امتیاز</string>
+    <string name="Credit">اعتبار</string>
 </resources>
