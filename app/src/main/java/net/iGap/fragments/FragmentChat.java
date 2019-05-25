@@ -112,6 +112,7 @@ import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.AdapterBottomSheetForward;
+import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
 import net.iGap.adapter.items.chat.ChatItemHolder;
@@ -309,6 +310,7 @@ import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.ActivityCallViewModel;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
@@ -374,7 +376,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
-        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick , ToolbarListener {
+        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, ToolbarListener {
 
     public static FinishActivity finishActivity;
     public static OnComplete onMusicListener;
@@ -476,7 +478,7 @@ public class FragmentChat extends BaseFragment
     private LinearLayout layoutAttachBottom;
     private LinearLayout ll_attach_text;
     private ConstraintLayout ll_AppBarSelected;
-    private MaterialDesignTextView mBtnCopySelected , mBtnForwardSelected , mBtnReplySelected , mBtnDeleteSelected ;
+    private MaterialDesignTextView mBtnCopySelected, mBtnForwardSelected, mBtnReplySelected, mBtnDeleteSelected;
     private TextView mTxtSelectedCounter;
     private LinearLayout toolbar;
     // private LinearLayout ll_navigate_Message;
@@ -612,7 +614,7 @@ public class FragmentChat extends BaseFragment
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
     private HelperToolbar mHelperToolbar;
-    private ViewGroup layoutToolbar ;
+    private ViewGroup layoutToolbar;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -1093,13 +1095,13 @@ public class FragmentChat extends BaseFragment
         mHelperToolbar = HelperToolbar.create()
                 .setContext(context)
                 .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_more_toolbar ,R.drawable.ic_voice_call , R.drawable.ic_video_call)
+                .setRightIcons(R.drawable.ic_more_toolbar, R.drawable.ic_voice_call, R.drawable.ic_video_call)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setListener(this);
 
         //just for skipping crash when name set to toolbar at onResume()
-        mHelperToolbar.getView() ;
+        mHelperToolbar.getView();
     }
 
     @Override
@@ -1498,14 +1500,13 @@ public class FragmentChat extends BaseFragment
         mHelperToolbar = HelperToolbar.create()
                 .setContext(context)
                 .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_more_toolbar ,R.drawable.ic_voice_call , R.drawable.ic_video_call)
+                .setRightIcons(R.drawable.ic_more_toolbar, R.drawable.ic_voice_call, R.drawable.ic_video_call)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setListener(this);
 
         layoutToolbar = rootView.findViewById(R.id.ac_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
-
 
 
         attachFile = new AttachFile(G.fragmentActivity);
@@ -1540,7 +1541,7 @@ public class FragmentChat extends BaseFragment
                 txtLastSeen.setGravity(Gravity.RIGHT);
             }
 
-                        /**
+            /**
              * need this info for load avatar
              */
             if (realmRoom != null) {
@@ -7221,22 +7222,22 @@ public class FragmentChat extends BaseFragment
                 replay(mAdapter.getSelectedItems().iterator().next().mMessage);
             }
         });
-        mBtnCopySelected.setOnClickListener( v -> {
+        mBtnCopySelected.setOnClickListener(v -> {
 
             copySelectedItemTextToClipboard();
-            
+
         });
-        
-        mBtnForwardSelected.setOnClickListener( v -> {
-           
+
+        mBtnForwardSelected.setOnClickListener(v -> {
+
             // forward selected messages to room list for selecting room
             if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
                 onForwardClick(null);
             }
-            
+
         });
-        
-        mBtnDeleteSelected.setOnClickListener(v-> {
+
+        mBtnDeleteSelected.setOnClickListener(v -> {
 
             final ArrayList<Long> list = new ArrayList<Long>();
             bothDeleteMessageId = new ArrayList<Long>();
@@ -7561,9 +7562,9 @@ public class FragmentChat extends BaseFragment
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                fastItemAdapter.add(new AdapterCamera("").withIdentifier(99));
+                                fastItemAdapter.add(new AdapterCamera("",onClickCamera).withIdentifier(99));
                                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
+                                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
                                 }
                                 isPermissionCamera = true;
                             }
@@ -7616,7 +7617,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
+                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
                 }
             }
         });
@@ -9389,74 +9390,6 @@ public class FragmentChat extends BaseFragment
                         });
                     }
                 }
-            }
-        }
-    }
-
-    public class AdapterCamera extends AbstractItem<AdapterCamera, AdapterCamera.ViewHolder> {
-
-        public String item;
-
-        //public String getItem() {
-        //    return item;
-        //}
-
-        public AdapterCamera(String item) {
-            this.item = item;
-        }
-
-        //public void setItem(String item) {
-        //    this.item = item;
-        //}
-
-        //The unique ID for this type of item
-        @Override
-        public int getType() {
-            return R.id.rootCamera;
-        }
-
-        //The layout to be used for this type of item
-        @Override
-        public int getLayoutRes() {
-            return R.layout.adapter_camera;
-        }
-
-        //The logic to bind your data to the view
-
-        @Override
-        public void unbindView(ViewHolder holder) {
-            super.unbindView(holder);
-        }
-
-        @Override
-        public void bindView(ViewHolder holder, List payloads) {
-            super.bindView(holder, payloads);
-        }
-
-        @Override
-        public ViewHolder getViewHolder(View v) {
-            return new ViewHolder(v);
-        }
-
-        //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
-        protected class ViewHolder extends RecyclerView.ViewHolder {
-
-            CameraView cm2;
-            private TextView rootCamera;
-
-            public ViewHolder(View view) {
-                super(view);
-
-                cm2 = view.findViewById(R.id.cameraView);
-                rootCamera = view.findViewById(R.id.txtIconCamera);
-                rootCamera.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (FragmentChat.onClickCamera != null) {
-                            FragmentChat.onClickCamera.onclickCamera();
-                        }
-                    }
-                });
             }
         }
     }

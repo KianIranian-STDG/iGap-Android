@@ -1802,4 +1802,6 @@
     <string name="refresh">Refresh</string>
     <string name="mark_as_several">Mark as several</string>
     <string name="add_new_subscriber">Add Subscriber</string>
+    <string name="financial_report">Financial Report</string>
+    <string name="fag">FAQ</string>
 </resources>

@@ -1798,5 +1798,7 @@
     <string name="chat_setting_title">تنظیمات چت</string>
     <!--todo: translate these below lines-->
     <string name="mark_as_several">Mark as several</string>
+    <string name="financial_report">گزارش مالی</string>
+    <string name="fag">سوالات متداول</string>
 
 </resources>

@@ -101,9 +101,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 .setContext(getContext())
                 .setLeftIcon(R.drawable.ic_back_btn)
                 .setRightIcons(R.drawable.ic_checked)
+                .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.settings))
-                .setLogoShown(false)
-                .setCounterShown(true)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -154,7 +153,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         viewModel.showSubmitButton.observe(this, aBoolean -> {
             if (aBoolean != null) {
-                Log.wtf("fragment setting","value of show visibility: "+aBoolean);
+                Log.wtf("fragment setting", "value of show visibility: " + aBoolean);
                 submitButton.setVisibility(aBoolean ? View.VISIBLE : View.GONE);
             }
         });

@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import net.iGap.R;
 import net.iGap.databinding.FragmentUserScoreBinding;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +43,20 @@ public class FragmentUserScore extends BaseFragment {
                 .setLeftIcon(R.drawable.ic_back_btn)
                 .setRightIcons(R.drawable.white_transaction_history)
                 .setLogoShown(false)
-                .setCounterShown(true);
+                .setCounterShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity()!=null){
+                            getActivity().onBackPressed();
+                        }
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        // to go history
+                    }
+                });
 
         binding.toolbar.addView(t.getView());
 
