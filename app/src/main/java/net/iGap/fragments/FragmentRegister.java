@@ -13,7 +13,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
@@ -21,7 +20,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.SearchView;
@@ -62,10 +60,10 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class FragmentRegister extends BaseFragment {
 
     public static final String TAG = FragmentRegister.class.getSimpleName();
-    private static final String KEY_SAVE_CODE_NUMBER = "SAVE_CODENUMBER";
-    private static final String KEY_SAVE_PHONE_NUMBER_MASK = "SAVE_PHONENUMBER_MASK";
-    private static final String KEY_SAVE_PHONE_NUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
-    private static final String KEY_SAVE_NAME_COUNTRY = "SAVE_NAMECOUNTRY";
+    private static final String KEY_SAVE_CODE_NUMBER = "SAVE_CODE_NUMBER";
+    private static final String KEY_SAVE_PHONE_NUMBER_MASK = "SAVE_PHONE_NUMBER_MASK";
+    private static final String KEY_SAVE_PHONE_NUMBER_NUMBER = "SAVE_PHONE_NUMBER_NUMBER";
+    private static final String KEY_SAVE_NAME_COUNTRY = "SAVE_NAME_COUNTRY";
     private static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
     private static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
     public static final String KEY_SAVE = "SAVE";
@@ -164,9 +162,7 @@ public class FragmentRegister extends BaseFragment {
             if (aBoolean != null && aBoolean) {
                 new DefaultRoundDialog(G.fragmentActivity).setMessage(getString(R.string.Re_dialog_verify_number_part1) + "\n" +
                         fragmentRegisterViewModel.callbackEdtCodeNumber.get() + "" + fragmentRegisterViewModel.callBackEdtPhoneNumber.get() + "\n" +
-                        G.fragmentActivity.getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, (dialog, which) -> {
-                    fragmentRegisterViewModel.confirmPhoneNumber();
-                }).setNegativeButton(R.string.B_edit, null).show();
+                        G.fragmentActivity.getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, (dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber()).setNegativeButton(R.string.B_edit, null).show();
             }
         });
 
@@ -197,8 +193,14 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.showDialogWaitTime.observe(this, data -> {
-            if (data!=null){
+            if (data != null) {
                 dialogWaitTime(data);
+            }
+        });
+
+        fragmentRegisterViewModel.showErrorMessageEmptyErrorPhoneNumberDialog.observe(this, isShow -> {
+            if (getContext() != null && isShow != null && isShow) {
+                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.phone_number_is_not_valid).setPositiveButton(R.string.ok, null).show();
             }
         });
     }
@@ -296,9 +298,7 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        dialogChooseCountry.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> {
-            dialogChooseCountry.dismiss();
-        });
+        dialogChooseCountry.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialogChooseCountry.dismiss());
 
         if (!(G.fragmentActivity).isFinishing()) {
             dialogChooseCountry.show();
@@ -316,16 +316,13 @@ public class FragmentRegister extends BaseFragment {
 
     private void dialogWaitTime(WaitTimeModel data) {
 
-        if (getActivity()!=null&&getActivity().isFinishing()) {
+        if (getActivity() != null && getActivity().isFinishing()) {
             return;
         }
 
-        MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(data.getTitle()).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                fragmentRegisterViewModel.timerFinished();
-                dialog.dismiss();
-            }
+        MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(data.getTitle()).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive((dialog, which) -> {
+            fragmentRegisterViewModel.timerFinished();
+            dialog.dismiss();
         }).show();
 
         View v = dialogWait.getCustomView();
@@ -338,7 +335,7 @@ public class FragmentRegister extends BaseFragment {
                 long minutes = millisUntilFinished / (60 * 1000) % 60;
                 long hour = millisUntilFinished / (3600 * 1000);
 
-                remindTime.setText(String.format(Locale.getDefault(),"%02d:%02d:%02d", hour, minutes, seconds));
+                remindTime.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minutes, seconds));
                 dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
@@ -371,11 +368,7 @@ public class FragmentRegister extends BaseFragment {
                     .setMessage(R.string.accept_terms_and_condition_error_message)
                     // Specifying a listener allows you to take an action before dismissing the dialog.
                     // The dialog is automatically dismissed when a dialog button is clicked.
-                    .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
+                    .setPositiveButton(R.string.dialog_ok, null)
                     .show();
         }
     }
