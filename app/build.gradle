@@ -25,7 +25,7 @@ android {
         applicationId "net.iGap"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 96
+        versionCode 97
         versionName "1.1.5"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
