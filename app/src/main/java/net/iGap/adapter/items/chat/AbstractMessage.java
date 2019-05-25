@@ -101,6 +101,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1939,7 +1940,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 realm.close();
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0).replace(".0", "")));
+                long id = new BigDecimal(((ArrayList<String>) v.getTag()).get(0)).longValue();
+                CardToCardHelper.CallCardToCard(G.currentActivity, id);
             }
 
         } catch (Exception e) {
