@@ -66,7 +66,7 @@ public class ChatCell extends ConstraintLayout {
          * */
         CircleImageView avatarImageView = new CircleImageView(G.context);
         avatarImageView.setId(R.id.iv_chatCell_userAvatar);
-        avatarImageView.setPadding(isRtl ? 16 : 0, 16, isRtl ? 0 : 16, 16);
+        avatarImageView.setPadding(isRtl ? 16 : 10, 16, isRtl ? 10 : 16, 16);
         addView(avatarImageView);
 
 
