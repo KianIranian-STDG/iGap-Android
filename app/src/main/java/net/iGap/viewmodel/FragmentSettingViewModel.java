@@ -196,6 +196,8 @@ public class FragmentSettingViewModel extends ViewModel {
 
     public FragmentSettingViewModel() {
 
+        gender.setValue(-1);
+
         //what is request ?!
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
