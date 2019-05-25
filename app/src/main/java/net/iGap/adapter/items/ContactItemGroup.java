@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.hanks.library.AnimateCheckBox;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -62,7 +63,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.checkBoxSelect.setChecked(true);
+        //holder.checkBoxSelect.setChecked(true);
 
         if (mContact.isHeader) {
             holder.topLine.setVisibility(View.VISIBLE);
@@ -71,9 +72,9 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         }
 
         if (mContact.isSelected) {
-            holder.checkBoxSelect.setVisibility(View.VISIBLE);
+            holder.checkBoxSelect.setChecked(true);
         } else {
-            holder.checkBoxSelect.setVisibility(View.INVISIBLE);
+            holder.checkBoxSelect.setChecked(false);
         }
 
         holder.title.setText(mContact.displayName);
@@ -109,7 +110,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
         protected View topLine;
-        protected AnimateCheckBox checkBoxSelect;
+        protected CheckBox checkBoxSelect;
 
         public ViewHolder(View view) {
             super(view);
@@ -118,7 +119,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             title = (CustomTextViewMedium) view.findViewById(R.id.title);
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
             topLine = (View) view.findViewById(R.id.topLine);
-            checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.cig_checkBox_select_user);
+            checkBoxSelect =  view.findViewById(R.id.cig_checkBox_select_user);
 
         }
 
