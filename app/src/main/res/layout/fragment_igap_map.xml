@@ -30,14 +30,13 @@
 
         <RelativeLayout
             android:id="@+id/mapContainer"
+            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <android.support.design.widget.AppBarLayout
                     android:id="@+id/backgroundToolbarMap"
@@ -123,22 +122,17 @@
                     </android.support.v7.widget.Toolbar>
                 </android.support.design.widget.AppBarLayout>
 
-                <LinearLayout
-                    android:id="@+id/fm_layout_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/toolbar_height"
-                    style="?backgroundColorSettingTheme"
-                    android:orientation="horizontal" />
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
                     android:visibility="visible">
 
                     <RelativeLayout
                         android:id="@+id/replace"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -228,8 +222,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:orientation="vertical"
-
-                            >
+                            android:paddingTop="10dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -361,7 +354,14 @@
 
 
                 </RelativeLayout>
-            </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fm_layout_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    android:orientation="horizontal" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
