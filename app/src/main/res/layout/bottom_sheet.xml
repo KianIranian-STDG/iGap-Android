@@ -67,7 +67,7 @@
           android:layout_height="@dimen/dp52"
           android:layout_gravity="center_horizontal"
           android:gravity="center"
-          android:text="@string/icon_folder"
+          android:text="@string/iconCardToCard"
           android:textSize="@dimen/dp20" />
 
         <TextView

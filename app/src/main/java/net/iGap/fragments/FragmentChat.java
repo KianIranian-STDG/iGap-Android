@@ -2527,6 +2527,7 @@ public class FragmentChat extends BaseFragment
                 ViewGroup root6 = v.findViewById(R.id.dialog_root_item6_notification);
                 ViewGroup root7 = v.findViewById(R.id.dialog_root_item7_notification);
                 ViewGroup root8 = v.findViewById(R.id.dialog_root_item10_sendMoney);
+                ViewGroup rootCardToCard = v.findViewById(R.id.dialog_root_item10_2_card_to_card);
                 ViewGroup root9 = v.findViewById(R.id.dialog_root_item11_exportChat);
                 ViewGroup root10 = v.findViewById(R.id.dialog_root_item12_stopBot);
 
@@ -2538,6 +2539,7 @@ public class FragmentChat extends BaseFragment
                 TextView txtCleanUp = v.findViewById(R.id.dialog_text_item6_notification);
                 TextView txtReport = v.findViewById(R.id.dialog_text_item7_notification);
                 TextView txtSendMoney = v.findViewById(R.id.dialog_text_item10_sendMoney);
+                TextView txtCardToCard = v.findViewById(R.id.dialog_text_item10_2_card_to_card);
                 TextView txtExportChat = v.findViewById(R.id.dialog_text_item11_exportChat);
                 TextView txtStopBot = v.findViewById(R.id.dialog_text_item12_stopBot);
 
@@ -2565,6 +2567,9 @@ public class FragmentChat extends BaseFragment
                 TextView iconSendMoney = v.findViewById(R.id.dialog_icon_item10_sendMoney);
                 iconSendMoney.setText(G.fragmentActivity.getResources().getString(R.string.md_payment));
 
+                TextView iconCardToCard = v.findViewById(R.id.dialog_icon_item10_2_card_to_card);
+                iconCardToCard.setText(G.fragmentActivity.getResources().getString(R.string.iconCardToCard));
+
                 TextView iconExposrtChat = v.findViewById(R.id.dialog_icon_item11_exportChat);
                 iconExposrtChat.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_export));
 
@@ -2578,6 +2583,7 @@ public class FragmentChat extends BaseFragment
                 root5.setVisibility(View.VISIBLE);
                 root6.setVisibility(View.VISIBLE);
                 root8.setVisibility(View.GONE);
+                rootCardToCard.setVisibility(View.GONE);
                 root9.setVisibility(View.VISIBLE);
                 root10.setVisibility(View.GONE);
 
@@ -2589,6 +2595,7 @@ public class FragmentChat extends BaseFragment
                 txtCleanUp.setText(G.fragmentActivity.getResources().getString(R.string.clean_up));
                 txtReport.setText(G.fragmentActivity.getResources().getString(R.string.report));
                 txtSendMoney.setText(G.fragmentActivity.getResources().getString(R.string.SendMoney));
+                txtCardToCard.setText(G.fragmentActivity.getResources().getString(R.string.amCardToCardIconText));
                 txtExportChat.setText(R.string.export_chat);
                 txtStopBot.setText(R.string.stop);
 
@@ -2598,7 +2605,9 @@ public class FragmentChat extends BaseFragment
                     if (!isChatReadOnly && !blockUser && !isBot) {
                         root5.setVisibility(View.VISIBLE);
                         root9.setVisibility(View.VISIBLE);
+                        rootCardToCard.setVisibility(View.VISIBLE);
                     } else {
+                        rootCardToCard.setVisibility(View.GONE);
                         root5.setVisibility(View.GONE);
                         root9.setVisibility(View.GONE);
                     }
@@ -2795,6 +2804,14 @@ public class FragmentChat extends BaseFragment
                             }
                         }
 
+                    }
+                });
+
+                rootCardToCard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        cardToCardClick(null);
                     }
                 });
 
@@ -6992,6 +7009,12 @@ public class FragmentChat extends BaseFragment
         ViewGroup video = viewBottomSheet.findViewById(R.id.video);
         ViewGroup music = viewBottomSheet.findViewById(R.id.music);
         ViewGroup request_cardToCard = viewBottomSheet.findViewById(R.id.request_cardToCard);
+        boolean isCardToCardEnabled = false;
+        request_cardToCard.setTag(false);
+        if (!isBot && chatType == CHAT) {
+            isCardToCardEnabled = true;
+            request_cardToCard.setTag(true);
+        }
         final ViewGroup close = viewBottomSheet.findViewById(R.id.close);
         ViewGroup file = viewBottomSheet.findViewById(R.id.file);
         ViewGroup paint = viewBottomSheet.findViewById(R.id.paint);
@@ -7023,7 +7046,15 @@ public class FragmentChat extends BaseFragment
         textPicture.setTextColor(Color.parseColor(G.attachmentColor));
         txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
         txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
-        txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
+
+        if (isCardToCardEnabled) {
+            txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
+            txtDocument2.setTextColor(Color.parseColor(G.attachmentColor));
+        } else {
+            txtDocument.setTextColor(Color.parseColor("#555555"));
+            txtDocument2.setTextColor(Color.parseColor("#555555"));
+        }
+
         txtFile.setTextColor(Color.parseColor(G.attachmentColor));
         txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
         txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
@@ -7035,7 +7066,6 @@ public class FragmentChat extends BaseFragment
         textPicture2.setTextColor(Color.parseColor(G.attachmentColor));
         txtVideo2.setTextColor(Color.parseColor(G.attachmentColor));
         txtMusic2.setTextColor(Color.parseColor(G.attachmentColor));
-        txtDocument2.setTextColor(Color.parseColor(G.attachmentColor));
         txtFile2.setTextColor(Color.parseColor(G.attachmentColor));
         txtPaint2.setTextColor(Color.parseColor(G.attachmentColor));
         txtLocation2.setTextColor(Color.parseColor(G.attachmentColor));
@@ -7337,10 +7367,7 @@ public class FragmentChat extends BaseFragment
         request_cardToCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                isCardToCardMessage = true;
-                showDraftLayout();
-//                sendNewMessageForRequestCardToCard();
+                cardToCardClick(v);
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -7451,6 +7478,22 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
+    }
+
+    private void cardToCardClick(View v) {
+        if (v == null) {
+            isCardToCardMessage = true;
+            showDraftLayout();
+        } else {
+            if ((Boolean) v.getTag()) {
+                bottomSheetDialog.dismiss();
+                isCardToCardMessage = true;
+                showDraftLayout();
+            } else {
+                bottomSheetDialog.dismiss();
+                HelperError.showSnackMessage(G.currentActivity.getString(R.string.disable), false);
+            }
+        }
     }
 
     @SuppressLint("RestrictedApi")
