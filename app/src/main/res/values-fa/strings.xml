@@ -581,6 +581,7 @@
     <string name="text_kick_moderator">آیا از اخراج این ناظر اطمینان دارید؟</string>
     <string name="dialog_readonly_chat">متأسفانه امکان ارسال پیام در گفتگو برای شما وجود ندارد.</string>
     <string name="delete_chat">حذف گفتگو</string>
+    <string name="delete">حذف</string>
     <string name="delete_account_text1">سایر</string>
     <string name="delete_account_text2">سایر</string>
     <string name="delete_account_text3">سایر</string>
@@ -1800,4 +1801,6 @@
     <string name="cloud">فضای ابری</string>
     <string name="score">امتیاز</string>
     <string name="Credit">اعتبار</string>
+    <string name="make_as_read">خوانده شده</string>
+    <string name="read_all">همه خوانده شده</string>
 </resources>

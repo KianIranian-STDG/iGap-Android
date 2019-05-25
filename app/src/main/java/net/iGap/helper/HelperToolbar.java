@@ -111,6 +111,7 @@ public class HelperToolbar {
 
     public HelperToolbar setLeftIcon(int drawable) {
         this.mLeftIcon = getConvertToBitmap(drawable);
+        if (mLeftBtn != null) mLeftBtn.setImageBitmap(mLeftIcon);
         return this;
     }
 

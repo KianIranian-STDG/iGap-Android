@@ -136,9 +136,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
 
     private HelperToolbar mHelperToolbar ;
     private boolean isChatMultiSelectEnable = false ;
-    private onChatCellClick onChatCellLongClicked ;
+    private onChatCellClick onChatCellClickedInEditMode ;
     private RoomAdapter roomsAdapter;
+    private List<RealmRoom> mSelectedRoomList = new ArrayList<>();
     private ViewGroup mLayoutMultiSelectedActions ;
+    private View mBtnRemoveSelected , mBtnClearCacheSelected , mBtnReadAllSelected , mBtnMakeAsReadSelected ;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -204,14 +206,35 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
 
-        onChatCellLongClicked = new onChatCellClick() {
+        initMultiSelectActions();
+
+        onChatCellClickedInEditMode = new onChatCellClick() {
             @Override
-            public void onClicked(View v, int position) {
-
-
-                refreshChatList(0 , true);
+            public void onClicked(View v, RealmRoom item ,int position , boolean status) {
+                refreshChatList(position , false);
             }
         };
+
+    }
+
+    private void initMultiSelectActions() {
+
+        mBtnRemoveSelected = mView.findViewById(R.id.amr_btn_delete_selected);
+        mBtnClearCacheSelected = mView.findViewById(R.id.amr_btn_clear_cache_selected);
+        mBtnMakeAsReadSelected = mView.findViewById(R.id.amr_btn_make_as_read_selected);
+        mBtnReadAllSelected = mView.findViewById(R.id.amr_btn_read_all_selected);
+
+
+        mBtnRemoveSelected.setOnClickListener( v-> {
+            if (mSelectedRoomList.size() > 0 )
+                confirmActionForRemoveSelected();
+        });
+
+        mBtnClearCacheSelected.setOnClickListener( v-> {
+            if (mSelectedRoomList.size() > 0){
+                confirmActionForClearHistoryOfSelected();
+            }
+        });
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {
@@ -432,32 +455,38 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
                     clearHistory(item.getId());
                     break;
                 case "txtDeleteChat":
-                    if (item.getType() == CHAT) {
-                        new RequestChatDelete().chatDelete(item.getId());
-                    } else if (item.getType() == GROUP) {
-                        if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
-                            new RequestGroupDelete().groupDelete(item.getId());
-                        } else {
-                            new RequestGroupLeft().groupLeft(item.getId());
-                        }
-                    } else if (item.getType() == CHANNEL) {
-
-                        if (MusicPlayer.mainLayout != null) {
-                            if (item.getId() == MusicPlayer.roomId) {
-                                MusicPlayer.closeLayoutMediaPlayer();
-                            }
-                        }
-
-
-                        if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                            new RequestChannelDelete().channelDelete(item.getId());
-                        } else {
-                            new RequestChannelLeft().channelLeft(item.getId());
-                        }
-                    }
+                    deleteChat(item);
                     break;
             }
         }
+    }
+
+    private void deleteChat(RealmRoom item) {
+
+        if (item.getType() == CHAT) {
+            new RequestChatDelete().chatDelete(item.getId());
+        } else if (item.getType() == GROUP) {
+            if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
+                new RequestGroupDelete().groupDelete(item.getId());
+            } else {
+                new RequestGroupLeft().groupLeft(item.getId());
+            }
+        } else if (item.getType() == CHANNEL) {
+
+            if (MusicPlayer.mainLayout != null) {
+                if (item.getId() == MusicPlayer.roomId) {
+                    MusicPlayer.closeLayoutMediaPlayer();
+                }
+            }
+
+
+            if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                new RequestChannelDelete().channelDelete(item.getId());
+            } else {
+                new RequestChannelLeft().channelLeft(item.getId());
+            }
+        }
+
     }
 
     private void muteNotification(final long roomId, final boolean mute) {
@@ -806,6 +835,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
     }
 
 
+
     @Override
     public void onChatDeleteError(int majorCode, int minorCode) {
 
@@ -991,13 +1021,29 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
     @Override
     public void onLeftIconClickListener(View view) {
 
-        mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
-        ViewGroup.MarginLayoutParams marginLayoutParams =
-                (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
-        marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_room_selected_mode), 0, 10);
-        mRecyclerView.setLayoutParams(marginLayoutParams);
-        isChatMultiSelectEnable = true ;
-        refreshChatList(0 , true);
+        if (isChatMultiSelectEnable){
+
+            mLayoutMultiSelectedActions.setVisibility(View.GONE);
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
+            marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_search), 0, 10);
+            mRecyclerView.setLayoutParams(marginLayoutParams);
+            isChatMultiSelectEnable = false ;
+            refreshChatList(0 , true);
+            mHelperToolbar.setLeftIcon(R.drawable.ic_edit_toolbar);
+            mSelectedRoomList.clear();
+            setVisiblityForSelectedActionsInEverySelection();
+
+        }else {
+
+            mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
+            marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_room_selected_mode), 0, 10);
+            mRecyclerView.setLayoutParams(marginLayoutParams);
+            isChatMultiSelectEnable = true ;
+            refreshChatList(0 , true);
+            mHelperToolbar.setLeftIcon(R.drawable.ic_cancel_toolbar);
+
+        }
     }
 
     @Override
@@ -1108,6 +1154,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
                 holder.chSelected.setVisibility(View.VISIBLE);
             }else{
                 holder.chSelected.setVisibility(View.GONE);
+                holder.chSelected.setChecked(false);
             }
 
             final RealmRoom mInfo = holder.mInfo = getItem(i);
@@ -1214,6 +1261,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
                 holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
                 holder.txtUnread.getTextView().setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getTextView().getText().toString()));
             }
+
+            holder.onRootClicked(i , mInfo);
         }
 
 
@@ -1516,16 +1565,61 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
 
                 txtTic = view.findViewById(R.id.iv_chatCell_messageStatus);
 
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
 
-                view.setOnClickListener(v -> {
+                        if (isChatMultiSelectEnable) return false;
+
+                        if (ActivityMain.isMenuButtonAddShown) {
+
+                            if (mComplete != null) {
+                                mComplete.complete(true, "closeMenuButton", "");
+                            }
+
+                        } else {
+                            if (mInfo.isValid() && G.fragmentActivity != null) {
+                                String role = null;
+                                if (mInfo.getType() == GROUP) {
+                                    role = mInfo.getGroupRoom().getRole().toString();
+                                } else if (mInfo.getType() == CHANNEL) {
+                                    role = mInfo.getChannelRoom().getRole().toString();
+                                }
+
+                                if (!G.fragmentActivity.isFinishing()) {
+                                    long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
+                                        @Override
+                                        public void complete(boolean result, String messageOne, String MessageTow) {
+                                            onSelectRoomMenu(messageOne, mInfo);
+                                        }
+                                    }, mInfo.isPinned());
+                                }
+                            }
+                        }
+                        return true;
+                    }
+                });
+            }
+
+            public void onRootClicked(int i, final RealmRoom mInfo) {
+
+
+                root.setOnClickListener(v -> {
 
                     if (isChatMultiSelectEnable){
 
                         if (chSelected.isChecked()){
                             chSelected.setChecked(false);
+                            mSelectedRoomList.remove(mInfo);
                         }else {
                             chSelected.setChecked(true);
+                            mSelectedRoomList.add(mInfo);
                         }
+
+                        setVisiblityForSelectedActionsInEverySelection();
+                        onChatCellClickedInEditMode.onClicked(chSelected , mInfo ,i ,  chSelected.isChecked());
+
 
                     }else {
 
@@ -1564,45 +1658,87 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
                     }
                 });
 
-                view.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-
-                        if (ActivityMain.isMenuButtonAddShown) {
-
-                            if (mComplete != null) {
-                                mComplete.complete(true, "closeMenuButton", "");
-                            }
-
-                        } else {
-                            if (mInfo.isValid() && G.fragmentActivity != null) {
-                                String role = null;
-                                if (mInfo.getType() == GROUP) {
-                                    role = mInfo.getGroupRoom().getRole().toString();
-                                } else if (mInfo.getType() == CHANNEL) {
-                                    role = mInfo.getChannelRoom().getRole().toString();
-                                }
-
-                                if (!G.fragmentActivity.isFinishing()) {
-                                    long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
-                                        @Override
-                                        public void complete(boolean result, String messageOne, String MessageTow) {
-                                            onSelectRoomMenu(messageOne, mInfo);
-                                        }
-                                    }, mInfo.isPinned());
-                                }
-                            }
-                        }
-                        return true;
-                    }
-                });
             }
         }
     }
 
-    private interface onChatCellClick{
-        void onClicked(View v , int position);
+    private interface onChatCellClick {
+        void onClicked(View v, RealmRoom item ,int pos , boolean status);
+    }
+
+    private void confirmActionForRemoveSelected(){
+
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
+                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+
+                        if (mSelectedRoomList.size() > 0){
+
+                            for (RealmRoom item : mSelectedRoomList){
+                                deleteChat(item);
+                            }
+
+                            onLeftIconClickListener(null);
+                        }
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void confirmActionForClearHistoryOfSelected() {
+
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
+                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+
+                        for (RealmRoom item : mSelectedRoomList){
+                            clearHistory(item.getId());
+                        }
+                        onLeftIconClickListener(null);
+
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void setVisiblityForSelectedActionsInEverySelection(){
+
+        if (mSelectedRoomList.size() == 0 ) mBtnRemoveSelected.setVisibility(View.VISIBLE);
+
+        for (RealmRoom item : mSelectedRoomList){
+
+            if (item != null && !RealmRoom.isPromote(item.getId())) {
+
+                if (item.getType() == ProtoGlobal.Room.Type.CHAT || item.getType() == ProtoGlobal.Room.Type.GROUP
+                        || item.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                    mBtnRemoveSelected.setVisibility(View.VISIBLE);
+                }else {
+                    mBtnRemoveSelected.setVisibility(View.GONE);
+                }
+
+            }else {
+                mBtnRemoveSelected.setVisibility(View.GONE);
+            }
+
+        }
     }
 
 }

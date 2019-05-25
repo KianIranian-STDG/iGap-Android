@@ -120,6 +120,7 @@
     <string name="unmute_notification">Unmute Notification</string>
     <string name="clear_history">Clear History</string>
     <string name="delete_chat">Delete Chat</string>
+    <string name="delete">Delete</string>
     <string name="left_group">Leave Group</string>
     <string name="delete_group">Delete Group</string>
 
@@ -1805,4 +1806,6 @@
     <string name="cloud">Cloud</string>
     <string name="score">Score</string>
     <string name="Credit">Credit</string>
+    <string name="make_as_read">Make as Read</string>
+    <string name="read_all">Read All</string>
 </resources>

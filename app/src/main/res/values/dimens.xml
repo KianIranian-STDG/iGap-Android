@@ -112,6 +112,7 @@
     <dimen name="multi_select_icon_size">17sp</dimen>
   <dimen name="multi_select_icon_margin">5dp</dimen>
   <dimen name="multi_select_icon_height">40dp</dimen>
+    <dimen name="main_rooms_selected_action_padding">8dp</dimen>
 
 
 </resources>
