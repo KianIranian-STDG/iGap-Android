@@ -83,6 +83,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
@@ -264,6 +266,7 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoSignalingOffer;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmCallConfig;
@@ -348,7 +351,6 @@ import static net.iGap.R.string.item;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
-import static net.iGap.module.AttachFile.request_code_open_document;
 import static net.iGap.module.AttachFile.request_code_pic_file;
 import static net.iGap.module.MessageLoader.getLocalMessage;
 import static net.iGap.module.enums.ProgressState.HIDE;
@@ -607,6 +609,7 @@ public class FragmentChat extends BaseFragment
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
+    private boolean isCardToCardMessage = false;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -2491,6 +2494,7 @@ public class FragmentChat extends BaseFragment
         btnCancelSendingFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isCardToCardMessage = false;
                 ll_attach_text.setVisibility(View.GONE);
                 edtChat.setFilters(new InputFilter[]{});
                 edtChat.setText(edtChat.getText());
@@ -3283,18 +3287,28 @@ public class FragmentChat extends BaseFragment
                 }
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
+                    if (isCardToCardMessage) {
+                        sendNewMessageForRequestCardToCard();
+                        ll_attach_text.setVisibility(View.GONE);
+                        edtChat.setFilters(new InputFilter[]{});
+                        edtChat.setText("");
 
-                    if (listPathString.size() == 0) {
+                        clearReplyView();
+                        isCardToCardMessage = false;
+                        return;
+                    } else {
+                        if (listPathString.size() == 0) {
+                            return;
+                        }
+                        sendMessage(latestRequestCode, listPathString.get(0));
+                        listPathString.clear();
+                        ll_attach_text.setVisibility(View.GONE);
+                        edtChat.setFilters(new InputFilter[]{});
+                        edtChat.setText("");
+
+                        clearReplyView();
                         return;
                     }
-                    sendMessage(latestRequestCode, listPathString.get(0));
-                    listPathString.clear();
-                    ll_attach_text.setVisibility(View.GONE);
-                    edtChat.setFilters(new InputFilter[]{});
-                    edtChat.setText("");
-
-                    clearReplyView();
-                    return;
                 }
 
                 /**
@@ -3349,43 +3363,7 @@ public class FragmentChat extends BaseFragment
                         edtChat.setText("");
                     }
                 } else { // new message has written
-
-                    String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
-                    if (messages.length == 0) {
-                        edtChat.setText("");
-                        Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
-                    } else {
-                        for (int i = 0; i < messages.length; i++) {
-                            final String message = messages[i];
-
-                            final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message, replyMessageId());
-                            if (roomMessage != null) {
-                                edtChat.setText("");
-                                lastMessageId = roomMessage.getMessageId();
-                                mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
-                                clearReplyView();
-                                scrollToEnd();
-
-                                /**
-                                 * send splitted message in every one second
-                                 */
-                                if (messages.length > 1) {
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (roomMessage.isValid() && !roomMessage.isDeleted()) {
-                                                new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
-                                            }
-                                        }
-                                    }, 1000 * i);
-                                } else {
-                                    new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
-                                }
-                            } else {
-                                Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
+                    sendNewMessage();
                 }
 
                 //realmMessage.close();
@@ -3539,6 +3517,104 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+
+    private void sendNewMessageForRequestCardToCard() {
+        String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
+        if (messages.length == 0) {
+            edtChat.setText("");
+            Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
+        } else {
+            for (int i = 0; i < messages.length; i++) {
+                final String message = messages[i];
+
+                final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message, replyMessageId());
+
+                if (roomMessage != null) {
+                    JsonArray jsonArray = new JsonArray();
+                    JsonArray jsonArray2 = new JsonArray();
+                    jsonArray.add(jsonArray2);
+                    JsonObject json = new JsonObject();
+                    json.addProperty("label", "Card to Card");
+                    json.addProperty("imageUrl", "");
+                    json.addProperty("actionType", "27");
+                    json.addProperty("value", G.userId);
+                    jsonArray2.add(json);
+
+
+                    getRealmChat().executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            roomMessage.setRealmAdditional(RealmAdditional.put(jsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON));
+                        }
+                    });
+
+                    edtChat.setText("");
+                    lastMessageId = roomMessage.getMessageId();
+                    mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+                    clearReplyView();
+                    scrollToEnd();
+
+                    /**
+                     * send splitted message in every one second
+                     */
+                    if (messages.length > 1) {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (roomMessage.isValid() && !roomMessage.isDeleted()) {
+                                    new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                }
+                            }
+                        }, 1000 * i);
+                    } else {
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                    }
+                } else {
+                    Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    private void sendNewMessage() {
+        String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
+        if (messages.length == 0) {
+            edtChat.setText("");
+            Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
+        } else {
+            for (int i = 0; i < messages.length; i++) {
+                final String message = messages[i];
+
+                final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message, replyMessageId());
+                if (roomMessage != null) {
+                    edtChat.setText("");
+                    lastMessageId = roomMessage.getMessageId();
+                    mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+                    clearReplyView();
+                    scrollToEnd();
+
+                    /**
+                     * send splitted message in every one second
+                     */
+                    if (messages.length > 1) {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (roomMessage.isValid() && !roomMessage.isDeleted()) {
+                                    new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                }
+                            }
+                        }, 1000 * i);
+                    } else {
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                    }
+                } else {
+                    Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     private void openWebViewForSpecialUrlChat(String mUrl) {
@@ -6286,14 +6362,22 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (listPathString == null) return;
-                if (listPathString.size() < 1) return;
-                if (listPathString.get(0) == null) return;
+                if (!isCardToCardMessage) {
+                    if (listPathString == null) return;
+                    if (listPathString.size() < 1) return;
+                    if (listPathString.get(0) == null) return;
+                }
+
                 if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
 
                     ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
                     layoutAttachBottom = rootView.findViewById(R.id.layoutAttachBottom);
                     imvSendButton = rootView.findViewById(R.id.chl_imv_send_button);
+                }
+
+                txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
+                if (isCardToCardMessage) {
+                    txtFileNameForSend.setText(R.string.cardToCardRequest);
                 }
 
                 ll_attach_text.setVisibility(View.VISIBLE);
@@ -6907,7 +6991,7 @@ public class FragmentChat extends BaseFragment
         ViewGroup picture = viewBottomSheet.findViewById(R.id.picture);
         ViewGroup video = viewBottomSheet.findViewById(R.id.video);
         ViewGroup music = viewBottomSheet.findViewById(R.id.music);
-        ViewGroup document = viewBottomSheet.findViewById(R.id.document);
+        ViewGroup request_cardToCard = viewBottomSheet.findViewById(R.id.request_cardToCard);
         final ViewGroup close = viewBottomSheet.findViewById(R.id.close);
         ViewGroup file = viewBottomSheet.findViewById(R.id.file);
         ViewGroup paint = viewBottomSheet.findViewById(R.id.paint);
@@ -7249,26 +7333,14 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
-        document.setOnClickListener(new View.OnClickListener() {
+
+        request_cardToCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestOpenDocumentFolder(new IPickFile() {
-                        @Override
-                        public void onPick(ArrayList<String> selectedPathList) {
-
-                            for (String path : selectedPathList) {
-                                Intent data = new Intent();
-                                data.setData(Uri.parse(path));
-                                onActivityResult(request_code_open_document, Activity.RESULT_OK, data);
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                isCardToCardMessage = true;
+                showDraftLayout();
+//                sendNewMessageForRequestCardToCard();
             }
         });
         close.setOnClickListener(new View.OnClickListener() {

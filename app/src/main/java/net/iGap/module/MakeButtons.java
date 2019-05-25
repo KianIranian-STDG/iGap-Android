@@ -32,8 +32,10 @@ import com.squareup.picasso.Picasso;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.structs.StructWebView;
+import net.iGap.proto.ProtoGlobal;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -206,10 +208,14 @@ public class MakeButtons {
             // btn1.setId(R.id.btn1);
             btn1.setEllipsize(TextUtils.TruncateAt.END);
             btn1.setGravity(CENTER);
+            btn1.setPadding(i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2));
             btn1.setMaxLines(1);
             btn1.setTypeface(G.typeface_IRANSansMobile);
-            btn1.setText(entity.getLable());
-
+            if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                btn1.setText(G.context.getString(R.string.cardToCardBtnText));
+            } else {
+                btn1.setText(entity.getLable());
+            }
             btn1.setTextSize(16);
             card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
             btn1.setTextColor(Color.parseColor("#000000"));
@@ -226,7 +232,7 @@ public class MakeButtons {
         card.addView(linearLayout_529);
 
         ArrayList<String> actions = new ArrayList<>();
-        actions.add(entity.getValue());
+        actions.add(entity.getValue().toString());
         actions.add(entity.getLable());
         actions.add(entity.getJsonObject());
         card.setTag(actions);

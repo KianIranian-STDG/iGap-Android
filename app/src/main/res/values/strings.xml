@@ -1757,4 +1757,7 @@
     <string name="cardToCardRrn">Billing number</string>
     <string name="cardToCardTrace">Trace Number</string>
     <string name="WalletRrnNumber">Reference No</string>
+    <string name="cardToCardRequest">Write your text for card to card.</string>
+    <string name="amCardToCardIconText">Transfer request</string>
+    <string name="cardToCardBtnText">Card to Card</string>
 </resources>

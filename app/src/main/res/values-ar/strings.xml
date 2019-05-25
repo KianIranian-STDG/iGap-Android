@@ -2708,5 +2708,8 @@
     <string name="cardToCardRrn">رقم الفواتير</string>
     <string name="cardToCardTrace">تتبع عدد</string>
     <string name="WalletRrnNumber">الرقم المرجعي</string>
+    <string name="cardToCardRequest">اكتب نصك للبطاقة.</string>
+    <string name="amCardToCardIconText">طلب نقل</string>
+    <string name="cardToCardBtnText">بطاقة إلى بطاقة</string>
 
 </resources>

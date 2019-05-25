@@ -950,7 +950,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 if (data != null && data.getStringExtra("enData") != null && !data.getStringExtra("enData").equals("")) {
-                    CardToCardHelper.setResultOfCardToCard(data.getStringExtra("enData"), 0L, 0, null, message);
+                    CardToCardHelper.setResultOfCardToCard(data.getStringExtra("enData"), 0, null, message);
                 } else {
                     if (message.length() > 0) {
                         HelperError.showSnackMessage(message, false);

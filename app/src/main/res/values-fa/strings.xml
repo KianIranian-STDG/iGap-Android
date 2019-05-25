@@ -1768,4 +1768,7 @@
     <string name="cardToCardRrn">شماره صورتحساب</string>
     <string name="cardToCardTrace">شماره پیگیری</string>
     <string name="WalletRrnNumber">شماره مرجع</string>
+    <string name="cardToCardRequest">متن درخواست کارت به کارت خود را بنویسید.</string>
+    <string name="amCardToCardIconText">درخواست انتقال</string>
+    <string name="cardToCardBtnText">کارت به کارت</string>
 </resources>

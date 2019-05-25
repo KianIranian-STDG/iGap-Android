@@ -14,11 +14,16 @@ import ir.pec.mpl.pecpayment.view.CardToCardInitiator;
 public class CardToCardHelper {
 
     public static final int requestCodeCardToCard = 19800;
+    private static long toUserId = 0;
 
     public static void CallCardToCard(Activity activity) {
+        CallCardToCard(activity, 0);
+    }
+    public static void CallCardToCard(Activity activity, long to_UserId) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
+        toUserId = to_UserId;
 
         final ProgressDialog dialog = ProgressDialog.show(activity, "",
                 G.context.getString(R.string.please_wait), true);
@@ -57,10 +62,11 @@ public class CardToCardHelper {
         if (!isSend) {
             HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
             dialog.dismiss();
+            return;
         }
     }
 
-    public static void setResultOfCardToCard(String data, long toUserId, int retryCount, ProgressDialog dialogg, String messageToShow) {
+    public static void setResultOfCardToCard(String data, int retryCount, ProgressDialog dialogg, String messageToShow) {
         if (dialogg == null) {
             dialogg = ProgressDialog.show(G.currentActivity, "",
                     G.context.getString(R.string.please_wait), true);
@@ -85,7 +91,7 @@ public class CardToCardHelper {
                             @Override
                             public void run() {
                                 if (major == 5) {
-                                    retryCardToCardSetResult(data, toUserId, retryCount + 1, dialog, messageToShow);
+                                    retryCardToCardSetResult(data, retryCount + 1, dialog, messageToShow);
                                 } else {
                                     dialog.dismiss();
                                     if (messageToShow.length() > 0)
@@ -97,17 +103,17 @@ public class CardToCardHelper {
                 });
 
         if (!isSend) {
-            retryCardToCardSetResult(data, toUserId, retryCount + 1, dialog, messageToShow);
+            retryCardToCardSetResult(data, retryCount + 1, dialog, messageToShow);
         }
 
     }
 
-    private static void retryCardToCardSetResult(String data, long toUserId, int retryCount, ProgressDialog dialog, String messageToShow) {
+    private static void retryCardToCardSetResult(String data, int retryCount, ProgressDialog dialog, String messageToShow) {
         if (retryCount < 6) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    setResultOfCardToCard(data, toUserId, retryCount + 1, dialog, messageToShow);
+                    setResultOfCardToCard(data, retryCount + 1, dialog, messageToShow);
                 }
             }, 700 * retryCount);
         } else {

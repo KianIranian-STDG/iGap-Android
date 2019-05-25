@@ -27,6 +27,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -396,7 +398,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             try {
-                if (mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
                     HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
                     Gson gson = new GsonBuilder().create();
                     for (int i = 0; i < buttonList.size(); i++) {
@@ -427,6 +429,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
             }
             ((LinearLayout.LayoutParams) ((LinearLayout) withTextHolder.messageView.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
         }
@@ -1935,6 +1938,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
                 realm.close();
                 DirectPayHelper.directPayBot(jsonObject, peerId);
+            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0).replace(".0", "")));
             }
 
         } catch (Exception e) {
