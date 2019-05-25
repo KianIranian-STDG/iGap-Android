@@ -1753,11 +1753,13 @@
     <string name="CARD_TRANSFER_MONEY">Card To Card Money Transfer</string>
     <string name="PAYMENT_TRANSFER_MONEY">Payment Money Transfer</string>
     <string name="card_number_dest">Destination card number</string>
+    <string name="card_number_source">Source card number</string>
     <string name="source_bank">Source bank</string>
-    <string name="cardToCardRrn">Billing number</string>
+    <string name="cardToCardInvoiceNumber">Billing number</string>
     <string name="cardToCardTrace">Trace Number</string>
     <string name="WalletRrnNumber">Reference No</string>
     <string name="cardToCardRequest">Write your text for card to card.</string>
-    <string name="amCardToCardIconText">Transfer request</string>
+    <string name="amCardToCardIconText">Transfer Request</string>
     <string name="cardToCardBtnText">Card to Card</string>
+    <string name="crad_to_card_dest_name">Account Holder Name</string>
 </resources>

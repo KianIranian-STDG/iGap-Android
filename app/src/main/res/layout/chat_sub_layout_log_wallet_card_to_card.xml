@@ -34,35 +34,6 @@
             android:textSize="@dimen/dp15" />
 
         <LinearLayout
-            android:id="@+id/amountRoot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/wallet_amount"
-                android:textSize="@dimen/dp14" />
-
-
-            <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/amount"
-                style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="1000 Rial"
-                android:textSize="@dimen/dp14"  />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/fromUserIdRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,13 +41,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -100,6 +64,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/amountRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -121,7 +86,44 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/card_number"
+                android:text="@string/wallet_amount"
+                android:textSize="@dimen/dp14" />
+
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/amount"
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="1000 Rial"
+                android:textSize="@dimen/dp14"  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="@color/white" />
+
+            <net.iGap.module.CustomTextViewMedium
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/card_number_source"
                 android:textSize="@dimen/dp14"  />
 
 
@@ -134,80 +136,6 @@
                 android:gravity="center"
                 android:text="6037691596470623"
                 android:textSize="@dimen/dp14" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/toUserIdRoot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
-
-            <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/wallet_to"
-                android:textSize="@dimen/dp14"  />
-
-
-            <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/toUserId"
-                style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="ali"
-                android:textSize="@dimen/dp14" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
-
-            <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/card_number_dest"
-                android:textSize="@dimen/dp14"  />
-
-
-            <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/cardNumberDest"
-                style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="602666656565"
-                android:textSize="@dimen/dp14"  />
         </LinearLayout>
 
         <LinearLayout
@@ -267,6 +195,42 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:text="@string/card_number_dest"
+                android:textSize="@dimen/dp14"  />
+
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/cardNumberDest"
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="602666656565"
+                android:textSize="@dimen/dp14"  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="@color/white" />
+
+            <net.iGap.module.CustomTextViewMedium
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/destination_bank"
                 android:textSize="@dimen/dp14"  />
 
@@ -280,6 +244,43 @@
                 android:gravity="center"
                 android:text="پارسیان"
                 android:textSize="@dimen/dp14"  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/toUserIdRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="@color/white" />
+
+            <net.iGap.module.CustomTextViewMedium
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/crad_to_card_dest_name"
+                android:textSize="@dimen/dp14"  />
+
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/toUserId"
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="ali"
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -341,7 +342,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/cardToCardRrn"
+                android:text="@string/WalletRrnNumber"
                 android:textSize="@dimen/dp14"  />
 
 

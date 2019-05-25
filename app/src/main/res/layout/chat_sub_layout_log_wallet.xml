@@ -196,7 +196,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/cardToCardRrn"
+                android:text="@string/cardToCardInvoiceNumber"
                 android:textSize="@dimen/dp15"  />
 
 

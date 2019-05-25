@@ -64,23 +64,17 @@ public class LogWalletCardToCard extends AbstractMessage<LogWalletCardToCard, Lo
 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageWalletCardToCard.getFromUserId());
-        RealmRegisteredInfo mRealmRegisteredInfoTo = RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageWalletCardToCard.getToUserId());
 
         String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletCardToCard.getRequestTime()) + " " + "-" + " " +
                 TimeUtils.toLocal(realmRoomMessageWalletCardToCard.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
 
         String fromDisplayName = "";
-        String toDisplayName = realmRoomMessageWalletCardToCard.getCardOwnerName();
         if (mRealmRegisteredInfoFrom != null) {
             fromDisplayName = mRealmRegisteredInfoFrom.getDisplayName();
         }
 
-        if (mRealmRegisteredInfoTo != null) {
-            toDisplayName = mRealmRegisteredInfoTo.getDisplayName();
-        }
-
         holder.fromUserId.setText(fromDisplayName);
-        holder.toUserId.setText(toDisplayName);
+        holder.toUserId.setText(realmRoomMessageWalletCardToCard.getCardOwnerName());
         holder.amount.setText(DirectPayHelper.convertNumberToPriceRial(realmRoomMessageWalletCardToCard.getAmount()));
         String traceNumber = String.valueOf(realmRoomMessageWalletCardToCard.getTraceNumber());
         String rrn = String.valueOf(realmRoomMessageWalletCardToCard.getRrn());

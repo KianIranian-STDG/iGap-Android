@@ -1764,11 +1764,13 @@
     <string name="CARD_TRANSFER_MONEY">انتقال وجه کارت به کارت</string>
     <string name="PAYMENT_TRANSFER_MONEY">پرداخت</string>
     <string name="card_number_dest">شماره کارت مقصد</string>
+    <string name="card_number_source">شماره کارت مبدا</string>
     <string name="source_bank">بانک مبدا</string>
-    <string name="cardToCardRrn">شماره صورتحساب</string>
+    <string name="cardToCardInvoiceNumber">شماره صورتحساب</string>
     <string name="cardToCardTrace">شماره پیگیری</string>
     <string name="WalletRrnNumber">شماره مرجع</string>
     <string name="cardToCardRequest">متن درخواست کارت به کارت خود را بنویسید.</string>
     <string name="amCardToCardIconText">درخواست انتقال</string>
     <string name="cardToCardBtnText">کارت به کارت</string>
+    <string name="crad_to_card_dest_name">نام دارنده حساب</string>
 </resources>
