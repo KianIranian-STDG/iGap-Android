@@ -183,7 +183,7 @@
             android:id="@+id/fup_splitter_1"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/gray_4c"
+            style="?lineColorSettingTheme"
             android:layout_marginRight="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginTop="@dimen/dp20"
@@ -255,7 +255,7 @@
             app:layout_constraintStart_toEndOf="@id/fup_btn_credit"
             app:layout_constraintEnd_toStartOf="@id/fup_btn_score"
             app:layout_constraintHorizontal_chainStyle="spread"
-            android:background="@color/gray_4c"
+            style="?lineColorSettingTheme"
             android:id="@+id/fup_splitter_2"/>
 
 
@@ -318,7 +318,7 @@
             android:id="@+id/fup_splitter_3"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/gray_4c"
+            style="?lineColorSettingTheme"
             android:layout_marginRight="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginTop="@dimen/dp20"
@@ -586,7 +586,7 @@
             android:id="@+id/fup_splitter_4"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/gray_4c"
+            style="?lineColorSettingTheme"
             android:layout_marginRight="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginTop="@dimen/dp20"

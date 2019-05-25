@@ -121,7 +121,6 @@
             android:singleLine="true"
             android:text="@string/disk_and_network_usage"
             style="?textTitleColorSettingTheme"
-            android:textColor="@color/black"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="visible" />
@@ -261,7 +260,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/auto_download_media"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
@@ -382,7 +381,7 @@
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:text="@string/auto_play_media"
-              android:textColor="@color/black"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
@@ -444,7 +443,6 @@
             android:singleLine="true"
             android:text="@string/cache"
             style="?textTitleColorSettingTheme"
-            android:textColor="@color/black"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="visible" />
