@@ -74,7 +74,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         badgeView.setLayoutParams(badgeParams);
 
         addView(imageView);
-        postDelayed(() -> addView(badgeView), 500);
+        postDelayed(() -> addView(badgeView), 150);
         setOnClickListener(this);
     }
 
@@ -161,6 +161,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             badgeView.getTextView().setText("+99");
         }
         Log.i(TAG, "setBadgeCount: " + count);
+
     }
 
     public void setBadgeColor(int color) {
