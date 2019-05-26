@@ -1074,6 +1074,7 @@
     <string name="dialog_readonly_chat">مع الأسف لايمكنك ارسال الرسالة خلال المحادثة.</string>
 
     <string name="delete_chat">مسح المحادثة </string>
+    <string name="delete">إزالة</string>
 
     <string name="delete_account_text1">الآخر </string>
 
@@ -2746,4 +2747,6 @@
     <string name="cloud">Cloud</string>
     <string name="score">Score</string>
     <string name="Credit">Credit</string>
+    <string name="make_as_read">Make as Read</string>
+    <string name="read_all">Read All</string>
 </resources>

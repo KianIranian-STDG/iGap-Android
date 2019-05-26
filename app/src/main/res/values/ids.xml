@@ -90,6 +90,7 @@
 
     <!--new chat cell-->
     <item name="cl_chatCell_root" type="id" />
+    <item name="iv_chatCell_checkbox" type="id" />
     <item name="iv_chatCell_userAvatar" type="id" />
     <item name="tv_chatCell_roomName" type="id" />
     <item name="tv_chatCell_chatIcon" type="id" />

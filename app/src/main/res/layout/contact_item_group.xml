@@ -5,11 +5,11 @@
   android:layout_height="wrap_content"
   android:clickable="true"
   android:orientation="vertical"
-  android:paddingEnd="@dimen/dp28"
-  android:paddingLeft="@dimen/dp52"
-  android:paddingRight="@dimen/dp28"
+  android:paddingEnd="@dimen/dp8"
+  android:paddingLeft="@dimen/dp8"
+  android:paddingRight="@dimen/dp8"
   style="?backgroundColorSettingTheme"
-  android:paddingStart="@dimen/dp52">
+  android:paddingStart="@dimen/dp8">
 
 
   <View
@@ -27,20 +27,16 @@
     android:orientation="horizontal">
 
 
-    <com.hanks.library.AnimateCheckBox
+    <CheckBox
       android:id="@+id/cig_checkBox_select_user"
       android:layout_width="@dimen/dp24"
       android:layout_height="@dimen/dp24"
         android:layout_marginRight="@dimen/dp10"
         android:layout_marginEnd="@dimen/dp10"
+        android:button="@drawable/check_box_background"
       android:layout_gravity="center"
       android:clickable="false"
-      android:visibility="invisible"
-      app:animDuration="200"
-      app:checkedColor="#28B463"
-      app:lineColor="#fff"
-      app:lineWidth="1.2dp"
-      app:unCheckColor="#ff0" />
+      android:visibility="visible" />
 
     <net.iGap.module.CircleImageView
       android:id="@+id/imageView"
