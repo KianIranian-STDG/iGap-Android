@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+
+        <shape android:shape="rectangle">
+
+            <gradient
+                android:angle="135"
+                android:endColor="#25851A"
+                android:startColor="#114602"/>
+            
+            <corners
+                android:bottomLeftRadius="@dimen/toolbar_radius"
+                android:bottomRightRadius="@dimen/toolbar_radius"/>
+
+        </shape>
+
+    </item>
+
+</selector>
