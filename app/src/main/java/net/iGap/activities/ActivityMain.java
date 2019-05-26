@@ -1918,11 +1918,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         }
 
-
         if (onBackPressedListener != null) {
             onBackPressedListener.doBack();
         }
 
+        super.onBackPressed();
+        if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() < 1) {
+            if (!this.isFinishing()) {
+                resume();
+            }
+        }
+        designLayout(chatLayoutMode.none);
     }
 
     @Override
