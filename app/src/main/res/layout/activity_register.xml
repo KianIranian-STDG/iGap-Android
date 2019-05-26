@@ -18,7 +18,8 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layoutDirection="locale">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,8 +33,8 @@
                 android:src="@drawable/logo"
                 app:layout_constraintBottom_toTopOf="@id/description"
                 app:layout_constraintDimensionRatio="16:9"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".6" />
 
@@ -45,8 +46,8 @@
                 android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/toolbar_background}"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@id/rg_btn_choseCountry"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/logo"
                 app:layout_constraintWidth_percent=".8" />
 
@@ -60,8 +61,8 @@
                 app:cardUseCompatPadding="true"
                 app:contentPadding="8dp"
                 app:layout_constraintBottom_toTopOf="@id/phoneNumber"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/description"
                 app:layout_constraintWidth_percent=".7">
 
@@ -107,13 +108,13 @@
                 android:id="@+id/phoneNumber"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:afterTextChanged="@{(phoneNumber)->fragmentRegisterViewModel.onTextChanged(phoneNumber.toString())}"
                 android:enabled="@{fragmentRegisterViewModel.edtPhoneNumberEnable}"
                 android:gravity="left|center_vertical"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="phone"
                 android:maxLength="18"
                 android:maxLines="@{fragmentRegisterViewModel.edtPhoneNumberMaskMaxCount}"
-                android:afterTextChanged="@{(phoneNumber)->fragmentRegisterViewModel.onTextChanged(phoneNumber.toString())}"
                 android:padding="@dimen/dp4"
                 android:text="@={fragmentRegisterViewModel.callBackEdtPhoneNumber}"
                 android:textAlignment="gravity"
@@ -171,8 +172,8 @@
                 android:layout_height="wrap_content"
                 android:visibility="@{fragmentRegisterViewModel.isShowLoading}"
                 app:layout_constraintBottom_toTopOf="@id/registerButton"
-                app:layout_constraintLeft_toLeftOf="@id/registerButton"
-                app:layout_constraintRight_toRightOf="@id/registerButton" />
+                app:layout_constraintEnd_toEndOf="@id/registerButton"
+                app:layout_constraintStart_toStartOf="@id/registerButton" />
 
             <android.support.design.button.MaterialButton
                 android:id="@+id/registerButton"
@@ -185,8 +186,8 @@
                 android:textColor="@{fragmentRegisterViewModel.btnStartColor , default = @color/rg_whit_background}"
                 android:textSize="@dimen/dp14"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/conditionCheckBox"
                 app:layout_constraintWidth_percent=".5" />
 

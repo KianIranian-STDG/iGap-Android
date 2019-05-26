@@ -79,6 +79,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     public MutableLiveData<Boolean> showConnectionErrorDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToMainPage = new MutableLiveData<>();
     public MutableLiveData<WaitTimeModel> showDialogWaitTime = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showErrorMessageEmptyErrorPhoneNumberDialog= new MutableLiveData<>();
 
 
     public static String isoCode = "IR";
@@ -168,15 +169,19 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     }
 
     public void onClicksStart() {
-        phoneNumber = callBackEdtPhoneNumber.get();
-        if (callBackEdtPhoneNumber.get().length() > 0 && (regex.equals("") || (!regex.equals("") && callBackEdtPhoneNumber.get().replace("-", "").matches(regex)))) {
+        phoneNumber = callBackEdtPhoneNumber.get() != null ? callBackEdtPhoneNumber.get() : "";
+        if (phoneNumber.length() > 0 && (regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex)))) {
             if (termsAndConditionIsChecked.get()) {
                 showConfirmPhoneNumberDialog.setValue(true);
             } else {
                 showConditionErrorDialog.setValue(true);
             }
         } else {
-            showEnteredPhoneNumberStartWithZeroError.setValue(callBackEdtPhoneNumber.get().replace("-", "").matches(regex));
+            if (phoneNumber.length() == 0) {
+                showErrorMessageEmptyErrorPhoneNumberDialog.setValue(true);
+            } else {
+                showEnteredPhoneNumberStartWithZeroError.setValue(phoneNumber.replace("-", "").matches(regex));
+            }
         }
     }
 
