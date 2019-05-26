@@ -158,8 +158,10 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         if (count == 0) {
             badgeView.setVisibility(GONE);
         } else if (count > 99) {
+            badgeView.setVisibility(VISIBLE);
             badgeView.getTextView().setText("+99");
-        }
+        }else
+            badgeView.setVisibility(VISIBLE);
         Log.i(TAG, "setBadgeCount: " + count);
 
     }
