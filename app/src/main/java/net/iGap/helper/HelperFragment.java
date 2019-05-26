@@ -308,7 +308,7 @@ public class HelperFragment {
                 }
             }
         } else {
-            resId = R.id.drawer_layout;
+            resId = R.id.rootFrame;
         }
 
         return resId;
