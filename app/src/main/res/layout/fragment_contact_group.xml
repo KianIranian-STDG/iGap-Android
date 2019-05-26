@@ -61,7 +61,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:text="@string/add_new_member"
-        android:textColor="@color/black"
+        style="?textTitleColorSettingTheme"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="@color/gray10"
+        style="?lineColorSettingTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fcg_lbl_add_member" />
@@ -92,7 +92,6 @@
         app:layout_constraintTop_toBottomOf="@id/fcg_splitter_add_member"
         android:paddingBottom="@dimen/dp8"
         android:layout_marginTop="8dp"
-        android:background="@color/white"
         android:scrollbars="vertical" />
 
 
