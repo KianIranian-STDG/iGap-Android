@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
@@ -42,7 +43,49 @@ public class FragmentIntroduce extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        goToProgram(view);
+
+        circleButton = view.findViewById(R.id.int_circleButton_introduce);
+        circleButton.circleButtonCount(3);
+
+        Button btnStart = view.findViewById(R.id.int_btnStart);
+
+        btnStart.setOnClickListener(view1 -> startRegistration());
+
+        view.findViewById(R.id.changeLanguage).setOnClickListener(v -> {
+            if (!isAdded() || G.fragmentActivity.isFinishing()) {
+                return;
+            }
+            if (G.socketConnection) {
+                FragmentLanguage fragment = new FragmentLanguage();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("canSwipeBack", true);
+                fragment.setArguments(bundle);
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+            } else {
+                G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
+            }
+        });
+
+        ViewPager viewPager = view.findViewById(R.id.int_viewPager_introduce);
+        viewPager.setPageTransformer(true, new ParallaxPageTransformer());
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) { //set animation for all page
+                circleButton.percentScroll(positionOffset, position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        AdapterViewPager adapterViewPager = new AdapterViewPager();
+        viewPager.setAdapter(adapterViewPager);
+        adapterViewPager.notifyDataSetChanged();
     }
 
     @Override
@@ -72,54 +115,6 @@ public class FragmentIntroduce extends BaseFragment {
             e.printStackTrace();
         }
         super.onConfigurationChanged(newConfig);
-    }
-
-    private void goToProgram(View view) {
-
-        ViewPager viewPager = view.findViewById(R.id.int_viewPager_introduce);
-        viewPager.setPageTransformer(true, new ParallaxPageTransformer());
-
-        circleButton = view.findViewById(R.id.int_circleButton_introduce);
-        circleButton.circleButtonCount(3);
-
-        Button btnStart = view.findViewById(R.id.int_btnStart);
-
-        btnStart.setOnClickListener(view1 -> startRegistration());
-
-        view.findViewById(R.id.changeLanguage).setOnClickListener(v -> {
-            if (!isAdded() || G.fragmentActivity.isFinishing()) {
-                return;
-            }
-            if (G.socketConnection) {
-                FragmentLanguage fragment = new FragmentLanguage();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("canSwipeBack", true);
-                fragment.setArguments(bundle);
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-            } else {
-                G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
-            }
-        });
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) { //set animation for all page
-                circleButton.percentScroll(positionOffset, position);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-
-        AdapterViewPager adapterViewPager = new AdapterViewPager();
-        viewPager.setAdapter(adapterViewPager);
-        adapterViewPager.notifyDataSetChanged();
-
     }
 
     private void startRegistration() {
@@ -157,9 +152,9 @@ public class FragmentIntroduce extends BaseFragment {
             AppCompatImageView introImage = view.findViewById(R.id.introImage);
             introImage.setImageResource(getIntroImage(position));
             AppCompatTextView title = view.findViewById(R.id.introTitle);
-            title.setText(getTitle(position));
+            title.setText(G.fragmentActivity.getResources().getString(getTitle(position)));
             AppCompatTextView description = view.findViewById(R.id.introDescription);
-            description.setText(getDescription(position));
+            description.setText(G.fragmentActivity.getResources().getString(getDescription(position)));
             container.addView(view);
             view.setTag(position);
             return view;
