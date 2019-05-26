@@ -352,7 +352,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="@color/toolbar_search_box_bg"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/main_font"
             android:gravity="center"
             android:hint="@string/search"

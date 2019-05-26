@@ -469,6 +469,8 @@ public class HelperToolbar {
             if (G.isDarkTheme){
                 mSearchBox.setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_search_box_dark));
                 mEdtSearch.setTextColor(mContext.getResources().getColor(R.color.white));
+                mEdtSearch.setHintTextColor(mContext.getResources().getColor(R.color.gray_f2));
+                mTxtSearch.setTextColor(mContext.getResources().getColor(R.color.gray_f2));
             }
         } else {
             mSearchBox.setVisibility(View.GONE);

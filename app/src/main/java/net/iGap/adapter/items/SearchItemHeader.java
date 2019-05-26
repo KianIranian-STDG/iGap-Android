@@ -12,10 +12,14 @@ package net.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.nostra13.universalimageloader.utils.L;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import java.util.List;
@@ -41,6 +45,15 @@ public class SearchItemHeader extends AbstractItem<SearchItemHeader, SearchItemH
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
+        if (holder.getAdapterPosition() == 0 ){
+            holder.root.setPadding(0 , 22 , 0 , 0 );
+        }else {
+            holder.root.setPadding(0 , 8 , 0 , 0 );
+        }
+
+        if (G.isDarkTheme){
+            holder.txtHeader.setTextColor(G.context.getResources().getColor(R.color.white));
+        }
         holder.txtHeader.setText(text);
     }
 
@@ -52,10 +65,12 @@ public class SearchItemHeader extends AbstractItem<SearchItemHeader, SearchItemH
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView txtHeader;
+        protected LinearLayout root ;
 
         public ViewHolder(View view) {
             super(view);
             txtHeader = (TextView) view.findViewById(R.id.sfslh_txt_header_text);
+            root =  view.findViewById(R.id.sfslh_header_layout);
         }
     }
 }
