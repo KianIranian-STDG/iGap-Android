@@ -18,6 +18,9 @@ import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentPaymentBillViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static net.iGap.activities.ActivityMain.requestCodeBarcode;
 import static net.iGap.viewmodel.FragmentPaymentBillViewModel.getCompany;
 
@@ -38,6 +41,18 @@ public class FragmentPaymentBill extends BaseFragment {
         FragmentPaymentBill fragmentPaymentBill = new FragmentPaymentBill();
         fragmentPaymentBill.setArguments(args);
         return fragmentPaymentBill;
+    }
+
+    public static FragmentPaymentBill newInstance(int resTitleId, JSONObject jsonObject) {
+        String PID = null;
+        String BID = null;
+        try {
+            PID = jsonObject.getString("PID");
+            BID = jsonObject.getString("BID");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return newInstance(resTitleId, PID, BID);
     }
 
     public FragmentPaymentBill() {
