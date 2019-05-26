@@ -5,7 +5,7 @@
     android:id="@+id/ac_layoutParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    style="?backgroundColorSettingTheme"
     android:clickable="true"
     android:layoutDirection="ltr"
     android:orientation="vertical"
@@ -25,7 +25,7 @@
 
     <EditText
         android:id="@+id/ac_edt_firstName"
-        style="?textTitleColorSettingTheme"
+        style="?hintColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -48,7 +48,7 @@
 
     <EditText
         android:id="@+id/ac_edt_lastName"
-        style="?textTitleColorSettingTheme"
+        style="?hintColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -81,7 +81,7 @@
         android:focusableInTouchMode="false"
         android:text="+98"
         android:textSize="@dimen/dp15"
-        style="?textTitleColorSettingTheme"
+        style="?hintColorSettingTheme"
         app:layout_constraintBottom_toBottomOf="@+id/ac_edt_phoneNumber"
         app:layout_constraintStart_toStartOf="@id/ac_edt_lastName"
         app:layout_constraintTop_toTopOf="@+id/ac_edt_phoneNumber" />
