@@ -225,8 +225,8 @@ public class FragmentSettingViewModel extends ViewModel {
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
 
-        usernameErrorMessage.setValue(R.string.is_empty);
-        emailErrorMessage.setValue(R.string.is_empty);
+        /*usernameErrorMessage.setValue(R.string.is_empty);
+        emailErrorMessage.setValue(R.string.is_empty);*/
         /*realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();*/
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo == null) {
@@ -336,6 +336,13 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     private void updateUserInfoUI(RealmUserInfo userInfo) {
+
+        gender.set(-1);
+        name.set("");
+        bio.set("");
+        userName.set("");
+        email.set("");
+
         if (checkValidationForRealm(userInfo)) {
             userId = userInfo.getUserId();
             currentName = userInfo.getUserInfo().getDisplayName();

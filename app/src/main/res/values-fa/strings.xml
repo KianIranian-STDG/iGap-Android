@@ -1825,4 +1825,5 @@
     <string name="amCardToCardIconText">درخواست انتقال</string>
     <string name="cardToCardBtnText">کارت به کارت</string>
     <string name="crad_to_card_dest_name">نام دارنده حساب</string>
+    <string name="groups_in_common">گروه های مشترک</string>
 </resources>
