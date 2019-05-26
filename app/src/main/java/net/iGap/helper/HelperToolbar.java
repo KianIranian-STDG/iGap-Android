@@ -466,6 +466,10 @@ public class HelperToolbar {
             mSearchBox.setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
             mBtnClearSearch.setOnClickListener(v -> mToolbarListener.onBtnClearSearchClickListener(v));
 
+            if (G.isDarkTheme){
+                mSearchBox.setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_search_box_dark));
+                mEdtSearch.setTextColor(mContext.getResources().getColor(R.color.white));
+            }
         } else {
             mSearchBox.setVisibility(View.GONE);
 
