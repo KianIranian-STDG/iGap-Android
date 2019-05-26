@@ -1795,8 +1795,6 @@
     <string name="accept_terms_and_condition_error_message">فراموش كردین شرایط و ضوابط را بپذیرید</string>
     <string name="new_channels_rules">اگر یک پیوند دائمی را تنظیم کنید، افراد دیگر قادر به یافتن و پیوستن به کانال شما خواهند بود.\nشما می توانید از a-z، 0-9 و زیرخط استفاده کنید.\nحداقل طول 5 حرف است.</string>
     <string name="refresh">تازه کردن</string>
-    <string name="chat_setting_title">تنظیمات چت</string>
-    <!--todo: translate these below lines-->
 
     <string name="mark_as_several">انتخاب چندتایی</string>
     <string name="chat_setting_title">تنظیمات صفحه گفتگو</string>
