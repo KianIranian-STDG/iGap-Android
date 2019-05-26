@@ -27,8 +27,14 @@ public class FragmentPaymentBill extends BaseFragment {
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
 
     public static FragmentPaymentBill newInstance(int resTitleId) {
+        return FragmentPaymentBill.newInstance(resTitleId, null, null);
+    }
+
+    public static FragmentPaymentBill newInstance(int resTitleId, String PID, String BID) {
         Bundle args = new Bundle();
         args.putInt("title", resTitleId);
+        args.putString("PID", PID);
+        args.putString("BID", BID);
         FragmentPaymentBill fragmentPaymentBill = new FragmentPaymentBill();
         fragmentPaymentBill.setArguments(args);
         return fragmentPaymentBill;
@@ -50,8 +56,10 @@ public class FragmentPaymentBill extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         int resTitleId = getArguments().getInt("title");
+        String PID = getArguments().getString("PID");
+        String BID = getArguments().getString("BID");
 
-        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId);
+        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId, PID, BID);
         fragmentPaymentBillBinding.setFragmentPaymentBillViewModel(fragmentPaymentBillViewModel);
 
         IBackHandler iBackHandler = new IBackHandler() {

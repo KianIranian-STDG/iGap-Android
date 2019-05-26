@@ -40,6 +40,8 @@ public class FragmentPaymentBillViewModel {
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
     public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
+    public ObservableField<String> PID = new ObservableField<>("");
+    public ObservableField<String> BID = new ObservableField<>("");
     public ObservableBoolean observePolice = new ObservableBoolean(false);
     public ObservableBoolean observeEnabledPayment = new ObservableBoolean(true);
     public ObservableBoolean observeAmount = new ObservableBoolean(false);
@@ -48,7 +50,7 @@ public class FragmentPaymentBillViewModel {
 
     private boolean isPolice = false;
 
-    public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId) {
+    public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId, String PID_Str, String BID_Str) {
         this.fragmentPaymentBill = fragmentPaymentBill;
         this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
         observeTitleToolbar.set(G.context.getString(resTitleId));
@@ -63,6 +65,17 @@ public class FragmentPaymentBillViewModel {
         Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green_sticker);
         myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
         observeBackGround.set(myIcon);
+        if (PID_Str != null) {
+            PID.set(PID_Str);
+        } else {
+            PID.set("");
+        }
+
+        if (BID_Str != null) {
+            BID.set(BID_Str);
+        } else {
+            BID.set("");
+        }
     }
 
 

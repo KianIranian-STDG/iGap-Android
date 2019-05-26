@@ -133,10 +133,28 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(FragmentPaymentCharge.newInstance()).setReplace(false).load();
                 break;
             case BILL_MENU:/** tested **/
-                new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                String PID = null;
+                String BID = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(discoveryField.value);
+                    PID = jsonObject.getString("PID");
+                    BID = jsonObject.getString("BID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills, PID, BID)).setReplace(false).load();
                 break;
             case TRAFFIC_BILL_MENU:/** tested **/
-                new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+                String PID2 = null;
+                String BID2 = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(discoveryField.value);
+                    PID2 = jsonObject.getString("PID");
+                    BID2 = jsonObject.getString("BID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime, PID2, BID2)).setReplace(false).load();
                 break;
             case PHONE_BILL_MENU:/** tested **/
                 new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
