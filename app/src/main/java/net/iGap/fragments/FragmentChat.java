@@ -965,7 +965,7 @@ public class FragmentChat extends BaseFragment
                             ((ActivityMain) G.fragmentActivity).lockNavigation();
                         }
                     } catch (Exception e) {
-                        HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
+                        HelperLog.setErrorLog(e);
                     }
                 }
 
@@ -2373,7 +2373,7 @@ public class FragmentChat extends BaseFragment
                     FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
                     new HelperFragment(fragment).setReplace(false).load();
                 } catch (Exception e) {
-                    HelperLog.setErrorLog("Activity Chat   complete   " + e.toString());
+                    HelperLog.setErrorLog(e);
                 }
             }
         };
@@ -4652,7 +4652,7 @@ public class FragmentChat extends BaseFragment
                     mAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog("Activity chat  onPlayMusic    " + e.toString());
+                HelperLog.setErrorLog(e);
             }
         }
     }

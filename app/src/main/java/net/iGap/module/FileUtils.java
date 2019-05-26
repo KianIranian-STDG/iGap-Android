@@ -328,7 +328,7 @@ public class FileUtils {
                     if (strPath != null && strPath.length() > 0) {
                         return strPath + "/" + split[1];
                     }
-                    HelperLog.setErrorLog("FileUtils   getPath   :  " + uri);
+                    HelperLog.setErrorLog(new Exception("FileUtils   getPath   :  " + uri));
                 }
 
             }

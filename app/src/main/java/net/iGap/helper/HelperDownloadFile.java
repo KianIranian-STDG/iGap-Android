@@ -435,7 +435,7 @@ public class HelperDownloadFile {
                                 }
                             });
                         } catch (NullPointerException e) {
-                            HelperLog.setErrorLog("HelperDownloadFile  startDownloadManager  onDownloadComplete   " + e.toString());
+                            HelperLog.setErrorLog(e);
                         }
                     }
 

@@ -1280,7 +1280,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
                     }
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(" Activity main   arcMenu.fabMenu.setOnClickListener   " + e.toString());
+                    HelperLog.setErrorLog(e);
                 }
             }
         });

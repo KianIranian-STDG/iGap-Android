@@ -169,7 +169,7 @@ public class RealmPhoneContacts extends RealmObject {
                             notImportedList.add(_item);
                         }
                     } catch (IllegalArgumentException e) {
-                        HelperLog.setErrorLog("RealmPhoneContacts    addContactToDB      phone : " + _item.getPhone() + "   firstName : " + _item.getFirstName() + "   lastname : " + _item.getLastName());
+                        HelperLog.setErrorLog(e);
                     }
 
                 }

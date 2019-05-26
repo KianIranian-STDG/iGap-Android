@@ -139,7 +139,7 @@ public class HelperFragment {
         }
 
         if (G.fragmentManager == null) {
-            HelperLog.setErrorLog("helper fragment loadFragment -> " + fragment.getClass().getName());
+            HelperLog.setErrorLog(new Exception("helper fragment loadFragment -> " + fragment.getClass().getName()));
             return;
         }
 

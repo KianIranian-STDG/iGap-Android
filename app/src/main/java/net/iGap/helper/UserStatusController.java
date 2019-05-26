@@ -110,7 +110,7 @@ public class UserStatusController implements RequestUserUpdateStatus.onUserStatu
         boolean isOnlineResponse = false;
         synchronized (mutex) {
             if (isOfflineRequestPending && isOnlineRequestPending) {
-                HelperLog.setErrorLog("Bagi Error Please Check!");
+                HelperLog.setErrorLog(new Exception("Bagi Error Please Check!"));
                 Log.d("bagi", "error in UserStatus");
             }
 

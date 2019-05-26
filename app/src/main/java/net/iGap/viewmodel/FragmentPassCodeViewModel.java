@@ -533,7 +533,7 @@ public class FragmentPassCodeViewModel {
                     G.currentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
 
 
@@ -546,7 +546,7 @@ public class FragmentPassCodeViewModel {
                     G.currentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
 
         }

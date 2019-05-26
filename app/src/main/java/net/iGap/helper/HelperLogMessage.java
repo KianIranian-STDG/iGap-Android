@@ -88,7 +88,7 @@ public class HelperLogMessage {
                 return extractLog(log, withLink);
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(" helper log message     deserializeLog()       " + e.toString());
+            HelperLog.setErrorLog(e);
             return new SpannableStringBuilder("");
         }
 

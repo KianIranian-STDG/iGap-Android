@@ -881,7 +881,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                 ringtonePlayer.prepare();
                 ringtonePlayer.start();
             } catch (Exception e) {
-                HelperLog.setErrorLog("activity call view model   set ringtone uri  " + e);
+                HelperLog.setErrorLog(e);
             }
         }
 

@@ -121,7 +121,7 @@ public final class StartupActions {
                     }
                 } catch (OutOfMemoryError error) {
                     error.printStackTrace();
-                    HelperLog.setErrorLog(error.getMessage());
+                    HelperLog.setErrorLog(new Exception(error.getMessage()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     HelperLog.setErrorLog(e);
