@@ -56,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
@@ -113,7 +114,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                     @Override
                     public void onRightIconClickListener(View view) {
-
+                        viewModel.submitData();
                     }
                 });
         binding.toolbar.addView(t.getView());
@@ -164,17 +165,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
         });
 
-        AppUtils.setProgresColler(binding.loading);
-
-
-
-
-        /*onClickBack = new onClickBack() {
-            @Override
-            public void back() {
-                G.fragmentActivity.onBackPressed();
+        viewModel.goBack.observe(this, aBoolean -> {
+            if (getActivity() != null && aBoolean != null && aBoolean) {
+                getActivity().onBackPressed();
             }
-        };*/
+        });
+
+        AppUtils.setProgresColler(binding.loading);
 
 
         FragmentShowAvatars.onComplete = new OnComplete() {

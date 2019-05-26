@@ -53,7 +53,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/pageHeader"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintStart_toStartOf="@id/pageHeader"
-                    app:layout_constraintWidth_percent=".2" />
+                    app:layout_constraintWidth_percent=".25" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/addAvatar"
