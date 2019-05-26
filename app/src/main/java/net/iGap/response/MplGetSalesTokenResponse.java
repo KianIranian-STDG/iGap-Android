@@ -10,15 +10,17 @@
 
 package net.iGap.response;
 
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoMplGetSalesToken;
+import net.iGap.request.RequestMplGetSalesToken;
 
 public class MplGetSalesTokenResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public MplGetSalesTokenResponse(int actionId, Object protoClass, String identity) {
+    public MplGetSalesTokenResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -31,6 +33,7 @@ public class MplGetSalesTokenResponse extends MessageHandler {
         super.handler();
 
         ProtoMplGetSalesToken.MplGetSalesTokenResponse.Builder builder = (ProtoMplGetSalesToken.MplGetSalesTokenResponse.Builder) message;
+        ((RequestMplGetSalesToken.GetSalesToken) identity).onSalesToken(builder.getToken());
     }
 
     @Override
@@ -41,5 +44,10 @@ public class MplGetSalesTokenResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        ((RequestMplGetSalesToken.GetSalesToken) identity).onError(majorCode, minorCode);
     }
 }

@@ -16,6 +16,18 @@ import android.support.v4.app.Fragment;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChannelProfile;
@@ -98,7 +110,7 @@ public class FragmentChannelProfileViewModel
     /*private boolean isSignature;*/
     private boolean isPopup = false;
     private boolean isNeedGetMemberList = true;
-    private Fragment fragment;
+    private FragmentChannelProfile fragment;
     private Realm realmChannelProfile;
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;

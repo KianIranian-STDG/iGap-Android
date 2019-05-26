@@ -49,6 +49,7 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnHoldBackgroundChanegeListener;
@@ -157,7 +158,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        canSetUserStatus = false;
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
@@ -564,8 +565,18 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
      */
 
     private void answer() {
+        UserStatusController.getInstance().setOnline();
+//        if (canClick) {\
         WebRTC.getInstance().createAnswer();
         cancelRingtone();
+        /*    try {
+                AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+                am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            } catch (Exception e) {
+            }*/
+
+        btnEndCall.setOnTouchListener(null);
+
         btnEndCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -573,6 +584,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                 btnEndCall.setVisibility(View.GONE);
             }
         });
+
+
     }
 
     private void cancelRingtone() {

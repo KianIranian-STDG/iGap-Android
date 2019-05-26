@@ -27,6 +27,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.helper.CardToCardHelper;
+import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
@@ -95,8 +98,10 @@ import net.iGap.request.RequestChannelAddMessageReaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -394,15 +399,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             try {
-                if (mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
                     HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
                     Gson gson = new GsonBuilder().create();
                     for (int i = 0; i < buttonList.size(); i++) {
                         LinearLayout childLayout = MakeButtons.createLayout();
                         for (int j = 0; j < buttonList.get(i).length(); j++) {
                             try {
+                                JSONObject json = new JSONObject(buttonList.get(i).get(j).toString());
                                 ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                                 }.getType());
+                                if (btnEntery.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                                    btnEntery.setLongValue(json.getLong("value"));
+                                }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
                                 childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
                                     @Override
@@ -425,6 +434,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
             }
             ((LinearLayout.LayoutParams) ((LinearLayout) withTextHolder.messageView.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
         }
@@ -1878,9 +1888,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
 
+            } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
+                JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                Realm realm = Realm.getDefaultInstance();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+                long peerId;
+                if (room != null && room.getChatRoom() != null) {
+                    peerId = room.getChatRoom().getPeerId();
+                } else {
+                    peerId = Long.parseLong(mMessage.senderID);
+                }
+                realm.close();
+                DirectPayHelper.directPayBot(jsonObject, peerId);
+            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
 

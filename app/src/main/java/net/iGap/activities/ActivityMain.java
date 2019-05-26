@@ -90,6 +90,8 @@ import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
+import net.iGap.helper.CardToCardHelper;
+import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
@@ -209,7 +211,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
     public static final int requestCodePaymentCharge = 198;
-    public static final int requestCodeCardToCard = 19800;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
@@ -928,19 +929,61 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case requestCodeCardToCard:
-                Log.d("bagi", "Code" + requestCode);
+            case DirectPayHelper.requestCodeDirectPay:
+                int errorType = 0;
+                switch (resultCode) {
+                    case 1:
+
+                        /*
+                        for example:
+                        enData:{"PayInfo":null,"PayData":"cHeOCQFF+29LUGXpTnzpz1yofTqgK+pP0ojhabaKEqUSBvzFuhf86bhUnsPCeMOdRkwzeYnmygZyNhWTmvJ8bc9qJSl7xidX0QV5yMG7wxAfIPaZWiUV8TlRhWyzMUWSS1MW8CGF07yfYHnD7SuwNucsHN3VatM2nwWOu4UXvco=","DataSign":"mhVO8u4Wime9Yh\/abvZskpi3jZdhfmuyLbYnqnjte9jmGGAHWXthDJLhN8Jfl65Wq9OTDIM51+nmQSZokqBCM8YFuMYOdrNLffbRHB5ZEKIAu+acYJhx2XdV\/7N6h9h2iMa77eaC0m0FKhYHlVNK5TDZc8Mz55o2swIhS37Beik=","AutoConfirm":false}
+                        message:مبلغ تراکنش کمتر از حد تعیین شده توسط صادرکننده کارت و یا بیشتر از حد مجاز می باشد
+                        status:61
+                         */
+                        Log.d("bagi", "enData:" + data.getStringExtra("enData"));
+                        Log.d("bagi", "message:" + data.getStringExtra("message"));
+                        Log.d("bagi", "status:" + data.getIntExtra("status", 0));
+                        DirectPayHelper.setResultOfDirectPay(data.getStringExtra("enData"), 0, null, data.getStringExtra("message"));
+                        break;
+                    case 2:
+                        errorType = data.getIntExtra("errorType", 0);
+                        break;
+                    case 5:
+                        errorType = data.getIntExtra("errorType", 0);
+                        break;
+                }
+                if (errorType != 0) {
+                    showErrorTypeMpl(errorType);
+                }
+                break;
+
+            case CardToCardHelper.requestCodeCardToCard:
+                String message = "";
+
                 switch (resultCode) {
                     case 2:
-                    case 1001:
-                    case 1002:
-                    case 1000:
-                        HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-                    case 201:
+                        message = getString(R.string.dialog_canceled);
                         break;
-                    case 2334:
-                        HelperError.showSnackMessage(getString(R.string.your_device_is_root), false);
+                    case 3:
+                        message = getString(R.string.server_error);
                         break;
+                    case 1:
+                        break;
+                }
+                if (data != null && data.getIntExtra("errorType", 0) != 0) {
+                    message = getErrorTypeMpl(data.getIntExtra("errorType", 0));
+                } else {
+                    if (data != null && data.getStringExtra("message") != null && !data.getStringExtra("message").equals("")) {
+                        message = data.getStringExtra("message");
+                    }
+                }
+
+                if (data != null && data.getStringExtra("enData") != null && !data.getStringExtra("enData").equals("")) {
+                    CardToCardHelper.setResultOfCardToCard(data.getStringExtra("enData"), 0, null, message);
+                } else {
+                    if (message.length() > 0) {
+                        HelperError.showSnackMessage(message, false);
+                    }
                 }
 
                 break;
@@ -1055,6 +1098,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //*******************************************************************************************************************************************
 
     private void showErrorTypeMpl(int errorType) {
+        String message = getErrorTypeMpl(errorType);
+
+        if (message.length() > 0) {
+            HelperError.showSnackMessage(message, false);
+        }
+    }
+
+    private String getErrorTypeMpl(int errorType) {
         String message = "";
         switch (errorType) {
             case 2:
@@ -1077,9 +1128,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 break;
         }
 
-        if (message.length() > 0) {
-            HelperError.showSnackMessage(message, false);
-        }
+        return message;
     }
 
     //*******************************************************************************************************************************************

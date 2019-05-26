@@ -20,39 +20,41 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmRoomMessageWalletRealmProxy;
 
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.CARD_TO_CARD;
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
+
 @Parcel(implementations = {net_iGap_realm_RealmRoomMessageWalletRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageWallet.class})
 public class RealmRoomMessageWallet extends RealmObject {
 
     @PrimaryKey
     private long id;
     private String type;
-    private long fromUserId;
-    private long toUserId;
-    private long amount;
-    private long traceNumber;
-    private long invoiceNumber;
-    private int payTime;
-    private String description;
+    private RealmRoomMessageWalletCardToCard realmRoomMessageWalletCardToCard;
+    private RealmRoomMessageWalletPayment realmRoomMessageWalletPayment;
+    private RealmRoomMessageWalletMoneyTransfer realmRoomMessageWalletMoneyTransfer;
 
     public static RealmRoomMessageWallet put(final ProtoGlobal.RoomMessageWallet input) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageWallet messageWallet = null;
+        RealmRoomMessageWallet messageWallet;
         messageWallet = realm.createObject(RealmRoomMessageWallet.class, AppUtils.makeRandomId());
 
         messageWallet.setType(input.getType().toString());
-        messageWallet.setFromUserId(input.getMoneyTransfer().getFromUserId());
-        messageWallet.setToUserId(input.getMoneyTransfer().getToUserId());
-        messageWallet.setAmount(input.getMoneyTransfer().getAmount());
-        messageWallet.setTraceNumber(input.getMoneyTransfer().getTraceNumber());
-        messageWallet.setInvoiceNumber(input.getMoneyTransfer().getInvoiceNumber());
-        messageWallet.setPayTime(input.getMoneyTransfer().getPayTime());
-        messageWallet.setDescription(input.getMoneyTransfer().getDescription());
+
+        if (input.getType() == CARD_TO_CARD) {
+            messageWallet.setRealmRoomMessageWalletCardToCard(RealmRoomMessageWalletCardToCard.put(input.getCardToCard()));
+        } else if (input.getType() == MONEY_TRANSFER) {
+            messageWallet.setRealmRoomMessageWalletMoneyTransfer(RealmRoomMessageWalletMoneyTransfer.put(input.getMoneyTransfer()));
+        } else if (input.getType() == PAYMENT ) {
+            messageWallet.setRealmRoomMessageWalletPayment(RealmRoomMessageWalletPayment.put(input.getMoneyTransfer()));
+        } else {
+
+        }
 
         realm.close();
 
         return messageWallet;
     }
-
 
     public long getId() {
         return id;
@@ -70,59 +72,27 @@ public class RealmRoomMessageWallet extends RealmObject {
         this.type = type;
     }
 
-    public long getFromUserId() {
-        return fromUserId;
+    public RealmRoomMessageWalletCardToCard getRealmRoomMessageWalletCardToCard() {
+        return realmRoomMessageWalletCardToCard;
     }
 
-    public void setFromUserId(long fromUserId) {
-        this.fromUserId = fromUserId;
+    public void setRealmRoomMessageWalletCardToCard(RealmRoomMessageWalletCardToCard realmRoomMessageWalletCardToCard) {
+        this.realmRoomMessageWalletCardToCard = realmRoomMessageWalletCardToCard;
     }
 
-    public long getToUserId() {
-        return toUserId;
+    public RealmRoomMessageWalletPayment getRealmRoomMessageWalletPayment() {
+        return realmRoomMessageWalletPayment;
     }
 
-    public void setToUserId(long toUserId) {
-        this.toUserId = toUserId;
+    public void setRealmRoomMessageWalletPayment(RealmRoomMessageWalletPayment realmRoomMessageWalletPayment) {
+        this.realmRoomMessageWalletPayment = realmRoomMessageWalletPayment;
     }
 
-    public long getAmount() {
-        return amount;
+    public RealmRoomMessageWalletMoneyTransfer getRealmRoomMessageWalletMoneyTransfer() {
+        return realmRoomMessageWalletMoneyTransfer;
     }
 
-    public void setAmount(long amount) {
-        this.amount = amount;
-    }
-
-    public long getTraceNumber() {
-        return traceNumber;
-    }
-
-    public void setTraceNumber(long traceNumber) {
-        this.traceNumber = traceNumber;
-    }
-
-    public long getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(long invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
-
-    public int getPayTime() {
-        return payTime;
-    }
-
-    public void setPayTime(int payTime) {
-        this.payTime = payTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRealmRoomMessageWalletMoneyTransfer(RealmRoomMessageWalletMoneyTransfer realmRoomMessageWalletMoneyTransfer) {
+        this.realmRoomMessageWalletMoneyTransfer = realmRoomMessageWalletMoneyTransfer;
     }
 }

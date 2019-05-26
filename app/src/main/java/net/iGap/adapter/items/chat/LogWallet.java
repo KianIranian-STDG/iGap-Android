@@ -10,26 +10,32 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
+import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmMoneyTransfer;
 import net.iGap.realm.RealmRegisteredInfo;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import io.realm.Realm;
 
 public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> {
-    private Realm mRealm;
 
     public LogWallet(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -49,106 +55,173 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-        RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(getRealm(), mMessage.structWallet.fromUserId);
-        RealmRegisteredInfo mRealmRegisteredInfoTo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), mMessage.structWallet.toUserId);
 
-        String persianCalander = HelperCalander.getPersianCalander(mMessage.structWallet.payTime * DateUtils.SECOND_IN_MILLIS);
+        if (mMessage.structWallet.getType().equals(ProtoGlobal.RoomMessageWallet.Type.UNRECOGNIZED.toString())) {
 
+            holder.titleTxt.setText(R.string.unknown_message);
+
+            holder.amountRoot.setVisibility(View.GONE);
+            holder.fromUserIdRoot.setVisibility(View.GONE);
+            holder.toUserIdRoot.setVisibility(View.GONE);
+            holder.traceNumberRoot.setVisibility(View.GONE);
+            holder.invoiceNumberRoot.setVisibility(View.GONE);
+            holder.descriptionRoot.setVisibility(View.GONE);
+            holder.payTime.setVisibility(View.GONE);
+            holder.cardNumberRoot.setVisibility(View.GONE);
+            holder.rrnNumberRoot.setVisibility(View.GONE);
+
+            return;
+        }
+
+        holder.amountRoot.setVisibility(View.VISIBLE);
+        holder.fromUserIdRoot.setVisibility(View.VISIBLE);
+        holder.toUserIdRoot.setVisibility(View.VISIBLE);
+        holder.traceNumberRoot.setVisibility(View.VISIBLE);
+        holder.invoiceNumberRoot.setVisibility(View.VISIBLE);
+        holder.descriptionRoot.setVisibility(View.VISIBLE);
+        holder.payTime.setVisibility(View.VISIBLE);
+        holder.cardNumberRoot.setVisibility(View.VISIBLE);
+        holder.rrnNumberRoot.setVisibility(View.VISIBLE);
+
+        RealmMoneyTransfer realmMoneyTransfer;
+
+        if (mMessage.structWallet.getType().equals(ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER.toString())) {
+            holder.cardNumberRoot.setVisibility(View.GONE);
+            holder.rrnNumberRoot.setVisibility(View.GONE);
+            realmMoneyTransfer = mMessage.structWallet.getRealmRoomMessageWalletMoneyTransfer();
+            holder.titleTxt.setText(R.string.WALLET_TRANSFER_MONEY);
+            String iGapYellowWallet = "#E6F4D442";
+            holder.payTime.setBackgroundColor(Color.parseColor(iGapYellowWallet));
+            holder.titleTxt.setBackgroundColor(Color.parseColor(iGapYellowWallet));
+        } else {
+            realmMoneyTransfer = mMessage.structWallet.getRealmRoomMessageWalletPayment();
+            holder.cardNumberRoot.setVisibility(View.VISIBLE);
+            holder.rrnNumberRoot.setVisibility(View.VISIBLE);
+            String cardNumber = realmMoneyTransfer.getCardNumber();
+            String rrn = realmMoneyTransfer.getRrn() + "";
+            if (HelperCalander.isPersianUnicode) {
+                cardNumber = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+                rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
+            }
+            holder.cardNumber.setText(cardNumber);
+            holder.rrnNumber.setText(rrn);
+            holder.titleTxt.setText(R.string.PAYMENT_TRANSFER_MONEY);
+            holder.payTime.setBackgroundColor(Color.parseColor(G.appBarColor));
+            holder.titleTxt.setBackgroundColor(Color.parseColor(G.appBarColor));
+        }
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmMoneyTransfer.getFromUserId());
+        RealmRegisteredInfo mRealmRegisteredInfoTo = RealmRegisteredInfo.getRegistrationInfo(realm, realmMoneyTransfer.getToUserId());
+
+        String persianCalender = HelperCalander.checkHijriAndReturnTime(realmMoneyTransfer.getPayTime()) + " " + "-" + " " +
+                TimeUtils.toLocal(realmMoneyTransfer.getPayTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+
+        String fromDisplayName = "";
+        String toDisplayName = "";
+
+        if (mRealmRegisteredInfoFrom != null) {
+            fromDisplayName = mRealmRegisteredInfoFrom.getDisplayName();
+        }
+
+        if (mRealmRegisteredInfoTo != null) {
+            toDisplayName = mRealmRegisteredInfoTo.getDisplayName();
+        }
+
+        holder.fromUserId.setText(fromDisplayName);
+        holder.toUserId.setText(toDisplayName);
+        holder.amount.setText(DirectPayHelper.convertNumberToPriceRial(realmMoneyTransfer.getAmount()));
+        String traceNumber = String.valueOf(realmMoneyTransfer.getTraceNumber());
+        String invoiceNumber = String.valueOf(realmMoneyTransfer.getInvoiceNumber());
         if (HelperCalander.isPersianUnicode) {
-
-            holder.fromUserId.setText("" + mRealmRegisteredInfoFrom.getDisplayName());
-            holder.toUserId.setText("" + mRealmRegisteredInfoTo.getDisplayName());
-            holder.amount.setText("" + mMessage.structWallet.amount);
-            holder.traceNumber.setText("" + mMessage.structWallet.traceNumber);
-            holder.invoiceNumber.setText("" + mMessage.structWallet.invoiceNumber);
-            holder.payTime.setText("" + persianCalander);
-
-            holder.fromUserId_2.setText(R.string.wallet_from);
-            holder.toUserId_2.setText(R.string.wallet_to);
-            holder.amount_2.setText(R.string.wallet_amount);
-            holder.traceNumber_2.setText(R.string.wallet_trace);
-            holder.invoiceNumber_2.setText(R.string.wallet_invoice);
-            holder.payTime_2.setText(R.string.wallet_data);
-        } else {
-            holder.fromUserId.setText(R.string.wallet_from);
-            holder.toUserId.setText(R.string.wallet_to);
-            holder.amount.setText(R.string.wallet_amount);
-            holder.traceNumber.setText(R.string.wallet_trace);
-            holder.invoiceNumber.setText(R.string.wallet_invoice);
-            holder.payTime.setText(R.string.wallet_data);
-
-            holder.fromUserId_2.setText("" + mRealmRegisteredInfoFrom.getDisplayName());
-            holder.toUserId_2.setText("" + mRealmRegisteredInfoTo.getDisplayName());
-            holder.amount_2.setText("" + mMessage.structWallet.amount);
-            holder.traceNumber_2.setText("" + mMessage.structWallet.traceNumber);
-            holder.invoiceNumber_2.setText("" + mMessage.structWallet.invoiceNumber);
-            holder.payTime_2.setText("" + persianCalander);
+            traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
+            invoiceNumber = HelperCalander.convertToUnicodeFarsiNumber(invoiceNumber);
+            persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
         }
 
-        if (mMessage.structWallet.description.isEmpty() || mMessage.structWallet.description.equals("")) {
-            holder.rootDescription.setVisibility(View.GONE);
-        } else {
-            holder.description.setText(mMessage.structWallet.description);
+        holder.description.setText(realmMoneyTransfer.getDescription());
+        holder.traceNumber.setText(traceNumber);
+        holder.invoiceNumber.setText(invoiceNumber);
+        holder.payTime.setText(persianCalender);
+
+        if (realmMoneyTransfer.getDescription() == null || realmMoneyTransfer.getDescription().isEmpty()) {
+            holder.descriptionRoot.setVisibility(View.GONE);
         }
 
-
-        getRealm().close();
+        realm.close();
     }
 
+    @NotNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NotNull View v) {
         return new ViewHolder(v);
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView fromUserId;
-        private TextView toUserId;
+        private TextView titleTxt;
+
+        private View amountRoot;
         private TextView amount;
+
+        private View fromUserIdRoot;
+        private TextView fromUserId;
+
+        private View toUserIdRoot;
+        private TextView toUserId;
+
+        private View traceNumberRoot;
         private TextView traceNumber;
+
+        private View invoiceNumberRoot;
         private TextView invoiceNumber;
-        private TextView payTime;
+
+        private View cardNumberRoot;
+        private TextView cardNumber;
+
+        private View rrnNumberRoot;
+        private TextView rrnNumber;
+
+
+        private View descriptionRoot;
         private TextView description;
-        private ViewGroup rootDescription;
 
-
-        private TextView fromUserId_2;
-        private TextView toUserId_2;
-        private TextView amount_2;
-        private TextView traceNumber_2;
-        private TextView invoiceNumber_2;
-        private TextView payTime_2;
-
+        private TextView payTime;
 
         protected ReserveSpaceRoundedImageView image;
 
         public ViewHolder(View view) {
             super(view);
+            CardView cardView = view.findViewById(R.id.rootCardView);
+            cardView.setCardBackgroundColor(Color.parseColor("#E6E5E1DC"));
+
+            titleTxt = view.findViewById(R.id.titleTxt);
+
+            amount = view.findViewById(R.id.amount);
+            amountRoot = view.findViewById(R.id.amountRoot);
 
             fromUserId = view.findViewById(R.id.fromUserId);
+            fromUserIdRoot = view.findViewById(R.id.fromUserIdRoot);
+
             toUserId = view.findViewById(R.id.toUserId);
-            amount = view.findViewById(R.id.amount);
+            toUserIdRoot = view.findViewById(R.id.toUserIdRoot);
+
             traceNumber = view.findViewById(R.id.traceNumber);
+            traceNumberRoot = view.findViewById(R.id.traceNumberRoot);
+
             invoiceNumber = view.findViewById(R.id.invoiceNumber);
-            payTime = view.findViewById(R.id.payTime);
+            invoiceNumberRoot = view.findViewById(R.id.invoiceNumberRoot);
+
+            cardNumber = view.findViewById(R.id.cardNumber);
+            cardNumberRoot = view.findViewById(R.id.cardNumberRoot);
+
+            rrnNumber = view.findViewById(R.id.WalletRrnNumber);
+            rrnNumberRoot = view.findViewById(R.id.WalletRrnNumberRoot);
+
             description = view.findViewById(R.id.description);
-            rootDescription = view.findViewById(R.id.rootDescription);
+            descriptionRoot = view.findViewById(R.id.descriptionRoot);
 
-
-            fromUserId_2 = view.findViewById(R.id.fromUserId_2);
-            toUserId_2 = view.findViewById(R.id.toUserId_2);
-            amount_2 = view.findViewById(R.id.amount_2);
-            traceNumber_2 = view.findViewById(R.id.traceNumber_2);
-            invoiceNumber_2 = view.findViewById(R.id.invoiceNumber_2);
-            payTime_2 = view.findViewById(R.id.payTime_2);
-
+            payTime = view.findViewById(R.id.payTime);
         }
-    }
-
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-        return mRealm;
     }
 }

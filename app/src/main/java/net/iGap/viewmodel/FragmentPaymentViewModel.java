@@ -9,8 +9,6 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.databinding.ObservableField;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -23,13 +21,8 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.fragments.FragmentPaymentInquiry;
-import net.iGap.helper.HelperError;
+import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperFragment;
-import ir.pec.mpl.pecpayment.view.CardToCardInitiator;
-import net.iGap.request.RequestMplGetCardToCardToken;
-
-import static net.iGap.activities.ActivityMain.requestCodeCardToCard;
-
 
 public class FragmentPaymentViewModel {
 
@@ -46,38 +39,8 @@ public class FragmentPaymentViewModel {
         new HelperFragment(FragmentPaymentCharge.newInstance()).setReplace(false).load();
     }
 
-    public static void CallCardToCard() {
-        if (G.currentActivity == null || G.currentActivity.isFinishing()) {
-            return;
-        }
-
-        final ProgressDialog dialog = ProgressDialog.show(G.currentActivity, "",
-                G.context.getString(R.string.please_wait), true);
-        boolean isSend = new RequestMplGetCardToCardToken().mplGetToken(new RequestMplGetCardToCardToken.OnMplCardToCardToken() {
-            @Override
-            public void onToken(String token) {
-                Intent intent = new Intent(G.context, CardToCardInitiator.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Token", token);
-                G.currentActivity.startActivityForResult(intent , requestCodeCardToCard);
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onError(int major, int minor) {
-                HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
-                dialog.dismiss();
-            }
-        });
-
-        if (!isSend) {
-            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
-            dialog.dismiss();
-        }
-    }
-
     public void onClickCardToCard(View v) {
-        CallCardToCard();
+        CardToCardHelper.CallCardToCard(G.currentActivity);
     }
 
     public void onClickBill(View v) {

@@ -55,6 +55,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 public class ActivityEnhanced extends AppCompatActivity {
 
     public AvatarHandler avatarHandler;
+    protected boolean canSetUserStatus = true;
     public boolean isOnGetPermission = false;
     BroadcastReceiver mybroadcast = new BroadcastReceiver() {
         //When Event is published, onReceive method is called
@@ -267,8 +268,8 @@ public class ActivityEnhanced extends AppCompatActivity {
         G.isScrInFg = true;
 
         AttachFile.isInAttach = false;
-
-        UserStatusController.getInstance().setOnline();
+        if (canSetUserStatus)
+            UserStatusController.getInstance().setOnline();
 
         super.onStart();
         avatarHandler.registerChangeFromOtherAvatarHandler();
@@ -293,7 +294,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         }catch (Exception e){};
 
-        if (!AttachFile.isInAttach) {
+        if (!AttachFile.isInAttach && canSetUserStatus) {
             UserStatusController.getInstance().setOffline();
         }
     }

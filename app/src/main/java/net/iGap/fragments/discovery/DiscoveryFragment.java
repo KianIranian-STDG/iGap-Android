@@ -98,6 +98,9 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
     }
 
     private void init() {
+        if (view == null) {
+            return;
+        }
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);

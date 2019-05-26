@@ -113,6 +113,9 @@ import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.CARD_TO_CARD;
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
@@ -1380,6 +1383,27 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
                             }
 
                             String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, G.roomMessageTypeColor);
+                            if (_type == ProtoGlobal.RoomMessageType.WALLET) {
+                                String type;
+                                if (mInfo.getLastMessage().getForwardMessage() != null) {
+                                    type = mInfo.getLastMessage().getForwardMessage().getRoomMessageWallet().getType();
+                                } else {
+                                    type = mInfo.getLastMessage().getRoomMessageWallet().getType();
+                                }
+
+                                if (type.equals(CARD_TO_CARD.toString())) {
+                                    result = G.fragmentActivity.getResources().getString(R.string.card_to_card_message);
+                                } else if (type.equals(PAYMENT.toString())) {
+                                    result = G.fragmentActivity.getResources().getString(R.string.payment_message);
+                                } else if (type.equals(MONEY_TRANSFER.toString())) {
+                                    result = G.fragmentActivity.getResources().getString(R.string.wallet_message);
+                                } else {
+                                    result = G.fragmentActivity.getResources().getString(R.string.unknown_message);
+                                }
+                                holder.txtLastMessage.setText(result);
+                            }
+
+
                             if (result.isEmpty()) {
                                 if (!HelperCalander.isPersianUnicode) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

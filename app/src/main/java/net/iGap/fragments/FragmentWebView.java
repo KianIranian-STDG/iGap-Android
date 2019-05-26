@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -11,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
@@ -180,12 +183,13 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         }
     }
 
-    private class CustomWebViewClient extends MyWebViewClient {
+    private class CustomWebViewClient extends WebViewClient {
 
         public boolean isWebViewVisible = true;
 
         @Override
-        protected void onReceivedError(WebView webView, String url, int errorCode, String description) {
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            super.onReceivedError(view, request, error);
 //            if (url.equals(FragmentWebView.this.url) && isWebViewVisible) {
             if (isWebViewVisible) {
                 isWebViewVisible = false;
@@ -196,19 +200,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
                 HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
             }
-        }
-
-        @Override
-        protected boolean handleUri(WebView webView, Uri uri) {
-            final String host = uri.getHost();
-            final String scheme = uri.getScheme();
-            // Returning false means that you are going to load this url in the webView itself
-            // Returning true means that you need to handle what to do with the url e.g. open web page in a Browser
-
-            // final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            // startActivity(intent);
-            return false;
-
         }
 
         @Override
@@ -229,6 +220,15 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 }
             }
 
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            boolean a = HelperUrl.handleAppUrl(url);
+            if (a) {
+                onBackButtonClicked(view);
+            }
+            return a;
         }
     }
 }

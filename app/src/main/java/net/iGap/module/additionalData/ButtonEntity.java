@@ -15,7 +15,9 @@ public class ButtonEntity {
     private String imageUrl;
     @SerializedName("value")
     @Expose
-    private String value;
+    private Object value;
+
+    private Long longValue;
 
     private String jsonObject;
 
@@ -51,12 +53,19 @@ public class ButtonEntity {
         this.imageUrl = imageUrl;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 
+    public Long getLongValue() {
+        return longValue;
+    }
+
+    public void setLongValue(Long longValue) {
+        this.longValue = longValue;
+    }
 }

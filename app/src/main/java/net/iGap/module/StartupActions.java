@@ -651,8 +651,8 @@ public final class StartupActions {
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override
                     public boolean shouldCompact(long totalBytes, long usedBytes) {
-                        final long thresholdSize = 50 * 1024 * 1024;
-                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.8);
+                        final long thresholdSize = 10 * 1024 * 1024;
+                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
                     }
                 })
                 .schemaVersion(REALM_SCHEMA_VERSION)

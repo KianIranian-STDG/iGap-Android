@@ -39,6 +39,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.interfaces.SpeakerControlListener;
 import net.iGap.module.AndroidUtils;
@@ -547,6 +548,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     }
 
     public void endCall() {
+        UserStatusController.getInstance().setOffline();
 
         G.isInCall = false;
 

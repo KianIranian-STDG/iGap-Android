@@ -580,7 +580,6 @@
     <string name="phone_selected_for_send">selected phone</string>
     <string name="crop_selected_for_send">selected Image</string>
     <string name="location_message">Location Message</string>
-    <string name="wallet_message">Wallet Transaction</string>
     <string name="chat_to_group">Convert to Group</string>
     <string name="last_seen_at">last seen at</string>
     <string name="long_time_ago">long time ago</string>
@@ -733,6 +732,7 @@
     <string name="description_optional">Description(optional)</string>
     <string name="enter_the_code_here">Enter the code here</string>
     <string name="transfer_to">Transfer to</string>
+    <string name="transfer_to_wallet">Transfer to wallet</string>
     <string name="price">Price</string>
     <string name="amunt">Amount</string>
     <string name="email_optional">Email(optional)</string>
@@ -1299,7 +1299,7 @@
     <string name="SendMoney">Send Money</string>
     <string name="transfer_amount_hint">Enter the transfer amount below :</string>
     <string name="amount_in_rial">Amount in Rial :</string>
-    <string name="pay">pay</string>
+    <string name="pay">Pay</string>
     <string name="transfer_to_dialog">Transfer to :</string>
     <string name="am_money">money</string>
     <string name="trace_number">Trace Number</string>
@@ -1340,12 +1340,12 @@
     <string name="result_3">The result of the payment is not known to the wallet period of the references or with the support contact.</string>
     <string name="result_4">Payment was successful. Check more in the wallet history section.</string>
 
-    <string name="wallet_from">From:</string>
-    <string name="wallet_to">To:</string>
-    <string name="wallet_amount">Amount:</string>
-    <string name="wallet_trace">Trace Number:</string>
-    <string name="wallet_invoice">Invoice Number:</string>
-    <string name="wallet_data">Pay Time:</string>
+    <string name="wallet_from">From</string>
+    <string name="wallet_to">To</string>
+    <string name="wallet_amount">Amount</string>
+    <string name="wallet_trace">Trace Number</string>
+    <string name="wallet_invoice">Invoice Number</string>
+    <string name="wallet_data">Pay Time</string>
     <string name="wallet_desc">---Description---</string>
     <string name="wallet_toman">Toman</string>
     <string name="wallet_Your_credit">Your credit: </string>
@@ -1808,4 +1808,23 @@
     <string name="Credit">Credit</string>
     <string name="make_as_read">Make as Read</string>
     <string name="read_all">Read All</string>
+
+    <string name="wallet_message">Wallet Message</string>
+    <string name="unknown_message">This message is not supported!</string>
+    <string name="card_to_card_message">Card to Card Message</string>
+    <string name="payment_message">Payment Message</string>
+
+    <string name="WALLET_TRANSFER_MONEY">Wallet Money Transfer</string>
+    <string name="CARD_TRANSFER_MONEY">Card To Card Money Transfer</string>
+    <string name="PAYMENT_TRANSFER_MONEY">Payment Money Transfer</string>
+    <string name="card_number_dest">Destination card number</string>
+    <string name="card_number_source">Source card number</string>
+    <string name="source_bank">Source bank</string>
+    <string name="cardToCardInvoiceNumber">Billing number</string>
+    <string name="cardToCardTrace">Trace Number</string>
+    <string name="WalletRrnNumber">Reference No</string>
+    <string name="cardToCardRequest">Write your text for card to card.</string>
+    <string name="amCardToCardIconText">Transfer Request</string>
+    <string name="cardToCardBtnText">Card to Card</string>
+    <string name="crad_to_card_dest_name">Account Owner Name</string>
 </resources>

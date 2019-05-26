@@ -34,7 +34,7 @@ public class UserIVandGetActivitiesResponse extends MessageHandler {
         ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse.Builder builder = (ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse.Builder) message;
         ((RequestUserIVandGetActivities.GetActivityStruct) identity).onGetActivities.onGetActivitiesReady(
                 ((RequestUserIVandGetActivities.GetActivityStruct) identity).pagination,
-                new ArrayList<>(builder.getAcitivitiesList())
+                new ArrayList<>(builder.getActivitiesList())
         );
     }
 
