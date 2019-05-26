@@ -748,5 +748,9 @@
     <item name="android:background">@android:color/transparent</item>
   </style>
 
+  <style name="myIconTextViewStyle">
+    <item name="fontPath">fonts/font_icon.ttf</item>
+    <item name="android:gravity">center</item>
+  </style>
 
 </resources>
