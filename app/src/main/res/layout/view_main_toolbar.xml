@@ -154,7 +154,7 @@
             android:layout_marginRight="8dp"
             android:fontFamily="@font/main_font"
             android:text="Your calling now"
-            android:textColor="#CCCACA"
+            android:textColor="#fff"
             android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/view_toolbar_logo"
