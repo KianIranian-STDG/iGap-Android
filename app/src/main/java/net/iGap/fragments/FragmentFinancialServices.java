@@ -11,9 +11,15 @@ import android.widget.LinearLayout;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentFinancialServicesBinding;
+import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FinancialServicesViewModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentFinancialServices extends FragmentToolBarBack {
 
@@ -37,6 +43,26 @@ public class FragmentFinancialServices extends FragmentToolBarBack {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        HelperToolbar t = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_more_toolbar)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.financial_services))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        showMenu();
+                    }
+                });
+
         binding.walletPriceView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -58,7 +84,28 @@ public class FragmentFinancialServices extends FragmentToolBarBack {
             }
         });
 
+    }
 
+    private void showMenu() {
+        if (getContext() != null) {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.financial_report));
+            items.add(getString(R.string.settings));
+            items.add(getString(R.string.fag));
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                switch (position) {
+                    case 0:
+
+                        break;
+                    case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                }
+            }).show();
+        }
     }
 
 }

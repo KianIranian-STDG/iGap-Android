@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter;
 
@@ -21,20 +21,24 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.OnPathAdapterBottomSheet;
 import net.iGap.interfaces.OnRotateImage;
 import net.iGap.module.structs.StructBottomSheet;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetItem.ViewHolder> {
 
     public StructBottomSheet mList;
+    private OnPathAdapterBottomSheet onPathAdapterBottomSheet;
     public boolean isChecked = false;
 
-    public BottomSheetItem(StructBottomSheet item) {
+    public BottomSheetItem(StructBottomSheet item, OnPathAdapterBottomSheet OnPathAdapterBottomSheet) {
         this.mList = item;
+        this.onPathAdapterBottomSheet = OnPathAdapterBottomSheet;
     }
 
     public StructBottomSheet getItem() {
@@ -60,9 +64,9 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
     //The logic to bind your data to the view
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    public void bindView(@NotNull final ViewHolder holder, @NotNull List payloads) {
         super.bindView(holder, payloads);
-        
+
         ImageHelper.correctRotateImage(mList.getPath(), true, new OnRotateImage() {
             @Override
             public void startProcess() {
@@ -87,7 +91,6 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
 
             }
         }); //rotate image
-        
 
 
         if (mList.isSelected) {
@@ -104,12 +107,12 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false, false, mList, mList.getId());
+                    onPathAdapterBottomSheet.path(mList.getPath(), false, false, mList, mList.getId());
                     mList.setSelected(true);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true, false, mList, mList.getId());
+                    onPathAdapterBottomSheet.path(mList.getPath(), true, false, mList, mList.getId());
                     mList.setSelected(false);
                 }
             }
@@ -121,12 +124,12 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false, true, mList, mList.getId());
+                    onPathAdapterBottomSheet.path(mList.getPath(), false, true, mList, mList.getId());
                     mList.setSelected(false);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true, true, mList, mList.getId());
+                    onPathAdapterBottomSheet.path(mList.getPath(), true, true, mList, mList.getId());
                     mList.setSelected(true);
                 }
 
@@ -134,8 +137,9 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         });
     }
 
+    @NotNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NotNull View v) {
         return new ViewHolder(v);
     }
 
@@ -150,10 +154,10 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         public ViewHolder(View view) {
             super(view);
 
-            cr = (CardView) view.findViewById(R.id.card_view);
-            imgSrc = (ImageView) view.findViewById(R.id.img_gallery);
-            checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.cig_checkBox_select_user);
-            prgBottomSheet = (ProgressBar) view.findViewById(R.id.prgBottomSheet);
+            cr = view.findViewById(R.id.card_view);
+            imgSrc = view.findViewById(R.id.img_gallery);
+            checkBoxSelect = view.findViewById(R.id.cig_checkBox_select_user);
+            prgBottomSheet = view.findViewById(R.id.prgBottomSheet);
         }
     }
 

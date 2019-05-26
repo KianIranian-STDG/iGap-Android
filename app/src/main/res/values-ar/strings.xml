@@ -2741,6 +2741,8 @@
     <string name="chat_setting_title">إعداد الدردشة</string>
     <!--todo: translate these below lines-->
     <string name="new_channels_rules">إذا قمت بتعيين رابط دائم ، فسيتمكن الأشخاص الآخرون من العثور على قناتك والانضمام إليها.\nيمكنك استخدام أ-ي و 0-9 و الشرطة السفلية.\nالحد الأدنى للطول هو 5 أحرف.</string>
+    <string name="financial_report">تقرير مالي</string>
+    <string name="fag">التعليمات</string>
 
     <string name="add_new_subscriber">Add Subscriber</string>
     <string name="cloud">Cloud</string>

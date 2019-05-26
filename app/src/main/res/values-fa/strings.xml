@@ -1804,6 +1804,8 @@
     <string name="Credit">اعتبار</string>
     <string name="make_as_read">خوانده شده</string>
     <string name="read_all">همه خوانده شده</string>
+    <string name="financial_report">گزارش مالی</string>
+    <string name="fag">سوالات متداول</string>
 
     <string name="wallet_message">پیام کیف پول</string>
     <string name="unknown_message">این پیام پشتیبانی نمی شود!</string>

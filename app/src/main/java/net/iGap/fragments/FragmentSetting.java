@@ -56,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
@@ -101,9 +102,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 .setContext(getContext())
                 .setLeftIcon(R.drawable.ic_back_btn)
                 .setRightIcons(R.drawable.ic_checked)
+                .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.settings))
-                .setLogoShown(false)
-                .setCounterShown(true)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -114,7 +114,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                     @Override
                     public void onRightIconClickListener(View view) {
-
+                        viewModel.submitData();
                     }
                 });
         binding.toolbar.addView(t.getView());
@@ -154,7 +154,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         viewModel.showSubmitButton.observe(this, aBoolean -> {
             if (aBoolean != null) {
-                Log.wtf("fragment setting","value of show visibility: "+aBoolean);
+                Log.wtf("fragment setting", "value of show visibility: " + aBoolean);
                 submitButton.setVisibility(aBoolean ? View.VISIBLE : View.GONE);
             }
         });
@@ -165,17 +165,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
         });
 
-        AppUtils.setProgresColler(binding.loading);
-
-
-
-
-        /*onClickBack = new onClickBack() {
-            @Override
-            public void back() {
-                G.fragmentActivity.onBackPressed();
+        viewModel.goBack.observe(this, aBoolean -> {
+            if (getActivity() != null && aBoolean != null && aBoolean) {
+                getActivity().onBackPressed();
             }
-        };*/
+        });
+
+        AppUtils.setProgresColler(binding.loading);
 
 
         FragmentShowAvatars.onComplete = new OnComplete() {

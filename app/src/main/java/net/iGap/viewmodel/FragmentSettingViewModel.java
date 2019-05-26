@@ -123,22 +123,6 @@ public class FragmentSettingViewModel extends ViewModel {
     public ObservableInt gender = new ObservableInt(-1);
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
 
-    public LiveData<Boolean> getUsernameErrorEnable() {
-        return usernameErrorEnable;
-    }
-
-    public LiveData<Integer> getUsernameErrorMessage() {
-        return usernameErrorMessage;
-    }
-
-    public LiveData<Boolean> getEmailErrorEnable() {
-        return emailErrorEnable;
-    }
-
-    public LiveData<Integer> getEmailErrorMessage() {
-        return emailErrorMessage;
-    }
-
     private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
     private MutableLiveData<Integer> usernameErrorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
@@ -151,6 +135,7 @@ public class FragmentSettingViewModel extends ViewModel {
     public MutableLiveData<Boolean> showError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showSubmitButton = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
 
     public String phoneNumber;
     private String currentName;
@@ -193,6 +178,22 @@ public class FragmentSettingViewModel extends ViewModel {
     private RealmPrivacy realmPrivacy;
     private RealmRegisteredInfo mRealmRegisteredInfo;
     /*private int[] fontSizeArray = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};*/
+
+    public LiveData<Boolean> getUsernameErrorEnable() {
+        return usernameErrorEnable;
+    }
+
+    public LiveData<Integer> getUsernameErrorMessage() {
+        return usernameErrorMessage;
+    }
+
+    public LiveData<Boolean> getEmailErrorEnable() {
+        return emailErrorEnable;
+    }
+
+    public LiveData<Integer> getEmailErrorMessage() {
+        return emailErrorMessage;
+    }
 
 
     public FragmentSettingViewModel() {
@@ -398,6 +399,23 @@ public class FragmentSettingViewModel extends ViewModel {
         showDialogLogout.setValue(true);
     }
 
+    public void submitData() {
+        showLoading.setValue(true);
+        if (!currentName.equals(name.get())) {
+            sendRequestSetName();
+        } else if (!currentUserName.equals(userName.get())) {
+            sendRequestSetUsername();
+        } else if (!currentBio.equals(bio.get())) {
+            sendRequestSetBio();
+        } else if (!currentUserEmail.equals(email.get())) {
+            sendRequestSetEmail();
+        } else if (currentGender != gender.get()) {
+            sendRequestSetGender();
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
     public void logout() {
         showLoading.setValue(true);
         new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
@@ -445,7 +463,11 @@ public class FragmentSettingViewModel extends ViewModel {
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
                 //setAvatar();
                 RealmRoom.updateChatTitle(userId, nickName);
-                G.handler.post(() -> showLoading.setValue(false));
+                G.handler.post(() -> {
+                    currentName = nickName;
+                    showLoading.setValue(false);
+                    submitData();
+                });
             }
 
             @Override
@@ -499,7 +521,11 @@ public class FragmentSettingViewModel extends ViewModel {
         new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
             @Override
             public void onUserProfileUpdateUsername(final String username) {
-                G.handler.post(() -> showLoading.setValue(false));
+                G.handler.post(() -> {
+                    showLoading.setValue(false);
+                    currentUserName = username;
+                    submitData();
+                });
             }
 
             @Override
@@ -536,7 +562,11 @@ public class FragmentSettingViewModel extends ViewModel {
         new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
             @Override
             public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
-                G.handler.post(() -> showLoading.setValue(false));
+                G.handler.post(() -> {
+                    showLoading.setValue(false);
+                    currentUserEmail = email;
+                    submitData();
+                });
             }
 
             @Override
@@ -574,6 +604,8 @@ public class FragmentSettingViewModel extends ViewModel {
 
     private void sendRequestSetBio() {
         new RequestUserProfileSetBio().setBio(bio.get());
+        currentBio = bio.get();
+        submitData();
     }
 
     public void onCheckedListener(int checkedId) {
@@ -591,7 +623,11 @@ public class FragmentSettingViewModel extends ViewModel {
         new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
             @Override
             public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-                G.handler.post(() -> showLoading.setValue(false));
+                G.handler.post(() -> {
+                    showLoading.setValue(false);
+                    currentGender = gender == ProtoGlobal.Gender.MALE ? R.id.male : R.id.female;
+                    submitData();
+                });
             }
 
             @Override
