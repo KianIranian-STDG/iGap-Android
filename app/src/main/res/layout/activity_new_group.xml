@@ -189,6 +189,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="@string/member"
+          style="?textTitleColorSettingTheme"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
           />
@@ -197,7 +198,7 @@
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_margin="10dp"
-          android:background="@{Color.parseColor(G.lineBorder),default=@color/toolbar_background}" />
+          style="?lineColorSettingTheme" />
 
       <android.support.v7.widget.RecyclerView
           android:layout_height="match_parent"
