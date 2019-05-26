@@ -855,6 +855,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }*/
                 lastHeader = header;
 
+
+                if (G.isDarkTheme){
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                }else{
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                }
+
                 viewHolder.title.setText(contact.getDisplay_name());
                 viewHolder.subtitle.setText("+" + contact.getPhone());
             /*final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());

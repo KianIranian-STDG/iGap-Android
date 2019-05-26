@@ -696,6 +696,14 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
             public void bindData(final StructContactInfo data){
 
+                if (G.isDarkTheme){
+                    txtName.setTextColor(context.getResources().getColor(R.color.white));
+                    txtPhone.setTextColor(context.getResources().getColor(R.color.white));
+                }else{
+                    txtName.setTextColor(context.getResources().getColor(R.color.white));
+                    txtPhone.setTextColor(context.getResources().getColor(R.color.white));
+                }
+
                 txtPhone.setVisibility(View.INVISIBLE);
                 chSelected.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.VISIBLE);
