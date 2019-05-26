@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -57,6 +58,7 @@ import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
+    private long mLastClickTime = 0;
 
     BaseViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -76,6 +78,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
