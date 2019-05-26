@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -74,7 +75,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         badgeView.setBadgeColor(getResources().getColor(R.color.red));
 
         addView(imageView);
-        addView(badgeView);
+        postDelayed(() -> addView(badgeView), 500);
         setOnClickListener(this);
     }
 
@@ -89,6 +90,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             if (getParent() instanceof BottomNavigation) {
                 bottomNavigation = (BottomNavigation) getParent();
                 setupViews();
+                Log.i(TAG, "checkParent: parent loaded");
             } else {
                 throw new RuntimeException(TAG + "BottomNavigation");
             }

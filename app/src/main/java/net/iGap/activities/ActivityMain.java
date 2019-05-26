@@ -1336,7 +1336,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
             @Override
             public int callCount() {
-                return 5200;
+                return 0;
             }
 
             @Override

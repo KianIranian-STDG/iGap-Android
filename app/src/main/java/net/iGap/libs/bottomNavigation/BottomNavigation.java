@@ -2,16 +2,11 @@ package net.iGap.libs.bottomNavigation;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -127,32 +122,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         return path;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private Bitmap shadow(Path path) {
-        Bitmap viewHolder = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ALPHA_8);
-        Canvas canvas = new Canvas(viewHolder);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(getResources().getColor(R.color.black));
-        paint.setAlpha(155);
-        canvas.drawPath(path, paint);
-        RenderScript script = RenderScript.create(getContext());
-        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(script, Element.U8(script));
-        Allocation input = Allocation.createCubemapFromBitmap(script, viewHolder);
-        Allocation output = Allocation.createTyped(script, input.getType());
-        blur.setRadius(15f);
-        blur.setInput(input);
-        blur.forEach(output);
-        output.copyTo(viewHolder);
-
-        script.destroy();
-        input.destroy();
-        output.destroy();
-        blur.destroy();
-
-        return viewHolder;
-    }
-
-
     public void setCurrentItem(int position) {
         defaultItem = position;
         for (int i = 0; i < tabItems.size(); i++) {
@@ -198,30 +167,32 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     public void setOnBottomNavigationBadge(OnBottomNavigationBadge callBack) {
-        for (int i = 0; i < getChildCount(); i++) {
-            final TabItem tabItem = (TabItem) getChildAt(i);
-            tabItem.setPosition(i);
-            tabItem.setBadgeColor(callBack.badgeColor());
-            tabItems.add(tabItem);
-            tabItem.setOnTabItemSelected(this);
+        post(() -> {
+            for (int i = 0; i < getChildCount(); i++) {
+                final TabItem tabItem = (TabItem) getChildAt(i);
+                tabItem.setPosition(i);
+                tabItem.setBadgeColor(callBack.badgeColor());
+                tabItems.add(tabItem);
+                tabItem.setOnTabItemSelected(this);
 
-            switch (i) {
-                case 0:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 1:
-                    tabItem.setBadgeCount(callBack.callCount());
-                    break;
-                case 2:
-                    tabItem.setBadgeCount(callBack.messageCount());
-                    break;
-                case 3:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 4:
-                    tabItem.setBadgeCount(0);
-                    break;
+                switch (i) {
+                    case 0:
+                        tabItem.setBadgeCount(0);
+                        break;
+                    case 1:
+                        tabItem.setBadgeCount(callBack.callCount());
+                        break;
+                    case 2:
+                        tabItem.setBadgeCount(callBack.messageCount());
+                        break;
+                    case 3:
+                        tabItem.setBadgeCount(0);
+                        break;
+                    case 4:
+                        tabItem.setBadgeCount(0);
+                        break;
+                }
             }
-        }
+        });
     }
 }
