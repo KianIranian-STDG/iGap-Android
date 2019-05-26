@@ -860,8 +860,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
                 }else{
-                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
@@ -960,6 +960,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 String header = contact.getDisplay_name();
 
                 lastHeader = header;
+
+                if (G.isDarkTheme){
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                }else{
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                }
 
                 viewHolder.title.setText(contact.getDisplay_name());
                 viewHolder.subtitle.setText("+" + contact.getPhone());
