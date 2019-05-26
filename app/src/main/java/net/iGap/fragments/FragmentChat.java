@@ -2724,7 +2724,6 @@ public class FragmentChat extends BaseFragment
                         }
                     }).negativeText(R.string.no).show();
                 } else if (items.get(position).equals(getString(R.string.amCardToCardIconText))) {
-                    dialog.dismiss();
                     cardToCardClick(null);
                 }
             });

@@ -216,12 +216,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         prgWaiting.setVisibility(View.GONE);
         vgInviteFriend =  view.findViewById(R.id.menu_layout_inviteFriend);
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
-        vgRoot.setBackgroundColor(context.getResources().getColor(R.color.white));
+        vgRoot.setBackgroundColor(G.context.getResources().getColor(R.color.white));
 
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
+                .setContext(G.context)
                 .setLeftIcon(R.drawable.ic_edit_toolbar)
                 .setRightIcons(R.drawable.ic_add_toolbar)
                 .setSearchBoxShown(true)
@@ -243,7 +243,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         mTxtSelectedCount = view.findViewById(R.id.fc_selected_mode_txt_counter);
         mBtnDeleteSelected = view.findViewById(R.id.fc_selected_mode_btn_delete);
         mBtnCancelSelected = view.findViewById(R.id.fc_selected_mode_btn_cancel);
-        mTxtSelectedCount.setText(0 + " " + context.getResources().getString(R.string.item_selected));
+        mTxtSelectedCount.setText(0 + " " + G.context.getResources().getString(R.string.item_selected));
 
         Bundle bundle = this.getArguments();
         String title = null;
@@ -796,7 +796,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         ContactListAdapter(RealmResults<RealmContacts> realmResults) {
             super(realmResults, true);
-            inflater = LayoutInflater.from(context);
+            inflater = LayoutInflater.from(G.context);
             count = realmResults.size();
             usersList = realmResults;
         }
@@ -1379,7 +1379,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             //fixLayoutSize(textView , mParent);
             textView.setText(realmResults.get(position).getDisplay_name().toUpperCase().substring(0, 1));
-            textView.setTextColor(context.getResources().getColor(R.color.black));
+            textView.setTextColor(G.context.getResources().getColor(R.color.black));
         }
 
         @Override
@@ -1570,9 +1570,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }
 
             if (selectedList.size() > 0) {
-                mTxtSelectedCount.setText(selectedList.size() + " " + context.getResources().getString(R.string.item_selected));
+                mTxtSelectedCount.setText(selectedList.size() + " " + G.context.getResources().getString(R.string.item_selected));
             } else {
-                mTxtSelectedCount.setText(selectedList.size() + " " + context.getResources().getString(R.string.item_selected));
+                mTxtSelectedCount.setText(selectedList.size() + " " + G.context.getResources().getString(R.string.item_selected));
             }
             refreshAdapter(position, false);
         }
