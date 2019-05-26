@@ -17,6 +17,8 @@ public class ButtonEntity {
     @Expose
     private Object value;
 
+    private Long longValue;
+
     private String jsonObject;
 
     public String getJsonObject() {
@@ -59,4 +61,11 @@ public class ButtonEntity {
         this.value = value;
     }
 
+    public Long getLongValue() {
+        return longValue;
+    }
+
+    public void setLongValue(Long longValue) {
+        this.longValue = longValue;
+    }
 }

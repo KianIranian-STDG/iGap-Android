@@ -406,8 +406,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         LinearLayout childLayout = MakeButtons.createLayout();
                         for (int j = 0; j < buttonList.get(i).length(); j++) {
                             try {
+                                JSONObject json = new JSONObject(buttonList.get(i).get(j).toString());
                                 ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                                 }.getType());
+                                if (btnEntery.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                                    btnEntery.setLongValue(json.getLong("value"));
+                                }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
                                 childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
                                     @Override
@@ -1940,8 +1944,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 realm.close();
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                long id = new BigDecimal(((ArrayList<String>) v.getTag()).get(0)).longValue();
-                CardToCardHelper.CallCardToCard(G.currentActivity, id);
+                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
             }
 
         } catch (Exception e) {

@@ -232,7 +232,11 @@ public class MakeButtons {
         card.addView(linearLayout_529);
 
         ArrayList<String> actions = new ArrayList<>();
-        actions.add(entity.getValue().toString());
+        if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+            actions.add(entity.getLongValue().toString());
+        } else {
+            actions.add(entity.getValue().toString());
+        }
         actions.add(entity.getLable());
         actions.add(entity.getJsonObject());
         card.setTag(actions);
