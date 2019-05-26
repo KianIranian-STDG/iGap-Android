@@ -6076,6 +6076,7 @@ public class FragmentChat extends BaseFragment
             if (recyclerView != null && mAdapter != null) {
 
                 int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                 if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
                     firstVisiblePosition++;
                 }
@@ -6086,7 +6087,7 @@ public class FragmentChat extends BaseFragment
 
                 long lastScrolledMessageID = 0;
 
-                if (firstVisiblePosition + Config.STORE_MESSAGE_POSITION_LIMIT < mAdapter.getAdapterItemCount()) {
+                if (mAdapter.getAdapterItemCount() - lastVisiblePosition > Config.STORE_MESSAGE_POSITION_LIMIT) {
                     lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
                 }
 
