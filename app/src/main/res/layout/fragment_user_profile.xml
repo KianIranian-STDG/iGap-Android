@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="-20dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="@dimen/toolbar_radius"
                 app:cardElevation="1dp">
 
                 <ImageView

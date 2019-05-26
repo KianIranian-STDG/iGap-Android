@@ -186,6 +186,11 @@ public class HelperToolbar {
 
         initViews(result);
 
+        //check and set custom shape for dark mode
+        if (G.isDarkTheme)
+            result.findViewById(R.id.view_toolbar_main_constraint)
+                    .setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
+
         if (mLeftIcon != null) {
             mLeftBtn.setImageBitmap(mLeftIcon);
             mLeftBtn.setVisibility(View.VISIBLE);

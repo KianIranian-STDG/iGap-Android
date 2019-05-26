@@ -20,6 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
+    style="?backgroundColorSettingTheme"
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
@@ -101,7 +102,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-          style="?backgroundColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
@@ -118,7 +118,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_title_messageNotification"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
@@ -350,7 +350,6 @@
 
         <!--group-->
         <LinearLayout
-          style="?backgroundColorSettingTheme_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
@@ -368,7 +367,7 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_groupNotification"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
@@ -594,7 +593,6 @@
 
         <!--in app notification-->
         <LinearLayout
-          style="?backgroundColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
@@ -611,7 +609,7 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_in_app_notification"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
@@ -786,7 +784,6 @@
 
           <!--this part is Gone-->
         <LinearLayout
-          style="?backgroundColorSettingTheme_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
@@ -803,7 +800,7 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_Events"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
@@ -892,7 +889,6 @@
               android:layout_marginLeft="@dimen/dp10" />
 
         <LinearLayout
-          style="?backgroundColorSettingTheme_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{FragmentNotificationAndSoundViewModel::onClickKeepService}"
@@ -910,7 +906,7 @@
             android:paddingTop="@dimen/dp12"
             android:paddingBottom="@dimen/dp16"
             android:text="@string/st_title_other"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
@@ -1146,7 +1142,6 @@
               android:layout_marginLeft="@dimen/dp10"/>
 
         <LinearLayout
-          style="?backgroundColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
@@ -1163,7 +1158,7 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_reset"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 

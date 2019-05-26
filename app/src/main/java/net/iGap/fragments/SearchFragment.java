@@ -106,7 +106,10 @@ public class SearchFragment extends BaseFragment {
     private void initComponent(View view) {
 
         index = 500;
-        //view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        if (G.isDarkTheme)
+            view.findViewById(R.id.sfl_ll_toolbar).setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
+
 
         loadingProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.sfl_progress_loading);
         imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);

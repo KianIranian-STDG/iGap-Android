@@ -132,6 +132,14 @@ public class FragmentUserProfile extends BaseFragment implements OnUserInfoMyCli
 
     private void setListenerToViews() {
 
+        mAvatar.setOnClickListener( v -> {
+            if (userInfo != null){
+                FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userInfo.getUserId(), FragmentShowAvatars.From.setting);
+                new HelperFragment(fragment).setReplace(false).load();
+
+            }
+        });
+
         mCloudBtn.setOnClickListener( v -> {
             chatGetRoom(G.userId);
         });
