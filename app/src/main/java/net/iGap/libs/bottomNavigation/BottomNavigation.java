@@ -10,6 +10,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
@@ -192,6 +193,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                         tabItem.setBadgeCount(0);
                         break;
                 }
+                Log.i(TAG, "setOnBottomNavigationBadge: " + i);
             }
         });
     }

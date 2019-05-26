@@ -72,7 +72,6 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         }
 
         badgeView.setLayoutParams(badgeParams);
-        badgeView.setBadgeColor(getResources().getColor(R.color.red));
 
         addView(imageView);
         postDelayed(() -> addView(badgeView), 500);
@@ -129,6 +128,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     public void onClick(View v) {
         if (onTabItemSelected != null)
             onTabItemSelected.selectedTabItem(position);
+        Log.i(TAG, "onClick: ");
     }
 
     public void setSelected(boolean isActive) {
@@ -140,6 +140,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         } else {
             imageView.setImageDrawable(unSelectedIcon);
         }
+        Log.i(TAG, "setSelected: ");
     }
 
     public void setOnTabItemSelected(OnItemSelected onItemSelected) {
@@ -159,6 +160,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         } else if (count > 99) {
             badgeView.getTextView().setText("+99");
         }
+        Log.i(TAG, "setBadgeCount: " + count);
     }
 
     public void setBadgeColor(int color) {

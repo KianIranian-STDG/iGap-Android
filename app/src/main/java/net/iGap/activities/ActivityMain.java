@@ -241,6 +241,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private RealmUserInfo userInfo;
     private int lastMarginTop = 0;
     private int retryConnectToWallet = 0;
+    private BottomNavigation bottomNavigation;
 
     public static void setWeight(View view, int value) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -1306,24 +1307,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mViewPager.setPagingEnabled(false);
         boolean isRtl = HelperCalander.isPersianUnicode;
 
-        BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
+        bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
         bottomNavigation.setDefaultItem(2);
-        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
-            @Override
-            public int callCount() {
-                return 0;
-            }
-
-            @Override
-            public int messageCount() {
-                return RealmRoom.getAllUnreadCount();
-            }
-
-            @Override
-            public int badgeColor() {
-                return G.context.getResources().getColor(R.color.red);
-            }
-        });
 
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1358,17 +1343,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         bottomNavigation.setOnItemChangeListener(i -> {
             if (isRtl) {
                 if (i == 4)
-                    mViewPager.setCurrentItem(0,false);
+                    mViewPager.setCurrentItem(0, false);
                 if (i == 3)
-                    mViewPager.setCurrentItem(1 , false);
+                    mViewPager.setCurrentItem(1, false);
                 if (i == 2)
-                    mViewPager.setCurrentItem(2 , false);
+                    mViewPager.setCurrentItem(2, false);
                 if (i == 1)
-                    mViewPager.setCurrentItem(3 , false);
+                    mViewPager.setCurrentItem(3, false);
                 if (i == 0)
-                    mViewPager.setCurrentItem(4 , false);
+                    mViewPager.setCurrentItem(4, false);
             } else {
-                mViewPager.setCurrentItem(i , false);
+                mViewPager.setCurrentItem(i, false);
             }
         });
 
@@ -1401,7 +1386,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 pages.add(DiscoveryFragment.newInstance(0));
-              //  pages.add(new FragmentSetting());
+                //  pages.add(new FragmentSetting());
                 pages.add(new FragmentUserProfile());
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
@@ -1483,7 +1468,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
     }
-
 
 
     /**
@@ -2390,6 +2374,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onChange() {
 
+        int unReadCount = RealmRoom.getAllUnreadCount().intValue();
+
+        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
+            @Override
+            public int callCount() {
+                return 0;
+            }
+
+            @Override
+            public int messageCount() {
+                return unReadCount;
+            }
+
+            @Override
+            public int badgeColor() {
+                return G.context.getResources().getColor(R.color.red);
+            }
+        });
+
+        Log.i("aabolfazl", "onChange: " + RealmRoom.getAllUnreadCount().intValue());
     }
 
     @Override

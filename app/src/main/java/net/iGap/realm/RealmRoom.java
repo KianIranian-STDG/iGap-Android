@@ -14,7 +14,6 @@ import android.text.format.DateUtils;
 import android.util.Log;
 
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnClientGetRoomMessage;
@@ -40,7 +39,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
-import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
@@ -1616,26 +1614,17 @@ public class RealmRoom extends RealmObject {
     }
 
 
-    public static int getAllUnreadCount() {
+    public static Number getAllUnreadCount() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
-        int all = 0, chat = 0, group = 0, channel = 0;
-        for (RealmRoom rm : results) {
-            switch (rm.getType()) {
-                case CHANNEL:
-                    channel += rm.getUnreadCount();
-                    break;
-                case CHAT:
-                    chat += rm.getUnreadCount();
-                    break;
-                case GROUP:
-                    group += rm.getUnreadCount();
-                    break;
-            }
-            all += rm.getUnreadCount();
-        }
+         Number s = realm.where(RealmRoom.class)
+                .equalTo(RealmRoomFields.MUTE, false)
+                .equalTo(RealmRoomFields.IS_DELETED, false)
+                .greaterThan("unreadCount", 0)
+                .sum("unreadCount");
+
         realm.close();
-        return all;
+
+        return s;
     }
 
 
