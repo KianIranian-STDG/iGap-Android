@@ -51,7 +51,7 @@
                         android:paddingRight="@dimen/dp16"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/st_title_message"
-                        android:textColor="@color/black"
+                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal" />
 
@@ -306,7 +306,7 @@
                         android:paddingRight="@dimen/dp16"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/st_title_Media"
-                        android:textColor="@color/black"
+                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal" />
 
