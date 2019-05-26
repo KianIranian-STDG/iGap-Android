@@ -1381,7 +1381,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             //fixLayoutSize(textView , mParent);
             textView.setText(realmResults.get(position).getDisplay_name().toUpperCase().substring(0, 1));
-            textView.setTextColor(context.getResources().getColor(R.color.black));
+
+            if (G.isDarkTheme)
+                textView.setTextColor(context.getResources().getColor(R.color.white));
+            else
+                textView.setTextColor(context.getResources().getColor(R.color.black));
+
         }
 
         @Override

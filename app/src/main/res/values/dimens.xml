@@ -7,7 +7,7 @@
   <dimen name="margin_for_below_layouts_of_toolbar">48dp</dimen>
   <dimen name="margin_for_below_layouts_of_toolbar_with_search">52dp</dimen>
   <dimen name="margin_for_below_layouts_of_toolbar_with_room_selected_mode">88dp</dimen>
-  <dimen name="toolbar_height_call_state">80dp</dimen>
+  <dimen name="toolbar_height_call_state">60dp</dimen>
   <dimen name="toolbar_height_with_search">58dp</dimen>
   <dimen name="toolbar_height_root_with_search">78dp</dimen>
   <dimen name="toolbar_height_with_avatar">78dp</dimen>

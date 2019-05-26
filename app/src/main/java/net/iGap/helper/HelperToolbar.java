@@ -270,7 +270,7 @@ public class HelperToolbar {
 
         setSearchBoxVisibility(result, isSearchBoxShown);
 
-        setCallModeVisibility(result, isCallModeEnable);
+        //setCallModeVisibility(result, isCallModeEnable);
 
         setGroupProfileVisibility(result, isGroupProfile);
 

@@ -41,7 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="user name"
-        android:textColor="@android:color/black"
         android:textStyle="bold"
         android:fontFamily="@font/main_font"
         style="?textTitleColorSettingTheme"
@@ -57,7 +56,8 @@
         android:fontFamily="@font/main_font"
         android:layout_marginLeft="@dimen/dp16"
         android:text="09xxxxx"
-        style="?textSubColorSettingTheme"
+        style="?textTitleColorSettingTheme"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"
         app:layout_constraintTop_toBottomOf="@+id/tv_itemContactChat_userName" />

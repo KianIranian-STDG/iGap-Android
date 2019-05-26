@@ -7,10 +7,11 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/dp52"
-    android:paddingEnd="@dimen/dp20"
-    android:background="@color/white"
-    android:paddingRight="@dimen/dp52">
+    android:paddingLeft="@dimen/dp16"
+    android:paddingTop="@dimen/dp8"
+    android:paddingBottom="@dimen/dp8"
+    android:paddingEnd="@dimen/dp16"
+    android:paddingRight="@dimen/dp16">
 
 
     <View
@@ -38,8 +39,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
             android:orientation="vertical">
 
             <net.iGap.module.CustomTextViewMedium
