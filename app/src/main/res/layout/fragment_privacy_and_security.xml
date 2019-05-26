@@ -101,7 +101,6 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -233,7 +232,7 @@
             android:paddingTop="@dimen/dp12"
             android:paddingBottom="@dimen/dp16"
             android:text="@string/privacy"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
@@ -531,7 +530,7 @@
             android:paddingTop="@dimen/dp12"
             android:text="@string/Security"
             android:textSize="@dimen/dp16"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textStyle="normal" />
 
           <View
@@ -630,7 +629,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp16"
             android:text="@string/Account_Self_destruction"
-            android:textColor="@color/black"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
