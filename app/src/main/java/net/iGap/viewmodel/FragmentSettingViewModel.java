@@ -184,9 +184,6 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public LiveData<Integer> getUsernameErrorMessage() {
-        if (usernameErrorMessage.getValue()==null){
-            usernameErrorMessage.setValue(R.string.is_empty);
-        }
         return usernameErrorMessage;
     }
 
@@ -195,9 +192,6 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public LiveData<Integer> getEmailErrorMessage() {
-        if (emailErrorMessage.getValue()==null){
-            emailErrorMessage.setValue(R.string.is_empty);
-        }
         return emailErrorMessage;
     }
 
@@ -609,9 +603,9 @@ public class FragmentSettingViewModel extends ViewModel {
         if (!currentBio.equals(newBio)) {
             showSubmitButton.setValue(true);
         } else {
-           // if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get())){// && currentGender == gender.get()) {
+            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentGender == gender.get()) {
                 showSubmitButton.setValue(false);
-            //}
+            }
         }
     }
 
