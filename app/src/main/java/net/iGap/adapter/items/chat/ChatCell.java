@@ -47,7 +47,7 @@ public class ChatCell extends ConstraintLayout {
 
         View pinView = new View(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_background_pin
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_background_pin_dark
                 : R.drawable.shape_background_pin, null);
         pinView.setBackground(drawable);
         addView(pinView);
@@ -129,7 +129,7 @@ public class ChatCell extends ConstraintLayout {
         secondTextView.setEllipsize(TextUtils.TruncateAt.END);
         secondTextView.setSingleLine(true);
         setTypeFace(secondTextView);
-        secondTextView.setTextColor(Color.parseColor("#FF616161"));
+        secondTextView.setTextColor(isDarkTheme ?  getContext().getResources().getColor(R.color.gray_f2): Color.parseColor("#FF616161"));
         setTextSize(secondTextView, G.twoPaneMode ? R.dimen.dp16 : R.dimen.dp12);
         secondTextView.setEmojiSize(i_Dp(R.dimen.dp14));
         addView(secondTextView);
@@ -147,7 +147,7 @@ public class ChatCell extends ConstraintLayout {
         thirdTextView.setEllipsize(TextUtils.TruncateAt.END);
         thirdTextView.setSingleLine(true);
         setTypeFace(thirdTextView);
-        thirdTextView.setTextColor(isDarkTheme ? Color.parseColor(G.textSubTheme) : Color.parseColor("#FF616161"));
+        thirdTextView.setTextColor(isDarkTheme ? getContext().getResources().getColor(R.color.gray_f2) : Color.parseColor("#FF616161"));
         setTextSize(thirdTextView, R.dimen.dp14);
         thirdTextView.setEmojiSize(i_Dp(R.dimen.dp14));
         addView(thirdTextView);
