@@ -19,7 +19,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -31,7 +32,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v4.widget.NestedScrollView
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -45,12 +45,11 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/notificationTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/app_notif_color"
-                    android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -58,6 +57,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/notificationStatus"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{fragmentGroupProfileViewModel.notificationState}"
@@ -70,7 +70,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notificationStatus"
@@ -78,19 +78,19 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/sharedContentTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:padding="8dp"
                     android:text="@string/chi_shared_Media"
-                    android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
                     app:layout_constraintRight_toRightOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/photo"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -103,6 +103,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/photoCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -115,6 +116,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/video"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -126,6 +128,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/videoCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -138,6 +141,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/audioFiles"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -149,6 +153,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/audioFilesCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -161,6 +166,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/voiceMessage"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -172,6 +178,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/voiceMessageCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -184,6 +191,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/gif"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -195,6 +203,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/gifCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -207,6 +216,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/files"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -218,6 +228,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/filesCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -230,6 +241,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/links"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -253,6 +265,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/noMediaShared"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -267,7 +280,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/noMediaShared"
@@ -275,14 +288,13 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/addMember"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->fragmentGroupProfileViewModel.addNewMember()}"
                     android:text="@string/add_new_member"
-                    android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
                     app:layout_constraintRight_toRightOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
