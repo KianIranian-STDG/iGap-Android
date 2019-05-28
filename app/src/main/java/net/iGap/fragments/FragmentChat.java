@@ -806,7 +806,7 @@ public class FragmentChat extends BaseFragment
                     initMain();
                 }
             }
-        }, Config.FAST_START_PAGE_TIME);
+        }, Config.LOW_START_PAGE_TIME);
     }
 
     @Override
@@ -1658,6 +1658,49 @@ public class FragmentChat extends BaseFragment
             isCloudRoom = true;
         }
         //+realm.close();
+
+        toolbar = rootView.findViewById(R.id.toolbar);
+        iconMute = mHelperToolbar.getChatMute();
+        RippleView rippleBackButton = rootView.findViewById(R.id.chl_ripple_back_Button);
+
+        //+final Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+
+            iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
+            isMuteNotification = realmRoom.getMute();
+        }
+
+        //gone video , voice button call then if status was ok visible them
+        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
+
+        if (chatType == CHAT && !isChatReadOnly) {
+
+            if (G.userId != chatPeerId && !isBot) {
+
+                // gone or visible view call
+                RealmCallConfig callConfig = getRealmChat().where(RealmCallConfig.class).findFirst();
+                if (callConfig != null) {
+                    if (callConfig.isVoice_calling()) {
+                        mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+
+                    } else {
+                        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+                    }
+
+                    if (callConfig.isVideo_calling()) {
+                        mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
+
+                    } else {
+                        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
+                    }
+
+                } else {
+                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
+                }
+            }
+        }
     }
 
     private long getMessagesCount() {
@@ -2492,44 +2535,7 @@ public class FragmentChat extends BaseFragment
         iconMute = mHelperToolbar.getChatMute();
         RippleView rippleBackButton = rootView.findViewById(R.id.chl_ripple_back_Button);
 
-        //+final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom != null) {
-
-            iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
-            isMuteNotification = realmRoom.getMute();
-        }
-
-        //gone video , voice button call then if status was ok visible them
-        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
-
-        if (chatType == CHAT && !isChatReadOnly) {
-
-            if (G.userId != chatPeerId && !isBot) {
-
-                // gone or visible view call
-                RealmCallConfig callConfig = getRealmChat().where(RealmCallConfig.class).findFirst();
-                if (callConfig != null) {
-                    if (callConfig.isVoice_calling()) {
-                        mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
-
-                    } else {
-                        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-                    }
-
-                    if (callConfig.isVideo_calling()) {
-                        mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
-
-                    } else {
-                        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
-                    }
-
-                } else {
-                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
-                }
-            }
-        }
 
         ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
         txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
