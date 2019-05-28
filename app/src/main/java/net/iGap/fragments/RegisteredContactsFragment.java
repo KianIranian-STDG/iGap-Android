@@ -146,6 +146,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private MaterialDesignTextView mBtnCancelSelected ;
     private int mNumberOfSelectedCounter ;
 
+    private View view;
+    private boolean isInit = false;
+
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
     }
@@ -158,6 +161,19 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         return realm;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !isInit) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    init();
+                }
+            }, 800);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -168,7 +184,30 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Override
     public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
+        prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
+        AppUtils.setProgresColler(prgWaiting);
 
+        prgWaiting.setVisibility(View.GONE);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                init();
+            }
+        }, 100);
+    }
+
+    private void init() {
+        if (view == null) {
+            return;
+        }
+
+        if (!getUserVisibleHint()) {
+            if (!isInit) {
+            }
+            return;
+        }
+        isInit = true;
         G.onPhoneContact = this;
         Contacts.localPhoneContactId = 0;
         Contacts.getContact = true;
@@ -210,10 +249,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         prgWaitingLiadList = (ProgressBar) view.findViewById(R.id.prgWaiting_loadList);
         prgWaitingLoadContact = (ProgressBar) view.findViewById(R.id.prgWaitingLoadContact);
 
-        prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
-        AppUtils.setProgresColler(prgWaiting);
 
-        prgWaiting.setVisibility(View.GONE);
         vgInviteFriend =  view.findViewById(R.id.menu_layout_inviteFriend);
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
         vgRoot.setBackgroundColor(G.context.getResources().getColor(R.color.white));
@@ -644,7 +680,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
                     }
 
-                     setPageShowingMode(mPageMode);
+                    setPageShowingMode(mPageMode);
                     isMultiSelect = false;
                     isLongClick = false;
                     selectedList.clear();
