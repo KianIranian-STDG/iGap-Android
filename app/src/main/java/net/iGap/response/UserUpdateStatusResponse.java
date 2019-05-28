@@ -49,7 +49,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
             ((RequestUserUpdateStatus.onUserStatus) identity).onUpdateUserStatus();
         } else {
             if (builder.getUserId() == userId) {
-                HelperLog.setErrorLog("Wht the hel bagi");
+                HelperLog.setErrorLog(new Exception("Wht the hel bagi"));
                 Log.d("bagi" , "Wht the hel bagi");
             }
         }

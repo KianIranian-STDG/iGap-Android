@@ -114,13 +114,13 @@ public class ActivityEnhanced extends AppCompatActivity {
             try {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
         } else {
             try {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
         }
 

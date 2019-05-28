@@ -18,7 +18,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.text.Html;
+import android.support.v4.text.HtmlCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -237,7 +237,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             public void onReceivePageInfo(final String bodyR) {
                 G.handler.post(() -> {
                     if (bodyR != null) {
-                        callbackTxtAgreement.set(Html.fromHtml(bodyR).toString());
+                        callbackTxtAgreement.set(HtmlCompat.fromHtml(bodyR, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
                     }
                 });
                 getInfoLocation();

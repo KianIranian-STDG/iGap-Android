@@ -1351,7 +1351,7 @@ public class FragmentSettingViewModel extends ViewModel {
                 }
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog("fragment setting   updateRoomListIfNeeded    " + e.toString());
+            HelperLog.setErrorLog(e);
         }
     }
 

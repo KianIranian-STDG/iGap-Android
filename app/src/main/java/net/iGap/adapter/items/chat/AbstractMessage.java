@@ -49,12 +49,14 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
@@ -1902,6 +1904,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
                 CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
+            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
+                try {
+                    JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
+                } catch (JSONException e) {
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                }
+            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.TRAFFIC_BILL_MENU.getNumber()) {
+                try {
+                    JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
+                } catch (JSONException e) {
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+                }
             }
 
         } catch (Exception e) {

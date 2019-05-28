@@ -974,7 +974,7 @@ public class FragmentChat extends BaseFragment
                             ((ActivityMain) G.fragmentActivity).lockNavigation();
                         }
                     } catch (Exception e) {
-                        HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
+                        HelperLog.setErrorLog(e);
                     }
                 }
 
@@ -2425,7 +2425,7 @@ public class FragmentChat extends BaseFragment
                     FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
                     new HelperFragment(fragment).setReplace(false).load();
                 } catch (Exception e) {
-                    HelperLog.setErrorLog("Activity Chat   complete   " + e.toString());
+                    HelperLog.setErrorLog(e);
                 }
             }
         };
@@ -4469,7 +4469,7 @@ public class FragmentChat extends BaseFragment
                     mAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog("Activity chat  onPlayMusic    " + e.toString());
+                HelperLog.setErrorLog(e);
             }
         }
     }
@@ -5291,12 +5291,12 @@ public class FragmentChat extends BaseFragment
         }
 
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom == null || !realmRoom.isValid()) {
-            return;
+        if (realmRoom == null || !realmRoom.isValid()){
+            avatarHandler.getAvatar(new ParamWithAvatarType(imvUserPicture, chatPeerId).avatarSize(R.dimen.dp60).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        } else {
+            Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), realmRoom.getInitials(), realmRoom.getColor());
+            avatarHandler.getAvatar(new ParamWithInitBitmap(imvUserPicture, idForGetAvatar).initBitmap(init).showMain());
         }
-
-        Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), realmRoom.getInitials(), realmRoom.getColor());
-        avatarHandler.getAvatar(new ParamWithInitBitmap(imvUserPicture, idForGetAvatar).initBitmap(init).showMain());
     }
 
     private void resetAndGetFromEnd() {
@@ -5783,6 +5783,7 @@ public class FragmentChat extends BaseFragment
             if (recyclerView != null && mAdapter != null) {
 
                 int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                 if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
                     firstVisiblePosition++;
                 }
@@ -5793,7 +5794,7 @@ public class FragmentChat extends BaseFragment
 
                 long lastScrolledMessageID = 0;
 
-                if (firstVisiblePosition + Config.STORE_MESSAGE_POSITION_LIMIT < mAdapter.getAdapterItemCount()) {
+                if (mAdapter.getAdapterItemCount() - lastVisiblePosition > Config.STORE_MESSAGE_POSITION_LIMIT) {
                     lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
                 }
 

@@ -131,7 +131,7 @@ public class ActivityRegisteration extends ActivityEnhanced {
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                                 .commit();
                     } catch (Exception e) {
-                        HelperLog.setErrorLog("activity registeration     loadFragmentIntroduce   " + e.toString());
+                        HelperLog.setErrorLog(e);
                     }
                 }
             }

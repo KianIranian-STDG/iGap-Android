@@ -73,7 +73,7 @@ public abstract class MessageHandler {
 
         if (!G.ignoreErrorCodes.contains(majorCode)) {
             Log.i("#peymanERR",majorCode+"");
-            HelperLog.setErrorLog("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId));
+            HelperLog.setErrorLog(new Exception("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId)));
         }
 
 

@@ -12,7 +12,6 @@ package net.iGap.response;
 
 import net.iGap.proto.ProtoChatUpdateDraft;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomDraft;
 
 public class ChatUpdateDraftResponse extends MessageHandler {
 
@@ -31,18 +30,8 @@ public class ChatUpdateDraftResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoChatUpdateDraft.ChatUpdateDraftResponse.Builder updateDraft = (ProtoChatUpdateDraft.ChatUpdateDraftResponse.Builder) message;
-
-        /**
-         * if another account get UpdateDraftResponse set draft to RealmRoom
-         */
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                if (updateDraft.getResponse().getId().isEmpty()) {
-                    RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo(), updateDraft.getDraft().getDraftTime());
-//                }
-            }
-        }).start();
+        // WHEN updateDraft.getResponse().getId().isEmpty() IS TRUE THEN WE DON MAKE REQUEST
+        RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo(), updateDraft.getDraft().getDraftTime());
     }
 
     @Override
