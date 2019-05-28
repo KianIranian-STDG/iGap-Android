@@ -134,10 +134,7 @@
       android:id="@+id/fcm_layout_toolbar"
       android:orientation="horizontal"
       android:layout_width="match_parent"
-      android:layout_height="@dimen/toolbar_height_root_with_search">
-
-
-  </LinearLayout>
+      android:layout_height="@dimen/toolbar_height_root_with_search"/>
 
   <LinearLayout
       android:orientation="vertical"
@@ -157,7 +154,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:text="@string/add_new_member"
-        android:textColor="@color/black"
+        style="?textTitleColorSettingTheme"
         android:textSize="18sp" />
 
     <View
@@ -170,7 +167,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/gray10" />
+        style="?lineColorSettingTheme" />
 
 
   </LinearLayout>
