@@ -44,9 +44,8 @@ import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
@@ -103,7 +102,6 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import yogesh.firzen.mukkiasevaigal.M;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
@@ -243,6 +241,17 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         mBtnClearCacheSelected.setOnClickListener( v-> {
             if (mSelectedRoomList.size() > 0){
                 confirmActionForClearHistoryOfSelected();
+            }
+        });
+
+        mBtnMakeAsReadSelected.setOnClickListener(v -> {
+
+            if (mSelectedRoomList.size() > 0){
+                for (int i = 0 ; i < mSelectedRoomList.size() ; i++){
+                    markAsRead(mSelectedRoomList.get(i).getType() , mSelectedRoomList.get(i).getId());
+                }
+
+                onLeftIconClickListener(v);
             }
         });
     }
@@ -1768,6 +1777,44 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
             }
 
         }
+    }
+
+    private void markAsRead(ProtoGlobal.Room.Type chatType , long roomId ){
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                        @Override
+                        public void sendSeenStatus(RealmRoomMessage message) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        }
+
+                        @Override
+                        public void resendMessage(RealmRoomMessage message) {
+
+                        }
+
+                        @Override
+                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
+
+                        }
+                    });
+                }
+
+                RealmRoom.setCount(roomId, 0);
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppUtils.updateBadgeOnly(realm, roomId);
+                        realm.close();
+                    }
+                }, 250);
+            }
+        }, 5);
     }
 
 }
