@@ -13,7 +13,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -98,13 +99,14 @@
                     android:id="@+id/line"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
                     app:layout_constraintLeft_toLeftOf="@id/groupNameEditText"
                     app:layout_constraintRight_toRightOf="@id/emojiButton" />
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/groupDescriptionEditText"
+                    style="?hintColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -119,7 +121,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
@@ -127,7 +129,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/chatHistoryTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -140,6 +142,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/chatHistoryStatus"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onChatHistoryStatusClick()}"
@@ -154,7 +157,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
@@ -162,7 +165,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/permission"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -175,7 +178,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/permissionItems"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onPermissionClick()}"
@@ -189,7 +192,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/administrators"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -202,7 +205,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/administratorsCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
@@ -217,7 +220,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderator"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -230,7 +233,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onModeratorClick()}"
@@ -244,7 +247,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/members"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -257,7 +260,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/membersCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onMemberClick()}"
@@ -274,7 +277,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/members"
@@ -282,7 +285,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/leaveGroup"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"

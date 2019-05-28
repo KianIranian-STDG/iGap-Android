@@ -16,7 +16,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -28,7 +29,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v4.widget.NestedScrollView
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintRight_toRightOf="parent"
@@ -44,7 +44,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelInfo"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -66,6 +66,7 @@
                     app:srcCompat="@drawable/ic_verify" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -84,6 +85,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelLink"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onClickChannelLink()}"
@@ -96,6 +98,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelLinkStatus"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
@@ -110,7 +113,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/channelLinkStatus"
@@ -118,7 +121,7 @@
 
                 <Switch
                     android:id="@+id/enableNotification"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -134,14 +137,14 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
                     app:layout_constraintTop_toBottomOf="@id/enableNotification" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/members"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -152,7 +155,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/subscribers"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -163,6 +166,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/subscribersCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -175,7 +179,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/administrators"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -186,7 +190,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/administratorsCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -199,7 +203,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderator"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -210,7 +214,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"

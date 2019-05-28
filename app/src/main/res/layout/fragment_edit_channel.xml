@@ -13,7 +13,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -88,13 +89,14 @@
                     android:id="@+id/line"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintBottom_toBottomOf="@id/channelAvatar"
                     app:layout_constraintLeft_toLeftOf="@id/channelNameEditText"
                     app:layout_constraintRight_toRightOf="@id/emojiButton" />
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/groupDescriptionEditText"
+                    style="?hintColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -111,7 +113,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
@@ -119,7 +121,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelTypeTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -132,6 +134,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelType"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onChannelTypeClick()}"
@@ -143,6 +146,7 @@
 
                 <Switch
                     android:id="@+id/signedMessage"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -157,6 +161,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/signedMessageDescription"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -169,6 +174,7 @@
 
                 <Switch
                     android:id="@+id/rateMessage"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -183,6 +189,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/rateMessageDescription"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -198,7 +205,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rateMessageDescription"
@@ -206,7 +213,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/administrators"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -219,7 +226,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/administratorsCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
@@ -234,7 +241,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderator"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -247,7 +254,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onModeratorClick()}"
@@ -261,7 +268,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/members"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -274,7 +281,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/membersCount"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onMemberClick()}"
@@ -288,7 +295,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/recentAction"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -304,7 +311,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recentAction"
@@ -312,6 +319,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/deleteChannel"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
