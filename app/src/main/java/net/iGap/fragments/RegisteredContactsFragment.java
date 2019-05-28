@@ -855,11 +855,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
 
                 if (G.isDarkTheme){
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
-                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.white));
                 }else{
-                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.black));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
@@ -960,11 +960,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 lastHeader = header;
 
                 if (G.isDarkTheme){
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
-                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.white));
                 }else{
-                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.black));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
@@ -1398,9 +1398,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             textView.setText(realmResults.get(position).getDisplay_name().toUpperCase().substring(0, 1));
 
             if (G.isDarkTheme)
-                textView.setTextColor(context.getResources().getColor(R.color.white));
+                textView.setTextColor(G.context.getResources().getColor(R.color.white));
             else
-                textView.setTextColor(context.getResources().getColor(R.color.black));
+                textView.setTextColor(G.context.getResources().getColor(R.color.black));
 
         }
 
