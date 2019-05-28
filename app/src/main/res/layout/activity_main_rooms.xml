@@ -29,79 +29,92 @@
             android:layout_alignParentTop="true"
             android:orientation="horizontal"/>
 
-        <LinearLayout
-            android:id="@+id/amr_layout_selected_actions"
+        <HorizontalScrollView
+            android:layout_below="@id/amr_layout_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            style="?backgroundColorSettingTheme"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:layout_below="@id/amr_layout_toolbar">
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
-            <TextView
-                android:fontFamily="@font/main_font"
-                android:id="@+id/amr_btn_read_all_selected"
+            <LinearLayout
+                android:id="@+id/amr_layout_selected_actions"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/black"
-                android:background="@color/gray_300"
-                android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                android:paddingRight="@dimen/main_rooms_selected_action_padding"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:text="@string/read_all"/>
+                android:layout_height="40dp"
+                style="?backgroundColorSettingTheme"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:fontFamily="@font/main_font"
+                    android:id="@+id/amr_btn_read_all_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:background="@color/gray_300"
+                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
+                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/read_all"/>
 
 
-            <TextView
-                android:fontFamily="@font/main_font"
-                android:id="@+id/amr_btn_make_as_read_selected"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/black"
-                android:background="@color/gray_300"
-                android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                android:paddingRight="@dimen/main_rooms_selected_action_padding"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:gravity="center"
-                android:text="@string/make_as_read"/>
+                <TextView
+                    android:fontFamily="@font/main_font"
+                    android:id="@+id/amr_btn_make_as_read_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:background="@color/gray_300"
+                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
+                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:singleLine="true"
+                    android:gravity="center"
+                    android:text="@string/make_as_read"/>
 
 
-            <TextView
-                android:fontFamily="@font/main_font"
-                android:id="@+id/amr_btn_delete_selected"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/black"
-                android:background="@color/gray_300"
-                android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                android:paddingRight="@dimen/main_rooms_selected_action_padding"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:gravity="center"
-                android:text="@string/delete"/>
+                <TextView
+                    android:fontFamily="@font/main_font"
+                    android:id="@+id/amr_btn_delete_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:background="@color/gray_300"
+                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
+                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:singleLine="true"
+                    android:gravity="center"
+                    android:text="@string/delete"/>
 
 
-            <TextView
-                android:fontFamily="@font/main_font"
-                android:id="@+id/amr_btn_clear_cache_selected"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/black"
-                android:background="@color/gray_300"
-                android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                android:paddingRight="@dimen/main_rooms_selected_action_padding"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:gravity="center"
-                android:text="@string/clear_history"/>
+                <TextView
+                    android:fontFamily="@font/main_font"
+                    android:id="@+id/amr_btn_clear_cache_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:background="@color/gray_300"
+                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
+                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:layout_marginLeft="5dp"
+                    android:singleLine="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center"
+                    android:text="@string/clear_history"/>
 
 
 
-        </LinearLayout>
+            </LinearLayout>
+
+        </HorizontalScrollView>
 
     </RelativeLayout>
 
