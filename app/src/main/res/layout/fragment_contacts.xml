@@ -442,7 +442,6 @@
             android:id="@+id/frg_contact_ll_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height_root_with_search"
-            style="?backgroundColorSettingTheme"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
