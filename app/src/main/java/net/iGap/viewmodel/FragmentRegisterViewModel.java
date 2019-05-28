@@ -24,7 +24,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
-import android.text.Html;
+import android.support.v4.text.HtmlCompat;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -691,7 +691,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 regex = argument.getString("REGEX");
                 String body = argument.getString("TERMS_BODY");
                 if (body != null) {
-                    callbackTxtAgreement.set(Html.fromHtml(body).toString());
+                    callbackTxtAgreement.set(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
                 }
             }
         }
