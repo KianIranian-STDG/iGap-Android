@@ -58,7 +58,7 @@ public class ChatCell extends ConstraintLayout {
         CheckBox cellCheckbox = new CheckBox(G.context);
         cellCheckbox.setId(R.id.iv_itemContactChat_checkBox);
         cellCheckbox.setButtonDrawable(R.drawable.check_box_background);
-        cellCheckbox.setPadding(16 , 0 , 0 , 0 );
+        cellCheckbox.setPadding(10 , 0 , 0 , 0 );
         addView(cellCheckbox);
 
         /**

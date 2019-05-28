@@ -5,6 +5,7 @@
     android:id="@+id/ac_ll_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="?backgroundColorSettingTheme"
     android:clickable="true"
     android:layoutDirection="ltr"
     tools:ignore="MissingPrefix">
@@ -17,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
+            style="?backgroundColorSettingTheme"
             android:orientation="vertical">
 
             <android.support.constraint.ConstraintLayout
@@ -35,7 +37,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:text=""
-                    android:textColor="@color/black"
+                    style="?textTitleColorSettingTheme"
                     android:gravity="bottom"
                     android:paddingBottom="5dp"
                     android:layout_marginLeft="10dp"
@@ -49,6 +51,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
+                    style="?textTitleColorSettingTheme"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
                     android:textColor="@color/red"
                     android:textSize="@dimen/multi_select_icon_size"
@@ -63,7 +66,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    android:textColor="@color/gray_4c"
+                    style="?textTitleColorSettingTheme"
                     android:textSize="@dimen/multi_select_icon_size"
                     android:gravity="center"
                     android:text="@string/md_right_arrow_forward"/>
@@ -77,7 +80,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    android:textColor="@color/gray_4c"
+                    style="?textTitleColorSettingTheme"
                     android:textSize="@dimen/multi_select_icon_size"
                     android:gravity="center"
                     android:text="@string/md_copy"/>
@@ -91,7 +94,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    android:textColor="@color/gray_4c"
+                    style="?textTitleColorSettingTheme"
                     android:textSize="@dimen/multi_select_icon_size"
                     android:gravity="center"
                     android:text="@string/md_back_arrow_reply"/>

@@ -7293,6 +7293,9 @@ public class FragmentChat extends BaseFragment
     private void initAppbarSelected() {
         ll_AppBarSelected = rootView.findViewById(R.id.ac_layout_selected_item);
 
+        if (G.isDarkTheme)
+            ll_AppBarSelected.setBackground(context.getResources().getDrawable(R.drawable.shape_multi_select_bg_dark));
+
         mTxtSelectedCounter = rootView.findViewById(R.id.ac_layout_selected_txt_counter);
         mBtnCopySelected = rootView.findViewById(R.id.ac_layout_selected_btn_copy);
         mBtnForwardSelected = rootView.findViewById(R.id.ac_layout_selected_btn_forward);

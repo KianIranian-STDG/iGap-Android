@@ -1179,7 +1179,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
             if (isChatMultiSelectEnable){
                 holder.chSelected.setVisibility(View.VISIBLE);
 
-                if (isItemAvailableOnSelectedList(mInfo)){
+                if (mSelectedRoomList.contains(holder.mInfo)){
                     holder.chSelected.setChecked(true);
                 }else {
                     holder.chSelected.setChecked(false);
