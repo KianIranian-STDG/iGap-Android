@@ -1826,4 +1826,5 @@
     <string name="cardToCardBtnText">کارت به کارت</string>
     <string name="crad_to_card_dest_name">نام دارنده حساب</string>
     <string name="groups_in_common">گروه های مشترک</string>
+    <string name="register_with_barcode_scan">ورود با اسکن بارکد</string>
 </resources>
