@@ -27,7 +27,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +102,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,8 +121,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public StructMessageInfo mMessage;
     public boolean directionalBased;
     public ProtoGlobal.Room.Type type;
-    private int minWith = 0;
     SpannableString myText;
+    private int minWith = 0;
     private RealmAttachment realmAttachment;
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
@@ -175,6 +173,51 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
             }
         };
+    }
+
+    public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
+        ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
+        int start = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '*' && (i + 1) < text.length() && text.charAt(i + 1) == '*') {
+                if (start == -1) {
+                    start = i;
+                } else {
+                    Tuple<Integer, Integer> t = new Tuple<>(start, i);
+                    result.add(t);
+                    start = -1;
+                }
+                i += 1;
+            }
+        }
+
+        return result;
+    }
+
+    public static String removeBoldMark(String text, ArrayList<Tuple<Integer, Integer>> boldPlaces) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (boldPlaces.size() == 0)
+            stringBuilder.append(text);
+        else {
+            for (int i = 0; i < boldPlaces.size(); i++) {
+                Tuple<Integer, Integer> point = boldPlaces.get(i);
+                Tuple<Integer, Integer> previousPoint = null;
+
+                if (i != 0)
+                    previousPoint = boldPlaces.get(i - 1);
+
+                if (previousPoint == null)
+                    stringBuilder.append(text.substring(0, point.x));
+                else
+                    stringBuilder.append(text.substring(previousPoint.y + 2, point.x));
+
+                stringBuilder.append(text.substring(point.x + 2, point.y));
+
+                if (i == boldPlaces.size() - 1)
+                    stringBuilder.append(text.substring(point.y + 2));
+            }
+        }
+        return stringBuilder.toString();
     }
 
     protected ProtoGlobal.Room.Type getRoomType() {
@@ -231,53 +274,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return this;
     }
 
-    public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
-        ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
-        int start = -1;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '*' && (i + 1) < text.length() && text.charAt(i+1) == '*') {
-                if (start == -1) {
-                    start = i;
-                } else {
-                    Tuple<Integer, Integer> t = new Tuple<>(start, i);
-                    result.add(t);
-                    start = -1;
-                }
-                i += 1;
-            }
-        }
-
-        return result;
-    }
-
-    public static String removeBoldMark(String text, ArrayList<Tuple<Integer, Integer>> boldPlaces) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (boldPlaces.size() == 0)
-            stringBuilder.append(text);
-        else {
-            for (int i = 0 ; i < boldPlaces.size(); i++) {
-                Tuple<Integer, Integer> point = boldPlaces.get(i);
-                Tuple<Integer, Integer> previousPoint = null;
-
-                if (i != 0)
-                    previousPoint = boldPlaces.get(i - 1);
-
-                if (previousPoint == null)
-                    stringBuilder.append(text.substring(0, point.x));
-                else
-                    stringBuilder.append(text.substring(previousPoint.y + 2, point.x));
-
-                stringBuilder.append(text.substring(point.x + 2, point.y));
-
-                if (i == boldPlaces.size() - 1)
-                    stringBuilder.append(text.substring(point.y + 2));
-            }
-        }
-        return stringBuilder.toString();
-    }
-
     private void updateBoldPlaces(ArrayList<Tuple<Integer, Integer>> boldPlaces) {
-        for (int i = 0 ; i < boldPlaces.size(); i++) {
+        for (int i = 0; i < boldPlaces.size(); i++) {
             Tuple<Integer, Integer> point = boldPlaces.get(i);
             point.x = point.x - i * 4;
             point.y = point.y - i * 4 - 2;
@@ -776,11 +774,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            setTextColor(mHolder.getTicTv(), R.color.white);
-            ((View) (mHolder.getChatBloke())).setBackgroundResource(R.drawable.rectangel_white_round_dark);
+            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.white));
+            ((mHolder.getChatBloke())).setBackgroundResource(R.drawable.rectangel_white_round_dark);
         } else {
-            setTextColor(mHolder.getTicTv(), R.color.colorOldBlack);
-            ((View) (mHolder.getChatBloke())).setBackgroundResource(R.drawable.rectangel_white_round);
+            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.colorOldBlack));
+            ((mHolder.getChatBloke())).setBackgroundResource(R.drawable.rectangel_white_round);
         }
 
         /**
@@ -831,19 +829,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
-            mHolder.getTicTv().setColorFilter(Color.parseColor(G.SeenTickColor));
+            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.read_status));
 
         } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
             // iconHearing.setVisibility(View.VISIBLE);
             if (G.isDarkTheme) {
-                setTextColor(mHolder.getTicTv(), R.color.iGapColor);
+                mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.iGapColor));
             } else {
-                setTextColor(mHolder.getTicTv(), R.color.backgroundColorCall2);
+                mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.backgroundColorCall2));
             }
-
             mHolder.getTicTv().setVisibility(View.VISIBLE);
         } else {
-            mHolder.getTicTv().setColorFilter(Color.parseColor(G.txtIconCheck));
+            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.unread_status));
         }
 
 
@@ -1106,7 +1103,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @return true if item has a progress
      */
     private boolean hasProgress(VH holder) {
-        if (holder instanceof IProgress){
+        if (holder instanceof IProgress) {
             return true;
         } else {
             return false;
@@ -1810,7 +1807,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
                             G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
                             messageClickListener.sendFromBot(realmRoomMessage);
                         }
@@ -1838,7 +1835,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                     G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
                                     messageClickListener.sendFromBot(realmRoomMessage);
                                 }
@@ -1856,8 +1853,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            if (G.locationListener != null){
-                                isLocationFromBot=true;
+                            if (G.locationListener != null) {
+                                isLocationFromBot = true;
                                 G.locationListener.requestLocation();
                             }
 

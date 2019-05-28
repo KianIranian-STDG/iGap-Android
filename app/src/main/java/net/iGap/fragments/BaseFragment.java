@@ -22,8 +22,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
-import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 
@@ -151,6 +151,10 @@ public class BaseFragment extends SwipeBackFragment {
 
         if (G.typeface_neuropolitical == null) {
             G.typeface_neuropolitical = Typeface.createFromAsset(G.context.getAssets(), "fonts/neuropolitical.ttf");
+        }
+
+        if (G.typeface_iGap == null) {
+            G.typeface_iGap = Typeface.createFromAsset(G.context.getAssets(), "fonts/igap.ttf");
         }
     }
 

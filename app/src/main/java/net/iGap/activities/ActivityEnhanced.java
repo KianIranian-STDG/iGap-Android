@@ -21,14 +21,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.WindowManager;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -42,8 +40,6 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.proto.ProtoUserUpdateStatus;
-import net.iGap.request.RequestUserUpdateStatus;
 
 import java.io.File;
 import java.io.IOException;
@@ -323,6 +319,10 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         if (G.typeface_neuropolitical == null) {
             G.typeface_neuropolitical = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        }
+
+        if (G.typeface_iGap == null) {
+            G.typeface_iGap = Typeface.createFromAsset(getAssets(), "fonts/igap.ttf");
         }
     }
 

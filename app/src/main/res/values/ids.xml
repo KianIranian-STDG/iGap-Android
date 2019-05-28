@@ -106,6 +106,7 @@
     <item name="iv_iv_chatCell_pin" type="id" />
     <item name="cv_chatCell_badge" type="id" />
     <item name="v_chatCell_bottomView" type="id" />
+    <item name="v_chatCell_pin" type="id" />
 
     <item name="bottomIcon" type="id" />
 
@@ -128,6 +129,7 @@
 
     <!--voice item-->
     <item name="wv_voiceItem_progress" type="id" />
+    <item name="v_voiceItem_listen" type="id" />
 
 
 </resources>

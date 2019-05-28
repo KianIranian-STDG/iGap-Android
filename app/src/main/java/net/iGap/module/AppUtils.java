@@ -12,21 +12,17 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -37,7 +33,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
@@ -314,45 +309,42 @@ public final class AppUtils {
     /**
      * update message status automatically
      *
-     * @param view TextView message status
+     * @param iconTextView TextView message status
      */
-    public static void rightMessageStatus(ImageView view, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
+    public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
 
-        if (view == null) {
+        if (iconTextView == null) {
             return;
         }
         if (!isSenderMe) {
-            view.setVisibility(View.GONE);
+            iconTextView.setVisibility(View.GONE);
             return;
         } else {
-            view.setVisibility(View.VISIBLE);
+            iconTextView.setVisibility(View.VISIBLE);
         }
         switch (status) {
             case DELIVERED:
-
-                setImageDrawable(view, R.drawable.ic_double_check);
-//                view.setColorFilter(Color.BLACK);
-                view.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+                iconTextView.setText("ß");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
                 break;
             case FAILED:
-                setImageDrawable(view, R.drawable.ic_error_igap);
-                view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
+                iconTextView.setText("ß");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.red));
                 break;
             case SEEN:
-                setImageDrawable(view, R.drawable.ic_double_check);
-                view.setColorFilter(Color.parseColor(G.SeenTickColor));
+                iconTextView.setText("v");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.read_status));
                 break;
             case SENDING:
-//                view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
-                view.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+                iconTextView.setText("T");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
                 break;
             case SENT:
-                setImageDrawable(view, R.drawable.ic_check);
-//                view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
-                view.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+                iconTextView.setText("ß");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
                 break;
             default:
-                view.setVisibility(View.GONE);
+                iconTextView.setVisibility(View.GONE);
                 break;
         }
     }
@@ -360,56 +352,44 @@ public final class AppUtils {
     /**
      * update message status automatically
      *
-     * @param view TextView message status
+     * @param iconTextView TextView message status
      */
-    public static void rightMessageStatus(ImageView view, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
-        if (view == null) {
+    public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status
+            , ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
+        if (iconTextView == null) {
             return;
         }
         if (!isSenderMe) {
-            view.setVisibility(View.GONE);
+            iconTextView.setVisibility(View.GONE);
             return;
         } else {
-            view.setVisibility(View.VISIBLE);
+            iconTextView.setVisibility(View.VISIBLE);
         }
+
         switch (status) {
             case DELIVERED:
-                setImageDrawable(view, R.drawable.ic_double_check);
-                //DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                iconTextView.setText("ß");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
                 break;
             case FAILED:
-                setImageDrawable(view, R.drawable.ic_error_igap);
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
-                } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
-                }
+                iconTextView.setText("ß");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.red));
                 break;
             case LISTENED:
             case SEEN:
-                setImageDrawable(view, R.drawable.ic_double_check);
-                final Drawable originalDrawable = view.getDrawable();
-                final Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
-                DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
+                iconTextView.setText("v");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.read_status));
                 break;
             case SENDING:
-                setImageDrawable(view, R.drawable.ic_clock);
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
-                } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
-                }
+                iconTextView.setText("T");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
                 break;
             case SENT:
-                setImageDrawable(view, R.drawable.ic_check);
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
-                } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
-                }
+                iconTextView.setText("ß");
+                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
                 break;
             default:
-                view.setVisibility(View.GONE);
+                iconTextView.setVisibility(View.GONE);
                 break;
         }
     }

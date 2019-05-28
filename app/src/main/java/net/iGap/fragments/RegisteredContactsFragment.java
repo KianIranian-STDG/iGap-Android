@@ -30,7 +30,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -57,7 +56,6 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
@@ -104,8 +102,15 @@ import static android.content.Context.MODE_PRIVATE;
 public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnUserContactDelete, OnPhoneContact {
 
     private static boolean getPermission = true;
+    public onClickRecyclerView onCliclRecyclerView;
+    public onLongClickRecyclerView onLongClickRecyclerView;
+    public boolean isLongClick = false;
+    public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
+    protected ArrayMap<Long, Boolean> selectedList = new ArrayMap<>();
     StickyRecyclerHeadersDecoration decoration;
     RealmResults<RealmContacts> results;
+    boolean isMultiSelect = false;
+    AdapterListContact adapterListContact;
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgInviteFriend, vgRoot;
     private RecyclerView realmRecyclerView, rcvListContact;
@@ -121,30 +126,22 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     //private ContactListAdapterA mAdapter;
     private NestedScrollView nestedScrollView;
     private ActionMode mActionMode;
-    protected ArrayMap<Long, Boolean> selectedList = new ArrayMap<>();
-    boolean isMultiSelect = false;
     private ContactListAdapter contactListAdapter;
     private AppBarLayout toolbar;
     private long index = 2500;
-    public onClickRecyclerView onCliclRecyclerView;
-    public onLongClickRecyclerView onLongClickRecyclerView;
-    AdapterListContact adapterListContact;
-    public boolean isLongClick = false;
-
-    public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
-
-
     private HelperToolbar mHelperToolbar;
-    private boolean isToolbarInEditMode = false ;
-    private int mPageMode = 0 ; // 0 = new chat , 1 = contact , 2 = call , 3 = add new
-    private LinearLayout btnAddNewChannel , btnAddNewGroup , btnAddSecretChat ;
-    private LinearLayout btnAddNewGroupCall, btnAddNewContact , btnDialNumber ;
+    private boolean isToolbarInEditMode = false;
+    private int mPageMode = 0; // 0 = new chat , 1 = contact , 2 = call , 3 = add new
+    private LinearLayout btnAddNewChannel, btnAddNewGroup, btnAddSecretChat;
+    private LinearLayout btnAddNewGroupCall, btnAddNewContact, btnDialNumber;
 
-    private ViewGroup mLayoutMultiSelected ;
-    private TextView mTxtSelectedCount ;
-    private ImageView mBtnDeleteSelected ;
-    private MaterialDesignTextView mBtnCancelSelected ;
-    private int mNumberOfSelectedCounter ;
+    private ViewGroup mLayoutMultiSelected;
+    private TextView mTxtSelectedCount;
+    private ImageView mBtnDeleteSelected;
+    private MaterialDesignTextView mBtnCancelSelected;
+    private int mNumberOfSelectedCounter;
+
+    private Context context = G.context;
 
     private View view;
     private boolean isInit = false;
@@ -156,6 +153,59 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         registeredContactsFragment.setArguments(bundle);
         return registeredContactsFragment;
     }
+
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.menu_multi_select, menu);
+            toolbar.setVisibility(View.GONE);
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
+                                new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
+                            }
+
+                            mActionMode.finish();
+                            refreshAdapter(0, true);
+
+                        }
+                    }).negativeText(R.string.B_cancel).show();
+
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+            isMultiSelect = false;
+            isLongClick = false;
+            selectedList.clear();
+            refreshAdapter(0, true);
+            toolbar.setVisibility(View.VISIBLE);
+        }
+    };
 
     public static RegisteredContactsFragment newInstance() {
         return newInstance(true);
@@ -304,13 +354,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
             if (title.equals("New Chat")) {
                 title = G.context.getString(R.string.New_Chat);
-                mPageMode = 0 ;
+                mPageMode = 0;
             } else if (title.equals("Contacts")) {
                 title = G.fragmentActivity.getString(R.string.contacts);
-                mPageMode = 1 ;
+                mPageMode = 1;
             } else if (title.equals("call")) {
                 title = G.context.getString(R.string.call_with);
-                mPageMode = 2 ;
+                mPageMode = 2;
 
                 //visible add buttons
                 btnAddNewGroupCall.setVisibility(View.VISIBLE);
@@ -322,7 +372,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
             } else if (title.equals("ADD")) {
                 title = G.context.getString(R.string.New_Chat);
-                mPageMode = 3 ;
+                mPageMode = 3;
 
                 //visible add buttons
                 btnAddNewChannel.setVisibility(View.VISIBLE);
@@ -331,7 +381,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 vgInviteFriend.setVisibility(View.GONE);
             }
         }
-
 
 
         toolbar = view.findViewById(R.id.fc_layot_title);
@@ -535,7 +584,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     isMultiSelect = true;
                     refreshAdapter(0, true);
 
-                    if (!mLayoutMultiSelected.isShown()){
+                    if (!mLayoutMultiSelected.isShown()) {
                         setPageShowingMode(4);
 
                     }
@@ -631,7 +680,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }
         });
 
-        btnAddNewChannel.setOnClickListener( v -> {
+        btnAddNewChannel.setOnClickListener(v -> {
 
             FragmentNewGroup fragment = FragmentNewGroup.newInstance();
             Bundle bundle_ = new Bundle();
@@ -641,7 +690,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
-        btnAddNewGroup.setOnClickListener( v -> {
+        btnAddNewGroup.setOnClickListener(v -> {
 
         /*    FragmentNewGroup fragment = FragmentNewGroup.newInstance();
             Bundle bundle_ = new Bundle();
@@ -673,17 +722,19 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
-        btnAddSecretChat.setOnClickListener( v -> {
+        btnAddSecretChat.setOnClickListener(v -> {
 
         });
 
-        btnDialNumber.setOnClickListener(v -> {});
+        btnDialNumber.setOnClickListener(v -> {
+        });
 
-        btnAddNewGroupCall.setOnClickListener(v -> {});
+        btnAddNewGroupCall.setOnClickListener(v -> {
+        });
 
         btnAddNewContact.setOnClickListener(this::onRightIconClickListener);
 
-        mBtnDeleteSelected.setOnClickListener( v -> {
+        mBtnDeleteSelected.setOnClickListener(v -> {
             new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -714,9 +765,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         });
     }
 
-    private void setPageShowingMode(int mode){
+    private void setPageShowingMode(int mode) {
 
-        if ( mode == 0 || mode == 1) { //contact mode
+        if (mode == 0 || mode == 1) { //contact mode
 
             btnAddNewGroupCall.setVisibility(View.GONE);
             btnAddNewContact.setVisibility(View.GONE);
@@ -727,7 +778,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             btnAddSecretChat.setVisibility(View.GONE);
             mLayoutMultiSelected.setVisibility(View.GONE);
 
-        }else if (mode == 2) { // call mode
+        } else if (mode == 2) { // call mode
 
             btnAddNewGroupCall.setVisibility(View.VISIBLE);
             btnAddNewContact.setVisibility(View.VISIBLE);
@@ -749,7 +800,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             btnDialNumber.setVisibility(View.GONE);
             mLayoutMultiSelected.setVisibility(View.GONE);
 
-        }else if (mode == 4) {//edit mode
+        } else if (mode == 4) {//edit mode
 
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
@@ -825,432 +876,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Override
     public void onPhoneContact(final ArrayList<StructListOfContact> contacts, final boolean isEnd) {
         new AddAsync(contacts, isEnd).execute();
-    }
-
-    /**
-     * **********************************************************************************
-     * ********************************** RealmAdapter **********************************
-     * **********************************************************************************
-     */
-
-    public class ContactListAdapter extends RealmRecyclerViewAdapter<RealmContacts, RecyclerView.ViewHolder> {
-
-        String lastHeader = "";
-        int count;
-        private boolean isSwipe = false;
-        RealmResults<RealmContacts> usersList;
-        private LayoutInflater inflater;
-
-
-        ContactListAdapter(RealmResults<RealmContacts> realmResults) {
-            super(realmResults, true);
-            inflater = LayoutInflater.from(G.context);
-            count = realmResults.size();
-            usersList = realmResults;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-
-            View v;
-            if (mPageMode == 2){//call mode
-                v = inflater.inflate(R.layout.item_contact_call , viewGroup , false);
-            }else { //new chat and contact
-                v = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
-            }
-            //View v = ViewMaker.getViewRegisteredContacts();
-
-            if (getData() != null && count != getData().size()) {
-                count = getData().size();
-
-                realmRecyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        realmRecyclerView.removeItemDecoration(decoration);
-                        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(getData().sort(RealmContactsFields.DISPLAY_NAME)));
-                        realmRecyclerView.addItemDecoration(decoration);
-                    }
-                });
-            }
-
-            if (mPageMode == 2)
-                return new ViewHolderCall(v);
-            else
-                return new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int i) {
-
-            if (holder instanceof  ViewHolder) {
-
-                ViewHolder viewHolder = (ViewHolder) holder ;
-
-                final RealmContacts contact = viewHolder.realmContacts = getItem(i);
-                if (contact == null) {
-                    return;
-                }
-
-                String header = contact.getDisplay_name();
-            /*if (!isMultiSelect) {
-                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
-                    viewHolder.topLine.setVisibility(View.VISIBLE);
-                } else {
-                    viewHolder.topLine.setVisibility(View.GONE);
-                }
-            }*/
-                lastHeader = header;
-
-
-                if (G.isDarkTheme){
-                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.white));
-                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.white));
-                }else{
-                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.black));
-                }
-
-                viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText("+" + contact.getPhone());
-            /*final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());
-            if (realmRegisteredInfo != null) {
-                viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
-                if (realmRegisteredInfo.getStatus() != null) {
-                    if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                        viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), realmRegisteredInfo.getLastSeen(), false));
-                    } else {
-                        if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
-                        }
-                        viewHolder.subtitle.setText(realmRegisteredInfo.getStatus());
-                    }
-                }
-
-                if (HelperCalander.isPersianUnicode) {
-                    viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
-                }
-            }*/
-
-            /*if (isMultiSelect) {
-                viewHolder.swipeLayout.setSwipeEnabled(false);
-
-            } else {
-                viewHolder.swipeLayout.setSwipeEnabled(true);
-            }*/
-
-
-           /* viewHolder.txtDelete.setOnClickListener((View v) -> {
-                MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        new RequestUserContactsDelete().contactsDelete(realmRegisteredInfo.getPhoneNumber());
-                    }
-                }).negativeText(R.string.B_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        viewHolder.swipeLayout.close();
-                    }
-                }).build();
-
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        viewHolder.swipeLayout.close();
-                    }
-                });
-                dialog.show();
-
-            });
-
-            viewHolder.txtEdit.setOnClickListener(v -> {
-
-                dialogEditContact(header, contact.getPhone(), contact.getId());
-
-
-            });*/
-
-
-                if (selectedList.containsKey(usersList.get(i).getPhone())) {
-                    viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                    //  viewHolder.animateCheckBox.setChecked(true);
-                    //  viewHolder.animateCheckBox.setLineColor(G.context.getResources().getColor(R.color.white));
-                    viewHolder.animateCheckBox.setChecked(true);
-
-//                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.gray_9d));
-                } else {
-                    //    viewHolder.animateCheckBox.setCircleColor(G.context.getResources().getColor(R.color.green));
-                    if (isLongClick) {
-                        viewHolder.animateCheckBox.setChecked(false);
-                        viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                    } else {
-                        viewHolder.animateCheckBox.setChecked(false);
-                        viewHolder.animateCheckBox.setVisibility(View.GONE);
-                    }
-//                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.white));
-                }
-
-                setAvatar(viewHolder, contact.getId());
-
-            }
-            else if (holder instanceof  ViewHolderCall){
-
-
-                ViewHolderCall viewHolder = (ViewHolderCall) holder ;
-
-                final RealmContacts contact = viewHolder.realmContacts = getItem(i);
-                if (contact == null) {
-                    return;
-                }
-
-                String header = contact.getDisplay_name();
-
-                lastHeader = header;
-
-                if (G.isDarkTheme){
-                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.white));
-                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.white));
-                }else{
-                    viewHolder.title.setTextColor(G.context.getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(G.context.getResources().getColor(R.color.black));
-                }
-
-                viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText("+" + contact.getPhone());
-
-                if (selectedList.containsKey(usersList.get(i).getPhone())) {
-                    viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                    viewHolder.animateCheckBox.setChecked(true);
-
-                } else {
-                    if (isLongClick) {
-                        viewHolder.animateCheckBox.setChecked(false);
-                        viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                    } else {
-                        viewHolder.animateCheckBox.setChecked(false);
-                        viewHolder.animateCheckBox.setVisibility(View.GONE);
-                    }
-                }
-
-                setAvatar(viewHolder, contact.getId());
-
-            }
-        }
-
-        private void setAvatar(final RecyclerView.ViewHolder viewHolder, final long userId) {
-            if (viewHolder instanceof ViewHolder) {
-                ViewHolder holder = (ViewHolder) viewHolder;
-                avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
-
-            } else if (viewHolder instanceof ViewHolderCall){
-                ViewHolderCall holder = (ViewHolderCall) viewHolder;
-                avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
-            }
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            private CircleImageView image;
-            private TextView title;
-            private TextView subtitle;
-            private RealmContacts realmContacts;
-            private ConstraintLayout root;
-            private CheckBox animateCheckBox;
-
-            public ViewHolder(View view) {
-                super(view);
-
-                root = view.findViewById(R.id.iv_itemContactChat_root);
-                animateCheckBox =  view.findViewById(R.id.iv_itemContactChat_checkBox);
-                image =  view.findViewById(R.id.iv_itemContactChat_profileImage);
-                title =  view.findViewById(R.id.tv_itemContactChat_userName);
-                //txtDelete = (ViewGroup) view.findViewById(R.id.swipeDelete);
-               // txtEdit = (ViewGroup) view.findViewById(R.id.swipeEdit);
-                subtitle =  view.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
-               // topLine = (View) view.findViewById(R.id.topLine);
-                //swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
-
-
-               /* root.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (onLongClickRecyclerView != null) {
-                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
-                            isLongClick = true;
-
-                        }
-
-                        return false;
-                    }
-                });*/
-
-
-                root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (!isMultiSelect) {
-                            if (isCallAction) {
-                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-
-                                long userId = realmContacts.getId();
-                                if (userId != 134 && G.userId != userId) {
-
-
-                                    new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
-                                        @Override
-                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                                            switch (which) {
-                                                case 0:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                                                    popBackStackFragment();
-                                                    break;
-                                                case 1:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-                                                    popBackStackFragment();
-                                                    break;
-                                            }
-
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-                                }
-
-                            } else {
-                                showProgress();
-
-                                HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
-                                    @Override
-                                    public void complete() {
-                                        hideProgress();
-                                        popBackStackFragment();
-                                    }
-                                }, new HelperPublicMethod.OnError() {
-                                    @Override
-                                    public void error() {
-                                        hideProgress();
-                                    }
-                                });
-                            }
-                        } else {
-                            if (onCliclRecyclerView != null)
-                                onCliclRecyclerView.onClick(v, getAdapterPosition());
-                        }
-                    }
-                });
-            }
-        }
-
-        public class ViewHolderCall extends RecyclerView.ViewHolder {
-
-            private CircleImageView image;
-            private TextView title;
-            private TextView subtitle;
-            private MaterialDesignTextView btnVoiceCall , btnVideoCall ;
-            private RealmContacts realmContacts;
-            private ConstraintLayout root;
-            private CheckBox animateCheckBox;
-
-            public ViewHolderCall(View view) {
-                super(view);
-
-                root = view.findViewById(R.id.iv_itemContactCall_root);
-                animateCheckBox =  view.findViewById(R.id.iv_itemContactCall_checkBox);
-                image =  view.findViewById(R.id.iv_itemContactCall_profileImage);
-                title =  view.findViewById(R.id.tv_itemContactCall_userName);
-                subtitle =  view.findViewById(R.id.tv_itemContactCall_userPhoneNumber);
-                btnVoiceCall = view.findViewById(R.id.tv_itemContactCall_voiceCall);
-                btnVideoCall = view.findViewById(R.id.tv_itemContactCall_videoCall);
-
-
-               /* root.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (onLongClickRecyclerView != null) {
-                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
-                            isLongClick = true;
-
-                        }
-
-                        return false;
-                    }
-                });*/
-
-                btnVoiceCall.setOnClickListener( v -> {
-                    long userId = realmContacts.getId();
-                    if (userId != 134 && G.userId != userId) {
-                        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                        popBackStackFragment();
-                    }
-                });
-
-                btnVideoCall.setOnClickListener( v -> {
-                    long userId = realmContacts.getId();
-                    if (userId != 134 && G.userId != userId) {
-                        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-                        popBackStackFragment();
-                    }
-                });
-
-                root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (!isMultiSelect) {
-                            if (isCallAction) {
-                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-
-                                long userId = realmContacts.getId();
-                                if (userId != 134 && G.userId != userId) {
-
-
-                                    new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
-                                        @Override
-                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                                            switch (which) {
-                                                case 0:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                                                    popBackStackFragment();
-                                                    break;
-                                                case 1:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-                                                    popBackStackFragment();
-                                                    break;
-                                            }
-
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-                                }
-
-                            } else {
-                                showProgress();
-
-                                HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
-                                    @Override
-                                    public void complete() {
-                                        hideProgress();
-                                        popBackStackFragment();
-                                    }
-                                }, new HelperPublicMethod.OnError() {
-                                    @Override
-                                    public void error() {
-                                        hideProgress();
-                                    }
-                                });
-                            }
-                        } else {
-                            if (onCliclRecyclerView != null)
-                                onCliclRecyclerView.onClick(v, getAdapterPosition());
-                        }
-                    }
-                });
-            }
-        }
     }
 
     private void dialogEditContact(String header, long phone, final long userId) {
@@ -1413,13 +1038,543 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         dialog.show();
     }
 
+    public void multi_select(int position) {
+        if (mLayoutMultiSelected.isShown()) {
+
+            if (results.get(position) == null) {
+                return;
+            }
+
+            if (selectedList.containsKey(results.get(position).getPhone())) {
+                selectedList.remove(results.get(position).getPhone());
+            } else {
+                selectedList.put(results.get(position).getPhone(), true);
+            }
+
+            if (selectedList.size() > 0) {
+                mTxtSelectedCount.setText(selectedList.size() + " " + G.context.getResources().getString(R.string.item_selected));
+            } else {
+                mTxtSelectedCount.setText(selectedList.size() + " " + G.context.getResources().getString(R.string.item_selected));
+            }
+            refreshAdapter(position, false);
+        }
+    }
+
+    public void refreshAdapter(int position, boolean isAllRefresh) {
+        contactListAdapter.usersList = results;
+        if (isAllRefresh) {
+            contactListAdapter.notifyDataSetChanged();
+        } else {
+            contactListAdapter.notifyItemChanged(position);
+        }
+    }
+
+    @Override //btn edit
+    public void onLeftIconClickListener(View view) {
+        showDialog();
+    }
+
+    // Add/Remove the item from/to the list
+
+    private void showDialog() {
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.sync_contact));
+        items.add(getString(R.string.mark_as_several));
+
+        new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (position == 0) {
+                    ContactUtils.syncContacts();
+                } else {
+                    if (!isMultiSelect) {
+                        isMultiSelect = true;
+                        refreshAdapter(0, true);
+
+                        if (!mLayoutMultiSelected.isShown()) {
+                            setPageShowingMode(4);
+                        }
+                        isLongClick = true;
+
+                    }
+                }
+            }
+        }).show(getFragmentManager(), "contactToolbar");
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+
+        if (!isToolbarInEditMode) {
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(true);
+            openKeyBoard();
+        }
+
+    }
+
+    @Override //btn add
+    public void onRightIconClickListener(View view) {
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
+        FragmentAddContact fragment = FragmentAddContact.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
+        fragment.setArguments(bundle);
+        new HelperFragment(fragment).setReplace(false).load();
+    }
+
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+        if (edtSearch.getText().length() > 0) {
+            edtSearch.setText("");
+        } else {
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(false);
+            closeKeyboard(getView());
+        }
+    }
+
+    private interface onClickRecyclerView {
+        void onClick(View view, int position);
+    }
+
+
+    private interface onLongClickRecyclerView {
+        void onClick(View view, int position);
+    }
+
+    /**
+     * **********************************************************************************
+     * ********************************** RealmAdapter **********************************
+     * **********************************************************************************
+     */
+
+    public class ContactListAdapter extends RealmRecyclerViewAdapter<RealmContacts, RecyclerView.ViewHolder> {
+
+        String lastHeader = "";
+        int count;
+        RealmResults<RealmContacts> usersList;
+        private boolean isSwipe = false;
+        private LayoutInflater inflater;
+
+
+        ContactListAdapter(RealmResults<RealmContacts> realmResults) {
+            super(realmResults, true);
+            inflater = LayoutInflater.from(G.context);
+            count = realmResults.size();
+            usersList = realmResults;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+
+            View v;
+            if (mPageMode == 2) {//call mode
+                v = inflater.inflate(R.layout.item_contact_call, viewGroup, false);
+            } else { //new chat and contact
+                v = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
+            }
+            //View v = ViewMaker.getViewRegisteredContacts();
+
+            if (getData() != null && count != getData().size()) {
+                count = getData().size();
+
+                realmRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        realmRecyclerView.removeItemDecoration(decoration);
+                        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(getData().sort(RealmContactsFields.DISPLAY_NAME)));
+                        realmRecyclerView.addItemDecoration(decoration);
+                    }
+                });
+            }
+
+            if (mPageMode == 2)
+                return new ViewHolderCall(v);
+            else
+                return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int i) {
+
+            if (holder instanceof ViewHolder) {
+
+                ViewHolder viewHolder = (ViewHolder) holder;
+
+                final RealmContacts contact = viewHolder.realmContacts = getItem(i);
+                if (contact == null) {
+                    return;
+                }
+
+                String header = contact.getDisplay_name();
+            /*if (!isMultiSelect) {
+                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+                    viewHolder.topLine.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.topLine.setVisibility(View.GONE);
+                }
+            }*/
+                lastHeader = header;
+
+
+                if (G.isDarkTheme) {
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                } else {
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                }
+
+                viewHolder.title.setText(contact.getDisplay_name());
+                viewHolder.subtitle.setText("+" + contact.getPhone());
+            /*final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());
+            if (realmRegisteredInfo != null) {
+                viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
+                if (realmRegisteredInfo.getStatus() != null) {
+                    if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                        viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), realmRegisteredInfo.getLastSeen(), false));
+                    } else {
+                        if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
+                        }
+                        viewHolder.subtitle.setText(realmRegisteredInfo.getStatus());
+                    }
+                }
+
+                if (HelperCalander.isPersianUnicode) {
+                    viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
+                }
+            }*/
+
+            /*if (isMultiSelect) {
+                viewHolder.swipeLayout.setSwipeEnabled(false);
+
+            } else {
+                viewHolder.swipeLayout.setSwipeEnabled(true);
+            }*/
+
+
+           /* viewHolder.txtDelete.setOnClickListener((View v) -> {
+                MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        new RequestUserContactsDelete().contactsDelete(realmRegisteredInfo.getPhoneNumber());
+                    }
+                }).negativeText(R.string.B_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        viewHolder.swipeLayout.close();
+                    }
+                }).build();
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        viewHolder.swipeLayout.close();
+                    }
+                });
+                dialog.show();
+
+            });
+
+            viewHolder.txtEdit.setOnClickListener(v -> {
+
+                dialogEditContact(header, contact.getPhone(), contact.getId());
+
+
+            });*/
+
+
+                if (selectedList.containsKey(usersList.get(i).getPhone())) {
+                    viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
+                    //  viewHolder.animateCheckBox.setChecked(true);
+                    //  viewHolder.animateCheckBox.setLineColor(G.context.getResources().getColor(R.color.white));
+                    viewHolder.animateCheckBox.setChecked(true);
+
+//                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.gray_9d));
+                } else {
+                    //    viewHolder.animateCheckBox.setCircleColor(G.context.getResources().getColor(R.color.green));
+                    if (isLongClick) {
+                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
+                    } else {
+                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setVisibility(View.GONE);
+                    }
+//                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.white));
+                }
+
+                setAvatar(viewHolder, contact.getId());
+
+            } else if (holder instanceof ViewHolderCall) {
+
+
+                ViewHolderCall viewHolder = (ViewHolderCall) holder;
+
+                final RealmContacts contact = viewHolder.realmContacts = getItem(i);
+                if (contact == null) {
+                    return;
+                }
+
+                String header = contact.getDisplay_name();
+
+                lastHeader = header;
+
+                if (G.isDarkTheme) {
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                } else {
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                }
+
+                viewHolder.title.setText(contact.getDisplay_name());
+                viewHolder.subtitle.setText("+" + contact.getPhone());
+
+                if (selectedList.containsKey(usersList.get(i).getPhone())) {
+                    viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
+                    viewHolder.animateCheckBox.setChecked(true);
+
+                } else {
+                    if (isLongClick) {
+                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
+                    } else {
+                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setVisibility(View.GONE);
+                    }
+                }
+
+                setAvatar(viewHolder, contact.getId());
+
+            }
+        }
+
+        private void setAvatar(final RecyclerView.ViewHolder viewHolder, final long userId) {
+            if (viewHolder instanceof ViewHolder) {
+                ViewHolder holder = (ViewHolder) viewHolder;
+                avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
+
+            } else if (viewHolder instanceof ViewHolderCall) {
+                ViewHolderCall holder = (ViewHolderCall) viewHolder;
+                avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
+            }
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            private CircleImageView image;
+            private TextView title;
+            private TextView subtitle;
+            private RealmContacts realmContacts;
+            private ConstraintLayout root;
+            private CheckBox animateCheckBox;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                root = view.findViewById(R.id.iv_itemContactChat_root);
+                animateCheckBox = view.findViewById(R.id.iv_itemContactChat_checkBox);
+                image = view.findViewById(R.id.iv_itemContactChat_profileImage);
+                title = view.findViewById(R.id.tv_itemContactChat_userName);
+                //txtDelete = (ViewGroup) view.findViewById(R.id.swipeDelete);
+                // txtEdit = (ViewGroup) view.findViewById(R.id.swipeEdit);
+                subtitle = view.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
+                // topLine = (View) view.findViewById(R.id.topLine);
+                //swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
+
+
+               /* root.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (onLongClickRecyclerView != null) {
+                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
+                            isLongClick = true;
+
+                        }
+
+                        return false;
+                    }
+                });*/
+
+
+                root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (!isMultiSelect) {
+                            if (isCallAction) {
+                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+
+                                long userId = realmContacts.getId();
+                                if (userId != 134 && G.userId != userId) {
+
+
+                                    new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                        @Override
+                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                            switch (which) {
+                                                case 0:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                                case 1:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                            }
+
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
+                                }
+
+                            } else {
+                                showProgress();
+
+                                HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                                    @Override
+                                    public void complete() {
+                                        hideProgress();
+                                        popBackStackFragment();
+                                    }
+                                }, new HelperPublicMethod.OnError() {
+                                    @Override
+                                    public void error() {
+                                        hideProgress();
+                                    }
+                                });
+                            }
+                        } else {
+                            if (onCliclRecyclerView != null)
+                                onCliclRecyclerView.onClick(v, getAdapterPosition());
+                        }
+                    }
+                });
+            }
+        }
+
+        public class ViewHolderCall extends RecyclerView.ViewHolder {
+
+            private CircleImageView image;
+            private TextView title;
+            private TextView subtitle;
+            private MaterialDesignTextView btnVoiceCall, btnVideoCall;
+            private RealmContacts realmContacts;
+            private ConstraintLayout root;
+            private CheckBox animateCheckBox;
+
+            public ViewHolderCall(View view) {
+                super(view);
+
+                root = view.findViewById(R.id.iv_itemContactCall_root);
+                animateCheckBox = view.findViewById(R.id.iv_itemContactCall_checkBox);
+                image = view.findViewById(R.id.iv_itemContactCall_profileImage);
+                title = view.findViewById(R.id.tv_itemContactCall_userName);
+                subtitle = view.findViewById(R.id.tv_itemContactCall_userPhoneNumber);
+                btnVoiceCall = view.findViewById(R.id.tv_itemContactCall_voiceCall);
+                btnVideoCall = view.findViewById(R.id.tv_itemContactCall_videoCall);
+
+
+               /* root.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (onLongClickRecyclerView != null) {
+                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
+                            isLongClick = true;
+
+                        }
+
+                        return false;
+                    }
+                });*/
+
+                btnVoiceCall.setOnClickListener(v -> {
+                    long userId = realmContacts.getId();
+                    if (userId != 134 && G.userId != userId) {
+                        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                        popBackStackFragment();
+                    }
+                });
+
+                btnVideoCall.setOnClickListener(v -> {
+                    long userId = realmContacts.getId();
+                    if (userId != 134 && G.userId != userId) {
+                        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                        popBackStackFragment();
+                    }
+                });
+
+                root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (!isMultiSelect) {
+                            if (isCallAction) {
+                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+
+                                long userId = realmContacts.getId();
+                                if (userId != 134 && G.userId != userId) {
+
+
+                                    new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                        @Override
+                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                            switch (which) {
+                                                case 0:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                                case 1:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                            }
+
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
+                                }
+
+                            } else {
+                                showProgress();
+
+                                HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                                    @Override
+                                    public void complete() {
+                                        hideProgress();
+                                        popBackStackFragment();
+                                    }
+                                }, new HelperPublicMethod.OnError() {
+                                    @Override
+                                    public void error() {
+                                        hideProgress();
+                                    }
+                                });
+                            }
+                        } else {
+                            if (onCliclRecyclerView != null)
+                                onCliclRecyclerView.onClick(v, getAdapterPosition());
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     /**
      * ************************************* show all phone contact *************************************
      */
     private class StickyHeader implements StickyRecyclerHeadersAdapter {
 
         RealmResults<RealmContacts> realmResults;
-        private ViewGroup mParent ;
+        private ViewGroup mParent;
 
         StickyHeader(RealmResults<RealmContacts> realmResults) {
             this.realmResults = realmResults;
@@ -1432,7 +1587,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         @Override
         public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-            mParent = parent ;
+            mParent = parent;
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
             return new RecyclerView.ViewHolder(view) {
             };
@@ -1446,9 +1601,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             textView.setText(realmResults.get(position).getDisplay_name().toUpperCase().substring(0, 1));
 
             if (G.isDarkTheme)
-                textView.setTextColor(G.context.getResources().getColor(R.color.white));
+                textView.setTextColor(context.getResources().getColor(R.color.white));
             else
-                textView.setTextColor(G.context.getResources().getColor(R.color.black));
+                textView.setTextColor(context.getResources().getColor(R.color.black));
 
         }
 
@@ -1621,164 +1776,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 prgWaitingLiadList.setVisibility(View.GONE);
             }
             super.onPostExecute(slc);
-        }
-    }
-
-    // Add/Remove the item from/to the list
-
-    public void multi_select(int position) {
-        if (mLayoutMultiSelected.isShown()) {
-
-            if (results.get(position) == null) {
-                return;
-            }
-
-            if (selectedList.containsKey(results.get(position).getPhone())) {
-                selectedList.remove(results.get(position).getPhone());
-            } else {
-                selectedList.put(results.get(position).getPhone(), true);
-            }
-
-            if (selectedList.size() > 0) {
-                mTxtSelectedCount.setText(selectedList.size() + " " + G.context.getResources().getString(R.string.item_selected));
-            } else {
-                mTxtSelectedCount.setText(selectedList.size() + " " + G.context.getResources().getString(R.string.item_selected));
-            }
-            refreshAdapter(position, false);
-        }
-    }
-
-    public void refreshAdapter(int position, boolean isAllRefresh) {
-        contactListAdapter.usersList = results;
-        if (isAllRefresh) {
-            contactListAdapter.notifyDataSetChanged();
-        } else {
-            contactListAdapter.notifyItemChanged(position);
-        }
-    }
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.menu_multi_select, menu);
-            toolbar.setVisibility(View.GONE);
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_delete:
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
-                                new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
-                            }
-
-                            mActionMode.finish();
-                            refreshAdapter(0, true);
-
-                        }
-                    }).negativeText(R.string.B_cancel).show();
-
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-            isMultiSelect = false;
-            isLongClick = false;
-            selectedList.clear();
-            refreshAdapter(0, true);
-            toolbar.setVisibility(View.VISIBLE);
-        }
-    };
-
-    private interface onClickRecyclerView {
-        void onClick(View view, int position);
-    }
-
-    private interface onLongClickRecyclerView {
-        void onClick(View view, int position);
-    }
-
-
-    @Override //btn edit
-    public void onLeftIconClickListener(View view) {
-        showDialog();
-    }
-
-    private void showDialog(){
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.sync_contact));
-        items.add(getString(R.string.mark_as_several));
-
-        new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
-            @Override
-            public void onClick(int position) {
-                if (position == 0) {
-                    ContactUtils.syncContacts();
-                }else{
-                        if (!isMultiSelect) {
-                            isMultiSelect = true;
-                            refreshAdapter(0, true);
-
-                            if (!mLayoutMultiSelected.isShown()){
-                                setPageShowingMode(4);
-                            }
-                            isLongClick = true;
-
-                    }
-                }
-            }
-        }).show(getFragmentManager(),"contactToolbar");
-    }
-
-    @Override
-    public void onSearchClickListener(View view) {
-
-        if (!isToolbarInEditMode){
-            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(true);
-            openKeyBoard();
-        }
-
-    }
-
-    @Override //btn add
-    public void onRightIconClickListener(View view) {
-        if (mActionMode != null) {
-            mActionMode.finish();
-        }
-        FragmentAddContact fragment = FragmentAddContact.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
-        fragment.setArguments(bundle);
-        new HelperFragment(fragment).setReplace(false).load();
-    }
-
-    @Override
-    public void onBtnClearSearchClickListener(View view) {
-        if (edtSearch.getText().length() > 0) {
-            edtSearch.setText("");
-        } else {
-            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(false) ;
-            closeKeyboard(getView());
         }
     }
 }
