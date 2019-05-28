@@ -134,7 +134,7 @@
             android:textColor="@color/white"
             android:textSize="19sp"
             android:textStyle="bold"
-            android:visibility="visible"
+            android:visibility="gone"
             android:maxLength="28"
             android:singleLine="true"
             android:layout_marginBottom="10dp"
@@ -166,7 +166,6 @@
             android:id="@+id/view_toolbar_user_chat_avatar_layout"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/view_toolbar_btn_left"
             app:layout_constraintTop_toTopOf="parent"
@@ -174,8 +173,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <net.iGap.module.CircleImageView
                 android:id="@+id/view_toolbar_user_chat_avatar"
@@ -202,16 +200,17 @@
 
         <LinearLayout
             android:id="@+id/view_toolbar_chat_layout_userName"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            app:layout_constraintVertical_chainStyle="spread"
+            app:layout_constraintBottom_toTopOf="@id/view_toolbar_chat_txt_seen_status"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintStart_toEndOf="@+id/view_toolbar_user_chat_avatar_layout"
             app:layout_constraintTop_toTopOf="@+id/view_toolbar_user_chat_avatar_layout">
@@ -256,27 +255,6 @@
 
         </LinearLayout>
 
-       <!-- <net.iGap.module.EmojiTextViewE
-            android:id="@+id/view_toolbar_chat_txt_userName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:fontFamily="@font/main_font"
-            android:singleLine="true"
-            android:text="User Name"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:emojiSize="14dp"
-            app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
-            app:layout_constraintStart_toEndOf="@+id/view_toolbar_user_chat_avatar"
-            app:layout_constraintTop_toTopOf="@+id/view_toolbar_user_chat_avatar" />-->
-
         <TextView
             android:id="@+id/view_toolbar_chat_txt_seen_status"
             android:layout_width="0dp"
@@ -287,10 +265,12 @@
             android:text="Last seen recently"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:visibility="gone"
+            android:visibility="visible"
+            app:layout_constraintVertical_chainStyle="spread"
+            app:layout_constraintTop_toBottomOf="@id/view_toolbar_chat_layout_userName"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintStart_toStartOf="@id/view_toolbar_chat_layout_userName"
-            app:layout_constraintTop_toBottomOf="@+id/view_toolbar_chat_layout_userName" />
+            app:layout_constraintBottom_toBottomOf="@+id/view_toolbar_user_chat_avatar_layout" />
 
         <!--Group Detail-->
         <net.iGap.module.CircleImageView
@@ -340,7 +320,7 @@
         android:layout_marginEnd="42dp"
         android:layout_marginRight="42dp"
         android:background="@drawable/shape_toolbar_search_box"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/view_toolbar_main_constraint"
         app:layout_constraintEnd_toEndOf="@+id/view_toolbar_main_constraint"
         app:layout_constraintStart_toStartOf="@+id/view_toolbar_main_constraint"
