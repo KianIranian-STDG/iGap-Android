@@ -19,6 +19,7 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.ContactItem;
 import net.iGap.adapter.items.ContactItemGroup;
@@ -59,6 +60,12 @@ public class StickyHeaderAdapter<Item extends IItem> extends RecyclerView.Adapte
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
 
+        if(G.isDarkTheme){
+            textView.setTextColor(G.context.getResources().getColor(R.color.white));
+        }else {
+            textView.setTextColor(G.context.getResources().getColor(R.color.white));
+        }
+        
         IItem item = getItem(position);
         if (item instanceof ContactItem && ((ContactItem) item).mContact != null) {
             //based on the position we set the headers text
@@ -70,6 +77,7 @@ public class StickyHeaderAdapter<Item extends IItem> extends RecyclerView.Adapte
             //based on the position we set the headers text
             textView.setText(String.valueOf(((ContactItemGroup) item).mContact.displayName.toUpperCase().charAt(0)));
         }
+
     }
 
     /**

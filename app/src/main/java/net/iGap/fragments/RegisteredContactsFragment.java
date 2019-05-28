@@ -853,6 +853,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }*/
                 lastHeader = header;
 
+
+                if (G.isDarkTheme){
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                }else{
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                }
+
                 viewHolder.title.setText(contact.getDisplay_name());
                 viewHolder.subtitle.setText("+" + contact.getPhone());
             /*final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());
@@ -949,6 +958,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 String header = contact.getDisplay_name();
 
                 lastHeader = header;
+
+                if (G.isDarkTheme){
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
+                }else{
+                    viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                }
 
                 viewHolder.title.setText(contact.getDisplay_name());
                 viewHolder.subtitle.setText("+" + contact.getPhone());
@@ -1379,7 +1396,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             //fixLayoutSize(textView , mParent);
             textView.setText(realmResults.get(position).getDisplay_name().toUpperCase().substring(0, 1));
-            textView.setTextColor(G.context.getResources().getColor(R.color.black));
+
+            if (G.isDarkTheme)
+                textView.setTextColor(context.getResources().getColor(R.color.white));
+            else
+                textView.setTextColor(context.getResources().getColor(R.color.black));
+
         }
 
         @Override

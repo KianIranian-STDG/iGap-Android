@@ -214,6 +214,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
                 isRemove = false;
 
+                StructContactInfo contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact ;
+                selectedContacts.remove(contactInfo);
             }
 
             @Override
@@ -307,6 +309,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 isRemove = true;
             }
         }, 50);
+
     }
 
     private void refreshView() {

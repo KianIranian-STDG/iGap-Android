@@ -270,7 +270,7 @@ public class HelperToolbar {
 
         setSearchBoxVisibility(result, isSearchBoxShown);
 
-        setCallModeVisibility(result, isCallModeEnable);
+        //setCallModeVisibility(result, isCallModeEnable);
 
         setGroupProfileVisibility(result, isGroupProfile);
 
@@ -466,6 +466,12 @@ public class HelperToolbar {
             mSearchBox.setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
             mBtnClearSearch.setOnClickListener(v -> mToolbarListener.onBtnClearSearchClickListener(v));
 
+            if (G.isDarkTheme){
+                mSearchBox.setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_search_box_dark));
+                mEdtSearch.setTextColor(mContext.getResources().getColor(R.color.white));
+                mEdtSearch.setHintTextColor(mContext.getResources().getColor(R.color.gray_f2));
+                mTxtSearch.setTextColor(mContext.getResources().getColor(R.color.gray_f2));
+            }
         } else {
             mSearchBox.setVisibility(View.GONE);
 

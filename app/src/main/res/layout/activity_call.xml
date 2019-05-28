@@ -24,7 +24,7 @@
         <LinearLayout
             android:id="@+id/ac_layout_call_ll_toolbar"
             android:layout_width="0dp"
-            android:layout_height="@dimen/toolbar_height_call_state"
+            android:layout_height="@dimen/toolbar_height"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
