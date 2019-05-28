@@ -130,9 +130,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
     private void setupToolbar() {
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setDefaultTitle(G.context.getResources().getString(R.string.notificaion_and_sound))
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setContext(getContext())
+                .setDefaultTitle(getString(R.string.notificaion_and_sound))
+                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

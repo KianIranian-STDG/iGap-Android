@@ -89,9 +89,9 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
     private void setupToolbar() {
         
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
+                .setContext(getContext())
                 .setDefaultTitle(G.context.getResources().getString(R.string.st_title_Privacy_Security))
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

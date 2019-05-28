@@ -100,8 +100,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_checked)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.settings))
                 .setListener(new ToolbarListener() {

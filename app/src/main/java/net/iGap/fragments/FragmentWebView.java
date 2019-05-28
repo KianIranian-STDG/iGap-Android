@@ -118,8 +118,8 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         appBarLayout.setVisibility(View.GONE);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

@@ -137,8 +137,8 @@ public class EditChannelFragment extends BaseFragment {
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_checked)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

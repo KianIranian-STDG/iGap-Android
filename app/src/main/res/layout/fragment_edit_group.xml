@@ -129,7 +129,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/chatHistoryTitle"
-                    style="?textTitleColorSettingTheme"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"

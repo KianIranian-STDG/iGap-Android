@@ -1444,9 +1444,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         .setContext(this)
                         .setLogoShown(false)
                         .setCounterShown(true)
-                        .setLeftIcon(R.drawable.hamburger_menu)
+                        .setLeftIcon(R.string.hamburger_menu_icon)
                         .setBigCenterAvatarShown(true)
-                        .setRightIcons(R.drawable.ic_tab_search)
+                        .setRightIcons(R.string.search_icon)
                         .getView();
 
                 container.removeAllViews();

@@ -322,10 +322,10 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         AppUtils.setProgresColler(fragmentNewGroupBinding.ngPrgWaiting);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
+                .setContext(getContext())
                 .setLogoShown(true)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_checked)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
                 .setListener(this);
 
         LinearLayout toollbarLayout = view.findViewById(R.id.ng_layout_toolbar);

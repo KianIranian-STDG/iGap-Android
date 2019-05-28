@@ -94,8 +94,8 @@ public class FragmentChatSettings extends BaseFragment {
     private void setupToolbar() {
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(G.context.getResources().getString(R.string.chat_setting))
                 .setListener(new ToolbarListener() {

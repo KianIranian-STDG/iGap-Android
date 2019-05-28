@@ -45,8 +45,8 @@ public class FragmentFinancialServices extends FragmentToolBarBack {
 
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_more_toolbar)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.financial_services))
                 .setListener(new ToolbarListener() {

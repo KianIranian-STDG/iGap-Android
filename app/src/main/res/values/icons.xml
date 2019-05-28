@@ -171,4 +171,34 @@
     chat cell icon
     -->
     <string name="igap_verified">\uf565</string>
+
+    <!--New Font Icon-->
+    <string name="cloud_icon">k</string>
+    <string name="add_icon">t</string>
+    <string name="wallet_icon">4</string>
+    <string name="score_star_icon">1</string>
+    <string name="invite_icon">i</string>
+    <string name="scan_qr_code_icon">$</string>
+    <string name="location_pin_icon">{</string>
+    <string name="dark_mode_icon">z</string>
+    <string name="faq_icon">`</string>
+    <string name="setting_icon">µ</string>
+    <string name="hamburger_menu_icon">S</string>
+    <string name="search_icon">*</string>
+    <string name="back_icon">p</string>
+    <string name="check_icon">ß</string>
+    <string name="edit_icon">|</string>
+    <string name="history_icon">T</string>
+    <string name="more_icon">&lt;</string>
+    <string name="voice_call_icon">d</string>
+    <string name="video_call_icon">É</string>
+    <string name="voice_call_made_icon">&gt;</string>
+    <string name="voice_call_missed_icon">H</string>
+    <string name="voice_call_received_icon">U</string>
+    <string name="group_icon">;</string>
+    <string name="channel_icon">:</string>
+    <string name="secret_chat_icon">}</string>
+    <string name="dial_number_icon">/</string>
+    <string name="delete_icon">x</string>
+    <string name="share_icon">À</string>
 </resources>

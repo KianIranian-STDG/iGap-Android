@@ -125,8 +125,8 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_checked)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
                 .setDefaultTitle(G.context.getResources().getString(R.string.tab_edit))
                 .setListener(new ToolbarListener() {
                     @Override

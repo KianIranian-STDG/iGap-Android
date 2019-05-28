@@ -150,6 +150,21 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
             }
         });
 
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                //.setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setLogoShown(true)
+                .setRightSmallAvatarShown(true)
+                .setListener(this);
+
+        if (page != 0){
+            mHelperToolbar.setLeftIcon(R.string.back_icon);
+        }
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
         rcDiscovery.setAdapter(adapterDiscovery);

@@ -66,10 +66,10 @@ public class FragmentCreateChannel extends BaseFragment implements ToolbarListen
     private void initComponents(View view) {
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
+                .setContext(getContext())
                 .setLogoShown(true)
-                .setRightIcons(R.drawable.ic_checked)
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.check_icon)
                 .setDefaultTitle(G.context.getResources().getString(R.string.new_channel))
                 .setListener(this);
 

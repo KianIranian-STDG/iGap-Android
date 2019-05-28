@@ -261,9 +261,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_shared_media_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_menu_btn)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.hamburger_menu_icon)
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setListener(this);

@@ -750,11 +750,11 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
     private void initToolbar(View view) {
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
+                .setContext(getContext())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.igap_nearby))
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_more_toolbar)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon)
                 .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fm_layout_toolbar);

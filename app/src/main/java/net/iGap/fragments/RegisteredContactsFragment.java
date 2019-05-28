@@ -25,6 +25,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -87,6 +88,8 @@ import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsGetList;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,11 +138,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private LinearLayout btnAddNewChannel, btnAddNewGroup, btnAddSecretChat;
     private LinearLayout btnAddNewGroupCall, btnAddNewContact, btnDialNumber;
 
-    private ViewGroup mLayoutMultiSelected;
-    private TextView mTxtSelectedCount;
-    private ImageView mBtnDeleteSelected;
-    private MaterialDesignTextView mBtnCancelSelected;
-    private int mNumberOfSelectedCounter;
+    private ViewGroup mLayoutMultiSelected ;
+    private TextView mTxtSelectedCount ;
+    private AppCompatTextView mBtnDeleteSelected ;
+    private MaterialDesignTextView mBtnCancelSelected ;
+    private int mNumberOfSelectedCounter ;
 
     private Context context = G.context;
 
@@ -234,7 +237,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getArguments().getBoolean("isBackSwipable")) {
             return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
         } else {
@@ -243,7 +246,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     }
 
     @Override
-    public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
@@ -327,6 +330,18 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         vgInviteFriend =  view.findViewById(R.id.menu_layout_inviteFriend);
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
         vgRoot.setBackgroundColor(G.context.getResources().getColor(R.color.white));
+
+        LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon)
+                .setSearchBoxShown(true)
+                .setLogoShown(true)
+                .setListener(this);
+
+        toolbarLayout.addView(mHelperToolbar.getView());
 
         btnAddNewGroupCall = view.findViewById(R.id.menu_layout_new_group_call);
         btnAddNewContact = view.findViewById(R.id.menu_layout_add_new_contact);

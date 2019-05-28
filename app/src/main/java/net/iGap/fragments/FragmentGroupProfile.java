@@ -101,8 +101,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         super.onViewCreated(view, savedInstanceState);
 
         HelperToolbar t = HelperToolbar.create().setContext(getContext())
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_more_toolbar, R.drawable.ic_edit_toolbar)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon, R.string.edit_icon)
                 .setGroupProfile(true)
                 .setListener(new ToolbarListener() {
                     @Override

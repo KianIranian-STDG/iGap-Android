@@ -12,9 +12,9 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -58,14 +58,14 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/addAvatar"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:background="@drawable/circle_white"
+                    android:background="@drawable/circle_green"
                     android:gravity="center"
                     android:onClick="@{()->viewModel.onAddImageClick()}"
-                    android:text="@string/md_add_plus_button"
-                    android:textAppearance="@style/TextIconAppearance.all"
-                    android:textColor="@color/md_green_500"
+                    android:text="@string/add_icon"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="@id/userAvatar"
                     app:layout_constraintEnd_toEndOf="@id/userAvatar"
                     app:layout_constraintStart_toEndOf="@id/userAvatar" />
@@ -84,11 +84,11 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/nameEditText"
+                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:afterTextChanged="@{(newName)->viewModel.nameTextChangeListener(newName.toString())}"
                         android:inputType="textPersonName"
-                        style="?textTitleColorSettingTheme"
                         android:text="@={viewModel.name}" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -108,11 +108,11 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/userNameEditText"
+                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:afterTextChanged="@{(newUsername)->viewModel.usernameTextChangeListener(newUsername.toString())}"
                         android:inputType="textPersonName"
-                        style="?textTitleColorSettingTheme"
                         android:text="@={viewModel.userName}" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -132,11 +132,11 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/bioEditText"
+                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:afterTextChanged="@{(newBio)->viewModel.bioTextChangeListener(newBio.toString())}"
                         android:inputType="text"
-                        style="?textTitleColorSettingTheme"
                         android:text="@={viewModel.bio}" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -156,11 +156,11 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/emailEditText"
+                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:afterTextChanged="@{(newEmail)->viewModel.emailTextChangeListener(newEmail.toString())}"
                         android:inputType="textEmailAddress"
-                        style="?textTitleColorSettingTheme"
                         android:text="@={viewModel.email}" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -178,11 +178,11 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/birthDateEditText"
+                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="date"
-                        android:text="@={viewModel.birthDate}"
-                        style="?textTitleColorSettingTheme"/>
+                        android:text="@={viewModel.birthDate}" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -211,29 +211,29 @@
 
                     <android.support.v7.widget.AppCompatRadioButton
                         android:id="@+id/male"
+                        style="?textSubColorSettingTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/male"
-                        style="?textSubColorSettingTheme"
-                        android:button="@drawable/check_box_background"/>
+                        android:button="@drawable/check_box_background"
+                        android:text="@string/male" />
 
                     <android.support.v7.widget.AppCompatRadioButton
                         android:id="@+id/female"
+                        style="?textSubColorSettingTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/female"
-                        style="?textSubColorSettingTheme"
-                        android:button="@drawable/check_box_background" />
+                        android:button="@drawable/check_box_background"
+                        android:text="@string/female" />
                 </RadioGroup>
 
                 <View
                     android:id="@+id/line1"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/gender"
@@ -297,10 +297,10 @@
 
                 <View
                     android:id="@+id/line2"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="@id/line1"
                     app:layout_constraintRight_toRightOf="@id/line1"
                     app:layout_constraintTop_toBottomOf="@id/chatSetting" />

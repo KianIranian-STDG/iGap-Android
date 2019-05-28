@@ -34,14 +34,14 @@
       app:rv_rippleDuration="0"
       app:rv_ripplePadding="5dp">
 
-      <net.iGap.module.MaterialDesignTextView
+      <android.support.v7.widget.AppCompatTextView
         android:id="@+id/asi_btn_back"
         android:layout_width="@dimen/dp52"
         android:layout_height="match_parent"
         android:background="@null"
         android:gravity="center"
-        android:text="@string/md_back_arrow"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/back_icon"
+        style="@style/myIconTextViewStyle"
         android:textColor="@android:color/white" />
     </net.iGap.libs.rippleeffect.RippleView>
 
@@ -66,14 +66,14 @@
       app:rv_rippleDuration="100"
       app:rv_ripplePadding="5dp">
 
-      <net.iGap.module.MaterialDesignTextView
+      <android.support.v7.widget.AppCompatTextView
         android:id="@+id/asi_btn_menu"
         android:layout_width="@dimen/dp52"
         android:layout_height="match_parent"
         android:background="@null"
         android:gravity="center"
-        android:text="@string/md_show_more_button"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/more_icon"
+        style="@style/myIconTextViewStyle"
         android:textColor="@android:color/white" />
     </net.iGap.libs.rippleeffect.RippleView>
   </LinearLayout>
