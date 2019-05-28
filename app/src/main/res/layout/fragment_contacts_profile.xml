@@ -14,11 +14,13 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
@@ -165,7 +167,6 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <android.support.constraint.ConstraintLayout
@@ -174,7 +175,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/phoneNumber"
-                    style="@style/TextAppearance.AppCompat.Medium"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -188,7 +189,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/status"
-                    style="@style/TextAppearance.AppCompat.Medium"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -203,7 +204,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/status"
@@ -211,7 +212,7 @@
 
                 <Switch
                     android:id="@+id/enableNotification"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -225,7 +226,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/customNotification"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -242,14 +243,14 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="@id/line1"
                     app:layout_constraintRight_toRightOf="@id/line1"
                     app:layout_constraintTop_toBottomOf="@id/customNotification" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/sharedContentTitle"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -261,6 +262,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/photo"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -273,6 +275,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/photoCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -285,6 +288,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/video"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -296,6 +300,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/videoCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -308,6 +313,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/audioFiles"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -319,6 +325,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/audioFilesCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -331,6 +338,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/voiceMessage"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -342,6 +350,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/voiceMessageCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -354,6 +363,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/gif"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -365,6 +375,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/gifCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -377,6 +388,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/files"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -388,6 +400,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/filesCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -400,6 +413,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/links"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -411,6 +425,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/linksCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -423,6 +438,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/emptySharedMedia"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -438,14 +454,14 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="@id/line1"
                     app:layout_constraintRight_toRightOf="@id/line1"
                     app:layout_constraintTop_toBottomOf="@id/emptySharedMedia" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/commonGroup"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -456,6 +472,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/commonGroupCount"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -481,14 +498,14 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="@id/line1"
                     app:layout_constraintRight_toRightOf="@id/line1"
                     app:layout_constraintTop_toBottomOf="@id/commonGroupList" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/background"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -502,14 +519,14 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/gray"
+                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="@id/line1"
                     app:layout_constraintRight_toRightOf="@id/line1"
                     app:layout_constraintTop_toBottomOf="@id/background" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/secretChat"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -522,7 +539,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/clearChat"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -535,7 +552,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/report"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -550,7 +567,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/block"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
