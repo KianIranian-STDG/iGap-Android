@@ -45,10 +45,20 @@ public class ChatCell extends ConstraintLayout {
 
         View pinView = new View(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_background_pin
-                : R.drawable.shape_background_pin, null);
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.ic_pin
+                : R.drawable.ic_pin, null);
         pinView.setBackground(drawable);
         addView(pinView);
+
+
+        View pin = new View(getContext());
+        pin.setId(R.id.v_chatCell_pin);
+        Drawable drawable1 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pin_badge, null);
+        pin.setBackground(drawable1);
+        addView(pin);
+
+
+
 
         /**
          * add check box
@@ -280,7 +290,7 @@ public class ChatCell extends ConstraintLayout {
             set.connect(chatIcon.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.LEFT);
             set.connect(roomName.getId(), ConstraintSet.RIGHT, chatIcon.getId(), ConstraintSet.LEFT);
             set.connect(verify.getId(), ConstraintSet.RIGHT, roomName.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
-            set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp8));
+            set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp12));
 
             //bottom
             set.connect(badgeView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT);
@@ -288,12 +298,14 @@ public class ChatCell extends ConstraintLayout {
             set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
             set.connect(messageStatus.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp8));
 
-            //pin
             set.connect(pinView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp32));
             set.connect(pinView.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
             set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp4));
             set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp4));
-
+            set.connect(pin.getId(), ConstraintSet.RIGHT, pinView.getId(), ConstraintSet.RIGHT);
+            set.connect(pin.getId(), ConstraintSet.LEFT, pinView.getId(), ConstraintSet.LEFT);
+            set.connect(pin.getId(), ConstraintSet.TOP, pinView.getId(), ConstraintSet.TOP);
+            set.connect(pin.getId(), ConstraintSet.BOTTOM, pinView.getId(), ConstraintSet.BOTTOM);
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
@@ -305,22 +317,28 @@ public class ChatCell extends ConstraintLayout {
             set.connect(chatIcon.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
             set.connect(roomName.getId(), ConstraintSet.LEFT, chatIcon.getId(), ConstraintSet.RIGHT);
             set.connect(verify.getId(), ConstraintSet.LEFT, roomName.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
-            set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
+            set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp12));
 
             //bottom
             set.connect(badgeView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
             set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
+
             set.connect(messageStatus.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
+
             set.connect(bottomView.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
-            set.connect(bottomView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp2));
+            set.connect(bottomView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             set.connect(bottomView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
 
-            //pin
             set.connect(pinView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp32));
-            set.connect(pinView.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
+            set.connect(pinView.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
             set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp4));
             set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp4));
+            set.connect(pin.getId(), ConstraintSet.RIGHT, pinView.getId(), ConstraintSet.RIGHT);
+            set.connect(pin.getId(), ConstraintSet.LEFT, pinView.getId(), ConstraintSet.LEFT);
+            set.connect(pin.getId(), ConstraintSet.TOP, pinView.getId(), ConstraintSet.TOP);
+            set.connect(pin.getId(), ConstraintSet.BOTTOM, pinView.getId(), ConstraintSet.BOTTOM);
+
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
@@ -329,8 +347,17 @@ public class ChatCell extends ConstraintLayout {
 
         }
 
-        set.addToVerticalChain(roomName.getId(), ConstraintSet.PARENT_ID, messageStatus.getId());
-        set.addToVerticalChain(messageStatus.getId(), roomName.getId(), ConstraintSet.PARENT_ID);
+
+        int[] chainViews = {roomName.getId(), messageStatus.getId()};
+        float[] chainWeights = {1, 1};
+        set.createVerticalChain(ConstraintSet.PARENT_ID, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM,
+                chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
+
+
+
+//
+//        set.addToVerticalChain(roomName.getId(), ConstraintSet.PARENT_ID, messageStatus.getId());
+//        set.addToVerticalChain(messageStatus.getId(), roomName.getId(), ConstraintSet.PARENT_ID);
 
         set.applyTo(this);
     }
