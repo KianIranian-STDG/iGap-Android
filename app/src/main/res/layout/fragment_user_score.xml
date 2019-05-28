@@ -11,7 +11,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -118,7 +119,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/rankTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -129,7 +130,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/scoreTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -140,7 +141,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/inviteItemTitle"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
@@ -154,7 +155,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/inviteItem"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp16"
@@ -175,7 +176,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/paymentItemTitle"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
@@ -212,7 +213,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/qrCodeItemTitle"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
@@ -249,7 +250,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/botsItemTitle"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
