@@ -1012,7 +1012,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 edtPhoneNumberEnable.set(true);
                 edtPhoneNumberColor.set(G.context.getResources().getColor(black_register));
                 edtCodeNumberColor.set(G.context.getResources().getColor(black_register));
-                txtAgreementVisibility.set(View.VISIBLE);
+                txtAgreementVisibility.set(View.GONE);
+                fragmentRegister.fragmentRegisterBinding.rgLayoutVerifyAndAgreement.setVisibility(View.GONE);
                 layoutVerifyAgreement.set(View.GONE);
                 dialog.dismiss();
             }
@@ -1029,7 +1030,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 long hour = millisUntilFinished / (3600 * 1000);
 
                 remindTime.setText(String.format("%02d:%02d:%02d", hour, minutes, seconds));
-                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+//                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
             @Override

@@ -72,7 +72,7 @@ public class FragmentRegister extends BaseFragment {
     private int headerLayoutHeight;
     private LinearLayout headerLayout;
     private FragmentRegisterViewModel fragmentRegisterViewModel;
-    private ActivityRegisterBinding fragmentRegisterBinding;
+    public ActivityRegisterBinding fragmentRegisterBinding;
     private SMSReceiver smsReceiver;
 
     @Nullable
