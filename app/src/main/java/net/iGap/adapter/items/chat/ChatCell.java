@@ -2,17 +2,14 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -21,6 +18,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.MaterialDesignTextView;
 
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
@@ -38,8 +36,8 @@ public class ChatCell extends ConstraintLayout {
         boolean isRtl = HelperCalander.isPersianUnicode;
         boolean isDarkTheme = G.isDarkTheme;
         ConstraintSet set = new ConstraintSet();
-        setId(R.id.cl_chatCell_root);
 
+        setId(R.id.cl_chatCell_root);
 
         /**
          * init pinned room on top
@@ -58,7 +56,7 @@ public class ChatCell extends ConstraintLayout {
         CheckBox cellCheckbox = new CheckBox(G.context);
         cellCheckbox.setId(R.id.iv_itemContactChat_checkBox);
         cellCheckbox.setButtonDrawable(R.drawable.check_box_background);
-        cellCheckbox.setPadding(16 , 0 , 0 , 0 );
+        cellCheckbox.setPadding(16, 0, 0, 0);
         addView(cellCheckbox);
 
         /**
@@ -73,9 +71,8 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init chat icon(channel,group,pv,muteRoomTv and unMute)
          * */
-        MaterialDesignTextView chatIcon = new MaterialDesignTextView(G.context);
+        FontIconTextView chatIcon = new FontIconTextView(G.context);
         chatIcon.setId(R.id.tv_chatCell_chatIcon);
-        chatIcon.setTextSize(R.dimen.dp14);
         chatIcon.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : Color.parseColor("#333333"));
         addView(chatIcon);
 
@@ -96,9 +93,10 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init verify room
          * */
-        AppCompatImageView verify = new AppCompatImageView(G.context);
+        FontIconTextView verify = new FontIconTextView(G.context);
         verify.setId(R.id.tv_chatCell_verify);
-        verify.setImageResource(R.drawable.ic_verify);
+        verify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+        verify.setText("a");
         addView(verify);
 
 
@@ -167,9 +165,9 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init last message status(read ,send , failed)
          * */
-        AppCompatImageView messageStatus = new AppCompatImageView(G.context);
+        FontIconTextView messageStatus = new FontIconTextView(G.context);
         messageStatus.setId(R.id.iv_chatCell_messageStatus);
-        messageStatus.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+        messageStatus.setTextSize(20);
         addView(messageStatus);
 
 
@@ -180,7 +178,7 @@ public class ChatCell extends ConstraintLayout {
         messageData.setId(R.id.tv_chatCell_messageData);
         messageData.setSingleLine(true);
         messageData.setTextColor(Color.parseColor(G.textTitleTheme));
-        setTextSize(messageData, R.dimen.dp14);
+        setTextSize(messageData, R.dimen.dp10);
         setTypeFace(messageData);
         addView(messageData);
 
@@ -202,18 +200,17 @@ public class ChatCell extends ConstraintLayout {
         bottomView.setBackgroundColor(isDarkTheme ? getResources().getColor(R.color.gray_6c) : getResources().getColor(R.color.gray_300));
         addView(bottomView);
 
+
         /**
          * set views dependency
          * */
-
-
         set.constrainHeight(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
 
         set.connect(cellCheckbox.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
         set.connect(cellCheckbox.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
         set.connect(cellCheckbox.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
-                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT , 16);
+                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT, 16);
 
         set.constrainHeight(avatarImageView.getId(), i_Dp(R.dimen.dp68));
         set.constrainWidth(avatarImageView.getId(), i_Dp(R.dimen.dp68));
@@ -262,8 +259,8 @@ public class ChatCell extends ConstraintLayout {
         set.constrainHeight(thirdTextView.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(thirdTextView.getId(), ConstraintSet.MATCH_CONSTRAINT);
 
-        set.constrainHeight(messageStatus.getId(), i_Dp(R.dimen.dp18));
-        set.constrainWidth(messageStatus.getId(), i_Dp(R.dimen.dp18));
+        set.constrainHeight(messageStatus.getId(), i_Dp(R.dimen.dp24));
+        set.constrainWidth(messageStatus.getId(), i_Dp(R.dimen.dp24));
 
         set.connect(firstTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
         set.connect(firstTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);

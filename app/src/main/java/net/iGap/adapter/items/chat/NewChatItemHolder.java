@@ -3,12 +3,10 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -23,6 +21,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.MaterialDesignTextView;
 
 import static android.view.Gravity.BOTTOM;
@@ -41,9 +40,9 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private TextView viewsLabelTv;
     private AppCompatTextView editedIndicatorTv;
     private AppCompatTextView timeTv;
-    private AppCompatImageView ticTv;
+    private FontIconTextView ticTv;
     private View cslm_view_left_dis;
-    private TextView eyeIconTv;
+    private FontIconTextView eyeIconTv;
     private MaterialDesignTextView voteDownIcon;
     private MaterialDesignTextView voteUpIcon;
 
@@ -97,17 +96,16 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTypeFace(viewsLabelTv);
         viewsLabelTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
 
-        eyeIconTv = new TextView(getContext());
+        eyeIconTv = new FontIconTextView(getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
-        eyeIconTv.setText(context.getResources().getString(R.string.md_visibility));
+        eyeIconTv.setText("Ë");
         eyeIconTv.setTextColor(Color.parseColor(G.textBubble));
-        eyeIconTv.setTypeface(G.typeface_Fontico);
-        eyeIconTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+        eyeIconTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
         editedIndicatorTv = new AppCompatTextView(getContext());
         editedIndicatorTv.setId(R.id.tv_chatItem_edited);
 
-        ticTv = new AppCompatImageView(getContext());
+        ticTv = new FontIconTextView(getContext());
         ticTv.setId(R.id.tv_chatItem_status);
         cslm_view_left_dis = new View(getContext());
 
@@ -141,7 +139,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         timeTv.setTextAppearance(getContext(), R.style.ChatMessages_Time);
         setTypeFace(timeTv);
 
-        ticTv.setColorFilter(Color.parseColor(G.textBubble), PorterDuff.Mode.SRC_IN);
 
         voteUpIcon = new MaterialDesignTextView(context);
         voteUpIcon.setText(context.getResources().getString(R.string.md_thumb_up));
@@ -261,9 +258,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return ViewMaker.i_Dp(dpSrc);
     }
 
-//    protected int dpToPx(int dp) {
-//        return ViewMaker.dpToPx(dp);
-//    }
 
     protected void setTypeFace(TextView v) {
         ViewMaker.setTypeFace(v);
@@ -314,7 +308,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return timeTv;
     }
 
-    public AppCompatImageView getTicTv() {
+    public FontIconTextView getTicTv() {
         return ticTv;
     }
 

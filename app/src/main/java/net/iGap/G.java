@@ -389,6 +389,7 @@ public class G extends MultiDexApplication {
     public static Typeface typeface_Fontico;
     public static Typeface typeface_FonticonNew;
     public static Typeface typeface_neuropolitical;
+    public static Typeface typeface_iGap;
     public static boolean isPassCode;
     public static FingerPrint fingerPrint;
     public static OneFragmentIsOpen oneFragmentIsOpen;

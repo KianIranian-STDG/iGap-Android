@@ -128,6 +128,7 @@
 
     <!--voice item-->
     <item name="wv_voiceItem_progress" type="id" />
+    <item name="v_voiceItem_listen" type="id" />
 
 
 </resources>

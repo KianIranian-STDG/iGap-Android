@@ -226,5 +226,8 @@
 
     <color name="voice_round">#468da7</color>
 
+    <color name="read_status">#5ebc45</color>
+    <color name="unread_status">#424242</color>
+
 
 </resources>
