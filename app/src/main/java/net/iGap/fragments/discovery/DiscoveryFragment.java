@@ -90,9 +90,21 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         page = getArguments().getInt("page");
-        //if (page == 0) {
-            appBarLayout.setVisibility(View.GONE);
-        //}
+        appBarLayout.setVisibility(View.GONE);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                //.setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setLogoShown(true)
+                .setRightSmallAvatarShown(true)
+                .setListener(this);
+
+        if (page != 0){
+            mHelperToolbar.setLeftIcon(R.drawable.ic_back_btn);
+        }
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
 
         init();
     }
@@ -137,21 +149,6 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
                 }
             }
         });
-
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
-                //.setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setLogoShown(true)
-                .setRightSmallAvatarShown(true)
-                .setListener(this);
-
-        if (page != 0){
-            mHelperToolbar.setLeftIcon(R.drawable.ic_back_btn);
-        }
-
-        ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
