@@ -149,8 +149,16 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private View view;
     private boolean isInit = false;
 
+    public static RegisteredContactsFragment newInstance(boolean isBackSwipable) {
+        RegisteredContactsFragment registeredContactsFragment = new RegisteredContactsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isBackSwipable", isBackSwipable);
+        registeredContactsFragment.setArguments(bundle);
+        return registeredContactsFragment;
+    }
+
     public static RegisteredContactsFragment newInstance() {
-        return new RegisteredContactsFragment();
+        return newInstance(true);
     }
 
     private Realm getRealm() {
@@ -177,8 +185,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
+        if (getArguments().getBoolean("isBackSwipable")) {
+            return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
+        } else {
+            return inflater.inflate(R.layout.fragment_contacts, container, false);
+        }
     }
 
     @Override
@@ -189,6 +200,19 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         AppUtils.setProgresColler(prgWaiting);
 
         prgWaiting.setVisibility(View.GONE);
+
+        LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setSearchBoxShown(true)
+                .setLogoShown(true)
+                .setListener(this);
+
+        toolbarLayout.addView(mHelperToolbar.getView());
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -253,18 +277,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         vgInviteFriend =  view.findViewById(R.id.menu_layout_inviteFriend);
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
         vgRoot.setBackgroundColor(G.context.getResources().getColor(R.color.white));
-
-        LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setRightIcons(R.drawable.ic_add_toolbar)
-                .setSearchBoxShown(true)
-                .setLogoShown(true)
-                .setListener(this);
-
-        toolbarLayout.addView(mHelperToolbar.getView());
 
         btnAddNewGroupCall = view.findViewById(R.id.menu_layout_new_group_call);
         btnAddNewContact = view.findViewById(R.id.menu_layout_add_new_contact);

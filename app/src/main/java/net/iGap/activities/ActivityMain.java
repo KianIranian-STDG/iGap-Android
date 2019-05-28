@@ -1367,7 +1367,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
-                pages.add(RegisteredContactsFragment.newInstance());
+                pages.add(RegisteredContactsFragment.newInstance(false));
 
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
@@ -1381,7 +1381,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             G.handler.postDelayed(() -> {
 
-                pages.add(RegisteredContactsFragment.newInstance());
+                pages.add(RegisteredContactsFragment.newInstance(false));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
