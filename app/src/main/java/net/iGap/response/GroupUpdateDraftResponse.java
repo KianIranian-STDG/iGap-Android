@@ -30,13 +30,7 @@ public class GroupUpdateDraftResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoGroupUpdateDraft.GroupUpdateDraftResponse.Builder updateDraft = (ProtoGroupUpdateDraft.GroupUpdateDraftResponse.Builder) message;
-
-        /**
-         * if another account get UpdateDraftResponse set draft to RealmRoom
-         */
-        if (updateDraft.getResponse().getId().isEmpty()) {
-            RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo(), updateDraft.getDraft().getDraftTime());
-        }
+        RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo(), updateDraft.getDraft().getDraftTime());
     }
 
     @Override
