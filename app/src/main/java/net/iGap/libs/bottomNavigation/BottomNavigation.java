@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
@@ -50,7 +51,12 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.BottomNavigation);
 
             try {
-                backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
+                if (G.isDarkTheme){
+                    backgroundColor = getResources().getColor(R.color.navigation_dark_mode_bg);
+                }else{
+                    backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
+                }
+
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
             } finally {
                 typedArray.recycle();

@@ -135,6 +135,14 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         if (active != isActive) {
             active = isActive;
         }
+
+        //todo:// add dark mode svg for bottom nav icons
+        if (G.isDarkTheme){
+
+        }else {
+
+        }
+
         if (active) {
             imageView.setImageDrawable(selectedIcon);
         } else {

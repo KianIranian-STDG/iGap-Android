@@ -182,7 +182,7 @@
         <View
             android:id="@+id/fup_splitter_1"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             style="?lineColorSettingTheme"
             android:layout_marginRight="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
@@ -248,7 +248,7 @@
         </android.support.constraint.ConstraintLayout>
 
         <View
-            android:layout_width="0.5dp"
+            android:layout_width="1dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="@id/fup_btn_credit"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit"
@@ -317,7 +317,7 @@
         <View
             android:id="@+id/fup_splitter_3"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             style="?lineColorSettingTheme"
             android:layout_marginRight="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
@@ -585,7 +585,7 @@
         <View
             android:id="@+id/fup_splitter_4"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             style="?lineColorSettingTheme"
             android:layout_marginRight="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
@@ -623,7 +623,7 @@
                 android:id="@+id/fup_txt_app_version"
                 android:textSize="@dimen/fup_items_textSize"
                 style="?textSubColorSettingTheme"
-                android:text="1.5.0.4"
+                android:text="0.0.0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
