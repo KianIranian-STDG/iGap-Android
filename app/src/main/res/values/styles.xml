@@ -751,6 +751,8 @@
   <style name="myIconTextViewStyle">
     <item name="fontPath">fonts/font_icon.ttf</item>
     <item name="android:gravity">center</item>
+    <item name="android:textSize">@dimen/dp22</item>
+    <item name="android:theme">?textTitleColorSettingTheme</item>
   </style>
 
 </resources>

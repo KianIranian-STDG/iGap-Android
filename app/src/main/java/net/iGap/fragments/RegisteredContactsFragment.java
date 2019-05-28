@@ -25,6 +25,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,6 +90,8 @@ import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsGetList;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +145,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     private ViewGroup mLayoutMultiSelected ;
     private TextView mTxtSelectedCount ;
-    private ImageView mBtnDeleteSelected ;
+    private AppCompatTextView mBtnDeleteSelected ;
     private MaterialDesignTextView mBtnCancelSelected ;
     private int mNumberOfSelectedCounter ;
 
@@ -160,13 +163,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
     }
 
     @Override
-    public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         G.onPhoneContact = this;
@@ -221,9 +224,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setContext(getContext())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon)
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setListener(this);

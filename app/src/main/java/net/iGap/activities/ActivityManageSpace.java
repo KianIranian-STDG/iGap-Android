@@ -70,8 +70,8 @@ public class ActivityManageSpace extends ActivityEnhanced implements ToolbarList
     private void setupToolbar() {
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setContext(this)
+                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(G.context.getResources().getString(R.string.data_storage))
                 .setListener(this);

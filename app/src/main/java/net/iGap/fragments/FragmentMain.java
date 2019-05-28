@@ -199,9 +199,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
         }, 10);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
-                .setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setContext(getContext())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon)
                 .setLogoShown(true)
                 .setSearchBoxShown(true)
                 .setListener(this);
@@ -1032,26 +1032,23 @@ public class FragmentMain extends BaseFragment implements ToolbarListener ,Activ
     public void onLeftIconClickListener(View view) {
 
         if (isChatMultiSelectEnable){
-
             mLayoutMultiSelectedActions.setVisibility(View.GONE);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_search), 0, 10);
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = false ;
             refreshChatList(0 , true);
-            mHelperToolbar.setLeftIcon(R.drawable.ic_edit_toolbar);
+            mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             setVisiblityForSelectedActionsInEverySelection();
-
         }else {
-
             mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_room_selected_mode), 0, 10);
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = true ;
             refreshChatList(0 , true);
-            mHelperToolbar.setLeftIcon(R.drawable.ic_cancel_toolbar);
+            mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }
     }

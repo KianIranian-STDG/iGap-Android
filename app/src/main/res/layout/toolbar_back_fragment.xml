@@ -2,18 +2,18 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
     style="?backgroundColorSettingTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <net.iGap.module.MyAppBarLayout
         android:id="@+id/ac_appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/shape_toolbar_background"
         android:layoutDirection="ltr"
-        app:elevation="0dp"
-        android:background="@drawable/shape_toolbar_background">
+        app:elevation="0dp">
 
         <RelativeLayout
             android:id="@+id/toolbar"
@@ -31,11 +31,11 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_back_Button"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/md_back_arrow"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:text="@string/back_icon"
                     android:textColor="@color/whit_background" />
 
             </net.iGap.libs.rippleeffect.RippleView>
@@ -44,10 +44,10 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingRight="58dp"
-                android:paddingLeft="58dp"
                 android:gravity="center"
                 android:padding="4dp"
+                android:paddingLeft="58dp"
+                android:paddingRight="58dp"
                 android:singleLine="true"
                 android:text=""
                 android:textAppearance="@style/TextIconAppearance_toolbar"
@@ -60,11 +60,11 @@
                 fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:singleLine="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:text="@string/md_rubbish_delete_file"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"

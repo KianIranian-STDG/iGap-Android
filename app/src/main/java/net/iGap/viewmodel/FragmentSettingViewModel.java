@@ -124,9 +124,9 @@ public class FragmentSettingViewModel extends ViewModel {
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
-    private MutableLiveData<Integer> usernameErrorMessage = new MutableLiveData<>();
+    public ObservableInt usernameErrorMessage = new ObservableInt(R.string.is_empty);
     private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
-    private MutableLiveData<Integer> emailErrorMessage = new MutableLiveData<>();
+    public ObservableInt emailErrorMessage = new ObservableInt(R.string.is_empty);
     //ui
     public MutableLiveData<Boolean> goToShowAvatar = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogDeleteAccount = new MutableLiveData<>();
@@ -183,16 +183,8 @@ public class FragmentSettingViewModel extends ViewModel {
         return usernameErrorEnable;
     }
 
-    public LiveData<Integer> getUsernameErrorMessage() {
-        return usernameErrorMessage;
-    }
-
     public LiveData<Boolean> getEmailErrorEnable() {
         return emailErrorEnable;
-    }
-
-    public LiveData<Integer> getEmailErrorMessage() {
-        return emailErrorMessage;
     }
 
 
@@ -498,13 +490,13 @@ public class FragmentSettingViewModel extends ViewModel {
                         if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
                             showSubmitButton.setValue(!currentUserName.equals(userName.get()));
                             usernameErrorEnable.setValue(true);
-                            usernameErrorMessage.setValue(R.string.is_empty);
+                            usernameErrorMessage.set(R.string.is_empty);
                         } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
-                            usernameErrorMessage.setValue(R.string.INVALID);
+                            usernameErrorMessage.set(R.string.INVALID);
                             usernameErrorEnable.setValue(true);
                             showSubmitButton.setValue(false);
                         } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
-                            usernameErrorMessage.setValue(R.string.TAKEN);
+                            usernameErrorMessage.set(R.string.TAKEN);
                             usernameErrorEnable.setValue(true);
                             showSubmitButton.setValue(false);
                         }
@@ -518,7 +510,7 @@ public class FragmentSettingViewModel extends ViewModel {
             });
         } else {
             usernameErrorEnable.setValue(true);
-            usernameErrorMessage.setValue(R.string.INVALID);
+            usernameErrorMessage.set(R.string.INVALID);
             showSubmitButton.setValue(false);
         }
     }
@@ -555,7 +547,7 @@ public class FragmentSettingViewModel extends ViewModel {
     public void emailTextChangeListener(String newEmail) {
         if (!newEmail.equals(currentUserEmail)) {
             showSubmitButton.setValue(true);
-            emailErrorMessage.setValue(R.string.is_empty);
+            emailErrorMessage.set(R.string.is_empty);
             emailErrorEnable.setValue(false);
         } else {
             if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentBio.equals(bio.get()) && currentGender == gender.get()) {
@@ -581,13 +573,13 @@ public class FragmentSettingViewModel extends ViewModel {
                 G.handler.post(() -> {
                     showLoading.setValue(false);
                     if (majorCode == 114 && minorCode == 1) {
-                        emailErrorMessage.setValue(R.string.error_email);
+                        emailErrorMessage.set(R.string.error_email);
                         emailErrorEnable.setValue(true);
                         showSubmitButton.setValue(false);
                     } else if (majorCode == 115) {
                         emailErrorEnable.setValue(true);
                         showSubmitButton.setValue(false);
-                        emailErrorMessage.setValue(R.string.error_email);
+                        emailErrorMessage.set(R.string.error_email);
                     }
                 });
             }
@@ -603,9 +595,12 @@ public class FragmentSettingViewModel extends ViewModel {
         if (!currentBio.equals(newBio)) {
             showSubmitButton.setValue(true);
         } else {
-            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentGender == gender.get()) {
-                showSubmitButton.setValue(false);
-            }
+            if (currentName.equals(name.get()))
+                if (currentUserName.equals(userName.get()))
+                    if (currentUserEmail.equals(email.get()))
+                        if (currentGender == gender.get()) {
+                            showSubmitButton.setValue(false);
+                        }
         }
     }
 

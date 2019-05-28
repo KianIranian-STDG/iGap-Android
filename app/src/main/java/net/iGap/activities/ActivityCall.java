@@ -553,7 +553,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private void setupToolbar() {
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(ActivityCall.this)
+                .setContext(this)
                 .setLogoShown(true)
                 .setCallEnable(true);
 

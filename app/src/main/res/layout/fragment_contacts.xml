@@ -3,130 +3,129 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/menu_parent_layout"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    style="?backgroundColorSettingTheme"
     tools:ignore="MissingPrefix">
 
 
     <android.support.design.widget.CoordinatorLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
 
         <net.iGap.module.MyAppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp10"
             android:background="@android:color/transparent"
+            android:paddingTop="@dimen/dp10"
             app:elevation="0dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dp10"
                 android:visibility="visible"
-                app:layout_scrollFlags="scroll|snap"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/dp10">
+                app:layout_scrollFlags="scroll|snap">
 
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:id="@+id/fc_layout_selected_mode"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?backgroundSubChatTheme"
-                android:paddingLeft="@dimen/dp20"
-                android:paddingTop="@dimen/dp12"
-                android:paddingEnd="@dimen/dp20"
-                android:paddingRight="@dimen/dp20"
-                android:paddingBottom="@dimen/dp6">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/fc_selected_mode_btn_cancel"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        style="?textTitleColorSettingTheme"
-                        android:text="@string/md_close_button"
-                        android:textSize="16sp"
-                        android:layout_marginRight="@dimen/dp10"
-                        android:layout_marginEnd="@dimen/dp10"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/fc_selected_mode_txt_counter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="?textTitleColorSettingTheme"
-                        android:fontFamily="@font/main_font"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
-                        android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
-                        android:textSize="14sp"/>
-
-                    <ImageView
-                        android:id="@+id/fc_selected_mode_btn_delete"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="5dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:padding="4dp"
-                        app:srcCompat="@drawable/ic_garbage"
-                        />
-
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/fc_selected_mode_btn_share"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="5dp"
-                        android:layout_toLeftOf="@id/fc_selected_mode_btn_delete"
-                        android:layout_toStartOf="@id/fc_selected_mode_btn_delete"
-                        android:padding="4dp"
-                        app:srcCompat="@drawable/share_icon"
-                        />
-
-                </RelativeLayout>
-                <!--
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/gray_4c"
-                    android:layout_marginTop=""
-                -->
-            </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/menu_layout_inviteFriend"
-                    android:visibility="visible"
+                <LinearLayout
+                    android:id="@+id/fc_layout_selected_mode"
+                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp20"
+                    android:paddingTop="@dimen/dp12"
+                    android:paddingEnd="@dimen/dp20"
+                    android:paddingRight="@dimen/dp20"
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <net.iGap.module.MaterialDesignTextView
+                            android:id="@+id/fc_selected_mode_btn_cancel"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/dp10"
+                            android:layout_marginRight="@dimen/dp10"
+                            android:gravity="center"
+                            android:text="@string/md_close_button"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/fc_selected_mode_txt_counter"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
+                            android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
+                            android:fontFamily="@font/main_font"
+                            android:textSize="14sp" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/fc_selected_mode_btn_delete"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="5dp"
+                            android:text="@string/delete_icon"
+                            style="@style/myIconTextViewStyle" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/fc_selected_mode_btn_share"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="5dp"
+                            android:layout_toStartOf="@id/fc_selected_mode_btn_delete"
+                            android:layout_toLeftOf="@id/fc_selected_mode_btn_delete"
+                            android:visibility="gone"
+                            android:text="@string/share_icon"
+                            style="@style/myIconTextViewStyle" />
+
+                    </RelativeLayout>
+                    <!--
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/gray_4c"
+                        android:layout_marginTop=""
+                    -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/menu_layout_inviteFriend"
                     style="?backgroundSubChatTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
-                    android:paddingBottom="@dimen/dp6">
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="visible">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        app:srcCompat="@drawable/invite_friend_ico" />
+                        android:text="@string/invite_icon" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -150,19 +149,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
-                    android:paddingBottom="@dimen/dp6">
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="gone">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/ic_add_new_channel" />
+                        android:text="@string/channel_icon" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -185,19 +184,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
-                    android:paddingBottom="@dimen/dp6">
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="gone">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/ic_add_new_group" />
+                        android:text="@string/group_icon" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -220,19 +219,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
-                    android:paddingBottom="@dimen/dp6">
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="gone">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/ic_add_new_secret_chat" />
+                        android:text="@string/secret_chat_icon" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -256,19 +255,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
-                    android:paddingBottom="@dimen/dp6">
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="gone">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/ic_add_new_group" />
+                        android:text="@string/group_icon" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -291,19 +290,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
-                    android:paddingBottom="@dimen/dp6">
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="gone">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/invite_friend_ico" />
+                        android:text="@string/invite_icon" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -326,19 +325,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
-                    android:paddingBottom="@dimen/dp6">
+                    android:paddingBottom="@dimen/dp6"
+                    android:visibility="gone">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/ic_add_new_secret_chat" />
+                        android:text="@string/dial_number_icon" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -360,14 +359,13 @@
 
         </net.iGap.module.MyAppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/nestedScrollContact"
+            style="?backgroundColorSettingTheme"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
             android:scrollbars="vertical"
-            style="?backgroundColorSettingTheme"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -398,6 +396,7 @@
 
                 <TextView
                     android:id="@+id/txtNon_User"
+                    style="?textTitleColorSettingTheme"
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -407,7 +406,6 @@
                     android:paddingTop="@dimen/dp10"
                     android:paddingBottom="@dimen/dp10"
                     android:text="@string/list_contacts"
-                    style="?textTitleColorSettingTheme"
                     android:textSize="@dimen/dp16"
                     android:textStyle="bold" />
 
@@ -433,16 +431,16 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/fc_layot_title"
         android:layout_width="match_parent"
-        android:background="@android:color/transparent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         app:elevation="0dp">
 
 
         <LinearLayout
             android:id="@+id/frg_contact_ll_toolbar_layout"
+            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height_root_with_search"
-            style="?backgroundColorSettingTheme"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"

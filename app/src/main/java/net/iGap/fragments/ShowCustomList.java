@@ -107,10 +107,10 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
 
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_checked)
-                .setDefaultTitle(G.context.getResources().getString(R.string.add_new_member))
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
+                .setDefaultTitle(getString(R.string.add_new_member))
                 .setListener(this)
                 .setLogoShown(true);
 

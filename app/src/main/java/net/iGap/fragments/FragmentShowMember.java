@@ -85,6 +85,8 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -178,12 +180,12 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_show_member, container, false));
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //G.onGroupAddAdmin = this;
@@ -440,8 +442,8 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
     private void initComponent(View view) {
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setSearchBoxShown(true)
                 .setListener(this);

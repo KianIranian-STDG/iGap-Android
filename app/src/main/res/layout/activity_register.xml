@@ -197,7 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{()->fragmentRegisterViewModel.onClickQrCode()}"
-                android:text="@string/Login_with_QrCode"
+                android:text="@string/register_with_barcode_scan"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 android:textColor="@color/green"

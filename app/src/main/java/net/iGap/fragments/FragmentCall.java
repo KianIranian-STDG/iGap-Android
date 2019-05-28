@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -24,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
@@ -32,7 +30,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -41,17 +38,13 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ISignalingGetCallLog;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnCallLogClear;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -62,6 +55,8 @@ import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.webrtc.WebRTC;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +169,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
         if (openInMain) {
             return inflater.inflate(R.layout.fragment_call, container, false);
@@ -186,7 +181,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
 
     @SuppressLint("RestrictedApi")
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
 
@@ -198,9 +193,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
 
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setContext(getContext())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon)
                 .setLogoShown(true)
                 .setListener(this);
 
@@ -262,7 +257,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
         });
 
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
+        mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
         LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(linearVertical);
@@ -783,31 +778,31 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
             // set icon and icon color
             switch (item.getStatus()) {
                 case OUTGOING:
-                    viewHolder.icon.setText(R.string.md_call_made);
+                    viewHolder.icon.setText(R.string.voice_call_made_icon);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
                     break;
                 case MISSED:
-                    viewHolder.icon.setText(R.string.md_call_missed);
+                    viewHolder.icon.setText(R.string.voice_call_missed_icon);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
                     viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.red));
                     viewHolder.timeDuration.setText(R.string.miss);
                     break;
                 case CANCELED:
-                    viewHolder.icon.setText(R.string.md_call_made);
+                    viewHolder.icon.setText(R.string.voice_call_made_icon);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setText(R.string.not_answer);
                     break;
                 case INCOMING:
-                    viewHolder.icon.setText(R.string.md_call_received);
+                    viewHolder.icon.setText(R.string.voice_call_received_icon);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
                     viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
                     break;
             }
 
             if (item.getType() == VIDEO_CALLING) {
-                viewHolder.icon.setText(R.string.md_file_video);
+                viewHolder.icon.setText(R.string.video_call_icon);
             }
 
 

@@ -5,16 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,7 +21,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.enums.ConnectionState;
@@ -37,7 +35,7 @@ import net.iGap.module.enums.ConnectionState;
  */
 public class HelperToolbar {
 
-    private ImageView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
+    private AppCompatTextView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
     private EmojiTextViewE mTxtChatUserName ;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
@@ -54,8 +52,8 @@ public class HelperToolbar {
     private ViewGroup mViewGroup = null;
     private ToolbarListener mToolbarListener;
 
-    private Bitmap mLeftIcon;
-    private Bitmap[] mRightIcons = {null, null, null, null};
+    private int mLeftIcon=0;
+    private int[] mRightIcons = {0, 0, 0, 0};
     private boolean isAttachToRoot;
     private boolean isSearchBoxShown;
     private boolean isLogoShown;
@@ -91,27 +89,19 @@ public class HelperToolbar {
         return this;
     }
 
-    public HelperToolbar setRightIcons(Bitmap... bitmaps) {
+    /*public HelperToolbar setRightIcons(Bitmap... bitmaps) {
         this.mRightIcons = bitmaps;
         return this;
-    }
+    }*/
 
-    public HelperToolbar setRightIcons(int... drawables) {
-
-        for (int i = 0; i < drawables.length; i++) {
-            mRightIcons[i] = getConvertToBitmap(drawables[i]);
-        }
+    public HelperToolbar setRightIcons(@StringRes int... drawables) {
+        System.arraycopy(drawables, 0, mRightIcons, 0, drawables.length);
         return this;
     }
 
-    public HelperToolbar setLeftIcon(Bitmap bitmap) {
-        this.mLeftIcon = bitmap;
-        return this;
-    }
-
-    public HelperToolbar setLeftIcon(int drawable) {
-        this.mLeftIcon = getConvertToBitmap(drawable);
-        if (mLeftBtn != null) mLeftBtn.setImageBitmap(mLeftIcon);
+    public HelperToolbar setLeftIcon(@StringRes int icon) {
+        this.mLeftIcon = icon;
+        if (mLeftBtn != null) mLeftBtn.setText(mLeftIcon);
         return this;
     }
 
@@ -191,8 +181,8 @@ public class HelperToolbar {
             result.findViewById(R.id.view_toolbar_main_constraint)
                     .setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
 
-        if (mLeftIcon != null) {
-            mLeftBtn.setImageBitmap(mLeftIcon);
+        if (mLeftIcon != 0) {
+            mLeftBtn.setText(mLeftIcon);
             mLeftBtn.setVisibility(View.VISIBLE);
             mLeftBtn.setOnClickListener(v -> mToolbarListener.onLeftIconClickListener(v));
 
@@ -200,8 +190,8 @@ public class HelperToolbar {
             mLeftBtn.setVisibility(View.GONE);
         }
 
-        if (mRightIcons[0] != null) {
-            mRightBtn.setImageBitmap(mRightIcons[0]);
+        if (mRightIcons[0] != 0) {
+            mRightBtn.setText(mRightIcons[0]);
             mRightBtn.setVisibility(View.VISIBLE);
             mRightBtn.setOnClickListener(v -> mToolbarListener.onRightIconClickListener(v));
 
@@ -209,8 +199,8 @@ public class HelperToolbar {
             mRightBtn.setVisibility(View.GONE);
         }
 
-        if (mRightIcons[1] != null) {
-            m2RightBtn.setImageBitmap(mRightIcons[1]);
+        if (mRightIcons[1] != 0) {
+            m2RightBtn.setText(mRightIcons[1]);
             m2RightBtn.setVisibility(View.VISIBLE);
             m2RightBtn.setOnClickListener(v -> mToolbarListener.onSecondRightIconClickListener(v));
 
@@ -218,8 +208,8 @@ public class HelperToolbar {
             m2RightBtn.setVisibility(View.GONE);
         }
 
-        if (mRightIcons[2] != null) {
-            m3RightBtn.setImageBitmap(mRightIcons[2]);
+        if (mRightIcons[2] != 0) {
+            m3RightBtn.setText(mRightIcons[2]);
             m3RightBtn.setVisibility(View.VISIBLE);
             m3RightBtn.setOnClickListener(v -> mToolbarListener.onThirdRightIconClickListener(v));
 
@@ -227,8 +217,8 @@ public class HelperToolbar {
             m3RightBtn.setVisibility(View.GONE);
         }
 
-        if (mRightIcons[3] != null) {
-            m4RightBtn.setImageBitmap(mRightIcons[3]);
+        if (mRightIcons[3] != 0) {
+            m4RightBtn.setText(mRightIcons[3]);
             m4RightBtn.setVisibility(View.VISIBLE);
             m4RightBtn.setOnClickListener(v -> mToolbarListener.onFourthRightIconClickListener(v));
 
@@ -334,23 +324,23 @@ public class HelperToolbar {
         return mTxtLogo;
     }
 
-    public ImageView getLeftButton() {
+    public AppCompatTextView getLeftButton() {
         return mLeftBtn;
     }
 
-    public ImageView getRightButton() {
+    public AppCompatTextView getRightButton() {
         return mRightBtn;
     }
 
-    public ImageView getSecondRightButton(){
+    public AppCompatTextView getSecondRightButton(){
         return m2RightBtn;
     }
 
-    public ImageView getThirdRightButton() {
+    public AppCompatTextView getThirdRightButton() {
         return m3RightBtn;
     }
 
-    public ImageView getFourthRightButton() {
+    public AppCompatTextView getFourthRightButton() {
         return m4RightBtn;
     }
 
@@ -546,8 +536,8 @@ public class HelperToolbar {
         }
     }
 
-    private ImageView getImageView(View v, int id) {
-        return ((ImageView) v.findViewById(id));
+    private AppCompatTextView getImageView(View v, int id) {
+        return v.findViewById(id);
     }
 
     private View getInflater(int resId) {

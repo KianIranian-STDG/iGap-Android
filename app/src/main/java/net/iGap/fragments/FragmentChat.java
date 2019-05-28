@@ -1097,9 +1097,9 @@ public class FragmentChat extends BaseFragment
 
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_more_toolbar, R.drawable.ic_voice_call, R.drawable.ic_video_call)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setListener(this);
@@ -1502,9 +1502,9 @@ public class FragmentChat extends BaseFragment
         //add toolbar
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_more_toolbar, R.drawable.ic_voice_call, R.drawable.ic_video_call)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setListener(this);

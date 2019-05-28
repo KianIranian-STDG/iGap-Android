@@ -53,6 +53,8 @@ import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactImport;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,12 +78,12 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_add_contact, container, false));
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -244,10 +246,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         ViewGroup toolbarLayout = view.findViewById(R.id.frg_add_contact_toolbar);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(context)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_checked)
-                .setDefaultTitle(G.context.getResources().getString(R.string.menu_add_contact))
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
+                .setDefaultTitle(getString(R.string.menu_add_contact))
                 .setLogoShown(true)
                 .setListener(this);
 

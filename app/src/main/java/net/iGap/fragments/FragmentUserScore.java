@@ -40,8 +40,8 @@ public class FragmentUserScore extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         HelperToolbar t = HelperToolbar.create().setContext(getContext())
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.white_transaction_history)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.history_icon)
                 .setLogoShown(false)
                 .setCounterShown(true)
                 .setListener(new ToolbarListener() {

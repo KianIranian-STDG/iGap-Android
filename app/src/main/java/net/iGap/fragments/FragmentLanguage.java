@@ -56,8 +56,8 @@ public class FragmentLanguage extends BaseFragment {
     private void initToolbar() {
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_back_btn)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.language))
                 .setListener(new ToolbarListener() {

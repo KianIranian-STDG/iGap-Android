@@ -116,9 +116,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         }
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_back_btn)
-                .setRightIcons(R.drawable.ic_checked)
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
                 .setDefaultTitle(G.context.getResources().getString(R.string.new_group))
                 .setListener(this)
                 .setLogoShown(true);

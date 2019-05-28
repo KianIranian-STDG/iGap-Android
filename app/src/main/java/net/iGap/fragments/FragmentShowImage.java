@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -259,8 +260,7 @@ public class FragmentShowImage extends BaseFragment {
 
         downloadedList.clear();
 
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
+        RippleView rippleBack = view.findViewById(R.id.asi_ripple_back);
 
         //rippleBack.setOnClickListener(new View.OnClickListener() {
         //    @Override
@@ -279,8 +279,7 @@ public class FragmentShowImage extends BaseFragment {
             }
         });
 
-        MaterialDesignTextView btnMenu = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_menu);
-        RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
+        RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
