@@ -15,6 +15,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.text.Html;
@@ -32,6 +33,7 @@ import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentRegister;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
+import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnInfoCountryResponse;
@@ -43,6 +45,7 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.structs.StructCountry;
@@ -54,12 +57,14 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestInfoLocation;
 import net.iGap.request.RequestInfoPage;
+import net.iGap.request.RequestQrCodeNewDevice;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestWrapper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -79,13 +84,20 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     public MutableLiveData<Boolean> showConnectionErrorDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToMainPage = new MutableLiveData<>();
     public MutableLiveData<WaitTimeModel> showDialogWaitTime = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showErrorMessageEmptyErrorPhoneNumberDialog= new MutableLiveData<>();
+    public MutableLiveData<Boolean> showErrorMessageEmptyErrorPhoneNumberDialog = new MutableLiveData<>();
+    public MutableLiveData<Integer> showDialogQrCode = new MutableLiveData<>();
+    public MutableLiveData<Uri> shareQrCodeIntent = new MutableLiveData<>();
+    public MutableLiveData<Boolean> hideDialogQRCode = new MutableLiveData<>();
 
 
     public static String isoCode = "IR";
 
     public String regex;
     public boolean isVerify = false;
+    public String _resultQrCode;
+    private Uri image_uriQrCode;
+
+
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.rg_agreement_text_register));
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -297,120 +309,50 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             }
         });
         callBackEdtPhoneNumber.set("");
-
-        /*isoCode = structCountry.getAbbreviation();
-
-        FragmentRegister.positionRadioButton = structCountry.getId();
-
-        callbackEdtCodeNumber.set("+ " + structCountry.getCountryCode());
-
-        if (structCountry.getPhonePattern() != null || structCountry.getPhonePattern().equals(" ")) {
-            edtPhoneNumberMask.set((structCountry.getPhonePattern().replace("X", "#").replace(" ", "-")));
-        } else {
-            edtPhoneNumberMaskMaxCount.set(18);
-            edtPhoneNumberMask.set("##################");
-        }
-
-        callbackBtnChoseCountry.set(structCountry.getName());*/
     }
 
-
-    //for qr code
-    /*private void shareQr() {
+    public void shareQr() {
         if (_resultQrCode == null) {
             return;
         }
         try {
             File file = new File(_resultQrCode);
             if (file.exists()) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                G.fragmentActivity.startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                shareQrCodeIntent.setValue(Uri.fromFile(file));
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-    }*/
+    }
 
-    //for qr code
-    /*public void onClickQrCode(View v) {
-
-        dialogQrCode = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                shareQr();
-            }
-        }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                if (_resultQrCode == null) {
-                    return;
-                }
-                File file = new File(_resultQrCode);
-                if (file.exists()) {
-                    HelperSaveFile.savePicToGallery(_resultQrCode, true);
-                }
-            }
-        }).neutralText(R.string.cancel).onNeutral(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                dialog.dismiss();
-            }
-        }).build();
-
-        imgQrCodeNewDevice = (ImageView) dialogQrCode.findViewById(R.id.imgQrCodeNewDevice);
-        prgQrCodeNewDevice = (ProgressBar) dialogQrCode.findViewById(R.id.prgWaitQrCode);
-        prgQrCodeNewDevice.setVisibility(View.VISIBLE);
-        if (!(G.fragmentActivity).isFinishing()) {
-            dialogQrCode.show();
+    public void saveQr(){
+        if (_resultQrCode == null) {
+            return;
         }
+        File file = new File(_resultQrCode);
+        if (file.exists()) {
+            HelperSaveFile.savePicToGallery(_resultQrCode, true);
+        }
+    }
 
-        dialogQrCode.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (CountDownTimerQrCode != null) {
-                    CountDownTimerQrCode.cancel();
-                }
+    public void onClickQrCode() {
+        isShowLoading.set(View.VISIBLE);
+        new RequestQrCodeNewDevice().qrCodeNewDevice((codeImage, expireTime) -> {
+            _resultQrCode = G.DIR_TEMP + "/" + "QrCode" + ".jpg";
+            File f = new File(_resultQrCode);
+            if (f.exists()) {
+                f.delete();
             }
+            AndroidUtils.writeBytesToFile(_resultQrCode, codeImage.toByteArray());
+            image_uriQrCode = Uri.parse("file://" + _resultQrCode);
+            G.handler.post(() -> {
+                isShowLoading.set(View.GONE);
+                showDialogQrCode.setValue(expireTime);
+            });
         });
-
-        new RequestQrCodeNewDevice().qrCodeNewDevice();
-
-        G.onQrCodeNewDevice = new OnQrCodeNewDevice() {
-            @Override
-            public void getQrCode(ByteString codeImage, final int expireTime) {
-
-                _resultQrCode = G.DIR_TEMP + "/" + "QrCode" + ".jpg";
-
-                File f = new File(_resultQrCode);
-                if (f.exists()) {
-                    f.delete();
-                }
-                AndroidUtils.writeBytesToFile(_resultQrCode, codeImage.toByteArray());
-                image_uriQrCode = Uri.parse("file://" + _resultQrCode);
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkExpireTime(expireTime);
-                        if (prgQrCodeNewDevice != null) {
-                            prgQrCodeNewDevice.setVisibility(View.GONE);
-                        }
-
-                        if (imgQrCodeNewDevice != null) {
-                            G.imageLoader.clearMemoryCache();
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(_resultQrCode), imgQrCodeNewDevice);
-                        }
-                    }
-                });
-            }
-        };
-
-
-    }*/
+    }
 
     /*public void onClickTxtForgotPassword(View v) {
 
@@ -473,8 +415,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             G.userId = userId = userIdR;
             G.authorHash = authorHash = authorHashR;
             G.handler.post(() -> {
-                /*if (dialogQrCode != null && dialogQrCode.isShowing())
-                    dialogQrCode.dismiss();*/
+                hideDialogQRCode.setValue(true);
                 userLogin(token);
             });
         };

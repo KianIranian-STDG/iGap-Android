@@ -324,7 +324,7 @@ public class G extends MultiDexApplication {
     public static OnSecurityCheckPassword onSecurityCheckPassword;
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static OnRecoveryEmailToken onRecoveryEmailToken;
-    public static OnQrCodeNewDevice onQrCodeNewDevice;
+    /*public static OnQrCodeNewDevice onQrCodeNewDevice;*/
     public static OnVerifyNewDevice onVerifyNewDevice;
     public static OnPushLoginToken onPushLoginToken;
     public static OnPushTwoStepVerification onPushTwoStepVerification;

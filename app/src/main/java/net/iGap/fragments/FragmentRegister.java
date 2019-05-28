@@ -21,6 +21,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.SearchView;
 import android.text.SpannableString;
@@ -41,12 +42,14 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.viewmodel.FragmentRegisterViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -59,19 +62,19 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class FragmentRegister extends BaseFragment {
 
-    public static final String TAG = FragmentRegister.class.getSimpleName();
     private static final String KEY_SAVE_CODE_NUMBER = "SAVE_CODE_NUMBER";
     private static final String KEY_SAVE_PHONE_NUMBER_MASK = "SAVE_PHONE_NUMBER_MASK";
     private static final String KEY_SAVE_PHONE_NUMBER_NUMBER = "SAVE_PHONE_NUMBER_NUMBER";
     private static final String KEY_SAVE_NAME_COUNTRY = "SAVE_NAME_COUNTRY";
     private static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
     private static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
-    public static final String KEY_SAVE = "SAVE";
+    private static final String KEY_SAVE = "SAVE";
 
     public static int positionRadioButton = -1;
 
     private FragmentRegisterViewModel fragmentRegisterViewModel;
     private ActivityRegisterBinding fragmentRegisterBinding;
+    private MaterialDialog dialogQrCode;
 
     @Nullable
     @Override
@@ -203,6 +206,28 @@ public class FragmentRegister extends BaseFragment {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.phone_number_is_not_valid).setPositiveButton(R.string.ok, null).show();
             }
         });
+
+        fragmentRegisterViewModel.showDialogQrCode.observe(this, integer -> {
+            if (integer != null) {
+                showQrCodeDialog(integer);
+            }
+        });
+
+        fragmentRegisterViewModel.shareQrCodeIntent.observe(this, uri -> {
+            if (getActivity() != null && uri != null) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                getActivity().startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
+            }
+        });
+
+        fragmentRegisterViewModel.hideDialogQRCode.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                if (dialogQrCode != null && dialogQrCode.isShowing())
+                    dialogQrCode.dismiss();
+            }
+        });
     }
 
     private void showCountryDialog() {
@@ -320,10 +345,11 @@ public class FragmentRegister extends BaseFragment {
             return;
         }
 
-        MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(data.getTitle()).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive((dialog, which) -> {
-            fragmentRegisterViewModel.timerFinished();
-            dialog.dismiss();
-        }).show();
+        MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(data.getTitle()).customView(R.layout.dialog_remind_time, true)
+                .positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive((dialog, which) -> {
+                    fragmentRegisterViewModel.timerFinished();
+                    dialog.dismiss();
+                }).show();
 
         View v = dialogWait.getCustomView();
 
@@ -370,6 +396,46 @@ public class FragmentRegister extends BaseFragment {
                     // The dialog is automatically dismissed when a dialog button is clicked.
                     .setPositiveButton(R.string.dialog_ok, null)
                     .show();
+        }
+    }
+
+    private void showQrCodeDialog(int expireTime) {
+        if (getActivity() != null) {
+            dialogQrCode = new MaterialDialog.Builder(getActivity()).title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true)
+                    .positiveText(R.string.share_item_dialog).onPositive((dialog, which) -> fragmentRegisterViewModel.shareQr())
+                    .negativeText(R.string.save).onNegative((dialog, which) -> fragmentRegisterViewModel.saveQr())
+                    .neutralText(R.string.cancel).onNeutral((dialog, which) -> dialog.dismiss()).build();
+
+            AppCompatImageView imgQrCodeNewDevice = (AppCompatImageView) dialogQrCode.findViewById(R.id.imgQrCodeNewDevice);
+            AppCompatTextView expireTimeTextView = (AppCompatTextView) dialogQrCode.findViewById(R.id.expireTime);
+
+            int time = (expireTime - 100) * 1000;
+            CountDownTimer CountDownTimerQrCode = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
+                public void onTick(long millisUntilFinished) {
+                    long seconds = millisUntilFinished / 1000 % 60;
+                    long minutes = millisUntilFinished / (60 * 1000) % 60;
+                    expireTimeTextView.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                }
+
+                public void onFinish() {
+                    dialogQrCode.dismiss();
+                    fragmentRegisterViewModel.onClickQrCode();
+                }
+            };
+
+            CountDownTimerQrCode.start();
+
+
+            if (!(getActivity()).isFinishing()) {
+                dialogQrCode.show();
+            }
+
+            dialogQrCode.setOnDismissListener(dialog -> CountDownTimerQrCode.cancel());
+
+            if (imgQrCodeNewDevice != null) {
+                G.imageLoader.clearMemoryCache();
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(fragmentRegisterViewModel._resultQrCode), imgQrCodeNewDevice);
+            }
         }
     }
 

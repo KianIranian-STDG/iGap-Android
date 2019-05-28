@@ -1830,4 +1830,5 @@
     <string name="cardToCardBtnText">Card to Card</string>
     <string name="crad_to_card_dest_name">Account Owner Name</string>
     <string name="groups_in_common">Groups in Common</string>
+    <string name="register_with_barcode_scan">Login with barcode scan</string>
 </resources>

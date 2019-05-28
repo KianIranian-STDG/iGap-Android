@@ -17,6 +17,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoQrCodeNewDevice;
 
@@ -33,7 +34,7 @@ public class RequestQrCodeNewDevice {
     private String Language;
 
 
-    public void qrCodeNewDevice() {
+    public void qrCodeNewDevice(OnQrCodeNewDevice callback) {
 
         infoApp();
 
@@ -47,7 +48,7 @@ public class RequestQrCodeNewDevice {
         builder.setDevice(typeMobile());
         builder.setDeviceName(Device);
 
-        RequestWrapper requestWrapper = new RequestWrapper(802, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(802, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

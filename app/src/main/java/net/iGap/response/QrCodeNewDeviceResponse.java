@@ -1,25 +1,26 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.proto.ProtoQrCodeNewDevice;
 
 public class QrCodeNewDeviceResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public QrCodeNewDeviceResponse(int actionId, Object protoClass, String identity) {
+    public QrCodeNewDeviceResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -35,8 +36,10 @@ public class QrCodeNewDeviceResponse extends MessageHandler {
         builder.getQrCodeImage();
         builder.getExpireTime();
 
-        if (G.onQrCodeNewDevice != null) {
-            G.onQrCodeNewDevice.getQrCode(builder.getQrCodeImage(), builder.getExpireTime() - builder.getResponse().getTimestamp());
+        if (identity instanceof OnQrCodeNewDevice) {
+            ((OnQrCodeNewDevice) identity).getQrCode(builder.getQrCodeImage(), builder.getExpireTime() - builder.getResponse().getTimestamp());
+        } else {
+            throw new ClassCastException("identity must be : " + OnQrCodeNewDevice.class.getName());
         }
     }
 
