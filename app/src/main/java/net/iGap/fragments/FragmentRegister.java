@@ -143,29 +143,29 @@ public class FragmentRegister extends BaseFragment {
         btnOk = fragmentRegisterBinding.rgEdtPhoneNumber;
 
         txtAgreement_register = fragmentRegisterBinding.txtAgreementRegister;
-        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+//        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
         layout_verify = fragmentRegisterBinding.rgLayoutVerifyAndAgreement;
 
         onStartAnimationRegister = new OnStartAnimationRegister() {
             @Override
             public void start() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
-                        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
-                        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-                        txtAgreement_register.startAnimation(trans_x_out);
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                fragmentRegisterBinding.rgLayoutVerifyAndAgreement.setVisibility(View.VISIBLE);
-                                layout_verify.startAnimation(trans_x_in);
-                            }
-                        }, 500);
-                    }
-                });
+//                txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                fragmentRegisterBinding.rgLayoutVerifyAndAgreement.setVisibility(View.VISIBLE);
+                fragmentRegisterViewModel.txtAgreementVisibility.set(View.GONE);
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
+//                        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
+//
+//                        txtAgreement_register.startAnimation(trans_x_out);
+//                        G.handler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                            }
+//                        }, 500);
+//                    }
+//                });
 
             }
         };
