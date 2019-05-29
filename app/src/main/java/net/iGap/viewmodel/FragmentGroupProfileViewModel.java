@@ -263,10 +263,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         }
     }*/
 
-    public void onClickGroupShearedMedia(View v) {
-
+    public void onClickGroupShearedMedia() {
         new HelperFragment(FragmentShearedMedia.newInstance(roomId)).setReplace(false).load();
-
     }
 
     public void onClickGroupAddMember(View v) {
