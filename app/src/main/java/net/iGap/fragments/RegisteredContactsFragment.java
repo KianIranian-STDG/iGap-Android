@@ -257,9 +257,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
-                .setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setContext(getContext())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon)
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setListener(this);
