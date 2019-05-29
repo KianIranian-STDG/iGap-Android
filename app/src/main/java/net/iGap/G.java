@@ -489,6 +489,7 @@ public class G extends MultiDexApplication {
 
         Metrix.getInstance().enableLogging(true);
         Metrix.getInstance().setLogLevel(Log.DEBUG);
+        Metrix.getInstance().setEventUploadThreshold(5);
 
         new Thread(new Runnable() {
             @Override

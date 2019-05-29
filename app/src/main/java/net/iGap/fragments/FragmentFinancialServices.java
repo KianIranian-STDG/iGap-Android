@@ -14,8 +14,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
 
-import ir.metrix.sdk.Metrix;
-
 public class FragmentFinancialServices extends BaseFragment {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
@@ -39,7 +37,6 @@ public class FragmentFinancialServices extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Metrix.getInstance().newEvent("dbbfk");
         openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
