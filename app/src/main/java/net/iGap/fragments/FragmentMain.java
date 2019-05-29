@@ -241,6 +241,17 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                 confirmActionForClearHistoryOfSelected();
             }
         });
+
+        mBtnMakeAsReadSelected.setOnClickListener(v -> {
+
+            if (mSelectedRoomList.size() > 0){
+                for (int i = 0 ; i < mSelectedRoomList.size() ; i++){
+                    markAsRead(mSelectedRoomList.get(i).getType() , mSelectedRoomList.get(i).getId());
+                }
+
+                onLeftIconClickListener(v);
+            }
+        });
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {
@@ -1076,86 +1087,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         }
     }
 
-    private boolean isItemAvailableOnSelectedList(RealmRoom mInfo) {
-
-        return mSelectedRoomList.contains(mInfo);
-    }
-
-    private void confirmActionForRemoveSelected() {
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
-                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-
-                        if (mSelectedRoomList.size() > 0) {
-
-                            for (RealmRoom item : mSelectedRoomList) {
-                                deleteChat(item);
-                            }
-
-                            onLeftIconClickListener(null);
-                        }
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    private void confirmActionForClearHistoryOfSelected() {
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
-                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-
-                        for (RealmRoom item : mSelectedRoomList) {
-                            clearHistory(item.getId());
-                        }
-                        onLeftIconClickListener(null);
-
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    private void setVisiblityForSelectedActionsInEverySelection() {
-
-        if (mSelectedRoomList.size() == 0) mBtnRemoveSelected.setVisibility(View.VISIBLE);
-
-        for (RealmRoom item : mSelectedRoomList) {
-
-            if (item != null && !RealmRoom.isPromote(item.getId())) {
-
-                if (item.getType() == ProtoGlobal.Room.Type.CHAT || item.getType() == ProtoGlobal.Room.Type.GROUP
-                        || item.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    mBtnRemoveSelected.setVisibility(View.VISIBLE);
-                } else {
-                    mBtnRemoveSelected.setVisibility(View.GONE);
-                }
-
-            } else {
-                mBtnRemoveSelected.setVisibility(View.GONE);
-            }
-
-        }
-    }
-
     public enum MainType {
         all, chat, group, channel
     }
@@ -1766,6 +1697,128 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             }
 
         }
+    }
+
+    private boolean isItemAvailableOnSelectedList(RealmRoom mInfo) {
+
+       return mSelectedRoomList.contains(mInfo);
+    }
+
+    private interface onChatCellClick {
+        void onClicked(View v, RealmRoom item ,int pos , boolean status);
+    }
+
+    private void confirmActionForRemoveSelected(){
+
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
+                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+
+                        if (mSelectedRoomList.size() > 0){
+
+                            for (RealmRoom item : mSelectedRoomList){
+                                deleteChat(item);
+                            }
+
+                            onLeftIconClickListener(null);
+                        }
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void confirmActionForClearHistoryOfSelected() {
+
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
+                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+
+                        for (RealmRoom item : mSelectedRoomList){
+                            clearHistory(item.getId());
+                        }
+                        onLeftIconClickListener(null);
+
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void setVisiblityForSelectedActionsInEverySelection(){
+
+        if (mSelectedRoomList.size() == 0 ) mBtnRemoveSelected.setVisibility(View.VISIBLE);
+
+        for (RealmRoom item : mSelectedRoomList){
+
+            if (item != null && !RealmRoom.isPromote(item.getId())) {
+
+                if (item.getType() == ProtoGlobal.Room.Type.CHAT || item.getType() == ProtoGlobal.Room.Type.GROUP
+                        || item.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                    mBtnRemoveSelected.setVisibility(View.VISIBLE);
+                }else {
+                    mBtnRemoveSelected.setVisibility(View.GONE);
+                }
+
+            }else {
+                mBtnRemoveSelected.setVisibility(View.GONE);
+            }
+
+        }
+    }
+
+    private void markAsRead(ProtoGlobal.Room.Type chatType , long roomId ){
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                        @Override
+                        public void sendSeenStatus(RealmRoomMessage message) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        }
+
+                        @Override
+                        public void resendMessage(RealmRoomMessage message) {
+
+                        }
+
+                        @Override
+                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
+
+                        }
+                    });
+                }
+
+                RealmRoom.setCount(roomId, 0);
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppUtils.updateBadgeOnly(realm, roomId);
+                        realm.close();
+                    }
+                }, 250);
+            }
+        }, 5);
     }
 
 }
