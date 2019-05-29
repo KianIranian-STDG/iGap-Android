@@ -74,7 +74,6 @@ import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
-import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentUserProfile;
 import net.iGap.fragments.FragmentiGapMap;
@@ -96,7 +95,6 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -106,7 +104,6 @@ import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
-import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
 import net.iGap.interfaces.OnConnectionChangeState;
@@ -155,18 +152,15 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
-import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserIVandSetActivity;
-import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
-import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
@@ -1304,11 +1298,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initTabStrip() {
 
         mViewPager = findViewById(R.id.viewpager);
-        mViewPager.setPagingEnabled(false);
+
         boolean isRtl = HelperCalander.isPersianUnicode;
 
         bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
         bottomNavigation.setDefaultItem(2);
+
+        bottomNavigation.setOnItemChangeListener(i -> {
+            if (isRtl) {
+                if (i == 4)
+                    mViewPager.setCurrentItem(0);
+                if (i == 3)
+                    mViewPager.setCurrentItem(1);
+                if (i == 2)
+                    mViewPager.setCurrentItem(2);
+                if (i == 1)
+                    mViewPager.setCurrentItem(3);
+                if (i == 0)
+                    mViewPager.setCurrentItem(4);
+            } else {
+                mViewPager.setCurrentItem(i);
+            }
+        });
 
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1340,22 +1351,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        bottomNavigation.setOnItemChangeListener(i -> {
-            if (isRtl) {
-                if (i == 4)
-                    mViewPager.setCurrentItem(0, false);
-                if (i == 3)
-                    mViewPager.setCurrentItem(1, false);
-                if (i == 2)
-                    mViewPager.setCurrentItem(2, false);
-                if (i == 1)
-                    mViewPager.setCurrentItem(3, false);
-                if (i == 0)
-                    mViewPager.setCurrentItem(4, false);
-            } else {
-                mViewPager.setCurrentItem(i, false);
-            }
-        });
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
         mViewPager.setOffscreenPageLimit(5);
@@ -1367,21 +1362,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
-                pages.add(RegisteredContactsFragment.newInstance(false));
+                pages.add(RegisteredContactsFragment.newInstance());
 
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
+                mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
 
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
-                mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-            }, 400);
+            }, 200);
 
         } else {
 
             G.handler.postDelayed(() -> {
 
-                pages.add(RegisteredContactsFragment.newInstance(false));
+                pages.add(RegisteredContactsFragment.newInstance());
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
@@ -1391,82 +1386,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
-                mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
-
-            }, 400);
-
-            G.handler.postDelayed(() -> {
-
-                pages.add(DiscoveryFragment.newInstance(0));
                 mViewPager.getAdapter().notifyDataSetChanged();
+                mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
 
-                //setViewPagerSelectedItem();
+            }, 200);
 
-            }, 800);
         }
 
 
         MaterialDesignTextView txtMenu = findViewById(R.id.am_btn_menu);
 
-        txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    fragmentCall.openDialogMenu();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        txtMenu.setOnClickListener(v -> {
+            try {
+                fragmentCall.openDialogMenu();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
         if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
-    }
-
-    private void addToolBar(int i) {
-        RelativeLayout container = findViewById(R.id.rootToolbar);
-        switch (i) {
-            case 0:
-                break;
-            case 1:
-                View callToolbar = HelperToolbar.create()
-                        .setContext(this)
-                        .setLogoShown(true)
-                        .setCallEnable(true)
-                        .getView();
-                container.removeAllViews();
-                container.addView(callToolbar);
-                break;
-            case 2:
-                View roomToolbar = HelperToolbar.create()
-                        .setContext(this)
-                        .setLogoShown(false)
-                        .setCounterShown(true)
-                        .setLeftIcon(R.string.hamburger_menu_icon)
-                        .setBigCenterAvatarShown(true)
-                        .setRightIcons(R.string.search_icon)
-                        .getView();
-
-                container.removeAllViews();
-                container.addView(roomToolbar);
-                break;
-            case 3:
-                View discoveryToolbar = HelperToolbar.create()
-                        .setContext(this)
-                        .setLogoShown(true)
-                        .setSearchBoxShown(true)
-                        .setRightSmallAvatarShown(true)
-                        .getView();
-                container.removeAllViews();
-                container.addView(discoveryToolbar);
-
-                break;
-            case 4:
-                break;
-        }
-
     }
 
 
@@ -1810,61 +1751,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
-    private void setPhoneInquiry(String phone) {
-
-        if (phone == null || phone.length() == 0) {
-            return;
-        }
-
-        if (phone.startsWith("+98")) {
-            phone = phone.replace("+98", "0");
-        }
-
-        if (phone.startsWith("98")) {
-            phone = phone.replace("98", "0");
-        }
-
-        if (!phone.startsWith("0")) {
-            phone = "0" + phone;
-        }
-
-        if (phone.length() < 5) {
-            return;
-        }
-
-        FragmentPaymentInquiryViewModel.OperatorType operatorType = FragmentPaymentInquiryViewModel.MCI.get(phone.substring(0, 4));
-
-        if (operatorType != null) {
-
-            TextView txtPhoneInquiry = findViewById(R.id.lm_txt_icon_phone_number_inquiry);
-            txtPhoneInquiry.setVisibility(View.VISIBLE);
-
-            final String finalPhone = phone;
-            txtPhoneInquiry.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, finalPhone)).setReplace(false).load();
-                    lockNavigation();
-                }
-            });
-        }
-    }
-
-    private void getUserInfo(final RealmUserInfo realmUserInfo) {
-        if (!realmUserInfo.isValid()) {
-            return;
-        }
-        if (G.userLogin) {
-            new RequestUserInfo().userInfo(realmUserInfo.getUserId());
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getUserInfo(realmUserInfo);
-                }
-            }, 1000);
-        }
-    }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
         if (!isDisable) {
@@ -1983,10 +1869,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             findViewById(R.id.am_ll_strip_call).setVisibility(View.GONE);
         }
 
-//        if (drawer != null) {
-//            openNavigation();
-//            drawer.closeDrawer(GravityCompat.START);
-//        }
 
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -2033,9 +1915,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         getIntent().setData(null);
         setDrawerInfo(false);
-//        if (drawer != null) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        }
 
         ActivityMain.setMediaLayout();
 
@@ -2184,40 +2063,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setImage();
     }
 
-    private void chatGetRoom(final long peerId) {
-        //final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
-
-        if (realmRoom != null) {
-
-            new GoToChatActivity(realmRoom.getId()).startActivity();
-
-        } else {
-
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(ProtoGlobal.Room room) {
-
-                    new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity();
-
-                    G.onChatGetRoom = null;
-                }
-
-                @Override
-                public void onChatGetRoomTimeOut() {
-
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(peerId);
-        }
-        //realm.close();
-    }
 
     @Override
     public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
@@ -2377,10 +2222,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onPayment = null;
     }
 
+    /**
+     *
+     * bottom navigation new message badge counter
+     * unReadCount get user all unread message count
+     * change badge color if color = 0 get default badge color
+     * badge counter for other bottom navigation item should add listener to OnBottomNavigationBadge
+     *
+     * */
+
     @Override
     public void onChange() {
 
-        int unReadCount = RealmRoom.getAllUnreadCount().intValue();
+        int unReadCount = RealmRoom.getAllUnreadCount();
 
         bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
             @Override
@@ -2399,7 +2253,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        Log.i("aabolfazl", "onChange: " + RealmRoom.getAllUnreadCount().intValue());
+        Log.i("aabolfazl", "onChange: " + RealmRoom.getAllUnreadCount());
     }
 
     @Override

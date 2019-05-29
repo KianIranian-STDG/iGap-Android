@@ -15,8 +15,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
-
-import static net.iGap.G.context;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class TabItem extends RelativeLayout implements View.OnClickListener {
 
@@ -65,10 +64,10 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         imageView.setLayoutParams(iconParams);
         if (isRtl) {
             badgeParams.addRule(RelativeLayout.LEFT_OF, imageView.getId());
-            badgeParams.setMargins(0, i_Dp(R.dimen.dp4), -16, i_Dp(R.dimen.dp4));
+            badgeParams.setMargins(0, Utils.dpToPx(4), -16, Utils.dpToPx(4));
         } else {
             badgeParams.addRule(RelativeLayout.RIGHT_OF, imageView.getId());
-            badgeParams.setMargins(-16, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
+            badgeParams.setMargins(-16, Utils.dpToPx(4), 0, Utils.dpToPx(4));
         }
 
         badgeView.setLayoutParams(badgeParams);
@@ -89,9 +88,8 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             if (getParent() instanceof BottomNavigation) {
                 bottomNavigation = (BottomNavigation) getParent();
                 setupViews();
+
                 Log.i(TAG, "checkParent: parent loaded");
-            } else {
-                throw new RuntimeException(TAG + "BottomNavigation");
             }
         });
     }
@@ -100,7 +98,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         imageView.setImageDrawable(selectedIcon);
         if (position == bottomNavigation.getDefaultItem())
             active = true;
-        setSelected(active);
+        setSelectedItem(active);
     }
 
     private void parseAttr(AttributeSet attributeSet) {
@@ -128,10 +126,11 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     public void onClick(View v) {
         if (onTabItemSelected != null)
             onTabItemSelected.selectedTabItem(position);
-        Log.i(TAG, "onClick: ");
+
+        Log.i(TAG, "onClick: " + position);
     }
 
-    public void setSelected(boolean isActive) {
+    public void setSelectedItem(boolean isActive) {
         if (active != isActive) {
             active = isActive;
         }
@@ -148,7 +147,8 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         } else {
             imageView.setImageDrawable(unSelectedIcon);
         }
-        Log.i(TAG, "setSelected: ");
+
+        Log.i(TAG, "setSelected: " + position);
     }
 
     public void setOnTabItemSelected(OnItemSelected onItemSelected) {
@@ -168,8 +168,9 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         } else if (count > 99) {
             badgeView.setVisibility(VISIBLE);
             badgeView.getTextView().setText("+99");
-        }else
+        } else
             badgeView.setVisibility(VISIBLE);
+
         Log.i(TAG, "setBadgeCount: " + count);
 
     }
@@ -180,9 +181,5 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
     public boolean isActive() {
         return active;
-    }
-
-    public int i_Dp(int dpSrc) {
-        return (int) context.getResources().getDimension(dpSrc);
     }
 }
