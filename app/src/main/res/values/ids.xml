@@ -131,5 +131,11 @@
     <item name="wv_voiceItem_progress" type="id" />
     <item name="v_voiceItem_listen" type="id" />
 
+    <!--Contact Item-->
+    <item name="iv_contactItem_contact" type="id" />
+    <item name="tv_contactItem_contactName" type="id" />
+    <item name="tv_contactItem_contactNumber" type="id" />
+    <item name="btn_contactItem_viewContact" type="id" />
+
 
 </resources>
