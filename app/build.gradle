@@ -49,7 +49,6 @@ android {
     }
 
     buildTypes {
-
         release {
             minifyEnabled true
             shrinkResources true
@@ -67,18 +66,18 @@ android {
         javaMaxHeapSize "4g"
     }
 
-    flavorDimensions "With64", "Only32"
+    flavorDimensions "default"
 
     productFlavors {
-        With64 {
+        GooglePlay { // 32 and 64 bit ndk compile
             ndk {
-                dimension "With64"
+                dimension "default"
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
             }
         }
-        Only32 {
+        Bazaar { // only 32 bit ndk compile
             ndk {
-                dimension "Only32"
+                dimension "default"
                 abiFilters "armeabi-v7a", "x86"
             }
         }
