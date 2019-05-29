@@ -202,4 +202,5 @@
     <string name="delete_icon">x</string>
     <string name="share_icon">À</string>
     <string name="close_icon">j</string>
+    <string name="language_icon">I</string>
 </resources>

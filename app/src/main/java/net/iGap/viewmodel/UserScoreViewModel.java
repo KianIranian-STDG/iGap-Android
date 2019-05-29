@@ -25,7 +25,7 @@ public class UserScoreViewModel extends ViewModel {
         paymentScore.setValue("10 points");
         qrCodeScore.setValue("20 points");
         botsScore.setValue("10 points");
-        userRank.setValue("1.690");
+        userRank.setValue("0");
         totalRank.setValue("of 20.000.000");
         //Todo:move to repository
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {

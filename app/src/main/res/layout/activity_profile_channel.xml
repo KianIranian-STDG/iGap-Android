@@ -14,9 +14,9 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -30,12 +30,12 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
             android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -43,22 +43,23 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/description"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
                     android:padding="8dp"
                     android:text="@{viewModel.callbackChannelDescription}"
                     android:visibility="@{viewModel.haveDescription}"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
                     app:layout_constraintLeft_toLeftOf="@id/channelInfo"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="@dimen/dp16"/>
+                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/divider0"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     android:visibility="@{viewModel.haveDescription}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
@@ -133,10 +134,10 @@
 
                 <View
                     android:id="@+id/divider1"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/channelLinkStatus"
@@ -157,10 +158,10 @@
 
                 <View
                     android:id="@+id/divider2"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
                     app:layout_constraintTop_toBottomOf="@id/enableNotification" />
