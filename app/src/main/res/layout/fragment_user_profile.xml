@@ -483,7 +483,7 @@
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginTop="@dimen/dp16"
             android:layout_marginRight="@dimen/dp32"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_dark_mode">
