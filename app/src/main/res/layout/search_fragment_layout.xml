@@ -44,9 +44,7 @@
                         android:adjustViewBounds="true"
                         android:paddingTop="@dimen/dp20"
                         android:visibility="gone"
-                        app:srcCompat="@drawable/find1"
-
-                        />
+                        app:srcCompat="@drawable/find1" />
 
                     <TextView
                         android:id="@+id/sfl_txt_empty_list_comment"
@@ -124,12 +122,12 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/sfl_btn_close"
+                    style="@style/myIconToolbarStyle"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
-                    android:text="@string/md_close_button"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:text="@string/close_icon"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/dp26" />
 
