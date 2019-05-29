@@ -119,7 +119,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelTypeTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

@@ -18,6 +18,7 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,7 +32,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v4.widget.NestedScrollView
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -45,10 +45,11 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/notificationTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
+                    android:padding="8dp"
                     android:text="@string/app_notif_color"
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -78,7 +79,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/sharedContentTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -275,12 +276,13 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/addMember"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->fragmentGroupProfileViewModel.addNewMember()}"
+                    android:padding="8dp"
                     android:text="@string/add_new_member"
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="@id/notificationTitle"

@@ -6,23 +6,23 @@
     android:layout_height="@dimen/dp70">
 
     <LinearLayout
+        android:id="@+id/iv_itemContactChat_ll"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:id="@+id/iv_itemContactChat_ll"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <CheckBox
             android:id="@+id/iv_itemContactCall_checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp8"
             android:layout_marginStart="@dimen/dp8"
-            android:button="@drawable/check_box_background"/>
+            android:layout_marginLeft="@dimen/dp8"
+            android:button="@drawable/check_box_background" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_itemContactCall_profileImage"
@@ -37,28 +37,28 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_itemContactCall_videoCall"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
-        android:paddingRight="@dimen/dp8"
         android:paddingLeft="@dimen/dp8"
-        android:text="@string/md_videocam"
-        style="?textTitleColorSettingTheme"
+        android:paddingRight="@dimen/dp8"
+        android:text="@string/video_call_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_itemContactCall_voiceCall"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
-        android:text="@string/md_call_made"
-        android:paddingRight="@dimen/dp8"
         android:paddingLeft="@dimen/dp8"
-        style="?textTitleColorSettingTheme"
+        android:paddingRight="@dimen/dp8"
+        android:text="@string/voice_call_icon"
         app:layout_constraintBottom_toBottomOf="@+id/tv_itemContactCall_videoCall"
         app:layout_constraintEnd_toStartOf="@+id/tv_itemContactCall_videoCall"
         app:layout_constraintHorizontal_bias="1.0"
@@ -70,10 +70,10 @@
         android:id="@+id/tv_itemContactCall_userName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/main_font"
         android:text="contact name"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:fontFamily="@font/main_font"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactCall_userPhoneNumber"
         app:layout_constraintStart_toStartOf="@+id/tv_itemContactCall_userPhoneNumber"
         app:layout_constraintTop_toTopOf="parent" />

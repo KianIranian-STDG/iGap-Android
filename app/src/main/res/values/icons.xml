@@ -201,4 +201,5 @@
     <string name="dial_number_icon">/</string>
     <string name="delete_icon">x</string>
     <string name="share_icon">À</string>
+    <string name="close_icon">j</string>
 </resources>

@@ -53,14 +53,14 @@
 
                         <net.iGap.module.MaterialDesignTextView
                             android:id="@+id/fc_selected_mode_btn_cancel"
-                            style="?textTitleColorSettingTheme"
+                            style="@style/myIconTextViewStyle"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="@dimen/dp10"
                             android:layout_marginRight="@dimen/dp10"
                             android:gravity="center"
-                            android:text="@string/md_close_button"
+                            android:text="@string/close_icon"
                             android:textSize="16sp" />
 
                         <TextView
@@ -76,26 +76,26 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/fc_selected_mode_btn_delete"
+                            style="@style/myIconTextViewStyle"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_margin="5dp"
-                            android:text="@string/delete_icon"
-                            style="@style/myIconTextViewStyle" />
+                            android:text="@string/delete_icon" />
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/fc_selected_mode_btn_share"
+                            style="@style/myIconTextViewStyle"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_centerVertical="true"
                             android:layout_margin="5dp"
                             android:layout_toStartOf="@id/fc_selected_mode_btn_delete"
                             android:layout_toLeftOf="@id/fc_selected_mode_btn_delete"
-                            android:visibility="gone"
                             android:text="@string/share_icon"
-                            style="@style/myIconTextViewStyle" />
+                            android:visibility="gone" />
 
                     </RelativeLayout>
                     <!--

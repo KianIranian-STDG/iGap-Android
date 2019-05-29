@@ -393,7 +393,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }
         });
 
-        realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        realmRecyclerView = view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -804,8 +804,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             usersList = realmResults;
         }
 
+        @NotNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
 
             View v;
             if (mPageMode == 2){//call mode

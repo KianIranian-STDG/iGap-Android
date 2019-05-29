@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
