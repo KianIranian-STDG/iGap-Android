@@ -1315,9 +1315,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
                         holder.txtPinIcon.setVisibility(View.VISIBLE);
-//                        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                        params.setMargins(16, 0, 16, 0);
-//                        holder.txtTime.setLayoutParams(params);
                     }
 
                 } else {
@@ -1331,13 +1328,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                 } else {
                     holder.txtUnread.setVisibility(View.VISIBLE);
                     holder.txtUnread.getTextView().setText(mInfo.getUnreadCount() + "");
-                    holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
 
                     if (mInfo.getMute()) {
                         holder.txtUnread.setBadgeColor(getResources().getColor(R.color.gray_9d));
                     } else {
                         if (G.isDarkTheme) {
-                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
+                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.md_blue_500));
                         } else {
                             holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         }
