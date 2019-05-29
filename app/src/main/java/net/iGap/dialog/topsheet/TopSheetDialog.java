@@ -17,6 +17,7 @@ package net.iGap.dialog.topsheet;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.BottomSheetListAdapter;
@@ -111,6 +113,10 @@ public class TopSheetDialog extends AppCompatDialog {
                         cancel();
                     }
                 });
+
+        if (!G.isDarkTheme) {
+            ((GradientDrawable) coordinator.findViewById(R.id.design_top_sheet).getBackground()).setColor(getContext().getResources().getColor(R.color.white));
+        }
         return coordinator;
     }
 
