@@ -353,12 +353,6 @@ public class ChatCell extends ConstraintLayout {
         set.createVerticalChain(ConstraintSet.PARENT_ID, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM,
                 chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
 
-
-
-//
-//        set.addToVerticalChain(roomName.getId(), ConstraintSet.PARENT_ID, messageStatus.getId());
-//        set.addToVerticalChain(messageStatus.getId(), roomName.getId(), ConstraintSet.PARENT_ID);
-
         set.applyTo(this);
     }
 

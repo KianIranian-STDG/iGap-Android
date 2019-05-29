@@ -1843,4 +1843,5 @@
     <string name="star_number">*</string>
     <string name="zero_number">0</string>
     <string name="back_number"><![CDATA[<]]></string>
+    <string name="view_contact">View Contact</string>
 </resources>
