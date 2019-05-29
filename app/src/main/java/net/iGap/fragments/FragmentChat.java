@@ -1666,9 +1666,9 @@ public class FragmentChat extends BaseFragment
         //+final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
-
             iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
             isMuteNotification = realmRoom.getMute();
+            isChatReadOnly = realmRoom.getReadOnly();
         }
 
         //gone video , voice button call then if status was ok visible them
