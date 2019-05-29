@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="md_check_symbol">\uf12c</string>
-    <string name="md_emoticon_with_happy_face">\uf1f2</string><!-- iGap_emoticon  -->
+    <string name="md_emoticon_with_happy_face">\,</string><!-- iGap_emoticon  -->
     <string name="md_black_keyboard_with_white_keys">\uf30c</string> <!-- igap_keyboard  -->
     <string name="md_send_button">\uf48a</string>  <!-- igap_send  -->
-    <string name="md_attachment_clip">\uf066</string>  <!-- igap_attachment  -->
+    <string name="md_attachment_clip">\o</string>  <!-- igap_attachment  -->
     <string name="md_bot">\uf757</string>
-    <string name="md_voice_message_microphone_button">\uf36c</string> <!-- igap_microphone  -->
+    <string name="md_voice_message_microphone_button">\F</string> <!-- igap_microphone  -->
     <string name="md_flaticon_volume_off_indicator">\uf581</string> <!-- igap_volume-off  -->
     <string name="md_share_button">\uf497</string>  <!-- igap_share-variant  -->
     <string name="md_show_more_button">\uf1d9</string>  <!-- igap_dots-vertical  -->
@@ -131,8 +131,8 @@
     <string name="md_igap_alert">\uf026</string> <!-- igap_eye_off  -->
     <string name="md_igap_map_marker_multiple">\uf350</string>
     <string name="md_igap_map_marker_off">\uf351</string>
-    <string name="md_igap_lock">\uf33e</string>
-    <string name="md_igap_lock_open_outline">\uf33f</string>
+    <string name="md_igap_lock">\}</string>
+    <string name="md_igap_lock_open_outline">\}</string>
     <string name="md_igap_fingerprint">\uf237</string>
     <string name="md_igap_account_alert">\uf005</string>
     <string name="md_igap_alert_box">\uf027</string>
