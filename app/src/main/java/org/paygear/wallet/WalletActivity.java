@@ -24,6 +24,7 @@ import org.paygear.wallet.model.PaymentAuth;
 import org.paygear.wallet.utils.Utils;
 import org.paygear.wallet.web.Web;
 
+import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.app.NavigationBarActivity;
@@ -74,6 +75,7 @@ public class WalletActivity extends NavigationBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Metrix.getInstance().newEvent("yxhgb");
         RelativeLayout navBarView = findViewById(R.id.nav_bar);
         navBarView.setVisibility(View.GONE);
 

@@ -93,6 +93,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.realm.Realm;
+import ir.metrix.sdk.Metrix;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
@@ -1045,6 +1046,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private void requestRegister() {
 
         if (G.socketConnection) {
+
+            Metrix.getInstance().newEvent("ooarp");
             phoneNumber = phoneNumber.replace("-", "");
             ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
             builder.setCountryCode(isoCode);
@@ -1073,6 +1076,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
      */
     private void userVerify(final String userName, final String verificationCode) {
         if (G.socketConnection) {
+
+            Metrix.getInstance().newEvent("jjrro");
 
             prgVerifyKeyVisibility.set(View.VISIBLE);
 

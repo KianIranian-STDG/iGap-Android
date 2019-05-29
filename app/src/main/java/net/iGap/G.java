@@ -26,6 +26,7 @@ import android.os.SystemClock;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.crashlytics.android.Crashlytics;
@@ -65,6 +66,7 @@ import javax.crypto.spec.SecretKeySpec;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
@@ -482,6 +484,11 @@ public class G extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         LooperThreadHelper.getInstance();
+
+        Metrix.initialize(this, "jpbnabzrmeqvxme");
+
+        Metrix.getInstance().enableLogging(true);
+        Metrix.getInstance().setLogLevel(Log.DEBUG);
 
         new Thread(new Runnable() {
             @Override
