@@ -3,6 +3,7 @@ package net.iGap.dialog.bottomsheet;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -27,20 +29,20 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     private String title = null;
     private BottomSheetItemClickCallback bottomSheetItemClickCallback;
 
-    public BottomSheetFragment setData(List<String> itemListId,int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
+    public BottomSheetFragment setData(List<String> itemListId, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
         this.itemList = itemListId;
         this.range = range;
         this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
         return this;
     }
 
-    public BottomSheetFragment setTitle(String title){
+    public BottomSheetFragment setTitle(String title) {
         this.title = title;
         return this;
     }
 
     @SuppressLint("ResourceType")
-    public BottomSheetFragment setTitle(@IdRes int title){
+    public BottomSheetFragment setTitle(@IdRes int title) {
         this.title = getString(title);
         return this;
     }
@@ -55,7 +57,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             bottomSheetItemClickCallback.onClick(position);
         });
         binding.bottomSheetList.setAdapter(bottomSheetListAdapter);
-        if (title!=null) {
+        if (title != null) {
             binding.title.setText(title);
             binding.title.setVisibility(View.VISIBLE);
         }
@@ -63,8 +65,18 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    @Override
     public int getTheme() {
-        return R.style.BaseBottomSheetDialog;
+        if (G.isDarkTheme) {
+            return R.style.BaseBottomSheetDialog;
+        } else {
+            return R.style.BaseBottomSheetDialogLight;
+        }
     }
 
     @NonNull

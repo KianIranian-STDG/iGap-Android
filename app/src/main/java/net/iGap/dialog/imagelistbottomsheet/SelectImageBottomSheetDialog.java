@@ -104,7 +104,11 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Override
     public int getTheme() {
-        return R.style.BaseBottomSheetDialog;
+        if (G.isDarkTheme) {
+            return R.style.BaseBottomSheetDialog;
+        } else {
+            return R.style.BaseBottomSheetDialogLight;
+        }
     }
 
     @NonNull
@@ -157,7 +161,7 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                 Collections.sort(itemList);
 
                 for (StructBottomSheet item : itemList) {
-                    Log.wtf("select image bottom sheet","value of path: "+item.getPath());
+                    Log.wtf("select image bottom sheet", "value of path: " + item.getPath());
                 }
             }
         };
@@ -182,7 +186,7 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                                     /*G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {*/
-                                            fotoapparatSwitcher.start();
+                                    fotoapparatSwitcher.start();
                                         /*}
                                     }, 50);*/
                                 } catch (Exception e) {
@@ -196,12 +200,12 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                                     /*G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {*/
-                                            fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                    fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                            .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                            .lensPosition(back())       // we want back camera
+                                            .build();
 
-                                            fotoapparatSwitcher.start();
+                                    fotoapparatSwitcher.start();
                                         /*}
                                     }, 100);*/
                                 } catch (IllegalStateException e) {
@@ -239,12 +243,12 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                                     /*G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {*/
-                                            fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                    fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                            .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                            .lensPosition(back())       // we want back camera
+                                            .build();
 
-                                            fotoapparatSwitcher.stop();
+                                    fotoapparatSwitcher.stop();
                                         /*}
                                     }, 100);*/
                                 } catch (IllegalStateException e) {
@@ -266,10 +270,10 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                         /*G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {*/
-                                if (!isCameraStart) {
-                                    fotoapparatSwitcher.start();
-                                    isCameraStart = true;
-                                }
+                        if (!isCameraStart) {
+                            fotoapparatSwitcher.start();
+                            isCameraStart = true;
+                        }
                             /*}
                         }, 50);*/
                     }
@@ -348,7 +352,7 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                                     }
                                 }).withIdentifier(99));
                                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i),onPathAdapterBottomSheet).withIdentifier(100 + i));
+                                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
                                 }
                                 isPermissionCamera = true;
                             }
@@ -382,7 +386,7 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
 
         G.handler.post(() -> {
             for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i),onPathAdapterBottomSheet).withIdentifier(100 + i));
+                fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
             }
         });
 

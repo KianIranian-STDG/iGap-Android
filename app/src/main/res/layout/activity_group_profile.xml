@@ -18,9 +18,9 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -49,6 +49,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
+                    android:padding="8dp"
                     android:text="@string/app_notif_color"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -294,6 +295,7 @@
                     android:layout_marginTop="@dimen/dp16"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->fragmentGroupProfileViewModel.addNewMember()}"
+                    android:padding="8dp"
                     android:text="@string/add_new_member"
                     app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
                     app:layout_constraintRight_toRightOf="@id/notificationTitle"

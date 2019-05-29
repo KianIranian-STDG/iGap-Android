@@ -91,6 +91,8 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
             }
 
             public void onFinish() {
+                timerValue.setValue(String.format(Locale.getDefault(), "%02d:%02d", 0, 0));
+                currentTimePosition.setValue(60 * 6);
                 enabledResendCodeButton.setValue(true);
             }
         };
