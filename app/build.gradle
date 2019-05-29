@@ -49,19 +49,10 @@ android {
     }
 
     buildTypes {
-        release_GooglePlay {
-            defaultConfig.ndk.abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-            minifyEnabled true
-            shrinkResources true
-            matchingFallbacks = ['release', 'debug']
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
 
-        release_Bazaar {
-            defaultConfig.ndk.abiFilters "armeabi-v7a", "x86"
+        release {
             minifyEnabled true
             shrinkResources true
-            matchingFallbacks = ['release', 'debug']
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -75,6 +66,24 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
+    flavorDimensions "With64", "Only32"
+
+    productFlavors {
+        With64 {
+            ndk {
+                dimension "With64"
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+        }
+        Only32 {
+            ndk {
+                dimension "Only32"
+                abiFilters "armeabi-v7a", "x86"
+            }
+        }
+    }
+
 }
 
 dependencies {
