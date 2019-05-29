@@ -1827,4 +1827,15 @@
     <string name="crad_to_card_dest_name">نام دارنده حساب</string>
     <string name="groups_in_common">گروه های مشترک</string>
     <string name="register_with_barcode_scan">ورود با اسکن بارکد</string>
+    <string name="one_number">۱</string>
+    <string name="two_number">۲</string>
+    <string name="three_number">۳</string>
+    <string name="four_number">۴</string>
+    <string name="five_number">۵</string>
+    <string name="six_number">۶</string>
+    <string name="seven_number">۷</string>
+    <string name="eight_number">۸</string>
+    <string name="nine_number">۹</string>
+    <string name="star_number">*</string>
+    <string name="zero_number">۰</string>
 </resources>

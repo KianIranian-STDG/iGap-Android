@@ -2772,4 +2772,15 @@
     <string name="crad_to_card_dest_name">اسم صاحب الحساب</string>
     <string name="groups_in_common">المجموعات المشتركة</string>
     <string name="register_with_barcode_scan">تسجيل الدخول مع مسح الباركود</string>
+    <string name="one_number">١</string>
+    <string name="two_number">٢</string>
+    <string name="three_number">٣</string>
+    <string name="four_number">٤</string>
+    <string name="five_number">٥</string>
+    <string name="six_number">٦</string>
+    <string name="seven_number">٧</string>
+    <string name="eight_number">٨</string>
+    <string name="nine_number">٩</string>
+    <string name="star_number">*</string>
+    <string name="zero_number">٠</string>
 </resources>

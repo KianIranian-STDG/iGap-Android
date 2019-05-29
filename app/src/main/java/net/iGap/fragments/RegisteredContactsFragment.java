@@ -741,8 +741,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
-        btnDialNumber.setOnClickListener(v -> {
-        });
+        btnDialNumber.setOnClickListener(v -> new HelperFragment(new DailNumberFragment()).setReplace(false).load());
 
         btnAddNewGroupCall.setOnClickListener(v -> {
         });
