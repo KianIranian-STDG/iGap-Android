@@ -12,6 +12,7 @@ package net.iGap.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.support.v4.app.Fragment;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
@@ -75,6 +76,7 @@ public class FragmentChannelProfileViewModel
     public MutableLiveData<String> administratorsCount = new MutableLiveData<>();
     public MutableLiveData<String> moderatorsCount = new MutableLiveData<>();
     public MutableLiveData<Boolean> isMuteNotification = new MutableLiveData<>();
+    public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
 
     public static OnMenuClick onMenuClick;
     public ChannelChatRole role;
@@ -158,7 +160,7 @@ public class FragmentChannelProfileViewModel
             channelLinkTitle.setValue(G.fragmentActivity.getResources().getString(R.string.st_username));
         }
         isShowLink.setValue(!(isPrivate && ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR))));
-        Log.wtf("view model","value234: "+ realmRoom.getMute());
+        Log.wtf("view model", "value234: " + realmRoom.getMute());
         isMuteNotification.setValue(!realmRoom.getMute());
 
         //todo: move to edit channel fragment
@@ -223,10 +225,13 @@ public class FragmentChannelProfileViewModel
         callbackChannelDescription.set(new SpannableStringBuilder(""));
 
         if (description != null && !description.isEmpty()) {
+            haveDescription.set(View.VISIBLE);
             SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
             if (spannableStringBuilder != null) {
                 callbackChannelDescription.set(spannableStringBuilder);
             }
+        } else {
+            haveDescription.set(View.GONE);
         }
 
         /*if (isSignature) {
@@ -243,8 +248,8 @@ public class FragmentChannelProfileViewModel
 
     }
 
-    public void onNotificationCheckChange(boolean isChecked){
-        Log.wtf("view model","value: "+isMuteNotification.getValue() + "+"+isChecked);
+    public void onNotificationCheckChange(boolean isChecked) {
+        Log.wtf("view model", "value: " + isMuteNotification.getValue() + "+" + isChecked);
         new RequestClientMuteRoom().muteRoom(roomId, !isChecked);
     }
 
@@ -881,12 +886,12 @@ public class FragmentChannelProfileViewModel
             } else if (role == ChannelChatRole.ADMIN) {
 
                 *//**
-                 *  ----------- Admin ---------------
-                 *  1- admin dose'nt access set another admin
-                 *  2- admin can set moderator
-                 *  3- can remove moderator
-                 *  4- can kick moderator and Member
-                 *//*
+     *  ----------- Admin ---------------
+     *  1- admin dose'nt access set another admin
+     *  2- admin can set moderator
+     *  3- can remove moderator
+     *  4- can kick moderator and Member
+     *//*
 
                 if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);

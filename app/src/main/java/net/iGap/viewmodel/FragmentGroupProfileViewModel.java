@@ -138,9 +138,9 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedLinkCount = new MutableLiveData<>();
     public ObservableInt noMediaSharedVisibility = new ObservableInt(View.VISIBLE);
+    public ObservableField<SpannableStringBuilder> callbackGroupDescription = new ObservableField<>();
+    public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
 
-
-    public static final String FRAGMENT_TAG = "FragmentGroupProfile";
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
     public static OnMenuClick onMenuClick;
@@ -148,7 +148,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public GroupChatRole role;
     public boolean isPrivate;
     public ObservableField<String> callbackGroupLink = new ObservableField<>("");
-    public ObservableField<SpannableStringBuilder> callbackGroupDescription = new ObservableField<>();
     /*public ObservableField<String> callbackGroupShearedMedia = new ObservableField<>("");*/
     public ObservableField<String> callBackDeleteLeaveGroup = new ObservableField<>(G.context.getResources().getString(R.string.Delete_and_leave_Group));
     public ObservableField<String> callbackGroupLinkTitle = new ObservableField<>(G.context.getResources().getString(R.string.group_link));
@@ -160,7 +159,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public ObservableField<Integer> lineAdminVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> setModereatorVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> layoutMemberCanAddMember = new ObservableField<>(View.GONE);
-    NestedScrollView nestedScrollView;
     AttachFile attachFile;
     private AppBarLayout appBarLayout;
     private FloatingActionButton fab;
@@ -373,8 +371,10 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         description = realmGroupRoom.getDescription();
         SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
         if (ds != null) {
+            haveDescription.set(View.VISIBLE);
             callbackGroupDescription.set(ds);
         } else {
+            haveDescription.set(View.GONE);
             callbackGroupDescription.set(new SpannableStringBuilder(""));
         }
 
@@ -684,7 +684,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                         positive.setEnabled(true);
                         progressBar.setVisibility(View.GONE);
                         switch (majorCode) {
-                            case 5 :
+                            case 5:
                                 HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
 
                             case 368:
