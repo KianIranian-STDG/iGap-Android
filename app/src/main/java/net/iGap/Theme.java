@@ -94,7 +94,7 @@ public class Theme extends Application {
     public static String default_dark_backgroundThemeMsg = "#2c363f";
     public static String default_dark_backgroundThemeMsgPined = "#3314191c";
     public static String default_dark_textTitleTheme = "#cccccc";
-    public static String default_dark_textSubTheme = "#686868";
+    public static String default_dark_textSubTheme = "#aaaaaa";
     public static String default_dark_tintImage = default_dark_textSubTheme;
     public static String default_dark_logLineTheme = "#2c363f";//
     public static String default_dark_textBubbleColor = "#cccccc";
