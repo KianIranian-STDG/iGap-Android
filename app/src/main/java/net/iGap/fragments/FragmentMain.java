@@ -43,6 +43,7 @@ import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
@@ -1702,10 +1703,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private boolean isItemAvailableOnSelectedList(RealmRoom mInfo) {
 
        return mSelectedRoomList.contains(mInfo);
-    }
-
-    private interface onChatCellClick {
-        void onClicked(View v, RealmRoom item ,int pos , boolean status);
     }
 
     private void confirmActionForRemoveSelected(){
