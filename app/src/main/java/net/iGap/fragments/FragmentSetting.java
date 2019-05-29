@@ -26,6 +26,8 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.databinding.FragmentSettingBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.imagelistbottomsheet.SelectImageBottomSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -55,7 +57,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
@@ -366,7 +370,34 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
     private void startDialog() {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.gallery));
+        items.add(getString(R.string.remove));
+        new SelectImageBottomSheetDialog().setData(items, 0, position -> {
+            if (position == 0) {
+                try {
+                    HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
+                        @Override
+                        public void Allow() {
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                        }
+
+                        @Override
+                        public void deny() {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+
+            }
+        }).show(getFragmentManager(), "test");
+
+        /*new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
@@ -407,7 +438,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     dialog.dismiss();
                 }
             }
-        }).show();
+        }).show();*/
     }
 
     private void useCamera() {

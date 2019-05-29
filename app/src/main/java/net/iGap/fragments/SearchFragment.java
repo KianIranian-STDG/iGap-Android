@@ -60,6 +60,8 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientSearchUsername;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,12 +93,12 @@ public class SearchFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return attachToSwipeBack(inflater.inflate(R.layout.search_fragment_layout, container, false));
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
@@ -111,10 +113,10 @@ public class SearchFragment extends BaseFragment {
             view.findViewById(R.id.sfl_ll_toolbar).setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
 
 
-        loadingProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.sfl_progress_loading);
-        imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
+        loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
+        imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
         imvNothingFound.setImageResource(R.drawable.find1);
-        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
+        txtEmptyListComment = view.findViewById(R.id.sfl_txt_empty_list_comment);
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -126,7 +128,7 @@ public class SearchFragment extends BaseFragment {
 
         txtEmptyListComment.setText(R.string.empty_message3);
 
-        edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
+        edtSearch = view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -149,8 +151,8 @@ public class SearchFragment extends BaseFragment {
         imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
 
 
-        btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
-        rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
+        btnClose = view.findViewById(R.id.sfl_btn_close);
+        rippleDown = view.findViewById(R.id.sfl_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -164,7 +166,7 @@ public class SearchFragment extends BaseFragment {
             }
         });
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.sfl_recycleview);
+        recyclerView = view.findViewById(R.id.sfl_recycleview);
     }
 
     private void initRecycleView() {
