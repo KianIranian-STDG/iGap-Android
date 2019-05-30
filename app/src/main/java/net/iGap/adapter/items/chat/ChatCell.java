@@ -37,7 +37,6 @@ public class ChatCell extends ConstraintLayout {
         boolean isDarkTheme = G.isDarkTheme;
         ConstraintSet set = new ConstraintSet();
 
-        setId(R.id.cl_chatCell_root);
 
         /**
          * init pinned room on top
@@ -45,19 +44,16 @@ public class ChatCell extends ConstraintLayout {
 
         View pinView = new View(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.ic_pin
-                : R.drawable.ic_pin, null);
-        pinView.setBackground(drawable);
+        if (isRtl) {
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_pin_rtl_dark
+                    : R.drawable.shape_pin_rtl, null);
+            pinView.setBackground(drawable);
+        } else {
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_pin_dark
+                    : R.drawable.shape_pin, null);
+            pinView.setBackground(drawable);
+        }
         addView(pinView);
-
-
-        View pin = new View(getContext());
-        pin.setId(R.id.v_chatCell_pin);
-        Drawable drawable1 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pin_badge, null);
-        pin.setBackground(drawable1);
-        addView(pin);
-
-
 
 
         /**
@@ -66,7 +62,7 @@ public class ChatCell extends ConstraintLayout {
         CheckBox cellCheckbox = new CheckBox(G.context);
         cellCheckbox.setId(R.id.iv_itemContactChat_checkBox);
         cellCheckbox.setButtonDrawable(R.drawable.check_box_background);
-        cellCheckbox.setPadding(10 , 0 , 0 , 0 );
+        cellCheckbox.setPadding(10, 0, 0, 0);
         addView(cellCheckbox);
 
         /**
@@ -137,7 +133,7 @@ public class ChatCell extends ConstraintLayout {
         secondTextView.setEllipsize(TextUtils.TruncateAt.END);
         secondTextView.setSingleLine(true);
         setTypeFace(secondTextView);
-        secondTextView.setTextColor(isDarkTheme ?  getContext().getResources().getColor(R.color.gray_f2): Color.parseColor("#FF616161"));
+        secondTextView.setTextColor(isDarkTheme ? getContext().getResources().getColor(R.color.gray_f2) : Color.parseColor("#FF616161"));
         setTextSize(secondTextView, G.twoPaneMode ? R.dimen.dp16 : R.dimen.dp12);
         secondTextView.setEmojiSize(i_Dp(R.dimen.dp14));
         addView(secondTextView);
@@ -302,10 +298,6 @@ public class ChatCell extends ConstraintLayout {
             set.connect(pinView.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
             set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp2));
             set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp2));
-            set.connect(pin.getId(), ConstraintSet.RIGHT, pinView.getId(), ConstraintSet.RIGHT);
-            set.connect(pin.getId(), ConstraintSet.LEFT, pinView.getId(), ConstraintSet.LEFT);
-            set.connect(pin.getId(), ConstraintSet.TOP, pinView.getId(), ConstraintSet.TOP);
-            set.connect(pin.getId(), ConstraintSet.BOTTOM, pinView.getId(), ConstraintSet.BOTTOM);
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
@@ -334,10 +326,6 @@ public class ChatCell extends ConstraintLayout {
             set.connect(pinView.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
             set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp2));
             set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp2));
-            set.connect(pin.getId(), ConstraintSet.RIGHT, pinView.getId(), ConstraintSet.RIGHT);
-            set.connect(pin.getId(), ConstraintSet.LEFT, pinView.getId(), ConstraintSet.LEFT);
-            set.connect(pin.getId(), ConstraintSet.TOP, pinView.getId(), ConstraintSet.TOP);
-            set.connect(pin.getId(), ConstraintSet.BOTTOM, pinView.getId(), ConstraintSet.BOTTOM);
 
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
