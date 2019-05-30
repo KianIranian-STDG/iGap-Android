@@ -181,7 +181,7 @@ public final class AppUtils {
     /**
      * convert message type to appropriate text and setText if textView isn't null
      */
-    private static String returnConversionMessageType(ProtoGlobal.RoomMessageType type){
+    private static String returnConversionMessageType(ProtoGlobal.RoomMessageType type) {
         String result = "";
 
         switch (type) {
@@ -312,6 +312,7 @@ public final class AppUtils {
      * @param iconTextView TextView message status
      */
     public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
+        boolean isDarkTheme = G.isDarkTheme;
 
         if (iconTextView == null) {
             return;
@@ -325,7 +326,8 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText("ß");
-                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
+                iconTextView.setTextColor(context.getResources()
+                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case FAILED:
                 iconTextView.setText("ß");
@@ -337,11 +339,13 @@ public final class AppUtils {
                 break;
             case SENDING:
                 iconTextView.setText("T");
-                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
+                iconTextView.setTextColor(context.getResources()
+                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case SENT:
                 iconTextView.setText("ß");
-                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
+                iconTextView.setTextColor(context.getResources()
+                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);
@@ -356,6 +360,7 @@ public final class AppUtils {
      */
     public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status
             , ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
+        boolean isDarkTheme = G.isDarkTheme;
         if (iconTextView == null) {
             return;
         }
@@ -369,7 +374,8 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText("ß");
-                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
+                iconTextView.setTextColor(context.getResources()
+                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case FAILED:
                 iconTextView.setText("ß");
@@ -382,11 +388,13 @@ public final class AppUtils {
                 break;
             case SENDING:
                 iconTextView.setText("T");
-                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
+                iconTextView.setTextColor(context.getResources()
+                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case SENT:
                 iconTextView.setText("ß");
-                iconTextView.setTextColor(context.getResources().getColor(R.color.unread_status));
+                iconTextView.setTextColor(context.getResources()
+                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);
@@ -517,7 +525,7 @@ public final class AppUtils {
                     if (message.getAttachment() == null) {
                         return null;
                     }
-                   messageText = resources.getString(R.string.file_message);
+                    messageText = resources.getString(R.string.file_message);
                     break;
                 case STICKER:
                     messageText = resources.getString(R.string.sticker);
