@@ -69,7 +69,7 @@ public class FragmentCreateChannel extends BaseFragment implements ToolbarListen
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setRightIcons(R.string.check_icon)
-                .setLeftIcon(R.string.check_icon)
+                .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(G.context.getResources().getString(R.string.new_channel))
                 .setListener(this);
 

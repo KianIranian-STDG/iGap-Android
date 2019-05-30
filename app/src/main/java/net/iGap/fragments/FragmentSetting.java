@@ -28,6 +28,7 @@ import net.iGap.activities.ActivityManageSpace;
 import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.imagelistbottomsheet.SelectImageBottomSheetDialog;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -47,6 +48,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
@@ -62,6 +64,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 /**
@@ -79,7 +82,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private Uri uriIntent;
     private long idAvatar;
 
-    private View submitButton;
     private FragmentSettingBinding binding;
     private FragmentSettingViewModel viewModel;
 
@@ -92,7 +94,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
-        viewModel = new FragmentSettingViewModel();
+        viewModel = new FragmentSettingViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
@@ -105,7 +107,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setRightIcons(R.string.more_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.settings))
                 .setListener(new ToolbarListener() {
@@ -118,19 +120,17 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                     @Override
                     public void onRightIconClickListener(View view) {
-                        viewModel.submitData();
+                        showMenu();
                     }
                 });
         binding.toolbar.addView(t.getView());
-        submitButton = t.getRightButton();
-        submitButton.setVisibility(View.GONE);
 
-        viewModel.goToShowAvatar.observe(this, aBoolean -> {
+        /*viewModel.goToShowAvatar.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.setting);
                 new HelperFragment(fragment).setReplace(false).load();
             }
-        });
+        });*/
 
         viewModel.showDialogDeleteAccount.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
@@ -156,18 +156,18 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
         });
 
-        viewModel.showSubmitButton.observe(this, aBoolean -> {
+        /*viewModel.showSubmitButton.observe(this, aBoolean -> {
             if (aBoolean != null) {
                 Log.wtf("fragment setting", "value of show visibility: " + aBoolean);
                 submitButton.setVisibility(aBoolean ? View.VISIBLE : View.GONE);
             }
-        });
+        });*/
 
-        viewModel.showDialogChooseImage.observe(this, aBoolean -> {
+        /*viewModel.showDialogChooseImage.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 startDialog();
             }
-        });
+        });*/
 
         viewModel.goBack.observe(this, aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
@@ -178,7 +178,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         AppUtils.setProgresColler(binding.loading);
 
 
-        FragmentShowAvatars.onComplete = new OnComplete() {
+        /*FragmentShowAvatars.onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
@@ -190,7 +190,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 avatarHandler.avatarDelete(new ParamWithAvatarType(binding.userAvatar, viewModel.userId)
                         .avatarType(AvatarHandler.AvatarType.USER), mAvatarId);
             }
-        };
+        };*/
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
@@ -274,7 +274,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.onResume();
+        /*viewModel.onResume();*/
         /*new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(int score) {
@@ -366,6 +366,17 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     public void onSaveInstanceState(Bundle outState) {
         //Override onSaveInstanceState method and comment 'super' from avoid from "Can not perform this action after onSaveInstanceState" error
         //super.onSaveInstanceState(outState);
+    }
+
+    public void showMenu() {
+        if (getContext() != null) {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.delete_account));
+
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                viewModel.onDeleteAccountClick();
+            }).show();
+        }
     }
 
     private void startDialog() {
@@ -466,12 +477,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     }
 
     private void setAvatar() {
-        avatarHandler.getAvatar(new ParamWithAvatarType(binding.userAvatar, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        /*avatarHandler.getAvatar(new ParamWithAvatarType(binding.userAvatar, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());*/
     }
 
     private void setImage(String path) {
         if (path != null) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), binding.userAvatar);
+            /*G.imageLoader.displayImage(AndroidUtils.suitablePath(path), binding.userAvatar);*/
             if (G.onChangeUserPhotoListener != null) {
                 G.onChangeUserPhotoListener.onChangePhoto(path);
             }

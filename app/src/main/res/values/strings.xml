@@ -1349,7 +1349,7 @@
     <string name="wallet_desc">---Description---</string>
     <string name="wallet_toman">Toman</string>
     <string name="wallet_Your_credit">Your credit: </string>
-    <string name="wallet_Reial"> Rial </string>
+    <string name="wallet_Reial">%d Rial </string>
     <string name="wallet_error_server">Error communicating with server</string>
 
     <string name="IP_blocked">Due to overuse, your IP has been blocked for a while.</string>

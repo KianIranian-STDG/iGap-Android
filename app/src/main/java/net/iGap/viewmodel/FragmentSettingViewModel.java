@@ -106,47 +106,57 @@ import net.iGap.request.RequestUserSessionLogout;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 
 public class FragmentSettingViewModel extends ViewModel {
 
-    public ObservableField<String> name = new ObservableField<>("");
-    public ObservableField<String> userName = new ObservableField<>("");
-    public ObservableField<String> bio = new ObservableField<>("");
-    public ObservableField<String> email = new ObservableField<>("");
-    public ObservableField<String> birthDate = new ObservableField<>("");
-    public ObservableInt gender = new ObservableInt(-1);
+    /*public ObservableField<String> name = new ObservableField<>("");*/
+    /*public ObservableField<String> userName = new ObservableField<>("");*/
+    /*public ObservableField<String> bio = new ObservableField<>("");*/
+    /*public ObservableField<String> email = new ObservableField<>("");*/
+    /*public ObservableField<String> birthDate = new ObservableField<>("");*/
+    /*public ObservableInt gender = new ObservableInt(-1);*/
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
-    public ObservableInt usernameErrorMessage = new ObservableInt(R.string.is_empty);
-    private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
-    public ObservableInt emailErrorMessage = new ObservableInt(R.string.is_empty);
+    public LiveData<String> getCurrentLanguage() {
+        return currentLanguage;
+    }
+
+    private MutableLiveData<String> currentLanguage = new MutableLiveData<>();
+
+    /*private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();*/
+    /*public ObservableInt usernameErrorMessage = new ObservableInt(R.string.is_empty);*/
+    /*private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();*/
+    /*public ObservableInt emailErrorMessage = new ObservableInt(R.string.is_empty);*/
     //ui
-    public MutableLiveData<Boolean> goToShowAvatar = new MutableLiveData<>();
+    /*public MutableLiveData<Boolean> goToShowAvatar = new MutableLiveData<>();*/
     public MutableLiveData<Boolean> showDialogDeleteAccount = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToManageSpacePage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLogout = new MutableLiveData<>();
     public MutableLiveData<Boolean> showError = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showSubmitButton = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();
+    /*public MutableLiveData<Boolean> showSubmitButton = new MutableLiveData<>();*/
+    /*public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();*/
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
 
     public String phoneNumber;
-    private String currentName;
-    private String currentUserName;
-    private String currentUserEmail;
-    private int currentGender;
-    private String currentBio;
-    private String currentBirthDate;
+    /*private String currentName;*/
+    /*private String currentUserName;*/
+    /*private String currentUserEmail;*/
+    /*private int currentGender;*/
+    /*private String currentBio;*/
+    /*private String currentBirthDate;*/
     public long userId;
+    /*public static String pathSaveImage;*/
 
-    public static String pathSaveImage;
+    private SharedPreferences sharedPreferences;
+
     /*public static int KEY_AD_DATA_PHOTO = -1;
     public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
     public static int KEY_AD_DATA_VIDEO = -1;
@@ -179,20 +189,20 @@ public class FragmentSettingViewModel extends ViewModel {
     private RealmRegisteredInfo mRealmRegisteredInfo;
     /*private int[] fontSizeArray = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};*/
 
-    public LiveData<Boolean> getUsernameErrorEnable() {
+    /*public LiveData<Boolean> getUsernameErrorEnable() {
         return usernameErrorEnable;
     }
-
     public LiveData<Boolean> getEmailErrorEnable() {
         return emailErrorEnable;
-    }
+    }*/
 
 
-    public FragmentSettingViewModel() {
-
+    public FragmentSettingViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+        currentLanguage.setValue(sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage()));
 
         //what is request ?!
-        Realm realm = Realm.getDefaultInstance();
+        /*Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);
         realm.close();
@@ -204,6 +214,7 @@ public class FragmentSettingViewModel extends ViewModel {
                     try (Realm realm = Realm.getDefaultInstance()) {
                         RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 
@@ -217,9 +228,9 @@ public class FragmentSettingViewModel extends ViewModel {
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
 
-        /*usernameErrorMessage.setValue(R.string.is_empty);
-        emailErrorMessage.setValue(R.string.is_empty);*/
-        /*realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();*/
+        *//*usernameErrorMessage.setValue(R.string.is_empty);
+        emailErrorMessage.setValue(R.string.is_empty);*//*
+        *//*realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();*//*
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo == null) {
             G.fragmentActivity.onBackPressed();
@@ -227,7 +238,7 @@ public class FragmentSettingViewModel extends ViewModel {
         }
 
         Log.wtf("view Model", "call updateUserInfoUI from constrictor");
-        updateUserInfoUI(realmUserInfo);
+        updateUserInfoUI(realmUserInfo);*/
 
 
         /*if (realmPrivacy == null) {
@@ -327,7 +338,7 @@ public class FragmentSettingViewModel extends ViewModel {
         /*callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());*/
     }
 
-    private void updateUserInfoUI(RealmUserInfo userInfo) {
+    /*private void updateUserInfoUI(RealmUserInfo userInfo) {
 
         gender.set(-1);
         name.set("");
@@ -357,25 +368,29 @@ public class FragmentSettingViewModel extends ViewModel {
             bio.set(currentBio);
             userName.set(currentUserName);
             email.set(currentUserEmail);
-            /*if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
+            *//*if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
                 callbackSetRepresent.set("");
             } else {
                 callbackSetRepresent.set(userInfo.getRepresentPhoneNumber());
-            }*/
+            }*//*
         }
-    }
+    }*/
 
 
     //===============================================================================
     //================================Event Listeners================================
     //===============================================================================
 
-    public void onAvatarClick() {
+    /*public void onAvatarClick() {
         goToShowAvatar.setValue(true);
-    }
+    }*/
 
-    public void onAddImageClick() {
+    /*public void onAddImageClick() {
         showDialogChooseImage.setValue(true);
+    }*/
+
+    public void onLanguageClick(){
+        new HelperFragment(new FragmentLanguage()).setReplace(false).load();
     }
 
     public void onClickNotifyAndSound() {
@@ -398,7 +413,7 @@ public class FragmentSettingViewModel extends ViewModel {
         showDialogLogout.setValue(true);
     }
 
-    public void submitData() {
+    /*public void submitData() {
         showLoading.setValue(true);
         if (!currentName.equals(name.get())) {
             sendRequestSetName();
@@ -413,7 +428,7 @@ public class FragmentSettingViewModel extends ViewModel {
         } else {
             goBack.setValue(true);
         }
-    }
+    }*/
 
     public void logout() {
         showLoading.setValue(true);
@@ -445,7 +460,7 @@ public class FragmentSettingViewModel extends ViewModel {
         showDialogDeleteAccount.setValue(true);
     }
 
-    public void nameTextChangeListener(String newName) {
+    /*public void nameTextChangeListener(String newName) {
         if (!newName.equals(currentName)) {
             showSubmitButton.setValue(true);
         } else {
@@ -453,9 +468,9 @@ public class FragmentSettingViewModel extends ViewModel {
                 showSubmitButton.setValue(false);
             }
         }
-    }
+    }*/
 
-    private void sendRequestSetName() {
+    /*private void sendRequestSetName() {
         showLoading.setValue(true);
         new RequestUserProfileSetNickname().userProfileNickName(name.get(), new OnUserProfileSetNickNameResponse() {
             @Override
@@ -479,9 +494,9 @@ public class FragmentSettingViewModel extends ViewModel {
                 G.handler.post(() -> showLoading.setValue(false));
             }
         });
-    }
+    }*/
 
-    public void usernameTextChangeListener(String newUsername) {
+    /*public void usernameTextChangeListener(String newUsername) {
         if (HelperString.regexCheckUsername(newUsername)) {
             new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
                 @Override
@@ -513,9 +528,9 @@ public class FragmentSettingViewModel extends ViewModel {
             usernameErrorMessage.set(R.string.INVALID);
             showSubmitButton.setValue(false);
         }
-    }
+    }*/
 
-    private void sendRequestSetUsername() {
+    /*private void sendRequestSetUsername() {
         showLoading.setValue(true);
         new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
             @Override
@@ -542,9 +557,9 @@ public class FragmentSettingViewModel extends ViewModel {
                 G.handler.post(() -> showLoading.setValue(false));
             }
         });
-    }
+    }*/
 
-    public void emailTextChangeListener(String newEmail) {
+    /*public void emailTextChangeListener(String newEmail) {
         if (!newEmail.equals(currentUserEmail)) {
             showSubmitButton.setValue(true);
             emailErrorMessage.set(R.string.is_empty);
@@ -554,9 +569,9 @@ public class FragmentSettingViewModel extends ViewModel {
                 showSubmitButton.setValue(false);
             }
         }
-    }
+    }*/
 
-    private void sendRequestSetEmail() {
+    /*private void sendRequestSetEmail() {
         showLoading.setValue(true);
         new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
             @Override
@@ -589,9 +604,9 @@ public class FragmentSettingViewModel extends ViewModel {
                 G.handler.post(() -> showLoading.setValue(false));
             }
         });
-    }
+    }*/
 
-    public void bioTextChangeListener(String newBio) {
+    /*public void bioTextChangeListener(String newBio) {
         if (!currentBio.equals(newBio)) {
             showSubmitButton.setValue(true);
         } else {
@@ -602,15 +617,15 @@ public class FragmentSettingViewModel extends ViewModel {
                             showSubmitButton.setValue(false);
                         }
         }
-    }
+    }*/
 
-    private void sendRequestSetBio() {
+    /*private void sendRequestSetBio() {
         new RequestUserProfileSetBio().setBio(bio.get());
         currentBio = bio.get();
         submitData();
-    }
+    }*/
 
-    public void onCheckedListener(int checkedId) {
+    /*public void onCheckedListener(int checkedId) {
         if (checkedId != currentGender) {
             showSubmitButton.setValue(true);
         } else {
@@ -618,9 +633,9 @@ public class FragmentSettingViewModel extends ViewModel {
                 showSubmitButton.setValue(false);
             }
         }
-    }
+    }*/
 
-    private void sendRequestSetGender() {
+    /*private void sendRequestSetGender() {
         showLoading.setValue(true);
         new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
             @Override
@@ -642,7 +657,7 @@ public class FragmentSettingViewModel extends ViewModel {
                 G.handler.post(() -> showLoading.setValue(false));
             }
         });
-    }
+    }*/
 
     /*public void onClickRepresent(View view) {
         if (RequestUserProfileGetRepresentative.numberOfPendingRequest == 0) {
@@ -1283,8 +1298,9 @@ public class FragmentSettingViewModel extends ViewModel {
     }*/
 
 
-    public void onResume() {
-        /*G.onUserAvatarResponse = fragmentSetting;*/
+    //todo:move this to correct page
+    /*public void onResume() {
+        *//*G.onUserAvatarResponse = fragmentSetting;*//*
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
@@ -1294,10 +1310,10 @@ public class FragmentSettingViewModel extends ViewModel {
             return;
         }
 
-        /*realmUserInfo.addChangeListener(realmModel -> {
+        *//*realmUserInfo.addChangeListener(realmModel -> {
             Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
             updateUserInfoUI((RealmUserInfo) realmModel);
-        });*/
+        });*//*
 
         mRealmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), G.userId);
         if (mRealmRegisteredInfo != null) {
@@ -1305,10 +1321,10 @@ public class FragmentSettingViewModel extends ViewModel {
                 Log.wtf("view Model", "call updateUserInfoUI from =mRealmRegisteredInfo change listener");
                 updateUserInfoUI(realmUserInfo);
             });
-            /*Log.wtf("view Model", "call updateUserInfoUI from =mRealmRegisteredInfo not null");
-            updateUserInfoUI(realmUserInfo);*/
+            *//*Log.wtf("view Model", "call updateUserInfoUI from =mRealmRegisteredInfo not null");
+            updateUserInfoUI(realmUserInfo);*//*
         }
-    }
+    }*/
 
     public void onPause() {
         if (realmUserInfo != null && realmUserInfo.isValid()) {

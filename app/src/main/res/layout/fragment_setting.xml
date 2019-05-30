@@ -16,340 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="44dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <android.support.design.card.MaterialCardView
-                    android:id="@+id/pageHeader"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="-1dp"
-                    app:layout_constraintDimensionRatio="360:150"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/test_bg" />
-                </android.support.design.card.MaterialCardView>
-
-                <net.iGap.module.CircleImageView
-                    android:id="@+id/userAvatar"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="24dp"
-                    android:onClick="@{()->viewModel.onAvatarClick()}"
-                    app:layout_constraintBottom_toBottomOf="@id/pageHeader"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintStart_toStartOf="@id/pageHeader"
-                    app:layout_constraintWidth_percent=".25" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/addAvatar"
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/circle_green"
-                    android:gravity="center"
-                    android:onClick="@{()->viewModel.onAddImageClick()}"
-                    android:text="@string/add_icon"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="@id/userAvatar"
-                    app:layout_constraintEnd_toEndOf="@id/userAvatar"
-                    app:layout_constraintStart_toEndOf="@id/userAvatar" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/name"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:hint="@string/name"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/pageHeader"
-                    app:layout_constraintWidth_percent=".9">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/nameEditText"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:afterTextChanged="@{(newName)->viewModel.nameTextChangeListener(newName.toString())}"
-                        android:inputType="textPersonName"
-                        android:text="@={viewModel.name}" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/userName"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:hint="@string/user_name"
-                    app:errorEnabled="@{viewModel.usernameErrorEnable}"
-                    app:errorText="@{viewModel.usernameErrorMessage}"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/name">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/userNameEditText"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:afterTextChanged="@{(newUsername)->viewModel.usernameTextChangeListener(newUsername.toString())}"
-                        android:inputType="textPersonName"
-                        android:text="@={viewModel.userName}" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/bio"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:hint="@string/st_bio"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="70"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/userName">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/bioEditText"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:afterTextChanged="@{(newBio)->viewModel.bioTextChangeListener(newBio.toString())}"
-                        android:inputType="text"
-                        android:text="@={viewModel.bio}" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/email"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:hint="@string/email"
-                    app:errorEnabled="@{viewModel.emailErrorEnable}"
-                    app:errorText="@{viewModel.emailErrorMessage}"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/bio">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/emailEditText"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:afterTextChanged="@{(newEmail)->viewModel.emailTextChangeListener(newEmail.toString())}"
-                        android:inputType="textEmailAddress"
-                        android:text="@={viewModel.email}" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/birthDate"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:hint="@string/birth_date"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/email">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/birthDateEditText"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="date"
-                        android:text="@={viewModel.birthDate}" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/gender"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:padding="4dp"
-                    android:text="@string/set_gender"
-                    app:layout_constraintStart_toStartOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/birthDate" />
-
-                <RadioGroup
-                    android:id="@+id/genderValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:checkedButton="@{viewModel.gender}"
-                    android:onCheckedChanged="@{(group,checkId)->viewModel.onCheckedListener(checkId)}"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="@id/gender"
-                    app:layout_constraintEnd_toEndOf="@id/name"
-                    app:layout_constraintStart_toEndOf="@id/gender"
-                    app:layout_constraintTop_toTopOf="@id/gender">
-
-                    <android.support.v7.widget.AppCompatRadioButton
-                        android:id="@+id/male"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/check_box_background"
-                        android:text="@string/male" />
-
-                    <android.support.v7.widget.AppCompatRadioButton
-                        android:id="@+id/female"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/check_box_background"
-                        android:text="@string/female" />
-                </RadioGroup>
-
-                <View
-                    android:id="@+id/line1"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/gender"
-                    app:layout_constraintWidth_percent=".95" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/notification"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onClickNotifyAndSound()}"
-                    android:padding="@dimen/dp4"
-                    android:text="@string/notificaion_and_sound"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/line1" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/privacyAndSecurity"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onClickPrivacySecurity()}"
-                    android:padding="4dp"
-                    android:text="@string/st_title_Privacy_Security"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/notification" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/dataAndStorage"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onClickDataStorage()}"
-                    android:padding="4dp"
-                    android:text="@string/data_storage"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/privacyAndSecurity" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/chatSetting"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onChatSettingClick()}"
-                    android:padding="4dp"
-                    android:text="@string/chat_setting_title"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/dataAndStorage" />
-
-                <View
-                    android:id="@+id/line2"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="@id/line1"
-                    app:layout_constraintRight_toRightOf="@id/line1"
-                    app:layout_constraintTop_toBottomOf="@id/chatSetting" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/logout"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onLogoutClick()}"
-                    android:padding="4dp"
-                    android:text="@string/logout"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/line2" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/deleteAccount"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginBottom="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onDeleteAccountClick()}"
-                    android:padding="4dp"
-                    android:text="@string/delete_account"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/logout" />
-
-                <ProgressBar
-                    android:id="@+id/loading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:visibility="@{viewModel.showLoading ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v4.widget.NestedScrollView>
-
         <LinearLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -358,6 +24,316 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/notification"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onClickNotifyAndSound()}"
+            android:padding="@dimen/dp8"
+            android:text="@string/notificaion_and_sound"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintWidth_percent=".9" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/privacyAndSecurity"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onClickPrivacySecurity()}"
+            android:padding="@dimen/dp8"
+            android:text="@string/st_title_Privacy_Security"
+            app:layout_constraintEnd_toEndOf="@id/notification"
+            app:layout_constraintStart_toStartOf="@id/notification"
+            app:layout_constraintTop_toBottomOf="@id/notification" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/dataAndStorage"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onClickDataStorage()}"
+            android:padding="@dimen/dp8"
+            android:text="@string/data_storage"
+            app:layout_constraintEnd_toEndOf="@id/notification"
+            app:layout_constraintStart_toStartOf="@id/notification"
+            app:layout_constraintTop_toBottomOf="@id/privacyAndSecurity" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/chatSetting"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onChatSettingClick()}"
+            android:padding="@dimen/dp8"
+            android:text="@string/chat_setting_title"
+            app:layout_constraintEnd_toEndOf="@id/notification"
+            app:layout_constraintStart_toStartOf="@id/notification"
+            app:layout_constraintTop_toBottomOf="@id/dataAndStorage" />
+
+        <View
+            android:id="@+id/line2"
+            style="?lineColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/dp16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chatSetting"
+            app:layout_constraintWidth_percent=".95" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/languageTitle"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:onClick="@{()->viewModel.onLanguageClick()}"
+            android:padding="@dimen/dp8"
+            android:text="@string/language"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/language"
+            app:layout_constraintStart_toStartOf="@id/notification"
+            app:layout_constraintTop_toBottomOf="@id/line2" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="?textTitleColorSettingTheme"
+            android:padding="@dimen/dp8"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onLanguageClick()}"
+            android:text="@{viewModel.currentLanguage}"
+            app:layout_constraintBottom_toBottomOf="@id/languageTitle"
+            app:layout_constraintEnd_toEndOf="@id/notification"
+            app:layout_constraintStart_toEndOf="@id/languageTitle"
+            app:layout_constraintTop_toTopOf="@id/languageTitle" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/logout"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onLogoutClick()}"
+            android:padding="@dimen/dp8"
+            android:text="@string/logout"
+            app:layout_constraintEnd_toEndOf="@id/notification"
+            app:layout_constraintStart_toStartOf="@id/notification"
+            app:layout_constraintTop_toBottomOf="@id/language" />
+
+        <!--<android.support.v7.widget.AppCompatTextView
+            android:id="@+id/deleteAccount"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp16"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onDeleteAccountClick()}"
+            android:padding="4dp"
+            android:text="@string/delete_account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/name"
+            app:layout_constraintRight_toRightOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/logout" />-->
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{viewModel.showLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--<android.support.v7.widget.AppCompatTextView
+            android:id="@+id/addAvatar"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/circle_green"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onAddImageClick()}"
+            android:text="@string/add_icon"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/userAvatar"
+            app:layout_constraintEnd_toEndOf="@id/userAvatar"
+            app:layout_constraintStart_toEndOf="@id/userAvatar" />-->
+
+        <!--<android.support.design.widget.TextInputLayout
+            android:id="@+id/name"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:hint="@string/name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pageHeader"
+            app:layout_constraintWidth_percent=".9">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/nameEditText"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{(newName)->viewModel.nameTextChangeListener(newName.toString())}"
+                android:inputType="textPersonName"
+                android:text="@={viewModel.name}" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/userName"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:hint="@string/user_name"
+            app:errorEnabled="@{viewModel.usernameErrorEnable}"
+            app:errorText="@{viewModel.usernameErrorMessage}"
+            app:layout_constraintLeft_toLeftOf="@id/name"
+            app:layout_constraintRight_toRightOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/name">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/userNameEditText"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{(newUsername)->viewModel.usernameTextChangeListener(newUsername.toString())}"
+                android:inputType="textPersonName"
+                android:text="@={viewModel.userName}" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/bio"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:hint="@string/st_bio"
+            app:counterEnabled="true"
+            app:counterMaxLength="70"
+            app:layout_constraintLeft_toLeftOf="@id/name"
+            app:layout_constraintRight_toRightOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/userName">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/bioEditText"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{(newBio)->viewModel.bioTextChangeListener(newBio.toString())}"
+                android:inputType="text"
+                android:text="@={viewModel.bio}" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:hint="@string/email"
+            app:errorEnabled="@{viewModel.emailErrorEnable}"
+            app:errorText="@{viewModel.emailErrorMessage}"
+            app:layout_constraintLeft_toLeftOf="@id/name"
+            app:layout_constraintRight_toRightOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/bio">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/emailEditText"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{(newEmail)->viewModel.emailTextChangeListener(newEmail.toString())}"
+                android:inputType="textEmailAddress"
+                android:text="@={viewModel.email}" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/birthDate"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:hint="@string/birth_date"
+            app:layout_constraintLeft_toLeftOf="@id/name"
+            app:layout_constraintRight_toRightOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/email">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/birthDateEditText"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:text="@={viewModel.birthDate}" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/gender"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:padding="4dp"
+            android:text="@string/set_gender"
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/birthDate" />
+
+        <RadioGroup
+            android:id="@+id/genderValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:checkedButton="@{viewModel.gender}"
+            android:onCheckedChanged="@{(group,checkId)->viewModel.onCheckedListener(checkId)}"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/gender"
+            app:layout_constraintEnd_toEndOf="@id/name"
+            app:layout_constraintStart_toEndOf="@id/gender"
+            app:layout_constraintTop_toTopOf="@id/gender">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/male"
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/check_box_background"
+                android:text="@string/male" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/female"
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/check_box_background"
+                android:text="@string/female" />
+        </RadioGroup>-->
+
     </android.support.constraint.ConstraintLayout>
 
 </layout>

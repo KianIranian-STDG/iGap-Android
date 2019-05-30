@@ -2339,7 +2339,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         if (G.selectedCard != null) {
                             if (itemCash != null) {
                                 itemCash.setVisibility(View.VISIBLE);
-                                itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + G.cardamount + " " + getResources().getString(R.string.wallet_Reial));
+                                itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " +String.format(getString(R.string.wallet_Reial),G.cardamount));
                             }
 
                         }
