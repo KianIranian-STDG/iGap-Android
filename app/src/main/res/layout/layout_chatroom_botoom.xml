@@ -12,8 +12,8 @@
         style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginRight="@dimen/dp16"
-        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp8"
+        android:layout_marginLeft="@dimen/dp8"
         app:layout_constraintTop_toTopOf="parent" />
 
     <net.iGap.module.MaterialDesignTextView
