@@ -45,8 +45,8 @@ public class ChatCell extends ConstraintLayout {
 
         View pinView = new View(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_background_pin_dark
-                : R.drawable.shape_background_pin, null);
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.ic_pin
+                : R.drawable.ic_pin, null);
         pinView.setBackground(drawable);
         addView(pinView);
 
