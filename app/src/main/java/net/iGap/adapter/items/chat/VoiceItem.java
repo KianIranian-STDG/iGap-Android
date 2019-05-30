@@ -45,7 +45,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
@@ -79,10 +78,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
             holder.mFilePath = localPath;
             holder.waveView.setEnabled(true);
-            holder.btnPlayMusic.setVisibility(View.VISIBLE);
-
+            G.handler.postDelayed(() -> holder.btnPlayMusic.setVisibility(View.VISIBLE), 200);
         } else {
-//            holder.musicSeekbar.setEnabled(false);
             holder.waveView.setEnabled(false);
             holder.btnPlayMusic.setVisibility(View.INVISIBLE);
         }
@@ -91,8 +88,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         holder.waveView.setTag(mMessage.messageID);
-
-//        holder.messageTime = HelperCalander.getClocktime(mMessage.time, false);
 
 
         ValueAnimator anim = ValueAnimator.ofInt(0, 100);
@@ -239,7 +234,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
 
-//            holder.waveView.setProgress(MusicPlayer.musicProgress);
             anim.start();
 
             if (MusicPlayer.musicProgress > 0) {
@@ -271,19 +265,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-
-        if (mMessage.isSenderMe() && ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColor), PorterDuff.Mode.SRC_IN);
-            }
-//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.iGapColor), android.graphics.PorterDuff.Mode.SRC_IN);
-        } else {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
-            }
-//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
-        }
-
         holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
         holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
     }
@@ -293,19 +274,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super.updateLayoutForReceive(holder);
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
-            }
-
-//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
             holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
             holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
         } else {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-//                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
-            }
 
-//            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
             holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
             holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
         }
@@ -318,18 +290,17 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     protected static class ViewHolder extends NewChatItemHolder implements IThumbNailItem, IProgress {
 
-        protected MessageProgress progress;
-        protected AppCompatImageView thumbnail;
-        protected AppCompatTextView btnPlayMusic;
-        protected OnComplete complete;
-        protected AppCompatTextView txt_Timer;
-        protected AppCompatTextView author;
-        protected String mFilePath = "";
-        protected String mMessageID = "";
-        protected String mTimeMusic = "";
-        protected long mRoomId;
-        protected ProtoGlobal.Room.Type mType;
-
+        private MessageProgress progress;
+        private AppCompatImageView thumbnail;
+        private AppCompatTextView btnPlayMusic;
+        private OnComplete complete;
+        private AppCompatTextView txt_Timer;
+        private AppCompatTextView author;
+        private String mFilePath = "";
+        private String mMessageID = "";
+        private String mTimeMusic = "";
+        private long mRoomId;
+        private ProtoGlobal.Room.Type mType;
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private AudioWave waveView;
@@ -425,7 +396,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             getContentBloke().addView(rootView, 0);
         }
 
-        public static byte[] hexStringToByteArray(String s) {
+        private byte[] hexStringToByteArray(String s) {
             int len = s.length();
             byte[] data = new byte[len / 2];
             for (int i = 0; i < len; i += 2) {

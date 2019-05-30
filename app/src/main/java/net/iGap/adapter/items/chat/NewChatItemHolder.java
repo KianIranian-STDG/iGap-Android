@@ -107,6 +107,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         ticTv = new FontIconTextView(getContext());
         ticTv.setId(R.id.tv_chatItem_status);
+        ticTv.setTextSize(16);
         cslm_view_left_dis = new View(getContext());
 
         timeTv = new AppCompatTextView(getContext());
@@ -157,10 +158,10 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.TOP, dpToPx(6));
 
-        set.constrainHeight(ticTv.getId(), i_Dp(R.dimen.dp14));
-        set.constrainWidth(ticTv.getId(), i_Dp(R.dimen.dp14));
+        set.constrainHeight(ticTv.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(ticTv.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(ticTv.getId(), ConstraintSet.RIGHT, chatBloke.getId(), ConstraintSet.RIGHT);
+        set.connect(ticTv.getId(), ConstraintSet.RIGHT, chatBloke.getId(), ConstraintSet.RIGHT,dpToPx(4));
         set.connect(ticTv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
         set.constrainHeight(timeTv.getId(), ConstraintSet.WRAP_CONTENT);
