@@ -292,7 +292,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             }
             holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.text_line1_igap_dark),
                     android.graphics.PorterDuff.Mode.SRC_IN);
-            holder.songTimeTv.setTextColor(Color.parseColor(G.textTitleTheme));
             holder.seekBar.setVisibility(View.INVISIBLE);
         } else {
 
@@ -302,8 +301,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             }
             holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.black),
                     android.graphics.PorterDuff.Mode.SRC_IN);
-            holder.songTimeTv.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
-            holder.songFileName.setTextColor(Color.parseColor(G.textSubTheme));
         }
     }
 
@@ -328,6 +325,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private CircleImageView coverIv;
+        private boolean isDarkTheme = G.isDarkTheme;
 
         public ViewHolder(final View view) {
             super(view);
@@ -346,7 +344,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songSize.setGravity(BOTTOM | CENTER_HORIZONTAL);
             songSize.setSingleLine(true);
             songSize.setAllCaps(TRUE);
-            songSize.setTextColor(Color.parseColor(G.textChatMusic));
+            songSize.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
             setTextSize(songSize, R.dimen.dp10);
             setTypeFace(songSize);
 
@@ -357,7 +355,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setSingleLine(true);
             songFileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
-            songFileName.setTextColor(Color.parseColor(G.textChatMusic));
+            songFileName.setTextColor(getColor(R.color.white));
             setTextSize(songFileName, R.dimen.dp12);
             songFileName.setTypeface(G.typeface_IRANSansMobile);
 
@@ -368,14 +366,14 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songArtist.setText("Artist");
             setTextSize(songArtist, R.dimen.dp10);
             setTypeFace(songArtist);
-            songArtist.setTextColor(Color.parseColor(G.textChatMusic));
+            songArtist.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
 
             playBtn = new MaterialDesignTextView(G.context);
             playBtn.setId(R.id.txt_play_music);
             playBtn.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
             playBtn.setTypeface(G.typeface_Fontico);
             playBtn.setGravity(CENTER);
-            playBtn.setTextColor(itemView.getResources().getColor(R.color.white));
+            playBtn.setTextColor(getColor(R.color.white));
             playBtn.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
             setTextSize(playBtn, R.dimen.dp16);
             playBtn.setBackground(getDrawable(R.drawable.background_audioitem_cover));
@@ -389,6 +387,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songTimeTv.setId(R.id.csla_txt_timer);
             songTimeTv.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
             songTimeTv.setText("00:00");
+            songTimeTv.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
             setTextSize(songTimeTv, R.dimen.dp10);
             setTypeFace(songTimeTv);
 
@@ -398,10 +397,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             progress = getProgressBar(R.dimen.dp48);
             rootView = new ConstraintLayout(getContext());
             set = new ConstraintSet();
+
             coverIv = new CircleImageView(getContext());
             coverIv.setId(R.id.iv_musicItem_cover);
             coverIv.setBorderColor(0);
-            coverIv.setImageDrawable(getDrawable(R.drawable.bank_eghtesad_novin_pec));
+            coverIv.setImageDrawable(getDrawable(R.drawable.ic_music_cover_blue));
 
             set.constrainWidth(coverIv.getId(), dpToPx(45));
             set.constrainHeight(coverIv.getId(), dpToPx(45));
@@ -421,11 +421,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             set.constrainWidth(progress.getId(), dpToPx(45));
             set.constrainHeight(progress.getId(), dpToPx(45));
 
-            set.constrainHeight(songTimeTv.getId(),ConstraintSet.WRAP_CONTENT);
-            set.constrainWidth(songTimeTv.getId(),ConstraintSet.WRAP_CONTENT);
+            set.constrainHeight(songTimeTv.getId(), ConstraintSet.WRAP_CONTENT);
+            set.constrainWidth(songTimeTv.getId(), ConstraintSet.WRAP_CONTENT);
 
-            set.constrainWidth(songSize.getId(),ConstraintSet.WRAP_CONTENT);
-            set.constrainHeight(songSize.getId(),ConstraintSet.WRAP_CONTENT);
+            set.constrainWidth(songSize.getId(), ConstraintSet.WRAP_CONTENT);
+            set.constrainHeight(songSize.getId(), ConstraintSet.WRAP_CONTENT);
 
 
             set.connect(coverIv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, dpToPx(4));
@@ -458,19 +458,19 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             set.connect(progress.getId(), ConstraintSet.LEFT, coverIv.getId(), ConstraintSet.LEFT);
             rootView.addView(progress);
 
-            set.connect(songTimeTv.getId(),ConstraintSet.LEFT, songFileName.getId(),ConstraintSet.LEFT);
-            set.connect(songTimeTv.getId(),ConstraintSet.TOP,songArtist.getId(),ConstraintSet.BOTTOM);
+            set.connect(songTimeTv.getId(), ConstraintSet.LEFT, songFileName.getId(), ConstraintSet.LEFT);
+            set.connect(songTimeTv.getId(), ConstraintSet.TOP, songArtist.getId(), ConstraintSet.BOTTOM);
             rootView.addView(songTimeTv);
 
-            set.connect(songSize.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,dpToPx(4));
-            set.connect(songSize.getId(),ConstraintSet.TOP, songTimeTv.getId(),ConstraintSet.TOP);
-            set.connect(songSize.getId(),ConstraintSet.BOTTOM, songTimeTv.getId(),ConstraintSet.BOTTOM);
+            set.connect(songSize.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, dpToPx(4));
+            set.connect(songSize.getId(), ConstraintSet.TOP, songTimeTv.getId(), ConstraintSet.TOP);
+            set.connect(songSize.getId(), ConstraintSet.BOTTOM, songTimeTv.getId(), ConstraintSet.BOTTOM);
             rootView.addView(songSize);
 
 
             set.applyTo(rootView);
             rootView.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
-            getContentBloke().addView(rootView,0);
+            getContentBloke().addView(rootView, 0);
         }
 
         @Override
