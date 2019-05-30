@@ -27,6 +27,7 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -536,5 +537,9 @@ public class G extends MultiDexApplication {
             mTracker = analytics.newTracker(R.xml.global_track);
         }
         return mTracker;
+    }
+
+    public static void showToast(String message){
+        G.handler.post(() -> Toast.makeText(G.context, message, Toast.LENGTH_SHORT).show());
     }
 }
