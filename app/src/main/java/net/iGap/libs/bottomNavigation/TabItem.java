@@ -26,11 +26,14 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
     private Drawable selectedIcon;
     private Drawable unSelectedIcon;
+    private Drawable darkSelectedIcon;
+    private Drawable darkUnSelectedIcon;
     private ImageView imageView;
     private BadgeView badgeView;
     private int position;
     private boolean active = false;
     private boolean isRtl = G.isAppRtl;
+    private boolean isDarkTheme = G.isDarkTheme;
 
 
     public TabItem(Context context) {
@@ -95,7 +98,12 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     }
 
     private void setupViews() {
-        imageView.setImageDrawable(selectedIcon);
+        if (isDarkTheme)
+            imageView.setImageDrawable(darkSelectedIcon);
+        else
+            imageView.setImageDrawable(selectedIcon);
+
+
         if (position == bottomNavigation.getDefaultItem())
             active = true;
         setSelectedItem(active);
@@ -108,6 +116,10 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             try {
                 selectedIcon = typedArray.getDrawable(R.styleable.TabItem_selected_icon);
                 unSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_unselected_icon);
+                darkSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_dark_selected_icon);
+                darkUnSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_dark_unselected_icon);
+
+                Log.i(TAG, "parseAttr: loaded");
             } finally {
                 typedArray.recycle();
             }
@@ -135,20 +147,21 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             active = isActive;
         }
 
-        //todo:// add dark mode svg for bottom nav icons
-        if (G.isDarkTheme){
-
-        }else {
-
-        }
-
-        if (active) {
-            imageView.setImageDrawable(selectedIcon);
+        if (isDarkTheme) {
+            if (active) {
+                imageView.setImageDrawable(darkSelectedIcon);
+            } else {
+                imageView.setImageDrawable(darkUnSelectedIcon);
+            }
         } else {
-            imageView.setImageDrawable(unSelectedIcon);
+            if (active) {
+                imageView.setImageDrawable(selectedIcon);
+            } else {
+                imageView.setImageDrawable(unSelectedIcon);
+            }
         }
 
-        Log.i(TAG, "setSelected: " + position);
+        Log.i(TAG, "setSelected: " + position + " " + isActive);
     }
 
     public void setOnTabItemSelected(OnItemSelected onItemSelected) {
