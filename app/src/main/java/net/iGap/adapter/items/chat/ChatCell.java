@@ -300,8 +300,8 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(pinView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp32));
             set.connect(pinView.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
-            set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp4));
-            set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp4));
+            set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp2));
+            set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp2));
             set.connect(pin.getId(), ConstraintSet.RIGHT, pinView.getId(), ConstraintSet.RIGHT);
             set.connect(pin.getId(), ConstraintSet.LEFT, pinView.getId(), ConstraintSet.LEFT);
             set.connect(pin.getId(), ConstraintSet.TOP, pinView.getId(), ConstraintSet.TOP);
@@ -332,8 +332,8 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(pinView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp32));
             set.connect(pinView.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
-            set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp4));
-            set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp4));
+            set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp2));
+            set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp2));
             set.connect(pin.getId(), ConstraintSet.RIGHT, pinView.getId(), ConstraintSet.RIGHT);
             set.connect(pin.getId(), ConstraintSet.LEFT, pinView.getId(), ConstraintSet.LEFT);
             set.connect(pin.getId(), ConstraintSet.TOP, pinView.getId(), ConstraintSet.TOP);

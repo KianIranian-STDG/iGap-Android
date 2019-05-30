@@ -1207,8 +1207,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
                 if (isMyCloud) {
 
-                    // TODO: 5/9/19 add cloud svg
-                    holder.image.setImageDrawable(getResources().getDrawable(R.drawable.bank_dey_pec));
+                    holder.image.setImageDrawable(G.context.getResources().getDrawable(R.drawable.ic_cloud_space_blue));
 
                 } else {
                     if (holder.image.getVisibility() == View.GONE) {
@@ -1244,9 +1243,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
                         holder.txtPinIcon.setVisibility(View.VISIBLE);
-//                        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                        params.setMargins(16, 0, 16, 0);
-//                        holder.txtTime.setLayoutParams(params);
                     }
 
                 } else {
