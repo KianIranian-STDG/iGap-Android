@@ -55,9 +55,9 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                 if (G.isDarkTheme){
                     backgroundColor = getContext().getResources().getColor(R.color.navigation_dark_mode_bg);
                 }else{
-                    backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
+                    backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color,
+                            getResources().getColor(R.color.background_color));
                 }
-
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
             } finally {
                 typedArray.recycle();

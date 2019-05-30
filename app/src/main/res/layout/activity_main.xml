@@ -224,7 +224,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:selected_icon="@drawable/ic_contact_selected"
-                        app:unselected_icon="@drawable/ic_contact_unselected" />
+                        app:unselected_icon="@drawable/ic_contact_unselected"
+                        app:dark_selected_icon="@drawable/ic_contact_selected_dark"
+                        app:dark_unselected_icon="@drawable/ic_contact_unselected_dark"/>
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_call"
@@ -232,7 +234,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:selected_icon="@drawable/ic_call_selected"
-                        app:unselected_icon="@drawable/ic_call_unselected" />
+                        app:unselected_icon="@drawable/ic_call_unselected"
+                        app:dark_selected_icon="@drawable/ic_call_selected_dark"
+                        app:dark_unselected_icon="@drawable/ic_call_unselected_dark"/>
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_chat"
@@ -240,7 +244,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:selected_icon="@drawable/ic_chat_selected"
-                        app:unselected_icon="@drawable/ic_chat_unselected" />
+                        app:unselected_icon="@drawable/ic_chat_unselected"
+                        app:dark_selected_icon="@drawable/ic_chat_selected_dark"
+                        app:dark_unselected_icon="@drawable/ic_chat_unselected_dark"/>
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_dashboard"
@@ -248,7 +254,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:selected_icon="@drawable/ic_app_selected"
-                        app:unselected_icon="@drawable/ic_app_unselected" />
+                        app:unselected_icon="@drawable/ic_app_unselected"
+                        app:dark_selected_icon="@drawable/ic_app_selected_dark"
+                        app:dark_unselected_icon="@drawable/ic_app_unselected_dark"/>
 
                     <net.iGap.libs.bottomNavigation.TabItem
                         android:id="@+id/ti_main_setting"
@@ -256,7 +264,10 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:selected_icon="@drawable/ic_me_selected"
-                        app:unselected_icon="@drawable/ic_me_unselected" />
+                        app:unselected_icon="@drawable/ic_me_unselected"
+                        app:dark_selected_icon="@drawable/ic_me_selected_dark"
+                        app:dark_unselected_icon="@drawable/ic_me_unselected_dark"/>
+
                 </net.iGap.libs.bottomNavigation.BottomNavigation>
 
             </RelativeLayout>

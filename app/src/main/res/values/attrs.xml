@@ -131,6 +131,10 @@
   <declare-styleable name="TabItem">
       <attr name="selected_icon" format="reference" />
       <attr name="unselected_icon" format="reference" />
+      <attr name="dark_selected_icon" format="reference" />
+      <attr name="dark_unselected_icon" format="reference" />
+
+
   </declare-styleable>
 
   <!--circle-->
