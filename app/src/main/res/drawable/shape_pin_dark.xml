@@ -6,8 +6,8 @@
             <gradient android:centerX="37.28327"
                 android:centerY="8.57479"
                 android:gradientRadius="894.10535" android:type="radial">
-                <item android:color="#3BC7C7C7" android:offset="0"/>
-                <item android:color="#3BC7C7C7" android:offset="1"/>
+                <item android:color="#222" android:offset="0"/>
+                <item android:color="#222" android:offset="1"/>
             </gradient>
         </aapt:attr>
     </path>
