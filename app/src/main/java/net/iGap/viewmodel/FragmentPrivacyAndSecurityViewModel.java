@@ -229,8 +229,7 @@ public class FragmentPrivacyAndSecurityViewModel {
     }
 
     private void updatePrivacyUI(RealmPrivacy realmPrivacy) {
-        if (realmPrivacy.isValid()) {
-
+        if (realmPrivacy != null && realmPrivacy.isValid()) {
             callbackSeeMyAvatar.set(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar(), SEE_MY_AVATAR));
             callbackInviteChannel.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel(), INVITE_CHANNEL));
             callbackInviteGroup.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup(), INVITE_GROUP));
