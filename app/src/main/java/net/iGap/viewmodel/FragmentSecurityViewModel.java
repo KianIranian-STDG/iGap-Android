@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -61,12 +62,12 @@ public class FragmentSecurityViewModel {
     public ObservableInt rootChangePassword = new ObservableInt(View.GONE);
     public ObservableInt txtResendConfirmEmail = new ObservableInt(View.VISIBLE);
     public ObservableInt prgWaiting = new ObservableInt(View.VISIBLE);
-    public ObservableInt rippleOkVisibility = new ObservableInt(View.GONE);
+    public MutableLiveData<Integer> rippleOkVisibility = new MutableLiveData<>();
     public ObservableInt setRecoveryEmail = new ObservableInt(View.VISIBLE);
     public ObservableInt lineConfirmView = new ObservableInt(View.VISIBLE);
     public ObservableInt setConfirmedEmail = new ObservableInt(View.VISIBLE);
     public ObservableInt viewRecoveryEmail = new ObservableInt(View.VISIBLE);
-    public ObservableField<String> titleToolbar = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.two_step_verification_title));
+    public MutableLiveData<String> titleToolbar = new MutableLiveData<>();
     public ObservableField<String> edtConfirmedEmailText = new ObservableField<>("");
     public ObservableField<String> edtChangeHintText = new ObservableField<>("");
     public ObservableField<String> edtSetEmailText = new ObservableField<>("");
@@ -202,8 +203,8 @@ public class FragmentSecurityViewModel {
         rootSetPassword.set(View.GONE);
         rootSetAdditionPassword.set(View.GONE);
         rootChangeHint.set(View.VISIBLE);
-        titleToolbar.set(G.fragmentActivity.getString(R.string.password_hint));
-        rippleOkVisibility.set(View.VISIBLE);
+        titleToolbar.setValue(G.fragmentActivity.getString(R.string.password_hint));
+        rippleOkVisibility.setValue(View.VISIBLE);
     }
 
     public void onClickTurnPasswordOff(View view) {
@@ -229,9 +230,9 @@ public class FragmentSecurityViewModel {
         rootSetPassword.set(View.GONE);
         rootSetAdditionPassword.set(View.GONE);
         rootChangeEmail.set(View.VISIBLE);
-        titleToolbar.set(G.fragmentActivity.getString(R.string.change_email_recovery));
+        titleToolbar.setValue(G.fragmentActivity.getString(R.string.change_email_recovery));
         //rootConfirmedEmail.setVisibility(View.VISIBLE);
-        rippleOkVisibility.set(View.VISIBLE);
+        rippleOkVisibility.setValue(View.VISIBLE);
     }
 
 
@@ -242,8 +243,8 @@ public class FragmentSecurityViewModel {
         rootSetPassword.set(View.GONE);
         rootSetAdditionPassword.set(View.GONE);
         rootConfirmedEmail.set(View.VISIBLE);
-        titleToolbar.set(G.fragmentActivity.getString(R.string.confirm_email_title));
-        rippleOkVisibility.set(View.VISIBLE);
+        titleToolbar.setValue(G.fragmentActivity.getString(R.string.confirm_email_title));
+        rippleOkVisibility.setValue(View.VISIBLE);
     }
 
 
@@ -253,8 +254,8 @@ public class FragmentSecurityViewModel {
         rootSetPassword.set(View.GONE);
         rootSetAdditionPassword.set(View.GONE);
         rootQuestionPassword.set(View.VISIBLE);
-        titleToolbar.set(G.fragmentActivity.getString(R.string.title_toolbar_password_Question));
-        rippleOkVisibility.set(View.VISIBLE);
+        titleToolbar.setValue(G.fragmentActivity.getString(R.string.title_toolbar_password_Question));
+        rippleOkVisibility.setValue(View.VISIBLE);
 
     }
 
@@ -316,6 +317,8 @@ public class FragmentSecurityViewModel {
             }
         }
 
+        titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.two_step_verification_title));
+        rippleOkVisibility.setValue(View.GONE);
 
         G.onTwoStepPassword = new OnTwoStepPassword() {
             @Override
@@ -338,7 +341,7 @@ public class FragmentSecurityViewModel {
                             rootSetAdditionPassword.set(View.GONE);
                             rootChangePassword.set(View.VISIBLE);
                             rootCheckPassword.set(View.VISIBLE);
-                            rippleOkVisibility.set(View.VISIBLE);
+                            rippleOkVisibility.setValue(View.VISIBLE);
                             edtCheckPasswordHint.set(hint);
                             isFirstSetPassword = false;
 
@@ -362,7 +365,7 @@ public class FragmentSecurityViewModel {
                             rootSetAdditionPassword.set(View.VISIBLE);
                             rootChangePassword.set(View.GONE);
                             rootCheckPassword.set(View.GONE);
-                            rippleOkVisibility.set(View.GONE);
+                            rippleOkVisibility.setValue(View.GONE);
                             isFirstSetPassword = true;
                         }
                     }
@@ -412,7 +415,7 @@ public class FragmentSecurityViewModel {
                     public void run() {
                         rootSetPassword.set(View.VISIBLE);
                         rootCheckPassword.set(View.GONE);
-                        rippleOkVisibility.set(View.GONE);
+                        rippleOkVisibility.setValue(View.GONE);
                     }
                 });
 
@@ -439,7 +442,7 @@ public class FragmentSecurityViewModel {
                         rootSetAdditionPassword.set(View.VISIBLE);
                         rootChangePassword.set(View.GONE);
                         rootCheckPassword.set(View.GONE);
-                        rippleOkVisibility.set(View.GONE);
+                        rippleOkVisibility.setValue(View.GONE);
                     }
                 });
 
@@ -542,7 +545,7 @@ public class FragmentSecurityViewModel {
                 rootSetAdditionPassword.set(View.VISIBLE);
                 rootChangePassword.set(View.GONE);
                 rootCheckPassword.set(View.GONE);
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 prgWaiting.set(View.GONE);
             }
         });
@@ -558,7 +561,7 @@ public class FragmentSecurityViewModel {
                 rootChangePassword.set(View.VISIBLE);
                 rootSetAdditionPassword.set(View.GONE);
                 rootCheckPassword.set(View.GONE);
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 prgWaiting.set(View.GONE);
                 if (!FragmentSecurity.isSetRecoveryEmail) {
                     setConfirmedEmail.set(View.GONE);
@@ -579,8 +582,8 @@ public class FragmentSecurityViewModel {
                 page = 0;
                 rootSetPassword.set(View.VISIBLE);
                 rootConfirmedEmail.set(View.GONE);
-                titleToolbar.set(G.fragmentActivity.getString(R.string.two_step_verification_title));
-                rippleOkVisibility.set(View.GONE);
+                titleToolbar.setValue(G.fragmentActivity.getString(R.string.two_step_verification_title));
+                rippleOkVisibility.setValue(View.GONE);
             }
         });
 
@@ -595,8 +598,8 @@ public class FragmentSecurityViewModel {
                 rootSetPassword.set(View.VISIBLE);
                 rootConfirmedEmail.set(View.GONE);
                 rootChangeEmail.set(View.GONE);
-                titleToolbar.set(G.fragmentActivity.getString(R.string.two_step_verification_title));
-                rippleOkVisibility.set(View.GONE);
+                titleToolbar.setValue(G.fragmentActivity.getString(R.string.two_step_verification_title));
+                rippleOkVisibility.setValue(View.GONE);
                 if (mUnconfirmedEmailPattern.length() > 0) {
                     setConfirmedEmail.set(View.VISIBLE);
                     lineConfirmView.set(View.VISIBLE);
@@ -617,8 +620,8 @@ public class FragmentSecurityViewModel {
                 page = 0;
                 rootSetPassword.set(View.VISIBLE);
                 rootChangeHint.set(View.GONE);
-                titleToolbar.set(G.fragmentActivity.getString(R.string.two_step_verification_title));
-                rippleOkVisibility.set(View.GONE);
+                titleToolbar.setValue(G.fragmentActivity.getString(R.string.two_step_verification_title));
+                rippleOkVisibility.setValue(View.GONE);
             }
         });
 
@@ -632,8 +635,8 @@ public class FragmentSecurityViewModel {
                 page = 0;
                 rootSetPassword.set(View.VISIBLE);
                 rootQuestionPassword.set(View.GONE);
-                titleToolbar.set(G.fragmentActivity.getString(R.string.two_step_verification_title));
-                rippleOkVisibility.set(View.GONE);
+                titleToolbar.setValue(G.fragmentActivity.getString(R.string.two_step_verification_title));
+                rippleOkVisibility.setValue(View.GONE);
             }
         });
 

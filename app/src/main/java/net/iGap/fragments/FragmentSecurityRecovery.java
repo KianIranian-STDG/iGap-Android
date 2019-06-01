@@ -16,8 +16,10 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnRecoveryEmailToken;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
@@ -45,6 +47,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
     private TextView txtSetRecoveryQuestionPassOne;
     private TextView txtSetRecoveryQuestionPassTwo;
     private boolean isConfirmedRecoveryEmail;
+    private HelperToolbar mHelperToolbar ;
 
     public FragmentSecurityRecovery() {
         // Required empty public constructor
@@ -61,7 +64,55 @@ public class FragmentSecurityRecovery extends BaseFragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setDefaultTitle(G.context.getResources().getString(R.string.recovery_Password))
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+
+                        closeKeyboard(view);
+                        if (page == Security.SETTING) {
+                            pageSetting();
+                        } else {
+                            pageRegister();
+                        }
+
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View v) {
+
+
+                        if (rootRecoveryEmail.getVisibility() == View.VISIBLE) {
+                            if (edtSetRecoveryEmail.length() > 0) {
+                                new RequestUserTwoStepVerificationRecoverPasswordByToken().recoveryPasswordByToken(edtSetRecoveryEmail.getText().toString());
+                                closeKeyboard(v);
+                                edtSetRecoveryEmail.setText("");
+                            } else {
+                                error(G.fragmentActivity.getResources().getString(R.string.please_enter_code));
+                            }
+                        } else {
+                            if (edtSetRecoveryAnswerPassOne.length() > 0 && edtSetRecoveryAnswerPassTwo.length() > 0) {
+                                new RequestUserTwoStepVerificationRecoverPasswordByAnswers().RecoveryPasswordByAnswer(edtSetRecoveryAnswerPassOne.getText().toString(), edtSetRecoveryAnswerPassTwo.getText().toString());
+                                edtSetRecoveryAnswerPassOne.setText("");
+                                edtSetRecoveryAnswerPassTwo.setText("");
+                                closeKeyboard(v);
+
+                            } else {
+
+                                error(G.fragmentActivity.getResources().getString(R.string.please_complete_all_item));
+                            }
+                        }
+                    }
+                });
+
+        ViewGroup toolbarLayout = view.findViewById(R.id.fsr_layout_toolbar);
+        toolbarLayout.addView(mHelperToolbar.getView());
 
         new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecoveryToken();
 
@@ -76,30 +127,12 @@ public class FragmentSecurityRecovery extends BaseFragment {
             isConfirmedRecoveryEmail = bundle.getBoolean("IS_CONFIRM_EMAIL");
         }
 
-        RippleView ripple_back = (RippleView) view.findViewById(R.id.ripple_back);
-
-        ripple_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                closeKeyboard(v);
-                if (page == Security.SETTING) {
-                    pageSetting();
-                } else {
-                    pageRegister();
-                }
-
-            }
-        });
-
         view.findViewById(R.id.rootRecoveryPassword).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
-
-        RippleView rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);
 
         rootRecoveryEmail = (ViewGroup) view.findViewById(R.id.rootRecoveryEmailPassword);
         rootRecoveryQuestionPassword = (ViewGroup) view.findViewById(R.id.rootRecoveryQuestionPassword);
@@ -228,33 +261,6 @@ public class FragmentSecurityRecovery extends BaseFragment {
             };
         }
 
-
-        rippleOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (rootRecoveryEmail.getVisibility() == View.VISIBLE) {
-                    if (edtSetRecoveryEmail.length() > 0) {
-                        new RequestUserTwoStepVerificationRecoverPasswordByToken().recoveryPasswordByToken(edtSetRecoveryEmail.getText().toString());
-                        closeKeyboard(v);
-                        edtSetRecoveryEmail.setText("");
-                    } else {
-                        error(G.fragmentActivity.getResources().getString(R.string.please_enter_code));
-                    }
-                } else {
-                    if (edtSetRecoveryAnswerPassOne.length() > 0 && edtSetRecoveryAnswerPassTwo.length() > 0) {
-                        new RequestUserTwoStepVerificationRecoverPasswordByAnswers().RecoveryPasswordByAnswer(edtSetRecoveryAnswerPassOne.getText().toString(), edtSetRecoveryAnswerPassTwo.getText().toString());
-                        edtSetRecoveryAnswerPassOne.setText("");
-                        edtSetRecoveryAnswerPassTwo.setText("");
-                        closeKeyboard(v);
-
-                    } else {
-
-                        error(G.fragmentActivity.getResources().getString(R.string.please_complete_all_item));
-                    }
-                }
-            }
-        });
     }
 
     private void pageRegister() {
