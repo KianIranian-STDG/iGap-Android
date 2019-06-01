@@ -17,6 +17,7 @@
   <android.support.constraint.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layoutDirection="locale"
       style="?backgroundColorSettingTheme">
 
     <LinearLayout
@@ -68,8 +69,8 @@
           android:layout_gravity="center"
           android:background="@drawable/circle_color_notificatin_setting"
           android:gravity="center"
-          android:padding="@dimen/dp32"
-          android:src="@mipmap/plus"
+          android:padding="@dimen/dp24"
+          app:srcCompat="@drawable/ic_camera"
           app:civ_border_width="0dp" />
 
 

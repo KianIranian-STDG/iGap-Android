@@ -1469,7 +1469,6 @@
     <string name="increase_score">Increase Score</string>
     <string name="bots_and_channels">Bots and Channels</string>
     <string name="all">All</string>
-    <string name="new_group_call">New Group Call</string>
     <string name="permanent_link">Permanent Link</string>
     <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length as 5 characters.</string>
     <string name="chat_history_for_new_member_title">Chat history for new members</string>
@@ -1844,4 +1843,6 @@
     <string name="zero_number">0</string>
     <string name="back_number"><![CDATA[<]]></string>
     <string name="view_contact">View Contact</string>
+    <string name="new_group_call">New Group Call</string>
+    <string name="dial_number">Dial Number</string>
 </resources>

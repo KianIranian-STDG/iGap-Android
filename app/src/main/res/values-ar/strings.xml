@@ -2784,4 +2784,6 @@
     <string name="star_number">*</string>
     <string name="zero_number">٠</string>
     <string name="view_contact">عرض الاتصال</string>
+    <string name="new_group_call">New Group Call</string>
+    <string name="dial_number">Dial Number</string>
 </resources>
