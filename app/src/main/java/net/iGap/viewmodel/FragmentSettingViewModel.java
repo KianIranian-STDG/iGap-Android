@@ -117,45 +117,22 @@ import static net.iGap.G.context;
 
 public class FragmentSettingViewModel extends ViewModel {
 
-    /*public ObservableField<String> name = new ObservableField<>("");*/
-    /*public ObservableField<String> userName = new ObservableField<>("");*/
-    /*public ObservableField<String> bio = new ObservableField<>("");*/
-    /*public ObservableField<String> email = new ObservableField<>("");*/
-    /*public ObservableField<String> birthDate = new ObservableField<>("");*/
-    /*public ObservableInt gender = new ObservableInt(-1);*/
-    public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
 
+    public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
     public LiveData<String> getCurrentLanguage() {
         return currentLanguage;
     }
-
     private MutableLiveData<String> currentLanguage = new MutableLiveData<>();
 
-    /*private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();*/
-    /*public ObservableInt usernameErrorMessage = new ObservableInt(R.string.is_empty);*/
-    /*private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();*/
-    /*public ObservableInt emailErrorMessage = new ObservableInt(R.string.is_empty);*/
     //ui
-    /*public MutableLiveData<Boolean> goToShowAvatar = new MutableLiveData<>();*/
     public MutableLiveData<Boolean> showDialogDeleteAccount = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToManageSpacePage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLogout = new MutableLiveData<>();
     public MutableLiveData<Boolean> showError = new MutableLiveData<>();
-    /*public MutableLiveData<Boolean> showSubmitButton = new MutableLiveData<>();*/
-    /*public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();*/
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
 
     public String phoneNumber;
-    /*private String currentName;*/
-    /*private String currentUserName;*/
-    /*private String currentUserEmail;*/
-    /*private int currentGender;*/
-    /*private String currentBio;*/
-    /*private String currentBirthDate;*/
     public long userId;
-    /*public static String pathSaveImage;*/
-
-    private SharedPreferences sharedPreferences;
 
     /*public static int KEY_AD_DATA_PHOTO = -1;
     public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
@@ -198,47 +175,9 @@ public class FragmentSettingViewModel extends ViewModel {
 
 
     public FragmentSettingViewModel(SharedPreferences sharedPreferences) {
-        this.sharedPreferences = sharedPreferences;
         currentLanguage.setValue(sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage()));
 
         //what is request ?!
-        /*Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);
-        realm.close();
-
-        if (isIntroduce) {
-            new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
-                @Override
-                public void onRepresent(String phoneNumber) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailed() {
-                }
-            });
-        }
-
-        new RequestUserProfileGetGender().userProfileGetGender();
-        new RequestUserProfileGetEmail().userProfileGetEmail();
-        new RequestUserProfileGetBio().getBio();
-
-        *//*usernameErrorMessage.setValue(R.string.is_empty);
-        emailErrorMessage.setValue(R.string.is_empty);*//*
-        *//*realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();*//*
-        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo == null) {
-            G.fragmentActivity.onBackPressed();
-            return;
-        }
-
-        Log.wtf("view Model", "call updateUserInfoUI from constrictor");
-        updateUserInfoUI(realmUserInfo);*/
 
 
         /*if (realmPrivacy == null) {
@@ -338,56 +277,10 @@ public class FragmentSettingViewModel extends ViewModel {
         /*callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());*/
     }
 
-    /*private void updateUserInfoUI(RealmUserInfo userInfo) {
-
-        gender.set(-1);
-        name.set("");
-        bio.set("");
-        userName.set("");
-        email.set("");
-
-        if (checkValidationForRealm(userInfo)) {
-            userId = userInfo.getUserId();
-            currentName = userInfo.getUserInfo().getDisplayName();
-            currentUserName = userInfo.getUserInfo().getUsername();
-            currentUserEmail = userInfo.getEmail();
-            currentBio = userInfo.getUserInfo().getBio();
-            phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-            ProtoGlobal.Gender userGender = userInfo.getGender();
-            if (userGender != null) {
-                if (userGender == ProtoGlobal.Gender.MALE) {
-                    currentGender = R.id.male;
-                } else if (userGender == ProtoGlobal.Gender.FEMALE) {
-                    currentGender = R.id.female;
-                }
-            } else {
-                currentGender = -1;
-            }
-            gender.set(currentGender);
-            name.set(currentName);
-            bio.set(currentBio);
-            userName.set(currentUserName);
-            email.set(currentUserEmail);
-            *//*if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
-                callbackSetRepresent.set("");
-            } else {
-                callbackSetRepresent.set(userInfo.getRepresentPhoneNumber());
-            }*//*
-        }
-    }*/
-
 
     //===============================================================================
     //================================Event Listeners================================
     //===============================================================================
-
-    /*public void onAvatarClick() {
-        goToShowAvatar.setValue(true);
-    }*/
-
-    /*public void onAddImageClick() {
-        showDialogChooseImage.setValue(true);
-    }*/
 
     public void onLanguageClick(){
         new HelperFragment(new FragmentLanguage()).setReplace(false).load();
@@ -412,23 +305,6 @@ public class FragmentSettingViewModel extends ViewModel {
     public void onLogoutClick() {
         showDialogLogout.setValue(true);
     }
-
-    /*public void submitData() {
-        showLoading.setValue(true);
-        if (!currentName.equals(name.get())) {
-            sendRequestSetName();
-        } else if (!currentUserName.equals(userName.get())) {
-            sendRequestSetUsername();
-        } else if (!currentBio.equals(bio.get())) {
-            sendRequestSetBio();
-        } else if (!currentUserEmail.equals(email.get())) {
-            sendRequestSetEmail();
-        } else if (currentGender != gender.get()) {
-            sendRequestSetGender();
-        } else {
-            goBack.setValue(true);
-        }
-    }*/
 
     public void logout() {
         showLoading.setValue(true);
@@ -460,204 +336,7 @@ public class FragmentSettingViewModel extends ViewModel {
         showDialogDeleteAccount.setValue(true);
     }
 
-    /*public void nameTextChangeListener(String newName) {
-        if (!newName.equals(currentName)) {
-            showSubmitButton.setValue(true);
-        } else {
-            if (currentBio.equals(bio.get()) && currentUserEmail.equals(email.get()) && currentUserName.equals(userName.get()) && currentGender == gender.get()) {
-                showSubmitButton.setValue(false);
-            }
-        }
-    }*/
 
-    /*private void sendRequestSetName() {
-        showLoading.setValue(true);
-        new RequestUserProfileSetNickname().userProfileNickName(name.get(), new OnUserProfileSetNickNameResponse() {
-            @Override
-            public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                //setAvatar();
-                RealmRoom.updateChatTitle(userId, nickName);
-                G.handler.post(() -> {
-                    currentName = nickName;
-                    showLoading.setValue(false);
-                    submitData();
-                });
-            }
-
-            @Override
-            public void onUserProfileNickNameError(int majorCode, int minorCode) {
-                G.handler.post(() -> showLoading.setValue(false));
-            }
-
-            @Override
-            public void onUserProfileNickNameTimeOut() {
-                G.handler.post(() -> showLoading.setValue(false));
-            }
-        });
-    }*/
-
-    /*public void usernameTextChangeListener(String newUsername) {
-        if (HelperString.regexCheckUsername(newUsername)) {
-            new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
-                @Override
-                public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
-                    G.handler.post(() -> {
-                        if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
-                            showSubmitButton.setValue(!currentUserName.equals(userName.get()));
-                            usernameErrorEnable.setValue(true);
-                            usernameErrorMessage.set(R.string.is_empty);
-                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
-                            usernameErrorMessage.set(R.string.INVALID);
-                            usernameErrorEnable.setValue(true);
-                            showSubmitButton.setValue(false);
-                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
-                            usernameErrorMessage.set(R.string.TAKEN);
-                            usernameErrorEnable.setValue(true);
-                            showSubmitButton.setValue(false);
-                        }
-                    });
-                }
-
-                @Override
-                public void Error(int majorCode, int minorCode) {
-
-                }
-            });
-        } else {
-            usernameErrorEnable.setValue(true);
-            usernameErrorMessage.set(R.string.INVALID);
-            showSubmitButton.setValue(false);
-        }
-    }*/
-
-    /*private void sendRequestSetUsername() {
-        showLoading.setValue(true);
-        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
-            @Override
-            public void onUserProfileUpdateUsername(final String username) {
-                G.handler.post(() -> {
-                    showLoading.setValue(false);
-                    currentUserName = username;
-                    submitData();
-                });
-            }
-
-            @Override
-            public void Error(final int majorCode, int minorCode, final int time) {
-                G.handler.post(() -> {
-                    if (majorCode == 175) {
-                        showLoading.setValue(false);
-                        dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
-                    }
-                });
-            }
-
-            @Override
-            public void timeOut() {
-                G.handler.post(() -> showLoading.setValue(false));
-            }
-        });
-    }*/
-
-    /*public void emailTextChangeListener(String newEmail) {
-        if (!newEmail.equals(currentUserEmail)) {
-            showSubmitButton.setValue(true);
-            emailErrorMessage.set(R.string.is_empty);
-            emailErrorEnable.setValue(false);
-        } else {
-            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentBio.equals(bio.get()) && currentGender == gender.get()) {
-                showSubmitButton.setValue(false);
-            }
-        }
-    }*/
-
-    /*private void sendRequestSetEmail() {
-        showLoading.setValue(true);
-        new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
-            @Override
-            public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
-                G.handler.post(() -> {
-                    showLoading.setValue(false);
-                    currentUserEmail = email;
-                    submitData();
-                });
-            }
-
-            @Override
-            public void Error(int majorCode, int minorCode) {
-                G.handler.post(() -> {
-                    showLoading.setValue(false);
-                    if (majorCode == 114 && minorCode == 1) {
-                        emailErrorMessage.set(R.string.error_email);
-                        emailErrorEnable.setValue(true);
-                        showSubmitButton.setValue(false);
-                    } else if (majorCode == 115) {
-                        emailErrorEnable.setValue(true);
-                        showSubmitButton.setValue(false);
-                        emailErrorMessage.set(R.string.error_email);
-                    }
-                });
-            }
-
-            @Override
-            public void onTimeOut() {
-                G.handler.post(() -> showLoading.setValue(false));
-            }
-        });
-    }*/
-
-    /*public void bioTextChangeListener(String newBio) {
-        if (!currentBio.equals(newBio)) {
-            showSubmitButton.setValue(true);
-        } else {
-            if (currentName.equals(name.get()))
-                if (currentUserName.equals(userName.get()))
-                    if (currentUserEmail.equals(email.get()))
-                        if (currentGender == gender.get()) {
-                            showSubmitButton.setValue(false);
-                        }
-        }
-    }*/
-
-    /*private void sendRequestSetBio() {
-        new RequestUserProfileSetBio().setBio(bio.get());
-        currentBio = bio.get();
-        submitData();
-    }*/
-
-    /*public void onCheckedListener(int checkedId) {
-        if (checkedId != currentGender) {
-            showSubmitButton.setValue(true);
-        } else {
-            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentBio.equals(bio.get())) {
-                showSubmitButton.setValue(false);
-            }
-        }
-    }*/
-
-    /*private void sendRequestSetGender() {
-        showLoading.setValue(true);
-        new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
-            @Override
-            public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-                G.handler.post(() -> {
-                    showLoading.setValue(false);
-                    currentGender = gender == ProtoGlobal.Gender.MALE ? R.id.male : R.id.female;
-                    submitData();
-                });
-            }
-
-            @Override
-            public void Error(int majorCode, int minorCode) {
-                G.handler.post(() -> showLoading.setValue(false));
-            }
-
-            @Override
-            public void onTimeOut() {
-                G.handler.post(() -> showLoading.setValue(false));
-            }
-        });
-    }*/
 
     /*public void onClickRepresent(View view) {
         if (RequestUserProfileGetRepresentative.numberOfPendingRequest == 0) {
@@ -671,12 +350,6 @@ public class FragmentSettingViewModel extends ViewModel {
 
     /*public void onClickIVand(View view) {
         new HelperFragment(new FragmentIVandProfile()).setReplace(false).load();
-    }*/
-
-
-    //todo:move to page chat setting
-    /*public void onClickLanguage(View view) {
-        new HelperFragment(new FragmentLanguage()).setReplace(false).load();
     }*/
 
     //todo:move to page chat setting
@@ -1209,10 +882,6 @@ public class FragmentSettingViewModel extends ViewModel {
         callbackSetIVand.set(G.currentActivity.getString(R.string.st_ivand_text_setting) + " " + score);
     }*/
 
-    private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
-        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
-    }
-
 
     /*private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -1246,38 +915,6 @@ public class FragmentSettingViewModel extends ViewModel {
         return mRealm;
     }
 
-    private void dialogWaitTime(int title, long time, int majorCode) {
-        if (isActiveRun) {
-            boolean wrapInScrollView = true;
-            final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            }).show();
-
-            View v = dialog.getCustomView();
-
-            final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
-            CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    int seconds = (int) ((millisUntilFinished) / 1000);
-                    int minutes = seconds / 60;
-                    seconds = seconds % 60;
-                    remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-                }
-
-                @Override
-                public void onFinish() {
-                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-                }
-            };
-            countWaitTimer.start();
-        }
-    }
-
     private boolean getBoolean(int num) {
         if (num == 0) {
             return false;
@@ -1309,11 +946,6 @@ public class FragmentSettingViewModel extends ViewModel {
             G.fragmentActivity.onBackPressed();
             return;
         }
-
-        *//*realmUserInfo.addChangeListener(realmModel -> {
-            Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
-            updateUserInfoUI((RealmUserInfo) realmModel);
-        });*//*
 
         mRealmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), G.userId);
         if (mRealmRegisteredInfo != null) {
