@@ -1298,6 +1298,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initTabStrip() {
 
         mViewPager = findViewById(R.id.viewpager);
+        mViewPager.setPagingEnabled(false);
 
         boolean isRtl = HelperCalander.isPersianUnicode;
 
@@ -1307,17 +1308,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         bottomNavigation.setOnItemChangeListener(i -> {
             if (isRtl) {
                 if (i == 4)
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(0 , false);
                 if (i == 3)
-                    mViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(1 , false);
                 if (i == 2)
-                    mViewPager.setCurrentItem(2);
+                    mViewPager.setCurrentItem(2 , false);
                 if (i == 1)
-                    mViewPager.setCurrentItem(3);
+                    mViewPager.setCurrentItem(3 , false);
                 if (i == 0)
-                    mViewPager.setCurrentItem(4);
+                    mViewPager.setCurrentItem(4 , false);
             } else {
-                mViewPager.setCurrentItem(i);
+                mViewPager.setCurrentItem(i , false);
             }
         });
 
