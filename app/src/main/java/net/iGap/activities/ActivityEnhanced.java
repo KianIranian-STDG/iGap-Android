@@ -51,6 +51,8 @@ import java.util.Locale;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
+import static net.iGap.G.updateResources;
+
 
 public class ActivityEnhanced extends AppCompatActivity {
 
@@ -81,7 +83,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
     }
 
     @Override
@@ -374,21 +376,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        checkLanguage();
+        updateResources(getApplicationContext());
     }
 
-    public void checkLanguage() {
-        try {
-            G.context = getApplicationContext();
-            String selectedLanguage = G.selectedLanguage;
-            if (selectedLanguage == null) return;
-            Locale locale = new Locale(selectedLanguage);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
