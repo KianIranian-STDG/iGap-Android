@@ -45,9 +45,9 @@ public class HelperToolbar {
     private TextView mTxtSearch;
     private AppCompatTextView groupName, groupMemberCount;
     public EditText mEdtSearch;
-    private AppCompatImageView mChatVerifyIcon ;
-    private MaterialDesignTextView mChatMuteIcon ;
-    private MaterialDesignTextView mCloudChatIcon ;
+    private TextView mChatVerifyIcon ;
+    private TextView mChatMuteIcon ;
+    private CircleImageView mCloudChatIcon ;
     private TextView mBtnClearSearch;
 
     private LayoutInflater mInflater;
@@ -341,7 +341,7 @@ public class HelperToolbar {
         return mAvatarChat;
     }
 
-    public MaterialDesignTextView getCloudChatIcon() {
+    public CircleImageView getCloudChatIcon() {
         return mCloudChatIcon;
     }
 
@@ -357,11 +357,11 @@ public class HelperToolbar {
         return groupAvatar;
     }
 
-    public AppCompatImageView getChatVerify() {
+    public TextView getChatVerify() {
         return mChatVerifyIcon;
     }
 
-    public MaterialDesignTextView getChatMute() {
+    public TextView getChatMute() {
         return mChatMuteIcon;
     }
 

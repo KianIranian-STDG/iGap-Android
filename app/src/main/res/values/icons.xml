@@ -204,4 +204,6 @@
     <string name="close_icon">j</string>
     <string name="language_icon">I</string>
     <string name="camera_icon">U</string>
+    <string name="mute_icon">K</string>
+    <string name="verify_icon">a</string>
 </resources>

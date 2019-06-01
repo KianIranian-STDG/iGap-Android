@@ -449,7 +449,7 @@ public class FragmentChat extends BaseFragment
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
     private CircleImageView imvUserPicture;
-    private AppCompatImageView txtVerifyRoomIcon;
+    private TextView txtVerifyRoomIcon;
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
     private WebView webViewChatPage;
@@ -474,7 +474,7 @@ public class FragmentChat extends BaseFragment
     private MaterialDialog dialogWait;
     private Uri latestUri;
     private Calendar lastDateCalendar = Calendar.getInstance();
-    private MaterialDesignTextView iconMute;
+    private TextView iconMute;
     private MyAppBarLayout appBarLayout;
     private LinearLayout mediaLayout;
     private LinearLayout ll_Search;
@@ -1079,6 +1079,8 @@ public class FragmentChat extends BaseFragment
 
         if (isCloudRoom) {
             mHelperToolbar.getCloudChatIcon().setVisibility(View.VISIBLE);
+            mHelperToolbar.getCloudChatIcon().setImageDrawable(G.context.getResources().getDrawable(R.drawable.ic_cloud_space_blue));
+
             mHelperToolbar.getUserAvatarChat().setVisibility(View.GONE);
         } else {
             mHelperToolbar.getCloudChatIcon().setVisibility(View.GONE);
