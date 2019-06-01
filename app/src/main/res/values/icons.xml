@@ -203,4 +203,7 @@
     <string name="share_icon">À</string>
     <string name="close_icon">j</string>
     <string name="language_icon">I</string>
+    <string name="message_icon">h</string>
+    <string name="mic_on_icon">F</string>
+    <string name="speaker_on_icon">È</string>
 </resources>
