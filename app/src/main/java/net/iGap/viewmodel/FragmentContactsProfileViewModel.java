@@ -508,18 +508,16 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                         if (HelperCalander.isPersianUnicode) {
                             countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                         }
-                        if (countText == null || countText.length() == 0) {
-                            sharedEmptyVisibility.set(View.VISIBLE);
-                        } else {
+                        String[] countList = countText.split("\n");
+                        int countOFImage = Integer.parseInt(countList[0]);
+                        int countOFVIDEO = Integer.parseInt(countList[1]);
+                        int countOFAUDIO = Integer.parseInt(countList[2]);
+                        int countOFVOICE = Integer.parseInt(countList[3]);
+                        int countOFGIF = Integer.parseInt(countList[4]);
+                        int countOFFILE = Integer.parseInt(countList[5]);
+                        int countOFLink = Integer.parseInt(countList[6]);
+                        if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
                             sharedEmptyVisibility.set(View.GONE);
-                            String[] countList = countText.split("\n");
-                            int countOFImage = Integer.parseInt(countList[0]);
-                            int countOFVIDEO = Integer.parseInt(countList[1]);
-                            int countOFAUDIO = Integer.parseInt(countList[2]);
-                            int countOFVOICE = Integer.parseInt(countList[3]);
-                            int countOFGIF = Integer.parseInt(countList[4]);
-                            int countOFFILE = Integer.parseInt(countList[5]);
-                            int countOFLink = Integer.parseInt(countList[6]);
                             if (countOFImage > 0) {
                                 sharedPhotoVisibility.set(View.VISIBLE);
                                 sharedPhotoCount.set(countOFImage);
@@ -562,6 +560,8 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                             } else {
                                 sharedLinkVisibility.set(View.GONE);
                             }
+                        } else {
+                            sharedEmptyVisibility.set(View.VISIBLE);
                         }
                     }
                 });

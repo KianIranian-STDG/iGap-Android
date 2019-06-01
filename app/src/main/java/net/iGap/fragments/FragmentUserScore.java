@@ -42,8 +42,8 @@ public class FragmentUserScore extends BaseFragment {
         HelperToolbar t = HelperToolbar.create().setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.history_icon)
-                .setLogoShown(false)
-                .setCounterShown(true)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.score))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
