@@ -45,7 +45,7 @@ import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.paygear.wallet.WalletActivity;
+import org.paygear.WalletActivity;
 
 import java.io.IOException;
 

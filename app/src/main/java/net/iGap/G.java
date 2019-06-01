@@ -11,7 +11,6 @@
 package net.iGap;
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -49,8 +48,8 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
 
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.utils.Utils;
+import org.paygear.model.Card;
+import org.paygear.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
