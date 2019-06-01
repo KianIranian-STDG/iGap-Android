@@ -1320,10 +1320,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
                 if (G.isDarkTheme) {
                     viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.white));
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
                 } else {
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
                     viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.black));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
