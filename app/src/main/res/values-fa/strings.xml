@@ -1769,7 +1769,7 @@
     <string name="welcome_title">به آیگپ خوش آمدید</string>
     <string name="add_modereator">افزودن مدیر</string>
     <string name="add_admin">اضافه کردن مدیریت</string>
-    <string name="subscribers_title">مشترکین</string>
+    <string name="subscribers_title">مشترک</string>
     <string name="invite_link_title">لینک دعوت</string>
     <string name="add_to_home_screen">افزودن به صفحه اصلی</string>
     <string name="channel_type">نوع کانال</string>
@@ -1838,4 +1838,6 @@
     <string name="nine_number">۹</string>
     <string name="star_number">*</string>
     <string name="zero_number">۰</string>
+    <string name="administrators_title">سرپرست</string>
+    <string name="moderators_title">مدیر</string>
 </resources>

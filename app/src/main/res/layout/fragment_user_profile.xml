@@ -133,8 +133,8 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/cloudIcon"
                 style="@style/myIconTextViewStyle"
-                android:layout_width="@dimen/fup_items_icon_size"
-                android:layout_height="@dimen/fup_items_icon_size"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp20"
                 android:text="@string/cloud_icon"
                 android:textSize="@dimen/dp28"
@@ -168,8 +168,8 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/settingIcon"
                 style="@style/myIconTextViewStyle"
-                android:layout_width="@dimen/fup_items_icon_size"
-                android:layout_height="@dimen/fup_items_icon_size"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
                 android:text="@string/setting_icon"
                 android:textSize="@dimen/dp28"
                 app:layout_constraintBottom_toBottomOf="@id/cloudIcon"
@@ -202,8 +202,8 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/addIcon"
                 style="@style/myIconTextViewStyle"
-                android:layout_width="@dimen/fup_items_icon_size"
-                android:layout_height="@dimen/fup_items_icon_size"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
                 android:padding="@dimen/fup_items_icon_padding"
                 android:text="@string/add_icon"
                 android:textSize="@dimen/dp28"
