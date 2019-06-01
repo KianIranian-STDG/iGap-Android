@@ -504,7 +504,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     @Override
     public void onSearchClickListener(View view) {
         if (!isToolbarInEditMode){
-            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(true);
+            isToolbarInEditMode =true;
             openKeyBoard();
         }
     }
@@ -514,9 +514,14 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         if (mHelperToolbar.getEditTextSearch().getText().length() > 0) {
             mHelperToolbar.getEditTextSearch().setText("");
         } else {
-            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(false) ;
+            isToolbarInEditMode = false ;
             closeKeyboard(getView());
         }
+    }
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+
     }
 
     @Override //menu button at toolbar

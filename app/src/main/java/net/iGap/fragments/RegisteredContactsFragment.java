@@ -261,10 +261,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
                 .setSearchBoxShown(true)
-                .setLogoShown(true)
-                .setListener(this);
+                .setLogoShown(true);
 
         toolbarLayout.addView(mHelperToolbar.getView());
+        mHelperToolbar.setListener(this);
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -436,42 +436,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }
         });
 
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                fastItemAdapter.filter(s.toString().toLowerCase());
-
-                if (s.length() > 0) {
-                    results = getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
-                } else {
-                    results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
-                }
-
-                realmRecyclerView.setAdapter(new ContactListAdapter(results));
-
-                // fastAdapter
-                //mAdapter.clear();
-                //for (RealmContacts contact : results) {
-                //    mAdapter.add(new ContactItem().setInfo(contact).withIdentifier(contact.getId()));
-                //}
-                //realmRecyclerView.setAdapter(mAdapter);
-
-                realmRecyclerView.removeItemDecoration(decoration);
-                decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(results));
-                realmRecyclerView.addItemDecoration(decoration);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         vgInviteFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1120,10 +1084,28 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public void onSearchClickListener(View view) {
 
         if (!isToolbarInEditMode) {
-            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(true);
+            isToolbarInEditMode = true;
             openKeyBoard();
         }
 
+    }
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+
+        fastItemAdapter.filter(text.toLowerCase());
+
+        if (text.length() > 0) {
+            results = getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        } else {
+            results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        }
+
+        realmRecyclerView.setAdapter(new ContactListAdapter(results));
+
+        realmRecyclerView.removeItemDecoration(decoration);
+        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(results));
+        realmRecyclerView.addItemDecoration(decoration);
     }
 
     @Override //btn add
@@ -1143,7 +1125,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         if (edtSearch.getText().length() > 0) {
             edtSearch.setText("");
         } else {
-            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(false);
+            isToolbarInEditMode = false;
             closeKeyboard(getView());
         }
     }

@@ -24,4 +24,6 @@ public interface ToolbarListener {
 
     default void onFourthRightIconClickListener(View view){}
 
+    default void onSearchTextChangeListener(View view , String text){}
+
 }

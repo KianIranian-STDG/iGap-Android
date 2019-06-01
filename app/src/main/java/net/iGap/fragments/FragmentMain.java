@@ -200,7 +200,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
                 .setLogoShown(true)
-                .setSearchBoxShown(true)
+                .setSearchBoxShown(true , false)
                 .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);

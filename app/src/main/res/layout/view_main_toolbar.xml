@@ -328,12 +328,14 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:paddingRight="35dp"
+            android:paddingLeft="35dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/main_font"
             android:gravity="center"
             android:hint="@string/search"
             android:singleLine="true"
-            android:textColor="@color/black"
+            style="?hintColorSettingTheme"
             android:textColorHint="@color/toolbar_search_box_txt_color"
             android:textSize="14sp"
             android:visibility="gone" />
@@ -347,23 +349,23 @@
             android:fontFamily="@font/main_font"
             android:gravity="center"
             android:text="@string/search"
-            android:textColor="@color/toolbar_search_box_txt_color"
+            style="?textSubColorSettingTheme"
             android:textSize="14sp"
             android:visibility="visible" />
 
-        <net.iGap.module.MaterialDesignTextView
+        <TextView
             android:id="@+id/view_toolbar_search_layout_btn_clear"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:gravity="center"
             android:padding="3dp"
-            android:text="@string/md_close_button"
-            android:textColor="@color/black"
-            android:textSize="@dimen/dp18"
+            android:text="@string/close_icon"
+            style="@style/myIconTextViewStyle"
+            android:textSize="18sp"
             android:visibility="gone" />
 
     </RelativeLayout>
