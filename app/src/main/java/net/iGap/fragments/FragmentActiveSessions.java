@@ -37,9 +37,11 @@ import net.iGap.R;
 import net.iGap.adapter.items.AdapterActiveSessions;
 import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnUserSessionGetActiveList;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnUserSessionTerminate;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
@@ -80,19 +82,26 @@ public class FragmentActiveSessions extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.acs_toolbar_session).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setDefaultTitle(G.context.getResources().getString(R.string.Active_Sessions))
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        removeFromBaseFragment(FragmentActiveSessions.this);
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fas_layout_toolbar);
+        layoutToolbar.addView(toolbar.getView());
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.stas_prgWaiting);
         AppUtils.setProgresColler(prgWaiting);
 
         prgWaiting.setVisibility(View.VISIBLE);
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.stas_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                removeFromBaseFragment(FragmentActiveSessions.this);
-            }
-        });
 
         fastItemAdapter = new FastItemAdapter();
         rcvContent = (RecyclerView) view.findViewById(R.id.stas_rcvContent);
