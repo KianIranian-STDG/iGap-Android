@@ -19,10 +19,18 @@ import com.andrognito.patternlockview.utils.ResourceUtils;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPassCodeBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.OnSelectedList;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
+import net.iGap.module.Contacts;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.structs.StructContactInfo;
+import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.viewmodel.FragmentPassCodeViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -61,18 +69,26 @@ public class FragmentPassCode extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();
-        fragmentPassCodeBinding.stnsTxtBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                //G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
-                popBackStackFragment();
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setDefaultTitle(G.context.getResources().getString(R.string.Passcode_Lock))
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
 
-                AppUtils.closeKeyboard(v);
+                        AppUtils.closeKeyboard(view);
 
-            }
-        });
+                    }
+                });
+
+        fragmentPassCodeBinding.fpcLayoutToolbar.addView(toolbar.getView());
+
+
 
         boolean isLinePattern;
         if (isPattern){
