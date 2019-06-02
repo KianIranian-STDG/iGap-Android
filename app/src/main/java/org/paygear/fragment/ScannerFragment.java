@@ -507,8 +507,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                     QRResponse qrData = response.body();
 
                     if (!TextUtils.isEmpty(qrData.accountId)) {
-                        AccountPaymentDialog.newInstance(qrData).show(
-                                getActivity().getSupportFragmentManager(), "AccountPaymentDialog");
+                        NewAccountPaymentDialog.newInstance(qrData).show(
+                                getActivity().getSupportFragmentManager(), "NewAccountPaymentDialog");
                     } else {
                         Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
                         isVisible = true;
