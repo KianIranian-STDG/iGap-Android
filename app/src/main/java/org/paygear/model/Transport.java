@@ -2,7 +2,9 @@ package org.paygear.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Transport {
+import java.io.Serializable;
+
+public class Transport implements Serializable {
 
     public static final int TYPE_KHATTI = 0;
     public static final int TYPE_GARDESHI = 1;

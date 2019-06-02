@@ -1726,6 +1726,14 @@
 
     <string name="cashier">finance</string>
     <string name="admin">admin</string>
+    <string name="bank_card">‌Bank Card</string>
+    <string name="wallet_card">Wallet</string>
+
+    <string name="amount_to_pay">Amount to pay (Rials) :</string>
+    <string name="club_balance">Club card balance (Rials)</string>
+    <string name="wallet_balance">Wallet balance (Rials)</string>
+    <string name="total_amount">Total Amount (Rials) :</string>
+    <string name="discount_amount">Discount Amount (Rials) :</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>

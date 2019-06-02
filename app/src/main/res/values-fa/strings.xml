@@ -1736,6 +1736,14 @@
     <string name="Forgot_Passwords">بازیابی رمز</string>
     <string name="cashier">مالی</string>
     <string name="admin">ادمین</string>
+    <string name="bank_card">کارت بانکی</string>
+    <string name="wallet_card">کیف پول</string>
+    <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>
+    <string name="club_balance">موجودی کارت باشگاهی (ریال)</string>
+    <string name="wallet_balance">موجودی کیف پول (ریال)</string>
+    <string name="total_amount">مبلغ کل (ریال) :</string>
+    <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
+
 
 
     <string name="default_sheba_number">شماره شبا پیش فرض</string>
