@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_marginStart="@dimen/dp8"
+            android:clickable="false"
             android:button="@drawable/check_box_background"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
