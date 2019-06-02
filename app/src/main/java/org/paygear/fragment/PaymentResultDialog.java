@@ -29,6 +29,7 @@ import net.iGap.R;
 
 import org.paygear.WalletActivity;
 import org.paygear.model.PaymentResult;
+import org.paygear.utils.SettingHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -83,7 +84,6 @@ public class PaymentResultDialog extends DialogFragment {
 
         receiptLayout = view.findViewById(R.id.receipt);
         View statusView = view.findViewById(R.id.status_view);
-
         TextView statusTitle = view.findViewById(R.id.status_title);
         statusTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
 
@@ -102,6 +102,7 @@ public class PaymentResultDialog extends DialogFragment {
 
         TextView saveButton = view.findViewById(R.id.save_button);
         ViewCompat.setBackground(saveButton, getButtonSelector());
+        saveButton.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.text_selector_dark));
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +112,7 @@ public class PaymentResultDialog extends DialogFragment {
 
         TextView closeButton = view.findViewById(R.id.close_button);
         ViewCompat.setBackground(closeButton, getButtonSelector());
+        closeButton.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.text_selector_dark));
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +144,6 @@ public class PaymentResultDialog extends DialogFragment {
 
         priceValue.setText(RaadCommonUtils.formatPrice(mResult.amount, true));
         playSound();
-
         return view;
     }
 
@@ -177,8 +178,8 @@ public class PaymentResultDialog extends DialogFragment {
                 Color.BLACK, corner, 0);
 
         StateListDrawable states = new StateListDrawable();
-        states.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
-        states.addState(new int[]{}, normalDrawable);
+        states.addState(new int[] {android.R.attr.state_pressed}, pressedDrawable);
+        states.addState(new int[] { }, normalDrawable);
         return states;
     }
 
@@ -214,10 +215,10 @@ public class PaymentResultDialog extends DialogFragment {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "Raad");
 
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
                 Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
-                return;
+                return ;
             }
         }
 
@@ -256,6 +257,7 @@ public class PaymentResultDialog extends DialogFragment {
     }
 
 
+
     class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHolder> {
 
         @Override
@@ -269,7 +271,11 @@ public class PaymentResultDialog extends DialogFragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             KeyValue keyValue = mResult.result[position];
             holder.title.setText(keyValue.key);
-            holder.value.setText(RaadCommonUtils.getPersianNumber(keyValue.value));
+            if (SettingHelper.getString(getContext(), SettingHelper.APP_LANGUAGE, "en").equals("fa")) {
+                holder.value.setText(RaadCommonUtils.getPersianNumber(keyValue.value));
+            }else {
+                holder.value.setText(keyValue.value);
+            }
         }
 
         @Override

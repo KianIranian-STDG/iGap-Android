@@ -2677,6 +2677,7 @@
     <string name="Forgot_Passwords">بازیابی رمز</string>
     <string name="cashier">المالية</string>
     <string name="admin">مشرف</string>
+    <string name="balance_low">موجودی کیف پول شما کم است. موجودی کیف پول خود را افزایش دهید.</string>
     <string name="bank_card">کارت بانکی</string>
     <string name="wallet_card">کیف پول</string>
     <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>

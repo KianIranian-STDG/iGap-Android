@@ -105,4 +105,36 @@ public class RSAUtils {
         return RSAUtils.getRSA(publicKey, cardInfoJson);
     }
 
+    public static String getSplitPaymentCardDataRSA(Payment mPayment, Card mCard, String pin2, String cvv2,Long amount) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("t", System.currentTimeMillis());
+
+        //String card = mCard != null ? mCard.token : carNumberText.getText().toString();
+        map.put("c", mCard.token);
+        map.put("bc", mCard.bankCode);
+        map.put("type", mCard.type);
+        map.put("a",amount);
+
+        /*if (!TextUtils.isEmpty(mMonth))
+            map.put("em", Integer.parseInt(mMonth));
+        if (!TextUtils.isEmpty(mYear))
+            map.put("ey", Integer.parseInt(mYear));*/
+
+        if (!TextUtils.isEmpty(cvv2))
+            map.put("cv", cvv2);
+
+        if (pin2 != null)
+            map.put("p2", pin2);
+
+        Gson gson = new Gson();
+        String cardInfoJson = gson.toJson(map);
+
+        String publicKey;
+        if (mPayment != null)
+            publicKey = mPayment.paymentAuth.publicKey;
+        else
+            publicKey = Auth.getCurrentAuth().getPublicKey();
+        return RSAUtils.getRSA(publicKey, cardInfoJson);
+    }
+
 }
