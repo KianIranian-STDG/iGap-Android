@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 public class AvailableClubs_Result {
 
     /**
-     * ID : 5bfd922091a020000f03a794
-     * Min : 10000
+     * id : 5bfd922091a020000f03a794
+     * min : 10000
      * max : 100000000
      * merchant_id : merchant1
      * member_id : member1
@@ -19,6 +19,33 @@ public class AvailableClubs_Result {
     private Long max;
     private String merchant_id;
     private String member_id;
+    private Boolean is_percentage;
+    private Long merchant_max;
+    private Boolean merchant_is_percentage;
+
+    public Boolean getIs_percentage() {
+        return is_percentage;
+    }
+
+    public void setIs_percentage(Boolean is_percentage) {
+        this.is_percentage = is_percentage;
+    }
+
+    public Long getMerchant_max() {
+        return merchant_max;
+    }
+
+    public void setMerchant_max(Long merchant_max) {
+        this.merchant_max = merchant_max;
+    }
+
+    public Boolean getMerchant_is_percentage() {
+        return merchant_is_percentage;
+    }
+
+    public void setMerchant_is_percentage(Boolean merchant_is_percentage) {
+        this.merchant_is_percentage = merchant_is_percentage;
+    }
 
     public String getID() {
         return id;
