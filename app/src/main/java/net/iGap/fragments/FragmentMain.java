@@ -1055,7 +1055,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = true ;
             refreshChatList(0 , true);
-            mHelperToolbar.setLeftIcon(R.string.back_icon);
+            mHelperToolbar.setLeftIcon(R.string.close_icon);
 
         }
     }
