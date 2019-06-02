@@ -30,7 +30,7 @@ public class Config {
     public static final int LIMIT_LOAD_ROOM = 50;
     public static final int STORE_MESSAGE_POSITION_LIMIT = 2; // count of message from end of list
     public static final int FAST_START_PAGE_TIME = (int) 50;
-    public static final int LOW_START_PAGE_TIME = (int) 500;
+    public static final int LOW_START_PAGE_TIME = (int) 200;
     public static final int PHONE_CONTACT_MAX_COUNT_LIMIT = 9999;
     public static final long drIgapPeerId = 2297310;
 

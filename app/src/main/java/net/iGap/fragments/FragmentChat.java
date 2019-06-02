@@ -1500,8 +1500,15 @@ public class FragmentChat extends BaseFragment
      * actions : set app color, load avatar, set background, set title, set status chat or member for group or channel
      */
     private void startPageFastInitialize() {
-
-        //add toolbar
+        Bundle extras = getArguments();
+        if (extras != null) {
+            mRoomId = extras.getLong("RoomId");
+            isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
+            isNotJoin = extras.getBoolean("ISNotJoin");
+            userName = extras.getString("UserName");
+            messageId = extras.getLong("MessageId");
+            chatPeerId = extras.getLong("peerId");
+        }
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -1520,135 +1527,129 @@ public class FragmentChat extends BaseFragment
 
         //+Realm realm = Realm.getDefaultInstance();
 
-        Bundle extras = getArguments();
-        if (extras != null) {
-            mRoomId = extras.getLong("RoomId");
-            chatPeerId = extras.getLong("peerId");
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        pageSettings();
 
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            pageSettings();
-
-            // avi = (AVLoadingIndicatorView)  rootView.findViewById(R.id.avi);
-            txtName = mHelperToolbar.getTextViewChatUserName();
-            txtLastSeen = mHelperToolbar.getTextViewChatSeenStatus();
-            viewGroupLastSeen = rootView.findViewById(R.id.chl_txt_viewGroup_seen);
-            imvUserPicture = mHelperToolbar.getUserAvatarChat();
-            txtVerifyRoomIcon = mHelperToolbar.getChatVerify();
-            txtVerifyRoomIcon.setVisibility(View.GONE);
+        // avi = (AVLoadingIndicatorView)  rootView.findViewById(R.id.avi);
+        txtName = mHelperToolbar.getTextViewChatUserName();
+        txtLastSeen = mHelperToolbar.getTextViewChatSeenStatus();
+        viewGroupLastSeen = rootView.findViewById(R.id.chl_txt_viewGroup_seen);
+        imvUserPicture = mHelperToolbar.getUserAvatarChat();
+        txtVerifyRoomIcon = mHelperToolbar.getChatVerify();
+        txtVerifyRoomIcon.setVisibility(View.GONE);
 
 
-            //set layout direction to views
+        //set layout direction to views
 
-            //todo : set gravity right for arabic and persian
-            if (G.selectedLanguage.equals("en")) {
-                txtName.setGravity(Gravity.LEFT);
-                txtLastSeen.setGravity(Gravity.LEFT);
-            } else {
-                txtName.setGravity(Gravity.LEFT);
-                txtLastSeen.setGravity(Gravity.LEFT);
-            }
+        //todo : set gravity right for arabic and persian
+        if (G.selectedLanguage.equals("en")) {
+            txtName.setGravity(Gravity.LEFT);
+            txtLastSeen.setGravity(Gravity.LEFT);
+        } else {
+            txtName.setGravity(Gravity.LEFT);
+            txtLastSeen.setGravity(Gravity.LEFT);
+        }
 
-            /**
-             * need this info for load avatar
-             */
-            if (realmRoom != null) {
-                chatType = realmRoom.getType();
-                if (chatType == CHAT) {
-                    chatPeerId = realmRoom.getChatRoom().getPeerId();
-                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
-                    if (realmRegisteredInfo != null) {
-                        title = realmRegisteredInfo.getDisplayName();
-                        lastSeen = realmRegisteredInfo.getLastSeen();
-                        userStatus = realmRegisteredInfo.getStatus();
-                        isBot = realmRegisteredInfo.isBot();
+        /**
+         * need this info for load avatar
+         */
+        if (realmRoom != null) {
+            chatType = realmRoom.getType();
+            if (chatType == CHAT) {
+                chatPeerId = realmRoom.getChatRoom().getPeerId();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
+                if (realmRegisteredInfo != null) {
+                    title = realmRegisteredInfo.getDisplayName();
+                    lastSeen = realmRegisteredInfo.getLastSeen();
+                    userStatus = realmRegisteredInfo.getStatus();
+                    isBot = realmRegisteredInfo.isBot();
 
-                        if (isBot) {
+                    if (isBot) {
 
-                            if (getMessagesCount() == 0) {
-                                layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
-                                layoutMute.setVisibility(View.VISIBLE);
-                                ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.start);
+                        if (getMessagesCount() == 0) {
+                            layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
+                            layoutMute.setVisibility(View.VISIBLE);
+                            ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.start);
 
-                                View layoutAttach = rootView.findViewById(R.id.layout_attach_file);
-                                layoutAttach.setVisibility(View.GONE);
+                            View layoutAttach = rootView.findViewById(R.id.layout_attach_file);
+                            layoutAttach.setVisibility(View.GONE);
 
-                                layoutMute.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (!isChatReadOnly) {
-                                            edtChat.setText("/Start");
-                                            imvSendButton.performClick();
-                                        }
+                            layoutMute.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (!isChatReadOnly) {
+                                        edtChat.setText("/Start");
+                                        imvSendButton.performClick();
                                     }
-                                });
-                                isShowStartButton = true;
-                            }
-
+                                }
+                            });
+                            isShowStartButton = true;
                         }
 
-                        if (realmRegisteredInfo.isVerified()) {
-                            txtVerifyRoomIcon.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        /**
-                         * when userStatus isn't EXACTLY lastSeen time not used so don't need
-                         * this time and also this time not exist in room info
-                         */
-                        title = realmRoom.getTitle();
-                        userStatus = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
+                    }
+
+                    if (realmRegisteredInfo.isVerified()) {
+                        txtVerifyRoomIcon.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    mRoomId = realmRoom.getId();
+                    /**
+                     * when userStatus isn't EXACTLY lastSeen time not used so don't need
+                     * this time and also this time not exist in room info
+                     */
                     title = realmRoom.getTitle();
-                    if (chatType == GROUP) {
-                        groupParticipantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                        isPublicGroup = !realmRoom.getGroupRoom().isPrivate();
-                    } else {
-                        groupParticipantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
-                        showVoteChannel = realmRoom.getChannelRoom().isReactionStatus();
-                        if (realmRoom.getChannelRoom().isVerified()) {
-                            txtVerifyRoomIcon.setVisibility(View.VISIBLE);
-                        }
-
-                    }
+                    userStatus = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
                 }
-
-                if (chatType == CHAT) {
-                    setUserStatus(userStatus, lastSeen);
-                } else if ((chatType == GROUP) || (chatType == CHANNEL)) {
-                    if (groupParticipantsCountLabel != null) {
-
-                        if (HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
-                        } else {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
-                        }
-                        // avi.setVisibility(View.GONE);
-                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+            } else {
+                mRoomId = realmRoom.getId();
+                title = realmRoom.getTitle();
+                if (chatType == GROUP) {
+                    groupParticipantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                    isPublicGroup = !realmRoom.getGroupRoom().isPrivate();
+                } else {
+                    groupParticipantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
+                    showVoteChannel = realmRoom.getChannelRoom().isReactionStatus();
+                    if (realmRoom.getChannelRoom().isVerified()) {
+                        txtVerifyRoomIcon.setVisibility(View.VISIBLE);
                     }
+
                 }
-            } else if (chatPeerId != 0) {
-                /**
-                 * when user start new chat this block will be called
-                 */
-                chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
-                title = realmRegisteredInfo.getDisplayName();
-                lastSeen = realmRegisteredInfo.getLastSeen();
-                userStatus = realmRegisteredInfo.getStatus();
+            }
+
+            if (chatType == CHAT) {
                 setUserStatus(userStatus, lastSeen);
-            }
+            } else if ((chatType == GROUP) || (chatType == CHANNEL)) {
+                if (groupParticipantsCountLabel != null) {
 
-            if (title != null) {
-                txtName.setText(title);
+                    if (HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                    } else {
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                    }
+                    // avi.setVisibility(View.GONE);
+                    ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+                }
             }
+        } else if (chatPeerId != 0) {
             /**
-             * change english number to persian number
+             * when user start new chat this block will be called
              */
-            if (HelperCalander.isPersianUnicode) {
-                txtName.setText(txtName.getText().toString());
-                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-            }
+            chatType = CHAT;
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
+            title = realmRegisteredInfo.getDisplayName();
+            lastSeen = realmRegisteredInfo.getLastSeen();
+            userStatus = realmRegisteredInfo.getStatus();
+            setUserStatus(userStatus, lastSeen);
+        }
+
+        if (title != null) {
+            txtName.setText(title);
+        }
+        /**
+         * change english number to persian number
+         */
+        if (HelperCalander.isPersianUnicode) {
+            txtName.setText(txtName.getText().toString());
+            txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
         }
 
         /**
@@ -1662,47 +1663,42 @@ public class FragmentChat extends BaseFragment
         //+realm.close();
 
         toolbar = rootView.findViewById(R.id.toolbar);
+        viewAttachFile = rootView.findViewById(R.id.layout_attach_file);
         iconMute = mHelperToolbar.getChatMute();
-        RippleView rippleBackButton = rootView.findViewById(R.id.chl_ripple_back_Button);
-
-        //+final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom != null) {
-            iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
-            isMuteNotification = realmRoom.getMute();
-            isChatReadOnly = realmRoom.getReadOnly();
-        }
-
+        iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
+        isMuteNotification = realmRoom.getMute();
+        isChatReadOnly = realmRoom.getReadOnly();
         //gone video , voice button call then if status was ok visible them
         mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
         mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
 
-        if (chatType == CHAT && !isChatReadOnly) {
-
-            if (G.userId != chatPeerId && !isBot) {
-
-                // gone or visible view call
-                RealmCallConfig callConfig = getRealmChat().where(RealmCallConfig.class).findFirst();
-                if (callConfig != null) {
-                    if (callConfig.isVoice_calling()) {
-                        mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
-
-                    } else {
-                        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-                    }
-
-                    if (callConfig.isVideo_calling()) {
-                        mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
-
-                    } else {
-                        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
-                    }
+        if (isChatReadOnly) {
+            viewAttachFile.setVisibility(View.GONE);
+            (rootView.findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
+        } else if (chatType == CHAT && G.userId != chatPeerId && !isBot) {
+            // gone or visible view call
+            RealmCallConfig callConfig = getRealmChat().where(RealmCallConfig.class).findFirst();
+            if (callConfig != null) {
+                if (callConfig.isVoice_calling()) {
+                    mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
 
                 } else {
-                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
+                    mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
                 }
+
+                if (callConfig.isVideo_calling()) {
+                    mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
+
+                } else {
+                    mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
+                }
+
+            } else {
+                new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         }
+
+        manageExtraLayout();
     }
 
     private long getMessagesCount() {
@@ -1839,7 +1835,6 @@ public class FragmentChat extends BaseFragment
         initPinedMessage();
 
         lyt_user = rootView.findViewById(R.id.lyt_user);
-        viewAttachFile = rootView.findViewById(R.id.layout_attach_file);
         viewMicRecorder = rootView.findViewById(R.id.layout_mic_recorde);
         prgWaiting = rootView.findViewById(R.id.chl_prgWaiting);
         AppUtils.setProgresColler(prgWaiting);
@@ -1857,150 +1852,89 @@ public class FragmentChat extends BaseFragment
 
         locationManager = (LocationManager) G.fragmentActivity.getSystemService(LOCATION_SERVICE);
 
+        /**
+         * Hint: don't need to get info here. currently do this action in {{@link #startPageFastInitialize()}}
         Bundle extras = getArguments();
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
             isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
             isNotJoin = extras.getBoolean("ISNotJoin");
             userName = extras.getString("UserName");
-
-            if (isNotJoin) {
-                final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
-                if (layoutMute == null) {
-                    layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
-                }
-                layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
-                layoutJoin.setVisibility(View.VISIBLE);
-                layoutMute.setVisibility(View.GONE);
-                viewAttachFile.setVisibility(View.GONE);
-
-                layoutJoin.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        HelperUrl.showIndeterminateProgressDialog();
-                        G.onClientJoinByUsername = new OnClientJoinByUsername() {
-                            @Override
-                            public void onClientJoinByUsernameResponse() {
-
-                                isNotJoin = false;
-                                HelperUrl.closeDialogWaiting();
-                                RealmRoom.joinRoom(mRoomId);
-
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        layoutJoin.setVisibility(View.GONE);
-                                        if (chatType == CHANNEL) {
-                                            layoutMute.setVisibility(View.VISIBLE);
-                                            initLayoutChannelFooter();
-                                        }
-                                        rootView.findViewById(ac_ll_parent).invalidate();
-
-
-                                        if (chatType == GROUP) {
-                                            viewAttachFile.setVisibility(View.VISIBLE);
-                                            isChatReadOnly = false;
-                                        }
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onError(int majorCode, int minorCode) {
-                                HelperUrl.dialogWaiting.dismiss();
-                            }
-                        };
-
-                        /**
-                         * if user joined to this room set lastMessage for that
-                         */
-                        RealmRoom.setLastMessage(mRoomId);
-                        new RequestClientJoinByUsername().clientJoinByUsername(userName);
-                    }
-                });
-            }
-
             messageId = extras.getLong("MessageId");
+        }
+        */
 
-            /**
-             * get userId . use in chat set action.
-             */
+        /**
+         * get userId . use in chat set action.
+         */
 
-            //+Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
-            RealmUserInfo realmUserInfo = getRealmChat().where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo == null) {
-                //finish();
-                finishChat();
-                return;
+        RealmUserInfo realmUserInfo = getRealmChat().where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo == null) {
+            //finish();
+            finishChat();
+            return;
+        }
+        userId = realmUserInfo.getUserId();
+
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+
+        if (realmRoom != null) { // room exist
+
+            title = realmRoom.getTitle();
+            initialize = realmRoom.getInitials();
+            color = realmRoom.getColor();
+            isChatReadOnly = realmRoom.getReadOnly();
+            unreadCount = realmRoom.getUnreadCount();
+            firstUnreadMessage = realmRoom.getFirstUnreadMessage();
+            savedScrollMessageId = realmRoom.getLastScrollPositionMessageId();
+            firstVisiblePositionOffset = realmRoom.getLastScrollPositionOffset();
+
+            if (messageId != 0) {
+                savedScrollMessageId = messageId;
+                firstVisiblePositionOffset = 0;
             }
-            userId = realmUserInfo.getUserId();
 
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            if (chatType == CHAT) {
 
-            if (realmRoom != null) { // room exist
-
-                title = realmRoom.getTitle();
-                initialize = realmRoom.getInitials();
-                color = realmRoom.getColor();
-                isChatReadOnly = realmRoom.getReadOnly();
-                unreadCount = realmRoom.getUnreadCount();
-                firstUnreadMessage = realmRoom.getFirstUnreadMessage();
-                savedScrollMessageId = realmRoom.getLastScrollPositionMessageId();
-                firstVisiblePositionOffset = realmRoom.getLastScrollPositionOffset();
-
-                if (messageId != 0) {
-                    savedScrollMessageId = messageId;
-                    firstVisiblePositionOffset = 0;
-                }
-                if (isChatReadOnly) {
-                    viewAttachFile.setVisibility(View.GONE);
-                    (rootView.findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
-                }
-
-                if (chatType == CHAT) {
-
-                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
-                    if (realmRegisteredInfo != null) {
-                        initialize = realmRegisteredInfo.getInitials();
-                        color = realmRegisteredInfo.getColor();
-                        phoneNumber = realmRegisteredInfo.getPhoneNumber();
-
-                        if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
-                            // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
-                            initDrBot();
-                        }
-
-                    } else {
-                        title = realmRoom.getTitle();
-                        initialize = realmRoom.getInitials();
-                        color = realmRoom.getColor();
-                        userStatus = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
-                    }
-                } else if (chatType == GROUP) {
-                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                    groupRole = realmGroupRoom.getRole();
-                    groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-                } else if (chatType == CHANNEL) {
-                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                    channelRole = realmChannelRoom.getRole();
-                    channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
-                }
-            } else {
-                chatPeerId = extras.getLong("peerId");
-                chatType = CHAT;
                 RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
                 if (realmRegisteredInfo != null) {
-                    title = realmRegisteredInfo.getDisplayName();
                     initialize = realmRegisteredInfo.getInitials();
                     color = realmRegisteredInfo.getColor();
-                    lastSeen = realmRegisteredInfo.getLastSeen();
-                    userStatus = realmRegisteredInfo.getStatus();
-                }
-            }
+                    phoneNumber = realmRegisteredInfo.getPhoneNumber();
 
-            //realm.close();
+                    if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
+                        // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
+                        initDrBot();
+                    }
+
+                } else {
+                    title = realmRoom.getTitle();
+                    initialize = realmRoom.getInitials();
+                    color = realmRoom.getColor();
+                    userStatus = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
+                }
+            } else if (chatType == GROUP) {
+                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                groupRole = realmGroupRoom.getRole();
+                groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
+            } else if (chatType == CHANNEL) {
+                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                channelRole = realmChannelRoom.getRole();
+                channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
+            }
+        } else {
+            //chatPeerId = extras.getLong("peerId");
+            chatType = CHAT;
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
+            if (realmRegisteredInfo != null) {
+                title = realmRegisteredInfo.getDisplayName();
+                initialize = realmRegisteredInfo.getInitials();
+                color = realmRegisteredInfo.getColor();
+                lastSeen = realmRegisteredInfo.getLastSeen();
+                userStatus = realmRegisteredInfo.getStatus();
+            }
         }
 
         initComponent();
@@ -2046,6 +1980,68 @@ public class FragmentChat extends BaseFragment
                 }
             }
         };
+    }
+
+    /**
+     * show join/mute layout if needed
+     */
+    private void manageExtraLayout(){
+        if (isNotJoin) {
+            final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
+            if (layoutMute == null) {
+                layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
+            }
+            layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
+            layoutJoin.setVisibility(View.VISIBLE);
+            layoutMute.setVisibility(View.GONE);
+            viewAttachFile.setVisibility(View.GONE);
+
+            layoutJoin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HelperUrl.showIndeterminateProgressDialog();
+                    G.onClientJoinByUsername = new OnClientJoinByUsername() {
+                        @Override
+                        public void onClientJoinByUsernameResponse() {
+
+                            isNotJoin = false;
+                            HelperUrl.closeDialogWaiting();
+                            RealmRoom.joinRoom(mRoomId);
+
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    layoutJoin.setVisibility(View.GONE);
+                                    if (chatType == CHANNEL) {
+                                        layoutMute.setVisibility(View.VISIBLE);
+                                        initLayoutChannelFooter();
+                                    }
+                                    rootView.findViewById(ac_ll_parent).invalidate();
+
+
+                                    if (chatType == GROUP) {
+                                        viewAttachFile.setVisibility(View.VISIBLE);
+                                        isChatReadOnly = false;
+                                    }
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
+                            HelperUrl.dialogWaiting.dismiss();
+                        }
+                    };
+
+                    /**
+                     * if user joined to this room set lastMessage for that
+                     */
+                    RealmRoom.setLastMessage(mRoomId);
+                    new RequestClientJoinByUsername().clientJoinByUsername(userName);
+                }
+            });
+        }
     }
 
     private void initPinedMessage() {
