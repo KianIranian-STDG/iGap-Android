@@ -143,6 +143,11 @@ public class HelperToolbar {
 
     public HelperToolbar setRightSmallAvatarShown(boolean rightSmallAvatarShown) {
         this.isRightSmallAvatarShown = rightSmallAvatarShown;
+
+        if (mAvatarSmall != null) {
+            mAvatarSmall.setVisibility(View.VISIBLE);
+            mAvatarSmall.setOnClickListener(v -> mToolbarListener.onSmallAvatarClickListener(v));
+        }
         return this;
     }
 
@@ -363,6 +368,10 @@ public class HelperToolbar {
 
     public TextView getChatMute() {
         return mChatMuteIcon;
+    }
+
+    public CircleImageView getAvatarSmall() {
+        return mAvatarSmall;
     }
 
     /*************************************************************/

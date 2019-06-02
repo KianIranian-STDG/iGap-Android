@@ -218,6 +218,11 @@ public class FragmentUserProfile extends BaseFragment {
                 startDialog();
             }
         });
+
+        binding.fupBtnDarkMode.setOnClickListener(v ->{
+            binding.darkTheme.setChecked(!G.isDarkTheme);
+            viewModel.onThemeClick(G.isDarkTheme);
+        } );
     }
 
     private void goToAddMemberPage() {

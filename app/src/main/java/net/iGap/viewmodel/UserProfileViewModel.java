@@ -437,6 +437,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
+    public void onRootThemeClick(){
+        onThemeClick(G.isDarkTheme);
+    }
+
     public void onFAQClick() {
         goToFAQPage.setValue(HelperCalander.isPersianUnicode ? "https://blog.igap.net/fa" : "https://blog.igap.net");
     }

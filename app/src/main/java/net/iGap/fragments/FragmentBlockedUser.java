@@ -440,6 +440,9 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             textView.setText(realmResults.get(position).getDisplayName().toUpperCase().substring(0, 1));
+
+            if (G.isDarkTheme)
+                textView.setTextColor(G.context.getResources().getColor(R.color.white));
         }
 
         @Override

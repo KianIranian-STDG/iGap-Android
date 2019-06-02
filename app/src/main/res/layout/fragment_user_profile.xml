@@ -508,21 +508,34 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/dark_mode_icon" />
 
-                <Switch
-                    android:id="@+id/darkTheme"
-                    style="?textTitleColorSettingTheme"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:checked="@={viewModel.isDarkMode}"
+                    style="?textTitleColorSettingTheme"
                     android:fontFamily="@font/main_font"
-                    android:gravity="center_vertical"
-                    android:onCheckedChanged="@{()->viewModel.onThemeClick(darkTheme.isChecked())}"
                     android:text="@string/st_dark_theme"
                     android:textSize="@dimen/fup_items_textSize"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:gravity="center_vertical"
+                    android:layout_toEndOf="@id/fup_btn_dark_view_handler_view"
+                    android:layout_toRightOf="@id/fup_btn_dark_view_handler_view"
+                    />
+
+                <ToggleButton
+                    android:id="@+id/darkTheme"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isDarkMode}"
+                    android:background="@drawable/st_switch_button"
+                    android:textOff=""
+                    android:textOn=""
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:onCheckedChanged="@{()->viewModel.onThemeClick(darkTheme.isChecked())}"
+                   />
 
             </LinearLayout>
 

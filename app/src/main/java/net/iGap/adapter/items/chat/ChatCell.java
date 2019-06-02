@@ -63,6 +63,7 @@ public class ChatCell extends ConstraintLayout {
         cellCheckbox.setId(R.id.iv_itemContactChat_checkBox);
         cellCheckbox.setButtonDrawable(R.drawable.check_box_background);
         cellCheckbox.setPadding(10, 0, 0, 0);
+        cellCheckbox.setClickable(false);
         addView(cellCheckbox);
 
         /**
