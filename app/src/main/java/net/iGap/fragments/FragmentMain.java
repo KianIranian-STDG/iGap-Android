@@ -53,7 +53,6 @@ import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
-import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
@@ -66,7 +65,6 @@ import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
 import net.iGap.module.enums.ChannelChatRole;
@@ -180,27 +178,15 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
         viewById.setVisibility(View.GONE);
-        /*switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
-        if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
-            allSwitcher = 1;
-            initRecycleView();
-        } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
-            allSwitcher = 1;
-            initRecycleView();
-        }*/
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initRecycleView();
-            }
-        }, 10);
+
+        G.handler.postDelayed(this::initRecycleView, 10);
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
                 .setLogoShown(true)
-                .setSearchBoxShown(true , false)
+                .setSearchBoxShown(true, false)
                 .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
@@ -208,18 +194,15 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         initMultiSelectActions();
 
-        onChatCellClickedInEditMode = new onChatCellClick() {
-            @Override
-            public void onClicked(View v, RealmRoom item, int position, boolean status) {
+        onChatCellClickedInEditMode = (v, item, position, status) -> {
 
-                if (!status) {
-                    mSelectedRoomList.add(item);
-                } else {
-                    mSelectedRoomList.remove(item);
-                }
-                refreshChatList(position, false);
-                setVisiblityForSelectedActionsInEverySelection();
+            if (!status) {
+                mSelectedRoomList.add(item);
+            } else {
+                mSelectedRoomList.remove(item);
             }
+            refreshChatList(position, false);
+            setVisiblityForSelectedActionsInEverySelection();
         };
 
     }
@@ -245,11 +228,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         mBtnMakeAsReadSelected.setOnClickListener(v -> {
 
-            if (mSelectedRoomList.size() > 0){
-                for (int i = 0 ; i < mSelectedRoomList.size() ; i++){
-                    markAsRead(mSelectedRoomList.get(i).getType() , mSelectedRoomList.get(i).getId());
+            if (mSelectedRoomList.size() > 0) {
+                for (int i = 0; i < mSelectedRoomList.size(); i++) {
+                    markAsRead(mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
                 }
-
                 onLeftIconClickListener(v);
             }
         });
@@ -269,13 +251,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         if (mView != null) {
             mRecyclerView = mView.findViewById(R.id.cl_recycler_view_contact);
-            // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
             mRecyclerView.setItemAnimator(null);
             mRecyclerView.setItemViewCacheSize(0);
             final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(layoutManager);
-//            mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
         }
 
         RealmResults<RealmRoom> results = null;
@@ -328,17 +308,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         }
         roomAdapterHashMap.put(mainType, roomsAdapter);
 
-        //fastAdapter
-        //final RoomsAdapter roomsAdapter = new RoomsAdapter(getRealmFragmentMain());
-        //for (RealmRoom realmRoom : results) {
-        //    roomsAdapter.add(new RoomItem(this, mainType).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
-        //}
-        //
-        //// put adapters in hashMap
-        //adapterHashMap.put(mainType, roomsAdapter);
-        //
-        //mRecyclerView.setAdapter(roomsAdapter);
-
         if (mainType == all) {
             getChatLists();
         }
@@ -373,13 +342,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             });
         }
 
-        G.onNotifyTime = new OnNotifyTime() {
-            @Override
-            public void notifyTime() {
-                if (mRecyclerView != null) {
-                    if (mRecyclerView.getAdapter() != null) {
-                        mRecyclerView.getAdapter().notifyDataSetChanged();
-                    }
+        G.onNotifyTime = () -> {
+            if (mRecyclerView != null) {
+                if (mRecyclerView.getAdapter() != null) {
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
                 }
             }
         };
@@ -399,13 +365,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
             case downScrool:
 
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (firstVisibleItem < 5) {
-                            mRecyclerView.scrollToPosition(0);
-                        }
+                G.handler.post(() -> {
+                    int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    if (firstVisibleItem < 5) {
+                        mRecyclerView.scrollToPosition(0);
                     }
                 });
 
@@ -417,43 +380,24 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
 
-    private boolean heartBeatTimeOut() {
-
-        long difference;
-
-        long currentTime = System.currentTimeMillis();
-        difference = (currentTime - G.latestHearBeatTime);
-
-        return difference >= Config.HEART_BEAT_CHECKING_TIME_OUT;
-
-    }
-
     //***************************************************************************************************************************
 
     private void sendClientCondition() {
         if (clientConditionGlobal != null) {
             new RequestClientCondition().clientCondition(clientConditionGlobal);
         } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    sendClientCondition();
-                }
-            }, 1000);
+            G.handler.postDelayed(this::sendClientCondition, 1000);
         }
     }
 
     private void getChatLists() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.isSecure && G.userLogin) {
-                    boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                    if (send)
-                        progressBar.setVisibility(View.VISIBLE);
-                } else {
-                    getChatLists();
-                }
+        new Handler().postDelayed(() -> {
+            if (G.isSecure && G.userLogin) {
+                boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                if (send)
+                    progressBar.setVisibility(View.VISIBLE);
+            } else {
+                getChatLists();
             }
         }, 1000);
     }
@@ -508,30 +452,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     private void muteNotification(final long roomId, final boolean mute) {
-        //+Realm realm = Realm.getDefaultInstance();
         new RequestClientMuteRoom().muteRoom(roomId, !mute);
-
-        //fastAdapter
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
-        //    }
-        //});
-        //realm.close();
     }
 
     private void clearHistory(final long roomId) {
         RealmRoomMessage.clearHistoryMessage(roomId);
-        //fastAdapter
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
-        //    }
-        //});
     }
 
     private void pinToTop(final long roomId, final boolean isPinned) {
@@ -541,103 +466,21 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         if (!isPinned) {
             goToTop();
         }
-
-        //fastAdapter
-        //if (!isPinned) {
-        //    G.handler.post(new Runnable() {
-        //        @Override
-        //        public void run() {
-        //            adapterHashMap.get(all).goToTop(roomId, true);
-        //            getAdapterMain(roomId).goToTop(roomId, true);
-        //        }
-        //    });
-        //} else {
-        //    updateUnPin(roomId, all);
-        //
-        //    ProtoGlobal.Room.Type type = getRoomType(roomId);
-        //    if (type == CHAT) {
-        //        updateUnPin(roomId, chat);
-        //    } else if (type == GROUP) {
-        //        updateUnPin(roomId, group);
-        //    } else if (type == CHANNEL) {
-        //        updateUnPin(roomId, channel);
-        //    }
-        //}
-        //realm.close();
     }
 
     private void goToTop() {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
-                    mRecyclerView.smoothScrollToPosition(0);
-                }
+        G.handler.postDelayed(() -> {
+            if (((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
+                mRecyclerView.smoothScrollToPosition(0);
             }
         }, 50);
     }
 
-    //fastAdapter
-    //private void updateUnPin(final long roomId, final MainType type) {
-    //    G.handler.post(new Runnable() {
-    //        @Override
-    //        public void run() {
-    //            RealmResults<RealmRoom> results = null;
-    //            String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
-    //            Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING};
-    //            switch (type) {
-    //                case all:
-    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
-    //                    break;
-    //                case chat:
-    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
-    //                    break;
-    //                case group:
-    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
-    //                    break;
-    //                case channel:
-    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
-    //                    break;
-    //            }
-    //
-    //            int position = 0;
-    //            for (RealmRoom room : results) {
-    //                if (room.getId() == roomId) {
-    //                    break;
-    //                }
-    //                position++;
-    //            }
-    //            adapterHashMap.get(type).goToPosition(roomId, position);
-    //        }
-    //    });
-    //}
 
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
         return realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded();
     }
 
-    //fastAdapter
-    //private ProtoGlobal.Room.Type getRoomType(long roomId) {
-    //    RealmRoom realmRoom = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-    //    if (realmRoom != null) {
-    //        return realmRoom.getType();
-    //    }
-    //    return null;
-    //}
-    //
-    //private RoomsAdapter getAdapterMain(long roomId) {
-    //    ProtoGlobal.Room.Type roomType = getRoomType(roomId);
-    //    if (roomType != null) {
-    //        if (roomType == CHAT) {
-    //            return adapterHashMap.get(chat);
-    //        } else if (roomType == GROUP) {
-    //            return adapterHashMap.get(group);
-    //        } else if (roomType == CHANNEL) {
-    //            return adapterHashMap.get(channel);
-    //        }
-    //    }
-    //    return adapterHashMap.get(all);
-    //}
 
     /**
      * ************************************ Callbacks ************************************
@@ -662,28 +505,17 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void onChatUpdateStatus(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-        //fastAdapter
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
-        //    }
-        //}, 200);
+
     }
 
     @Override
     public void onChatDelete(final long roomId) {
-        //fastAdapter
-        //adapterHashMap.get(all).removeChat(roomId);
-        //adapterHashMap.get(chat).removeChat(roomId);
+
     }
 
     @Override
     public void onGroupDelete(long roomId) {
-        //fastAdapter
-        //adapterHashMap.get(all).removeChat(roomId);
-        //adapterHashMap.get(group).removeChat(roomId);
+
     }
 
     @Override
@@ -698,9 +530,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void onChannelDelete(long roomId) {
-        //fastAdapter
-        //adapterHashMap.get(all).removeChat(roomId);
-        //adapterHashMap.get(channel).removeChat(roomId);
+
     }
 
     @Override
@@ -715,26 +545,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
-        //fastAdapter
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).goToTop(roomId, false);
-        //        getAdapterMain(roomId).goToTop(roomId, false);
-        //    }
-        //}, 200);
+
     }
 
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        //fastAdapter
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).goToTop(roomId, false);
-        //        getAdapterMain(roomId).goToTop(roomId, false);
-        //    }
-        //});
+
     }
 
     @Override
@@ -744,25 +560,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void onClientGetRoomResponse(final long roomId) {
-        //fastAdapter
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        RealmRoom realmRoom = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        //        if (realmRoom != null && getAdapterMain(roomId).getPosition(realmRoom.getId()) == -1) {
-        //            adapterHashMap.get(all).add(0, new RoomItem(mComplete, all).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
-        //            MainType type = all;
-        //            if (realmRoom.getType() == CHAT) {
-        //                type = chat;
-        //            } else if (realmRoom.getType() == GROUP) {
-        //                type = group;
-        //            } else if (realmRoom.getType() == CHANNEL) {
-        //                type = channel;
-        //            }
-        //            getAdapterMain(roomId).add(0, new RoomItem(mComplete, type).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
-        //        }
-        //    }
-        //});
+
     }
 
     @Override
@@ -785,14 +583,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         putChatToDatabase(roomList);
 
-        //fastAdapter
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        initRecycleView(null);
-        //    }
-        //}, 200);
-
         /**
          * to first enter to app , client first compute clientCondition then
          * getRoomList and finally send condition that before get clientCondition;
@@ -812,17 +602,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         mOffset += roomList.size();
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-
-        //else {
-        //    mOffset = 0;
-        //}
-
+        G.handler.post(() -> progressBar.setVisibility(View.GONE));
 
     }
 
@@ -843,12 +623,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     @Override
     public void onClientGetRoomListTimeout() {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.GONE);
-                getChatLists();
-            }
+        G.handler.post(() -> {
+            progressBar.setVisibility(View.GONE);
+            getChatLists();
         });
     }
 
@@ -876,7 +653,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //super.onSaveInstanceState(outState); //No call for super(). Bug on API Level > 11.
+
     }
 
     @Override
@@ -899,15 +676,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         if (G.isDepricatedApp)
             isDeprecated();
 
-        //G.onSelectMenu = this;
-        //G.onRemoveFragment = this;
-        //G.onChatDeleteInRoomList = this;
-        //G.onGroupDeleteInRoomList = this;
-        //G.onChannelDeleteInRoomList = this;
         G.onClientGetRoomListResponse = this;
-        //onClientGetRoomResponseRoomList = this;
-        //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponseFragmentMain(this);
-        //G.chatSendMessageUtil.setOnChatSendMessageResponseFragmentMainRoomList(this);
 
         if (progressBar != null) {
             AppUtils.setProgresColler(progressBar);
@@ -953,9 +722,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                 }
             }
         }
-//        BotInit.checkDrIgap();
 
-        Log.d("bagi", "FragmentMain:onResume:end");
     }
 
     @Override
@@ -998,35 +765,28 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     public void isUpdateAvailable() {
         try {
             if (getActivity() != null && !getActivity().isFinishing()) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getActivity().hasWindowFocus()) {
-                            new MaterialDialog.Builder(getActivity())
-                                    .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
-                                    .titleGravity(GravityEnum.CENTER)
-                                    .buttonsGravity(GravityEnum.CENTER)
-                                    .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                                    .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                getActivity().runOnUiThread(() -> {
+                    if (getActivity().hasWindowFocus()) {
+                        new MaterialDialog.Builder(getActivity())
+                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                .titleGravity(GravityEnum.CENTER)
+                                .buttonsGravity(GravityEnum.CENTER)
+                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    dialog.dismiss();
-                                }
-                            }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        }).positiveText(R.string.startUpdate).onPositive((dialog, which) -> {
 
-                                    // HelperUrl.openBrowser("http://d.igap.net/update");
-                                    String url = "http://d.igap.net/update";
-                                    Intent i = new Intent(Intent.ACTION_VIEW);
-                                    i.setData(Uri.parse(url));
-                                    startActivity(i);
-                                    dialog.dismiss();
-                                }
-                            })
-                                    .show();
-                        }
+                            String url = "http://d.igap.net/update";
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                            dialog.dismiss();
+                        })
+                                .show();
                     }
                 });
             }
@@ -1038,23 +798,23 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     @Override
     public void onLeftIconClickListener(View view) {
 
-        if (isChatMultiSelectEnable){
+        if (isChatMultiSelectEnable) {
             mLayoutMultiSelectedActions.setVisibility(View.GONE);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_search), 0, 10);
             mRecyclerView.setLayoutParams(marginLayoutParams);
-            isChatMultiSelectEnable = false ;
-            refreshChatList(0 , true);
+            isChatMultiSelectEnable = false;
+            refreshChatList(0, true);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             setVisiblityForSelectedActionsInEverySelection();
-        }else {
+        } else {
             mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_room_selected_mode), 0, 10);
             mRecyclerView.setLayoutParams(marginLayoutParams);
-            isChatMultiSelectEnable = true ;
-            refreshChatList(0 , true);
+            isChatMultiSelectEnable = true;
+            refreshChatList(0, true);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }
@@ -1088,6 +848,102 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         }
     }
 
+    private boolean isItemAvailableOnSelectedList(RealmRoom mInfo) {
+
+        return mSelectedRoomList.contains(mInfo);
+    }
+
+    private void confirmActionForRemoveSelected() {
+
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
+                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+
+                    if (mSelectedRoomList.size() > 0) {
+
+                        for (RealmRoom item : mSelectedRoomList) {
+                            deleteChat(item);
+                        }
+
+                        onLeftIconClickListener(null);
+                    }
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void confirmActionForClearHistoryOfSelected() {
+
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
+                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+
+                    for (RealmRoom item : mSelectedRoomList) {
+                        clearHistory(item.getId());
+                    }
+                    onLeftIconClickListener(null);
+
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void setVisiblityForSelectedActionsInEverySelection() {
+
+        if (mSelectedRoomList.size() == 0) mBtnRemoveSelected.setVisibility(View.VISIBLE);
+
+        for (RealmRoom item : mSelectedRoomList) {
+
+            if (item != null && !RealmRoom.isPromote(item.getId())) {
+
+                if (item.getType() == ProtoGlobal.Room.Type.CHAT || item.getType() == ProtoGlobal.Room.Type.GROUP
+                        || item.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                    mBtnRemoveSelected.setVisibility(View.VISIBLE);
+                } else {
+                    mBtnRemoveSelected.setVisibility(View.GONE);
+                }
+
+            } else {
+                mBtnRemoveSelected.setVisibility(View.GONE);
+            }
+
+        }
+    }
+
+    private void markAsRead(ProtoGlobal.Room.Type chatType, long roomId) {
+
+        G.handler.postDelayed(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                    @Override
+                    public void sendSeenStatus(RealmRoomMessage message) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    }
+
+                    @Override
+                    public void resendMessage(RealmRoomMessage message) {
+
+                    }
+
+                    @Override
+                    public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
+
+                    }
+                });
+            }
+
+            RealmRoom.setCount(roomId, 0);
+
+            G.handler.postDelayed(() -> {
+                AppUtils.updateBadgeOnly(realm, roomId);
+                realm.close();
+            }, 250);
+        }, 5);
+    }
+
     public enum MainType {
         all, chat, group, channel
     }
@@ -1119,7 +975,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
             rootView = new ChatCell(getContext());
             rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80)));
             return new ViewHolder(rootView);
@@ -1127,40 +982,37 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         @Override
         protected OrderedRealmCollectionChangeListener createListener() {
-            return new OrderedRealmCollectionChangeListener() {
-                @Override
-                public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
-                    if (getData() != null && getData().size() > 0) {
-                        emptyView.setVisibility(View.GONE);
-                    } else {
-                        emptyView.setVisibility(View.VISIBLE);
-                    }
-                    if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
-                        loadingView.setVisibility(View.GONE);
-                        notifyDataSetChanged();
-                        return;
-                    }
-                    // For deletions, the adapter has to be notified in reverse order.
-                    OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
-                    for (int i = deletions.length - 1; i >= 0; i--) {
-                        OrderedCollectionChangeSet.Range range = deletions[i];
-                        notifyItemRangeRemoved(range.startIndex, range.length);
-                    }
+            return (collection, changeSet) -> {
+                if (getData() != null && getData().size() > 0) {
+                    emptyView.setVisibility(View.GONE);
+                } else {
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
+                    loadingView.setVisibility(View.GONE);
+                    notifyDataSetChanged();
+                    return;
+                }
+                // For deletions, the adapter has to be notified in reverse order.
+                OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
+                for (int i = deletions.length - 1; i >= 0; i--) {
+                    OrderedCollectionChangeSet.Range range = deletions[i];
+                    notifyItemRangeRemoved(range.startIndex, range.length);
+                }
 
-                    OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
-                    for (OrderedCollectionChangeSet.Range range : insertions) {
-                        notifyItemRangeInserted(range.startIndex, range.length);
-                        //goToTop();
-                    }
+                OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
+                for (OrderedCollectionChangeSet.Range range : insertions) {
+                    notifyItemRangeInserted(range.startIndex, range.length);
+                    //goToTop();
+                }
 
-                    if (!updateOnModification) {
-                        return;
-                    }
+                if (!updateOnModification) {
+                    return;
+                }
 
-                    OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
-                    for (OrderedCollectionChangeSet.Range range : modifications) {
-                        notifyItemRangeChanged(range.startIndex, range.length);
-                    }
+                OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
+                for (OrderedCollectionChangeSet.Range range : modifications) {
+                    notifyItemRangeChanged(range.startIndex, range.length);
                 }
             };
         }
@@ -1185,17 +1037,17 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             }
 
             if (isChatMultiSelectEnable) {
-                holder.chSelected.setVisibility(View.VISIBLE);
+                holder.selectedRoomCB.setVisibility(View.VISIBLE);
 
                 if (isItemAvailableOnSelectedList(mInfo)) {
-                    holder.chSelected.setChecked(true);
+                    holder.selectedRoomCB.setChecked(true);
                 } else {
-                    holder.chSelected.setChecked(false);
+                    holder.selectedRoomCB.setChecked(false);
                 }
 
             } else {
-                holder.chSelected.setVisibility(View.GONE);
-                holder.chSelected.setChecked(false);
+                holder.selectedRoomCB.setVisibility(View.GONE);
+                holder.selectedRoomCB.setChecked(false);
             }
             final boolean isMyCloud;
 
@@ -1207,31 +1059,32 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
                 if (isMyCloud) {
 
-                    holder.image.setImageDrawable(G.context.getResources().getDrawable(R.drawable.ic_cloud_space_blue));
+                    holder.avatarIv.setImageDrawable(G.context.getResources().getDrawable(R.drawable.ic_cloud_space_blue));
 
                 } else {
-                    if (holder.image.getVisibility() == View.GONE) {
-                        holder.image.setVisibility(View.VISIBLE);
+                    if (holder.avatarIv.getVisibility() == View.GONE) {
+                        holder.avatarIv.setVisibility(View.VISIBLE);
                     }
                     setAvatar(mInfo, holder);
                 }
 
-                setChatIcon(mInfo, holder.txtChatIcon);
+                setChatIcon(mInfo, holder.chatIconTv);
+                setMuteIcon(mInfo, holder.muteRoomTv);
 
-                holder.name.setText(mInfo.getTitle());
+                holder.roomNameTv.setText(mInfo.getTitle());
 
                 if ((mInfo.getType() == CHAT) && mInfo.getChatRoom().isVerified()) {
-                    holder.imgVerifyRoom.setVisibility(View.VISIBLE);
+                    holder.verifyRoomTv.setVisibility(View.VISIBLE);
                 } else if ((mInfo.getType() == CHANNEL) && mInfo.getChannelRoom().isVerified()) {
-                    holder.imgVerifyRoom.setVisibility(View.VISIBLE);
+                    holder.verifyRoomTv.setVisibility(View.VISIBLE);
                 } else {
-                    holder.imgVerifyRoom.setVisibility(View.INVISIBLE);
+                    holder.verifyRoomTv.setVisibility(View.INVISIBLE);
                 }
 
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
-                    holder.txtTime.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+                    holder.lastMessageTv.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
                 } else {
-                    holder.txtTime.setVisibility(View.GONE);
+                    holder.lastMessageTv.setVisibility(View.GONE);
                 }
 
                 /**
@@ -1240,30 +1093,30 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
                 if (mInfo.isPinned()) {
                     if (mInfo.isFromPromote()) {
-                        holder.txtPinIcon.setVisibility(View.GONE);
+                        holder.pinView.setVisibility(View.GONE);
                     } else {
-                        holder.txtPinIcon.setVisibility(View.VISIBLE);
+                        holder.pinView.setVisibility(View.VISIBLE);
                     }
 
                 } else {
-                    holder.txtPinIcon.setVisibility(View.GONE);
+                    holder.pinView.setVisibility(View.GONE);
                 }
 
                 if (mInfo.getUnreadCount() < 1) {
 
-                    holder.txtUnread.setVisibility(View.GONE);
+                    holder.badgeView.setVisibility(View.GONE);
 
                 } else {
-                    holder.txtUnread.setVisibility(View.VISIBLE);
-                    holder.txtUnread.getTextView().setText(mInfo.getUnreadCount() + "");
+                    holder.badgeView.setVisibility(View.VISIBLE);
+                    holder.badgeView.getTextView().setText(mInfo.getUnreadCount() + "");
 
                     if (mInfo.getMute()) {
-                        holder.txtUnread.setBadgeColor(getResources().getColor(R.color.gray_9d));
+                        holder.badgeView.setBadgeColor(getResources().getColor(R.color.gray_9d));
                     } else {
                         if (G.isDarkTheme) {
-                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.md_blue_500));
+                            holder.badgeView.setBadgeColor(getResources().getColor(R.color.md_blue_500));
                         } else {
-                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
+                            holder.badgeView.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         }
                     }
                 }
@@ -1275,10 +1128,17 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
              * for change english number to persian number
              */
             if (HelperCalander.isPersianUnicode) {
-                holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
-                holder.txtUnread.getTextView().setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getTextView().getText().toString()));
+                holder.LastMessageTv.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.LastMessageTv.getText().toString()));
+                holder.badgeView.getTextView().setText(HelperCalander.convertToUnicodeFarsiNumber(holder.badgeView.getTextView().getText().toString()));
             }
 
+        }
+
+        private void setMuteIcon(RealmRoom mInfo, FontIconTextView muteTv) {
+            if (mInfo.getMute())
+                muteTv.setVisibility(View.VISIBLE);
+            else
+                muteTv.setVisibility(View.INVISIBLE);
         }
 
 
@@ -1301,20 +1161,20 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         //*******************************************************************************************
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
-            holder.txtTic.setVisibility(View.INVISIBLE);
-            holder.txtLastMessageFileText.setVisibility(View.GONE);
-            holder.txtLastMessage.setText("");
+            holder.lastMessageStatusTv.setVisibility(View.INVISIBLE);
+            holder.LastMessageFileTextTv.setVisibility(View.GONE);
+            holder.LastMessageTv.setText("");
 
             if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != G.userId))))) {
 
                 holder.lastMessageSender.setVisibility(View.GONE);
-                holder.txtLastMessage.setText(mInfo.getActionState());
-                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+                holder.LastMessageTv.setText(mInfo.getActionState());
+                holder.LastMessageTv.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                holder.LastMessageTv.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
                 ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(mInfo.getDraft().getMessage());
-                holder.txtLastMessage.setText(subStringInternal(AbstractMessage.removeBoldMark(mInfo.getDraft().getMessage(), boldPlaces)));
-                holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
+                holder.LastMessageTv.setText(subStringInternal(AbstractMessage.removeBoldMark(mInfo.getDraft().getMessage(), boldPlaces)));
+                holder.LastMessageTv.setTextColor(Color.parseColor(G.textSubTheme));
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
                 holder.lastMessageSender.setTextColor(getResources().getColor(R.color.red));
@@ -1322,7 +1182,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             } else {
 
                 if (mInfo.getLastMessage() != null) {
-                    holder.txtTime.setVisibility(View.VISIBLE);
+                    holder.lastMessageTv.setVisibility(View.VISIBLE);
                     String lastMessage = AppUtils.rightLastMessage(RealmRoomMessage.getFinalMessage(mInfo.getLastMessage()));
 
                     if (lastMessage == null) {
@@ -1335,7 +1195,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                     } else {
                         if (mInfo.getLastMessage().isAuthorMe()) {
 
-                            holder.txtTic.setVisibility(View.VISIBLE);
+                            holder.lastMessageStatusTv.setVisibility(View.VISIBLE);
 
                             ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
                             if (mInfo.getLastMessage().getStatus() != null) {
@@ -1345,7 +1205,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                                     e.printStackTrace();
                                 }
                             }
-                            AppUtils.rightMessageStatus(holder.txtTic, status, mInfo.getLastMessage().isAuthorMe());
+                            AppUtils.rightMessageStatus(holder.lastMessageStatusTv, status, mInfo.getLastMessage().isAuthorMe());
                         }
 
                         if (mInfo.getType() == GROUP) {
@@ -1395,7 +1255,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                                 e.printStackTrace();
                             }
 
-                            String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, G.roomMessageTypeColor);
+                            String result = AppUtils.conversionMessageType(_type, holder.LastMessageTv, G.roomMessageTypeColor);
                             if (_type == ProtoGlobal.RoomMessageType.WALLET) {
                                 String type;
                                 if (mInfo.getLastMessage().getForwardMessage() != null) {
@@ -1413,37 +1273,37 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                                 } else {
                                     result = G.fragmentActivity.getResources().getString(R.string.unknown_message);
                                 }
-                                holder.txtLastMessage.setText(result);
+                                holder.LastMessageTv.setText(result);
                             }
 
 
                             if (result.isEmpty()) {
                                 if (!HelperCalander.isPersianUnicode) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                        holder.txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
+                                        holder.LastMessageTv.setTextDirection(View.TEXT_DIRECTION_LTR);
                                     }
                                 }
-                                holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
-                                holder.txtLastMessage.setText(subStringInternal(lastMessage));
-                                holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
+                                holder.LastMessageTv.setTextColor(Color.parseColor(G.textSubTheme));
+                                holder.LastMessageTv.setText(subStringInternal(lastMessage));
+                                holder.LastMessageTv.setEllipsize(TextUtils.TruncateAt.END);
                             } else {
                                 if (fileText != null && !fileText.isEmpty()) {
-                                    holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
-                                    holder.txtLastMessageFileText.setText(fileText);
+                                    holder.LastMessageFileTextTv.setVisibility(View.VISIBLE);
+                                    holder.LastMessageFileTextTv.setText(fileText);
 
-                                    holder.txtLastMessage.setText(holder.txtLastMessage.getText() + " : ");
+                                    holder.LastMessageTv.setText(holder.LastMessageTv.getText() + " : ");
                                 } else {
-                                    holder.txtLastMessageFileText.setVisibility(View.GONE);
+                                    holder.LastMessageFileTextTv.setVisibility(View.GONE);
                                 }
                             }
                         } else {
-                            holder.txtLastMessage.setText(subStringInternal(lastMessage));
+                            holder.LastMessageTv.setText(subStringInternal(lastMessage));
                         }
                     }
                 } else {
 
                     holder.lastMessageSender.setVisibility(View.GONE);
-                    holder.txtTime.setVisibility(View.GONE);
+                    holder.lastMessageTv.setVisibility(View.GONE);
                 }
             }
         }
@@ -1478,51 +1338,25 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             }
 
             Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor());
-            avatarHandler.getAvatar(new ParamWithInitBitmap(holder.image, idForGetAvatar).initBitmap(init));
+            avatarHandler.getAvatar(new ParamWithInitBitmap(holder.avatarIv, idForGetAvatar).initBitmap(init));
         }
 
         /**
-         * change mute icon for channel pv and group chats
+         * change muteRoomTv icon for channel pv and group chats
          * font type face FontIconTextView
          */
         private void setChatIcon(RealmRoom mInfo, FontIconTextView chatIconTv) {
-            if (mInfo.getType() == CHAT && mInfo.getMute()) {
-                chatIconTv.setVisibility(View.VISIBLE);
-                chatIconTv.setText("K");
-            } else if (mInfo.getType() == CHAT && !mInfo.getMute()) {
+            if (mInfo.getType() == CHAT) {
                 chatIconTv.setVisibility(View.GONE);
                 chatIconTv.setText("");
-            }
-            if (mInfo.getType() == GROUP && !mInfo.getMute()) {
+            } else if (mInfo.getType() == GROUP) {
                 chatIconTv.setVisibility(View.VISIBLE);
                 chatIconTv.setText(";");
-            } else if (mInfo.getType() == GROUP && mInfo.getMute()) {
-                chatIconTv.setText("K");
-            }
-            if (mInfo.getType() == CHANNEL && !mInfo.getMute()) {
+            } else if (mInfo.getType() == CHANNEL) {
                 chatIconTv.setVisibility(View.VISIBLE);
                 chatIconTv.setText(":");
-            } else if (mInfo.getType() == CHANNEL && mInfo.getMute()) {
-                chatIconTv.setText("K");
-            }
-        }
-
-        /**
-         * get string chat icon
-         *
-         * @param chatType chat type
-         * @return String
-         */
-        private String getStringChatIcon(RoomType chatType) {
-            switch (chatType) {
-                case CHAT:
-                    return "";
-                case CHANNEL:
-                    return context.getString(R.string.md_channel_icon);
-                case GROUP:
-                    return context.getString(R.string.md_users_social_symbol);
-                default:
-                    return null;
+            } else {
+                chatIconTv.setVisibility(View.GONE);
             }
         }
 
@@ -1530,21 +1364,21 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
-            protected CircleImageView image;
-            protected EmojiTextViewE name;
-            protected MaterialDesignTextView mute;
-            protected RealmRoom mInfo;
-            private EmojiTextViewE txtLastMessage;
-            private EmojiTextViewE txtLastMessageFileText;
-            private FontIconTextView txtChatIcon;
-            private TextView txtTime;
-            private View txtPinIcon;
-            private FontIconTextView imgVerifyRoom;
-            private BadgeView txtUnread;
+            private CircleImageView avatarIv;
+            private EmojiTextViewE roomNameTv;
+            private FontIconTextView muteRoomTv;
+            private RealmRoom mInfo;
+            private EmojiTextViewE LastMessageTv;
+            private EmojiTextViewE LastMessageFileTextTv;
+            private FontIconTextView chatIconTv;
+            private TextView lastMessageTv;
+            private View pinView;
+            private FontIconTextView verifyRoomTv;
+            private BadgeView badgeView;
             private EmojiTextViewE lastMessageSender;
-            private FontIconTextView txtTic;
+            private FontIconTextView lastMessageStatusTv;
             private View root;
-            private CheckBox chSelected;
+            private CheckBox selectedRoomCB;
 
 
             public ViewHolder(View view) {
@@ -1552,70 +1386,74 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
                 root = view;
                 /**
-                 * user avatar image
+                 * user avatar avatarIv
                  * */
-                image = view.findViewById(R.id.iv_chatCell_userAvatar);
-
-                chSelected = view.findViewById(R.id.iv_itemContactChat_checkBox);
+                avatarIv = view.findViewById(R.id.iv_chatCell_userAvatar);
 
                 /**
-                 * user name
+                 * multi select room list
                  * */
-                name = view.findViewById(R.id.tv_chatCell_roomName);
-                name.setTypeface(G.typeface_IRANSansMobile_Bold);
+                selectedRoomCB = view.findViewById(R.id.iv_itemContactChat_checkBox);
 
-                txtLastMessage = view.findViewById(R.id.tv_chatCell_secondTextView);
-                txtLastMessageFileText = view.findViewById(R.id.tv_chatCell_thirdTextView);
+                /**
+                 * user roomNameTv
+                 * */
+                roomNameTv = view.findViewById(R.id.tv_chatCell_roomName);
+                roomNameTv.setTypeface(G.typeface_IRANSansMobile_Bold);
+
+                LastMessageTv = view.findViewById(R.id.tv_chatCell_secondTextView);
+                LastMessageFileTextTv = view.findViewById(R.id.tv_chatCell_thirdTextView);
 
                 /**
                  * channel or group icon
                  * */
-                txtChatIcon = view.findViewById(R.id.tv_chatCell_chatIcon);
+                chatIconTv = view.findViewById(R.id.tv_chatCell_chatIcon);
 
                 /**
                  * sended message time
                  * */
-                txtTime = view.findViewById(R.id.tv_chatCell_messageData);
-                txtTime.setTypeface(G.typeface_IRANSansMobile);
+                lastMessageTv = view.findViewById(R.id.tv_chatCell_messageData);
+                lastMessageTv.setTypeface(G.typeface_IRANSansMobile);
 
                 /**
                  * pin icon
                  * */
-//                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_pinnedMessage);
-//                txtPinIcon.setTypeface(G.typeface_Fontico);
-
-                txtPinIcon = view.findViewById(R.id.iv_iv_chatCell_pin);
+                pinView = view.findViewById(R.id.iv_iv_chatCell_pin);
 
                 /**
                  * verify imageView
                  * */
-                imgVerifyRoom = view.findViewById(R.id.tv_chatCell_verify);
+                verifyRoomTv = view.findViewById(R.id.tv_chatCell_verify);
 
                 /**
                  * unread text counter
                  * */
-                txtUnread = view.findViewById(R.id.iv_chatCell_messageCount);
-                txtUnread.getTextView().setTypeface(G.typeface_IRANSansMobile);
+                badgeView = view.findViewById(R.id.iv_chatCell_messageCount);
+                badgeView.getTextView().setTypeface(G.typeface_IRANSansMobile);
 
                 /**
-                 * mute icon
+                 * muteRoomTv icon
                  * */
-                mute = view.findViewById(R.id.iv_chatCell_mute);
+                muteRoomTv = view.findViewById(R.id.iv_chatCell_mute);
 
                 /**
-                 * last message sender name
+                 * last message sender roomNameTv
                  * */
                 lastMessageSender = view.findViewById(R.id.tv_chatCell_firstTextView);
                 lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
 
 
-                txtTic = view.findViewById(R.id.iv_chatCell_messageStatus);
+                /**
+                 * message status
+                 * */
+                lastMessageStatusTv = view.findViewById(R.id.iv_chatCell_messageStatus);
+
 
                 root.setOnClickListener(v -> {
 
                     if (isChatMultiSelectEnable) {
 
-                        onChatCellClickedInEditMode.onClicked(chSelected, mInfo, getAdapterPosition(), chSelected.isChecked());
+                        onChatCellClickedInEditMode.onClicked(selectedRoomCB, mInfo, getAdapterPosition(), selectedRoomCB.isChecked());
 
 
                     } else {
@@ -1655,162 +1493,41 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                     }
                 });
 
-                view.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
+                view.setOnLongClickListener(v -> {
 
-                        if (isChatMultiSelectEnable) return false;
+                    if (isChatMultiSelectEnable) return false;
 
-                        if (ActivityMain.isMenuButtonAddShown) {
+                    if (ActivityMain.isMenuButtonAddShown) {
 
-                            if (mComplete != null) {
-                                mComplete.complete(true, "closeMenuButton", "");
+                        if (mComplete != null) {
+                            mComplete.complete(true, "closeMenuButton", "");
+                        }
+
+                    } else {
+                        if (mInfo.isValid() && G.fragmentActivity != null) {
+                            String role = null;
+                            if (mInfo.getType() == GROUP) {
+                                role = mInfo.getGroupRoom().getRole().toString();
+                            } else if (mInfo.getType() == CHANNEL) {
+                                role = mInfo.getChannelRoom().getRole().toString();
                             }
 
-                        } else {
-                            if (mInfo.isValid() && G.fragmentActivity != null) {
-                                String role = null;
-                                if (mInfo.getType() == GROUP) {
-                                    role = mInfo.getGroupRoom().getRole().toString();
-                                } else if (mInfo.getType() == CHANNEL) {
-                                    role = mInfo.getChannelRoom().getRole().toString();
-                                }
-
-                                if (!G.fragmentActivity.isFinishing()) {
-                                    long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
-                                        @Override
-                                        public void complete(boolean result, String messageOne, String MessageTow) {
-                                            onSelectRoomMenu(messageOne, mInfo);
-                                        }
-                                    }, mInfo.isPinned());
-                                }
+                            if (!G.fragmentActivity.isFinishing()) {
+                                long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
+                                MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
+                                    @Override
+                                    public void complete(boolean result, String messageOne, String MessageTow) {
+                                        onSelectRoomMenu(messageOne, mInfo);
+                                    }
+                                }, mInfo.isPinned());
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
 
         }
-    }
-
-    private boolean isItemAvailableOnSelectedList(RealmRoom mInfo) {
-
-       return mSelectedRoomList.contains(mInfo);
-    }
-
-    private void confirmActionForRemoveSelected(){
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
-                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-
-                        if (mSelectedRoomList.size() > 0){
-
-                            for (RealmRoom item : mSelectedRoomList){
-                                deleteChat(item);
-                            }
-
-                            onLeftIconClickListener(null);
-                        }
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    private void confirmActionForClearHistoryOfSelected() {
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
-                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-
-                        for (RealmRoom item : mSelectedRoomList){
-                            clearHistory(item.getId());
-                        }
-                        onLeftIconClickListener(null);
-
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    private void setVisiblityForSelectedActionsInEverySelection(){
-
-        if (mSelectedRoomList.size() == 0 ) mBtnRemoveSelected.setVisibility(View.VISIBLE);
-
-        for (RealmRoom item : mSelectedRoomList){
-
-            if (item != null && !RealmRoom.isPromote(item.getId())) {
-
-                if (item.getType() == ProtoGlobal.Room.Type.CHAT || item.getType() == ProtoGlobal.Room.Type.GROUP
-                        || item.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    mBtnRemoveSelected.setVisibility(View.VISIBLE);
-                }else {
-                    mBtnRemoveSelected.setVisibility(View.GONE);
-                }
-
-            }else {
-                mBtnRemoveSelected.setVisibility(View.GONE);
-            }
-
-        }
-    }
-
-    private void markAsRead(ProtoGlobal.Room.Type chatType , long roomId ){
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
-                        @Override
-                        public void sendSeenStatus(RealmRoomMessage message) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                        }
-
-                        @Override
-                        public void resendMessage(RealmRoomMessage message) {
-
-                        }
-
-                        @Override
-                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
-
-                        }
-                    });
-                }
-
-                RealmRoom.setCount(roomId, 0);
-
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppUtils.updateBadgeOnly(realm, roomId);
-                        realm.close();
-                    }
-                }, 250);
-            }
-        }, 5);
     }
 
 }

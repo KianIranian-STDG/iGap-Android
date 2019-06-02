@@ -16,10 +16,10 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
-import net.iGap.module.MaterialDesignTextView;
 
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
@@ -160,9 +160,9 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init room notification
          * */
-        MaterialDesignTextView mute = new MaterialDesignTextView(G.context);
+        FontIconTextView mute = new FontIconTextView(G.context);
         mute.setId(R.id.iv_chatCell_mute);
-        mute.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
+        mute.setText("K");
         mute.setTextColor(Color.parseColor(G.textTitleTheme));
         setTextSize(mute, R.dimen.dp13);
         addView(mute);
@@ -207,9 +207,11 @@ public class ChatCell extends ConstraintLayout {
         addView(bottomView);
 
 
+
         /**
          * set views dependency
          * */
+
         set.constrainHeight(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
 
@@ -237,6 +239,9 @@ public class ChatCell extends ConstraintLayout {
         set.constrainHeight(badgeView.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(badgeView.getId(), ConstraintSet.WRAP_CONTENT);
 
+        set.constrainHeight(mute.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(mute.getId(), ConstraintSet.WRAP_CONTENT);
+
         set.constrainHeight(messageData.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(messageData.getId(), ConstraintSet.WRAP_CONTENT);
 
@@ -251,9 +256,7 @@ public class ChatCell extends ConstraintLayout {
 
         set.connect(mute.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
         set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
-
-
-//        bottom
+        set.connect(mute.getId(),ConstraintSet.RIGHT,messageData.getId(),ConstraintSet.LEFT, LayoutCreator.dp(4));
 
 
         set.constrainHeight(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
@@ -282,13 +285,11 @@ public class ChatCell extends ConstraintLayout {
 
 
         if (isRtl) {
-            //top
             set.connect(chatIcon.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.LEFT);
             set.connect(roomName.getId(), ConstraintSet.RIGHT, chatIcon.getId(), ConstraintSet.LEFT);
             set.connect(verify.getId(), ConstraintSet.RIGHT, roomName.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
             set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp12));
 
-            //bottom
             set.connect(badgeView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
             set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
@@ -309,13 +310,11 @@ public class ChatCell extends ConstraintLayout {
                     chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
 
         } else {
-            //top
             set.connect(chatIcon.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
             set.connect(roomName.getId(), ConstraintSet.LEFT, chatIcon.getId(), ConstraintSet.RIGHT);
             set.connect(verify.getId(), ConstraintSet.LEFT, roomName.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
             set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp12));
 
-            //bottom
             set.connect(badgeView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
             set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
