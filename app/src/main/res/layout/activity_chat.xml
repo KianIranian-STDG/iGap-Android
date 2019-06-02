@@ -28,6 +28,7 @@
                 android:layout_marginTop="-10dp"
                 android:paddingTop="10dp"
                 android:visibility="gone"
+                android:layoutDirection="locale"
                 android:background="@drawable/shape_multi_select_bg">
 
                 <TextView
@@ -51,12 +52,12 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
-                    style="?textTitleColorSettingTheme"
+                    style="@style/myIconTextViewStyle"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
                     android:textColor="@color/red"
                     android:textSize="@dimen/multi_select_icon_size"
                     android:gravity="center"
-                    android:text="@string/md_rubbish_delete_file"/>
+                    android:text="@string/delete_icon"/>
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_layout_selected_btn_forward"
@@ -66,10 +67,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    style="?textTitleColorSettingTheme"
+                    style="@style/myIconTextViewStyle"
                     android:textSize="@dimen/multi_select_icon_size"
                     android:gravity="center"
-                    android:text="@string/md_right_arrow_forward"/>
+                    android:text="@string/forward_icon"/>
 
 
                 <net.iGap.module.MaterialDesignTextView
@@ -80,10 +81,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    style="?textTitleColorSettingTheme"
+                    style="@style/myIconTextViewStyle"
                     android:textSize="@dimen/multi_select_icon_size"
                     android:gravity="center"
-                    android:text="@string/md_copy"/>
+                    android:text="@string/copy_icon"/>
 
 
                 <net.iGap.module.MaterialDesignTextView
@@ -94,10 +95,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    style="?textTitleColorSettingTheme"
+                    style="@style/myIconTextViewStyle"
                     android:textSize="@dimen/multi_select_icon_size"
                     android:gravity="center"
-                    android:text="@string/md_back_arrow_reply"/>
+                    android:text="@string/reply_icon"/>
 
 
             </android.support.constraint.ConstraintLayout>

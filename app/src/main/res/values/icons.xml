@@ -207,4 +207,7 @@
     <string name="mute_icon">K</string>
     <string name="verify_icon">a</string>
     <string name="flag_icon">=</string>
+    <string name="copy_icon">n</string>
+    <string name="forward_icon">Q</string> // forward and copy must change
+    <string name="reply_icon">&amp;</string>
 </resources>
