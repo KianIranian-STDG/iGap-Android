@@ -1724,6 +1724,8 @@
     <string name="Forgot_Passwords">Password recovery</string>
     <string name="enter_your_province">select your province</string>
 
+    <string name="cashier">finance</string>
+    <string name="admin">admin</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
