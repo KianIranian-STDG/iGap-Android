@@ -19,7 +19,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.DataUsageAdapter;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.DataUsageListener;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.structs.DataUsageStruct;
 import net.iGap.realm.RealmDataUsage;
@@ -38,9 +40,8 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     private long totalReceivedByte;
     private boolean type;
     private DataUsageAdapter adapter;
-    private TextView txtDataUsageHeader;
-    private RippleView rippleDataUsage;
     private RelativeLayout rvMainDataUsage;
+    private HelperToolbar mHelperToolbar;
 
     public static FragmentDataUsage newInstance() {
         return new FragmentDataUsage();
@@ -51,16 +52,28 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_data_usage, container, false);
-        txtDataUsageHeader = (TextView) view.findViewById(R.id.txtDataUsageHeader);
+
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        getActivity().onBackPressed();
+
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fdu_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
+
 
         rvMainDataUsage = (RelativeLayout) view.findViewById(R.id.rvMainDataUsage);
         rvMainDataUsage.setBackgroundColor(G.getThemeBackgroundColor());
 
 
-        AppBarLayout appBarDataUsage = (AppBarLayout) view.findViewById(R.id.appBarDataUsage);
-        appBarDataUsage.setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        rippleDataUsage = (RippleView) view.findViewById(R.id.dataUsage_ripple_back);
 
         type = getArguments().getBoolean("TYPE", false);
 
@@ -78,7 +91,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
         RealmResults<RealmDataUsage> wifiRealmDataUsages;
         RealmResults<RealmDataUsage> dataRealmDataUsages;
         if (type) {
-            txtDataUsageHeader.setText(getResources().getString(R.string.wifi_data_usage));
+            mHelperToolbar.setDefaultTitle(getResources().getString(R.string.wifi_data_usage));
             totalReceivedByte = 0;
             totalSendByte = 0;
             wifiRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
@@ -92,7 +105,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
             }
 
         } else {
-            txtDataUsageHeader.setText(getResources().getString(R.string.mobile_data_usage));
+            mHelperToolbar.setDefaultTitle(getResources().getString(R.string.mobile_data_usage));
             totalReceivedByte = 0;
             totalSendByte = 0;
             dataRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
@@ -117,12 +130,6 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
         rcDataUsage.setAdapter(adapter);
         rcDataUsage.setLayoutManager(layoutManager);
 
-        rippleDataUsage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
 
     }
 

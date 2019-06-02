@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.Observer;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentFragmentSecurityBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentSecurityViewModel;
 
 /**
@@ -23,6 +27,7 @@ public class FragmentSecurity extends BaseFragment {
     public static OnPopBackStackFragment onPopBackStackFragment;
     public FragmentSecurityViewModel fragmentSecurityViewModel;
     public FragmentFragmentSecurityBinding fragmentSecurityBinding;
+    private HelperToolbar mHelperToolbar;
 
 
     public FragmentSecurity() {
@@ -41,6 +46,40 @@ public class FragmentSecurity extends BaseFragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding();
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setDefaultTitle(G.context.getResources().getString(R.string.two_step_verification_title))
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        fragmentSecurityViewModel.onClickRippleBack(view);
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        fragmentSecurityViewModel.onClickRippleOk(view);
+                    }
+                });
+
+        fragmentSecurityBinding.ffsLayoutToolbar.addView(mHelperToolbar.getView());
+
+        fragmentSecurityViewModel.titleToolbar.observe(G.fragmentActivity, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                mHelperToolbar.setDefaultTitle(s);
+            }
+        });
+
+        fragmentSecurityViewModel.rippleOkVisibility.observe(G.fragmentActivity, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer visibility) {
+                mHelperToolbar.getRightButton().setVisibility(visibility);
+            }
+        });
 
         onPopBackStackFragment = new OnPopBackStackFragment() {
             @Override

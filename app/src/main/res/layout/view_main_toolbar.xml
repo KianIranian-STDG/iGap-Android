@@ -178,7 +178,14 @@
                 android:layout_centerInParent="true"
                 android:visibility="gone" />
 
-            <net.iGap.module.MaterialDesignTextView
+            <net.iGap.module.CircleImageView
+                android:id="@+id/view_toolbar_user_cloud_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <!--<TextView
                 android:id="@+id/view_toolbar_user_cloud_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -186,11 +193,12 @@
                 android:padding="4dp"
                 android:layout_centerInParent="true"
                 android:singleLine="true"
-                android:text="@string/md_cloud"
+                android:text="@string/cloud_icon"
+                style="@style/myIconTextViewStyle"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:textColor="#ffffff"
                 android:textSize="28sp"
-                android:visibility="gone" />
+                android:visibility="gone" />-->
 
         </RelativeLayout>
 
@@ -226,20 +234,35 @@
                 android:textSize="14sp"
                 app:emojiSize="14dp" />
 
-            <net.iGap.module.MaterialDesignTextView
+            <TextView
                 android:id="@+id/view_toolbar_chat_txt_isMute"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:text="@string/md_flaticon_volume_off_indicator"
+                style="@style/myIconTextViewStyle"
+                android:text="@string/mute_icon"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@android:color/white"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 android:visibility="gone" />
 
-            <android.support.v7.widget.AppCompatImageView
+            <TextView
+                android:id="@+id/view_toolbar_chat_txt_verify"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                style="@style/myIconTextViewStyle"
+                android:text="@string/verify_icon"
+                android:textAppearance="@style/TextIconAppearance.all"
+                android:textColor="@color/verify_color"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <!--<android.support.v7.widget.AppCompatImageView
                 android:id="@+id/view_toolbar_chat_txt_verify"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -247,7 +270,7 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:tint="@color/white"
-                app:srcCompat="@drawable/ic_verify" />
+                app:srcCompat="@drawable/ic_verify" />-->
 
         </LinearLayout>
 
@@ -328,12 +351,14 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:paddingRight="35dp"
+            android:paddingLeft="35dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/main_font"
             android:gravity="center"
             android:hint="@string/search"
             android:singleLine="true"
-            android:textColor="@color/black"
+            style="?hintColorSettingTheme"
             android:textColorHint="@color/toolbar_search_box_txt_color"
             android:textSize="14sp"
             android:visibility="gone" />
@@ -347,23 +372,23 @@
             android:fontFamily="@font/main_font"
             android:gravity="center"
             android:text="@string/search"
-            android:textColor="@color/toolbar_search_box_txt_color"
+            style="?textSubColorSettingTheme"
             android:textSize="14sp"
             android:visibility="visible" />
 
-        <net.iGap.module.MaterialDesignTextView
+        <TextView
             android:id="@+id/view_toolbar_search_layout_btn_clear"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             android:gravity="center"
             android:padding="3dp"
-            android:text="@string/md_close_button"
-            android:textColor="@color/black"
-            android:textSize="@dimen/dp18"
+            android:text="@string/close_icon"
+            style="@style/myIconTextViewStyle"
+            android:textSize="18sp"
             android:visibility="gone" />
 
     </RelativeLayout>

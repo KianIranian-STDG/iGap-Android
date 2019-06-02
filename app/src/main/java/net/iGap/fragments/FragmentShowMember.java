@@ -745,10 +745,16 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
     @Override
     public void onSearchClickListener(View view) {
 
-        mHelperToolbar.setSearchEditableMode(true);
         openKeyBoard();
 
     }
+
+   /* @Override
+    public void onSearchTextChangeListener(View view, String text) {
+        RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRoomID, text);
+        mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
+        mRecyclerView.setAdapter(mAdapter);
+    }*/
 
     private void openFragmentForAdd(String SelectedRole) {
         FragmentShowMember fragment1 = FragmentShowMember.newInstance1(fragment, mRoomID, role.toString(), G.userId, SelectedRole, true);
@@ -764,7 +770,6 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
         }else {
             InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            mHelperToolbar.setSearchEditableMode(false);
         }
 
     }

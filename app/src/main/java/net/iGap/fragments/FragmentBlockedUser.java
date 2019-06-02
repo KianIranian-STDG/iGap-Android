@@ -33,10 +33,12 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.OnSelectedList;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
@@ -57,11 +59,12 @@ import io.realm.RealmResults;
 
 import static net.iGap.G.inflater;
 
-public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged {
+public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged , ToolbarListener {
 
     //private BlockListAdapter mAdapter;
     private Realm realmBlockedUser;
     private StickyRecyclerHeadersDecoration decoration;
+    private HelperToolbar mHelperToolbar ;
 
     private Realm getRealmBlockedUser() {
         if (realmBlockedUser == null || realmBlockedUser.isClosed()) {
@@ -80,42 +83,44 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //G.onBlockStateChanged = this;
 
-        view.findViewById(R.id.fbu_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fbu_ripple_back_Button);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
-        });
-
-        RippleView rippleAdd = (RippleView) view.findViewById(R.id.fbu_ripple_add);
-        rippleAdd.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-
-                List<StructContactInfo> userList = Contacts.retrieve(null);
-
-                Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setDefaultTitle(G.context.getResources().getString(R.string.Block_Users))
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.add_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
                     @Override
-                    public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
 
-                        for (int i = 0; i < list.size(); i++) {
+                    @Override
+                    public void onRightIconClickListener(View view) {
 
-                            new RequestUserContactsBlock().userContactsBlock(list.get(i).peerId);
-                        }
+                        List<StructContactInfo> userList = Contacts.retrieve(null);
+
+                        Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
+                            @Override
+                            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+
+                                for (int i = 0; i < list.size(); i++) {
+
+                                    new RequestUserContactsBlock().userContactsBlock(list.get(i).peerId);
+                                }
+                            }
+                        });
+
+                        Bundle bundle = new Bundle();
+                        // if you want to have  single select in select list
+                        fragment.setArguments(bundle);
+                        new HelperFragment(fragment).setReplace(false).load();
                     }
                 });
 
-                Bundle bundle = new Bundle();
-                // if you want to have  single select in select list
-                fragment.setArguments(bundle);
-                new HelperFragment(fragment).setReplace(false).load();
-            }
-        });
+        ViewGroup layoutToolbar = view.findViewById(R.id.fbu_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
 
         //+ manually update
         //mAdapter = new BlockListAdapter(); // (+ avoid use from realm-adapter) BlockListAdapter blockListAdapter = new BlockListAdapter(results);

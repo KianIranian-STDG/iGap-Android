@@ -2786,4 +2786,6 @@
     <string name="administrators_title">المسؤولين</string>
     <string name="moderators_title">المشرفين</string>
     <string name="view_contact">عرض الاتصال</string>
+    <string name="new_group_call">New Group Call</string>
+    <string name="dial_number">Dial Number</string>
 </resources>

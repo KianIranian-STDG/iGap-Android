@@ -9,6 +9,8 @@ import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +44,11 @@ public class HelperToolbar {
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch;
     private AppCompatTextView groupName, groupMemberCount;
-    private EditText mEdtSearch;
-    private AppCompatImageView mChatVerifyIcon ;
-    private MaterialDesignTextView mChatMuteIcon ;
-    private MaterialDesignTextView mCloudChatIcon ;
+    public EditText mEdtSearch;
+    private TextView mChatVerifyIcon ;
+    private TextView mChatMuteIcon ;
+    private CircleImageView mCloudChatIcon ;
+    private TextView mBtnClearSearch;
 
     private LayoutInflater mInflater;
     private Context mContext;
@@ -63,8 +66,9 @@ public class HelperToolbar {
     private boolean isInChatRoom;
     private boolean isCallModeEnable;
     private boolean isGroupProfile;
-    private MaterialDesignTextView mBtnClearSearch;
     private String defaultTitleText = null;
+    private boolean isShowEditTextForSearch;
+    private View rootView;
 
     private HelperToolbar() {
     }
@@ -105,8 +109,15 @@ public class HelperToolbar {
         return this;
     }
 
-    public HelperToolbar setSearchBoxShown(boolean searchBoxShown) {
+    public HelperToolbar setSearchBoxShown(boolean searchBoxShown , boolean isShowEditTextForSearch ) {
         this.isSearchBoxShown = searchBoxShown;
+        this.isShowEditTextForSearch = isShowEditTextForSearch;
+        return this;
+    }
+
+    public HelperToolbar setSearchBoxShown(boolean searchBoxShown ) {
+        this.isSearchBoxShown = searchBoxShown;
+        this.isShowEditTextForSearch = true;
         return this;
     }
 
@@ -171,14 +182,14 @@ public class HelperToolbar {
             defaultTitleText = mContext.getResources().getString(R.string.app_name);
         }
 
-        View result = getInflater(R.layout.view_main_toolbar);
-        setNormalSizeToRootViews(result);
+        rootView = getInflater(R.layout.view_main_toolbar);
+        setNormalSizeToRootViews(rootView);
 
-        initViews(result);
+        initViews(rootView);
 
         //check and set custom shape for dark mode
         if (G.isDarkTheme)
-            result.findViewById(R.id.view_toolbar_main_constraint)
+            rootView.findViewById(R.id.view_toolbar_main_constraint)
                     .setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
 
         if (mLeftIcon != 0) {
@@ -240,8 +251,8 @@ public class HelperToolbar {
         }
 
         if (isInChatRoom) {
-            result.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.VISIBLE);
-            result.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.VISIBLE);
             mTxtChatSeenStatus.setVisibility(View.VISIBLE);
             mAvatarChat.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
             mCloudChatIcon.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
@@ -249,47 +260,25 @@ public class HelperToolbar {
             mTxtChatSeenStatus.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
 
         } else {
-            result.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.GONE);
-            result.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.GONE);
+            rootView.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.GONE);
+            rootView.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.GONE);
             mTxtChatSeenStatus.setVisibility(View.GONE);
         }
 
-        setBigAvatarVisibility(result, isBigCenterAvatarShown);
+        setBigAvatarVisibility(rootView, isBigCenterAvatarShown);
 
-        setIGapLogoVisibility(result, isLogoShown);
+        setIGapLogoVisibility(rootView, isLogoShown);
 
-        setSearchBoxVisibility(result, isSearchBoxShown);
+        setSearchBoxVisibility(rootView, isSearchBoxShown);
 
         //setCallModeVisibility(result, isCallModeEnable);
 
-        setGroupProfileVisibility(result, isGroupProfile);
+        setGroupProfileVisibility(rootView, isGroupProfile);
 
         toolBarTitleHandler();
 
-        return result;
+        return rootView;
 
-    }
-
-    public boolean setSearchEditableMode(boolean state) {
-
-        if (state) {
-
-            mTxtSearch.setVisibility(View.GONE);
-            mEdtSearch.setVisibility(View.VISIBLE);
-            mBtnClearSearch.setVisibility(View.VISIBLE);
-            mEdtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-            mEdtSearch.requestFocus();
-
-        } else {
-
-            //mEdtSearch.setText("");
-            mBtnClearSearch.setVisibility(View.GONE);
-            mEdtSearch.setVisibility(View.GONE);
-            mTxtSearch.setVisibility(View.VISIBLE);
-
-        }
-
-        return state;
     }
 
     public TextView getTextViewCounter() {
@@ -316,7 +305,11 @@ public class HelperToolbar {
         return mEdtSearch;
     }
 
-    public MaterialDesignTextView getButtonClearSearch() {
+    public View getRootView() {
+        return rootView;
+    }
+
+    public TextView getButtonClearSearch() {
         return mBtnClearSearch;
     }
 
@@ -348,7 +341,7 @@ public class HelperToolbar {
         return mAvatarChat;
     }
 
-    public MaterialDesignTextView getCloudChatIcon() {
+    public CircleImageView getCloudChatIcon() {
         return mCloudChatIcon;
     }
 
@@ -364,11 +357,11 @@ public class HelperToolbar {
         return groupAvatar;
     }
 
-    public AppCompatImageView getChatVerify() {
+    public TextView getChatVerify() {
         return mChatVerifyIcon;
     }
 
-    public MaterialDesignTextView getChatMute() {
+    public TextView getChatMute() {
         return mChatMuteIcon;
     }
 
@@ -453,19 +446,69 @@ public class HelperToolbar {
                             mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_root_with_search)
                     ));
 
-            mSearchBox.setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
-            mBtnClearSearch.setOnClickListener(v -> mToolbarListener.onBtnClearSearchClickListener(v));
+            mSearchBox.setOnClickListener(v ->{
+                if (isShowEditTextForSearch) setSearchEditableMode(mTxtSearch.isShown());
+                mToolbarListener.onSearchClickListener(v);
+            });
+
+            mBtnClearSearch.setOnClickListener(v ->{
+
+                if (!mEdtSearch.getText().toString().trim().equals(""))
+                    mEdtSearch.setText("");
+                else if (isShowEditTextForSearch)
+                    setSearchEditableMode(mTxtSearch.isShown());
+
+                mToolbarListener.onBtnClearSearchClickListener(v);
+            });
+
+            mEdtSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    mToolbarListener.onSearchTextChangeListener(mEdtSearch , s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
             if (G.isDarkTheme){
                 mSearchBox.setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_search_box_dark));
-                mEdtSearch.setTextColor(mContext.getResources().getColor(R.color.white));
-                mEdtSearch.setHintTextColor(mContext.getResources().getColor(R.color.gray_f2));
-                mTxtSearch.setTextColor(mContext.getResources().getColor(R.color.gray_f2));
+              //  mEdtSearch.setTextColor(mContext.getResources().getColor(R.color.white));
+             //   mEdtSearch.setHintTextColor(mContext.getResources().getColor(R.color.gray_f2));
+            //    mTxtSearch.setTextColor(mContext.getResources().getColor(R.color.gray_f2));
             }
         } else {
             mSearchBox.setVisibility(View.GONE);
 
         }
+    }
+
+    private void setSearchEditableMode(boolean state) {
+
+        if (state) {
+
+            mTxtSearch.setVisibility(View.GONE);
+            mEdtSearch.setVisibility(View.VISIBLE);
+            mBtnClearSearch.setVisibility(View.VISIBLE);
+            mEdtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+            mEdtSearch.requestFocus();
+
+        } else {
+
+            //mEdtSearch.setText("");
+            mBtnClearSearch.setVisibility(View.GONE);
+            mEdtSearch.setVisibility(View.GONE);
+            mTxtSearch.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
     private void setCallModeVisibility(View view, boolean visible) {
