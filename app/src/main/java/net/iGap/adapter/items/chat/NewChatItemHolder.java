@@ -22,7 +22,6 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
-import net.iGap.module.MaterialDesignTextView;
 
 import static android.view.Gravity.BOTTOM;
 
@@ -43,8 +42,8 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private FontIconTextView ticTv;
     private View cslm_view_left_dis;
     private FontIconTextView eyeIconTv;
-    private MaterialDesignTextView voteDownIcon;
-    private MaterialDesignTextView voteUpIcon;
+    private FontIconTextView voteDownIcon;
+    private FontIconTextView voteUpIcon;
 
     private LinearLayout voteContainer;
     private LinearLayout viewContainer;
@@ -141,17 +140,17 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTypeFace(timeTv);
 
 
-        voteUpIcon = new MaterialDesignTextView(context);
-        voteUpIcon.setText(context.getResources().getString(R.string.md_thumb_up));
+        voteUpIcon = new FontIconTextView(context);
+        voteUpIcon.setText("Ö");
         voteUpIcon.setGravity(BOTTOM);
         voteUpIcon.setTextColor(Color.parseColor(G.voteIconTheme));
-        voteUpIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+        voteUpIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
-        voteDownIcon = new MaterialDesignTextView(context);
-        voteDownIcon.setText(context.getResources().getString(R.string.md_thumb_down));
+        voteDownIcon = new FontIconTextView(context);
+        voteDownIcon.setText("Ü");
         voteDownIcon.setGravity(BOTTOM);
         voteDownIcon.setTextColor(Color.parseColor(G.voteIconTheme));
-        voteDownIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+        voteDownIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
@@ -343,5 +342,21 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public Drawable getDrawable(int drawableId) {
         return getResources().getDrawable(drawableId);
+    }
+
+    public FontIconTextView getVoteDownIcon() {
+        return voteDownIcon;
+    }
+
+    public void setVoteDownIcon(FontIconTextView voteDownIcon) {
+        this.voteDownIcon = voteDownIcon;
+    }
+
+    public FontIconTextView getVoteUpIcon() {
+        return voteUpIcon;
+    }
+
+    public void setVoteUpIcon(FontIconTextView voteUpIcon) {
+        this.voteUpIcon = voteUpIcon;
     }
 }
