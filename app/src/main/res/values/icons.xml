@@ -206,4 +206,5 @@
     <string name="camera_icon">U</string>
     <string name="mute_icon">K</string>
     <string name="verify_icon">a</string>
+    <string name="flag_icon">=</string>
 </resources>

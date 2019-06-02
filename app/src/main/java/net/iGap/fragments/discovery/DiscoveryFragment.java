@@ -28,6 +28,8 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
@@ -101,6 +103,9 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
 
         if (page != 0){
             mHelperToolbar.setLeftIcon(R.string.back_icon);
+        }else {
+            mHelperToolbar.setLeftIcon(R.string.flag_icon);
+            mHelperToolbar.setRightSmallAvatarShown(true);
         }
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
@@ -150,20 +155,9 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
             }
         });
 
+        //load user avatar in toolbar
+        avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                //.setLeftIcon(R.drawable.ic_edit_toolbar)
-                .setLogoShown(true)
-                .setRightSmallAvatarShown(true)
-                .setListener(this);
-
-        if (page != 0){
-            mHelperToolbar.setLeftIcon(R.string.back_icon);
-        }
-
-        ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
