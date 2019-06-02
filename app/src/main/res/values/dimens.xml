@@ -120,6 +120,6 @@
     <dimen name="discovery_margin_top_nested">@dimen/dp8</dimen>
 
   <dimen name="toggles_height">@dimen/dp20</dimen>
-  <dimen name="toggles_width">@dimen/dp26</dimen>
+  <dimen name="toggles_width">@dimen/dp32</dimen>
 
 </resources>

@@ -146,11 +146,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
-              android:id="@+id/stns_toggle_alert"
+            <net.iGap.module.CustomToggleButton
+                android:id="@+id/stns_toggle_alert"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertMassage)}"
               android:gravity="start"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"
@@ -187,11 +186,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_messagePreview"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMassagePreview)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMassagePreview(checked)}"
               android:textOff=""
@@ -395,11 +393,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_alert_group"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertGroup)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAlertGroup(checked)}"
               android:textOff=""
@@ -432,11 +429,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_messagePreview_group"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMessagePreViewGroup)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMessagePreViewGroup(checked)}"
               android:textOff=""
@@ -638,11 +634,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_app_sound"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAppSound)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAppSound(checked)}"
               android:textOff=""
@@ -679,11 +674,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_app_vibrate"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppVibration)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppVibration(checked)}"
               android:textOff=""
@@ -720,11 +714,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_app_preview"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppPreView)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppPreView(checked)}"
               android:textOff=""
@@ -759,11 +752,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_chat_sound"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSoundInChat)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedSoundInChat(checked)}"
               android:textOff=""
@@ -828,11 +820,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_Contact_joined"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:textOff=""
               android:textOn="" />
 
@@ -855,11 +846,10 @@
               android:layout_alignParentRight="true"
               android:layout_centerInParent="true">
 
-              <ToggleButton
+              <net.iGap.module.CustomToggleButton
                 android:id="@+id/stns_toggle_pinned_message"
                   android:layout_width="@dimen/toggles_width"
                   android:layout_height="@dimen/toggles_height"
-                android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn="" />
             </LinearLayout>
@@ -934,11 +924,10 @@
               android:textSize="@dimen/dp16"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_separate_notifications"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSeparateNotification)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setSeparateNotification(checked)}"
               android:textOff=""
@@ -980,16 +969,17 @@
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:gravity="center_vertical"
+                android:paddingRight="@dimen/dp10"
+                android:paddingEnd="@dimen/dp10"
               android:paddingTop="@dimen/dp1"
               android:text="@string/st_text_keep_alive_service"
               android:textSize="@dimen/dp13"
               android:textStyle="normal" />
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
               android:id="@+id/stns_toggle_keep_alive_service"
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
-              android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isKeepService)}"
               android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedKeepService(checked)}"
               android:textOff=""
@@ -1017,11 +1007,10 @@
               android:layout_alignParentRight="true"
               android:layout_centerInParent="true">
 
-              <ToggleButton
+              <net.iGap.module.CustomToggleButton
                 android:id="@+id/stns_toggle_background_connection"
                   android:layout_width="@dimen/toggles_width"
                   android:layout_height="@dimen/toggles_height"
-                android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn="" />
 
@@ -1072,11 +1061,10 @@
               android:layout_alignParentRight="true"
               android:layout_centerInParent="true">
 
-              <ToggleButton
+              <net.iGap.module.CustomToggleButton
                 android:id="@+id/stns_badge_counter"
                   android:layout_width="@dimen/toggles_width"
                   android:layout_height="@dimen/toggles_height"
-                android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn="" />
             </LinearLayout>
