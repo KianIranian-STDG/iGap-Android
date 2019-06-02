@@ -361,7 +361,6 @@
             android:hint="@string/search"
             android:singleLine="true"
             style="?hintColorSettingTheme"
-            android:textColorHint="@color/toolbar_search_box_txt_color"
             android:textSize="14sp"
             android:visibility="gone" />
 
