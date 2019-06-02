@@ -413,7 +413,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         }
 
         String orderId = mPayment != null ? mPayment.orderId : null;
-        Web.getInstance().getWebService().getCards(orderId, false).enqueue(new Callback<ArrayList<Card>>() {
+        Web.getInstance().getWebService().getCards(orderId, false, true).enqueue(new Callback<ArrayList<Card>>() {
             @Override
             public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                 Boolean success = Web.checkResponse(CardsFragment.this, call, response);
