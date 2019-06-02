@@ -102,6 +102,12 @@ public interface WebService {
     Call<ArrayList<Card>> getCards(@Query("order_id") String orderId,
                                    @Query("cashout") boolean cashOut);
 
+
+    @GET("payment/v3/cards")
+    Call<ArrayList<Card>> getCards(@Query("order_id") String orderId,
+                                   @Query("cashout") boolean cashOut,
+                                   @Query("club") boolean hasClub);
+
     @PUT("payment/v3/cards/{card_token}")
     Call<Void> updateCard(@Path("card_token") String cardToken,
                           @Body RequestBody phoneJsonBody);
