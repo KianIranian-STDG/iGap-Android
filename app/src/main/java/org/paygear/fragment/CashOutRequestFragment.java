@@ -552,7 +552,7 @@ public class CashOutRequestFragment extends Fragment {
     }
 
     private void loadCashOutCards() {
-        Web.getInstance().getWebService().getCards(null, true).enqueue(new Callback<ArrayList<Card>>() {
+        Web.getInstance().getWebService().getCards(null, true, true).enqueue(new Callback<ArrayList<Card>>() {
             @Override
             public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                 Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);

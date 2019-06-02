@@ -199,7 +199,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                     new android.os.Handler(getContext().getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            Web.getInstance().getWebService().getCards(null, false).enqueue(new Callback<ArrayList<Card>>() {
+                            Web.getInstance().getWebService().getCards(null, false, true).enqueue(new Callback<ArrayList<Card>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                     if (progressDialog != null) progressDialog.dismiss();

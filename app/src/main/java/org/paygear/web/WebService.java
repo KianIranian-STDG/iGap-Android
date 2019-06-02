@@ -100,11 +100,6 @@ public interface WebService {
 
     @GET("payment/v3/cards")
     Call<ArrayList<Card>> getCards(@Query("order_id") String orderId,
-                                   @Query("cashout") boolean cashOut);
-
-
-    @GET("payment/v3/cards")
-    Call<ArrayList<Card>> getCards(@Query("order_id") String orderId,
                                    @Query("cashout") boolean cashOut,
                                    @Query("club") boolean hasClub);
 
