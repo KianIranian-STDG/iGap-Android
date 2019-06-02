@@ -32,8 +32,8 @@
 
   <ToggleButton
     android:id="@+id/btnMapChangeRegistration"
-    android:layout_width="@dimen/dp52"
-    android:layout_height="@dimen/dp52"
+      android:layout_width="@dimen/toggles_width"
+      android:layout_height="@dimen/toggles_height"
     android:background="@drawable/st_switch_button"
     android:checked="true"
     android:textOff=""

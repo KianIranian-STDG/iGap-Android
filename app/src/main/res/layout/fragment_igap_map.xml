@@ -249,8 +249,8 @@
 
                             <ToggleButton
                                 android:id="@+id/toggleGps"
-                                android:layout_width="@dimen/dp52"
-                                android:layout_height="@dimen/dp52"
+                                android:layout_width="@dimen/dp40"
+                                android:layout_height="@dimen/dp32"
                                 android:background="@drawable/st_switch_button"
                                 android:textOff=""
                                 android:textOn="" />

@@ -188,6 +188,11 @@ public class FragmentUserProfile extends BaseFragment {
                 new GoToChatActivity(roomId).startActivity();
             }
         });
+
+        binding.fupBtnDarkMode.setOnClickListener(v ->{
+            binding.darkTheme.setChecked(!G.isDarkTheme);
+            viewModel.onThemeClick(G.isDarkTheme);
+        } );
     }
 
     private void goToAddMemberPage() {

@@ -119,5 +119,7 @@
     <dimen name="discovery_margin">@dimen/dp4</dimen>
     <dimen name="discovery_margin_top_nested">@dimen/dp8</dimen>
 
+  <dimen name="toggles_height">@dimen/dp20</dimen>
+  <dimen name="toggles_width">@dimen/dp26</dimen>
 
 </resources>

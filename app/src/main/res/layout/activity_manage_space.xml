@@ -333,8 +333,8 @@
 
             <ToggleButton
                 android:id="@+id/st_toggle_enableAnimation"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp40"
+                android:layout_width="@dimen/toggles_width"
+                android:layout_height="@dimen/toggles_height"
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn="" />
@@ -411,8 +411,8 @@
 
           <ToggleButton
               android:id="@+id/st_toggle_autoGif"
-              android:layout_width="@dimen/dp44"
-              android:layout_height="@dimen/dp40"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
               android:background="@drawable/st_switch_button"
               android:checked="@{safeUnbox(activityManageSpaceViewModel.isAutoGif)}"
               android:onCheckedChanged="@{(switch, checked) -> activityManageSpaceViewModel.onCheckedChangeAutoGif(checked)}"
@@ -590,8 +590,8 @@
 
           <ToggleButton
             android:id="@+id/stsp_toggle_use_sdk"
-            android:layout_width="@dimen/dp44"
-            android:layout_height="@dimen/dp40"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:background="@drawable/st_switch_button"
             android:checked="@{safeUnbox(activityManageSpaceViewModel.isSdkEnable)}"
             android:onCheckedChanged="@{(switch, checked) -> activityManageSpaceViewModel.onCheckedSdkEnable(checked)}"
