@@ -1845,4 +1845,5 @@
     <string name="view_contact">View Contact</string>
     <string name="new_group_call">New Group Call</string>
     <string name="dial_number">Dial Number</string>
+    <string name="Select_Country">Select Country</string>
 </resources>

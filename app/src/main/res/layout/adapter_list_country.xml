@@ -36,7 +36,7 @@
       android:layout_marginRight="@dimen/dp28"
       android:padding="@dimen/dp10"
       android:text="@string/iran"
-      android:textColor="@color/green"
+      android:textColor="@color/ivand_green_text_color"
       android:textSize="@dimen/dp14" />
   </LinearLayout>
 </LinearLayout>
