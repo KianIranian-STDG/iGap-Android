@@ -41,13 +41,15 @@ import retrofit2.Response;
 public class PaymentHistoryFragment extends Fragment {
 
     RecyclerView mList;
-    ProgressLayout mProgress;
+    ProgressLayout progress;
     ListItemAdapter adapter;
 
     PaginateList<Order> orderList;
     MaterialDialog progressDialog;
     private int mOrderType;
     private boolean mShowAppBar = true;
+    private boolean isForMerchant = false;
+    private String mAccountId;
 
     public PaymentHistoryFragment() {
     }
@@ -61,12 +63,25 @@ public class PaymentHistoryFragment extends Fragment {
         return fragment;
     }
 
+    public static PaymentHistoryFragment newInstance(int orderType, boolean showAppBar, boolean isForMerchant, String accountId) {
+        PaymentHistoryFragment fragment = new PaymentHistoryFragment();
+        Bundle args = new Bundle();
+        args.putInt("OrderType", orderType);
+        args.putBoolean("ShowAppBar", showAppBar);
+        args.putBoolean("IsForMerchant", isForMerchant);
+        args.putString("AccountId", accountId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mOrderType = getArguments().getInt("OrderType");
             mShowAppBar = getArguments().getBoolean("ShowAppBar");
+            isForMerchant = getArguments().getBoolean("IsForMerchant", false);
+            mAccountId = getArguments().getString("AccountId", null);
         }
 
 
@@ -112,8 +127,8 @@ public class PaymentHistoryFragment extends Fragment {
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
         mList.addItemDecoration(divider);
 
-        mProgress = view.findViewById(R.id.progress);
-        mProgress.setOnRetryButtonListener(new View.OnClickListener() {
+        progress = view.findViewById(R.id.progress);
+        progress.setOnRetryButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 load(false);
@@ -135,11 +150,25 @@ public class PaymentHistoryFragment extends Fragment {
     }
 
     private void load(final boolean loadMore) {
-        if (!loadMore)
-            mProgress.setStatus(0);
+        if (!loadMore) {
+            if (!isForMerchant)
+                progress.setStatus(0);
+            else
+                progress.setStatus(0);
+        }
 
+        String accountId=Auth.getCurrentAuth().getId();
+        if (isForMerchant) {
+            if (mAccountId != null) {
+                accountId = mAccountId;
+
+            } else {
+                accountId = Auth.getCurrentAuth().getId();
+            }
+
+        }
         String lastId = loadMore && orderList != null && orderList.hasItems() ? orderList.items.get(orderList.items.size() - 1).id : null;
-        Web.getInstance().getWebService().getOrders(Auth.getCurrentAuth().getId(), 0, mOrderType != 0 ? String.valueOf(mOrderType) : null, true, lastId, 40).enqueue(new Callback<PaginateList<Order>>() {
+        Web.getInstance().getWebService().getOrders(accountId, 0, mOrderType != 0 ? String.valueOf(mOrderType) : null, true, lastId, 40).enqueue(new Callback<PaginateList<Order>>() {
             @Override
             public void onResponse(Call<PaginateList<Order>> call, Response<PaginateList<Order>> response) {
                 Boolean success = Web.checkResponse(PaymentHistoryFragment.this, call, response);
@@ -161,7 +190,7 @@ public class PaymentHistoryFragment extends Fragment {
                     }
                 } else {
                     if (orderList == null || !orderList.hasItems())
-                        mProgress.setStatus(-1, getString(R.string.server_error));
+                        progress.setStatus(-1, getString(R.string.server_error));
 
                     if (adapter != null)
                         adapter.finishLoading(false);
@@ -172,7 +201,7 @@ public class PaymentHistoryFragment extends Fragment {
             public void onFailure(Call<PaginateList<Order>> call, Throwable t) {
                 if (Web.checkFailureResponse(PaymentHistoryFragment.this, call, t)) {
                     if (orderList == null || !orderList.hasItems())
-                        mProgress.setStatus(-1, getString(R.string.network_error));
+                        progress.setStatus(-1, getString(R.string.network_error));
                     if (adapter != null)
                         adapter.finishLoading(false);
                 }
@@ -185,9 +214,9 @@ public class PaymentHistoryFragment extends Fragment {
             adapter = new ListItemAdapter();
         mList.setAdapter(adapter);
         if (orderList == null || !orderList.hasItems())
-            mProgress.setStatus(2, getString(R.string.no_item));
+            progress.setStatus(2, getString(R.string.no_item));
         else
-            mProgress.setStatus(1);
+            progress.setStatus(1);
     }
 
     class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHolder> {
@@ -211,7 +240,8 @@ public class PaymentHistoryFragment extends Fragment {
 
             LinearLayout root = new LinearLayout(getContext());
             root.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
-            root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            root.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             root.setOrientation(LinearLayout.VERTICAL);
 
             OrderView orderView = new OrderView(getContext());

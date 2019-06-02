@@ -3,6 +3,8 @@ package org.paygear.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.GsonBuilder;
+
 import java.util.Set;
 
 public class SettingHelper {
@@ -15,6 +17,23 @@ public class SettingHelper {
 	public static String SCANNER_TIPS = "scanner_tips";
 	public static String APP_LANGUAGE = "app_language";
 	public static String SERVER_ADDRESS = "server_address";
+	public static String USER_ACCOUNT = "user_account";
+
+	public static void PrefsSave(Context context,String key, Object toSave) {
+		SharedPreferences sp = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+		SharedPreferences.Editor e = sp.edit();
+		e.putString(key, toSave == null ? "" : new GsonBuilder().create().toJson(toSave));
+		e.commit();
+	}
+
+	public static <T> T PrefsLoad(Context context,String key, Class<T> rClass, T rDefault) {
+		SharedPreferences sp = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+		String rJson = sp.getString(key, "");
+		if (rJson.isEmpty())
+			return rDefault;
+		else
+			return new GsonBuilder().create().fromJson(rJson, rClass);
+	}
 
 
 	public static void putString(Context context, String name, String value) {

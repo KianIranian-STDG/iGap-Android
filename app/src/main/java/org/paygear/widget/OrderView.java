@@ -226,7 +226,6 @@ public class OrderView extends LinearLayout {
         }
 
         Calendar calendar = Calendar.getInstance();
-      //  calendar.setTimeInMillis(order.createdMicroTime+ TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
         calendar.setTimeInMillis(order.createdMicroTime);
         date.setText(RaadCommonUtils.getLocaleFullDateTime(calendar));
 
@@ -242,8 +241,8 @@ public class OrderView extends LinearLayout {
         } else {
             Picasso.get()
                     .load(RaadCommonUtils.getImageUrl(img))
-                    .error(R.drawable.ic_person_outline_white_24dp)
-                    .placeholder(R.drawable.ic_person_outline_white_24dp)
+                    .error(R.drawable.ic_person_outline2_white_24dp)
+                    .placeholder(R.drawable.ic_person_outline2_white_24dp)
                     .fit()
                     .centerCrop()
                     .into(image);

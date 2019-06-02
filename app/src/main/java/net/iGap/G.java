@@ -48,6 +48,7 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
 
+import org.paygear.RaadApp;
 import org.paygear.model.Card;
 import org.paygear.utils.Utils;
 
@@ -480,6 +481,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
 
         new Thread(new Runnable() {

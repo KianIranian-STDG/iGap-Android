@@ -1,10 +1,14 @@
 package org.paygear.utils;
 
+import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -15,6 +19,9 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,12 +29,22 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.paygear.WalletActivity;
+import net.iGap.R;
 
+import org.paygear.RaadApp;
+import org.paygear.WalletActivity;
+import org.paygear.model.Contact;
+import org.paygear.web.Web;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
 import ir.radsense.raadcore.Raad;
+import ir.radsense.raadcore.model.Auth;
+
+import static ir.radsense.raadcore.utils.RaadCommonUtils.RTL_CHAR;
 
 /**
  * Created by Software1 on 9/19/2017.
@@ -40,7 +57,7 @@ public class Utils {
             Gson gson = new Gson();
             gson.fromJson(string, Object.class);
             return true;
-        } catch (com.google.gson.JsonSyntaxException ex) {
+        } catch(com.google.gson.JsonSyntaxException ex) {
             return false;
         }
     }
@@ -52,7 +69,7 @@ public class Utils {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    /*public static void changeLocale(Context context, String lan) {
+    public static void changeLocale(Context context, String lan) {
         SettingHelper.putString(context, SettingHelper.APP_LANGUAGE, lan);
         setLocale(context, lan);
     }
@@ -60,17 +77,11 @@ public class Utils {
     public static void setLocale(Context context) {
         String lan = SettingHelper.getString(context, SettingHelper.APP_LANGUAGE, "fa");
         setLocale(context, lan);
-    }*/
+    }
 
     public static void setLocale(Context context, String lan) {
-
         Raad.language = lan;
-        if (lan.toLowerCase().equals("fa") || lan.toLowerCase().equals("ar"))
-            Raad.isFA = true;
-        else
-            Raad.isFA = false;
-
-
+        Raad.isFA = lan.toLowerCase().equals("fa");
         Resources res = context.getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         android.content.res.Configuration conf = res.getConfiguration();
@@ -118,24 +129,24 @@ public class Utils {
     }
 
     public static void setShadow(View view, Drawable sd) {
-        RoundRectShape rss = new RoundRectShape(new float[]{12f, 12f, 12f,
-                12f, 12f, 12f, 12f, 12f}, null, null);
+        RoundRectShape rss = new RoundRectShape(new float[] { 12f, 12f, 12f,
+                12f, 12f, 12f, 12f, 12f }, null, null);
         ShapeDrawable sds = new ShapeDrawable(rss);
         sds.setShaderFactory(new ShapeDrawable.ShaderFactory() {
 
             @Override
             public Shader resize(int width, int height) {
                 LinearGradient lg = new LinearGradient(0, 0, 0, height,
-                        new int[]{Color.parseColor("#e5e5e5"),
+                        new int[] { Color.parseColor("#e5e5e5"),
                                 Color.parseColor("#e5e5e5"),
                                 Color.parseColor("#e5e5e5"),
-                                Color.parseColor("#e5e5e5")}, new float[]{0,
-                        0.50f, 0.50f, 1}, Shader.TileMode.REPEAT);
+                                Color.parseColor("#e5e5e5") }, new float[] { 0,
+                        0.50f, 0.50f, 1 }, Shader.TileMode.REPEAT);
                 return lg;
             }
         });
 
-        LayerDrawable ld = new LayerDrawable(new Drawable[]{sds, sd});
+        LayerDrawable ld = new LayerDrawable(new Drawable[] { sds, sd });
         ld.setLayerInset(0, 5, 5, 0, 0); // inset the shadow so it doesn't start right at the left/top
         ld.setLayerInset(1, 0, 0, 5, 5); // inset the top drawable so we can leave a bit of space for the shadow to use
 
@@ -162,7 +173,7 @@ public class Utils {
         }
 
         if (rem > 0) {
-            formatted += number.subSequence((sec * 4), (sec * 4) + rem);
+            formatted += number.subSequence((sec*4), (sec*4) + rem);
         }
 
         if (formatted.endsWith(" - "))
@@ -198,6 +209,142 @@ public class Utils {
             Toast.makeText(context, "No browser found", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public static void showNotification(Context context, Intent intent, String title, String message, int type) {
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, type, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentIntent(pendingIntent)
+                .setContentTitle(title != null ? title : context.getString(R.string.app_name))
+                .setContentText(RTL_CHAR + message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setAutoCancel(true)
+                .setPriority(type == RaadApp.NOTIFICATION_TYPE_NEW_MESSAGE ? NotificationCompat.PRIORITY_MAX : NotificationCompat.PRIORITY_DEFAULT)
+                .setShowWhen(true);
+        //.setSmallIcon(R.drawable.ic_raad_notification)
+        //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_raad_logo));
+
+        NotificationManager manager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(type, builder.build());
+    }
+
+    public static void cancelAllNotification(Context context) {
+        NotificationManager manager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancel(RaadApp.NOTIFICATION_TYPE_LIKE);
+        manager.cancel(RaadApp.NOTIFICATION_TYPE_COMMENT);
+        manager.cancel(RaadApp.NOTIFICATION_TYPE_NEW_MESSAGE);
+        manager.cancel(RaadApp.NOTIFICATION_TYPE_PAY_COMPLETE);
+        manager.cancel(RaadApp.NOTIFICATION_TYPE_COUPON);
+        manager.cancel(RaadApp.NOTIFICATION_TYPE_DELIVERY);
+        manager.cancel(RaadApp.NOTIFICATION_TYPE_FOLLOW);
+    }
+
+    public static void deleteFile(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteFile(child);
+
+        fileOrDirectory.delete();
+    }
+
+    public static void signOutAndGoLogin(Activity activity) {
+        AppCompatActivity act = (AppCompatActivity) activity;
+
+        RaadApp.paygearCard = null;
+        RaadApp.cards = null;
+        RaadApp.me = null;
+
+        SettingHelper.PrefsSave(activity.getApplicationContext(),SettingHelper.USER_ACCOUNT,null);
+
+
+        deleteAllUserData(activity);
+        Auth.release();
+        Web.getInstance().release();
+//        cancelAllNotification(activity);
+//        Intent i = new Intent(act, LoginActivity.class);
+//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        act.startActivity(i);
+    }
+
+    public static void deleteAllUserData(Activity activity) {
+        activity.getDatabasePath("raad").delete();
+        deleteFile(activity.getFilesDir());
+
+        SettingHelper.remove(activity.getApplicationContext(), SettingHelper.LOGIN_STEP);
+        SettingHelper.remove(activity.getApplicationContext(), SettingHelper.SCANNER_TIPS);
+        SettingHelper.remove(activity.getApplicationContext(), SettingHelper.DEVICE_TOKEN);
+        SettingHelper.remove(activity.getApplicationContext(), SettingHelper.TOKEN_SENT_TO_SERVER);
+
+        SettingHelper.remove(activity.getApplicationContext(), "service_token");
+
+        SettingHelper.remove(activity.getApplicationContext(), SettingHelper.USER_ACCOUNT);
+
+
+    }
+
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.toLowerCase().startsWith(manufacturer.toLowerCase())) {
+            return capitalize(model);
+        } else {
+            return capitalize(manufacturer) + " " + model;
+        }
+    }
+
+
+    private static String capitalize(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char first = s.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return s;
+        } else {
+            return Character.toUpperCase(first) + s.substring(1);
+        }
+    }
+
+    public static ArrayList<Contact> loadContacts(Context context) {
+        ArrayList<Contact> contacts = new ArrayList<>();
+        Cursor phones = context.getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                null,
+                null,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        if (phones == null)
+            return contacts;
+        Contact previousContact = null;
+        while (phones.moveToNext()) {
+
+            //String id = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            phone = phone.replace("+", "").replace(" ", "");
+
+            Contact contact = new Contact(name, phone);
+            /*int len = contact.phone.length();
+            if (len >= 10 && contact.phone.substring(len - 10, len).equals(auth.phone))
+                continue;*/
+            //Log.i("GH_Contact", "ID: " + id + "\nName: " + name + "\nNumber: " + phone);
+
+            if (previousContact == null || !previousContact.mobile.equals(contact.mobile))
+                contacts.add(contact);
+
+            previousContact = contact;
+        }
+        phones.close();
+        return contacts;
+    }
+
+
 
 
 }

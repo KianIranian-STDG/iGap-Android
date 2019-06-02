@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,7 +18,7 @@
         android:paddingRight="16dp">
 
         <ImageView
-            android:id="@+id/paygear_image"
+            android:id="@+id/imgQrCode"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:srcCompat="@drawable/qr_logo"
@@ -199,7 +200,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:drawableRight="@drawable/ic_lock_white"
                 android:drawablePadding="4dp"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"

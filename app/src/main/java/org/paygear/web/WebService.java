@@ -55,6 +55,9 @@ public interface WebService {
     @POST("users/v3/auth/otp")
     Call<Void> getOTP(@Body RequestBody phoneJsonBody);
 
+    @POST("users/v3/auth/refresh")
+    Call<Void> refreshToken(@Body RequestBody phoneJsonBody);
+
     @POST("users/v3/auth/2step_verification/accounts/{account_id}/login")
     Call<Void> validatePassword(@Path("account_id") String accountId,
                                 @Body RequestBody otpJsonBody);
@@ -103,8 +106,8 @@ public interface WebService {
     Call<Void> updateCard(@Path("card_token") String cardToken,
                           @Body RequestBody phoneJsonBody);
 
-    @GET("payment/v3/{account_id}/cards")
-    Call<ArrayList<Card>> getUserCards(@Query("account_id") String accountId);
+    @GET("payment/v3/accounts/{account_id}/cards")
+    Call<ArrayList<Card>> getUserCards(@Path("account_id") String accountId);
 
     @GET("credit/v3/password/{card_token}/accounts/{account_id}")
     Call<Void> getForgotPassword(@Path("card_token") String card_token,
