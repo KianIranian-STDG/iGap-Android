@@ -124,7 +124,7 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:padding="8dp"
                     android:text="@string/shared_image"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedPhotoVisibility ,default= gone}"
+                    android:visibility="@{fragmentGroupProfileViewModel.sharedPhotoVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/photoCount"
                     app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
@@ -137,7 +137,7 @@
                     android:padding="8dp"
                     android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedPhotoCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedPhotoVisibility ,default= gone}"
+                    android:visibility="@{fragmentGroupProfileViewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/photo" />

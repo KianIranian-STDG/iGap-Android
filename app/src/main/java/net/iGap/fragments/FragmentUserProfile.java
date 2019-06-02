@@ -3,9 +3,13 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintSet;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
+import net.iGap.dialog.imagelistbottomsheet.SelectImageBottomSheetDialog;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -40,6 +45,10 @@ import org.paygear.wallet.WalletActivity;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 
 public class FragmentUserProfile extends BaseFragment {
@@ -188,6 +197,27 @@ public class FragmentUserProfile extends BaseFragment {
                 new GoToChatActivity(roomId).startActivity();
             }
         });
+
+        viewModel.getIsEditProfile().observe(this, isEditProfile -> {
+            if (isEditProfile != null) {
+                ConstraintSet set = new ConstraintSet();
+                set.clone(binding.root);
+                set.setVisibility(binding.editProfileView.getId(), isEditProfile ? View.VISIBLE : View.GONE);
+                set.setVisibility(binding.profileViewGroup.getId(), isEditProfile ? View.GONE : View.VISIBLE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    TransitionManager.beginDelayedTransition(binding.root);
+                    set.applyTo(binding.root);
+                } else {
+                    set.applyTo(binding.root);
+                }
+            }
+        });
+
+        viewModel.showDialogChooseImage.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                startDialog();
+            }
+        });
     }
 
     private void goToAddMemberPage() {
@@ -202,48 +232,76 @@ public class FragmentUserProfile extends BaseFragment {
         }
     }
 
-    private void getLogout() {
-        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.log_out))
-                .content(R.string.content_log_out)
-                .positiveText(getResources().getString(R.string.B_ok))
-                .negativeText(getResources().getString(R.string.B_cancel))
-                .iconRes(R.mipmap.exit_to_app_button)
-                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
-                            @Override
-                            public void onUserSessionLogout() {
+    private void startDialog() {
 
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        G.selectedCard = null;
-                                        HelperLogout.logout();
-                                    }
-                                });
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.gallery));
+        items.add(getString(R.string.remove));
+        new SelectImageBottomSheetDialog().setData(items, 0, position -> {
+            if (position == 0) {
+                try {
+                    HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
+                        @Override
+                        public void Allow() {
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                        }
+
+                        @Override
+                        public void deny() {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+
+            }
+        }).show(getFragmentManager(), "test");
+
+        /*new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+                if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
+                    try {
+                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                            @Override
+                            public void Allow() {
+                                dialog.dismiss();
+                                useCamera();
                             }
 
                             @Override
-                            public void onError() {
+                            public void deny() {
 
-                            }
-
-                            @Override
-                            public void onTimeOut() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        HelperError.showSnackMessage(getResources().getString(R.string.error), false);
-
-                                    }
-                                });
                             }
                         });
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                })
-                .show();
+                } else {
+                    try {
+                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                            @Override
+                            public void Allow() {
+                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                intent.setType("image/*");
+                                startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                            }
 
+                            @Override
+                            public void deny() {
+
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.dismiss();
+                }
+            }
+        }).show();*/
     }
 }

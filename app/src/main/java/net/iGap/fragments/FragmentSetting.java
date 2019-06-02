@@ -125,13 +125,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 });
         binding.toolbar.addView(t.getView());
 
-        /*viewModel.goToShowAvatar.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.setting);
-                new HelperFragment(fragment).setReplace(false).load();
-            }
-        });*/
-
         viewModel.showDialogDeleteAccount.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDeleteAccountDialog();
@@ -155,19 +148,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
             }
         });
-
-        /*viewModel.showSubmitButton.observe(this, aBoolean -> {
-            if (aBoolean != null) {
-                Log.wtf("fragment setting", "value of show visibility: " + aBoolean);
-                submitButton.setVisibility(aBoolean ? View.VISIBLE : View.GONE);
-            }
-        });*/
-
-        /*viewModel.showDialogChooseImage.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                startDialog();
-            }
-        });*/
 
         viewModel.goBack.observe(this, aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
@@ -219,16 +199,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         };
 
         setAvatar();
-
-
-        /*onRemoveFragmentSetting = new onRemoveFragmentSetting() {
-            @Override
-            public void removeFragment() {
-                removeFromBaseFragment(FragmentSetting.this);
-            }
-        };*/
-
-
     }
 
     @Override
@@ -263,34 +233,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onAvatarError() {
         viewModel.showLoading.setValue(false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        /*viewModel.onResume();*/
-        /*new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
-            @Override
-            public void getScore(int score) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewModel.updateIvandScore(score);
-                    }
-                });
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });*/
     }
 
     @Override
@@ -377,79 +319,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 viewModel.onDeleteAccountClick();
             }).show();
         }
-    }
-
-    private void startDialog() {
-
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.gallery));
-        items.add(getString(R.string.remove));
-        new SelectImageBottomSheetDialog().setData(items, 0, position -> {
-            if (position == 0) {
-                try {
-                    HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            intent.setType("image/*");
-                            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                        }
-
-                        @Override
-                        public void deny() {
-
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-
-            }
-        }).show(getFragmentManager(), "test");
-
-        /*new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
-                    try {
-                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                dialog.dismiss();
-                                useCamera();
-                            }
-
-                            @Override
-                            public void deny() {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                intent.setType("image/*");
-                                startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                            }
-
-                            @Override
-                            public void deny() {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    dialog.dismiss();
-                }
-            }
-        }).show();*/
     }
 
     private void useCamera() {

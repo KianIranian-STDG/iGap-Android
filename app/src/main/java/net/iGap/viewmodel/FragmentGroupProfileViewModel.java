@@ -23,6 +23,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -123,7 +124,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public ObservableField<String> notificationState = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     private int realmNotification = 0;
     private RealmNotificationSetting realmNotificationSetting;
-    public MutableLiveData<Integer> sharedPhotoVisibility = new MutableLiveData<>();
+    public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedPhotoCount = new MutableLiveData<>();
     public ObservableInt sharedVideoVisibility = new ObservableInt(View.GONE);
     public MutableLiveData<Integer> sharedVideoCount = new MutableLiveData<>();
@@ -746,28 +747,29 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                             public void run() {
                                 if (((RealmRoom) element).isValid()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
+                                    Log.wtf("group profile view model", "value: " + countText);
                                     if (HelperCalander.isPersianUnicode) {
                                         countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                                     }
-                                    if (countText == null || countText.length() == 0) {
-                                        noMediaSharedVisibility.set(View.VISIBLE);
-                                        /*countText = context.getString(R.string.there_is_no_sheared_media);*/
-                                    } else {
-                                        noMediaSharedVisibility.set(View.GONE);
-                                        String[] countList = countText.split("\n");
-                                        int countOFImage = Integer.parseInt(countList[0]);
-                                        int countOFVIDEO = Integer.parseInt(countList[1]);
-                                        int countOFAUDIO = Integer.parseInt(countList[2]);
-                                        int countOFVOICE = Integer.parseInt(countList[3]);
-                                        int countOFGIF = Integer.parseInt(countList[4]);
-                                        int countOFFILE = Integer.parseInt(countList[5]);
-                                        int countOFLink = Integer.parseInt(countList[6]);
+                                    String[] countList = countText.split("\n");
+                                    int countOFImage = Integer.parseInt(countList[0]);
+                                    int countOFVIDEO = Integer.parseInt(countList[1]);
+                                    int countOFAUDIO = Integer.parseInt(countList[2]);
+                                    int countOFVOICE = Integer.parseInt(countList[3]);
+                                    int countOFGIF = Integer.parseInt(countList[4]);
+                                    int countOFFILE = Integer.parseInt(countList[5]);
+                                    int countOFLink = Integer.parseInt(countList[6]);
 
+                                    if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
+                                        noMediaSharedVisibility.set(View.GONE);
+                                        Log.wtf("group profile view model", "image count: " + countOFImage);
                                         if (countOFImage > 0) {
-                                            sharedPhotoVisibility.setValue(View.VISIBLE);
+                                            Log.wtf("group profile view model", "image visibility: VISIBLE");
+                                            sharedPhotoVisibility.set(View.VISIBLE);
                                             sharedPhotoCount.setValue(countOFImage);
                                         } else {
-                                            sharedPhotoVisibility.setValue(View.GONE);
+                                            Log.wtf("group profile view model", "image visibility: Gone");
+                                            sharedPhotoVisibility.set(View.GONE);
                                         }
                                         if (countOFVIDEO > 0) {
                                             sharedVideoVisibility.set(View.VISIBLE);
@@ -805,6 +807,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                                         } else {
                                             sharedLinkVisibility.set(View.GONE);
                                         }
+                                    } else {
+                                        noMediaSharedVisibility.set(View.VISIBLE);
                                     }
                                 }
                             }

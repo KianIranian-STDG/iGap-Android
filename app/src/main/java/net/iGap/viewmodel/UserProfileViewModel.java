@@ -1,18 +1,27 @@
 package net.iGap.viewmodel;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ObservableLong;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 
 import net.iGap.BuildConfig;
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
@@ -21,18 +30,38 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGeoGetConfiguration;
+import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.interfaces.OnUserInfoMyClient;
+import net.iGap.interfaces.OnUserProfileCheckUsername;
+import net.iGap.interfaces.OnUserProfileSetEmailResponse;
+import net.iGap.interfaces.OnUserProfileSetGenderResponse;
+import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoResponse;
+import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
+import net.iGap.request.RequestUserIVandGetScore;
+import net.iGap.request.RequestUserProfileCheckUsername;
+import net.iGap.request.RequestUserProfileGetBio;
+import net.iGap.request.RequestUserProfileGetEmail;
+import net.iGap.request.RequestUserProfileGetGender;
+import net.iGap.request.RequestUserProfileGetRepresentative;
+import net.iGap.request.RequestUserProfileSetBio;
+import net.iGap.request.RequestUserProfileSetEmail;
+import net.iGap.request.RequestUserProfileSetGender;
+import net.iGap.request.RequestUserProfileSetNickname;
+import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,12 +84,23 @@ import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventListener {
 
     private ObservableField<String> appVersion = new ObservableField<>("");
-    private ObservableField<String> username = new ObservableField<>();
     private ObservableField<String> userPhoneNumber = new ObservableField<>();
-    private ObservableField<String> userBio = new ObservableField<>();
     private ObservableLong currentCredit = new ObservableLong(0);
     private ObservableField<String> currentScore = new ObservableField<>("0");
     private ObservableBoolean isDarkMode = new ObservableBoolean(false);
+    private ObservableInt editProfileIcon = new ObservableInt(R.string.edit_icon);
+
+    private ObservableField<String> name = new ObservableField<>("");
+    private ObservableField<String> userName = new ObservableField<>("");
+    private ObservableField<String> bio = new ObservableField<>("");
+    private ObservableField<String> email = new ObservableField<>("");
+    private ObservableField<String> birthDate = new ObservableField<>("");
+    private ObservableInt gender = new ObservableInt(-1);
+    private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
+    private ObservableInt usernameErrorMessage = new ObservableInt(R.string.is_empty);
+    private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
+    private ObservableInt emailErrorMessage = new ObservableInt(R.string.is_empty);
+    private ObservableInt showLoading = new ObservableInt(View.GONE);
     //ui
     public MutableLiveData<Boolean> goToAddMemberPage = new MutableLiveData<>();
     public MutableLiveData<String> goToWalletAgreementPage = new MutableLiveData<>();
@@ -74,12 +114,23 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
     public MutableLiveData<ChangeImageModel> setUserAvatarPath = new MutableLiveData<>();
     public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isEditProfile = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
     private SharedPreferences sharedPreferences;
+    private String currentName;
+    private String currentUserName;
+    private String currentUserEmail;
+    private int currentGender;
+    private String currentBio;
+    private String currentBirthDate;
+    private long userId;
+    /*public static String pathSaveImage;*/
 
     public UserProfileViewModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -87,13 +138,87 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         isDarkMode.set(G.isDarkTheme);
 
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        if (userInfo != null) {
-            username.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(userInfo.getUserInfo().getDisplayName()) : userInfo.getUserInfo().getDisplayName());
+        //set credit amount
+        if (G.selectedCard != null) {
+            currentCredit.set(G.selectedCard.cashOutBalance);
+        } else {
+            currentCredit.set(0);
+        }
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);
+        realm.close();
+
+        if (isIntroduce) {
+            new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
+                @Override
+                public void onRepresent(String phoneNumber) {
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailed() {
+                }
+            });
+        }
+
+        new RequestUserProfileGetGender().userProfileGetGender();
+        new RequestUserProfileGetEmail().userProfileGetEmail();
+        new RequestUserProfileGetBio().getBio();
+        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
+            @Override
+            public void getScore(int score) {
+                G.handler.post(() -> currentScore.set(String.valueOf(score)));
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+
+        updateUserInfoUI();
+        isEditProfile.setValue(false);
+    }
+
+    private void updateUserInfoUI() {
+
+        gender.set(-1);
+        name.set("");
+        bio.set("");
+        userName.set("");
+        email.set("");
+
+        if (checkValidationForRealm(userInfo)) {
+            userId = userInfo.getUserId();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             userPhoneNumber.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(phoneNumber) : phoneNumber);
-            userBio.set(userInfo.getUserInfo().getBio());
-
             setUserAvatar.setValue(G.userId);
+            currentName = userInfo.getUserInfo().getDisplayName();
+            currentUserName = userInfo.getUserInfo().getUsername();
+            currentUserEmail = userInfo.getEmail();
+            currentBio = userInfo.getUserInfo().getBio();
+            phoneNumber = userInfo.getUserInfo().getPhoneNumber();
+            ProtoGlobal.Gender userGender = userInfo.getGender();
+            if (userGender != null) {
+                if (userGender == ProtoGlobal.Gender.MALE) {
+                    currentGender = R.id.male;
+                } else if (userGender == ProtoGlobal.Gender.FEMALE) {
+                    currentGender = R.id.female;
+                }
+            } else {
+                currentGender = -1;
+            }
+            gender.set(currentGender);
+            name.set(currentName);
+            bio.set(currentBio);
+            userName.set(currentUserName);
+            email.set(currentUserEmail);
             G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
                 @Override
                 public void onChangePhoto(final String imagePath) {
@@ -105,30 +230,24 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     G.handler.post(() -> setUserAvatarPath.setValue(new ChangeImageModel(null, initials, color)));
                 }
             };
+            userInfo.addChangeListener(realmModel -> {
+                Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
+                userInfo = (RealmUserInfo) realmModel;
+                updateUserInfoUI();
+            });
         }
+    }
 
-        //set credit amount
-        if (G.selectedCard != null) {
-            currentCredit.set(G.selectedCard.cashOutBalance);
-        } else {
-            currentCredit.set(0);
-        }
+    private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
+        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
     }
 
     public ObservableField<String> getAppVersion() {
         return appVersion;
     }
 
-    public ObservableField<String> getUsername() {
-        return username;
-    }
-
     public ObservableField<String> getUserPhoneNumber() {
         return userPhoneNumber;
-    }
-
-    public ObservableField<String> getUserBio() {
-        return userBio;
     }
 
     public ObservableLong getCurrentCredit() {
@@ -141,6 +260,74 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public ObservableBoolean getIsDarkMode() {
         return isDarkMode;
+    }
+
+    public ObservableInt getEditProfileIcon() {
+        return editProfileIcon;
+    }
+
+    public LiveData<Boolean> getIsEditProfile() {
+        return isEditProfile;
+    }
+
+    public ObservableField<String> getName() {
+        return name;
+    }
+
+    public ObservableField<String> getUserName() {
+        return userName;
+    }
+
+    public ObservableField<String> getBio() {
+        return bio;
+    }
+
+    public ObservableField<String> getEmail() {
+        return email;
+    }
+
+    public ObservableField<String> getBirthDate() {
+        return birthDate;
+    }
+
+    public ObservableInt getGender() {
+        return gender;
+    }
+
+    public LiveData<Boolean> getUsernameErrorEnable() {
+        return usernameErrorEnable;
+    }
+
+    public ObservableInt getUsernameErrorMessage() {
+        return usernameErrorMessage;
+    }
+
+    public LiveData<Boolean> getEmailErrorEnable() {
+        return emailErrorEnable;
+    }
+
+    public ObservableInt getEmailErrorMessage() {
+        return emailErrorMessage;
+    }
+
+    public ObservableInt getShowLoading() {
+        return showLoading;
+    }
+
+    public void onEditProfileClick() {
+        if (isEditProfile.getValue() != null) {
+            if (isEditProfile.getValue()) {
+                if (editProfileIcon.get() == R.string.check_icon) {
+                    submitData();
+                } else {
+                    editProfileIcon.set(R.string.edit_icon);
+                    isEditProfile.setValue(false);
+                }
+            } else {
+                editProfileIcon.set(R.string.close_icon);
+                isEditProfile.setValue(true);
+            }
+        }
     }
 
     public void onCloudMessageClick() {
@@ -231,10 +418,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onThemeClick(boolean isCheck) {
-        Log.wtf("view Model","value of is check: "+isCheck);
+        Log.wtf("view Model", "value of is check: " + isCheck);
         if (isCheck != isDarkMode.get()) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            Log.wtf("view Model","value of is check: "+isCheck);
+            Log.wtf("view Model", "value of is check: " + isCheck);
             if (isCheck) {
                 int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
                 editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
@@ -260,7 +447,89 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
-    public void getUserCredit() {
+    public void onAddImageClick() {
+        showDialogChooseImage.setValue(true);
+    }
+
+    public void nameTextChangeListener(String newName) {
+        if (!newName.equals(currentName)) {
+            editProfileIcon.set(R.string.check_icon);
+        } else {
+            if (isEditProfile.getValue()) {
+                if (currentBio.equals(bio.get()) && currentUserEmail.equals(email.get()) && currentUserName.equals(userName.get()) && currentGender == gender.get()) {
+                    editProfileIcon.set(R.string.close_icon);
+                }
+            }
+        }
+    }
+
+    public void usernameTextChangeListener(String newUsername) {
+        if (HelperString.regexCheckUsername(newUsername)) {
+            new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
+                @Override
+                public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
+                    G.handler.post(() -> {
+                        if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
+                            editProfileIcon.set(!currentUserName.equals(userName.get()) ? R.string.check_icon : R.string.close_icon);
+                            usernameErrorEnable.setValue(true);
+                            usernameErrorMessage.set(R.string.is_empty);
+                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
+                            usernameErrorMessage.set(R.string.INVALID);
+                            usernameErrorEnable.setValue(true);
+                            editProfileIcon.set(R.string.close_icon);
+                        } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
+                            usernameErrorMessage.set(R.string.TAKEN);
+                            usernameErrorEnable.setValue(true);
+                            editProfileIcon.set(R.string.close_icon);
+                        }
+                    });
+                }
+
+                @Override
+                public void Error(int majorCode, int minorCode) {
+
+                }
+            });
+        } else {
+            usernameErrorEnable.setValue(true);
+            usernameErrorMessage.set(R.string.INVALID);
+            editProfileIcon.set(R.string.close_icon);
+        }
+    }
+
+    public void emailTextChangeListener(String newEmail) {
+        if (!newEmail.equals(currentUserEmail)) {
+            editProfileIcon.set(R.string.check_icon);
+            emailErrorMessage.set(R.string.is_empty);
+            emailErrorEnable.setValue(false);
+        } else {
+            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentBio.equals(bio.get()) && currentGender == gender.get()) {
+                editProfileIcon.set(R.string.close_icon);
+            }
+        }
+    }
+
+    public void bioTextChangeListener(String newBio) {
+        if (!currentBio.equals(newBio)) {
+            editProfileIcon.set(R.string.check_icon);
+        } else {
+            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentGender == gender.get()) {
+                editProfileIcon.set(R.string.close_icon);
+            }
+        }
+    }
+
+    public void onCheckedListener(int checkedId) {
+        if (checkedId != currentGender) {
+            editProfileIcon.set(R.string.check_icon);
+        } else {
+            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentBio.equals(bio.get())) {
+                editProfileIcon.set(R.string.close_icon);
+            }
+        }
+    }
+
+    private void getUserCredit() {
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
@@ -293,6 +562,177 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             mRealm = Realm.getDefaultInstance();
         }
         return mRealm;
+    }
+
+    private void submitData() {
+        showLoading.set(View.VISIBLE);
+        if (!currentName.equals(name.get())) {
+            sendRequestSetName();
+        } else if (!currentUserName.equals(userName.get())) {
+            sendRequestSetUsername();
+        } else if (!currentBio.equals(bio.get())) {
+            sendRequestSetBio();
+        } else if (!currentUserEmail.equals(email.get())) {
+            sendRequestSetEmail();
+        } else if (currentGender != gender.get()) {
+            sendRequestSetGender();
+        } else {
+            showLoading.set(View.GONE);
+            isEditProfile.setValue(false);
+            editProfileIcon.set(R.string.edit_icon);
+        }
+    }
+
+    private void sendRequestSetName() {
+        showLoading.set(View.VISIBLE);
+        new RequestUserProfileSetNickname().userProfileNickName(name.get(), new OnUserProfileSetNickNameResponse() {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName, String initials) {
+                //setAvatar();
+                RealmRoom.updateChatTitle(userId, nickName);
+                G.handler.post(() -> {
+                    currentName = nickName;
+                    showLoading.set(View.GONE);
+                    submitData();
+                });
+            }
+
+            @Override
+            public void onUserProfileNickNameError(int majorCode, int minorCode) {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+
+            @Override
+            public void onUserProfileNickNameTimeOut() {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+        });
+    }
+
+    private void sendRequestSetUsername() {
+        showLoading.set(View.VISIBLE);
+        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
+            @Override
+            public void onUserProfileUpdateUsername(final String username) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    currentUserName = username;
+                    submitData();
+                });
+            }
+
+            @Override
+            public void Error(final int majorCode, int minorCode, final int time) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    if (majorCode == 175) {
+                        dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
+                    }
+                });
+            }
+
+            @Override
+            public void timeOut() {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+        });
+    }
+
+    private void sendRequestSetEmail() {
+        showLoading.set(View.VISIBLE);
+        new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
+            @Override
+            public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    currentUserEmail = email;
+                    submitData();
+                });
+            }
+
+            @Override
+            public void Error(int majorCode, int minorCode) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    if (majorCode == 114 && minorCode == 1) {
+                        emailErrorMessage.set(R.string.error_email);
+                        emailErrorEnable.setValue(true);
+                        editProfileIcon.set(R.string.close_icon);
+                    } else if (majorCode == 115) {
+                        emailErrorEnable.setValue(true);
+                        editProfileIcon.set(R.string.close_icon);
+                        emailErrorMessage.set(R.string.error_email);
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+        });
+    }
+
+    private void sendRequestSetBio() {
+        new RequestUserProfileSetBio().setBio(bio.get());
+        currentBio = bio.get();
+        submitData();
+    }
+
+    private void sendRequestSetGender() {
+        showLoading.set(View.VISIBLE);
+        new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
+            @Override
+            public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    currentGender = gender == ProtoGlobal.Gender.MALE ? R.id.male : R.id.female;
+                    submitData();
+                });
+            }
+
+            @Override
+            public void Error(int majorCode, int minorCode) {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+        });
+    }
+
+    private void dialogWaitTime(int title, long time, int majorCode) {
+        if (false) {
+            boolean wrapInScrollView = true;
+            final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    dialog.dismiss();
+                }
+            }).show();
+
+            View v = dialog.getCustomView();
+
+            final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+            CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    int seconds = (int) ((millisUntilFinished) / 1000);
+                    int minutes = seconds / 60;
+                    seconds = seconds % 60;
+                    remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                }
+            };
+            countWaitTimer.start();
+        }
     }
 
     @Override
