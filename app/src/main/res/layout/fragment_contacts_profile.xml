@@ -233,7 +233,6 @@
                     android:paddingTop="6dp"
                     android:paddingBottom="6dp"
                     android:onClick="@{()-> viewModel.onNotificationClick()}"
-                    android:text="@string/mute_notification"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line1"

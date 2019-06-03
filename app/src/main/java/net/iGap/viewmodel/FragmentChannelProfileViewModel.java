@@ -76,6 +76,7 @@ public class FragmentChannelProfileViewModel
     public MutableLiveData<String> administratorsCount = new MutableLiveData<>();
     public MutableLiveData<String> moderatorsCount = new MutableLiveData<>();
     public MutableLiveData<Boolean> isMuteNotification = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
     public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
 
     public static OnMenuClick onMenuClick;
@@ -250,9 +251,14 @@ public class FragmentChannelProfileViewModel
 
     public void onNotificationCheckChange(boolean isChecked) {
         Log.wtf("view model", "value: " + isMuteNotification.getValue() + "+" + isChecked);
-        new RequestClientMuteRoom().muteRoom(roomId, !isChecked);
+        isMuteNotification.setValue(isChecked);
     }
 
+    public void onNotificationClick(){
+        isMuteNotification.setValue(!isMuteNotification.getValue());
+        isMuteNotificationChangeListener.setValue(isMuteNotification.getValue());
+
+    }
     //Todo: move to edit channel fragment
     /*public void onClickChannelListAdmin(View v) {
         showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());

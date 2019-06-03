@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.Observer;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +52,7 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
     private AttachFile attachFile;
     private FragmentChannelProfileViewModel viewModel;
     private ActivityProfileChannelBinding binding;
+    private long roomId;
 
     private CircleImageView imvChannelAvatar;
 
@@ -67,13 +70,13 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_profile_channel, container, false);
-        long t = -1;
+        roomId = -1;
         boolean v = false;
         if (getArguments() != null) {
-            t = getArguments().getLong(ROOM_ID);
+            roomId = getArguments().getLong(ROOM_ID);
             v = getArguments().getBoolean(IS_NOT_JOIN);
         }
-        viewModel = new FragmentChannelProfileViewModel(t, v);
+        viewModel = new FragmentChannelProfileViewModel(roomId, v);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
@@ -131,6 +134,16 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
 
         AppUtils.setProgresColler(binding.loading);
         setAvatar();
+
+
+        viewModel.isMuteNotificationChangeListener.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isChecked) {
+                binding.enableNotification.setChecked(isChecked);
+
+                new RequestClientMuteRoom().muteRoom(roomId, !isChecked);
+            }
+        });
 
         /*FragmentShowAvatars.onComplete = new OnComplete() {
             @Override
