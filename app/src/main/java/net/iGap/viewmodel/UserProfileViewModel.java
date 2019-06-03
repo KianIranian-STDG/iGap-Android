@@ -26,14 +26,21 @@ import net.iGap.Theme;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
+import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGeoGetConfiguration;
+import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnUserProfileCheckUsername;
@@ -42,7 +49,10 @@ import net.iGap.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.interfaces.RefreshWalletBalance;
+import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SUID;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
@@ -51,6 +61,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
+import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserIVandGetScore;
 import net.iGap.request.RequestUserProfileCheckUsername;
 import net.iGap.request.RequestUserProfileGetBio;
@@ -68,7 +79,10 @@ import org.jetbrains.annotations.NotNull;
 import org.paygear.model.Card;
 import org.paygear.web.Web;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 import io.realm.Realm;
 import ir.radsense.raadcore.model.Auth;
@@ -81,7 +95,7 @@ import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventListener {
+public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventListener, OnUserAvatarResponse {
 
     private final String TAG = UserProfileViewModel.class.getName();
 
@@ -113,6 +127,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public MutableLiveData<String> goToFAQPage = new MutableLiveData<>();
     public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
     public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
+    public MutableLiveData<DeleteAvatarModel> deleteAvatar = new MutableLiveData<>();
     public MutableLiveData<ChangeImageModel> setUserAvatarPath = new MutableLiveData<>();
     public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> isEditProfile = new MutableLiveData<>();
@@ -130,10 +145,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private String currentBio;
     private String currentBirthDate;
     private long userId;
-    /*public static String pathSaveImage;*/
+    public String pathSaveImage;
+    private long idAvatar;
 
-    public UserProfileViewModel(SharedPreferences sharedPreferences) {
+    private AvatarHandler avatarHandler;
+
+    public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
         this.sharedPreferences = sharedPreferences;
+        this.avatarHandler = avatarHandler;
 
         isEditProfile.setValue(false);
         appVersion.set(BuildConfig.VERSION_NAME);
@@ -185,6 +204,36 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         });
 
         updateUserInfoUI();
+
+        FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
+            long mAvatarId = 0;
+            if (messageOne != null && !messageOne.equals("")) {
+                mAvatarId = Long.parseLong(messageOne);
+            }
+            long finalMAvatarId = mAvatarId;
+            G.handler.post(() -> deleteAvatar.setValue(new DeleteAvatarModel(userId, finalMAvatarId)));
+        };
+
+        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
+            pathSaveImage = path;
+            long lastUploadedAvatarId = idAvatar + 1L;
+            showLoading.set(View.VISIBLE);
+            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress >= 100) {
+                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                    }
+                }
+
+                @Override
+                public void OnError() {
+                    showLoading.set(View.GONE);
+                }
+            });
+        };
+
+        G.onUserAvatarResponse = this;
     }
 
     private void updateUserInfoUI() {
@@ -712,35 +761,69 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void dialogWaitTime(int title, long time, int majorCode) {
-        if (false) {
-            boolean wrapInScrollView = true;
-            final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            }).show();
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        }).show();
 
-            View v = dialog.getCustomView();
+        View v = dialog.getCustomView();
 
-            final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
-            CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    int seconds = (int) ((millisUntilFinished) / 1000);
-                    int minutes = seconds / 60;
-                    seconds = seconds % 60;
-                    remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-                }
+        final TextView remindTime = v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+            }
 
-                @Override
-                public void onFinish() {
-                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+            @Override
+            public void onFinish() {
+                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+            }
+        };
+        countWaitTimer.start();
+    }
+
+    public File getImageFile() {
+        idAvatar = SUID.id().get();
+        pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
+        return new File(pathSaveImage);
+    }
+
+    @Override
+    public void onAvatarAdd(ProtoGlobal.Avatar avatar) {
+        /**
+         * if another account do this action we haven't avatar source and have
+         *  to download avatars . for do this action call HelperAvatar.getAvatar
+         */
+        if (pathSaveImage == null) {
+            setUserAvatar.setValue(userId);
+        } else {
+
+            avatarHandler.avatarAdd(userId, pathSaveImage, avatar, avatarPath -> G.handler.post(() -> {
+                showLoading.set(View.GONE);
+                if (G.onChangeUserPhotoListener != null) {
+                    G.onChangeUserPhotoListener.onChangePhoto(avatarPath);
                 }
-            };
-            countWaitTimer.start();
+            }));
+            pathSaveImage = null;
         }
+    }
+
+    @Override
+    public void onAvatarAddTimeOut() {
+        G.handler.post(() -> showLoading.set(View.GONE));
+    }
+
+    @Override
+    public void onAvatarError() {
+        G.handler.post(() -> showLoading.set(View.GONE));
     }
 
     @Override
@@ -809,6 +892,24 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
         public String getColor() {
             return color;
+        }
+    }
+
+    public class DeleteAvatarModel {
+        private long userId;
+        private long avatarId;
+
+        public DeleteAvatarModel(long userId, long avatarId) {
+            this.userId = userId;
+            this.avatarId = avatarId;
+        }
+
+        public long getUserId() {
+            return userId;
+        }
+
+        public long getAvatarId() {
+            return avatarId;
         }
     }
 }

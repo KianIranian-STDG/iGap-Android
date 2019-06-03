@@ -14,7 +14,8 @@
     <android.support.constraint.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layoutDirection="locale">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -111,11 +112,11 @@
             android:id="@+id/language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="?textTitleColorSettingTheme"
-            android:padding="@dimen/dp8"
             android:background="?attr/selectableItemBackground"
             android:onClick="@{()->viewModel.onLanguageClick()}"
+            android:padding="@dimen/dp8"
             android:text="@{viewModel.currentLanguage}"
+            android:theme="?textTitleColorSettingTheme"
             app:layout_constraintBottom_toBottomOf="@id/languageTitle"
             app:layout_constraintEnd_toEndOf="@id/notification"
             app:layout_constraintStart_toEndOf="@id/languageTitle"
