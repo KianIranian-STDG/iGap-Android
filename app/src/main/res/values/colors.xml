@@ -232,5 +232,7 @@
     <color name="unread_status">#424242</color>
     <color name="unread_status_dark">#FFFFFF</color>
 
+    <color name="voice_item">#468ba7</color>
+
 
 </resources>

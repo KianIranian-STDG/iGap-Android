@@ -18,6 +18,7 @@ import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,7 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.audio.AudioWave;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -51,10 +53,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     private static final String PLAY = "play";
     private static final String PAUSE = "pause";
-
-    private String playMode = PAUSE;
-    private boolean firstPlay = true;
-
+    private static final String TAG = "aabolfazl";
 
     public VoiceItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -89,50 +88,69 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         holder.waveView.setTag(mMessage.messageID);
 
-
         ValueAnimator anim = ValueAnimator.ofInt(0, 100);
         anim.setDuration((long) ((mMessage.attachment.duration) / 0.001));
         anim.addUpdateListener(animation -> {
             int animProgress = (Integer) animation.getAnimatedValue();
             holder.waveView.setProgress(animProgress);
+            Log.i(TAG, "voice  animation: " + animProgress);
 
         });
 
 
         holder.complete = (result, messageOne, MessageTow) -> {
 
+            Log.i(TAG, "voice message" + messageOne + " | " + MessageTow);
+
             if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
-                if (messageOne.equals("play")) {
-                    holder.btnPlayMusic.setText(R.string.md_play_arrow);
 
+                switch (messageOne) {
+                    case PLAY:
+                        holder.btnPlayMusic.setText("#");
 
-                } else if (messageOne.equals("pause")) {
-                    holder.btnPlayMusic.setText(R.string.md_pause_button);
+                        G.handler.postDelayed(() -> {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                anim.pause();
+                            } else
+                                anim.cancel();
 
-                } else if (messageOne.equals("updateTime")) {
+                        }, 50);
 
-                    if (result) {
+                        Log.i(TAG, "voice mode not play");
+                        break;
+                    case PAUSE:
+                        holder.btnPlayMusic.setText("?");
 
-                        G.handler.post(() -> {
+                        G.handler.postDelayed(() -> {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                anim.resume();
+                            } else
+                                anim.start();
+                        }, 50);
 
-                            if (mMessage.messageID.equals(MusicPlayer.messageId)) {
+                        Log.i(TAG, "voice mode not pause");
+                        break;
+                    case "updateTime":
+                        if (result) {
+                            G.handler.post(() -> {
+
+                                if (mMessage.messageID.equals(MusicPlayer.messageId)) {
+                                    holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+                                    if (HelperCalander.isPersianUnicode) {
+                                        holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                                    }
+                                }
+                            });
+                        } else {
+                            holder.btnPlayMusic.post(() -> {
+
                                 holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
                                 if (HelperCalander.isPersianUnicode) {
                                     holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
                                 }
-//                                        holder.waveView.setProgress(MusicPlayer.musicProgress);
-                            }
-                        });
-                    } else {
-                        holder.btnPlayMusic.post(() -> {
-
-                            holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
-                            if (HelperCalander.isPersianUnicode) {
-                                holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
-                            }
-                            holder.waveView.setProgress(0);
-                        });
-                    }
+                                holder.waveView.setProgress(0);
+                            });
+                        }
                 }
             }
         };
@@ -168,32 +186,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 MusicPlayer.startPlayer("", holder.mFilePath, FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, true, holder.mMessageID);
                 messageClickListener.onPlayMusic(holder.mMessageID);
                 holder.mTimeMusic = MusicPlayer.musicTime;
-            }
-
-            if (playMode.equals(PLAY)) {
-                playMode = PAUSE;
-
-                G.handler.postDelayed(() -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        anim.pause();
-                    } else
-                        anim.cancel();
-                }, 100);
-
-            } else if (playMode.equals(PAUSE)) {
-                playMode = PLAY;
-
-                if (firstPlay) {
-                    anim.start();
-                } else {
-                    G.handler.postDelayed(() -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            anim.resume();
-                        } else
-                            anim.start();
-                    }, 100);
-                }
-                firstPlay = false;
             }
 
         });
@@ -234,25 +226,24 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
 
-            anim.start();
-
             if (MusicPlayer.musicProgress > 0) {
                 holder.txt_Timer.setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
             }
 
+            anim.start();
 
             holder.mTimeMusic = MusicPlayer.musicTime;
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    holder.btnPlayMusic.setText(R.string.md_pause_button);
+                    holder.btnPlayMusic.setText("?");
                 } else {
-                    holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                    holder.btnPlayMusic.setText("#");
                 }
             }
         } else {
             holder.waveView.setProgress(0);
-            holder.btnPlayMusic.setText(R.string.md_play_arrow);
+            holder.btnPlayMusic.setText("#");
         }
 
         holder.mMessageID = mMessage.messageID;
@@ -292,7 +283,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         private MessageProgress progress;
         private AppCompatImageView thumbnail;
-        private AppCompatTextView btnPlayMusic;
+        private FontIconTextView btnPlayMusic;
         private OnComplete complete;
         private AppCompatTextView txt_Timer;
         private AppCompatTextView author;
@@ -322,14 +313,13 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             setTypeFace(author);
 
 
-            btnPlayMusic = new AppCompatTextView(G.context);
+            btnPlayMusic = new FontIconTextView(G.context);
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
-            btnPlayMusic.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
-            btnPlayMusic.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-            setTextSize(btnPlayMusic, R.dimen.dp20);
-            btnPlayMusic.setTypeface(G.typeface_Fontico);
+            btnPlayMusic.setText("#");
+            btnPlayMusic.setTextColor(getColor(R.color.voice_item));
+            setTextSize(btnPlayMusic, R.dimen.dp36);
 
             txt_Timer = new AppCompatTextView(G.context);
             txt_Timer.setId(R.id.csla_txt_timer);
@@ -346,14 +336,16 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
 
             Date currentTime = Calendar.getInstance().getTime();
-            String value = currentTime.toString();
+            String value = currentTime.toString() + currentTime.toString();
 
             byte[] soundBytes = hexStringToByteArray(value + value + value);
 
-            waveView.setWaveColor(Color.parseColor("#007fff"));
+            waveView.setWaveColor(getColor(R.color.voice_item));
             waveView.setScaledData(soundBytes);
             waveView.setChunkHeight(dpToPx(16));
+            waveView.setMinChunkHeight(dpToPx(2));
             waveView.setChunkRadius(dpToPx(8));
+            waveView.setExpansionAnimated(true);
             waveView.setChunkSpacing(dpToPx(2));
             waveView.setChunkWidth(dpToPx(3));
 
