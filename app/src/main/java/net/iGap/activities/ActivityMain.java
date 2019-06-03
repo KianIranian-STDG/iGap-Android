@@ -2030,7 +2030,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void setImage() {
         avatarHandler.getAvatar(new ParamWithAvatarType(imgNavImage, G.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
-        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
+        /*G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
             @Override
             public void onChangePhoto(final String imagePath) {
                 G.handler.post(new Runnable() {
@@ -2056,7 +2056,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
             }
-        };
+        };*/
     }
 
     @Override

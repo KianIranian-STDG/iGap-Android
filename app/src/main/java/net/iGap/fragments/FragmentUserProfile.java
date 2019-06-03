@@ -2,7 +2,9 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,8 +16,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -23,21 +25,19 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
-import net.iGap.dialog.imagelistbottomsheet.SelectImageBottomSheetDialog;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,9 +45,8 @@ import org.paygear.wallet.WalletActivity;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 
@@ -59,7 +58,7 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
-        viewModel = new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE));
+        viewModel = new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE),avatarHandler);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -180,6 +179,13 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
+        viewModel.deleteAvatar.observe(this, deleteAvatarModel -> {
+            if (deleteAvatarModel != null) {
+                avatarHandler.avatarDelete(new ParamWithAvatarType(binding.fupUserImage, deleteAvatarModel.getUserId())
+                        .avatarType(AvatarHandler.AvatarType.USER), deleteAvatarModel.getAvatarId());
+            }
+        });
+
         viewModel.setUserAvatarPath.observe(this, changeImageModel -> {
             if (changeImageModel != null) {
                 if (changeImageModel.getImagePath() == null || !new File(changeImageModel.getImagePath()).exists()) {
@@ -228,6 +234,43 @@ public class FragmentUserProfile extends BaseFragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /**
+         * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
+         * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
+         */
+        if (G.isPassCode) ActivityMain.isUseCamera = true;
+
+        if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
+        if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
+
+
+        if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
+                FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+            } else {
+                ImageHelper.correctRotateImage(viewModel.pathSaveImage, true); //rotate image
+                FragmentEditImage.insertItemList(viewModel.pathSaveImage, false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+            }
+        } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
+            if (data != null) {
+                if (data.getData() == null) {
+                    return;
+                }
+                ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
+                FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+            }
+        }
+    }
+
     private void goToAddMemberPage() {
         final Fragment fragment = RegisteredContactsFragment.newInstance();
         Bundle bundle = new Bundle();
@@ -241,8 +284,7 @@ public class FragmentUserProfile extends BaseFragment {
     }
 
     private void startDialog() {
-
-        List<String> items = new ArrayList<>();
+        /*List<String> items = new ArrayList<>();
         items.add(getString(R.string.gallery));
         items.add(getString(R.string.remove));
         new SelectImageBottomSheetDialog().setData(items, 0, position -> {
@@ -267,9 +309,9 @@ public class FragmentUserProfile extends BaseFragment {
             } else {
 
             }
-        }).show(getFragmentManager(), "test");
+        }).show(getFragmentManager(), "test");*/
 
-        /*new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
@@ -310,6 +352,25 @@ public class FragmentUserProfile extends BaseFragment {
                     dialog.dismiss();
                 }
             }
-        }).show();*/
+        }).show();
+    }
+
+    private void useCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentUserProfile.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (getActivity() != null && getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(viewModel.getImageFile()));
+                startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+
+            } else {
+                Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
