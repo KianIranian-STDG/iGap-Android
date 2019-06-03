@@ -55,9 +55,6 @@ public interface WebService {
     @POST("users/v3/auth/otp")
     Call<Void> getOTP(@Body RequestBody phoneJsonBody);
 
-    @POST("users/v3/auth/refresh")
-    Call<Void> refreshToken(@Body RequestBody phoneJsonBody);
-
     @POST("users/v3/auth/2step_verification/accounts/{account_id}/login")
     Call<Void> validatePassword(@Path("account_id") String accountId,
                                 @Body RequestBody otpJsonBody);

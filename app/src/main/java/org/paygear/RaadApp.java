@@ -82,47 +82,47 @@ public class RaadApp {
                         return true;
                     }
                     if (response.code() == 401 || response.code() == 403) {
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("refresh_token", Auth.getCurrentAuth().refreshToken);
-                        map.put("appid", Web.APP_ID);
+//                        Map<String, Object> map = new HashMap<>();
+//                        map.put("refresh_token", Auth.getCurrentAuth().refreshToken);
+//                        map.put("appid", Web.APP_ID);
                         if (hasRefreshTokenRequest)
                             return true;
 
                         hasRefreshTokenRequest = true;
-                        Web.getInstance().getWebService().refreshToken(PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                hasRefreshTokenRequest = false;
-                                if (!response.isSuccessful()) {
-                                    Utils.signOutAndGoLogin(fragment.getActivity());
-
-                                } else {
-
-                                    String accessToken = response.headers().get("X-ACCESS-TOKEN");
-                                    String tokenType = response.headers().get("X-TOKEN-TYPE");
-                                    String refreshToken = response.headers().get("X-REFRESH-TOKEN");
-
-                                    Auth auth = new Auth(accessToken, tokenType, refreshToken);
-                                    auth.setPublicKey(Auth.getCurrentAuth().getPublicKey());
-
-                                    if (auth.getJWT() == null) {
-                                        Toast.makeText(applicationContext, R.string.authorization_not_valid, Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    auth.save();
-                                    Web.getInstance().initWebService();
-                                    fragment.onCreate(null);
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                hasRefreshTokenRequest = false;
-                                Utils.signOutAndGoLogin((NavigationBarActivity) context);
-
-
-                            }
-                        });
+//                        Web.getInstance().getWebService().refreshToken(PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
+//                            @Override
+//                            public void onResponse(Call<Void> call, Response<Void> response) {
+//                                hasRefreshTokenRequest = false;
+//                                if (!response.isSuccessful()) {
+//                                    Utils.signOutAndGoLogin(fragment.getActivity());
+//
+//                                } else {
+//
+//                                    String accessToken = response.headers().get("X-ACCESS-TOKEN");
+//                                    String tokenType = response.headers().get("X-TOKEN-TYPE");
+//                                    String refreshToken = response.headers().get("X-REFRESH-TOKEN");
+//
+//                                    Auth auth = new Auth(accessToken, tokenType, refreshToken);
+//                                    auth.setPublicKey(Auth.getCurrentAuth().getPublicKey());
+//
+//                                    if (auth.getJWT() == null) {
+//                                        Toast.makeText(applicationContext, R.string.authorization_not_valid, Toast.LENGTH_SHORT).show();
+//                                        return;
+//                                    }
+//                                    auth.save();
+//                                    Web.getInstance().initWebService();
+//                                    fragment.onCreate(null);
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<Void> call, Throwable t) {
+//                                hasRefreshTokenRequest = false;
+//                                Utils.signOutAndGoLogin((NavigationBarActivity) context);
+//
+//
+//                            }
+//                        });
 
                         return false;
                     }
@@ -138,46 +138,46 @@ public class RaadApp {
                 }
 
                 if (response.code() == 401 || response.code() == 403) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("refresh_token", Auth.getCurrentAuth().refreshToken);
-                    map.put("appid", Web.APP_ID);
+//                    Map<String, Object> map = new HashMap<>();
+//                    map.put("refresh_token", Auth.getCurrentAuth().refreshToken);
+//                    map.put("appid", Web.APP_ID);
                     if (hasRefreshTokenRequest)
                         return true;
 
                     hasRefreshTokenRequest = true;
-                    Web.getInstance().getWebService().refreshToken(PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            hasRefreshTokenRequest = false;
-                            if (!response.isSuccessful()) {
-                                Utils.signOutAndGoLogin(appCompatActivity);
-
-                            } else {
-
-                                String accessToken = response.headers().get("X-ACCESS-TOKEN");
-                                String tokenType = response.headers().get("X-TOKEN-TYPE");
-                                String refreshToken = response.headers().get("X-REFRESH-TOKEN");
-
-                                Auth auth = new Auth(accessToken, tokenType, refreshToken);
-                                auth.setPublicKey(Auth.getCurrentAuth().getPublicKey());
-
-                                if (auth.getJWT() == null) {
-                                    Toast.makeText(applicationContext, R.string.authorization_not_valid, Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-                                auth.save();
-                                Web.getInstance().initWebService();
-                                appCompatActivity.recreate();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            hasRefreshTokenRequest = false;
-                            Utils.signOutAndGoLogin((NavigationBarActivity) context);
-
-                        }
-                    });
+//                    Web.getInstance().getWebService().refreshToken(PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
+//                        @Override
+//                        public void onResponse(Call<Void> call, Response<Void> response) {
+//                            hasRefreshTokenRequest = false;
+//                            if (!response.isSuccessful()) {
+//                                Utils.signOutAndGoLogin(appCompatActivity);
+//
+//                            } else {
+//
+//                                String accessToken = response.headers().get("X-ACCESS-TOKEN");
+//                                String tokenType = response.headers().get("X-TOKEN-TYPE");
+//                                String refreshToken = response.headers().get("X-REFRESH-TOKEN");
+//
+//                                Auth auth = new Auth(accessToken, tokenType, refreshToken);
+//                                auth.setPublicKey(Auth.getCurrentAuth().getPublicKey());
+//
+//                                if (auth.getJWT() == null) {
+//                                    Toast.makeText(applicationContext, R.string.authorization_not_valid, Toast.LENGTH_SHORT).show();
+//                                    return;
+//                                }
+//                                auth.save();
+//                                Web.getInstance().initWebService();
+//                                appCompatActivity.recreate();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Void> call, Throwable t) {
+//                            hasRefreshTokenRequest = false;
+//                            Utils.signOutAndGoLogin((NavigationBarActivity) context);
+//
+//                        }
+//                    });
 
                     return false;
                 }

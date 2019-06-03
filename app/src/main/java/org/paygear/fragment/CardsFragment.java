@@ -37,6 +37,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCardsBinding;
@@ -724,10 +726,24 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
         if (selectedMerchant != null) {
+            String name = "";
             if (selectedMerchant.getName() != null && !selectedMerchant.getName().equals("")) {
-                balanceTitle.setText(getString(R.string.paygear_balance) + " " + selectedMerchant.getName());
+                name = selectedMerchant.getName();
             } else {
-                balanceTitle.setText(getString(R.string.paygear_balance) + " " + selectedMerchant.getUsername());
+                name = selectedMerchant.getUsername();
+            }
+
+            if (selectedMerchant.getAccount_type() != 4) {
+                if (selectedMerchant.getBusiness_type()==2){
+                    balanceTitle.setText(getString(R.string.taxi_balance) + " " + name);
+                    cashout.setText(getString(R.string.cashout_taxi));
+                }else {
+                    balanceTitle.setText(getString(R.string.shop_balance) + " " + name);
+                    cashout.setText(getString(R.string.cashout_taxi));
+                }
+            } else {
+                cashout.setText(getString(R.string.cash_out_paygear));
+                balanceTitle.setText(getString(R.string.paygear_balance) + " " + name);
             }
         }
 
