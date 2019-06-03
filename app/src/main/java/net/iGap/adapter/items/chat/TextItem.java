@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -50,7 +50,7 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         if (mMessage.hasEmojiInText) {
             if (myText.length() <= 2) {
-                if (EmojiUtils.emojisCount((String) myText) == 1) {
+                if (EmojiUtils.emojisCount(myText.toString()) == 1) {
                     holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
                 }
             }

@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -30,6 +30,7 @@ import net.iGap.request.RequestFileUpload;
 import net.iGap.request.RequestFileUploadInit;
 import net.iGap.request.RequestFileUploadOption;
 import net.iGap.request.RequestFileUploadStatus;
+import net.iGap.request.RequestQueue;
 
 import java.io.File;
 import java.io.IOException;
@@ -164,7 +165,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
         if (list.containsKey(identity)) {
 
             StructUpload _sp = list.remove(identity);
-            HelperDownloadFile.getInstance().removeRequestQueue(identity);
+            RequestQueue.removeRequestQueue(identity);
 
             if (myQueue.contains(_sp)) {
                 myQueue.remove(_sp);

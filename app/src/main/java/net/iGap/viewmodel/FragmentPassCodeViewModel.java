@@ -5,7 +5,7 @@ package net.iGap.viewmodel;
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -533,7 +533,7 @@ public class FragmentPassCodeViewModel {
                     G.currentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
 
 
@@ -546,7 +546,7 @@ public class FragmentPassCodeViewModel {
                     G.currentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
 
         }

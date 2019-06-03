@@ -1,19 +1,17 @@
 package net.iGap.helper;
 
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
 
 import net.iGap.BuildConfig;
 
 public class HelperLog {
 
-    public static void setErrorLog(String message) {
+    public static void setErrorLog(Exception e) {
 
-        Crashlytics.logException(new Exception(message));
+        Crashlytics.logException(e);
 
         if (BuildConfig.DEBUG) {
-            Log.e("debug", message);
+            e.printStackTrace();
         }
     }
 }

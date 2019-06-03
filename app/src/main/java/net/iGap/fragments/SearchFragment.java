@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -72,7 +72,6 @@ import static net.iGap.fragments.FragmentChat.messageId;
 
 public class SearchFragment extends BaseFragment {
 
-    public static HashMap<Long, CircleImageView> hashMapAvatarSearchFragment = new HashMap<>();
     MaterialDesignTextView btnClose;
     RippleView rippleDown;
     private FastAdapter fastAdapter;
@@ -280,14 +279,7 @@ public class SearchFragment extends BaseFragment {
                         }
                         realm.close();
 
-                        String text = edtSearch.getText().toString();
-                        if (text.startsWith("@")) {
-                            fillListItemAtsign(text.substring(1));
-
-                        } else {
-                            fillListItemGlobal(text);
-
-                        }
+                        fillAfterResponse();
                     }
                 });
             }
@@ -298,11 +290,23 @@ public class SearchFragment extends BaseFragment {
                     @Override
                     public void run() {
                         loadingProgressBar.setVisibility(View.GONE);
+                        fillAfterResponse();
                     }
                 });
             }
         };
 
+    }
+
+    private void fillAfterResponse(){
+        String text = edtSearch.getText().toString();
+        if (text.startsWith("@")) {
+            fillListItemAtsign(text.substring(1));
+
+        } else {
+            fillListItemGlobal(text);
+
+        }
     }
 
     private void fillListItemHashtag(String text) {
@@ -399,7 +403,7 @@ public class SearchFragment extends BaseFragment {
                 if (item.type == SearchType.header) {
                     items.add(new SearchItemHeader().setText(item.name).withIdentifier(index++));
                 } else {
-                    items.add(new SearchItem().setContact(item).withIdentifier(index++));
+                    items.add(new SearchItem(avatarHandler).setContact(item).withIdentifier(index++));
                 }
             }
         }
@@ -568,7 +572,7 @@ public class SearchFragment extends BaseFragment {
             results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, false).findAll();
 
         } else {
-            results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text).endGroup().findAll();
+            results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text,Case.INSENSITIVE).endGroup().findAll();
         }
 
         if (results != null && results.size() > 0) {

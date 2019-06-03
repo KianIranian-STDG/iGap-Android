@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -48,7 +48,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -64,12 +63,12 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
@@ -82,7 +81,6 @@ import net.iGap.libs.KeyboardUtils;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.DialogAnimation;
@@ -128,7 +126,6 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -204,7 +201,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private Realm realmMapUsers;
     private RecyclerView mRecyclerView;
     private MapUserAdapter mAdapter;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private View vgSlideUp;
     private TextView iconSlide;
@@ -450,13 +446,13 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 }
 
                 if (isVisible && orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE){
-                    btnSatelliteView.setVisibility(View.GONE);
-                    btnOrginView.setVisibility(View.GONE);
-                    fabGps.setVisibility(View.GONE);
+                    btnSatelliteView.hide();
+                    btnOrginView.hide();
+                    fabGps.hide();
                 } else {
-                    btnSatelliteView.setVisibility(View.VISIBLE);
-                    btnOrginView.setVisibility(View.VISIBLE);
-                    fabGps.setVisibility(View.VISIBLE);
+                    btnSatelliteView.show();
+                    btnOrginView.show();
+                    fabGps.show();
                 }
             }
         });
@@ -1156,7 +1152,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                     if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
                         rippleMoreMap.setVisibility(View.VISIBLE);
-                        fabGps.setVisibility(View.VISIBLE);
+                        fabGps.show();
                         fabStateSwitcher.setVisibility(View.VISIBLE);
                     }
                     if (!isBackPress) {
@@ -1209,7 +1205,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         @Override
                         public void onClick(View view) {
                             dialog.dismiss();
-                            fabGps.setVisibility(View.GONE);
+                            fabGps.hide();
                             fabStateSwitcher.setVisibility(View.GONE);
                             rippleMoreMap.setVisibility(View.GONE);
                             page = pageUserList;
@@ -1370,7 +1366,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 InfoWindow infoWindow;
                 marker.setIcon(avatarMark(userIdR, MarkerColor.GRAY));
-                infoWindow = new MyInfoWindow(map, marker, userIdR, hasComment, FragmentiGapMap.this, G.fragmentActivity);
+                infoWindow = new MyInfoWindow(map, marker, userIdR, hasComment, FragmentiGapMap.this, G.fragmentActivity, avatarHandler);
                 marker.setInfoWindow(infoWindow);
 
                 markers.add(marker);
@@ -1552,15 +1548,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 if (pathName == null) {
                     pathName = avatar.getFile().getLocalThumbnailPath();
                     if (pathName == null) {
-                        HelperAvatar.getAvatar(G.userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                            @Override
-                            public void onAvatarGet(String avatarPath, long roomId) {
-                            }
 
-                            @Override
-                            public void onShowInitials(String initials, String color) {
-                            }
-                        });
+                        //todo get avatar?
+
                     }
                 }
                 break;
@@ -1586,7 +1576,12 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
                             @Override
                             public void onInfo(Long registeredId) {
-                                drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+                                    }
+                                });
                             }
                         });
                     }
@@ -1648,7 +1643,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             isGpsOn = true;
             if (mapRegistrationStatus) {
                 rootTurnOnGps.setVisibility(View.GONE);
-                fabGps.setVisibility(View.VISIBLE);
+                fabGps.show();
                 fabStateSwitcher.setVisibility(View.VISIBLE);
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
@@ -1665,7 +1660,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
     private void visibleViewAttention(String text, boolean b) {
         rootTurnOnGps.setVisibility(View.VISIBLE);
-        fabGps.setVisibility(View.GONE);
+        fabGps.hide();
         fabStateSwitcher.setVisibility(View.GONE);
         toggleGps.setChecked(false);
         vgMessageGps.setVisibility(View.GONE);
@@ -1709,17 +1704,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 map.getController().animateTo(new GeoPoint(lastLatitude, lastLongitude));
             }
         }, 1000);
-    }
-
-    private void closeKeyboard(View v) {
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
-        }
     }
 
     @Override
@@ -1949,30 +1933,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             if (HelperCalander.isPersianUnicode) {
                 holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
             }
-
-            hashMapAvatar.put(item.getUserId(), holder.avatar);
-            HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, final long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
-
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
             realm.close();
         }
 

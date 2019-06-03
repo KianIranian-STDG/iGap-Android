@@ -4,13 +4,16 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
 package net.iGap.request;
 
 import net.iGap.proto.ProtoClientGetRoomHistory;
+import net.iGap.proto.ProtoGlobal;
+
+import java.util.List;
 
 public class RequestClientGetRoomHistory {
 
@@ -28,6 +31,42 @@ public class RequestClientGetRoomHistory {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getRoomHistory(long roomId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, OnHistoryReady historyReady) {
+        RequestData requestData = new RequestData(historyReady, roomId, firstMessageId, limit);
+        ProtoClientGetRoomHistory.ClientGetRoomHistory.Builder builder = ProtoClientGetRoomHistory.ClientGetRoomHistory.newBuilder();
+        builder.setRoomId(roomId);
+        builder.setFirstMessageId(firstMessageId);
+        builder.setDirection(direction);
+        builder.setLimit(limit);
+
+        RequestWrapper requestWrapper = new RequestWrapper(603, builder, requestData);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class RequestData {
+        public OnHistoryReady onHistoryReady;
+        public long roomId;
+        public long limit;
+        public long messageIdGetHistory;
+
+        public RequestData(OnHistoryReady onHistoryReady, long roomId, long messageIdGetHistory, long limit) {
+            this.onHistoryReady = onHistoryReady;
+            this.roomId = roomId;
+            this.messageIdGetHistory = messageIdGetHistory;
+            this.limit = limit;
+
+        }
+    }
+
+    public interface OnHistoryReady {
+        void onHistory(List<ProtoGlobal.RoomMessage> messageList);
+        void onErrorHistory(int major, int minor);
     }
 
     public static class IdentityClientGetRoomHistory {

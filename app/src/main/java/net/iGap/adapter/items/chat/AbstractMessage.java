@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
@@ -21,8 +22,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,18 +49,23 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperAvatar;
+import net.iGap.fragments.FragmentPaymentBill;
+import net.iGap.helper.CardToCardHelper;
+import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnProgressUpdate;
+import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
@@ -90,8 +100,10 @@ import net.iGap.request.RequestChannelAddMessageReaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +112,7 @@ import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -111,7 +124,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean directionalBased;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
-    CharSequence myText;
+    SpannableString myText;
     private RealmAttachment realmAttachment;
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
@@ -176,6 +189,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     protected void setTextIfNeeded(TextView view) {
         if (!TextUtils.isEmpty(myText)) {
             view.setText(myText);
+            // if this not work then use view.requestLayout();
+            view.forceLayout();
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);
@@ -204,22 +219,95 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             realmAttachment = f.getAttachment();
         }
         if (mMessage.forwardedFrom != null) {
-            myText = mMessage.forwardedFrom.getMessage();
+            myText = new SpannableString(mMessage.forwardedFrom.getMessage());
+        } else if (mMessage.messageText != null) {
+            myText = new SpannableString(mMessage.messageText);
         } else {
-            myText = mMessage.messageText;
+            myText = new SpannableString("");
         }
 
-        updateMessageText((String) myText);
+        updateMessageText();
 
         return this;
     }
 
+    public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
+        ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
+        int start = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '*' && (i + 1) < text.length() && text.charAt(i+1) == '*') {
+                if (start == -1) {
+                    start = i;
+                } else {
+                    Tuple<Integer, Integer> t = new Tuple<>(start, i);
+                    result.add(t);
+                    start = -1;
+                }
+                i += 1;
+            }
+        }
+
+        return result;
+    }
+
+    public static String removeBoldMark(String text, ArrayList<Tuple<Integer, Integer>> boldPlaces) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (boldPlaces.size() == 0)
+            stringBuilder.append(text);
+        else {
+            for (int i = 0 ; i < boldPlaces.size(); i++) {
+                Tuple<Integer, Integer> point = boldPlaces.get(i);
+                Tuple<Integer, Integer> previousPoint = null;
+
+                if (i != 0)
+                    previousPoint = boldPlaces.get(i - 1);
+
+                if (previousPoint == null)
+                    stringBuilder.append(text.substring(0, point.x));
+                else
+                    stringBuilder.append(text.substring(previousPoint.y + 2, point.x));
+
+                stringBuilder.append(text.substring(point.x + 2, point.y));
+
+                if (i == boldPlaces.size() - 1)
+                    stringBuilder.append(text.substring(point.y + 2));
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private void updateBoldPlaces(ArrayList<Tuple<Integer, Integer>> boldPlaces) {
+        for (int i = 0 ; i < boldPlaces.size(); i++) {
+            Tuple<Integer, Integer> point = boldPlaces.get(i);
+            point.x = point.x - i * 4;
+            point.y = point.y - i * 4 - 2;
+        }
+    }
+
+    private ArrayList<Tuple<Integer, Integer>> MessageBoldSetup(String text) {
+        ArrayList<Tuple<Integer, Integer>> boldPlaces = getBoldPlaces(text);
+        myText = new SpannableString(removeBoldMark(text, boldPlaces));
+        updateBoldPlaces(boldPlaces);
+        return boldPlaces;
+    }
+
     public void updateMessageText(String text) {
-        if (!TextUtils.isEmpty(text)) {
+        myText = new SpannableString(text);
+        updateMessageText();
+    }
+
+    public void updateMessageText() {
+        if (!TextUtils.isEmpty(myText)) {
+            ArrayList<Tuple<Integer, Integer>> results = MessageBoldSetup(myText.toString());
             if (mMessage.hasLinkInMessage) {
-                myText = HelperUrl.getLinkText(text, mMessage.linkInfo, mMessage.messageID);
+                myText = SpannableString.valueOf(HelperUrl.getLinkText(myText.toString(), mMessage.linkInfo, mMessage.messageID));
             } else {
-                myText = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(text) : text;
+                myText = new SpannableString(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(myText.toString()) : myText);
+            }
+
+            for (int i = 0; i < results.size(); i++) {
+                Tuple<Integer, Integer> point = results.get(i);
+                myText.setSpan(new StyleSpan(Typeface.BOLD), point.x, point.y, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
@@ -227,6 +315,39 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @Override
     public Item withIdentifier(long identifier) {
         return super.withIdentifier(identifier);
+    }
+
+    private void OnClickRow(ChatItemHolder holder, View view) {
+        new CountDownTimer(300, 100) {
+
+            public void onTick(long millisUntilFinished) {
+                view.setEnabled(false);
+            }
+
+            public void onFinish() {
+                view.setEnabled(true);
+            }
+        }.start();
+
+        if (FragmentChat.isInSelectionMode) {
+            holder.itemView.performLongClick();
+        } else {
+            if (G.isLinkClicked) {
+                G.isLinkClicked = false;
+                return;
+            }
+
+            if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
+                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    return;
+                }
+                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
+                } else {
+                    messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
+                }
+            }
+        }
     }
 
     @Override
@@ -243,36 +364,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CountDownTimer(300, 100) {
+                OnClickRow(mHolder, view);
+            }
+        });
 
-                    public void onTick(long millisUntilFinished) {
-                        view.setEnabled(false);
-                    }
-
-                    public void onFinish() {
-                        view.setEnabled(true);
-                    }
-                }.start();
-
-                if (FragmentChat.isInSelectionMode) {
-                    holder.itemView.performLongClick();
-                } else {
-                    if (G.isLinkClicked) {
-                        G.isLinkClicked = false;
-                        return;
-                    }
-
-                    if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            return;
-                        }
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
-                        } else {
-                            messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
-                        }
-                    }
-                }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnClickRow(mHolder, view);
             }
         });
 
@@ -302,15 +401,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             try {
-                if (mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
                     HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
                     Gson gson = new GsonBuilder().create();
                     for (int i = 0; i < buttonList.size(); i++) {
                         LinearLayout childLayout = MakeButtons.createLayout();
                         for (int j = 0; j < buttonList.get(i).length(); j++) {
                             try {
+                                JSONObject json = new JSONObject(buttonList.get(i).get(j).toString());
                                 ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                                 }.getType());
+                                if (btnEntery.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                                    btnEntery.setLongValue(json.getLong("value"));
+                                }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
                                 childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
                                     @Override
@@ -333,6 +436,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
             }
             ((LinearLayout.LayoutParams) ((LinearLayout) withTextHolder.messageView.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
         }
@@ -429,27 +533,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 //  String[] initialize =
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
-                HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, getRealmChat(), new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(final String avatarPath, long ownerId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), copyMessageSenderAvatar);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onShowInitials(final String initials, final String color) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                copyMessageSenderAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
-                        });
-                    }
-                });
+                mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, Long.parseLong(mMessage.senderID)).avatarType(AvatarHandler.AvatarType.USER));
                 //if (initialize != null && initialize[0] != null && initialize[1] != null) {
                 //    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
                 //        net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));
@@ -1815,8 +1899,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            if (G.locationListener != null)
-                              G.locationListener.requestLocation();
+                            if (G.locationListener != null){
+                                isLocationFromBot=true;
+                                G.locationListener.requestLocation();
+                            }
+
 
 
                    /*         G.locationListenerResponse = new LocationListenerResponse() {
@@ -1846,9 +1933,38 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
 
+            } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
+                JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                Realm realm = Realm.getDefaultInstance();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+                long peerId;
+                if (room != null && room.getChatRoom() != null) {
+                    peerId = room.getChatRoom().getPeerId();
+                } else {
+                    peerId = Long.parseLong(mMessage.senderID);
+                }
+                realm.close();
+                DirectPayHelper.directPayBot(jsonObject, peerId);
+            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
+            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
+                try {
+                    JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
+                } catch (JSONException e) {
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                }
+            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.TRAFFIC_BILL_MENU.getNumber()) {
+                try {
+                    JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
+                } catch (JSONException e) {
+                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+                }
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
 

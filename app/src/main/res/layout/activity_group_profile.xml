@@ -28,15 +28,6 @@
     tools:ignore="MissingPrefix">
 
 
-    <ProgressBar
-      android:id="@+id/agp_prgWaiting_addContact"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center"
-      android:indeterminate="true"
-      android:visibility="@{safeUnbox(fragmentGroupProfileViewModel.prgWaitingVisibility)}" />
-
     <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -222,7 +213,7 @@
             android:visibility="visible">
 
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -441,7 +432,7 @@
 
             >
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               android:id="@+id/headerTextview"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
@@ -548,7 +539,7 @@
             style="?backgroundColorSettingTheme"
             android:visibility="@{safeUnbox(fragmentGroupProfileViewModel.settingVisibility)}">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -747,6 +738,15 @@
         app:layout_anchorGravity="bottom|right|end" />
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <ProgressBar
+        android:id="@+id/agp_prgWaiting_addContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="@{safeUnbox(fragmentGroupProfileViewModel.prgWaitingVisibility)}" />
 
   </RelativeLayout>
 </layout>

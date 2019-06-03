@@ -7,10 +7,13 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.http.SslError;
 import android.os.Build;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -29,8 +32,10 @@ import com.squareup.picasso.Picasso;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.structs.StructWebView;
+import net.iGap.proto.ProtoGlobal;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,7 +99,7 @@ public class MakeButtons {
         return linearLayout_179;
     }
 
-    public static LinearLayout addButtons(ButtonEntity entity, View.OnClickListener clickListener, int culmn, float wightSum,  int btnId,  LinearLayout mainLayout,  Integer additionalType) {
+    public static LinearLayout addButtons(ButtonEntity entity, View.OnClickListener clickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
@@ -126,7 +131,7 @@ public class MakeButtons {
                 weightSum = 3f;
                 textWeight = 3f;
             }
-        }else if (culmn == 4) {
+        } else if (culmn == 4) {
             if (!entity.getImageUrl().equals("")) {
                 weightSum = 4f;
                 textWeight = 2.6f;
@@ -156,26 +161,12 @@ public class MakeButtons {
 
         // Set a background color for CardView
 
-        if (additionalType == AdditionalType.UNDER_KEYBOARD_BUTTON) {
+    /*    if (additionalType == AdditionalType.UNDER_KEYBOARD_BUTTON) {
             card.setCardBackgroundColor(Color.parseColor("#20000000"));
-        }
+        }*/
 
 
 
-
-        //    card.setForeground(getSelectedItemDrawable());
-        //  card.setBackgroundResource(getSelectedItemDrawable());
-
-    /*    int[] attrs = new int[]{R.attr.selectableItemBackground};
-        TypedArray typedArray = G.context.obtainStyledAttributes(attrs);
-        int backgroundResource = typedArray.getResourceId(0, 0);
-        card.setBackgroundResource(backgroundResource);
-        typedArray.recycle();*/
-        card.setForeground(getSelectedItemDrawable());
-
-        //  card.setFocusable(true);
-        card.setClickable(true);
-        // card.setCardElevation(3);
 
 
         LinearLayout linearLayout_529 = new LinearLayout(G.context);
@@ -186,7 +177,7 @@ public class MakeButtons {
         linearLayout_529.setLayoutParams(layout_941);
         linearLayout_529.setWeightSum(weightSum);
 
-        ImageView img1 = new ImageView(G.context);
+        AppCompatImageView img1 = new AppCompatImageView(G.context);
 
         /*img1.setId(1);
         img1.setTag("abc");*/
@@ -204,7 +195,7 @@ public class MakeButtons {
             layout_738.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 
 
-            //  img1.setBackgroundColor(Color.parseColor("#000000"));
+
 
 
             img1.setLayoutParams(layout_738);
@@ -212,20 +203,22 @@ public class MakeButtons {
         }
 
         if (entity.getLable().trim() != null) {
-            TextView btn1 = new TextView(G.context);
+            TextView btn1 = new AppCompatTextView(G.context);
 
             // btn1.setId(R.id.btn1);
             btn1.setEllipsize(TextUtils.TruncateAt.END);
             btn1.setGravity(CENTER);
+            btn1.setPadding(i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2));
             btn1.setMaxLines(1);
             btn1.setTypeface(G.typeface_IRANSansMobile);
-            btn1.setText(entity.getLable());
-
-            btn1.setTextSize(16);
-            if (Build.VERSION.SDK_INT < 21) {
-                card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
-                btn1.setTextColor(Color.parseColor("#000000"));
+            if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                btn1.setText(G.context.getString(R.string.cardToCardBtnText));
+            } else {
+                btn1.setText(entity.getLable());
             }
+            btn1.setTextSize(16);
+            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
+            btn1.setTextColor(Color.parseColor("#000000"));
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
@@ -237,24 +230,54 @@ public class MakeButtons {
             linearLayout_529.addView(btn1);
         }
         card.addView(linearLayout_529);
+
         ArrayList<String> actions = new ArrayList<>();
-        actions.add(entity.getValue());
+        if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+            actions.add(entity.getLongValue().toString());
+        } else {
+            actions.add(entity.getValue().toString());
+        }
         actions.add(entity.getLable());
         actions.add(entity.getJsonObject());
         card.setTag(actions);
 
 
         card.setId(entity.getActionType());
+/** add this section to make inside effect
+            /*    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
+                  StateListAnimator stateListAnimator = AnimatorInflater
+                  .loadStateListAnimator(G.context, R.animator.lift_on_touch);
+                  card.setStateListAnimator(stateListAnimator);
+ }*/
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
-            StateListAnimator stateListAnimator = AnimatorInflater
-                    .loadStateListAnimator(G.context, R.animator.lift_on_touch);
-            card.setStateListAnimator(stateListAnimator);
-        }
+        //    card.setLongClickable(false);
 
+/*        card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                return true;
+            }
+        });*/
+        card.setFocusableInTouchMode(false);
+        card.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+
+                                        if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                                            card.setCardBackgroundColor(Color.parseColor("#afc8cc"));
+
+                                        } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
+
+                                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                                            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
+                                        }
+                                        return false;
+                                    }
+                                }
+        );
         card.setOnClickListener(clickListener);
-
-
         mainLayout.addView(card);
         return mainLayout;
 

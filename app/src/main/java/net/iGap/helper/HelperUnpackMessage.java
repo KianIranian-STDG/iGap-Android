@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -20,6 +20,8 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -252,7 +254,20 @@ public class HelperUnpackMessage {
             object3 = method2.invoke(object2, protoMessage);
             Method method3 = object3.getClass().getMethod("build");
             method3.invoke(object3);
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         }
 
@@ -276,9 +291,23 @@ public class HelperUnpackMessage {
             if (optionalMethod != null) {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            HelperLog.setErrorLog(e);
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         }
         return object;
     }
+
 }

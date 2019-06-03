@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -21,6 +21,7 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.request.RequestClientGetRoomList;
 
 import ir.radsense.raadcore.model.Auth;
 
@@ -64,8 +65,7 @@ public final class HelperLogout {
 
     private static void resetStaticField() {
         Theme.setThemeColor();
-        G.firstTimeEnterToApp = true;
-        G.multiTab = false;
+        G.userLogin = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
         G.isPassCode = false;

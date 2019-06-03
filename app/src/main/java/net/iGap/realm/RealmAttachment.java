@@ -4,12 +4,13 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
 package net.iGap.realm;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import net.iGap.G;
@@ -27,6 +28,8 @@ import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
 
@@ -35,6 +38,8 @@ public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey
     private long id;
+
+    @Index
     private String token;
     private String url;
     private String name;
@@ -42,6 +47,8 @@ public class RealmAttachment extends RealmObject {
     private int width;
     private int height;
     private double duration;
+
+    @Index
     private String cacheId;
     private RealmThumbnail largeThumbnail;
     private RealmThumbnail smallThumbnail;
@@ -208,6 +215,38 @@ public class RealmAttachment extends RealmObject {
         realm.close();
 
         return realmAttachment;
+    }
+
+    public static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(@NonNull Realm realm) {
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+                for (RealmAttachment attachment : attachments) {
+                    attachment.setLocalThumbnailPath(path);
+                }
+            }
+        });
+
+        realm.close();
+    }
+
+    public static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+
+                for (RealmAttachment attachment : attachments) {
+                    attachment.setLocalFilePath(path);
+                }
+            }
+        });
+        realm.close();
     }
 
     public RealmThumbnail getLargeThumbnail() {

@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -32,9 +32,10 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
+import net.iGap.adapter.items.chat.LogWalletCardToCard;
 import net.iGap.adapter.items.chat.TimeItem;
-import net.iGap.eventbus.ErrorHandler;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
@@ -58,10 +59,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
+    public AvatarHandler avatarHandler;
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet) {
+            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard) {
                 if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && item.mMessage != null && item.mMessage.senderID != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
@@ -82,11 +84,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
-    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener) {
+    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         iMessageItem = iMessageItemListener;
         onChatMessageRemove = chatMessageRemoveListener;
-
+        this.avatarHandler = avatarHandler;
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
         setHasStableIds(true);
 
@@ -111,7 +113,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
                 AppUtils.closeKeyboard(v);
 
-                if ((item instanceof LogWallet)) {
+                if ((item instanceof LogWallet || item instanceof LogWalletCardToCard)) {
                     return false;
                 }
 
@@ -183,9 +185,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 if (item.mMessage.messageID != null) {
                     if (item.mMessage.messageID.equals(Long.toString(messageId))) {
                         item.mMessage.messageText = updatedText;
-                        item.updateMessageText(updatedText);
                         item.mMessage.isEdited = true;
                         item.mMessage.linkInfo = HelperUrl.getLinkInfo(updatedText);
+                        item.updateMessageText(updatedText);
                         set(i, item);
 
                         notifyItemChanged(i);
@@ -288,6 +290,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             }
         }
         return null;
+    }
+    public long getItemByPosition(int position){
+        try {
+            return getAdapterItem(position).mMessage.time;
+        }catch (Exception e){}
+        return 0;
+
     }
 
     public void removeMessage(long messageId) {

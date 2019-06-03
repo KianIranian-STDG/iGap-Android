@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -12,24 +12,25 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 import net.iGap.G;
 
-public class HeaderTextview extends TextView {
+public class HeaderTextView extends AppCompatTextView {
 
-    public HeaderTextview(Context context) {
+    public HeaderTextView(Context context) {
         super(context);
         this.setTextColor(Color.parseColor(G.headerTextColor));
     }
 
-    public HeaderTextview(Context context, AttributeSet attrs) {
+    public HeaderTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setTextColor(Color.parseColor(G.headerTextColor));
     }
 
-    public HeaderTextview(Context context, AttributeSet attrs, int defStyleAttr) {
+    public HeaderTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setTextColor(Color.parseColor(G.headerTextColor));
     }

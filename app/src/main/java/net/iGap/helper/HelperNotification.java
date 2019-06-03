@@ -27,8 +27,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.OnActivityChatStart;
+import net.iGap.libs.Tuple;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
@@ -147,7 +149,6 @@ public class HelperNotification {
 
         private NotificationManager notificationManager;
         private Notification notification;
-        private int defaultNotificationId = 20;
         private String mHeader = "";
         private String mContent = "";
         private Bitmap mBitmapIcon = null;
@@ -156,13 +157,6 @@ public class HelperNotification {
         private int delayAlarm = 5000;
         private long currentAlarm;
         private int notificationIconSrc;
-
-        class StructNotificationMap {
-            int notificationId;
-            Notification notification;
-        }
-
-        private HashMap<Long, StructNotificationMap> notificationMap = new HashMap<>();
 
         int vibrator;
         int sound;
@@ -194,16 +188,16 @@ public class HelperNotification {
         }
 
         private void setNotification() {
-            StructNotificationMap np = null;
-            int notificationId = defaultNotificationId;
+            int notificationId = 21;
             if (settingValue.separateNotification) {
-                if (notificationMap.containsKey(messageList.get(0).roomId)) {
-                    notificationId = notificationMap.get(messageList.get(0).roomId).notificationId;
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.KEY_NOTIF_KEYS, Context.MODE_PRIVATE);
+                notificationId = sharedPreferences.getInt("NotifNextId", 22);
+                int roomNotifId = sharedPreferences.getInt(String.valueOf(messageList.get(0).roomId), -1);
+                if (roomNotifId == -1) {
+                    sharedPreferences.edit().putInt(String.valueOf(messageList.get(0).roomId), notificationId).apply();
+                    sharedPreferences.edit().putInt("NotifNextId", notificationId + 1).apply();
                 } else {
-                    np = new StructNotificationMap();
-                    np.notificationId = ++defaultNotificationId;
-                    notificationMap.put(messageList.get(0).roomId, np);
-                    notificationId = defaultNotificationId;
+                    notificationId = roomNotifId;
                 }
             }
 
@@ -244,10 +238,6 @@ public class HelperNotification {
 
             if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
                 alarmNotification(messageToShow);
-            }
-
-            if (np != null) {
-                np.notification = notification;
             }
 
             notificationManager.notify(notificationId, notification);
@@ -349,8 +339,7 @@ public class HelperNotification {
             mBitmapIcon = BitmapFactory.decodeResource(null, R.mipmap.icon);
 
             if (countUniqueChat == 1 || settingValue.separateNotification) {
-
-                RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, messageList.get(0).senderId).findFirst();
+                RealmAvatar realmAvatarPath = RealmAvatar.getLastAvatar(messageList.get(0).senderId, realm);
                 if (realmAvatarPath != null) {
                     if (realmAvatarPath.getFile().isFileExistsOnLocal()) {
                         avatarPath = realmAvatarPath.getFile().getLocalFilePath();
@@ -514,16 +503,6 @@ public class HelperNotification {
             }
             return intVibrator;
         }
-
-        public void updateNotification(long roomId) {
-            if (notificationManager != null) {
-                StructNotificationMap sp = notificationMap.get(roomId);
-                if (sp != null && sp.notification != null) {
-                    notificationManager.notify(sp.notificationId, sp.notification);
-                }
-            }
-        }
-
     }
 
     private class ShowPopUp {
@@ -765,11 +744,29 @@ public class HelperNotification {
     }
 
     private String parseMessage(ProtoGlobal.RoomMessage roomMessage) {
+        if (G.isPassCode && ActivityMain.isLock) {
+            return context.getString(R.string.new_message_notif);
+        }
+
         String text = "";
         try {
             if (roomMessage.hasLog()) {
                 if (roomMessage.getLog().getType() == PINNED_MESSAGE) {
                     text = roomMessage.getReplyTo().getMessage();
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_JOINED_BY_INVITE_LINK) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                    // after showing notification we must update it after getting user name by bellow line
+                    //roomMessage.getLog().getTargetUser().getId()
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_ADDED) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_KICKED) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_LEFT) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                }  else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VIDEO_CALL) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                 } else if (roomMessage.getReplyTo() != null) {
                     text = AppUtils.conversionMessageType(roomMessage.getReplyTo().getMessageType());
                 }
@@ -778,10 +775,12 @@ public class HelperNotification {
                 if (roomMessage.hasForwardFrom()) {
                     rm = roomMessage.getForwardFrom();
                 } else if (roomMessage.hasReplyTo()) {
-                    rm = roomMessage.getReplyTo();
+                    rm = roomMessage;
                 }
 
                 text = rm.getMessage();
+                ArrayList<Tuple<Integer, Integer>> a = AbstractMessage.getBoldPlaces(text);
+                text = AbstractMessage.removeBoldMark(text, a);
 
                 if (rm.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
                     text = G.context.getString(R.string.sticker_message) + " : " + text;
@@ -831,7 +830,7 @@ public class HelperNotification {
                     }
 
                     if (notificationId > 0) {
-                        HelperNotification.getInstance().showNotification.updateNotification(roomId);
+                        HelperNotification.getInstance().showNotification.notificationManager.cancel(notificationId);
                     }
 
                     if (message != null && message.length() > 0 && roomId > 0) {

@@ -1,16 +1,18 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -91,7 +93,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
             } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".exe")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
-            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".docs")) {
+            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".doc") || roomMessage.getAttachment().getName().toLowerCase().endsWith(".docs") || roomMessage.getAttachment().getName().toLowerCase().endsWith(".docx")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
             } else {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
@@ -126,9 +128,9 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
-        protected TextView cslf_txt_file_name;
-        protected TextView cslf_txt_file_size;
-        protected ImageView thumbnail;
+        protected AppCompatTextView cslf_txt_file_name;
+        protected AppCompatTextView cslf_txt_file_size;
+        protected AppCompatImageView thumbnail;
         protected MessageProgress progress;
 
         public ViewHolder(View view) {
@@ -149,7 +151,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             frameLayout.setPadding(10, 10, 10, 10);
             frameLayout.setLayoutParams(layoutParamsFrameLayout);
 
-            thumbnail = new ImageView(G.context);
+            thumbnail = new AppCompatImageView(G.context);
             thumbnail.setId(R.id.thumbnail);
             LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
             thumbnailParams.gravity = CENTER;
@@ -164,7 +166,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             layout_752.gravity = CENTER;
             linearLayout_780.setLayoutParams(layout_752);
 
-            cslf_txt_file_name = new TextView(G.context);
+            cslf_txt_file_name = new AppCompatTextView(G.context);
             cslf_txt_file_name.setId(R.id.songArtist);
             cslf_txt_file_name.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             cslf_txt_file_name.setSingleLine(true);
@@ -178,7 +180,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name.setLayoutParams(layout_1000);
             linearLayout_780.addView(cslf_txt_file_name);
 
-            cslf_txt_file_size = new TextView(G.context);
+            cslf_txt_file_size = new AppCompatTextView(G.context);
             cslf_txt_file_size.setId(R.id.fileSize);
             cslf_txt_file_size.setSingleLine(true);
             cslf_txt_file_size.setText("3.2 mb");

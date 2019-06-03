@@ -6,12 +6,15 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.Ipromote;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -50,10 +54,12 @@ import java.util.HashMap;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class BotInit implements View.OnClickListener {
 
+    ProtoGlobal.RoomMessage newMessage;
     private ArrayList<StructRowBotAction> botActionList;
     private View layoutBot;
     private View rootView;
@@ -63,7 +69,6 @@ public class BotInit implements View.OnClickListener {
     private HashMap<Integer, JSONArray> buttonList;
     private RealmRoomMessage roomMessage;
     private String additionalData;
-    ProtoGlobal.RoomMessage newMessage;
     private int additionalType;
     private MaterialDesignTextView btnShowBot;
     private long roomId;
@@ -74,6 +79,104 @@ public class BotInit implements View.OnClickListener {
         this.rootView = rootView;
         init(rootView);
 
+    }
+
+    public static void checkDrIgap() {
+
+        new RequestClientGetPromote().getPromote();
+        G.ipromote = new Ipromote() {
+            @Override
+            public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
+                ArrayList<Long> promoteIds = new ArrayList<>();
+
+                for (int i = 0; i < builder.getPromoteList().size(); i++)
+                    promoteIds.add(builder.getPromoteList().get(i).getId());
+
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
+                        for (RealmRoom room : roomList) {
+                            if (!promoteIds.contains(room.getPromoteId())) {
+                                //   Log.i("#peymanPromoteId", room.getPromoteId() + "");
+                                room.setFromPromote(false);
+                                new RequestClientPinRoom().pinRoom(room.getId(), false);
+                            }
+                        }
+                    }
+                });
+                realm.close();
+
+                for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
+
+                    ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type TYPE = builder.getPromoteList().get(i).getType();
+                    RealmRoom realmRoom;
+
+                    if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
+                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
+                    } else {
+                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
+                    }
+
+                    if (realmRoom == null) {
+                        if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
+                            //                   RealmRoom.setPromote(builder.getPromoteList().get(i).getId(), TYPE);
+                            G.onChatGetRoom = new OnChatGetRoom() {
+                                @Override
+                                public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                    G.onChatGetRoom = null;
+                                    Realm realm1 = Realm.getDefaultInstance();
+                                    realm1.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm mRealm) {
+                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, mRealm);
+                                            realmRoom1.setFromPromote(true);
+                                            realmRoom1.setPromoteId(realmRoom1.getChatRoom().getPeerId());
+                                        }
+                                    });
+
+                                    new RequestClientPinRoom().pinRoom(room.getId(), true);
+
+
+                                    //  RealmRoom.setPromote(2297310L, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER);
+                                    ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
+
+                                    realm1.close();
+                                }
+
+
+                                @Override
+                                public void onChatGetRoomTimeOut() {
+
+                                }
+
+                                @Override
+                                public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                                }
+                            };
+                            new RequestChatGetRoom().chatGetRoom(builder.getPromoteList().get(i).getId());
+
+                        } else {
+
+                            new RequestClientGetRoom().clientGetRoom(builder.getPromoteList().get(i).getId(), RequestClientGetRoom.CreateRoomMode.getPromote);
+
+                        }
+
+
+                    } else {
+
+                        new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
+                        Log.i("#peymanSize", builder.getPromoteList().size() + "");
+
+                    }
+                }
+
+            }
+
+        };
+        //   G.ipromote = null;
     }
 
     public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu, RealmRoomMessage roomMessage, long roomId) {
@@ -185,10 +288,9 @@ public class BotInit implements View.OnClickListener {
 
     }
 
-
     private void init(View rootView) {
 
-        btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
         btnShowBot.setVisibility(View.INVISIBLE);
 
         layoutBot = rootView.findViewById(R.id.layout_bot);
@@ -208,7 +310,7 @@ public class BotInit implements View.OnClickListener {
             return;
         }*/
 
-        btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
 
         if (gone) {
             layoutBot.setVisibility(View.GONE);
@@ -278,7 +380,7 @@ public class BotInit implements View.OnClickListener {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rootView.findViewById(R.id.chl_edt_chat).getWindowToken(), 0);
 
-                MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+                MaterialDesignTextView btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
 
             } catch (IllegalStateException e) {
                 e.getStackTrace();
@@ -323,13 +425,13 @@ public class BotInit implements View.OnClickListener {
         LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
         layoutBot.removeAllViews();
 
-        LinearLayout layout = null;
+        RelativeLayout layout = null;
 
 
         for (int i = 0; i < botActionList.size(); i += 2) {
 
-            layout = new LinearLayout(G.context);
-            layout.setOrientation(LinearLayout.HORIZONTAL);
+            layout = new RelativeLayout(G.context);
+            layout.setGravity(RelativeLayout.CENTER_IN_PARENT);
 
             StructRowBotAction sb0 = botActionList.get(i);
             if (sb0.name.length() > 0) {
@@ -348,17 +450,18 @@ public class BotInit implements View.OnClickListener {
 
     }
 
-    private void addButton(LinearLayout layout, String name, String action) {
+    private void addButton(RelativeLayout layout, String name, String action) {
 
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-        param.setMargins(2, 2, 2, 2);
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        Button btn = new Button(G.context);
+        AppCompatButton btn = new AppCompatButton(G.context);
         btn.setLayoutParams(param);
-        btn.setTextColor(Color.WHITE);
-        btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.zxing_viewfinder_laser));
+        btn.setPadding(ViewMaker.dpToPixel(14), ViewMaker.dpToPixel(14), ViewMaker.dpToPixel(14), ViewMaker.dpToPixel(14));
+        btn.setTextColor(ContextCompat.getColor(G.context, R.color.start_color));
+        btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.background_setting_light));
         btn.setText(name);
         btn.setAllCaps(false);
+        btn.setGravity(Gravity.CENTER);
         btn.setTypeface(G.typeface_IRANSansMobile);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -379,7 +482,7 @@ public class BotInit implements View.OnClickListener {
     public void onClick(View v) {
         try {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
@@ -387,7 +490,7 @@ public class BotInit implements View.OnClickListener {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
                             G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
                             if (G.onBotClick != null) {
                                 G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
@@ -397,11 +500,11 @@ public class BotInit implements View.OnClickListener {
                 } catch (Exception e) {
                 }
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).substring(14));
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
-                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
-                G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0).toString(), ButtonActionType.WEBVIEW_LINK);
+                G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0), ButtonActionType.WEBVIEW_LINK);
             } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
                 try {
                     new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -414,7 +517,7 @@ public class BotInit implements View.OnClickListener {
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                     G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
                                     if (G.onBotClick != null) {
                                         G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
@@ -434,8 +537,10 @@ public class BotInit implements View.OnClickListener {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Boolean response = false;
-                            if (G.locationListener != null)
-                                response = G.locationListener.requestLocation();
+                            if (G.locationListener != null) {
+                                isLocationFromBot = true;
+                                G.locationListener.requestLocation();
+                            }
 
               /*              G.locationListenerResponse = new LocationListenerResponse() {
                                 @Override
@@ -471,12 +576,6 @@ public class BotInit implements View.OnClickListener {
         }
     }
 
-
-    class StructRowBotAction {
-        String action = "";
-        String name = "";
-    }
-
     private void makeTxtList(View rootView) {
 
         LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
@@ -498,7 +597,7 @@ public class BotInit implements View.OnClickListener {
 
         ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
 
-        TextView txt = new TextView(G.context);
+        TextView txt = new AppCompatTextView(G.context);
         txt.setLayoutParams(param);
         txt.setPadding(15, 6, 15, 6);
         txt.setText(action);
@@ -522,104 +621,9 @@ public class BotInit implements View.OnClickListener {
         setLayoutBot(true, false);
     }
 
-
-    public static void checkDrIgap() {
-
-        new RequestClientGetPromote().getPromote();
-        G.ipromote = new Ipromote() {
-            @Override
-            public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
-                final Realm realm = Realm.getDefaultInstance();
-                ArrayList<Long> promoteIds = new ArrayList<>();
-
-                for (int i = 0; i < builder.getPromoteList().size(); i++)
-                    promoteIds.add(builder.getPromoteList().get(i).getId());
-
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
-                        for (RealmRoom room : roomList) {
-                            if (!promoteIds.contains(room.getPromoteId())) {
-                                //   Log.i("#peymanPromoteId", room.getPromoteId() + "");
-                                room.setFromPromote(false);
-                                new RequestClientPinRoom().pinRoom(room.getId(), false);
-                            }
-
-                        }
-                    }
-                });
-
-                for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
-
-                    ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type TYPE = builder.getPromoteList().get(i).getType();
-                    RealmRoom realmRoom;
-
-                    if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
-                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
-                    } else {
-                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
-                    }
-
-                    if (realmRoom == null) {
-                        if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
-                            //                   RealmRoom.setPromote(builder.getPromoteList().get(i).getId(), TYPE);
-                            G.onChatGetRoom = new OnChatGetRoom() {
-                                @Override
-                                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                    G.onChatGetRoom = null;
-                                    Realm realm1 = Realm.getDefaultInstance();
-                                    realm1.executeTransaction(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm mRealm) {
-                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, mRealm);
-                                            realmRoom1.setFromPromote(true);
-                                            realmRoom1.setPromoteId(realmRoom1.getChatRoom().getPeerId());
-                                        }
-                                    });
-
-                                    new RequestClientPinRoom().pinRoom(room.getId(), true);
-
-
-                                    //  RealmRoom.setPromote(2297310L, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER);
-                                    ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
-
-                                    realm1.close();
-                                }
-
-
-                                @Override
-                                public void onChatGetRoomTimeOut() {
-
-                                }
-
-                                @Override
-                                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                                }
-                            };
-                            new RequestChatGetRoom().chatGetRoom(builder.getPromoteList().get(i).getId());
-
-                        } else {
-
-                            new RequestClientGetRoom().clientGetRoom(builder.getPromoteList().get(i).getId(), RequestClientGetRoom.CreateRoomMode.getPromote);
-
-                        }
-
-
-                    } else {
-
-                        new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
-                        Log.i("#peymanSize", builder.getPromoteList().size() + "");
-
-                    }
-                }
-
-            }
-
-        };
-        //   G.ipromote = null;
+    class StructRowBotAction {
+        String action = "";
+        String name = "";
     }
 
 }

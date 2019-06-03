@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -328,7 +328,7 @@ public class FileUtils {
                     if (strPath != null && strPath.length() > 0) {
                         return strPath + "/" + split[1];
                     }
-                    HelperLog.setErrorLog("FileUtils   getPath   :  " + uri);
+                    HelperLog.setErrorLog(new Exception("FileUtils   getPath   :  " + uri));
                 }
 
             }

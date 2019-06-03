@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the kianiranian Company - http://www.kianiranian.com/
 * All rights reserved.
 */
 
@@ -23,6 +23,7 @@ import net.iGap.helper.HelperConnectionState;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 import net.iGap.response.HandleResponse;
@@ -34,6 +35,7 @@ import java.util.Map;
 import static net.iGap.Config.ALLOW_RECONNECT_AGAIN_NORMAL;
 import static net.iGap.G.latestHearBeatTime;
 import static net.iGap.G.latestResponse;
+import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 
 public class WebSocketClient {
 
@@ -163,7 +165,7 @@ public class WebSocketClient {
      * @return webSocketConnection
      */
 
-    public static WebSocket getInstance() {
+    public synchronized static WebSocket getInstance() {
         if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(ConnectionState.CONNECTING);
@@ -213,7 +215,7 @@ public class WebSocketClient {
      *              detected this actions(android 7.*).
      */
 
-    public static void reconnect(boolean force) {
+    public static synchronized void reconnect(boolean force) {
 
         if ((force || (webSocketClient == null || !webSocketClient.isOpen()))) {
             G.handler.postDelayed(new Runnable() {
@@ -297,6 +299,7 @@ public class WebSocketClient {
      * role back main data for preparation reconnecting to socket
      */
     private static void resetWebsocketInfo() {
+        pendingRequest.remove(0);
         count = 0;
         G.canRunReceiver = true;
         G.symmetricKey = null;
@@ -314,7 +317,7 @@ public class WebSocketClient {
     }
 
     /**
-     * reset some info after connection is lost
+     * reset some info just for 'RealmRoom' after connection is lost
      */
     private static void resetMainInfo() {
         RealmRoom.clearAllActions();
@@ -339,17 +342,12 @@ public class WebSocketClient {
                             e.printStackTrace();
                         }
 
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (G.symmetricKey == null && G.socketConnection) {
-                                    WebSocket webSocket = WebSocketClient.getInstance();
-                                    if (webSocket != null) {
-                                        webSocket.sendText("i need 30001");
-                                    }
-                                }
+                        if (G.symmetricKey == null && G.socketConnection) {
+                            WebSocket webSocket = WebSocketClient.getInstance();
+                            if (webSocket != null) {
+                                webSocket.sendText("i need 30001");
                             }
-                        });
+                        }
                     } else {
                         G.allowForConnect = false;
                         WebSocket webSocket = WebSocketClient.getInstance();

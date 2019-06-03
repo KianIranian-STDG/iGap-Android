@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -47,6 +47,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnHoldBackgroundChanegeListener;
@@ -175,7 +176,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        canSetUserStatus = false;
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
@@ -588,6 +589,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
      */
 
     private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
+        UserStatusController.getInstance().setOnline();
         if (canClick) {
             layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);

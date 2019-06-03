@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -88,7 +88,7 @@ public class HelperLogMessage {
                 return extractLog(log, withLink);
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(" helper log message     deserializeLog()       " + e.toString());
+            HelperLog.setErrorLog(e);
             return new SpannableStringBuilder("");
         }
 
@@ -161,7 +161,7 @@ public class HelperLogMessage {
         return " " + result + " ";
     }
 
-    private static String getLogTypeString(ProtoGlobal.RoomMessageLog.Type type, ProtoGlobal.RoomMessage.Author author) {
+    public static String getLogTypeString(ProtoGlobal.RoomMessageLog.Type type, ProtoGlobal.RoomMessage.Author author) {
         int messageID = 0;
 
         switch (type) {
@@ -275,7 +275,7 @@ public class HelperLogMessage {
             case MEMBER_KICKED:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
-                    strBuilder.append("\u200E");
+                    strBuilder.append("\u200F");
                     insertClickSpanLink(strBuilder, targetName, true, targetId);
                     strBuilder.append(G.context.getString(R.string.prefix));
                     insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
@@ -285,7 +285,7 @@ public class HelperLogMessage {
             case MEMBER_LEFT:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
-                    strBuilder.append("\u200E");
+                    strBuilder.append("\u200F");
                     insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(LogMessageTypeString);
@@ -306,7 +306,7 @@ public class HelperLogMessage {
             case MEMBER_JOINED_BY_INVITE_LINK:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
-                    strBuilder.append("\u200E");
+                    strBuilder.append("\u200F");
                     insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                     strBuilder.append(finalTypeRoom);
@@ -333,6 +333,16 @@ public class HelperLogMessage {
                 strBuilder.clear();
                 String temp = log.message + "  " + LogMessageTypeString;
                 strBuilder.append(temp);
+                break;
+            case USER_JOINED:
+            case USER_DELETED:
+                if (HelperCalander.isPersianUnicode) {
+                    strBuilder.clear();
+                    strBuilder.append("\u200F");
+                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    strBuilder.append(LogMessageTypeString);
+                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                }
                 break;
             case UNRECOGNIZED:
                 strBuilder.clear();

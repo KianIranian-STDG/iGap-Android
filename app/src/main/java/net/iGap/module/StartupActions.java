@@ -5,7 +5,6 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
@@ -28,10 +27,14 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFillLookUpClass;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
 
@@ -45,11 +48,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import io.realm.DynamicRealm;
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
+import io.realm.CompactOnLaunchCallback;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
@@ -84,14 +90,46 @@ import static net.iGap.G.userTextSize;
  * all actions that need doing after open app
  */
 public final class StartupActions {
-    private RealmConfiguration configuration;
 
     public StartupActions() {
 
         detectDeviceType();
+
         //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
+
         realmConfiguration();
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                try {
+                    long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
+                    RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                    for (RealmRoom room : realmRooms)
+                    {
+                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
+                        if (room.getLastMessage() != null) {
+                            roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                        }
+
+                        RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                                .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
+                        for (RealmRoomMessage var : realmRoomMessages)
+                            var.removeFromRealm(realm);
+                    }
+                } catch (OutOfMemoryError error) {
+                    error.printStackTrace();
+                    HelperLog.setErrorLog(new Exception(error.getMessage()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    HelperLog.setErrorLog(e);
+                }
+            }
+        });
+        realm.close();
+
         mainUserInfo();
         connectToServer();
         manageSettingPreferences();
@@ -391,8 +429,6 @@ public final class StartupActions {
 
         Theme.setThemeColor();
 
-        G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
-
         // setting for show layout vote in channel
         G.showVoteChannelLayout = preferences.getInt(SHP_SETTING.KEY_VOTE, 1) == 1;
 
@@ -493,7 +529,13 @@ public final class StartupActions {
                 break;
         }
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new CalligraphyInterceptor(
+                        new CalligraphyConfig.Builder()
+                                .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+                                .setFontAttrId(R.attr.fontPath)
+                                .build()))
+                .build());
     }
 
     private void initializeGlobalVariables() {
@@ -547,7 +589,6 @@ public final class StartupActions {
          */
         Realm.init(context);
 
-
         //  new SecureRandom().nextBytes(key);
 
 
@@ -561,41 +602,32 @@ public final class StartupActions {
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
 
         Realm configuredRealm = getInstance();
-        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuredRealm.getConfiguration());
-
-
 
         /*if (configuration!=null)
             Realm.deleteRealm(configuration);*/
 
-        /**
-         * Returns version of Realm file on disk
-         */
-        if (dynamicRealm.getVersion() == -1) {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabaseEncrypted.realm").schemaVersion(REALM_SCHEMA_VERSION).deleteRealmIfMigrationNeeded().build());
-            //   Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-        } else {
-            Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-
-        }
-        dynamicRealm.close();
+        Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
         configuredRealm.close();
-        try {
-            Realm.compactRealm(configuredRealm.getConfiguration());
-
-        } catch (UnsupportedOperationException e) {
-            e.printStackTrace();
-        }
     }
 
     public Realm getPlainInstance() {
-        RealmConfiguration configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB)).schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .name(context.getResources().getString(R.string.planDB))
+                .schemaVersion(REALM_SCHEMA_VERSION)
+                .compactOnLaunch(new CompactOnLaunchCallback() {
+                    @Override
+                    public boolean shouldCompact(long totalBytes, long usedBytes) {
+                        final long thresholdSize = 50 * 1024 * 1024;
+                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.8);
+                    }
+                })
+                .migration(new RealmMigration())
+                .build();
         return Realm.getInstance(configuration);
     }
 
     public Realm getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
-
         String stringArray = sharedPreferences.getString("myByteArray", null);
         if (stringArray == null) {
             byte[] key = new byte[64];
@@ -603,31 +635,41 @@ public final class StartupActions {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
             editor.putString("myByteArray", saveThis);
-            editor.commit();
+            editor.apply();
         }
 
         byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
+
+        RealmConfiguration oldConfig = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
+                .schemaVersion(REALM_SCHEMA_VERSION)
+                .compactOnLaunch()
+                .migration(new RealmMigration()).build();
+
         RealmConfiguration newConfig = new RealmConfiguration.Builder()
                 .name(context.getResources().getString(R.string.encriptedDB))
                 .encryptionKey(mKey)
+                .compactOnLaunch(new CompactOnLaunchCallback() {
+                    @Override
+                    public boolean shouldCompact(long totalBytes, long usedBytes) {
+                        final long thresholdSize = 10 * 1024 * 1024;
+                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
+                    }
+                })
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .migration(new RealmMigration())
                 .build();
 
+        File oldRealmFile = new File(oldConfig.getPath());
         File newRealmFile = new File(newConfig.getPath());
-        if (newRealmFile.exists()) {
-            return Realm.getInstance(newConfig);
+        if (!oldRealmFile.exists()) {
+            return Realm.getInstance(newConfig);// ohhhhh
         } else {
             Realm realm = null;
             try {
-                configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
-                        .schemaVersion(REALM_SCHEMA_VERSION)
-                        .compactOnLaunch()
-                        .migration(new RealmMigration()).build();
-                realm = Realm.getInstance(configuration);
+                realm = Realm.getInstance(oldConfig);
                 realm.writeEncryptedCopyTo(newRealmFile, mKey);
                 realm.close();
-                Realm.deleteRealm(configuration);
+                Realm.deleteRealm(oldConfig);
                 return Realm.getInstance(newConfig);
             } catch (OutOfMemoryError oom) {
                 realm.close();
@@ -635,7 +677,6 @@ public final class StartupActions {
             } catch (Exception e) {
                 realm.close();
                 return getPlainInstance();
-
             }
         }
     }

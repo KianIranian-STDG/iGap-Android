@@ -97,6 +97,16 @@ public class GoToChatActivity {
                     fragmentChat.setArguments(getBundle());
                     new HelperFragment(fragmentChat).setReplace(false).load();
                 }
+            }).onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    HelperGetDataFromOtherApp.hasSharedData = false;
+                }
+            }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    dialog.dismiss();
+                }
             });
             if (G.fragmentActivity != null && !(G.fragmentActivity).isFinishing()) {
                 mDialog.show();

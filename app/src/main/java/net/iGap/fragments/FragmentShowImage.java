@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -486,11 +486,15 @@ public class FragmentShowImage extends BaseFragment {
             File file = new File(path);
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("image/*");
-                //+Realm realm = Realm.getDefaultInstance();
                 AppUtils.shareItem(intent, StructMessageInfo.convert(getRealm(), roomMessage));
-                //putExtra(intent, StructMessageInfo.convert(getRealm(), roomMessage));
-                startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                    intent.setType("video/*");
+                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_video_from_igap)));
+                } else {
+                    intent.setType("image/*");
+                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                }
+
             }
         }
     }

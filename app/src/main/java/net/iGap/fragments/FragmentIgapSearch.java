@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -329,7 +329,7 @@ public class FragmentIgapSearch extends BaseFragment {
                                 }
                             }
 
-                            items.add(new SearchItamIGap().setItem(item).withIdentifier(index++));
+                            items.add(new SearchItamIGap(avatarHandler).setItem(item).withIdentifier(index++));
                         }
                         itemAdapter.clear();
                         itemAdapter.add(items);

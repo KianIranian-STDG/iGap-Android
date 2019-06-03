@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -20,10 +20,9 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.structs.StructContactInfo;
@@ -38,7 +37,11 @@ import java.util.List;
 public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> {
     public static OnClickAdapter OnClickAdapter;
     public StructContactInfo mContact;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
+    private AvatarHandler avatarHandler;
+
+    public ContactItemGroup(AvatarHandler avatarHandler) {
+        this.avatarHandler = avatarHandler;
+    }
 
     public ContactItemGroup setContact(StructContactInfo contact) {
         this.mContact = contact;
@@ -88,30 +91,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
                 holder.subtitle.setText(holder.subtitle.getText().toString());
             }
         }
-
-        hashMapAvatar.put(mContact.peerId, holder.image);
-
-        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, final long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
     }
 
     @Override

@@ -193,7 +193,7 @@
             android:visibility="visible">
 
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -417,7 +417,7 @@
             android:orientation="vertical"
             android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.addMemberVisibility)}">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -524,7 +524,7 @@
             android:orientation="vertical"
             android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.settingVisibility)}">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"

@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -12,8 +12,6 @@ package net.iGap.helper;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -26,27 +24,19 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnDownload;
 import net.iGap.interfaces.OnFileDownloadResponse;
-import net.iGap.interfaces.OnFileDownloaded;
-import net.iGap.interfaces.OnStickerDownloaded;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.request.RequestFileDownload;
-import net.iGap.request.RequestWrapper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class HelperDownloadFile {
 
@@ -67,7 +57,7 @@ public class HelperDownloadFile {
         }
     }
 
-    private static HelperDownloadFile helperDownloadFile;
+    private static final HelperDownloadFile helperDownloadFile = new HelperDownloadFile();
     public ArrayList<String> manuallyStoppedDownload = new ArrayList<>();
     private ConcurrentHashMap<String, StructDownLoad> list = new ConcurrentHashMap<>();
     private ArrayList<StructQueue> mQueue = new ArrayList<>();
@@ -77,9 +67,6 @@ public class HelperDownloadFile {
     //**********************************************************************************************
 
     public static HelperDownloadFile getInstance() {
-        if (helperDownloadFile == null) {
-            helperDownloadFile = new HelperDownloadFile();
-        }
         return helperDownloadFile;
     }
 
@@ -135,22 +122,19 @@ public class HelperDownloadFile {
         }
 
         item.selector = selector;
-        String sel;
         switch (item.selector) {
             case FILE:
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, false);
                 break;
             case SMALL_THUMBNAIL:
                 if (item.url != null && !item.url.isEmpty()) {
-                    sel = "?selector=" + 1;
-                    item.url = item.url + sel;
+                    item.url = item.url + "?selector=" + 1;
                 }
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
                 break;
             case LARGE_THUMBNAIL:
                 if (item.url != null && !item.url.isEmpty()) {
-                    sel = "?selector=" + 2;
-                    item.url = item.url + sel;
+                    item.url = item.url + "?selector=" + 2;
                 }
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
                 break;
@@ -168,8 +152,8 @@ public class HelperDownloadFile {
         }
 
         if (moveToDirectoryPAth != null && moveToDirectoryPAth.length() > 0) {
-            File _lockalFile = new File(moveToDirectoryPAth);
-            if (_lockalFile.exists()) {
+            File _localFile = new File(moveToDirectoryPAth);
+            if (_localFile.exists()) {
                 item.progress = 100;
             }
         }
@@ -195,7 +179,7 @@ public class HelperDownloadFile {
         String primaryKey = cacheId + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.size() > 0 && list.containsKey(primaryKey)) {
-            //removeRequestQueue(list.get(primaryKey).identity); // don't need remove this item, remove listener in enough for stop download
+            //RequestQueue.removeRequestQueue(list.get(primaryKey).identity); // don't need remove this item, remove listener in enough for stop download
 
             StructDownLoad item = list.get(primaryKey);
 
@@ -204,12 +188,10 @@ public class HelperDownloadFile {
 
             }
 
-            if (item.structListeners != null) {
-                for (StructListener mItem : item.structListeners) {
-                    if (mItem.listener != null) {
-                        item.isPause = true;
-                        mItem.listener.OnError(item.Token);
-                    }
+            for (StructListener mItem : item.structListeners) {
+                if (mItem.listener != null) {
+                    item.isPause = true;
+                    mItem.listener.OnError(item.Token);
                 }
             }
 
@@ -453,7 +435,7 @@ public class HelperDownloadFile {
                                 }
                             });
                         } catch (NullPointerException e) {
-                            HelperLog.setErrorLog("HelperDownloadFile  startDownloadManager  onDownloadComplete   " + e.toString());
+                            HelperLog.setErrorLog(e);
                         }
                     }
 
@@ -518,46 +500,14 @@ public class HelperDownloadFile {
             }
             switch (item.selector) {
                 case FILE:
-                    setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
+                    RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
                     break;
                 case SMALL_THUMBNAIL:
                 case LARGE_THUMBNAIL:
-                    setThumbnailPathDataBaseAttachment(cashId, item.path);
+                    RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
                     break;
             }
         }
-    }
-
-    private void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
-                for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalThumbnailPath(path);
-                }
-            }
-        });
-
-        realm.close();
-    }
-
-    private void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
-
-                for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalFilePath(path);
-                }
-            }
-        });
-        realm.close();
     }
 
     private void updateView(final StructDownLoad item) {
@@ -565,14 +515,6 @@ public class HelperDownloadFile {
             if (mItem.listener != null) {
                 String _path = item.moveToDirectoryPAth.length() > 0 ? item.moveToDirectoryPAth : item.path;
                 mItem.listener.OnProgress(_path, item.progress);
-            }
-        }
-    }
-
-    void removeRequestQueue(String identity) {
-        for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
-            if (entry.getValue().identity != null && entry.getValue().identity.toString().contains(identity)) {
-                G.requestQueueMap.remove(entry.getKey());
             }
         }
     }

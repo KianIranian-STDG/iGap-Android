@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -33,7 +33,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -318,8 +317,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-
-        HelperAvatar.avatarAdd(G.userId, pathImageUser, avatar, new OnAvatarAdd() {
+        avatarHandler.avatarAdd(G.userId, pathImageUser, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
 

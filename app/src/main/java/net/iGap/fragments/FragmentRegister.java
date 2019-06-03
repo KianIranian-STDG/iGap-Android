@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -51,6 +51,7 @@ import net.iGap.viewmodel.FragmentRegisterViewModel;
 
 public class FragmentRegister extends BaseFragment {
 
+    public static final String TAG = FragmentRegister.class.getSimpleName();
     private static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
     private static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
     private static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
@@ -62,19 +63,16 @@ public class FragmentRegister extends BaseFragment {
     public static MaskedEditText edtPhoneNumber;
     public static TextView btnOk;
     public static int positionRadioButton = -1;
-
     public static OnStartAnimationRegister onStartAnimationRegister;
     private TextView txtAgreement_register;
-    private ViewGroup layout_verify;
     //Array List for Store List of StructCountry Object
-
+    private ViewGroup layout_verify;
     private FragmentActivity mActivity;
     private ScrollView scrollView;
     private int headerLayoutHeight;
     private LinearLayout headerLayout;
     private FragmentRegisterViewModel fragmentRegisterViewModel;
-    private ActivityRegisterBinding fragmentRegisterBinding;
-    public static final String TAG = FragmentRegister.class.getSimpleName();
+    public ActivityRegisterBinding fragmentRegisterBinding;
     private SMSReceiver smsReceiver;
 
     @Nullable
@@ -145,29 +143,29 @@ public class FragmentRegister extends BaseFragment {
         btnOk = fragmentRegisterBinding.rgEdtPhoneNumber;
 
         txtAgreement_register = fragmentRegisterBinding.txtAgreementRegister;
-        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+//        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
         layout_verify = fragmentRegisterBinding.rgLayoutVerifyAndAgreement;
 
         onStartAnimationRegister = new OnStartAnimationRegister() {
             @Override
             public void start() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
-                        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
-                        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-                        txtAgreement_register.startAnimation(trans_x_out);
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                fragmentRegisterBinding.rgLayoutVerifyAndAgreement.setVisibility(View.VISIBLE);
-                                layout_verify.startAnimation(trans_x_in);
-                            }
-                        }, 500);
-                    }
-                });
+//                txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                fragmentRegisterBinding.rgLayoutVerifyAndAgreement.setVisibility(View.VISIBLE);
+                fragmentRegisterViewModel.txtAgreementVisibility.set(View.GONE);
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
+//                        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
+//
+//                        txtAgreement_register.startAnimation(trans_x_out);
+//                        G.handler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                            }
+//                        }, 500);
+//                    }
+//                });
 
             }
         };
@@ -187,7 +185,7 @@ public class FragmentRegister extends BaseFragment {
                 public void onOTPReceived(String message) {
 
                     try {
-                        if (message != null && message.length()>0) {
+                        if (message != null && message.length() > 0) {
                             fragmentRegisterViewModel.receiveVerifySms(message);
                         }
                     } catch (Exception e1) {
@@ -199,18 +197,14 @@ public class FragmentRegister extends BaseFragment {
 
                 @Override
                 public void onOTPTimeOut() {
-                    Log.e(TAG,"OTP Time out");
+                    Log.e(TAG, "OTP Time out");
                 }
 
                 @Override
                 public void onOTPReceivedError(String error) {
-                    Log.e(TAG,error);
+                    Log.e(TAG, error);
                 }
             });
-
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
-            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
 
             SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
 
@@ -218,14 +212,14 @@ public class FragmentRegister extends BaseFragment {
             task.addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Log.e(TAG,"sms API successfully started   ");
+                    Log.e(TAG, "sms API successfully started   ");
                 }
             });
 
             task.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG,"sms Fail to start API   ");
+                    Log.e(TAG, "sms Fail to start API   ");
                 }
             });
         } catch (Exception e) {
@@ -234,13 +228,13 @@ public class FragmentRegister extends BaseFragment {
     }
 
 
-    private void unregisterReceiver(){
+    private void unregisterReceiver() {
         try {
-            if(smsReceiver !=null){
+            if (smsReceiver != null) {
                 G.fragmentActivity.unregisterReceiver(smsReceiver);
-                smsReceiver=null;
+                smsReceiver = null;
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
     }
@@ -281,7 +275,6 @@ public class FragmentRegister extends BaseFragment {
 
                 @Override
                 public void onGlobalLayout() {
-                    // TODO Auto-generated method stub
                     headerLayoutHeight = headerLayout.getHeight();
                     scrollView.scrollTo(0, headerLayoutHeight);
                     headerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
@@ -305,6 +298,18 @@ public class FragmentRegister extends BaseFragment {
         unregisterReceiver();
         fragmentRegisterViewModel.onStop();
         super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public enum Reason {

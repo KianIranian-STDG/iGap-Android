@@ -204,7 +204,7 @@
           android:paddingTop="@dimen/dp8"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -396,78 +396,167 @@
           </LinearLayout>
 
           <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{fragmentSettingViewModel::onClickPhoneNumber}"
-            android:orientation="vertical">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dp12"
-              android:paddingEnd="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@string/st_phoneNumber"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal" />
+              android:orientation="horizontal">
 
-            <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="start">
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight=".48"
+                  android:onClick="@{fragmentSettingViewModel::onClickPhoneNumber}"
+                  android:orientation="vertical">
+
+                  <TextView
+                      style="?textTitleColorSettingTheme"
+                      fontPath="fonts/IRANSansMobile.ttf"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/dp12"
+                      android:paddingEnd="@dimen/dp4"
+                      android:paddingStart="@dimen/dp4"
+                      android:text="@string/st_phoneNumber"
+                      android:textSize="@dimen/dp15"
+                      android:textStyle="normal" />
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="start">
 
 
-              <TextView
-                android:id="@+id/st_txt_phoneNumber"
-                style="?textSubColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingEnd="@dimen/dp4"
-                android:paddingStart="@dimen/dp4"
-                android:text="@{fragmentSettingViewModel.callbackSetPhoneNumber , default =@string/st_phoneNumber }"
-                android:textSize="@dimen/dp14"
-                android:textStyle="normal" />
-            </RelativeLayout>
+                      <TextView
+                          android:id="@+id/st_txt_phoneNumber"
+                          style="?textSubColorSettingTheme"
+                          fontPath="fonts/IRANSansMobile.ttf"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:gravity="center_vertical"
+                          android:paddingEnd="@dimen/dp4"
+                          android:paddingStart="@dimen/dp4"
+                          android:text="@{fragmentSettingViewModel.callbackSetPhoneNumber , default =@string/st_phoneNumber }"
+                          android:textSize="@dimen/dp14"
+                          android:textStyle="normal" />
+                  </RelativeLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight=".04"
+                  android:orientation="vertical" />
+
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight=".48"
+                  android:onClick="@{fragmentSettingViewModel::onClickRepresent}"
+                  android:orientation="vertical">
+
+                  <TextView
+                      style="?textTitleColorSettingTheme"
+                      fontPath="fonts/IRANSansMobile.ttf"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/dp12"
+                      android:paddingEnd="@dimen/dp4"
+                      android:paddingStart="@dimen/dp4"
+                      android:text="@string/st_represent"
+                      android:textSize="@dimen/dp15"
+                      android:textStyle="normal" />
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="start">
+
+
+                      <TextView
+                          android:id="@+id/st_txt_represent"
+                          style="?textSubColorSettingTheme"
+                          fontPath="fonts/IRANSansMobile.ttf"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:gravity="center_vertical"
+                          android:paddingEnd="@dimen/dp4"
+                          android:paddingStart="@dimen/dp4"
+                          android:text="@{fragmentSettingViewModel.callbackSetRepresent , default =@string/st_represent }"
+                          android:textSize="@dimen/dp14"
+                          android:textStyle="normal" />
+                  </RelativeLayout>
+
+              </LinearLayout>
 
           </LinearLayout>
 
           <LinearLayout
-            android:id="@+id/st_layout_bio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{fragmentSettingViewModel::onClickBio}"
-            android:orientation="vertical">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
+              android:id="@+id/st_layout_bio"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dp12"
-              android:paddingEnd="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@string/st_bio"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal" />
+              android:onClick="@{fragmentSettingViewModel::onClickBio}"
+              android:orientation="vertical">
 
             <TextView
-              android:id="@+id/st_txt_bio"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
+                style="?textTitleColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_bio"
+                android:textSize="@dimen/dp15"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/st_txt_bio"
+                style="?textSubColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@{fragmentSettingViewModel.callbackSetBio , default = @string/st_bio }"
+                android:textSize="@dimen/dp14"
+                android:theme="@style/Setting_editText"
+
+                />
+          </LinearLayout>
+
+          <LinearLayout
+              android:id="@+id/st_layout_ivand"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:gravity="center_vertical"
-              android:paddingEnd="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@{fragmentSettingViewModel.callbackSetBio , default = @string/st_bio }"
-              android:textSize="@dimen/dp14"
-              android:theme="@style/Setting_editText"
+              android:onClick="@{fragmentSettingViewModel::onClickIVand}"
+              android:orientation="vertical">
 
-              />
+            <TextView
+                style="?textTitleColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_ivand"
+                android:textSize="@dimen/dp15"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/st_txt_ivand"
+                style="?textSubColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@{fragmentSettingViewModel.callbackSetIVand}"
+                android:textSize="@dimen/dp14"
+                android:theme="@style/Setting_editText" />
+
           </LinearLayout>
 
         </LinearLayout>
@@ -481,7 +570,7 @@
           android:visibility="visible">
 
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -771,8 +860,9 @@
             android:layout_height="1dp"
             android:visibility="visible" />
 
-          <LinearLayout
+          <!-- multi tab must be deleted -->
 
+          <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
             android:onClick="@{fragmentSettingViewModel::onClickMultiTab}"
@@ -781,7 +871,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingStart="@dimen/dp16"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
               android:id="@+id/st_txt_st_toggle_multi_tab"
@@ -821,7 +911,7 @@
           android:paddingTop="@dimen/dp8"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -1085,7 +1175,7 @@
           android:paddingTop="@dimen/dp4"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -1501,7 +1591,7 @@
           android:orientation="vertical"
           android:visibility="visible">
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

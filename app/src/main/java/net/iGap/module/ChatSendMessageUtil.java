@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -33,7 +33,6 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     private ProtoGlobal.Room.Type roomType;
     private OnChatSendMessageResponse onChatSendMessageResponseChat;
     private OnChatSendMessageResponse onChatSendMessageResponseRoom;
-    private OnChatSendMessageResponse onChatSendMessageResponseFragmentMainRoom;
 
     public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.roomType = roomType;
@@ -229,10 +228,6 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         this.onChatSendMessageResponseRoom = response;
     }
 
-    public void setOnChatSendMessageResponseFragmentMainRoomList(OnChatSendMessageResponse response) {
-        this.onChatSendMessageResponseFragmentMainRoom = response;
-    }
-
     public void sendMessage(String fakeMessageIdAsIdentity) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.sendMessage(fakeMessageIdAsIdentity);
@@ -273,10 +268,6 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         if (onChatSendMessageResponseRoom != null) {
             onChatSendMessageResponseRoom.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
         }
-
-        if (onChatSendMessageResponseFragmentMainRoom != null) {
-            onChatSendMessageResponseFragmentMainRoom.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
-        }
     }
 
     @Override
@@ -288,10 +279,6 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         if (onChatSendMessageResponseRoom != null) {
             onChatSendMessageResponseRoom.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
         }
-
-        if (onChatSendMessageResponseFragmentMainRoom != null) {
-            onChatSendMessageResponseFragmentMainRoom.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
-        }
     }
 
     @Override
@@ -302,10 +289,6 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
 
         if (onChatSendMessageResponseRoom != null) {
             onChatSendMessageResponseRoom.onMessageFailed(roomId, roomMessage);
-        }
-
-        if (onChatSendMessageResponseFragmentMainRoom != null) {
-            onChatSendMessageResponseFragmentMainRoom.onMessageFailed(roomId, roomMessage);
         }
     }
 }

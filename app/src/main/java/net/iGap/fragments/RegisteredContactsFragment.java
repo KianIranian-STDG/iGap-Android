@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -41,7 +41,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -51,28 +50,23 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SwipeLayout;
-import com.hanks.library.AnimateCheckBox;
-import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.mikepenz.fastadapter.items.AbstractItem;
-import com.squareup.picasso.Picasso;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
@@ -89,29 +83,19 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsGetList;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 
 import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.context;
-import static net.iGap.R.string.contacts;
-import static net.iGap.R.string.of;
 
 public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete, OnPhoneContact {
 
@@ -128,7 +112,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private ProgressBar prgWaitingLoadContact;
     private EditText edtSearch;
     private boolean isCallAction = false;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private FastItemAdapter fastItemAdapter;
     private ProgressBar prgWaitingLiadList;
     //private ContactListAdapterA mAdapter;
@@ -230,7 +213,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             if (title.equals("New Chat")) {
                 title = G.context.getString(R.string.New_Chat);
             } else if (title.equals("Contacts")) {
-                title = G.context.getString(contacts);
+                title = G.fragmentActivity.getString(R.string.contacts);
             } else if (title.equals("call")) {
                 title = G.context.getString(R.string.call_with);
             }
@@ -851,13 +834,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
             final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());
             if (realmRegisteredInfo != null) {
-                viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
                 if (realmRegisteredInfo.getStatus() != null) {
                     if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                         viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), realmRegisteredInfo.getLastSeen(), false));
                     } else {
                         if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
                         }
                         viewHolder.subtitle.setText(realmRegisteredInfo.getStatus());
                     }
@@ -927,23 +910,11 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 //                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.white));
             }
 
-            hashMapAvatar.put(contact.getId(), viewHolder.image);
             setAvatar(viewHolder, contact.getId());
         }
 
         private void setAvatar(final ViewHolder holder, final long userId) {
-
-            HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color) {
-                    hashMapAvatar.get(userId).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -1396,7 +1367,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         }
     }
 
-    private class AddAsync extends AsyncTask<Void, Void, Void> {
+    private class AddAsync extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
 
         private ArrayList<StructListOfContact> contacts;
         private boolean isEnd;
@@ -1407,14 +1378,8 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
+        protected ArrayList<StructListOfContact> doInBackground(Void... params) {
             for (int i = 0; i < contacts.size(); i++) {
-                //   fastItemAdapter.add(new AdapterListContact(contacts.get(i).getDisplayName(), contacts.get(i).getPhone()).withIdentifier(index++));
 
                 String s = contacts.get(i).getPhone();
                 s = s.replaceAll("\\A0|\\+|\\-?", "");
@@ -1423,16 +1388,12 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 if (!s.startsWith("98"))
                     s = "98" + s;
                 contacts.get(i).setPhone(s);
-                //  phoneContactsList.add(contacts.get(i));
-
             }
-
-            //   getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
-            RealmResults<RealmContacts> mList = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
 
             ArrayList<StructListOfContact> slc = new ArrayList();
-
 
             for (int i = 0; i < contacts.size(); i++) {
                 boolean helpIndex = false;
@@ -1446,25 +1407,20 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                     slc.add(contacts.get(i));
                 }
             }
+            realm.close();
 
+            return slc;
+        }
 
-            //  phoneContactsList.clear();
+        @Override
+        protected void onPostExecute(ArrayList<StructListOfContact> slc) {
             phoneContactsList.addAll(slc);
-
-     /*       Collections.sort(phoneContactsList, new Comparator<StructListOfContact>() {
-                @Override
-                public int compare(StructListOfContact o1, StructListOfContact o2) {
-                    String s1 = o1.displayName;
-                    String s2 = o2.displayName;
-                    return s1.compareToIgnoreCase(s2);
-                }
-            });*/
 
             adapterListContact.notifyDataSetChanged();
             if (isEnd) {
                 prgWaitingLiadList.setVisibility(View.GONE);
             }
-            super.onPostExecute(aVoid);
+            super.onPostExecute(slc);
         }
     }
 

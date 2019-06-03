@@ -4,14 +4,15 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.proto.ProtoChannelAvatarDelete;
 
 public class ChannelAvatarDeleteResponse extends MessageHandler {
@@ -36,7 +37,9 @@ public class ChannelAvatarDeleteResponse extends MessageHandler {
         if (G.onChannelAvatarDelete != null) {
             G.onChannelAvatarDelete.onChannelAvatarDelete(builder.getRoomId(), builder.getId());
         } else {
-            HelperAvatar.avatarDelete(builder.getRoomId(), builder.getId(), HelperAvatar.AvatarType.ROOM, null);
+            if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
+                G.currentActivity.avatarHandler.avatarDelete(new ParamWithAvatarType(null, builder.getRoomId()).avatarType(AvatarHandler.AvatarType.ROOM), builder.getId());
+            }
         }
     }
 

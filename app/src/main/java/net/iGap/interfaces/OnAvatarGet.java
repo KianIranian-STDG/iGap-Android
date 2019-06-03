@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -20,7 +20,7 @@ public interface OnAvatarGet {
      *
      * @param avatarPath path for show image from that
      */
-    void onAvatarGet(String avatarPath, long roomId);
+    void onAvatarGet(String avatarPath, long avatarId);
 
     /**
      * call this method if avatarPath not exist
@@ -28,5 +28,5 @@ public interface OnAvatarGet {
      * @param initials letters for show in imageView
      * @param color    color imageView background
      */
-    void onShowInitials(String initials, String color);
+    void onShowInitials(String initials, String color, long avatarId);
 }

@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -586,6 +586,51 @@ public class RealmRoomMessage extends RealmObject {
             }
         }
         return 0;
+    }
+
+    public void removeFromRealm(Realm realm) {
+        if (realmAdditional != null)
+            realmAdditional.deleteFromRealm();
+
+        if (attachment != null) {
+            long count = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.ATTACHMENT.ID, attachment.getId())
+                    .count();
+
+            if (count == 1) // 1 is for this message
+                attachment.deleteFromRealm();
+        }
+
+        if (location != null)
+            location.deleteFromRealm();
+
+        if (roomMessageContact != null)
+            roomMessageContact.deleteFromRealm();
+
+        if (roomMessageWallet != null)
+            roomMessageWallet.deleteFromRealm();
+
+        if (forwardMessage != null) {
+            long count = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, forwardMessage.getMessageId())
+                    .or()
+                    .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, forwardMessage.getMessageId())
+                    .count();
+            if (count == 1) // 1 is for this message
+                forwardMessage.deleteFromRealm();
+        }
+
+        if (replyTo != null) {
+            long count = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, replyTo.getMessageId())
+                    .or()
+                    .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, replyTo.getMessageId())
+                    .count();
+            if (count == 1) // 1 is for this message
+                replyTo.deleteFromRealm();
+        }
+
+        this.deleteFromRealm();
     }
 
     /**
@@ -1291,7 +1336,7 @@ public class RealmRoomMessage extends RealmObject {
         return roomMessageWallet;
     }
 
-    private void setRoomMessageWallet(RealmRoomMessageWallet roomMessageWallet) {
+    public void setRoomMessageWallet(RealmRoomMessageWallet roomMessageWallet) {
         this.roomMessageWallet = roomMessageWallet;
     }
 

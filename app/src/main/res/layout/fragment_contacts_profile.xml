@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
@@ -259,7 +260,7 @@
             android:paddingTop="@dimen/dp8"
             android:visibility="visible">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -504,7 +505,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"

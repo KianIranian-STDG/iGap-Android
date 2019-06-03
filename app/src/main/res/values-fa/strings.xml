@@ -45,7 +45,7 @@
     <!-- Register Page -->
     <string name="rg_title_register">"ثبت نام"</string>
     <string name="rg_confirm_text_register">"لطفاً نام و کد کشور خود را تأیید کرده سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
-    <string name="rg_Start">"بزن بریم"</string>
+    <string name="rg_Start">"بزن بریم..."</string>
     <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
     <string name="rg_agreement_text_register">"تأیید نهایی شماره تلفن شما، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم."</string>
     <string name="rg_verify_register1">"در حال اتصال"</string>
@@ -64,6 +64,14 @@
     <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
     <string name="phone_number">"شماره تلفن"</string>
     <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
+
+
+    <!--Reagent-->
+    <string name="ra_title">"معرف"</string>
+    <string name="ra_enter_reagent_code">"لطفا شماره ی معرف خود را وارد کنید"</string>
+    <string name="ra_confirm">"تایید"</string>
+    <string name="ra_skip">"فعلا بیخیال!"</string>
+
 
     <!-- Toast -->
     <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
@@ -175,6 +183,7 @@
     <string name="st_nickname">"نام"</string>
     <string name="st_contactName">"نام مخاطب"</string>
     <string name="st_phoneNumber">"شماره تلفن"</string>
+    <string name="st_represent">معرف:</string>
     <string name="st_title_info">"اطلاعات"</string>
     <string name="st_title_notification_sounds">"اعلانات و صداها"</string>
     <string name="st_title_Clear_Cache">"پاک کردن حافظهٔ نهان"</string>
@@ -546,7 +555,6 @@
     <string name="phone_selected_for_send">شماره تلفن انتخاب شده</string>
     <string name="crop_selected_for_send">تصویر انتخاب شده</string>
     <string name="location_message">پیام مکانی</string>
-    <string name="wallet_message">تراکنش کیف پول</string>
     <string name="chat_to_group">انتقال گفتگو به گروه</string>
     <string name="last_seen_at">آخرین بار دیده شده در</string>
     <string name="long_time_ago">خیلی وقت پیش</string>
@@ -669,6 +677,7 @@
     <string name="please_enter_code_for_verify">کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
     <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
+    <string name="share_video_from_igap">به اشتراک گذاشتن ویدیو از آی‌گپ</string>
     <string name="TERMINATE">لغو</string>
     <string name="iGap_version">آیگپ اندروید نسخه</string>
     <string name="Bazzar">کافه بازار</string>
@@ -703,6 +712,7 @@
     <string name="description_optional">توضیح (اختیاری)</string>
     <string name="enter_the_code_here">کد را اینجا وارد کنید.</string>
     <string name="transfer_to">انتقال به</string>
+    <string name="transfer_to_wallet">انتقال به کیف پول</string>
     <string name="price">قیمت</string>
     <string name="amunt">مقدار</string>
     <string name="email_optional">ایمیل (اختیاری)</string>
@@ -1294,12 +1304,12 @@
     <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
     <string name="result_4">پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول</string>
 
-    <string name="wallet_from">از:</string>
-    <string name="wallet_to">به:</string>
-    <string name="wallet_amount">مبلغ:</string>
-    <string name="wallet_trace">کد پیگیری:</string>
-    <string name="wallet_invoice">فاکتور:</string>
-    <string name="wallet_data">تاریخ:</string>
+    <string name="wallet_from">از</string>
+    <string name="wallet_to">به</string>
+    <string name="wallet_amount">مبلغ</string>
+    <string name="wallet_trace">کد پیگیری</string>
+    <string name="wallet_invoice">فاکتور</string>
+    <string name="wallet_data">تاریخ</string>
     <string name="wallet_desc">---توضیحات پرداخت---</string>
     <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">اعتبار شما: </string>
@@ -1412,7 +1422,6 @@
     <string name="Please_select_an_option"> لطفا یک گزینه را انتخاب کنید</string>
 
 
-
     <string name="sticker">استیکر</string>
     <string name="add_sticker">اضافه کردن استیکر</string>
     <string name="remove_sticker">حذف استیکر</string>
@@ -1420,4 +1429,348 @@
     <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
     <string name="Add">اضافه</string>
     <string name="Remove">حذف</string>
+
+    <string name="try_later">چند ثانیه بعد امتحان کنید</string>
+    <string name="representer">ثبت معرف</string>
+    <string name="representer_code">شماره تلفن همراه معرف خود را  وارد کنید
+</string>
+
+    <string name="unknown_type">این نوع کارت پشتیبانی نمی شود.</string>
+    <string name="order_history">مشاهده سوابق</string>
+    <string name="your_point">امتیاز شما:</string>
+
+    <string name="dialog_ok">باشه</string>
+    <string name="error_submit_qr_code">خطایی با درخواست شما رخ داده است!</string>
+
+    <string name="not_exist_activities">لیست سوابق شما خالی است.</string>
+
+    <string name="ivand_profile_title">امتیاز من</string>
+
+    <string name="ivand_activities_title">سوابق امتیاز</string>
+    <string name="scan_barcode">اسکن بارکد</string>
+
+    <string name="st_ivand">باشگاه آیگپ</string>
+    <string name="st_ivand_text_setting">امتیاز شما:</string>
+    <string name="E_10183">کد وارد شده نا معتبر می باشد</string>
+
+
+    <string name="share_link_item_dialog">اشتراک لینک</string>
+    <string name="not_found_message">این پیام وجود ندارد.</string>
+    <string name="ivnalid_data_provided">مقادیر ورودی اشتباه است.</string>
+    <string name="new_message_notif">پیام جدید</string>
+    <string name="card_to_card">کارت به کارت</string>
+    <string name="your_device_is_root">متاسفانه دستگاه شما روت است.</string>
+
+
+    <string name="rial">ریال</string>
+    <string name="toman">تومان</string>
+
+    <string name="verify_fragment_hint">ما از طریق پیامک برای شما یک کد فعالسازی ارسال کرده‌ایم، در صورت عدم دریافت کد بعد از ۱ دقیقه دوباره درخواست دهید.</string>
+    <string name="new_user_pass_fragment_hint">برای حساب کیف پول خود یک رمز عبور تعیین کنید، شما بعدا می‌توانید از تنظیمات رمز خود را تغییر دهید.</string>
+    <string name="code_resend_text">* ثانیه تا ارسال دوباره پیامک</string>
+    <string name="resend_code">ارسال دوباره پیامک</string>
+    <string name="new_otp_requested">درخواست کد جدید ارسال شد</string>
+    <string name="request_again">درخواست مجدد</string>
+    <string name="sending_code_to_x">در حال ارسال پیامک به شماره\n*</string>
+    <string name="select_your_city">شهر خود را انتخاب کنید</string>
+    <string name="enter_username">شناسه کاربری خود را وارد کنید</string>
+    <string name="enter_code_correctly">کد ارسال شده را کامل وارد کنید</string>
+    <string name="enter_mobile_correctly">شماره موبایل خود را کامل وارد کنید</string>
+    <string name="enter_your_mobile">شماره موبایل خود را وارد کنید</string>
+    <string name="enter_your_mobile_without_zero">شماره موبایل خود را بدون صفر وارد کنید</string>
+    <string name="enter_your_activation_code">کد فعال‌سازی خود را وارد کنید</string>
+    <string name="country_code_not_valid">کد کشور صحیح نیست</string>
+    <string name="four_digits_activation_code">کد فعال‌سازی ۴ رقمی</string>
+    <string name="confirm_password">تکرار رمز عبور</string>
+    <string name="enter_your_confirm_password">تکرار رمز عبور خود را وارد کنید</string>
+    <string name="enter_your_password">رمز عبور خود را وارد کنید</string>
+    <string name="select_your_password">رمز عبور خود را انتخاب کنید</string>
+    <string name="enter_your_referral_code">کد معرف خود را وارد کنید</string>
+    <string name="select_your_province">استان خود را انتخاب کنید</string>
+    <string name="referral_code">کد معرف</string>
+    <string name="province_name">نام استان</string>
+    <string name="account_password">رمز حساب کاربری</string>
+
+    <string name="full_name">نام و نام خانوادگی</string>
+    <string name="user_name">نام کاربری</string>
+    <string name="birth_date">تاریخ تولد</string>
+    <string name="email">ایمیل</string>
+    <string name="province">استان</string>
+    <string name="edit_profile_hint">این اطلاعات به صورت رمزنگاری شده روی سرورهای امن کیف پول ذخیره می‌شوند و فقط در صورت نیاز با مجوز شما به سایر نرم افزارهای طرف سوم انتقال داده خواهد شد. کاربرد این اطلاعات به منظور راحتی فرآیندهای خرید می‌باشد.</string>
+    <string name="username">شناسه کاربری</string>
+    <string name="select_city">انتخاب شهر</string>
+    <string name="select_province">انتخاب استان</string>
+    <string name="mobile_number">شماره موبایل</string>
+    <string name="paygear_user">کاربر کیف پول</string>
+    <string name="authorization_not_valid">مجوز دسترسی معتبر نیست</string>
+    <string name="already_read">قبلا خواندم</string>
+    <string name="login">ورود</string>
+    <string name="next">بعدی</string>
+    <string name="back">بازگشت</string>
+    <string name="code">کد</string>
+    <string name="never_mind">بی خیال</string>
+    <string name="not_now">الان نه!</string>
+
+    <string name="no_item">موردی یافت نشد</string>
+    <string name="retry">تلاش مجدد</string>
+
+    <string name="charge_wallet">شارژ کیف پول</string>
+    <string name="charge_paygear">شارژ کیف پول</string>
+    <string name="immediate_cash_out">برداشت فوری</string>
+    <string name="normal_cash_out">برداشت عادی</string>
+
+    <string name="enter_info_completely">اطلاعات را به صورت کامل وارد کنید</string>
+    <string name="source_card">کارت مبدا</string>
+    <string name="destination_card">کارت مقصد</string>
+    <string name="destination_card_number">شماره کارت مقصد</string>
+    <string name="destination_sheba_number">شماره شبای مقصد</string>
+    <string name="trace_no">کد رهگیری</string>
+    <string name="reference_code">شماره مرجع</string>
+    <string name="has">دارد</string>
+    <string name="not_has">ندارد</string>
+    <string name="see_details">مشاهده جزییات</string>
+    <string name="request_time">زمان درخواست</string>
+    <string name="settlement_time">زمان تسویه</string>
+    <string name="requested_amount">مبلغ درخواستی</string>
+    <string name="requested_amount_rial">مبلغ درخواستی(ریال)</string>
+    <string name="settlement_wage">کارمزد تسویه</string>
+    <string name="deposits">واریزی</string>
+    <string name="wage">کارمزد</string>
+    <string name="bank">بانک</string>
+    <string name="destination_bank">بانک مقصد</string>
+    <string name="card_owner">صاحب کارت</string>
+    <string name="total_price">مبلغ کل</string>
+    <string name="discount">تخفیف</string>
+    <string name="service_price">حق سرویس</string>
+    <string name="tax">مالیات</string>
+    <string name="delivery_price">هزینه ارسال</string>
+    <string name="payable_price_rial">قابل پرداخت (ریال)</string>
+    <string name="final_price_rial">مبلغ نهایی (ریال)</string>
+    <string name="payable_price">مبلغ پرداختی</string>
+    <string name="withdraw_price">مبلغ برداشت</string>
+    <string name="qr_not_detected">نماد قابل شناسایی نیست</string>
+    <string name="payment_price_rial">مبلغ پرداختی به ریال</string>
+    <string name="price_rial">مبلغ (ریال)</string>
+    <string name="amount_must_be_greater_1000">مبلغ باید بیشتر از 1000 ریال باشد</string>
+    <string name="amount_not_valid">مبلغ را صحیح وارد کنید</string>
+    <string name="payment_history">تاریخچه تراکنش‌ها</string>
+    <string name="set_card_pin">تعریف رمز امنیتی</string>
+    <string name="credit_card_set_pin_confirm">برای استفاده از کیف پولکارت ابتدا باید برای آن رمز تعریف کنید. آیا می‌خواهید رمز را فعال نمایید؟</string>
+
+    <string name="order_info">اطلاعات تراکنش</string>
+    <string name="pay_to">پرداخت به</string>
+    <string name="pay_with_raad_card_to">پرداخت با کیف پولکارت به</string>
+    <string name="pay_charge_for_raad_card_to">پرداخت شارژ کیف پولکارت به</string>
+    <string name="charge_paygear_card">شارژ کیف پولکارت</string>
+    <string name="purchase_club_plan_from">خرید طرح باشگاه از</string>
+    <string name="receive_from">دریافت از</string>
+    <string name="receive_sale_share_from">دریافت سهم فروش از</string>
+    <string name="receive_charge_for_raad_card_from">دریافت شارژ کیف پولکارت از</string>
+    <string name="settled">تسویه حساب شده</string>
+    <string name="settled_pending">در انتظار تسویه حساب</string>
+    <string name="settlement">تسویه</string>
+    <string name="payment_pending">در انتظار پرداخت</string>
+
+    <string name="taxi">تاکسی</string>
+
+    <string name="successful_payment">پرداخت موفق</string>
+    <string name="unsuccessful_payment">پرداخت ناموفق</string>
+    <string name="save_receipt">ذخیره رسید</string>
+    <string name="receipt_saved">رسید ذخیره شد</string>
+
+    <string name="scan">اسکن کنید</string>
+
+    <string name="cash_in_hint">مبلغ مورد نظر خود را وارد کرده و با استفاده از کارت بانکی و رمز دوم اینترنتی خود حساب خود را شارژ کنید.</string>
+    <string name="cash_out_normal_hint">برداشت عادی بوسیله شبکه شاپرک و شماره شبا صورت میگیرد. بعد از درخواست تا حداکثر ۲۴ ساعت پول به حساب شما واریز خواهد شد.</string>
+    <string name="cash_out_immediate_hint">کارمزد مطابق دستورالعمل‌های شاپرک از حساب شما کسر می‌گردد.</string>
+    <string name="how_to_get_sheba">نحوه اطلاع از شماره شبا</string>
+    <string name="my_qr_hint">کد تصویری خود را به دیگران نشان دهید تا آن را اسکن کنند و به شما پول بدهند!</string>
+    <string name="my_qr">کیوآر من</string>
+    <string name="credit">اعتباری</string>
+
+    <string name="card_16_digits">شماره ۱۶ رقمی کارت</string>
+    <string name="sheba_20_digits">شماره ۲۴ رقمی شبا</string>
+
+    <string name="no_camera_found">دوربین دستگاه یافت نشد</string>
+
+    <string name="paygear_balance">موجودی کیف پول</string>
+    <string name="paygear_card_balance">موجودی کیف پول کارت</string>
+    <string name="paygear_account_balance">موجودی حساب کیف پول</string>
+    <string name="cashable_balance">موجودی قابل برداشت</string>
+    <string name="cashable_price">مبلغ قابل برداشت</string>
+    <string name="cash_in_paygear">شارژ حساب کیف پول</string>
+    <string name="cash_out_paygear">برداشت از کیف پول</string>
+    <string name="cashable">قابل برداشت</string>
+    <string name="not_cashable">غیر قابل برداشت</string>
+    <string name="gift">هدیه</string>
+    <string name="withdraw">برداشت</string>
+    <string name="cards">کارت‌ها</string>
+    <string name="my_cards">کارت‌های من</string>
+    <string name="cashout_today_limit">سقف برداشت امروز</string>
+    <string name="cash_out_request_done">درخواست تسویه انجام شد</string>
+    <string name="cashout_request">درخواست تسویه</string>
+    <string name="paygear_card_pin">رمز کیف پولکارت</string>
+    <string name="qr">کیوآر</string>
+    <string name="scanner">اسکنر</string>
+
+    <string name="default_card">کارت پیش‌فرض</string>
+    <string name="delete_card">حذف کارت</string>
+    <string name="add_new_card">افزودن کارت جدید</string>
+    <string name="delete_card_confirm">آیا از حذف این کارت بانکی مطمئن هستید؟</string>
+    <string name="card_number">شماره کارت</string>
+    <string name="month">ماه</string>
+    <string name="year">سال</string>
+    <string name="edit">ویرایش</string>
+    <string name="camera">دوربین</string>
+    <string name="gallery">گالری</string>
+    <string name="delete_image">حذف تصویر</string>
+    <string name="click_here_for_adding_card">برای افزودن کارت اینجا را لمس کنید</string>
+
+    <string name="x_people">* نفر</string>
+    <string name="enter_receiver_code">کد پذیرنده را وارد کنید</string>
+    <string name="receiver_code">کد پذیرنده</string>
+    <string name="pay_with_price_x">پرداخت به مبلغ\n*</string>
+
+    <string name="internet_pin_2">رمز دوم اینترنتی</string>
+    <string name="cvv2">CVV2</string>
+    <string name="select_card">انتخاب کارت</string>
+
+
+    <string name="new_pass">رمز جدید</string>
+    <string name="confirm_pass">تکرار رمز</string>
+    <string name="current_pass">رمز فعلی</string>
+    <string name="passwords_not_match">رمزها یکسان نیستند</string>
+    <string name="card_pin_saved">رمز کیف پول ثبت شد</string>
+    <string name="card_pin_changed">رمز کیف پول تغییر یافت</string>
+
+    <string name="flash_light">چراغ قوه</string>
+    <string name="entering_driver_code">ورود دستی کد راننده یا مغازه</string>
+    <string name="scan_driver_or_store_qr">کیوآر را اسکن کنید</string>
+    <string name="data_unknown">اطلاعات دریافتی نامشخص است</string>
+
+    <string name="enter_card_number">شماره کارت را به طور کامل وارد کنید</string>
+    <string name="enter_cvv2">کد cvv2 کارت خود را وارد کنید</string>
+    <string name="enter_your_second_pin">رمز دوم کارت خود را وارد نمایید</string>
+    <string name="enter_expire_date">تاریخ انقضای کارت خود را وارد کنید</string>
+    <string name="enter_expire_date_year">سال انقضای کارت خود را وارد کنید</string>
+    <string name="enter_expire_date_month">ماه انقضای کارت خود را وارد کنید</string>
+    <string name="enter_expire_date_month_correctly">ماه انقضای کارت خود را به درستی وارد کنید</string>
+
+    <string name="enter_cash_in_price">مبلغ واریزی را مشخص نمایید</string>
+    <string name="enter_cash_out_price">مبلغ برداشت را مشخص نمایید</string>
+    <string name="enter_your_card_number">شماره کارت خود را وارد کنید</string>
+    <string name="enter_your_sheba_number">شماره شبا خود را وارد کنید</string>
+    <string name="enter_your_province">استان خود را مشخص کنید</string>
+
+
+    <string name="language">زبان برنامه</string>
+    <string name="privacy_policy">حریم خصوصی</string>
+    <string name="security_privacy_policy">امنیت و حریم خصوصی</string>
+    <string name="app_version">نسخه برنامه</string>
+    <string name="about_app">درباره برنامه</string>
+    <string name="terms_condition">قوانین و مقررات</string>
+    <string name="terms_and_conditions">قوانین و نحوه استفاده</string>
+    <string name="contact_us">تماس با ما</string>
+    <string name="faq">سوالات متداول</string>
+    <string name="logout_from_account">خروج از حساب کاربری</string>
+    <string name="logout_prompt">آیا میخواهید از حساب خود خارج شوید؟</string>
+    <string name="logout">خروج</string>
+
+    <array name="onboard_titles">
+        <item>کیف پول موبایلی</item>
+        <item>خرید با QR</item>
+    </array>
+
+    <array name="onboard_descriptions">
+        <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف
+            پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.
+        </item>
+        <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن
+            استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.
+        </item>
+    </array>
+
+    <string name="top_company">شرکت تجارت الکترونیک پارسیان</string>
+
+    <string name="bank_parsian">بانک پارسیان</string>
+    <string name="bank_saman">بانک سامان</string>
+    <string name="bank_mellat">بانک ملت</string>
+    <string name="bank_pasargad">بانک پاسارگاد</string>
+    <string name="bank_eghtesad_novin">بانک اقتصاد نوین</string>
+    <string name="bank_karafarin">بانک کارآفرین</string>
+    <string name="bank_sarmayeh">بانک سرمایه</string>
+    <string name="bank_melli">بانک ملی ایران</string>
+    <string name="bank_sepah">بانک سپه</string>
+    <string name="bank_dey">بانک دی</string>
+    <string name="bank_tejarat">بانک تجارت</string>
+    <string name="bank_refah">بانک رفاه</string>
+    <string name="bank_saderat">بانک صادرات ایران</string>
+    <string name="bank_maskan">بانک مسکن</string>
+    <string name="bank_shahr">بانک شهر</string>
+    <string name="bank_sina">بانک سینا</string>
+    <string name="bank_keshavarzi">بانک کشاورزی</string>
+    <string name="bank_markazi">بانک مرکزی</string>
+    <string name="bank_gardeshgari">بانک گردشگری</string>
+    <string name="bank_post_bank">پست بانک</string>
+    <string name="bank_ansar">بانک انصار</string>
+    <string name="bank_iran_zamin">بانک ایران زمین</string>
+    <string name="bank_ayandeh">بانک آینده</string>
+    <string name="bank_resalat">بانک رسالت</string>
+    <string name="bank_tosee_taavon">بانک توسعه تعاون</string>
+    <string name="bank_tosee_saderat">بانک توسعه صادرات ایران</string>
+    <string name="bank_hekmat_iranian">بانک حکمت ایرانیان</string>
+    <string name="bank_sanato_madan">بانک صنعت و معدن</string>
+    <string name="bank_ghavamin">بانک قوامین</string>
+    <string name="bank_mehr_iran">بانک مهر ایران</string>
+    <string name="bank_mehr_eghtesad">بانک مهر اقتصاد</string>
+    <string name="bank_etebari_kosar">موسسه اعتباری کوثر</string>
+    <string name="bank_etebari_tosee">موسسه اعتباری توسعه</string>
+    <string name="bank_etebari_asgarieh">موسسه اعتباری عسگریه</string>
+    <string name="card_bank">کارت بانک</string>
+    <string name="paygear_card">کیف پول کارت</string>
+    <string name="set_password">ثبت رمز عبور</string>
+    <string name="change_password">تغییر رمز عبور</string>
+    <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
+( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
+    <string name="text_forgot_title">ارسال مجدد رمز</string>
+    <string name="Forgot_Passwords">بازیابی رمز</string>
+
+
+    <string name="default_sheba_number">شماره شبا پیش فرض</string>
+    <string name="default_sheba_number_message">آیا مایل به ذخیره این شماره به عنوان شماره شبای پیش فرض خود هستید؟\n دقت کنید! در صورت انتخاب پیشفرض از این پس تمام برداشت های عادی اتوماتیک با شماره شبا پیشفرض انجام می شود.</string>
+    <string name="recover_password">فراموشی رمز</string>
+    <string name="cash_out_two_wallet_hint">مبلغ را وارد کنید تا موجودی فروشگاه به موجودی کیف پول شخصی شما انتقال یابد.</string>
+    <string name="cash_to_wallet">کیف ‌پولی</string>
+    <string name="person">نفر</string>
+    <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
+    <string name="enter_four_digit_code">کد چهار رقمی  را وارد کنید</string>
+    <string name="four_digit_code">کد شش رقمی پیامک شده</string>
+    <string name="show_receipt">مشاهده رسید</string>
+    <string name="reciever_name">نام گیرنده</string>
+    <string name="date_time">تاریخ و ساعت</string>
+    <string name="transaction_type">نوع تراکنش</string>
+    <string name="purchase">خرید</string>
+    <string name="remaining_balance">موجودی باقیمانده</string>
+    <string name="refound">سند اصلاح واریز  مبلغ به کیف پول</string>
+    <string name="Recently_Sticker">به تازگی</string>
+    <string name="Favorite_Sticker">مورد علاقه</string>
+
+    <string name="wallet_message">پیام کیف پول</string>
+    <string name="unknown_message">این پیام پشتیبانی نمی شود!</string>
+    <string name="card_to_card_message">پیام کارت به کارت</string>
+    <string name="payment_message">پیام پرداخت</string>
+
+    <string name="WALLET_TRANSFER_MONEY">انتقال وجه کیف پول</string>
+    <string name="CARD_TRANSFER_MONEY">انتقال وجه کارت به کارت</string>
+    <string name="PAYMENT_TRANSFER_MONEY">پرداخت</string>
+    <string name="card_number_dest">شماره کارت مقصد</string>
+    <string name="card_number_source">شماره کارت مبدا</string>
+    <string name="source_bank">بانک مبدا</string>
+    <string name="cardToCardInvoiceNumber">شماره صورتحساب</string>
+    <string name="cardToCardTrace">شماره پیگیری</string>
+    <string name="WalletRrnNumber">شماره مرجع</string>
+    <string name="cardToCardRequest">متن درخواست کارت به کارت خود را بنویسید.</string>
+    <string name="amCardToCardIconText">درخواست انتقال</string>
+    <string name="cardToCardBtnText">کارت به کارت</string>
+    <string name="crad_to_card_dest_name">نام دارنده حساب</string>
 </resources>

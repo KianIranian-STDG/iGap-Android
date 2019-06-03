@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -372,6 +372,7 @@ public final class AndroidUtils {
                 return G.DIR_DOCUMENT;
             case IMAGE:
             case IMAGE_TEXT:
+            case STICKER:
             case GIF:
             case GIF_TEXT:
                 return G.DIR_IMAGES;
@@ -491,16 +492,15 @@ public final class AndroidUtils {
         md.update(buffer);
         byte[] digest = md.digest();
 
-        String hexStr = "";
-        for (int i = 0; i < digest.length; i++) {
-            hexStr += Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1);
+        StringBuilder hexStr = new StringBuilder();
+        for (byte aDigest : digest) {
+            hexStr.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
         }
-        return hexStr;
+        return hexStr.toString();
     }
 
     public static String getFilePathWithCashId(String cashId, String name, ProtoGlobal.RoomMessageType messageType) {
 
-        String _Dir = suitableAppFilePath(messageType);
         String _hash = cashId;
         String _mimeType = "";
 
@@ -515,8 +515,6 @@ public final class AndroidUtils {
             }
         }
 
-        String _result = "";
-
         try {
             if (cashId != null && cashId.length() > 0) {
                 _hash = makeSHA1Hash(cashId);
@@ -525,9 +523,7 @@ public final class AndroidUtils {
 
         }
 
-        _result = _Dir + "/" + _hash + _mimeType;
-
-        return _result;
+        return suitableAppFilePath(messageType) + "/" + _hash + _mimeType;
     }
 
     public static String getFilePathWithCashId(String cashId, String name, String selectDir, boolean isThumbNail) {
@@ -555,21 +551,12 @@ public final class AndroidUtils {
             e.printStackTrace();
         }
 
-        if (selectDir.equals(G.DIR_TEMP)) {
-
-            if (isThumbNail) {
-                _result = G.DIR_TEMP + "/" + "thumb_" + _hash + _mimeType;
-            } else {
-                _result = G.DIR_TEMP + "/" + _hash + _mimeType;
-            }
-        } else if (selectDir.equals(G.DIR_IMAGE_USER)) {
-
-            if (isThumbNail) {
-                _result = G.DIR_IMAGE_USER + "/" + "thumb_" + _hash + _mimeType;
-            } else {
-                _result = G.DIR_IMAGE_USER + "/" + _hash + _mimeType;
-            }
+        if (isThumbNail) {
+            _result = selectDir + "/" + "thumb_" + _hash + _mimeType;
+        } else {
+            _result = selectDir + "/" + _hash + _mimeType;
         }
+
         // AppUtils.suitableThumbFileName(name);
 
         return _result;

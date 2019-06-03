@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -36,6 +36,8 @@ import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.UserStatusController;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
@@ -47,10 +49,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+
+import static net.iGap.G.updateResources;
+
 
 public class ActivityEnhanced extends AppCompatActivity {
 
+    public AvatarHandler avatarHandler;
+    protected boolean canSetUserStatus = true;
     public boolean isOnGetPermission = false;
     BroadcastReceiver mybroadcast = new BroadcastReceiver() {
         //When Event is published, onReceive method is called
@@ -76,7 +83,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
     }
 
     @Override
@@ -90,6 +97,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
 
+        avatarHandler = new AvatarHandler();
         setThemeSetting();
 
 
@@ -108,13 +116,13 @@ public class ActivityEnhanced extends AppCompatActivity {
             try {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
         } else {
             try {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
-                HelperLog.setErrorLog(e.toString());
+                HelperLog.setErrorLog(e);
             }
         }
 
@@ -262,17 +270,17 @@ public class ActivityEnhanced extends AppCompatActivity {
         G.isScrInFg = true;
 
         AttachFile.isInAttach = false;
-
-        if (!G.isUserStatusOnline && G.userLogin) {
-            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
-        }
+        if (canSetUserStatus)
+            UserStatusController.getInstance().setOnline();
 
         super.onStart();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        avatarHandler.unregisterChangeFromOtherAvatarHandler();
 
         if (!G.isScrInFg || !G.isChangeScrFg) {
             G.isAppInFg = false;
@@ -288,16 +296,9 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         }catch (Exception e){};
 
-
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!G.isAppInFg && !AttachFile.isInAttach && G.userLogin) {
-                    new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
-                }
-            }
-        }, Config.UPDATE_STATUS_TIME);
+        if (!AttachFile.isInAttach && canSetUserStatus) {
+            UserStatusController.getInstance().setOffline();
+        }
     }
 
     /**
@@ -375,21 +376,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        checkLanguage();
+        updateResources(getApplicationContext());
     }
 
-    public void checkLanguage() {
-        try {
-            G.context = getApplicationContext();
-            String selectedLanguage = G.selectedLanguage;
-            if (selectedLanguage == null) return;
-            Locale locale = new Locale(selectedLanguage);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

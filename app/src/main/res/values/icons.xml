@@ -22,14 +22,16 @@
   <string name="md_add_user_button">\uf014</string>  <!-- igap_account-plus  -->
   <string name="md_add_plus_button">\uf415</string>  <!-- igap_plus  -->
   <string name="md_user_account_box">\uf004</string>  <!-- igap_account  -->
-  <string name="md_apps">\uf03b</string>  <!-- igap_apps  -->
+  <string name="md_apps">\uf640</string>  <!-- igap_apps  -->
   <string name="md_igap_contacts">\uf6ca</string>  <!-- igap_apps  -->
   <string name="md_nearby">\uf352</string>  <!-- igap_map-marker-radius -->
   <string name="md_chat_box">\uf366</string>  <!-- igap_message-processing -->
   <string name="md_satellite_variant">\uf471</string>  <!--igap_satellite-variant-->
 
 
+  <string name="md_try_agin">\uf450</string>  <!--igap_satellite-variant-->
   <string name="md_users_social_symbol">\uf00e</string>  <!-- igap_account-multiple  -->
+  <string name="md_chat_tab">\uf17a</string>  <!-- igap_account-multiple  -->
   <string name="md_settings_cogwheel_button">\uf493</string>  <!-- igap_settings  -->
   <string name="md_help_round_button">\uf2d7</string>  <!-- igap_help-circle  -->
   <string name="md_menu_button">\uf35c</string>  <!-- igap_menu  -->
@@ -110,7 +112,7 @@
   <string name="icon_music">\uf759</string>  <!-- igap_music  -->
   <string name="icon_file">\uf214</string>  <!-- igap_file  -->
   <string name="icon_file_empty">\uf224</string><!--  igap_file-outline  -->
-  <string name="icon_folder">\uf76f</string>  <!-- igap_folder-open  -->
+  <string name="iconCardToCard">\uf19b</string>  <!-- igap_folder-open  -->
   <string name="icon_photo">\uf2ef</string> <!--  igap_image-filter  -->
   <string name="md_eraser">\uf1fe</string> <!-- igap_eraser  -->
   <string name="md_qrCode">\uf433</string> <!-- igap_qrCode  -->
@@ -156,4 +158,12 @@
   <string name="md_swich_video">\uf569</string>
   <string name="md_igap_bluetooth">\uf0af</string>
   <string name="md_igap_stop">\uf4db</string>
+
+  <string name="md_igap_arrow_up_thick">\uf05f</string>
+  <string name="md_igap_arrow_down_thick">\uf047</string>
+  <string name="md_igap_minus">\uf1fd</string>
+
+
+  <string name="md_get_score_ok">\uf5e0</string>
+  <string name="md_get_score_failed">\uf159</string>
 </resources>

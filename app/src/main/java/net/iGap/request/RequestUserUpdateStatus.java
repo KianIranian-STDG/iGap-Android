@@ -4,25 +4,55 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
 package net.iGap.request;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoUserUpdateStatus;
 
 public class RequestUserUpdateStatus {
 
-    public void userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status status) {
+    public interface onUserStatus {
+        void onUpdateUserStatus();
+        void onError(int major, int minor);
+    }
+
+    public boolean userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status status) {
         ProtoUserUpdateStatus.UserUpdateStatus.Builder builder = ProtoUserUpdateStatus.UserUpdateStatus.newBuilder();
         builder.setStatus(status);
 
         RequestWrapper requestWrapper = new RequestWrapper(124, builder);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            if (G.userLogin) {
+                RequestQueue.sendRequest(requestWrapper);
+                return true;
+            } else {
+                return false;
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status status, onUserStatus onUserStatus) {
+        ProtoUserUpdateStatus.UserUpdateStatus.Builder builder = ProtoUserUpdateStatus.UserUpdateStatus.newBuilder();
+        builder.setStatus(status);
+
+        RequestWrapper requestWrapper = new RequestWrapper(124, builder, onUserStatus);
+        try {
+            if (G.userLogin) {
+                RequestQueue.sendRequest(requestWrapper);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

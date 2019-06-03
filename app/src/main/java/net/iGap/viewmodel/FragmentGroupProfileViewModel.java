@@ -15,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.InputType;
@@ -30,6 +31,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -152,7 +154,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
     private Realm realmGroupProfile;
-    private Fragment fragment;
+    private FragmentGroupProfile fragment;
     private boolean isNotJoin = false;
     private String memberCount;
 
@@ -178,8 +180,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutDialog.setOrientation(LinearLayout.VERTICAL);
         layoutDialog.setBackgroundColor(G.context.getResources().getColor(android.R.color.white));
-        TextView text2 = new TextView(G.context);
-        TextView text3 = new TextView(G.context);
+        TextView text2 = new AppCompatTextView(G.context);
+        TextView text3 = new AppCompatTextView(G.context);
 
         text2.setTextColor(G.context.getResources().getColor(android.R.color.black));
         text3.setTextColor(G.context.getResources().getColor(android.R.color.black));
@@ -443,6 +445,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        hideProgressBar();
                         isPrivate = true;
                         if (inviteLink == null || inviteLink.isEmpty() || inviteLink.equals("https://")) {
                             new RequestGroupRevokeLink().groupRevokeLink(roomId);
@@ -455,6 +458,17 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
             @Override
             public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+                        if (majorCode == 5) {
+                            HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+                        } else {
+                            HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.server_error), false);
+                        }
+                    }
+                });
 
             }
         };
@@ -462,8 +476,12 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_title_convert_to_private)).content(G.fragmentActivity.getResources().getString(R.string.group_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
+                if (G.userLogin) {
+                    showProgressBar();
+                    new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
+                } else {
+                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+                }
             }
         }).negativeText(R.string.no).show();
     }
@@ -514,6 +532,13 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutUserName.addView(inputUserName, layoutParams);
+        ProgressBar progressBar = new ProgressBar(G.fragmentActivity);
+        LinearLayout.LayoutParams progParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        progParams.gravity = Gravity.CENTER;
+        progressBar.setLayoutParams(progParams);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.GONE);
+        layoutUserName.addView(progressBar);
 
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
@@ -551,7 +576,15 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
+                if (majorCode == 5) {
+                    positive.setEnabled(false);
+                    inputUserName.setErrorEnabled(true);
+                    inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.network_error));
+                } else {
+                    positive.setEnabled(false);
+                    inputUserName.setErrorEnabled(true);
+                    inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.server_error));
+                }
             }
         };
 
@@ -588,8 +621,14 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
 
                 if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
-                    String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
-                    new RequestGroupCheckUsername().GroupCheckUsername(roomId, userName);
+                    if (G.userLogin) {
+                        String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
+                        new RequestGroupCheckUsername().GroupCheckUsername(roomId, userName);
+                    } else {
+                        positive.setEnabled(false);
+                        inputUserName.setErrorEnabled(true);
+                        inputUserName.setError("" + G.fragmentActivity.getResources().getString(R.string.network_error));
+                    }
                 } else {
                     positive.setEnabled(false);
                     inputUserName.setErrorEnabled(true);
@@ -604,7 +643,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        positive.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
                         isPrivate = false;
                         dialog.dismiss();
 
@@ -616,28 +656,39 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
             @Override
             public void onError(final int majorCode, int minorCode, final int time) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        positive.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
+                        switch (majorCode) {
+                            case 5 :
+                                HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
 
-                switch (majorCode) {
-                    case 368:
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                            case 368:
                                 if (dialog.isShowing()) dialog.dismiss();
                                 dialogWaitTime(R.string.GROUP_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
-                            }
-                        });
+                                break;
+                        }
+                    }
+                });
 
-                        break;
-                }
             }
         };
 
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                fragment.closeKeyboard(view);
                 String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
-                new RequestGroupUpdateUsername().groupUpdateUsername(roomId, userName);
+                if (G.userLogin) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    positive.setEnabled(false);
+                    new RequestGroupUpdateUsername().groupUpdateUsername(roomId, userName);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    HelperError.showSnackMessage(G.fragmentActivity.getString(R.string.wallet_error_server), false);
+                }
             }
         });
 
@@ -942,7 +993,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         inputGroupLink.addView(edtLink);
         inputGroupLink.addView(viewRevoke, viewParams);
 
-        TextView txtLink = new TextView(G.fragmentActivity);
+        TextView txtLink = new AppCompatTextView(G.fragmentActivity);
         txtLink.setText(Config.IGAP_LINK_PREFIX);
         txtLink.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
 

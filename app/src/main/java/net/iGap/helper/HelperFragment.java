@@ -12,6 +12,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.discovery.DiscoveryFragment;
 
 import java.util.ArrayList;
 
@@ -113,24 +114,24 @@ public class HelperFragment {
         return this;
     }
 
-    public void load() {
-
+    public void load(boolean checkStack) {
         if (fragment == null) {
             return;
         }
 
         try {
+            if (checkStack) {
+                if (fragment.getClass().getName().equalsIgnoreCase(FragmentChat.class.getName())) {
+                    if (SystemClock.elapsedRealtime() - G.mLastClickTime > 1000) {
+                        G.mLastClickTime = SystemClock.elapsedRealtime();
+                    } else {
+                        return;
+                    }
+                }
 
-            if (fragment.getClass().getName().equalsIgnoreCase(FragmentChat.class.getName())) {
-                if (SystemClock.elapsedRealtime() - G.mLastClickTime > 1000) {
-                    G.mLastClickTime = SystemClock.elapsedRealtime();
-                } else {
+                else if ((G.fragmentActivity.getSupportFragmentManager().getBackStackEntryAt(G.fragmentActivity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))){
                     return;
                 }
-            }
-
-           else if ((G.fragmentActivity.getSupportFragmentManager().getBackStackEntryAt(G.fragmentActivity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))){
-                return;
             }
 
         } catch (Exception e) {
@@ -138,7 +139,7 @@ public class HelperFragment {
         }
 
         if (G.fragmentManager == null) {
-            HelperLog.setErrorLog("helper fragment loadFragment -> " + fragment.getClass().getName());
+            HelperLog.setErrorLog(new Exception("helper fragment loadFragment -> " + fragment.getClass().getName()));
             return;
         }
 
@@ -185,6 +186,10 @@ public class HelperFragment {
         }
     }
 
+    public void load() {
+        load(true);
+    }
+
     public void remove() {
         try {
             if (fragment == null) {
@@ -214,6 +219,11 @@ public class HelperFragment {
                     if (keepMain) {
                         if (fragment.getClass().getName().equals(FragmentMain.class.getName())) {
                             continue;
+                        }
+                        if (fragment.getClass().getName().equals(DiscoveryFragment.class.getName())) {
+                            if (fragment.getArguments().getInt("page") == 0) {
+                                continue;
+                            }
                         }
                         if (fragment instanceof FragmentCall) {
                             if (fragment.getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN)) {
@@ -298,7 +308,7 @@ public class HelperFragment {
                 }
             }
         } else {
-            resId = R.id.frame_main;
+            resId = R.id.drawer_layout;
         }
 
         return resId;

@@ -308,18 +308,6 @@ public class FragmentSetSecurityPassword extends BaseFragment {
         return Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{2,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" + ")+");
     }
 
-    private void closeKeyboard(View v) {
-
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
-        }
-    }
-
     private void openKeyboard(View v) {
         if (isAdded()) {
             try {

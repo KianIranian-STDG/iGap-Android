@@ -15,9 +15,8 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentChat;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.webserviceDrBot.Favorite;
+import net.iGap.proto.ProtoGlobal;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,10 +26,20 @@ import java.util.regex.Pattern;
 public class AdapterDrBot extends RecyclerView.Adapter<AdapterDrBot.ViewHolder> {
 
 
-    private List<Favorite> itemDrBots;
+    public interface OnHandleDrBot {
 
-    public AdapterDrBot(List<Favorite> itemDrBots) {
+        void goToRoomBot(ProtoGlobal.Favorite favorite);
+
+        void sendMessageBOt(ProtoGlobal.Favorite favorite);
+
+    }
+
+    private List<ProtoGlobal.Favorite> itemDrBots;
+    private OnHandleDrBot onHandleDrBot;
+
+    public AdapterDrBot(List<ProtoGlobal.Favorite> itemDrBots, OnHandleDrBot onHandleDrBot) {
         this.itemDrBots = itemDrBots;
+        this.onHandleDrBot = onHandleDrBot;
     }
 
     @NonNull
@@ -43,11 +52,10 @@ public class AdapterDrBot extends RecyclerView.Adapter<AdapterDrBot.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
-        Favorite itemDrBot = itemDrBots.get(i);
+        ProtoGlobal.Favorite itemDrBot = itemDrBots.get(i);
 
-        if (itemDrBot.getFavoriteImage() != null && !itemDrBot.getFavoriteImage().equals("")) {
-
-            byte[] theByteArray = Base64.decode(itemDrBot.getFavoriteImage(), Base64.DEFAULT);
+        if (!itemDrBot.getImage().equals("")) {
+            byte[] theByteArray = Base64.decode(itemDrBot.getImage(), Base64.DEFAULT);
             Bitmap bmp = BitmapFactory.decodeByteArray(theByteArray, 0, theByteArray.length);
             holder.icon.setImageBitmap(bmp);
 
@@ -56,20 +64,20 @@ public class AdapterDrBot extends RecyclerView.Adapter<AdapterDrBot.ViewHolder> 
         }
         GradientDrawable gd = new GradientDrawable();
         gd.setCornerRadius(75);
-        String bgColor = "#"+itemDrBot.getFavoriteBgColor();
-        if (checkColor(bgColor)){
+        String bgColor = "#" + itemDrBot.getBgcolor();
+        if (checkColor(bgColor)) {
             gd.setColor(Color.parseColor(bgColor));
-        }else {
+        } else {
             gd.setColor(G.context.getResources().getColor(R.color.colorOldBlack));
         }
 
         holder.itemView.setBackgroundDrawable(gd);
-        holder.title.setText(itemDrBot.getFavoriteName());
+        holder.title.setText(itemDrBot.getName());
 
-        String txtColor = "#"+itemDrBot.getFavoriteColor();
-        if (checkColor(txtColor)){
+        String txtColor = "#" + itemDrBot.getTextcolor();
+        if (checkColor(txtColor)) {
             holder.title.setTextColor(Color.parseColor(txtColor));
-        }else {
+        } else {
             holder.title.setTextColor(G.context.getResources().getColor(R.color.white));
         }
     }
@@ -104,12 +112,14 @@ public class AdapterDrBot extends RecyclerView.Adapter<AdapterDrBot.ViewHolder> 
                 @Override
                 public void onComplete(RippleView rippleView) throws IOException {
 
-                    Favorite item = itemDrBots.get(getAdapterPosition());
+                    ProtoGlobal.Favorite item = itemDrBots.get(getAdapterPosition());
 
-                    if (item.getFavoriteValue().startsWith("@")){
-                        FragmentChat.onHandleDrBot.goToRoomBot(item);
-                    }else{
-                        FragmentChat.onHandleDrBot.sendMessageBOt(item);
+                    if (onHandleDrBot != null) {
+                        if (item.getValue().startsWith("@")) {
+                            onHandleDrBot.goToRoomBot(item);
+                        } else {
+                            onHandleDrBot.sendMessageBOt(item);
+                        }
                     }
 
                 }
@@ -117,8 +127,4 @@ public class AdapterDrBot extends RecyclerView.Adapter<AdapterDrBot.ViewHolder> 
         }
     }
 
-    public void update(List<Favorite> itemDrBots) {
-        this.itemDrBots = itemDrBots;
-        notifyDataSetChanged();
-    }
 }

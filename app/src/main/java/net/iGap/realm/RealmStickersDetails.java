@@ -1,19 +1,15 @@
 package net.iGap.realm;
 
-import android.util.Log;
 
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
-
-import java.io.File;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
 
 public class RealmStickersDetails extends RealmObject {
 
-    private long id;
     private String st_id;
     private long refId;
     private String name;
@@ -74,14 +70,6 @@ public class RealmStickersDetails extends RealmObject {
         realm.close();
 
         return realmStickersDetails;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getSt_id() {

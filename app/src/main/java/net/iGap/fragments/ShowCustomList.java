@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -188,7 +188,7 @@ public class ShowCustomList extends BaseFragment {
 
         for (StructContactInfo contact : contacts) {
             if (contact != null) {
-                items.add(new ContactItemGroup().setContact(contact).withIdentifier(contact.peerId));
+                items.add(new ContactItemGroup(avatarHandler).setContact(contact).withIdentifier(contact.peerId));
                 Uri uri = null;
                 if (contact.avatar != null && contact.avatar.getFile() != null && contact.avatar.getFile().getLocalThumbnailPath() != null) {
                     uri = Uri.fromFile(new File(contact.avatar.getFile().getLocalThumbnailPath()));

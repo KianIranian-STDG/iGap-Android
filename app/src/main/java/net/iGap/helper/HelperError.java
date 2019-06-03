@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -628,6 +628,7 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_10168);
 
                 break;
+                
             case 99999: // client errors
                 error = "Offset is negative";
             case -1: // client errors

@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -38,11 +38,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.interfaces.IResendMessage;
+import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.CircleProgress.CircularProgressView;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -574,6 +577,9 @@ public final class AppUtils {
                     break;
             }
         }
+
+        ArrayList<Tuple<Integer, Integer>> places = AbstractMessage.getBoldPlaces(messageText);
+        messageText = AbstractMessage.removeBoldMark(messageText, places);
         return messageText;
     }
 
@@ -696,6 +702,7 @@ public final class AppUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            HelperLog.setErrorLog(e);
         }
     }
 
@@ -715,6 +722,7 @@ public final class AppUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
+            HelperLog.setErrorLog(e);
         }
     }
 

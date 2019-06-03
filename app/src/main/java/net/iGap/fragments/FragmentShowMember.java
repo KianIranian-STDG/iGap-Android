@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -32,11 +32,10 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddModerator;
 import net.iGap.interfaces.OnChannelGetMemberList;
@@ -940,7 +939,6 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
         public String mainRole;
         public ProtoGlobal.Room.Type roomType;
         public long userId;
-        private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
         public MemberAdapter(RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userId) {
             super(realmResults, true);
@@ -1068,25 +1066,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
 
             setRoleStarColor(holder.roleStar, mContact);
 
-            hashMapAvatar.put(mContact.peerId, holder.image);
-
-            HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(String avatarPath, long userId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(userId));
-                }
-
-                @Override
-                public void onShowInitials(String initials, String color) {
-                    //CircleImageView imageView;
-                    //if (hashMapAvatar.get(userId) != null) {
-                    //    imageView = hashMapAvatar.get(userId);
-                    //} else {
-                    //    imageView = holder.image;
-                    //}
-                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
             if (mContact.status != null) {
                 if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {

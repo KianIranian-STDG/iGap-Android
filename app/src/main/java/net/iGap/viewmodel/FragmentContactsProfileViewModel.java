@@ -11,13 +11,12 @@ import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnUserContactEdit;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserUpdateStatus;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.proto.ProtoGlobal;
@@ -76,13 +75,15 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     private String color;
     private String userStatus;
     private String avatarPath;
+    private AvatarHandler avatarHandler;
     private boolean isBot = false;
 
-    public FragmentContactsProfileViewModel(FragmentContactsProfileBinding fragmentContactsProfileBinding, long roomId, long userId, String enterFrom) {
+    public FragmentContactsProfileViewModel(FragmentContactsProfileBinding fragmentContactsProfileBinding, long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
         this.fragmentContactsProfileBinding = fragmentContactsProfileBinding;
         this.roomId = roomId;
         this.userId = userId;
         this.enterFrom = enterFrom;
+        this.avatarHandler = avatarHandler;
 
         mainStart();
         startInitCallbacks();
@@ -343,27 +344,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     }
 
     private void setAvatar() {
-        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), fragmentContactsProfileBinding.chiImgCircleImage);
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        fragmentContactsProfileBinding.chiImgCircleImage.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) fragmentContactsProfileBinding.chiImgCircleImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(fragmentContactsProfileBinding.chiImgCircleImage, userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     private Realm getRealm() {

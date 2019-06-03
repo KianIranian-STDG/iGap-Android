@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'io.fabric.tools:gradle:1.28.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -20,21 +20,17 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "net.iGap"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 93
-        versionName "1.1.1"
+        versionCode 97
+        versionName "1.1.5"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
         javaCompileOptions {
 
             annotationProcessorOptions {
@@ -55,6 +51,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -68,6 +65,24 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        GooglePlay { // 32 and 64 bit ndk compile
+            ndk {
+                dimension "default"
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+        }
+        Bazaar { // only 32 bit ndk compile
+            ndk {
+                dimension "default"
+                abiFilters "armeabi-v7a", "x86"
+            }
+        }
+    }
+
 }
 
 dependencies {
@@ -97,7 +112,10 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.larswerkman:HoloColorPicker:1.5'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+
+    implementation 'io.github.inflationx:calligraphy3:3.1.1'
+    implementation 'io.github.inflationx:viewpump:1.0.0'
+
     implementation 'me.leolin:ShortcutBadger:1.1.18@aar'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -108,7 +126,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.2'
     implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.6'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.8'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-base:16.1.0'
@@ -121,6 +139,7 @@ dependencies {
     implementation 'io.fotoapparat.fotoapparat:library:1.3.0'
     implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
     implementation 'com.github.pchmn:MaterialChipsInput:1.0.8'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'org.parceler:parceler:1.1.6'
     compileOnly 'com.android.support:support-annotations:28.0.0'
@@ -128,9 +147,9 @@ dependencies {
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.mindorks.android:prdownloader:0.4.0'
-    implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.mindorks.android:prdownloader:0.5.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
     implementation('com.github.KianIranian-STDG:Compress:1.2.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
@@ -139,28 +158,30 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:1.0.1'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
-    implementation 'com.github.KianIranian-STDG:Proto:sticker'
+    implementation 'com.github.KianIranian-STDG:Proto:Build111'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
-    implementation project(':paygear_wallet')
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
-implementation 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    implementation 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'org.apache.commons:commons-io:1.3.2'
     implementation 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
     implementation 'me.saket:better-link-movement-method:2.2.0'
-    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation 'com.github.molareza.sticker:emoji-ios:0.0110'
+    implementation 'com.github.KianIranian-STDG.sticker:emoji-ios:1.1'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation project(':paygearcore')
     implementation project(':pecpayment-release')
+
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.bumptech.glide:okhttp3-integration:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 }
 
 configurations.all {

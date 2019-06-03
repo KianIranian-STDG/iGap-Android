@@ -67,11 +67,11 @@
         android:orientation="horizontal">
 
 
-        <CheckBox
-            android:id="@+id/img2"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:layout_marginRight="@dimen/dp20"/>
+        <!--<CheckBox-->
+            <!--android:id="@+id/img2"-->
+            <!--android:layout_width="@dimen/dp48"-->
+            <!--android:layout_height="@dimen/dp48"-->
+            <!--android:layout_marginRight="@dimen/dp20"/>-->
 
         <net.iGap.module.CircleImageView
           android:id="@+id/imageView"

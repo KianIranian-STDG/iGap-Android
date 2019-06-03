@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -40,19 +40,23 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityEnhanced;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
-import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
+import net.iGap.libs.Tuple;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -62,7 +66,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
-import net.iGap.request.RequestClientGetRoomMessage;
+import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
 
@@ -83,6 +87,7 @@ import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
+import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
@@ -91,6 +96,12 @@ public class HelperUrl {
     public static int LinkColorDark = Color.CYAN;
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
+    public static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
+    public static Pattern patternMessageLink2 = Pattern.compile("igap://resolve\\?domain=(.*)&post=([0-9]*)");
+
+    public static Pattern patternRoom1 = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)");
+    public static Pattern patternRoom2 = Pattern.compile("igap://resolve\\?domain=(.*)");
+    public static Pattern patternRoom3 = Pattern.compile("igap://join\\?domain=(.*)");
 
     private static boolean isIgapLink(String text) {
         return text.matches("(https?\\:\\/\\/)?igap.net/(.*)");
@@ -129,6 +140,25 @@ public class HelperUrl {
         }
 
         return strBuilder;
+    }
+
+    public static boolean handleAppUrl(String url) {
+        Matcher matcher2 = HelperUrl.patternMessageLink2.matcher(url);
+        Matcher matcher4 = HelperUrl.patternRoom2.matcher(url);
+        Matcher matcher5 = HelperUrl.patternRoom3.matcher(url);
+        if (matcher2.find()) {
+            String username = matcher2.group(1);
+            long messageId = Long.parseLong(matcher2.group(2));
+            checkUsernameAndGoToRoomWithMessageId(username, HelperUrl.ChatEntry.profile, messageId);
+            return true;
+        } else if (matcher4.find()) {
+            checkUsernameAndGoToRoom(matcher4.group(1), HelperUrl.ChatEntry.profile);
+            return true;
+        } else if (matcher5.find()) {
+            checkAndJoinToRoom(matcher5.group(1));
+            return true;
+        }
+        return false;
     }
 
     private static boolean isTextLink(String text) {
@@ -200,22 +230,10 @@ public class HelperUrl {
                         mUrl = "http://" + mUrl;
                     }
 
-                    URL url = null;
-                    try {
-                        url = new URL(mUrl);
-                        URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
-                        url = new URL(uri.toASCIIString());
-                        mUrl = url.toString();
-                        mUrl = mUrl.replaceAll("[^\\x00-\\x7F]", "");
-                        if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
-                            openBrowser(mUrl);
-                        } else {
-                            openWithoutBrowser(mUrl);
-                        }
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                    if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
+                        openBrowser(mUrl); //internal chrome
+                    } else {
+                        openWithoutBrowser(mUrl);//external intent
                     }
 
                 }
@@ -238,7 +256,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static boolean isNeedOpenWithoutBrowser(String url) {
+    public static boolean isNeedOpenWithoutBrowser(String url) {
         ArrayList<String> listApps = new ArrayList<>();
         listApps.add("facebook.com");
         listApps.add("twitter.com");
@@ -259,7 +277,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static void openWithoutBrowser(String url) {
+    public static void openWithoutBrowser(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -317,7 +335,14 @@ public class HelperUrl {
                     if (url.toLowerCase().contains("join")) {
                         checkAndJoinToRoom(token);
                     } else {
-                        checkUsernameAndGoToRoom(token, ChatEntry.profile);
+                        Matcher matcher = patternMessageLink.matcher(url);
+                        if (matcher.find()) {
+                            String username = matcher.group(6);
+                            long messageId = Long.parseLong(matcher.group(8));
+                            checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                        } else {
+                            checkUsernameAndGoToRoom(token, ChatEntry.profile);
+                        }
                     }
                 }
             }
@@ -368,19 +393,26 @@ public class HelperUrl {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
 
+                String url = strBuilder.toString().substring(start, end);
+
                 G.isLinkClicked = true;
-                try {
-                    String url = strBuilder.toString().substring(start, end);
+                Matcher matcher2 = patternMessageLink2.matcher(url);
+                if (matcher2.find()){
+                    String username = matcher2.group(1);
+                    long messageId = Long.parseLong(matcher2.group(2));
+                    checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                } else {
+                    try {
+                        Uri path = Uri.parse(url);
 
-                    Uri path = Uri.parse(url);
+                        String domain = path.getQueryParameter("domain");
 
-                    String domain = path.getQueryParameter("domain");
+                        if (domain != null && domain.length() > 0) {
+                            checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                        }
+                    } catch (Exception e) {
 
-                    if (domain != null && domain.length() > 0) {
-                        checkUsernameAndGoToRoom(domain, ChatEntry.profile);
                     }
-                } catch (Exception e) {
-
                 }
             }
 
@@ -637,6 +669,8 @@ public class HelperUrl {
             return linkInfo;
         }
 
+        ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(text);
+        text = AbstractMessage.removeBoldMark(text, boldPlaces);
 
         linkInfo += analysisAtSignLinkInfo(text);
 
@@ -811,18 +845,8 @@ public class HelperUrl {
                 TextView txtMemberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
                 txtMemberNumber.setText(finalMemberNumber);
 
-                HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(final String avatarPath, long roomId) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
-                    }
-
-                    @Override
-                    public void onShowInitials(String initials, String color) {
-                        imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
                 if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing() && !G.currentActivity.isFinishing()) {
+                    G.currentActivity.avatarHandler.getAvatar(new ParamWithAvatarType(imageView[0], room.getId()).avatarType(AvatarHandler.AvatarType.ROOM));
                     dialog.show();
                 }
             }
@@ -910,8 +934,7 @@ public class HelperUrl {
      */
 
     public static void checkUsernameAndGoToRoomWithMessageId(final String username, final ChatEntry chatEntry, final long messageId) {
-
-        if (username == null || username.length() < 1 || isInCurrentChat(username)) return;
+        if (username == null || username.length() < 1) return;
 
         if (G.userLogin) {
 
@@ -945,27 +968,67 @@ public class HelperUrl {
      * if message isn't exist in Realm resolve from server and then open chat
      */
     private static void resolveMessageAndOpenChat(final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
-
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
         if (rm != null) {
             openChat(username, type, user, room, chatEntry, messageId);
         } else {
+            new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1 , 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+                @Override
+                public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
+                    if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                closeDialogWaiting();
+                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                                openChat(username, type, user, room, chatEntry, 0);
+                            }
+                        });
+                    } else {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                    if (roomMessage.getAuthor().hasUser()) {
+                                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                    }
+                                    RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
+                                }
+                            }
+                        });
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-            if (realmRoom == null || realmRoom.isDeleted()) {
-                openChat(username, type, user, room, chatEntry, messageId);
-            } else {
-                new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId);
-                G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
-                    @Override
-                    public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                        RealmRoomMessage.setGap(message.getMessageId());
-                        G.onClientGetRoomMessage = null;
-                        openChat(username, type, user, room, chatEntry, message.getMessageId());
+                        realm.close();
+                        RealmRoomMessage.setGap(messageList.get(0).getMessageId());
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.refreshRealmUi();
+                                openChat(username, type, user, room, chatEntry, messageList.get(0).getMessageId());
+                            }
+                        });
                     }
-                };
-            }
+                }
+
+                @Override
+                public void onErrorHistory(int major , int minor) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeDialogWaiting();
+                            if (major == 626) {
+                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                            } else if (minor == 624) {
+                                HelperError.showSnackMessage(G.context.getString(R.string.ivnalid_data_provided), false);
+                            } else {
+                                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                            }
+                        }
+                    });
+                }
+            });
+
         }
         realm.close();
     }
@@ -1139,24 +1202,33 @@ public class HelperUrl {
         if (realmRoom != null) {
 
             if (realmRoom.isDeleted()) {
-                addRoomToDataBaseAndGoToRoom(username, room);
+                addRoomToDataBaseAndGoToRoom(username, room, messageId);
             } else {
                 closeDialogWaiting();
 
                 if (room.getId() != FragmentChat.lastChatRoomId) {
                     new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                } else {
+                    try {
+                        if (G.fragmentManager != null) {
+                            G.fragmentManager.popBackStack();
+                            new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                        }
+                    } catch (Exception e) {
+                        HelperLog.setErrorLog(e);
+                        e.printStackTrace();
+                    }
                 }
-
             }
 
             realm.close();
         } else {
 
-            addRoomToDataBaseAndGoToRoom(username, room);
+            addRoomToDataBaseAndGoToRoom(username, room, messageId);
         }
     }
 
-    private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room) {
+    private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room, long messageId) {
         closeDialogWaiting();
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -1175,8 +1247,19 @@ public class HelperUrl {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
+                        realm.refresh();
                         if (room.getId() != FragmentChat.lastChatRoomId) {
-                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).startActivity();
+                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity();
+                        } else {
+                            try {
+                                if (G.fragmentManager != null) {
+                                    G.fragmentManager.popBackStack();
+                                    new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity();
+                                }
+                            } catch (Exception e) {
+                                HelperLog.setErrorLog(e);
+                                e.printStackTrace();
+                            }
                         }
                         realm.close();
                     }
@@ -1194,21 +1277,34 @@ public class HelperUrl {
 
         String action = intent.getAction();
 
-        if (action == null) return;
+        if (action == null || intent.getData() == null) return;
 
         if (action.equals(Intent.ACTION_VIEW)) {
-            G.currentActivity = activity;
+            G.currentActivity = (ActivityEnhanced) activity;
             showIndeterminateProgressDialog();
             checkConnection(intent.getData(), 0);
         }
     }
 
     private static void checkConnection(final Uri path, int countTime) {
-
         countTime++;
 
         if (G.userLogin) {
-            getToRoom(path);
+            Matcher matcher = patternMessageLink.matcher(path.toString());
+            Matcher matcher2 = patternMessageLink2.matcher(path.toString());
+            if (matcher.find()) {
+                String username = matcher.group(6);
+                long messageId = Long.parseLong(matcher.group(8));
+                checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+            } else if (matcher2.find()) {
+                String username = matcher2.group(1);
+                long messageId = Long.parseLong(matcher2.group(2));
+                checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+            } else {
+                getToRoom(path);
+            }
+
+
         } else {
             if (countTime < 15) {
                 final int finalCountTime = countTime;

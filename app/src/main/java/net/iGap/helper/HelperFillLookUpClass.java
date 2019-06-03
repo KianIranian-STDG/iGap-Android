@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -101,6 +101,11 @@ public class HelperFillLookUpClass {
         lookupMap.put(30148, "ProtoUserProfileGetBio.UserProfileGetBioResponse");
         lookupMap.put(30149, "ProtoUserReport.UserReportResponse");
         lookupMap.put(30150, "ProtoUserSetBot.UserSetBotResponse");
+        lookupMap.put(30151, "ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse");
+        lookupMap.put(30152, "ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse");
+        lookupMap.put(30153, "ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse");
+        lookupMap.put(30154, "ProtoUserIVandGetScore.UserIVandGetScoreResponse");
+        lookupMap.put(30155, "ProtoUserIVandSetActivity.UserIVandSetActivityResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
@@ -201,6 +206,9 @@ public class HelperFillLookUpClass {
         lookupMap.put(30616, "ProtoClientRoomReport.ClientRoomReportResponse");
         lookupMap.put(30617, "ProtoClientRegisterDevice.ClientRegisterDeviceResponse");
         lookupMap.put(30618, "ProtoClientGetPromote.ClientGetPromoteResponse");
+        lookupMap.put(30619, "ProtoClientGetFavoriteMenu.ClientGetFavoriteMenuResponse");
+        lookupMap.put(30620, "ProtoClientGetDiscovery.ClientGetDiscoveryResponse");
+        lookupMap.put(30621, "ProtoClientSetDiscoveryItemClick.ClientSetDiscoveryItemClickResponse");
 
         // FileUpload,Download 7xx , 307xx
         lookupMap.put(30700, "ProtoFileUploadOption.FileUploadOptionResponse");
@@ -248,6 +256,10 @@ public class HelperFillLookUpClass {
         //Mpl 90xx
         lookupMap.put(39100, "ProtoMplGetBillToken.MplGetBillTokenResponse");
         lookupMap.put(39101, "ProtoMplGetTopupToken.MplGetTopupTokenResponse");
+        lookupMap.put(39102, "ProtoMplGetSalesToken.MplGetSalesTokenResponse");
+        lookupMap.put(39103, "ProtoMplSetSalesResult.MplSetSalesResultResponse");
+        lookupMap.put(39106, "ProtoMplGetCardToCardToken.MplGetCardToCardTokenResponse");
+        lookupMap.put(39108, "ProtoMplSetCardToCardResult.MplSetCardToCardResultResponse");
         lookupMap.put(39200, "ProtoBillInquiryMci.BillInquiryMciResponse");
         lookupMap.put(39201, "ProtoBillInquiryTelecom.BillInquiryTelecomResponse");
 
@@ -257,6 +269,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(60002, "ProtoPushUserInfoExpired.PushUserInfoExpiredResponse");
         lookupMap.put(60003, "ProtoPushRateSignaling.PushRateSignalingResponse");
         lookupMap.put(60004, "ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse");
+
 
     }
 

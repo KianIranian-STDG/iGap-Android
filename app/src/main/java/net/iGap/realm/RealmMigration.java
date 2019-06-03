@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -264,14 +264,14 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmRoomMessageWallet = schema.create(RealmRoomMessageWallet.class.getSimpleName())
                     .addField(RealmRoomMessageWalletFields.ID, long.class, FieldAttribute.REQUIRED)
                     .addPrimaryKey(RealmRoomMessageWalletFields.ID)
-                    .addField(RealmRoomMessageWalletFields.FROM_USER_ID, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.TO_USER_ID, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.AMOUNT, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.TRACE_NUMBER, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.INVOICE_NUMBER, long.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.PAY_TIME, int.class, FieldAttribute.REQUIRED)
+                    .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("toUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("amount", long.class, FieldAttribute.REQUIRED)
+                    .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("invoiceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("payTime", int.class, FieldAttribute.REQUIRED)
                     .addField(RealmRoomMessageWalletFields.TYPE, String.class)
-                    .addField(RealmRoomMessageWalletFields.DESCRIPTION, String.class);
+                    .addField("description", String.class);
 
             RealmObjectSchema realmRoomMessage = schema.get(RealmRoomMessage.class.getSimpleName());
             if (realmRoomMessage != null) {
@@ -383,7 +383,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 27
+        if (oldVersion == 27) {
 
             RealmObjectSchema realmStickerDetails = schema.create(RealmStickersDetails.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.REQUIRED)
@@ -417,5 +417,117 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 28) {
+            RealmObjectSchema realmRoomDraft = schema.get(RealmRoomDraft.class.getSimpleName());
+            if (realmRoomDraft != null) {
+                realmRoomDraft.addField("draftTime", long.class, FieldAttribute.REQUIRED);
+            }
+
+            RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
+            if (realmAttachment != null) {
+                realmAttachment.addIndex(RealmAttachmentFields.CACHE_ID);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == 29) {
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfo != null) {
+                realmUserInfo.addField("representPhoneNumber", String.class);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == 30) {
+            RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
+            if (realmAttachment != null) {
+                realmAttachment.addIndex(RealmAttachmentFields.TOKEN);
+            }
+
+            RealmObjectSchema realmStickers = schema.get(RealmStickers.class.getSimpleName());
+            if (realmStickers.hasField("id")) {
+                realmStickers.removeField("id");
+            }
+
+            RealmObjectSchema realmStickerDetails = schema.get(RealmStickersDetails.class.getSimpleName());
+            if (realmStickerDetails.hasField("id")) {
+                realmStickerDetails.removeField("id");
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 31
+
+            RealmObjectSchema realmRoomMessageWalletCardToCard = schema.create(RealmRoomMessageWalletCardToCard.class.getSimpleName())
+                    .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("toUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("amount", long.class, FieldAttribute.REQUIRED)
+                    .addField("bankName", String.class)
+                    .addField("destBankName", String.class)
+                    .addField("cardOwnerName", String.class)
+                    .addField("orderId", long.class, FieldAttribute.REQUIRED)
+                    .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("token", String.class)
+                    .addField("status", boolean.class, FieldAttribute.REQUIRED)
+                    .addField("sourceCardNumber", String.class)
+                    .addField("destCardNumber", String.class)
+                    .addField("rrn", String.class)
+                    .addField("requestTime", int.class, FieldAttribute.REQUIRED);
+
+
+            RealmObjectSchema realmRoomMessageWalletMoneyTransfer = schema.create(RealmRoomMessageWalletMoneyTransfer.class.getSimpleName())
+                    .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("toUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("amount", long.class, FieldAttribute.REQUIRED)
+                    .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("invoiceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("payTime", int.class, FieldAttribute.REQUIRED)
+                    .addField("description", String.class)
+                    .addField("cardNumber", String.class)
+                    .addField("rrn", long.class, FieldAttribute.REQUIRED);
+
+            RealmObjectSchema realmRoomMessageWalletPayment = schema.create(RealmRoomMessageWalletPayment.class.getSimpleName())
+                    .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("toUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("amount", long.class, FieldAttribute.REQUIRED)
+                    .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("invoiceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("payTime", int.class, FieldAttribute.REQUIRED)
+                    .addField("description", String.class)
+                    .addField("cardNumber", String.class)
+                    .addField("rrn", long.class, FieldAttribute.REQUIRED);
+
+
+            RealmObjectSchema realmRoomMessageWallet = schema.get(RealmRoomMessageWallet.class.getSimpleName());
+            if (realmRoomMessageWallet.hasField("fromUserId")) {
+                realmRoomMessageWallet.removeField("fromUserId");
+            }
+            if (realmRoomMessageWallet.hasField("toUserId")) {
+                realmRoomMessageWallet.removeField("toUserId");
+            }
+            if (realmRoomMessageWallet.hasField("amount")) {
+                realmRoomMessageWallet.removeField("amount");
+            }
+            if (realmRoomMessageWallet.hasField("traceNumber")) {
+                realmRoomMessageWallet.removeField("traceNumber");
+            }
+            if (realmRoomMessageWallet.hasField("invoiceNumber")) {
+                realmRoomMessageWallet.removeField("invoiceNumber");
+            }
+            if (realmRoomMessageWallet.hasField("payTime")) {
+                realmRoomMessageWallet.removeField("payTime");
+            }
+            if (realmRoomMessageWallet.hasField("description")) {
+                realmRoomMessageWallet.removeField("description");
+            }
+            realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletCardToCard", realmRoomMessageWalletCardToCard);
+            realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletPayment", realmRoomMessageWalletPayment);
+            realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletMoneyTransfer", realmRoomMessageWalletMoneyTransfer);
+
+            oldVersion++;
+        }
+
     }
 }

@@ -5,7 +5,7 @@ package net.iGap.module;
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
 */
 
@@ -14,6 +14,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -169,7 +170,7 @@ public class NumberPicker extends LinearLayout {
 
         setWillNotDraw(false);
 
-        mInputText = new TextView(getContext());
+        mInputText = new AppCompatTextView(getContext());
         mInputText.setGravity(Gravity.CENTER);
         mInputText.setSingleLine(true);
         mInputText.setTextColor(G.context.getResources().getColor(R.color.black90));

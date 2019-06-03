@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -169,7 +169,7 @@ public class RealmPhoneContacts extends RealmObject {
                             notImportedList.add(_item);
                         }
                     } catch (IllegalArgumentException e) {
-                        HelperLog.setErrorLog("RealmPhoneContacts    addContactToDB      phone : " + _item.getPhone() + "   firstName : " + _item.getFirstName() + "   lastname : " + _item.getLastName());
+                        HelperLog.setErrorLog(e);
                     }
 
                 }

@@ -26,13 +26,7 @@ public class RealmAdditional extends RealmObject {
 
 
     public static RealmAdditional put(final ProtoGlobal.RoomMessage input) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmAdditional realmAdditional = realm.createObject(RealmAdditional.class ,  AppUtils.makeRandomId());
-        realmAdditional.setAdditionalType(input.getAdditionalType());
-        realmAdditional.setAdditionalData(input.getAdditionalData());
-
-        realm.close();
-        return realmAdditional;
+        return RealmAdditional.put(input.getAdditionalData(), input.getAdditionalType());
     }
 
     public static RealmAdditional put(String additionalData, int additionalType) {

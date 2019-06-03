@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -30,18 +30,8 @@ public class ChatUpdateDraftResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoChatUpdateDraft.ChatUpdateDraftResponse.Builder updateDraft = (ProtoChatUpdateDraft.ChatUpdateDraftResponse.Builder) message;
-
-        /**
-         * if another account get UpdateDraftResponse set draft to RealmRoom
-         */
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (updateDraft.getResponse().getId().isEmpty()) {
-                    RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
-                }
-            }
-        }).start();
+        // WHEN updateDraft.getResponse().getId().isEmpty() IS TRUE THEN WE DON MAKE REQUEST
+        RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo(), updateDraft.getDraft().getDraftTime());
     }
 
     @Override

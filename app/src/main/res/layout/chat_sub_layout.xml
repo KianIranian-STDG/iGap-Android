@@ -143,7 +143,7 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="test"
+            android:text=""
             android:textColor="@color/green"
             android:textSize="@dimen/dp13"
             app:emojiSize="@dimen/dp14" />

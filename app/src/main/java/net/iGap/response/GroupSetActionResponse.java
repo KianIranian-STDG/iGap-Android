@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -34,41 +34,28 @@ public class GroupSetActionResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
+        final Realm realm = Realm.getDefaultInstance();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+        if (G.userId != builder.getUserId()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
 
-                if (G.userId != builder.getUserId()) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-
-                            if (G.userId != builder.getUserId()) {
-                                HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                            }
-                        }
-                    });
-
-                    realm.close();
-
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            if (G.onSetAction != null) {
-                                G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                            }
-
-                            if (G.onSetActionInRoom != null) {
-                                G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                            }
-                        }
-                    });
+                    if (G.userId != builder.getUserId()) {
+                        HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                    }
                 }
+            });
+
+            realm.close();
+            if (G.onSetAction != null) {
+                G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
             }
-        }).start();
+
+            if (G.onSetActionInRoom != null) {
+                G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+            }
+        }
     }
 
     @Override

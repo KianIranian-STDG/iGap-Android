@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -12,6 +12,7 @@ package net.iGap.request;
 
 import android.text.format.DateUtils;
 
+import net.iGap.G;
 import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserInfo;
 
@@ -68,15 +69,17 @@ public class RequestUserInfo {
      * we send a request when coming to ActivityChat and send a
      * request after send message
      */
-    public void userInfoAvoidDuplicate(long userId) {
+    public synchronized void userInfoAvoidDuplicate(long userId) {
         if (!userIdArrayList.contains(String.valueOf(userId))) {
-            userIdArrayList.add(String.valueOf(userId));
             ProtoUserInfo.UserInfo.Builder builder = ProtoUserInfo.UserInfo.newBuilder();
             builder.setUserId(userId);
 
             RequestWrapper requestWrapper = new RequestWrapper(117, builder, userId + "");
             try {
-                RequestQueue.sendRequest(requestWrapper);
+                if (G.userLogin) {
+                    userIdArrayList.add(String.valueOf(userId));
+                    RequestQueue.sendRequest(requestWrapper);
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

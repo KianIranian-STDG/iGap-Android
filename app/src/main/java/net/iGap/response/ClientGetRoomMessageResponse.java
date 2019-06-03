@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -13,7 +13,9 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomMessage;
+import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.request.RequestClientGetRoomMessage;
 
 import io.realm.Realm;
 
@@ -21,9 +23,9 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public ClientGetRoomMessageResponse(int actionId, Object protoClass, String identity) {
+    public ClientGetRoomMessageResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -37,16 +39,18 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
         final ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder builder = (ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder) message;
         final Realm realm = Realm.getDefaultInstance();
 
+        RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra extra = (RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra) identity;
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoomMessage.putOrUpdate(realm, Long.parseLong(identity), builder.getMessage(), new StructMessageOption().setGap());
+                RealmRoomMessage.putOrUpdate(realm, extra.getRoomId(), builder.getMessage(), new StructMessageOption().setGap());
             }
         });
         realm.close();
 
-        if (G.onClientGetRoomMessage != null) {
-            G.onClientGetRoomMessage.onClientGetRoomMessageResponse(builder.getMessage());
+        if (extra.getOnClientGetRoomMessage() != null) {
+            extra.getOnClientGetRoomMessage().onClientGetRoomMessageResponse(builder.getMessage());
         }
     }
 
@@ -58,7 +62,14 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
 
+        RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra extra = (RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra) identity;
+        if (extra.getOnClientGetRoomMessage() != null) {
+            extra.getOnClientGetRoomMessage().onError(majorCode, minorCode);
+        }
     }
 }
 

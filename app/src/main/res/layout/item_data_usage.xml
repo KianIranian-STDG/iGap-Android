@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
                 android:id="@+id/txtTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                     android:textSize="@dimen/dp14" />
 
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/txtSentNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                     android:textSize="@dimen/dp14" />
 
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/txtReceivedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                     android:textSize="@dimen/dp14" />
 
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/txtByteSentNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                     android:text="@string/bytes_received"
                     android:textSize="@dimen/dp14" />
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/txtByteReceivedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

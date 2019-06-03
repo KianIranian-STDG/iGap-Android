@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -218,10 +218,13 @@ public class RealmRegisteredInfo extends RealmObject {
         realm.close();
     }
 
-    public static void updateStatus(long userId, final int lastSeen, final String userStatus) {
+    public static boolean updateStatus(long userId, final int lastSeen, final String userStatus) {
         Realm realm = Realm.getDefaultInstance();
         final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (realmRegisteredInfo != null) {
+            if (userStatus.toLowerCase().equals("offline") && !realmRegisteredInfo.getStatus().toLowerCase().equals("online"))
+                return false;
+
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -231,6 +234,7 @@ public class RealmRegisteredInfo extends RealmObject {
             });
         }
         realm.close();
+        return true;
     }
 
     public long getId() {

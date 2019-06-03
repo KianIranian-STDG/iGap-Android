@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -23,6 +23,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmRoomMessageLocation;
+import net.iGap.realm.RealmRoomMessageWallet;
 
 import org.parceler.Parcels;
 
@@ -78,7 +79,7 @@ public class StructMessageInfo implements Parcelable {
     public byte[] fileHash;
     public int uploadProgress;
     public StructMessageAttachment attachment;
-    public StructWallet structWallet;
+    public RealmRoomMessageWallet structWallet;
     public StructRegisteredInfo userInfo;
     public StructMessageAttachment senderAvatar;
     public long time;
@@ -355,7 +356,9 @@ public class StructMessageInfo implements Parcelable {
         }
 
         if (roomMessage.getRoomMessageWallet() != null) {
-            messageInfo.structWallet = StructWallet.convert(roomMessage.getRoomMessageWallet());
+            Realm realm = Realm.getDefaultInstance();
+            messageInfo.structWallet = realm.copyFromRealm(roomMessage.getRoomMessageWallet());
+            realm.close();
         }
 
         if (roomMessage.getRealmAdditional()!=null ){

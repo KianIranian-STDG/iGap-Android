@@ -1,16 +1,16 @@
 package net.iGap.realm;
 
 
-import android.util.Log;
-
+import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import io.realm.Realm;
@@ -20,9 +20,8 @@ import io.realm.RealmResults;
 
 public class RealmStickers extends RealmObject {
 
-    private long id;
-    private long createdAt;
     private String st_id;
+    private long createdAt;
     private long refId;
     private String name;
     private String avatarToken;
@@ -217,14 +216,6 @@ public class RealmStickers extends RealmObject {
         return realmStickers;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public long getCreatedAt() {
         return createdAt;
     }
@@ -343,5 +334,54 @@ public class RealmStickers extends RealmObject {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public void removeFromRealm() {
+        if (realmStickersDetails != null) {
+            for (Iterator<RealmStickersDetails> iterator = realmStickersDetails.iterator(); iterator.hasNext();) {
+                RealmStickersDetails stickersDetails = iterator.next();
+                if (stickersDetails != null) {
+                    iterator.remove();
+                    stickersDetails.deleteFromRealm();
+                }
+            }
+        }
+
+        deleteFromRealm();
+    }
+
+    public static void updateStickers(List<StructGroupSticker> mData) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                HashSet<String> hashedData = new HashSet<>();
+                ArrayList<RealmStickers> itemToDelete = new ArrayList<>();
+                HashSet<String> itemNotNeedToAdd = new HashSet<>();
+                for (StructGroupSticker structGroupSticker: mData) {
+                    hashedData.add(structGroupSticker.getId());
+                }
+
+                RealmResults<RealmStickers> allStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, true).findAll();
+                for (RealmStickers realmStickers: allStickers) {
+                    if (!hashedData.contains(realmStickers.st_id)) {
+                        itemToDelete.add(realmStickers);
+                    } else {
+                        itemNotNeedToAdd.add(realmStickers.st_id);
+                    }
+                }
+
+                for (RealmStickers realmStickers: itemToDelete) {
+                    realmStickers.removeFromRealm();
+                }
+
+                for (StructGroupSticker item: mData) {
+                    if (!itemNotNeedToAdd.contains(item.getId())) {
+                        RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                    }
+                }
+            }
+        });
+        realm.close();
     }
 }

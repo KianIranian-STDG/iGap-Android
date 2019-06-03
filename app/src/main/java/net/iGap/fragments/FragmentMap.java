@@ -4,13 +4,14 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
 package net.iGap.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -39,7 +40,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -57,30 +57,27 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 
 import io.realm.Realm;
 
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.R.id.mf_fragment_map_view;
 
 public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener, LocationListener {
@@ -275,7 +272,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     @Override
     public void onDetach() {
         super.onDetach();
-
+        isLocationFromBot = false;
         HelperSetAction.sendCancel(FragmentChat.messageId);
     }
 
@@ -306,7 +303,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         //  rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
-            fabOpenMap.setVisibility(View.GONE);
+            fabOpenMap.hide();
             rvSendPosition.setVisibility(View.VISIBLE);
             rvSeePosition.setVisibility(View.GONE);
             rvSendPosition.setOnClickListener(this);
@@ -314,7 +311,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         } else if (mode == Mode.seePosition) {
             rvSeePosition.setVisibility(View.VISIBLE);
-            fabOpenMap.setVisibility(View.VISIBLE);
+            fabOpenMap.show();
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
@@ -364,34 +361,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     }
 
     private void setAvatar(long id) {
-
-        HelperAvatar.getAvatar(id, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        //   if (!isCloudRoom) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgProfile);
-                        //     }
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //   if (!isCloudRoom && imvUserPicture != null) {
-                        imgProfile.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
-                        //    }
-                    }
-                });
-            }
-        });
-
+        avatarHandler.getAvatar(new ParamWithAvatarType(imgProfile, id).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 
     //****************************************************************************************************
@@ -418,12 +388,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             return;
         }
-        if (mode == Mode.seePosition) {
+        if (mode == Mode.seePosition || isLocationFromBot) {
             mMap.setMyLocationEnabled(true);
 
             mMap.getUiSettings().setZoomGesturesEnabled(true);
         } else {
-
             mMap.getUiSettings().setZoomGesturesEnabled(false);
             mMap.setMyLocationEnabled(false);
         }
@@ -660,11 +629,15 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                     break;
 
                 case R.id.mf_fab_openMap:
-                    Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(im here)");
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
+                    try {
+                        Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(im here)");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+                    } catch (ActivityNotFoundException e) {
+                    }
                     break;
+
 
             }
 

@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -68,7 +69,7 @@ import static net.iGap.R.dimen.messageContainerPadding;
 public class ViewMaker {
 
     public static View getUnreadMessageItemView() {
-        TextView cslum_txt_unread_message = new TextView(G.context);
+        TextView cslum_txt_unread_message = new AppCompatTextView(G.context);
         cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
         cslum_txt_unread_message.setPadding(0, dpToPixel(2), 0, dpToPixel(2));
         cslum_txt_unread_message.setBackgroundColor(G.context.getResources().getColor(R.color.green));
@@ -99,7 +100,7 @@ public class ViewMaker {
     }
 
     public static View getLogItemView() {
-        TextView text = new TextView(G.context);
+        TextView text = new AppCompatTextView(G.context);
         text.setId(R.id.csll_txt_log_text);
 
         text.setPadding(i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4));
@@ -153,7 +154,7 @@ public class ViewMaker {
         verticalLine.setLayoutParams(layout_81);
         cslr_replay_layout.addView(verticalLine);
 
-        ImageView chslr_imv_replay_pic = new ImageView(context);
+        AppCompatImageView chslr_imv_replay_pic = new AppCompatImageView(context);
         chslr_imv_replay_pic.setId(R.id.chslr_imv_replay_pic);
         chslr_imv_replay_pic.setAdjustViewBounds(true);
 
@@ -240,7 +241,7 @@ public class ViewMaker {
         cslr_ll_forward.addView(View_997);
 
 
-        TextView cslr_txt_prefix_forward = new TextView(context);
+        TextView cslr_txt_prefix_forward = new AppCompatTextView(context);
         cslr_txt_prefix_forward.setId(R.id.cslr_txt_prefix_forward);
         cslr_txt_prefix_forward.setText(context.getResources().getString(R.string.forwarded_from));
         cslr_txt_prefix_forward.setTextColor(Color.parseColor(G.textBubble));
@@ -253,7 +254,7 @@ public class ViewMaker {
         cslr_txt_prefix_forward.setLayoutParams(layout_992);
         cslr_ll_forward.addView(cslr_txt_prefix_forward);
 
-        TextView cslr_txt_forward_from = new TextView(context);
+        TextView cslr_txt_forward_from = new AppCompatTextView(context);
         cslr_txt_forward_from.setId(R.id.cslr_txt_forward_from);
         cslr_txt_forward_from.setMinimumWidth(i_Dp(R.dimen.dp100));
         cslr_txt_forward_from.setMaxWidth(i_Dp(R.dimen.dp140));
@@ -672,7 +673,7 @@ public class ViewMaker {
         cs_txt_mute.setLayoutParams(layout_152s);
         linearLayout_620.addView(cs_txt_mute);
 
-        ImageView cslr_txt_tic = new ImageView(G.context);
+        AppCompatImageView cslr_txt_tic = new AppCompatImageView(G.context);
         cslr_txt_tic.setId(R.id.cslr_txt_tic);
         cslr_txt_tic.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
         LinearLayout.LayoutParams layout_516 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp16), i_Dp(R.dimen.dp16));
@@ -686,7 +687,7 @@ public class ViewMaker {
         cslr_txt_tic.setLayoutParams(layout_516);
         linearLayout_620.addView(cslr_txt_tic);
 
-        TextView cs_txt_contact_time = new TextView(G.context);
+        AppCompatTextView cs_txt_contact_time = new AppCompatTextView(G.context);
         cs_txt_contact_time.setId(R.id.cs_txt_contact_time);
         cs_txt_contact_time.setSingleLine(true);
         cs_txt_contact_time.setText("time");
@@ -700,7 +701,7 @@ public class ViewMaker {
 
         linearLayout_922.addView(linearLayout_620);
 
-        TextView cs_txt_unread_message = new TextView(G.context);
+        AppCompatTextView cs_txt_unread_message = new AppCompatTextView(G.context);
         cs_txt_unread_message.setId(R.id.cs_txt_unread_message);
         cs_txt_unread_message.setBackgroundResource(R.drawable.rect_oval_red);
         cs_txt_unread_message.setGravity(CENTER);
@@ -802,7 +803,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_106 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_976.setLayoutParams(layout_106);
 
-        TextView fcsl_txt_time_info = new TextView(G.context);
+        AppCompatTextView fcsl_txt_time_info = new AppCompatTextView(G.context);
         fcsl_txt_time_info.setId(R.id.fcsl_txt_time_info);
         fcsl_txt_time_info.setGravity(Gravity.START);
         fcsl_txt_time_info.setSingleLine(true);
@@ -841,7 +842,7 @@ public class ViewMaker {
         fcsl_txt_icon.setLayoutParams(layout_178);
         linearLayout_202.addView(fcsl_txt_icon);
 
-        TextView fcsl_txt_dureation_time = new TextView(G.context);
+        AppCompatTextView fcsl_txt_dureation_time = new AppCompatTextView(G.context);
         fcsl_txt_dureation_time.setId(R.id.fcsl_txt_dureation_time);
         fcsl_txt_dureation_time.setText("2:24");
         fcsl_txt_dureation_time.setTextColor(G.context.getResources().getColor(R.color.btn_start_page5));
@@ -894,7 +895,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams layoutDeleteParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutDelete.setLayoutParams(layoutDeleteParams);
 
-        TextView txtDelete = new TextView(G.context);
+        AppCompatTextView txtDelete = new AppCompatTextView(G.context);
         txtDelete.setText(G.context.getResources().getString(R.string.delete_item_dialog));
         txtDelete.setGravity(Gravity.CENTER);
         setTypeFace(txtDelete);
@@ -926,7 +927,7 @@ public class ViewMaker {
         layoutEdit.setLayoutParams(layoutEditParams);
 
 
-        TextView txtEdit = new TextView(G.context);
+        AppCompatTextView txtEdit = new AppCompatTextView(G.context);
         txtEdit.setText(G.context.getResources().getString(R.string.edit));
         txtEdit.setGravity(Gravity.CENTER);
         setTypeFace(txtEdit);
@@ -968,7 +969,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_578.setLayoutParams(layout_842);
 
-        TextView topLine = new TextView(G.context);
+        AppCompatTextView topLine = new AppCompatTextView(G.context);
         topLine.setId(R.id.topLine);
         topLine.setBackgroundColor(G.context.getResources().getColor(R.color.gray));
         LinearLayout.LayoutParams layout_323 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
@@ -1051,7 +1052,7 @@ public class ViewMaker {
         }
         linearLayout_673.setLayoutParams(layout_445);
 
-        TextView title = new TextView(G.context);
+        AppCompatTextView title = new AppCompatTextView(G.context);
         title.setId(R.id.title);
 
 
@@ -1064,7 +1065,7 @@ public class ViewMaker {
         title.setLayoutParams(layout_949);
         linearLayout_673.addView(title);
 
-        TextView subtitle = new TextView(G.context);
+        AppCompatTextView subtitle = new AppCompatTextView(G.context);
         subtitle.setId(R.id.subtitle);
         subtitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
         subtitle.setText(G.fragmentActivity.getResources().getString(R.string.last_seen_recently));

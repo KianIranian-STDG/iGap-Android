@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -71,7 +71,7 @@ public abstract class MessageHandler {
 
         if (!G.ignoreErrorCodes.contains(majorCode)) {
             Log.i("#peymanERR",majorCode+"");
-            HelperLog.setErrorLog("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId));
+            HelperLog.setErrorLog(new Exception("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId)));
         }
 
 

@@ -4,15 +4,14 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
 package net.iGap.realm;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -20,16 +19,20 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.module.BotInit;
-import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.request.RequestChannelUpdateDraft;
+import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
+import net.iGap.request.RequestGroupUpdateDraft;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import io.realm.Realm;
@@ -236,7 +239,9 @@ public class RealmRoom extends RealmObject {
             }
         }
 
-        realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), room.getDraft().getMessage(), room.getDraft().getReplyTo()));
+        realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), room.getDraft().getMessage(), room.getDraft().getReplyTo(), room.getDraft().getDraftTime()));
+        Log.i("CCCCCC", "2 put: " + realmRoom.getUpdatedTime());
+
 
         return realmRoom;
     }
@@ -246,69 +251,104 @@ public class RealmRoom extends RealmObject {
      *
      * @param rooms ProtoGlobal.Room
      */
-    public static void putChatToDatabase(final List<ProtoGlobal.Room> rooms, final boolean deleteBefore, final boolean cleanDeletedRoomMessage) {
+    public static void putChatToDatabase(final List<ProtoGlobal.Room> rooms) {
 
         /**
          * (( hint : i don't used from mRealm instance ,because i have an error
          * that realm is closed, and for avoid from that error i used from
          * new instance for this action ))
          */
+        final Realm realm = Realm.getDefaultInstance();
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+            public void execute(Realm realm) {
+                HashSet<Long> allUnPined = new HashSet<>();
+                HashSet<Long> allPinned = new HashSet<>();
+                long timeMin = Long.MAX_VALUE;
+                long timeMax = Long.MIN_VALUE;
+                long pinIdMin = Long.MAX_VALUE;
+                long pinIdMax = Long.MIN_VALUE;
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        if (deleteBefore) {
-                            RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
-                            for (int i = 0; i < list.size(); i++) {
-                                list.get(i).setDeleted(true);
-                            }
-
-                            BotInit.checkDrIgap();
+                for (int i = 0; i < rooms.size(); i++) {
+                    RealmRoom.putOrUpdate(rooms.get(i), realm);
+                    if (rooms.get(i).getPinId() == 0L) {
+                        allUnPined.add(rooms.get(i).getId());
+                        if (rooms.get(i).getLastMessage().getCreateTime() != 0 && timeMin > rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
+                            timeMin = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
                         }
 
-                        for (ProtoGlobal.Room room : rooms) {
-                            RealmRoom.putOrUpdate(room, realm);
+                        if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && timeMin > rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
+                            timeMin = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
                         }
 
-                        if (cleanDeletedRoomMessage) {
-                            // delete messages and rooms that was deleted
-                            RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
-                            for (RealmRoom item : deletedRoomsList) {
-                                /**
-                                 * delete all message in deleted room
-                                 *
-                                 * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
-                                 * transaction and client can't use a transaction inside another
-                                 */
-                                RealmRoomMessage.deleteAllMessage(realm, item.getId());
-                                RealmClientCondition.deleteCondition(realm, item.getId());
-                                item.deleteFromRealm();
-                            }
+                        if (rooms.get(i).getLastMessage().getCreateTime() != 0 && timeMax < rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
+                            timeMax = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
+                        }
+
+                        if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && timeMax < rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
+                            timeMax = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
+                        }
+                    } else {
+                        allPinned.add(rooms.get(i).getId());
+                        if (pinIdMin > rooms.get(i).getPinId()) {
+                            pinIdMin = rooms.get(i).getPinId();
+                        }
+
+                        if (pinIdMax < rooms.get(i).getPinId()) {
+                            pinIdMax = rooms.get(i).getPinId();
                         }
                     }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
+                }
 
-                        realm.close();
+                RealmResults<RealmRoom> deletedRoomsListUnPined = realm.where(RealmRoom.class)
+                        .greaterThanOrEqualTo(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, timeMin)
+                        .lessThanOrEqualTo(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, timeMax)
+                        .equalTo(RealmRoomFields.IS_PINNED, false)
+                        .equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+
+                RealmResults<RealmRoom> deletedRoomsListPined = realm.where(RealmRoom.class)
+                        .equalTo(RealmRoomFields.IS_PINNED, true)
+                        .greaterThanOrEqualTo(RealmRoomFields.PIN_ID, pinIdMin)
+                        .lessThanOrEqualTo(RealmRoomFields.PIN_ID, pinIdMax)
+                        .equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+
+                for (RealmRoom item : deletedRoomsListUnPined) {
+                    if (allUnPined.contains(item.getId())) {
+                        continue;
                     }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
+                    /**
+                     * delete all message in deleted room
+                     *
+                     * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
+                     * transaction and client can't use a transaction inside another
+                     */
+                    RealmRoomMessage.deleteAllMessage(realm, item.getId());
+                    RealmClientCondition.deleteCondition(realm, item.getId());
+                    item.deleteFromRealm();
+                }
+
+                for (RealmRoom item : deletedRoomsListPined) {
+                    if (allPinned.contains(item.getId())) {
+                        continue;
                     }
-                });
+                    /**
+                     * delete all message in deleted room
+                     *
+                     * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
+                     * transaction and client can't use a transaction inside another
+                     */
+                    RealmRoomMessage.deleteAllMessage(realm, item.getId());
+                    RealmClientCondition.deleteCondition(realm, item.getId());
+                    item.deleteFromRealm();
+                }
             }
         });
+
+        realm.close();
     }
 
-    public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId) {
+    public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId, int draftTime) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -316,10 +356,14 @@ public class RealmRoom extends RealmObject {
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
-                    realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
-
-                    if (G.onDraftMessage != null) {
-                        G.onDraftMessage.onDraftMessage(roomId, message);
+                    realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId, draftTime));
+                    if (!message.isEmpty() && draftTime != 0) {
+                        realmRoom.setUpdatedTime(draftTime * (DateUtils.SECOND_IN_MILLIS));
+                    }
+                    if (realmRoom.getDraft() == null) {
+                        realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId, draftTime));
+                    } else {
+                        realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), message, replyToMessageId, draftTime));
                     }
                 }
             }
@@ -715,7 +759,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updatePin(final long roomId, final boolean pin, final long pinId) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
@@ -854,7 +898,7 @@ public class RealmRoom extends RealmObject {
 
     public static void setAction(final long roomId, final long userId, final String action) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -865,6 +909,8 @@ public class RealmRoom extends RealmObject {
         });
         realm.close();
     }
+
+
 
     public static void setLastScrollPosition(final long roomId, final long messageId, final int offset) {
         Realm realm = Realm.getDefaultInstance();
@@ -902,23 +948,21 @@ public class RealmRoom extends RealmObject {
         setLastScrollPosition(roomId, 0, 0);
     }
 
-    public static void setDraft(final long roomId, final String message, final long replyToMessageId) {
+    public static void setDraft(final long roomId, final String message, final long replyToMessageId, ProtoGlobal.Room.Type chatType) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                //    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getUpdateTime() == 0) {
-                        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-                //    } else {
-                //        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-               //     }
+        if (realmRoom != null) {
+            if (realmRoom.getDraft() == null || realmRoom.getDraft().getMessage() == null || !realmRoom.getDraft().getMessage().equals(message)) {
+                if (chatType == CHAT) {
+                    new RequestChatUpdateDraft().chatUpdateDraft(roomId, message, replyToMessageId);
+                } else if (chatType == GROUP) {
+                    new RequestGroupUpdateDraft().groupUpdateDraft(roomId, message, replyToMessageId);
+                } else if (chatType == CHANNEL) {
+                    new RequestChannelUpdateDraft().channelUpdateDraft(roomId, message, replyToMessageId);
                 }
             }
-        });
+        }
         realm.close();
     }
 
@@ -954,9 +998,6 @@ public class RealmRoom extends RealmObject {
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
-                    realmRoom.setDraft(null);
-                    realmRoom.setDraftFile(null);
-
                     if (realmRoom.getLastMessage().getUpdateTime() == 0) {
                         realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
                     } else {
@@ -1442,10 +1483,9 @@ public class RealmRoom extends RealmObject {
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                         equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).findFirst();
                 if (roomMessage == null) {
-                    G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
                         @Override
                         public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                            G.onClientGetRoomMessage = null;
                             G.handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1455,9 +1495,12 @@ public class RealmRoom extends RealmObject {
                                 }
                             }, 200);
                         }
-                    };
 
-                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId());
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
+
+                        }
+                    });
                 } else {
                     RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                             equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
@@ -1502,6 +1545,9 @@ public class RealmRoom extends RealmObject {
     }
 
     public long getLastScrollPositionMessageId() {
+        if (lastScrollPositionMessageId == 0 || !RealmRoomMessage.existMessage(lastScrollPositionMessageId))
+            return 0;
+
         return lastScrollPositionMessageId;
     }
 
@@ -1604,9 +1650,9 @@ public class RealmRoom extends RealmObject {
         }
         String ar[];
         if (HelperCalander.isPersianUnicode) {
-            ar = new String[]{"0", channel + "", group + "", chat + "", all + ""};
+            ar = new String[]{"0", "0", all + ""};
         } else {
-            ar = new String[]{all + "", chat + "", group + "", channel + "", "0"};
+            ar = new String[]{all + "", "0", "0"};
         }
         realm.close();
         return ar;

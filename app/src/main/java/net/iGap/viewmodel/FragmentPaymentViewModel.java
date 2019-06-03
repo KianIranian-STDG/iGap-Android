@@ -5,7 +5,7 @@ package net.iGap.viewmodel;
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
 */
 
@@ -21,8 +21,8 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.fragments.FragmentPaymentInquiry;
+import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperFragment;
-
 
 public class FragmentPaymentViewModel {
 
@@ -37,6 +37,10 @@ public class FragmentPaymentViewModel {
 
     public void onClickCharge(View v) {
         new HelperFragment(FragmentPaymentCharge.newInstance()).setReplace(false).load();
+    }
+
+    public void onClickCardToCard(View v) {
+        CardToCardHelper.CallCardToCard(G.currentActivity);
     }
 
     public void onClickBill(View v) {

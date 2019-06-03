@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -15,12 +15,10 @@ import android.view.View;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.LastSeenTimeUtil;
@@ -37,6 +35,11 @@ import io.realm.Realm;
  */
 public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolder> {
     public StructContactInfo mContact;
+    private AvatarHandler avatarHandler;
+
+    public ContactItem(AvatarHandler avatarHandler) {
+        this.avatarHandler = avatarHandler;
+    }
 
     public ContactItem setContact(StructContactInfo contact) {
         this.mContact = contact;
@@ -85,18 +88,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
     }
 
     private void setAvatar(final ViewHolder holder) {
-
-        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color) {
-                holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
     }
 
     @Override

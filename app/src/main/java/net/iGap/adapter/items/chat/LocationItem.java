@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -29,6 +29,7 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -61,7 +62,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         super.bindView(holder, payloads);
 
         holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
-
+        holder.imgMapPosition.setImageResource(R.drawable.map);
         RealmRoomMessageLocation item = null;
 
         if (mMessage.forwardedFrom != null) {
@@ -84,8 +85,12 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                 FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
                     @Override
                     public void getBitmap(Bitmap bitmap) {
-                        holder.imgMapPosition.setImageBitmap(bitmap);
-                        AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
+                        if (bitmap == null) {
+                            holder.imgMapPosition.setImageResource(R.drawable.map);
+                        } else {
+                            holder.imgMapPosition.setImageBitmap(bitmap);
+                            AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
+                        }
                     }
                 });
             }

@@ -53,6 +53,14 @@
                 android:textSize="@dimen/dp18"
                 android:visibility="visible" />
 
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/iconAddSticker"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/md_add_plus_button"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
+                android:textColor="@color/whit_background" />
             <TextView
                 android:id="@+id/txtAddSticker"
                 fontPath="fonts/IRANSansMobile_Bold.ttf"
@@ -61,7 +69,7 @@
                 android:layout_gravity="center"
                 android:gravity="center|left"
                 android:singleLine="true"
-                android:text="@string/add_sticker"
+                android:text="@string/Add"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/dp18"

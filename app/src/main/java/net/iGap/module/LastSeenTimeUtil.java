@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -200,7 +200,7 @@ public class LastSeenTimeUtil {
         long difference = (currentTime - (time * DateUtils.SECOND_IN_MILLIS));
         //difference = -(70 * DateUtils.MINUTE_IN_MILLIS);
         if (TimeUnit.MILLISECONDS.toMinutes(difference) <= 0) {
-            return G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
+            return G.context.getResources().getString(R.string.last_seen_recently);
         }
 
         /*else if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 61) {

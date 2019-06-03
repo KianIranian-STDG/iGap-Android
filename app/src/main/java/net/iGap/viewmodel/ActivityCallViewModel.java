@@ -5,7 +5,7 @@ package net.iGap.viewmodel;
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -63,6 +63,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.interfaces.SpeakerControlListener;
 import net.iGap.module.AndroidUtils;
@@ -612,6 +613,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     }
 
     public void endCall() {
+        UserStatusController.getInstance().setOffline();
 
         G.isInCall = false;
 
@@ -879,7 +881,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                 ringtonePlayer.prepare();
                 ringtonePlayer.start();
             } catch (Exception e) {
-                HelperLog.setErrorLog("activity call view model   set ringtone uri  " + e);
+                HelperLog.setErrorLog(e);
             }
         }
 

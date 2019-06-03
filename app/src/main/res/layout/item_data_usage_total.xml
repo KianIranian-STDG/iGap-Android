@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
                 android:id="@+id/txtTitle"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                     android:text="@string/total_sent" />
 
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/txtTotalSentByte"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
                     android:text="@string/total_received" />
 
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/txtTotalReceivedByte"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"

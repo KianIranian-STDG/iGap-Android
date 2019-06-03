@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the kianiranian Company - http://www.kianiranian.com/
  * All rights reserved.
  */
 
@@ -16,7 +16,7 @@ public class Config {
 
     public static final int ACCEPT = 1;
     public static final int REJECT = 0;
-    public static final int REALM_SCHEMA_VERSION = 28;
+    public static final int REALM_SCHEMA_VERSION = 32;
     public static final int REALM_LATEST_MIGRATION_VERSION = REALM_SCHEMA_VERSION - 1;
     public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
     public static final int MAX_TEXT_ATTACHMENT_LENGTH = 1024;
@@ -57,6 +57,7 @@ public class Config {
     public static final int DEFAULT_BOTH_CHAT_DELETE_TIME = (int) (2 * DateUtils.HOUR_IN_MILLIS);
     public static final String iGapAccount = "iGap";
     public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
+    //  public static final String URL_WEBSOCKET = "ws://192.168.10.254:8739/";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
     public static final String IGAP_LINK_PREFIX = "https://iGap.net/";
     public static final String PUBLIC_KEY_CLIENT = "-----BEGIN PUBLIC KEY-----\n"

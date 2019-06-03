@@ -23,7 +23,7 @@
       android:padding="@dimen/dp12">
 
 
-      <net.iGap.module.HeaderTextview
+      <net.iGap.module.HeaderTextView
         android:id="@+id/adp_currentSession"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

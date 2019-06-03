@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -65,8 +65,8 @@ import net.iGap.realm.RealmRoomMessage;
 import java.io.File;
 import java.util.ArrayList;
 
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import io.realm.Realm;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityPopUpNotification extends AppCompatActivity {
 
@@ -127,7 +127,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(G.updateResources(newBase)));
     }
 
     @Override

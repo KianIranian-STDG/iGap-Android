@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -70,6 +70,9 @@ public class SHP_SETTING {
 
 
     // ========================================================================================== notification and sound
+
+
+    public static final String KEY_NOTIF_KEYS = "NOTIF_KEYS";
 
     public static final String KEY_STNS_ALERT_MESSAGE = "STNS_ALERT_MESSAGE";
     public static final String KEY_STNS_MESSAGE_PREVIEW_MESSAGE = "STNS_MESSAGE_PREVIEW_MESSAGE";

@@ -18,6 +18,9 @@ import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentPaymentBillViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static net.iGap.activities.ActivityMain.requestCodeBarcode;
 import static net.iGap.viewmodel.FragmentPaymentBillViewModel.getCompany;
 
@@ -27,11 +30,29 @@ public class FragmentPaymentBill extends BaseFragment {
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
 
     public static FragmentPaymentBill newInstance(int resTitleId) {
+        return FragmentPaymentBill.newInstance(resTitleId, null, null);
+    }
+
+    public static FragmentPaymentBill newInstance(int resTitleId, String PID, String BID) {
         Bundle args = new Bundle();
         args.putInt("title", resTitleId);
+        args.putString("PID", PID);
+        args.putString("BID", BID);
         FragmentPaymentBill fragmentPaymentBill = new FragmentPaymentBill();
         fragmentPaymentBill.setArguments(args);
         return fragmentPaymentBill;
+    }
+
+    public static FragmentPaymentBill newInstance(int resTitleId, JSONObject jsonObject) {
+        String PID = null;
+        String BID = null;
+        try {
+            PID = jsonObject.getString("PID");
+            BID = jsonObject.getString("BID");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return newInstance(resTitleId, PID, BID);
     }
 
     public FragmentPaymentBill() {
@@ -50,8 +71,10 @@ public class FragmentPaymentBill extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         int resTitleId = getArguments().getInt("title");
+        String PID = getArguments().getString("PID");
+        String BID = getArguments().getString("BID");
 
-        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId);
+        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId, PID, BID);
         fragmentPaymentBillBinding.setFragmentPaymentBillViewModel(fragmentPaymentBillViewModel);
 
         IBackHandler iBackHandler = new IBackHandler() {

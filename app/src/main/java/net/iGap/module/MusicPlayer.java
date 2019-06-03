@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -348,7 +348,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "play", "");
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog("music player   pauseSound   aaa    " + e.toString());
+            HelperLog.setErrorLog(e);
         }
 
         try {
@@ -357,7 +357,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 isPause = true;
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog("music player   pauseSound   bbb    " + e.toString());
+            HelperLog.setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
     }
@@ -410,7 +410,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "pause", "");
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog("music player   playSound   aaa    " + e.toString());
+            HelperLog.setErrorLog(e);
         }
 
         try {
@@ -422,7 +422,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog("music player   playSound  bbb " + e.toString());
+            HelperLog.setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
     }
@@ -710,7 +710,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         }
                     }
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(" music plyer   startPlayer   setISVoice    " + messageID + "    " + e.toString());
+                    HelperLog.setErrorLog(e);
                 }
             }
 
@@ -1405,7 +1405,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     mSession.setPlaybackState(state);
                 } catch (Exception e) {
 
-                    HelperLog.setErrorLog(" music player   registerMediaBottom     " + e.toString());
+                    HelperLog.setErrorLog(e);
                 }
             } else {
 
@@ -1414,7 +1414,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
                     audioManager.registerMediaButtonEventReceiver(remoteComponentName);
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(" music plyer   registerMediaBottom    " + e.toString());
+                    HelperLog.setErrorLog(e);
                 }
             }
 
@@ -1436,7 +1436,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_STOP | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(" music plyer   setMediaControl    " + e.toString());
+                HelperLog.setErrorLog(e);
             }
         }
     }
@@ -1466,7 +1466,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 metadataEditor.apply();
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(" music plyer   setMedoiInfoOnLockScreen    " + e.toString());
+            HelperLog.setErrorLog(e);
         }
     }
 

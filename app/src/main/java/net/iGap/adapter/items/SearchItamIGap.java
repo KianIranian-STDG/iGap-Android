@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -19,10 +19,9 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.module.AndroidUtils;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.EmojiTextViewE;
@@ -34,6 +33,11 @@ import java.util.List;
 public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.ViewHolder> {
     ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item;
     private Typeface typeFaceIcon;
+    private AvatarHandler avatarHandler;
+
+    public SearchItamIGap(AvatarHandler avatarHandler) {
+        this.avatarHandler = avatarHandler;
+    }
 
     public ProtoClientSearchUsername.ClientSearchUsernameResponse.Result getItem() {
         return item;
@@ -61,56 +65,12 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
         holder.txtIcon.setVisibility(View.GONE);
 
         if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
-
-            HelperAvatar.getAvatar(item.getUser().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long roomId) {
-
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color) {
-
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUser().getId()).avatarType(AvatarHandler.AvatarType.USER));
 
             holder.name.setText(item.getUser().getDisplayName());
             holder.lastSeen.setText(item.getUser().getUsername());
         } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
-
-            HelperAvatar.getAvatar(item.getRoom().getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long roomId) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getRoom().getId()).avatarType(AvatarHandler.AvatarType.ROOM));
 
             holder.name.setText(item.getRoom().getTitle());
 

@@ -29,16 +29,17 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.OnAvatarChange;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarDelete;
 import net.iGap.interfaces.OnComplete;
@@ -171,22 +172,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        HelperAvatar.avatarDelete(fragmentChannelProfileViewModel.roomId, finalMAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-                            @Override
-                            public void latestAvatarPath(String avatarPath) {
-                                setImage(avatarPath);
-                            }
-
-                            @Override
-                            public void showInitials(final String initials, final String color) {
-                                G.handler.post(new Runnable() {
+                        avatarHandler.avatarDelete(new ParamWithAvatarType(imgCircleImageView, fragmentChannelProfileViewModel.roomId)
+                                .avatarType(AvatarHandler.AvatarType.ROOM).turnOffCache().onAvatarChange(new OnAvatarChange() {
                                     @Override
-                                    public void run() {
-                                        imgCircleImageView.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                    public void onChange(boolean fromCache) {
+                                        imgCircleImageView.setPadding(0, 0, 0, 0);
                                     }
-                                });
-                            }
-                        });
+                                }), finalMAvatarId);
                     }
                 });
             }
@@ -255,27 +247,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     }
 
     private void setAvatar() {
-        HelperAvatar.getAvatar(fragmentChannelProfileViewModel.roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imgCircleImageView.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(imgCircleImageView, fragmentChannelProfileViewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 
 
@@ -353,7 +325,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         if (pathSaveImage == null) {
             setAvatar();
         } else {
-            HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
+            avatarHandler.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
                 @Override
                 public void onAvatarAdd(final String avatarPath) {
 
@@ -382,22 +354,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                HelperAvatar.avatarDelete(roomId, avatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-                    @Override
-                    public void latestAvatarPath(String avatarPath) {
-                        setImage(avatarPath);
-                    }
-
-                    @Override
-                    public void showInitials(final String initials, final String color) {
-                        G.handler.post(new Runnable() {
+                avatarHandler.avatarDelete(new ParamWithAvatarType(imgCircleImageView, roomId)
+                        .avatarType(AvatarHandler.AvatarType.ROOM).turnOffCache().onAvatarChange(new OnAvatarChange() {
                             @Override
-                            public void run() {
-                                imgCircleImageView.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            public void onChange(boolean fromCache) {
+                                imgCircleImageView.setPadding(0, 0, 0, 0);
                             }
-                        });
-                    }
-                });
+                        }), avatarId);
             }
         });
     }

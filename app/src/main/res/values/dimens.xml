@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- Audio Item Id -->
@@ -74,5 +75,14 @@
   <dimen name="md_listitem_textsize" tools:override="true">16dp</dimen>
   <dimen name="md_title_textsize" tools:override="true">18dp</dimen>
   <dimen name="md_content_padding_bottom" tools:override="true">6dp</dimen>
+
+
+  <dimen name="coupon_qr_size">140dp</dimen>
+  <dimen name="app_bar_card_view_elevation">0dp</dimen>
+  <dimen name="image">64dp</dimen>
+  <dimen name="discovery_radius">@dimen/dp12</dimen>
+  <dimen name="discovery_margin">@dimen/dp4</dimen>
+  <dimen name="discovery_margin_top_nested">@dimen/dp8</dimen>
+
 
 </resources>

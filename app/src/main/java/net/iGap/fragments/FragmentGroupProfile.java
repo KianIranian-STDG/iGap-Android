@@ -30,16 +30,15 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarAdd;
-import net.iGap.interfaces.OnAvatarDelete;
-import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarDelete;
@@ -68,7 +67,7 @@ import java.util.HashMap;
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarResponse, OnGroupAvatarDelete {
@@ -260,7 +259,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         fab.setColorFilter(Color.WHITE);
 
         if (fragmentGroupProfileViewModel.role == GroupChatRole.OWNER || fragmentGroupProfileViewModel.role == GroupChatRole.ADMIN) {
-            fab.setVisibility(View.VISIBLE);
+            fab.show();
             //
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -270,7 +269,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 }
             });
         } else {
-            fab.setVisibility(View.GONE);
+            fab.hide();
         }
         //
 
@@ -296,27 +295,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     mAvatarId = Long.parseLong(messageOne);
                 }
 
-                HelperAvatar.avatarDelete(fragmentGroupProfileViewModel.roomId, mAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-                    @Override
-                    public void latestAvatarPath(final String avatarPath) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void showInitials(final String initials, final String color) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
-                        });
-                    }
-                });
+                avatarHandler.avatarDelete(new ParamWithAvatarType(imvGroupAvatar, fragmentGroupProfileViewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM), mAvatarId);
             }
         };
 
@@ -395,27 +374,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     }
 
     private void showAvatar() {
-        HelperAvatar.getAvatar(fragmentGroupProfileViewModel.roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
-                    }
-                });
-            }
-
-            @Override
-            public void onShowInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.getAvatar(new ParamWithAvatarType(imvGroupAvatar, fragmentGroupProfileViewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 
     private void showProgressBar() {
@@ -455,7 +414,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         if (pathSaveImage == null) {
             showAvatar();
         } else {
-            HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
+            avatarHandler.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
                 @Override
                 public void onAvatarAdd(final String avatarPath) {
                     G.handler.post(new Runnable() {
@@ -478,27 +437,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     @Override
     public void onDeleteAvatar(long roomId, long avatarId) {
         hideProgressBar();
-        HelperAvatar.avatarDelete(roomId, avatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-            @Override
-            public void latestAvatarPath(final String avatarPath) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
-                    }
-                });
-            }
-
-            @Override
-            public void showInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
-            }
-        });
+        avatarHandler.avatarDelete(new ParamWithAvatarType(imvGroupAvatar, roomId).avatarType(AvatarHandler.AvatarType.ROOM), avatarId);
     }
 
     @Override

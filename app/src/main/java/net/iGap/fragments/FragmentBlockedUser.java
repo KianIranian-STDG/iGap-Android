@@ -4,7 +4,7 @@
 * You should have received a copy of the license in this archive (see LICENSE).
 * Copyright © 2017 , iGap - www.iGap.net
 * iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* The idea of the Kianiranian Company - www.kianiranian.com
 * All rights reserved.
 */
 
@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +31,13 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
-import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
@@ -303,6 +303,13 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 return;
             }
 
+            viewHolder.swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    unblock(viewHolder, registeredInfo.getId());
+                }
+            });
+
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
             viewHolder.title.setTextColor(Color.parseColor(G.textTitleTheme));
@@ -311,28 +318,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             if (HelperCalander.isPersianUnicode) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
-
-            HelperAvatar.getAvatar(registeredInfo.getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, registeredInfo.getId()).avatarType(AvatarHandler.AvatarType.USER));
 
             viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
             viewHolder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
@@ -342,7 +328,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
                 @Override
                 public void onOpen(SwipeLayout layout) {
-
+                    unblock(viewHolder, registeredInfo.getId());
                 }
 
                 @Override
@@ -363,26 +349,31 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 @Override
                 public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
 
-                    if (!viewHolder.isOpenDialog) {
-                        viewHolder.isOpenDialog = true;
-                        MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                new RequestUserContactsUnblock().userContactsUnblock(registeredInfo.getId());
-                            }
-                        }).negativeText(R.string.B_cancel).build();
-
-                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                viewHolder.swipeLayout.close();
-                                viewHolder.isOpenDialog = false;
-                            }
-                        });
-                        dialog.show();
-                    }
                 }
             });
+        }
+
+        private void unblock(ViewHolder viewHolder, long id) {
+            Log.d("bagi" , "unblock");
+            if (!viewHolder.isOpenDialog) {
+                Log.d("bagi" , "unblock2");
+                viewHolder.isOpenDialog = true;
+                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new RequestUserContactsUnblock().userContactsUnblock(id);
+                    }
+                }).negativeText(R.string.B_cancel).build();
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        viewHolder.swipeLayout.close();
+                        viewHolder.isOpenDialog = false;
+                    }
+                });
+                dialog.show();
+            }
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -414,13 +405,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 //    }
                 //});
                 swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
-                swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
-                        openDialogToggleBlock(realmRegisteredInfo.getId());
-                    }
-                });
             }
         }
     }

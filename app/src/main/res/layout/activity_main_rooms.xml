@@ -9,21 +9,12 @@
     tools:ignore="MissingPrefix">
 
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/activity_main_swipe_refresh_layout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cl_recycler_view_contact"
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/cl_recycler_view_contact"
-            style="?backgroundColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never" />
-
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
 
 
     <ProgressBar
@@ -38,18 +29,17 @@
     <include
         android:id="@+id/empty_icon"
         layout="@layout/empty_layout"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 
     <ProgressBar
         android:id="@+id/pbLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-      android:layout_marginTop="160dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="160dp"
         android:padding="@dimen/dp4"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 
 </net.iGap.module.NotTouchableCoordinatorLayout>
