@@ -145,11 +145,10 @@
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/as_toggle_show_vote"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isShowVote)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedShowVote(checked)}"
                             android:textOff=""
@@ -179,11 +178,10 @@
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/as_toggle_show_sender_name_group"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isSenderNameGroup)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedSenderNameGroup(checked)}"
                             android:textOff=""
@@ -218,11 +216,10 @@
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/st_toggle_sendEnter"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isSendEnter)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedSendEnter(checked)}"
                             android:textOff=""
@@ -250,11 +247,10 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerInParent="true">
 
-                            <ToggleButton
+                            <net.iGap.module.CustomToggleButton
                                 android:id="@+id/st_toggle_inAppBrowser"
                                 android:layout_width="@dimen/toggles_width"
                                 android:layout_height="@dimen/toggles_height"
-                                android:background="@drawable/st_switch_button"
                                 android:checked="@{safeUnbox(chatSettingsVM.isInAppBrowser)}"
                                 android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedAppBrowser(checked)}"
                                 android:textOff=""
@@ -329,11 +325,10 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerInParent="true">
 
-                            <ToggleButton
+                            <net.iGap.module.CustomToggleButton
                                 android:id="@+id/st_toggle_enableAnimation"
                                 android:layout_width="@dimen/toggles_width"
                                 android:layout_height="@dimen/toggles_height"
-                                android:background="@drawable/st_switch_button"
                                 android:textOff=""
                                 android:textOn="" />
                         </LinearLayout>
@@ -378,11 +373,10 @@
                             android:textStyle="normal" />
 
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/stsp_toggle_compress"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isCompress)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCompress(checked)}"
                             android:textOff=""
@@ -414,11 +408,10 @@
                             android:textStyle="normal" />
 
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/stsp_toggle_trim"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isTrim)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedTrim(checked)}"
                             android:textOff=""
@@ -450,11 +443,10 @@
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/stsp_toggle_open_default_player"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isDefaultPlayer)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedDefaultVideo(checked)}"
                             android:textOff=""
@@ -480,11 +472,10 @@
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/stsp_toggle_crop"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isCrop)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCrop(checked)}"
                             android:textOff=""
@@ -512,11 +503,10 @@
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/stsp_toggle_cameraBottomSheet"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
-                            android:background="@drawable/st_switch_button"
                             android:checked="@{safeUnbox(chatSettingsVM.isCameraButtonSheet)}"
                             android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCameraButtonSheet(checked)}"
                             android:textOff=""

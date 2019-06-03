@@ -523,14 +523,11 @@
                     android:layout_toRightOf="@id/fup_btn_dark_view_handler_view"
                     />
 
-                <ToggleButton
+                <net.iGap.module.CustomToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/darkTheme"
-                    android:layout_width="@dimen/toggles_width"
-                    android:layout_height="@dimen/toggles_height"
                     android:checked="@={viewModel.isDarkMode}"
-                    android:background="@drawable/st_switch_button"
-                    android:textOff=""
-                    android:textOn=""
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"

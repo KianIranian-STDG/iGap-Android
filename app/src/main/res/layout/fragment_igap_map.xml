@@ -251,7 +251,7 @@
                                 android:id="@+id/toggleGps"
                                 android:layout_width="@dimen/dp40"
                                 android:layout_height="@dimen/dp32"
-                                android:background="@drawable/st_switch_button"
+                                android:background="@drawable/st_switch_button_dark"
                                 android:textOff=""
                                 android:textOn="" />
 
