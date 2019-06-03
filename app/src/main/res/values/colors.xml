@@ -233,8 +233,6 @@
     <color name="unread_status_dark">#FFFFFF</color>
 
     <color name="voice_item">#468ba7</color>
-
-
     <color name="colorWhite">#fff</color>
 
     <color name="onboard_button_normal">#1fa8f2</color>
@@ -242,5 +240,6 @@
 
     <color name="not_now_button_normal">#f44336</color>
     <color name="not_now_button_selected">#a12c23</color>
-
+    <color name="toolbar_player_base_color">#468DA7</color>
+    <color name="toolbar_player_background">#EFEFEF</color>
 </resources>

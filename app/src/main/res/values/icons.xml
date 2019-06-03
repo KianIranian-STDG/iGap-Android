@@ -217,4 +217,6 @@
     <string name="speaker_off_icon">K</string>
     <string name="switch_camera_icon">Ã</string>
     <string name="end_voice_call_icon">Ý</string>
+    <string name="play_icon">#</string>
+    <string name="pause_icon">\?</string>
 </resources>
