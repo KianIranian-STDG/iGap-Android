@@ -237,30 +237,28 @@
                 app:emojiSize="14dp" />
 
             <TextView
-                android:id="@+id/view_toolbar_chat_txt_isMute"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                style="@style/myIconTextViewStyle"
-                android:text="@string/mute_icon"
-                android:textAppearance="@style/TextIconAppearance.all"
-                android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/view_toolbar_chat_txt_verify"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 style="@style/myIconTextViewStyle"
                 android:text="@string/verify_icon"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@color/verify_color"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/view_toolbar_chat_txt_isMute"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                style="@style/myIconTextViewStyle"
+                android:text="@string/mute_icon"
+                android:textAppearance="@style/TextIconAppearance.all"
+                android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:visibility="gone" />
 
