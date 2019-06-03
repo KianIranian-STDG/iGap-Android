@@ -143,18 +143,35 @@
                     app:layout_constraintTop_toBottomOf="@id/channelLinkStatus"
                     app:layout_constraintWidth_percent=".95" />
 
-                <Switch
-                    android:id="@+id/enableNotification"
+                <RelativeLayout
+                    android:id="@+id/enableNotificationLyt"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
-                    android:checked="@={viewModel.isMuteNotification}"
-                    android:onCheckedChanged="@{()->viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
-                    android:text="@string/ntg_notifications"
+                    android:onClick="@{()-> viewModel.onNotificationClick()}"
                     app:layout_constraintLeft_toLeftOf="@id/channelInfo"
                     app:layout_constraintRight_toRightOf="@id/channelInfo"
-                    app:layout_constraintTop_toBottomOf="@id/divider1" />
+                    app:layout_constraintTop_toBottomOf="@id/divider1" >
+
+                    <TextView
+                        android:fontFamily="@font/main_font"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/mute_notification" />
+
+                    <net.iGap.module.CustomToggleButton
+                        android:id="@+id/enableNotification"
+                        android:layout_width="@dimen/toggles_width"
+                        android:layout_height="@dimen/toggles_height"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:checked="@={viewModel.isMuteNotification}" />
+
+                </RelativeLayout>
 
                 <View
                     android:id="@+id/divider2"
@@ -164,7 +181,7 @@
                     android:layout_marginTop="@dimen/dp16"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
-                    app:layout_constraintTop_toBottomOf="@id/enableNotification" />
+                    app:layout_constraintTop_toBottomOf="@id/enableNotificationLyt" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/members"
