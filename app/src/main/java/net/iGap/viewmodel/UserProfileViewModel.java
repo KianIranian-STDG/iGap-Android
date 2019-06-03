@@ -65,8 +65,8 @@ import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.web.Web;
+import org.paygear.model.Card;
+import org.paygear.web.Web;
 
 import java.util.ArrayList;
 

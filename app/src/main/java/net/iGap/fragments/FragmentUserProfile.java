@@ -41,7 +41,7 @@ import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.wallet.WalletActivity;
+import org.paygear.WalletActivity;
 
 import java.io.File;
 import java.io.IOException;
