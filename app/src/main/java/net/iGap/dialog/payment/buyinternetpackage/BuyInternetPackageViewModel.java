@@ -16,49 +16,47 @@ public class BuyInternetPackageViewModel extends ViewModel {
 
     private CompleteListener completeListener;
 
-    public BuyInternetPackageViewModel(CompleteListener completeListener){
+    public BuyInternetPackageViewModel(CompleteListener completeListener) {
         this.completeListener = completeListener;
     }
 
-    public LiveData<Boolean> getPhoneEnableError(){
+    public LiveData<Boolean> getPhoneEnableError() {
         return phoneEnableError;
     }
 
-    public LiveData<Integer> phoneErrorMessage(){
+    public LiveData<Integer> phoneErrorMessage() {
         return phoneErrorMessage;
     }
 
-    public LiveData<Boolean> operatorMessageEnable(){
+    public LiveData<Boolean> operatorMessageEnable() {
         return operatorMessageEnable;
     }
 
-    public LiveData<Integer> operatorErrorMessage(){
+    public LiveData<Integer> operatorErrorMessage() {
         return operatorErrorMessage;
     }
 
-    public void onActionInfoClick(){
+    public void onActionInfoClick() {
 
     }
 
-    public void onPersonIconClick(){
+    public void onPersonIconClick() {
 
     }
 
-    public void onContinueButtonClick(String phoneNumber,String operator){
-        if (phoneNumber.isEmpty()){
+    public void onContinueButtonClick(String phoneNumber, String operator) {
+        if (phoneNumber.isEmpty()) {
             phoneEnableError.setValue(true);
             phoneErrorMessage.setValue(R.string.error);
-        }
-        else{
+        } else {
             phoneEnableError.setValue(false);
-            phoneErrorMessage.setValue(R.string.is_empty);
-            if (operator.isEmpty()){
+            phoneErrorMessage.setValue(R.string.empty_error_message);
+            if (operator.isEmpty()) {
                 operatorMessageEnable.setValue(true);
                 operatorErrorMessage.setValue(R.string.error);
-            }
-            else{
+            } else {
                 operatorMessageEnable.setValue(false);
-                operatorErrorMessage.setValue(R.string.is_empty);
+                operatorErrorMessage.setValue(R.string.empty_error_message);
                 completeListener.onCompleted();
             }
         }

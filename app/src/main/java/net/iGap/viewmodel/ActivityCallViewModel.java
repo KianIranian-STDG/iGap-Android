@@ -80,10 +80,10 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     public ObservableInt showChangeToVideoCall = new ObservableInt(View.GONE);
     public ObservableInt showSwitchCamera = new ObservableInt(View.GONE);
     public ObservableField<String> callBackTxtName = new ObservableField<>("Name");
-    public ObservableInt callBackTxtStatus = new ObservableInt(R.string.is_empty);
+    public ObservableInt callBackTxtStatus = new ObservableInt(R.string.empty_error_message);
     public ObservableField<String> callBackTxtTimer = new ObservableField<>("00:00");
     public ObservableInt txtTimerVisibility = new ObservableInt(View.GONE);
-    public ObservableInt endCallText = new ObservableInt(R.string.md_call_end);
+    public ObservableInt endCallText = new ObservableInt(R.string.end_voice_call_icon);
     public ObservableInt answerCallIcon = new ObservableInt(R.string.voice_call_icon);
     public ObservableInt layoutAnswerCallVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt cllBackBtnMic = new ObservableInt(R.string.mic_on_icon);
@@ -167,7 +167,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
             showSwitchCamera.set(View.GONE);
             showRendererSurface.set(View.GONE);
             showPeerSurface.set(View.GONE);
-            endCallText.set(R.string.voice_call_icon);
+            endCallText.set(R.string.end_voice_call_icon);
             answerCallIcon.set(R.string.voice_call_icon);
         }
     }
@@ -446,7 +446,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
             case ON_HOLD:
                 return R.string.on_hold;
             default:
-                return R.string.is_empty;
+                return R.string.empty_error_message;
         }
     }
 
@@ -653,7 +653,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         if (type.equals("error")) {
             playRingTone.setValue(false);
             txtAviVisibility.set(View.GONE);
-            callBackTxtStatus.set(R.string.is_empty);
+            callBackTxtStatus.set(R.string.empty_error_message);
             G.handler.postDelayed(this::endVoiceAndFinish, 2000);
         } else {
             G.handler.postDelayed(this::endVoiceAndFinish, 1000);

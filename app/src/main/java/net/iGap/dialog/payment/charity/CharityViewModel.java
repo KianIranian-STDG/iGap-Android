@@ -49,13 +49,13 @@ public class CharityViewModel extends ViewModel {
             charityNameErrorMessage.setValue(R.string.error);
         } else {
             charityNameEnableError.setValue(false);
-            charityNameErrorMessage.setValue(R.string.is_empty);
+            charityNameErrorMessage.setValue(R.string.empty_error_message);
             if (amount.isEmpty()) {
                 amountMessageEnable.setValue(true);
                 amountErrorMessage.setValue(R.string.error);
             } else {
                 amountMessageEnable.setValue(false);
-                amountErrorMessage.setValue(R.string.is_empty);
+                amountErrorMessage.setValue(R.string.empty_error_message);
                 completeListener.onCompleted();
             }
         }

@@ -517,60 +517,64 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                         if (HelperCalander.isPersianUnicode) {
                             countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                         }
-                        String[] countList = countText.split("\n");
-                        int countOFImage = Integer.parseInt(countList[0]);
-                        int countOFVIDEO = Integer.parseInt(countList[1]);
-                        int countOFAUDIO = Integer.parseInt(countList[2]);
-                        int countOFVOICE = Integer.parseInt(countList[3]);
-                        int countOFGIF = Integer.parseInt(countList[4]);
-                        int countOFFILE = Integer.parseInt(countList[5]);
-                        int countOFLink = Integer.parseInt(countList[6]);
-                        if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
-                            sharedEmptyVisibility.set(View.GONE);
-                            if (countOFImage > 0) {
-                                sharedPhotoVisibility.set(View.VISIBLE);
-                                sharedPhotoCount.set(countOFImage);
-                            } else {
-                                sharedPhotoVisibility.set(View.GONE);
-                            }
-                            if (countOFVIDEO > 0) {
-                                sharedVideoVisibility.set(View.VISIBLE);
-                                sharedVideoCount.set(countOFVIDEO);
-                            } else {
-                                sharedVideoVisibility.set(View.GONE);
-                            }
-                            if (countOFAUDIO > 0) {
-                                sharedAudioVisibility.set(View.VISIBLE);
-                                sharedAudioCount.set(countOFAUDIO);
-                            } else {
-                                sharedAudioVisibility.set(View.GONE);
-                            }
-                            if (countOFVOICE > 0) {
-                                sharedVoiceVisibility.set(View.VISIBLE);
-                                sharedVoiceCount.set(countOFVOICE);
-                            } else {
-                                sharedVoiceVisibility.set(View.GONE);
-                            }
-                            if (countOFGIF > 0) {
-                                sharedGifVisibility.set(View.VISIBLE);
-                                sharedGifCount.set(countOFGIF);
-                            } else {
-                                sharedGifVisibility.set(View.GONE);
-                            }
-                            if (countOFFILE > 0) {
-                                sharedFileVisibility.set(View.VISIBLE);
-                                sharedFileCount.set(countOFFILE);
-                            } else {
-                                sharedFileVisibility.set(View.GONE);
-                            }
-                            if (countOFLink > 0) {
-                                sharedLinkVisibility.set(View.VISIBLE);
-                                sharedLinkCount.set(countOFLink);
-                            } else {
-                                sharedLinkVisibility.set(View.GONE);
-                            }
-                        } else {
+                        if (countText == null || countText.length() == 0) {
                             sharedEmptyVisibility.set(View.VISIBLE);
+                        } else {
+                            String[] countList = countText.split("\n");
+                            int countOFImage = Integer.parseInt(countList[0]);
+                            int countOFVIDEO = Integer.parseInt(countList[1]);
+                            int countOFAUDIO = Integer.parseInt(countList[2]);
+                            int countOFVOICE = Integer.parseInt(countList[3]);
+                            int countOFGIF = Integer.parseInt(countList[4]);
+                            int countOFFILE = Integer.parseInt(countList[5]);
+                            int countOFLink = Integer.parseInt(countList[6]);
+                            if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
+                                sharedEmptyVisibility.set(View.GONE);
+                                if (countOFImage > 0) {
+                                    sharedPhotoVisibility.set(View.VISIBLE);
+                                    sharedPhotoCount.set(countOFImage);
+                                } else {
+                                    sharedPhotoVisibility.set(View.GONE);
+                                }
+                                if (countOFVIDEO > 0) {
+                                    sharedVideoVisibility.set(View.VISIBLE);
+                                    sharedVideoCount.set(countOFVIDEO);
+                                } else {
+                                    sharedVideoVisibility.set(View.GONE);
+                                }
+                                if (countOFAUDIO > 0) {
+                                    sharedAudioVisibility.set(View.VISIBLE);
+                                    sharedAudioCount.set(countOFAUDIO);
+                                } else {
+                                    sharedAudioVisibility.set(View.GONE);
+                                }
+                                if (countOFVOICE > 0) {
+                                    sharedVoiceVisibility.set(View.VISIBLE);
+                                    sharedVoiceCount.set(countOFVOICE);
+                                } else {
+                                    sharedVoiceVisibility.set(View.GONE);
+                                }
+                                if (countOFGIF > 0) {
+                                    sharedGifVisibility.set(View.VISIBLE);
+                                    sharedGifCount.set(countOFGIF);
+                                } else {
+                                    sharedGifVisibility.set(View.GONE);
+                                }
+                                if (countOFFILE > 0) {
+                                    sharedFileVisibility.set(View.VISIBLE);
+                                    sharedFileCount.set(countOFFILE);
+                                } else {
+                                    sharedFileVisibility.set(View.GONE);
+                                }
+                                if (countOFLink > 0) {
+                                    sharedLinkVisibility.set(View.VISIBLE);
+                                    sharedLinkCount.set(countOFLink);
+                                } else {
+                                    sharedLinkVisibility.set(View.GONE);
+                                }
+                            } else {
+                                sharedEmptyVisibility.set(View.VISIBLE);
+                            }
                         }
                     }
                 });

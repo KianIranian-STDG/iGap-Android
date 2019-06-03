@@ -57,13 +57,13 @@ public class SendMoneyViewModel extends ViewModel {
             destinationErrorMessage.setValue(R.string.error);
             destinationEnableError.setValue(true);
         } else {
-            destinationErrorMessage.setValue(R.string.is_empty);
+            destinationErrorMessage.setValue(R.string.empty_error_message);
             destinationEnableError.setValue(false);
             if (amount.isEmpty()) {
                 amountErrorMessage.setValue(R.string.error);
                 amountErrorMessageEnable.setValue(true);
             } else {
-                amountErrorMessage.setValue(R.string.is_empty);
+                amountErrorMessage.setValue(R.string.empty_error_message);
                 amountErrorMessageEnable.setValue(false);
                 // every things ok do your jobs
                 completeListener.onCompleted();
