@@ -70,6 +70,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsDelete;
@@ -101,6 +102,8 @@ public class FragmentContactsProfile extends BaseFragment {
     private long roomId = 0;*/
     private String enterFrom = "";
     private String report;
+    private long roomId = 0;
+
     private FragmentContactsProfileBinding fragmentContactsProfileBinding;
     private FragmentContactsProfileViewModel fragmentContactsProfileViewModel;
 
@@ -126,7 +129,6 @@ public class FragmentContactsProfile extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         long userId = 0;
-        long roomId = 0;
 
         if (getArguments() != null) {
             userId = getArguments().getLong(PEER_ID);
@@ -143,6 +145,15 @@ public class FragmentContactsProfile extends BaseFragment {
                 if (aBoolean != null && aBoolean) {
                     popBackStackFragment();
                 }
+            }
+        });
+
+        fragmentContactsProfileViewModel.isMuteNotificationChangeListener.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isChecked) {
+                fragmentContactsProfileBinding.enableNotification.setChecked(isChecked);
+
+                new RequestClientMuteRoom().muteRoom(roomId, isChecked);
             }
         });
 
