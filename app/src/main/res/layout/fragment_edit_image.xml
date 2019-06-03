@@ -71,7 +71,7 @@
           android:layout_height="match_parent"
           android:layout_gravity="right"
           android:gravity="center"
-          android:text="@string/md_igap_check"
+          android:text="@string/check_icon"
           android:textAppearance="@style/TextIconAppearance_toolbar"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp22"
