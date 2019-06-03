@@ -6,8 +6,6 @@
 
         <import type="android.view.View" />
 
-        <import type="net.iGap.G" />
-
         <variable
             name="activityCallViewModel"
             type="net.iGap.viewmodel.ActivityCallViewModel" />
@@ -16,8 +14,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/ac_layout_call_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/v"
@@ -31,13 +28,13 @@
                 android:layout_width="@dimen/dp100"
                 android:layout_height="@dimen/dp140"
                 android:layout_margin="@dimen/dp8"
-                android:visibility="gone" />
+                android:visibility="@{activityCallViewModel.showPeerSurface}" />
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/ac_layout_main_call"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -47,7 +44,8 @@
                 android:id="@+id/fcr_surface_remote"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:onClick="@{()->activityCallViewModel.onSurfaceViewRendererClick()}"
+                android:visibility="@{activityCallViewModel.showRendererSurface}" />
         </FrameLayout>
 
         <android.support.v7.widget.AppCompatImageView
@@ -55,7 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@id/fcr_btn_chat"
+            android:visibility="@{activityCallViewModel.showImageBackground}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -64,6 +63,8 @@
             android:id="@+id/fcr_imv_background_layer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@drawable/calling_person_image_layer"
+            android:visibility="@{activityCallViewModel.showImageBackground}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_imv_background"
             app:layout_constraintLeft_toLeftOf="@id/fcr_imv_background"
             app:layout_constraintRight_toRightOf="@id/fcr_imv_background"
@@ -73,6 +74,7 @@
             android:id="@+id/rippleItem"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="@{activityCallViewModel.showRippleView}"
             app:layout_constraintBottom_toTopOf="@id/callInfo"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -84,6 +86,7 @@
             android:id="@+id/callingUserImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="@{activityCallViewModel.showUserAvatar}"
             app:civ_border_color="#cccccc"
             app:civ_border_width="3dp"
             app:layout_constraintBottom_toBottomOf="@id/rippleItem"
@@ -109,7 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="@{activityCallViewModel.callBackTxtName ,default = Name}" />
+                android:text="@{activityCallViewModel.callBackTxtName}"
+                android:visibility="@{activityCallViewModel.showChatButton}" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fcr_txt_status"
@@ -118,7 +122,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="4dp"
-                android:text="@{activityCallViewModel.callBackTxtStatus ,default = Status}" />
+                android:text="@{activityCallViewModel.callBackTxtStatus}"
+                android:visibility="@{activityCallViewModel.showChatButton}" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fcr_txt_timer"
@@ -131,17 +136,20 @@
                 android:shadowRadius="10"
                 android:text="@{activityCallViewModel.callBackTxtTimer}"
                 android:textColor="#f8f4df"
-                android:visibility="@{activityCallViewModel.txtTimerVisibility , default = gone}" />
+                android:visibility="@{activityCallViewModel.txtTimerVisibility}" />
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageButton
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/btnAddPerson"
+            style="@style/baseFontIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{() -> activityCallViewModel.addPersonClickListener()}"
-            android:visibility="gone"
+            android:text="@string/invite_icon"
+            android:textSize="@dimen/dp28"
+            android:visibility="@{activityCallViewModel.showAddMemberButton,default=gone}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_end"
@@ -150,19 +158,25 @@
         <android.support.design.button.MaterialButton
             android:id="@+id/fcr_btn_end"
             style="@style/Widget.MaterialComponents.Button.TextButton"
+            fontPath="fonts/font_icon.ttf"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/md_call_end"
-            android:textAppearance="@style/TextIconAppearance.all"
+            android:enabled="@{activityCallViewModel.enableEndCallButton}"
+            android:onClick="@{()->activityCallViewModel.onEndCallClick()}"
+            android:padding="@dimen/dp8"
+            android:text="@{activityCallViewModel.endCallText}"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textColor="@color/white"
+            android:textSize="@dimen/dp28"
+            android:visibility="@{activityCallViewModel.showChatButton}"
             app:backgroundTint="@color/red"
             app:cornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_call"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/callInfo"
-            app:layout_constraintWidth_percent=".3" />
+            app:layout_constraintWidth_percent=".311" />
 
         <android.support.design.button.MaterialButton
             android:id="@+id/fcr_btn_call"
@@ -170,11 +184,13 @@
             fontPath="fonts/font_icon.ttf"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/voice_call_icon"
+            android:onClick="@{()->activityCallViewModel.onCallClick()}"
+            android:padding="@dimen/dp8"
+            android:text="@{activityCallViewModel.answerCallIcon}"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textColor="@color/white"
+            android:textSize="@dimen/dp28"
             android:visibility="@{activityCallViewModel.layoutAnswerCallVisibility, default = visible}"
             app:backgroundTint="@color/notification_badge"
             app:cornerRadius="8dp"
@@ -182,15 +198,18 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_end"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_end"
-            app:layout_constraintWidth_percent=".3" />
+            app:layout_constraintWidth_percent=".311" />
 
-        <android.support.v7.widget.AppCompatImageButton
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/btnVideoCall"
+            style="@style/baseFontIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{() -> activityCallViewModel.videoCallClickListener()}"
-            android:visibility="gone"
+            android:text="@string/video_call_icon"
+            android:textSize="@dimen/dp28"
+            android:visibility="@{activityCallViewModel.showChangeToVideoCall,default=gone}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_end"
             app:layout_constraintRight_toRightOf="parent"
@@ -199,98 +218,68 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_chat"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{activityCallViewModel::onClickBtnChat}"
+            android:onClick="@{()->activityCallViewModel.onClickBtnChat()}"
             android:text="@string/message_icon"
+            android:textSize="@dimen/dp28"
+            android:visibility="@{activityCallViewModel.showChatButton}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_mic"
             app:layout_constraintTop_toBottomOf="@id/fcr_btn_end" />
 
-        <View
-            android:id="@+id/t2"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/incomingCallUserImageLayerEnd"
-            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
-            app:layout_constraintLeft_toRightOf="@id/fcr_btn_chat"
-            app:layout_constraintRight_toLeftOf="@id/fcr_btn_mic"
-            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_mic"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{activityCallViewModel::onClickBtnMic}"
-            android:text="@{activityCallViewModel.cllBackBtnMic , default = @string/mic_on_icon}"
+            android:onClick="@{()->activityCallViewModel.onClickBtnMic()}"
+            android:text="@{activityCallViewModel.cllBackBtnMic}"
+            android:textSize="@dimen/dp28"
+            android:visibility="@{activityCallViewModel.showChatButton}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_chat"
-            app:layout_constraintRight_toLeftOf="@id/fcr_btn_speaker"
-            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
-
-        <View
-            android:id="@+id/t3"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/incomingCallUserImageLayerEnd"
-            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
-            app:layout_constraintLeft_toRightOf="@id/fcr_btn_mic"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_speaker"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_speaker"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{activityCallViewModel::onClickBtnSpeaker}"
-            android:text="@{activityCallViewModel.cllBackBtnSpeaker , default = @string/speaker_on_icon}"
+            android:onClick="@{()->activityCallViewModel.onClickBtnSpeaker()}"
+            android:text="@{activityCallViewModel.cllBackBtnSpeaker}"
+            android:textSize="@dimen/dp28"
+            android:visibility="@{activityCallViewModel.showChatButton}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_mic"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_swich_camera"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
 
-        <View
-            android:id="@+id/t4"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/incomingCallUserImageLayerEnd"
-            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
-            app:layout_constraintLeft_toRightOf="@id/fcr_btn_speaker"
-            app:layout_constraintRight_toLeftOf="@id/fcr_btn_swich_camera"
-            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_swich_camera"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/baseFontIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:onClick="@{activityCallViewModel::onClickBtnSwitchCamera}"
-            android:text="@string/md_swich_video"
-            android:textAppearance="@style/TextIconAppearance.all"
+            android:onClick="@{()->activityCallViewModel.onClickBtnSwitchCamera()}"
+            android:text="@string/switch_camera_icon"
+            android:textSize="@dimen/dp28"
+            android:visibility="@{activityCallViewModel.showSwitchCamera}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_speaker"
             app:layout_constraintRight_toRightOf="parent"

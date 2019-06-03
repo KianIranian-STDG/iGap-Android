@@ -205,5 +205,8 @@
     <string name="language_icon">I</string>
     <string name="message_icon">h</string>
     <string name="mic_on_icon">F</string>
+    <string name="mic_off_icon">D</string>
     <string name="speaker_on_icon">È</string>
+    <string name="speaker_off_icon">K</string>
+    <string name="switch_camera_icon">Ã</string>
 </resources>
