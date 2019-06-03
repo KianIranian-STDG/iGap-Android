@@ -41,12 +41,12 @@ public class SignalingRingingResponse extends MessageHandler {
                 G.iSignalingRinging.onRinging();
             }
 
-            G.handler.post(new Runnable() {
+            /*G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     Toast.makeText(G.context, G.context.getResources().getString(R.string.ringing), Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
         }
 
     }
