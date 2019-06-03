@@ -16,7 +16,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletIdMapping;
 
-import org.paygear.wallet.RaadApp;
+import org.paygear.RaadApp;
 
 public class WalletIdMappingResponse extends MessageHandler {
 

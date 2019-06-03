@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -21,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -41,21 +39,20 @@ import net.iGap.webservice.APIService;
 import net.iGap.webservice.ApiUtils;
 import net.iGap.webservice.Post;
 
-import org.paygear.wallet.RaadApp;
-import org.paygear.wallet.WalletActivity;
-import org.paygear.wallet.fragment.PaymentResultDialog;
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.model.Payment;
-import org.paygear.wallet.model.PaymentAuth;
-import org.paygear.wallet.model.PaymentResult;
-import org.paygear.wallet.web.Web;
+import org.paygear.RaadApp;
+import org.paygear.WalletActivity;
+import org.paygear.fragment.PaymentResultDialog;
+import org.paygear.model.Card;
+import org.paygear.model.Payment;
+import org.paygear.model.PaymentAuth;
+import org.paygear.model.PaymentResult;
+import org.paygear.web.Web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.web.PostRequest;
 import okhttp3.MediaType;
@@ -67,7 +64,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
-import static org.paygear.wallet.utils.RSAUtils.getRSA;
+import static org.paygear.utils.RSAUtils.getRSA;
 
 public class PaymentFragment extends BaseFragment implements EventListener {
 
@@ -202,7 +199,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                     new android.os.Handler(getContext().getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            Web.getInstance().getWebService().getCards(null, false).enqueue(new Callback<ArrayList<Card>>() {
+                            Web.getInstance().getWebService().getCards(null, false, true).enqueue(new Callback<ArrayList<Card>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                     if (progressDialog != null) progressDialog.dismiss();

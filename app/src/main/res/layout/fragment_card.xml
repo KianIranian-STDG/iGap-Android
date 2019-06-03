@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:background="@color/fragment_back"
-    tools:context="org.paygear.wallet.fragment.CardFragment">
+    tools:context="org.paygear.fragment.CardFragment">
 
   <!--<android.support.v7.widget.CardView-->
   <!--android:layout_width="match_parent"-->
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <org.paygear.wallet.widget.BankCardView
+            <org.paygear.widget.BankCardView
                 android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
