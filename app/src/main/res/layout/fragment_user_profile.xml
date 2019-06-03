@@ -489,7 +489,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/fup_btn_dark_mode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -524,8 +524,8 @@
                     />
 
                 <net.iGap.module.CustomToggleButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
                     android:id="@+id/darkTheme"
                     android:checked="@={viewModel.isDarkMode}"
                     android:layout_alignParentRight="true"
@@ -534,7 +534,7 @@
                     android:onCheckedChanged="@{()->viewModel.onThemeClick(darkTheme.isChecked())}"
                    />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/fup_btn_faq"
