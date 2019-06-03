@@ -162,10 +162,10 @@ import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
-import org.paygear.wallet.RaadApp;
-import org.paygear.wallet.fragment.PaymentHistoryFragment;
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.web.Web;
+import org.paygear.RaadApp;
+import org.paygear.fragment.PaymentHistoryFragment;
+import org.paygear.model.Card;
+import org.paygear.web.Web;
 
 import java.io.File;
 import java.io.IOException;
