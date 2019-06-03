@@ -148,7 +148,7 @@
       android:gravity="start"
       android:padding="@dimen/dp16"
       android:text="@string/your_resend_email_skip"
-      android:textColor="@color/green"
+      android:textColor="@color/setting_items_value_color"
       android:textSize="@dimen/dp14"
       android:visibility="visible" />
 

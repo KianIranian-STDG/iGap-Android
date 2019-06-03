@@ -48,30 +48,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        style="?backgroundColorSettingTheme"
         android:visibility="@{fragmentSecurityViewModel.rootSetAdditionPassword ,default = visible}">
 
+
         <TextView
-          android:id="@+id/tsv_txtSetAdditionPassword"
-          style="?textTitleColorSettingTheme"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/dp40"
-          android:gravity="center_vertical|start"
-          android:onClick="@{fragmentSecurityViewModel::onClickSetAdditionPassword}"
-          android:paddingLeft="@dimen/dp8"
-          android:paddingRight="@dimen/dp8"
-          android:paddingTop="@dimen/dp4"
-          android:text="@string/set_additional_password"
-          android:textSize="@dimen/dp14"
-          android:textStyle="normal"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp22"
+            android:layout_marginRight="@dimen/dp44"
+            android:layout_marginLeft="@dimen/dp44"
+            android:gravity="center_vertical|start"
+            android:paddingLeft="@dimen/dp20"
+            android:paddingRight="@dimen/dp20"
+            android:text="@string/two_step_verification_description"
+            android:textSize="@dimen/dp14"
+            android:textStyle="normal"
+            style="?textSubColorSettingTheme"
 
-          />
+            />
 
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
-          android:visibility="visible" />
+        <android.support.design.button.MaterialButton
+            android:id="@+id/tsv_txtSetAdditionPassword"
+            style="@style/IGapButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp60"
+            android:layout_marginRight="@dimen/dp60"
+            android:layout_marginTop="@dimen/dp36"
+            android:text="@string/set_password"
+            android:onClick="@{fragmentSecurityViewModel::onClickSetAdditionPassword}" />
+
+
       </LinearLayout>
 
       <LinearLayout
@@ -91,20 +99,14 @@
           android:layout_height="@dimen/dp40"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickChangePassword}"
-          android:paddingLeft="@dimen/dp8"
-          android:paddingRight="@dimen/dp8"
-          android:paddingTop="@dimen/dp4"
+          android:paddingLeft="@dimen/dp10"
+          android:paddingRight="@dimen/dp10"
+          android:layout_marginTop="@dimen/dp4"
           android:text="@string/Change_password"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="visible"
           style="?textTitleColorSettingTheme" />
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
-          android:visibility="visible" />
 
         <TextView
           android:id="@+id/tsv_changeHint"
@@ -113,20 +115,14 @@
           android:layout_height="@dimen/dp40"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickChangeHint}"
-          android:paddingLeft="@dimen/dp8"
-          android:paddingRight="@dimen/dp8"
-          android:paddingTop="@dimen/dp4"
+          android:paddingLeft="@dimen/dp10"
+          android:paddingRight="@dimen/dp10"
+          android:layout_marginTop="@dimen/dp4"
           android:text="@string/Change_hint"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="visible"
           style="?textTitleColorSettingTheme" />
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
-          android:visibility="visible" />
 
         <TextView
           android:id="@+id/tsv_turnPasswordOff"
@@ -135,19 +131,13 @@
           android:layout_height="@dimen/dp40"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickTurnPasswordOff}"
-          android:paddingLeft="@dimen/dp8"
-          android:paddingRight="@dimen/dp8"
-          android:paddingTop="@dimen/dp4"
+          android:paddingLeft="@dimen/dp10"
+          android:paddingRight="@dimen/dp10"
+          android:layout_marginTop="@dimen/dp4"
           android:text="@string/turn_Password_off"
           style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
-          android:visibility="visible" />
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
           android:visibility="visible" />
 
         <TextView
@@ -158,22 +148,15 @@
           style="?textTitleColorSettingTheme"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickSetRecoveryEmail}"
-          android:paddingLeft="@dimen/dp8"
-          android:paddingRight="@dimen/dp8"
-          android:paddingTop="@dimen/dp4"
+          android:paddingLeft="@dimen/dp10"
+          android:paddingRight="@dimen/dp10"
+          android:layout_marginTop="@dimen/dp4"
           android:text="@string/change_email_recovery"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="@{fragmentSecurityViewModel.setRecoveryEmail}"
 
           />
-
-        <View
-          android:id="@+id/tsv_viewRecoveryEmail"
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
-          android:visibility="@{fragmentSecurityViewModel.viewRecoveryEmail}" />
 
         <TextView
           android:id="@+id/tsv_setConfirmedEmail"
@@ -183,21 +166,14 @@
 
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickSetConfirmedEmail}"
-          android:paddingLeft="@dimen/dp8"
-          android:paddingRight="@dimen/dp8"
-          android:paddingTop="@dimen/dp4"
+          android:paddingLeft="@dimen/dp10"
+          android:paddingRight="@dimen/dp10"
+          android:layout_marginTop="@dimen/dp4"
           android:text="@string/set_unconfirmed_email"
           style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="@{fragmentSecurityViewModel.setConfirmedEmail}" />
-
-        <View
-          android:id="@+id/tsv_viewConfirmedEmail"
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
-          android:visibility="@{fragmentSecurityViewModel.lineConfirmView}" />
 
         <TextView
           android:id="@+id/tsv_setRecoveryQuestion"
@@ -206,41 +182,18 @@
           android:layout_height="@dimen/dp40"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClicksetRecoveryQuestion}"
-          android:paddingLeft="@dimen/dp8"
-          android:paddingRight="@dimen/dp8"
-          android:paddingTop="@dimen/dp4"
+          android:paddingLeft="@dimen/dp10"
+          android:paddingRight="@dimen/dp10"
+          android:layout_marginTop="@dimen/dp4"
           android:text="@string/Change_question_recovery"
           style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="visible" />
 
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          style="?lineColorSettingTheme"
-          android:visibility="visible" />
-
 
       </LinearLayout>
 
-      <TextView
-        fontPath="fonts/IRANSansMobile.ttf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp4"
-        android:gravity="center_vertical|start"
-        android:lineSpacingExtra=".8mm"
-        android:paddingLeft="@dimen/dp8"
-        android:paddingRight="@dimen/dp8"
-        android:paddingTop="@dimen/dp4"
-        android:text="@string/two_step_verification_description"
-        android:textColor="@color/gray_6c"
-        android:textSize="@dimen/dp14"
-        android:textStyle="normal"
-        style="?textBackgroundColor"
-
-        />
     </LinearLayout>
 
     <!--CheckPassword-->
@@ -284,11 +237,11 @@
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
         android:layout_marginStart="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp60"
+        android:layout_marginTop="@dimen/dp10"
         android:gravity="left|start"
         android:onClick="@{fragmentSecurityViewModel::onClickForgotPassword}"
         android:text="@string/forgot_password"
-        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+        android:textColor="@color/setting_items_value_color"
         android:textSize="@dimen/dp14"
 
         />
@@ -536,7 +489,7 @@
         android:onClick="@{fragmentSecurityViewModel::onClickResendConfirmEmail}"
         android:padding="@dimen/dp16"
         android:text="@string/your_resend_email_skip"
-        android:textColor="@color/green"
+        android:textColor="@color/setting_items_value_color"
         android:textSize="@dimen/dp14"
         android:visibility="@{fragmentSecurityViewModel.txtResendConfirmEmail}" />
 

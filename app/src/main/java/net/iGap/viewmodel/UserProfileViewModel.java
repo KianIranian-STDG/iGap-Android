@@ -517,9 +517,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (!currentBio.equals(newBio)) {
             editProfileIcon.set(R.string.check_icon);
         } else {
-            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentGender == gender.get()) {
+           // if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentGender == gender.get()) {
                 editProfileIcon.set(R.string.close_icon);
-            }
+            //}
         }
     }
 
@@ -527,9 +527,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (checkedId != currentGender) {
             editProfileIcon.set(R.string.check_icon);
         } else {
-            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentBio.equals(bio.get())) {
-                editProfileIcon.set(R.string.close_icon);
-            }
+//            if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentBio.equals(bio.get())) {
+          //      editProfileIcon.set(R.string.close_icon);
+          //  }
         }
     }
 
