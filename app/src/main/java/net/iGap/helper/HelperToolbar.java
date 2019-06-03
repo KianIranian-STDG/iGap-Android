@@ -3,6 +3,7 @@ package net.iGap.helper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -163,6 +164,7 @@ public class HelperToolbar {
 
         if (mTxtLogo != null){
             mTxtLogo.setText(title);
+            checkIGapFont();
         }
 
         return this;
@@ -282,6 +284,8 @@ public class HelperToolbar {
 
         toolBarTitleHandler();
 
+        checkIGapFont();
+
         return rootView;
 
     }
@@ -376,6 +380,15 @@ public class HelperToolbar {
 
     /*************************************************************/
 
+    private void checkIGapFont() {
+
+        if (mTxtLogo.getText().toString().toLowerCase().equals("igap")){
+            mTxtLogo.setTypeface(G.typeface_neuropolitical);
+        }else {
+            mTxtLogo.setTypeface(G.typeface_IRANSansMobile);
+        }
+    }
+
     private void toolBarTitleHandler() {
 
         G.connectionStateMutableLiveData.observe(G.fragmentActivity, new android.arch.lifecycle.Observer<ConnectionState>() {
@@ -405,6 +418,8 @@ public class HelperToolbar {
                         mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
                         mTxtLogo.setText(defaultTitleText);
                     }
+
+                    checkIGapFont();
 
                 }
 
