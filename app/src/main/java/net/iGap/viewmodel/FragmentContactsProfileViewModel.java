@@ -7,6 +7,7 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -82,6 +83,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public ObservableInt sharedEmptyVisibility = new ObservableInt(View.VISIBLE);
 
     public MutableLiveData<Boolean> isMuteNotification = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
     public MutableLiveData<Boolean> isShowReportView = new MutableLiveData<>();
 
     //ui event and observed
@@ -147,7 +149,14 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
 
     public void onNotificationCheckChange(boolean isChecked) {
         Log.wtf("view model", "value: " + isMuteNotification.getValue() + "+" + isChecked);
-        new RequestClientMuteRoom().muteRoom(roomId, isChecked);
+        isMuteNotification.setValue(isChecked);
+
+    }
+
+    public void onNotificationClick(){
+        isMuteNotification.setValue(!isMuteNotification.getValue());
+        isMuteNotificationChangeListener.setValue(isMuteNotification.getValue());
+
     }
 
     public void onMoreButtonClick() {
