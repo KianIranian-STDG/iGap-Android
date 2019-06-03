@@ -1717,11 +1717,11 @@
     <string name="card_bank">Bank Card</string>
     <string name="paygear_card">Wallet Card</string>
     <string name="set_password">Set Password</string>
-    <string name="change_password">Change Password</string>
+    <string name="change_password">Change Wallet Password</string>
     <string name="text_forgot">Wallet password sent to you.
 (The password will expire after 2 minutes, please change it after retrieving it)</string>
     <string name="text_forgot_title">Resend Password</string>
-    <string name="Forgot_Passwords">Password recovery</string>
+    <string name="Forgot_Passwords">Wallet Password recovery</string>
     <string name="enter_your_province">select your province</string>
 
     <string name="cashier">finance</string>
