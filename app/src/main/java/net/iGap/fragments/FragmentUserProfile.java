@@ -59,7 +59,7 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
-        viewModel = new UserProfileViewModel(G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE));
+        viewModel = new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE));
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -198,8 +198,11 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.getIsEditProfile().observe(this, isEditProfile -> {
+        viewModel.isEditProfile.observe(this, isEditProfile -> {
             if (isEditProfile != null) {
+                if (!isEditProfile) {
+                    hideKeyboard();
+                }
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
                 set.setVisibility(binding.editProfileView.getId(), isEditProfile ? View.VISIBLE : View.GONE);
@@ -219,10 +222,10 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        binding.fupBtnDarkMode.setOnClickListener(v ->{
+        binding.fupBtnDarkMode.setOnClickListener(v -> {
             binding.darkTheme.setChecked(!G.isDarkTheme);
             viewModel.onThemeClick(G.isDarkTheme);
-        } );
+        });
     }
 
     private void goToAddMemberPage() {
