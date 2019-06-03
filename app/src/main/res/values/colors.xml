@@ -232,5 +232,8 @@
     <color name="unread_status">#424242</color>
     <color name="unread_status_dark">#FFFFFF</color>
 
+    <color name="toolbar_player_base_color">#468DA7</color>
+    <color name="toolbar_player_background">#EFEFEF</color>
+
 
 </resources>

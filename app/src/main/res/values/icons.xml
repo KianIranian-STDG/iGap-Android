@@ -210,4 +210,6 @@
     <string name="copy_icon">n</string>
     <string name="forward_icon">ü</string>
     <string name="reply_icon">&amp;</string>
+    <string name="play_icon">#</string>
+    <string name="pause_icon">\?</string>
 </resources>

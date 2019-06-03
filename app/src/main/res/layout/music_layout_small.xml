@@ -8,7 +8,7 @@
 
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp40"
+    android:layout_height="@dimen/dp52"
     style="?backgroundSubChatTheme"
     android:gravity="left|center">
 
@@ -21,21 +21,43 @@
       android:background="@null"
       android:gravity="center"
       android:paddingRight="@dimen/dp8"
-      android:text="@string/md_play_arrow"
-      android:textAppearance="@style/TextIconAppearance_toolbar"
-      android:textColor="@color/toolbar_background"
+      android:text="@string/play_icon"
+      style="@style/myIconToolbarStyle"
+      android:textColor="@color/toolbar_player_base_color"
       android:textSize="@dimen/dp20" />
 
-    <TextView
-      android:id="@+id/mls_txt_music_name"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/dp4"
-      android:layout_weight="1"
-      android:singleLine="true"
-      android:text=""
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp14" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp4"
+        android:layout_weight="1">
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/mls_txt_music_name"
+          android:singleLine="true"
+          android:text=""
+          style="?textTitleColorSettingTheme"
+          android:textColor="@color/toolbar_player_base_color"
+          android:textSize="@dimen/dp13" />
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/mls_txt_music_info"
+          android:singleLine="true"
+          android:text=""
+          android:layout_marginTop="@dimen/dp4"
+          style="?textTitleColorSettingTheme"
+          android:textColor="@color/gray_4c"
+          android:textSize="@dimen/dp10" />
+
+
+    </LinearLayout>
+
+
 
     <TextView
       android:id="@+id/mls_txt_music_time_counter"
@@ -45,14 +67,15 @@
       android:minWidth="@dimen/dp28"
       android:text=""
       style="?textTitleColorSettingTheme"
+        android:textColor="@color/toolbar_player_base_color"
       android:textSize="@dimen/dp12" />
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginRight="@dimen/dp4"
-      android:text="/"
-      android:textColor="#888"
+      android:text=" | "
+      android:textColor="@color/toolbar_player_base_color"
       android:textSize="@dimen/dp12" />
 
     <TextView
@@ -62,6 +85,7 @@
       android:layout_marginRight="@dimen/dp4"
       android:text="time"
       style="?textTitleColorSettingTheme"
+        android:textColor="@color/toolbar_player_base_color"
       android:textSize="@dimen/dp12" />
 
     <net.iGap.module.MaterialDesignTextView
@@ -71,9 +95,10 @@
       android:layout_marginRight="@dimen/dp8"
       android:background="@null"
       android:gravity="center"
-      android:text="@string/md_close_button"
+      android:text="@string/close_icon"
       android:textAppearance="@style/TextIconAppearance_toolbar"
-      style="?textTitleColorSettingTheme"
+      style="@style/myIconToolbarStyle"
+        android:textColor="@color/toolbar_player_base_color"
       android:textSize="@dimen/dp20" />
 
   </LinearLayout>
