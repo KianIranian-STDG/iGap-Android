@@ -70,7 +70,7 @@ public class CashOutFragment extends Fragment {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
         }
         appBar = view.findViewById(R.id.app_bar);
-        appBar.setTitle(getString(isCashOut ? R.string.cash_out_paygear : R.string.charge_paygear));
+        appBar.setTitle(getString(isCashOut ? R.string.cashout_taxi : R.string.charge_paygear));
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
         appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
         appBar.showBack();
