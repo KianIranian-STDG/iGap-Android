@@ -96,13 +96,12 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                //.setLeftIcon(R.drawable.ic_edit_toolbar)
                 .setLogoShown(true)
-                .setRightSmallAvatarShown(true)
                 .setListener(this);
 
         if (page != 0){
             mHelperToolbar.setLeftIcon(R.string.back_icon);
+            mHelperToolbar.setRightSmallAvatarShown(false);
         }else {
             mHelperToolbar.setLeftIcon(R.string.flag_icon);
             mHelperToolbar.setRightSmallAvatarShown(true);
