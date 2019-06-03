@@ -43,8 +43,6 @@ import retrofit2.http.Query;
  */
 
 public interface WebService {
-    @POST("payment/v3/accounts/{account_id}/ibans")
-    Call<Iban>addNewIban(@Path("account_id") String accountId, @Body RequestBody iban);
 
     @GET("club/v3/custom/clubs")
     Call<List<AvailableClubs_Result>>getAvailableClubs(@Query("merchant_id") String merchantId, @Query("member_id")String userId);
@@ -193,6 +191,12 @@ public interface WebService {
 
     @GET("credit/v3/password/{paygear_card_token}/accounts/{account_id}")
     Call<Void>getRecoverPasswordOTP(@Path("paygear_card_token") String PGCardToken,@Path("account_id") String accountId);
+
+    @GET("payment/v3/accounts/{account_id}/ibans")
+    Call<List<Iban>>getIbanList(@Path("account_id") String accountId);
+
+    @POST("payment/v3/accounts/{account_id}/ibans")
+    Call<Iban>addNewIban(@Path("account_id") String accountId,@Body RequestBody iban);
 
     @POST("users/v3/thirdparty/auth")
     Call<OTPVerifyResult> getIGapToken(@Body RequestBody requestBody, @Header("abcdef") String ip);
