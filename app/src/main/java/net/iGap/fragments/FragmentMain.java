@@ -208,9 +208,20 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         if(MusicPlayer.playerStateChangeListener != null){
             MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
-                roomsAdapter.notifyDataSetChanged();
+                try {
+                    roomsAdapter.notifyDataSetChanged();
+                }catch (Exception e){}
+
             });
         }
+
+        G.callStripLayoutVisiblityListener.observe(this , isVisible -> {
+            try {
+                roomsAdapter.notifyDataSetChanged();
+            }catch (Exception e){}
+
+        });
+
 
     }
 
@@ -689,6 +700,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             AppUtils.setProgresColler(progressBar);
         }
 
+        try{
+            mHelperToolbar.checkIsAvailableOnGoingCall();
+        }catch (Exception e){}
+
         boolean canUpdate = false;
 
         if (mainType != null) {
@@ -1039,7 +1054,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                     ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
                     lp.setMargins(0, i_Dp(R.dimen.dp70), 0, 0);
                     holder.root.setLayoutParams(lp);
-                }else {
+                }else if (G.isInCall){
+                    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
+                    lp.setMargins(0, i_Dp(R.dimen.dp60), 0, 0);
+                    holder.root.setLayoutParams(lp);
+                } else {
                     ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
                     lp.setMargins(0, i_Dp(R.dimen.dp24), 0, 0);
                     holder.root.setLayoutParams(lp);

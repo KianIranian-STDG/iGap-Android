@@ -495,6 +495,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     private void endCall() {
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
@@ -503,6 +504,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     private void endVoiceAndFinish() {
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         playRingTone.setValue(false);
         if (ActivityCall.onFinishActivity != null) {
             ActivityCall.onFinishActivity.finishActivity();
@@ -628,6 +630,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public void leaveCall() {
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         if (isIncomingCall) {
             WebRTC.getInstance().leaveCall();
         }
@@ -637,6 +640,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public void onDestroy() {
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         G.iSignalingCallBack = null;
         G.onCallLeaveView = null;
         setSpeakerphoneOn(false);

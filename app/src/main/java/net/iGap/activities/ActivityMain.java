@@ -663,7 +663,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //MusicPlayer.setMusicPlayer(mediaLayout);
         //MusicPlayer.mainLayout = mediaLayout;
 
-        ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
+        //ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
 
 
         appBarLayout = findViewById(R.id.appBarLayout);
@@ -1839,35 +1839,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (contentLoading != null) {
             AppUtils.setProgresColler(contentLoading);
-        }
-
-        if (G.isInCall) {
-            findViewById(R.id.am_ll_strip_call).setVisibility(View.VISIBLE);
-
-            ActivityCallViewModel.txtTimerMain = findViewById(R.id.cslcs_txt_timer);
-
-            TextView txtCallActivityBack = findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(ActivityMain.this, ActivityCall.class));
-                }
-            });
-
-            G.iCallFinishMain = new ICallFinish() {
-                @Override
-                public void onFinish() {
-                    try {
-
-                        findViewById(R.id.am_ll_strip_call).setVisibility(View.GONE);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-        } else {
-            findViewById(R.id.am_ll_strip_call).setVisibility(View.GONE);
         }
 
 
