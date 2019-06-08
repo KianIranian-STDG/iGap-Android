@@ -1,34 +1,31 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
 import android.Manifest;
-import android.app.Service;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -46,9 +43,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnCountryCallBack;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CountryReader;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactImport;
@@ -63,6 +58,9 @@ import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
 public class FragmentAddContact extends BaseFragment implements ToolbarListener {
+
+    public static final String NAME = "name";
+    public static final String PHONE = "PHONE";
 
     public static OnCountryCallBack onCountryCallBack;
     private EditText edtFirstName;
@@ -86,6 +84,20 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        edtFirstName = view.findViewById(R.id.ac_edt_firstName);
+        edtLastName = view.findViewById(R.id.ac_edt_lastName);
+        edtPhoneNumber = view.findViewById(R.id.ac_edt_phoneNumber);
+        txtCodeCountry = view.findViewById(R.id.ac_txt_codeCountry);
+        parent = view.findViewById(R.id.ac_layoutParent);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String contactName = bundle.getString(NAME);
+            edtFirstName.setText(contactName);
+
+            Log.i("aabolfazl", "show contact: " + contactName);
+        }
+
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         initComponent(view);
@@ -98,7 +110,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         String phoneFromUrl = "";
         String countryCode = "";
         try {
-            phoneFromUrl = getArguments().getString("PHONE");
+            phoneFromUrl = getArguments().getString(PHONE);
             if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
 
                 if (phoneFromUrl.startsWith("+")) {
@@ -119,15 +131,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
             e.printStackTrace();
         }
 
-        parent = (ViewGroup) view.findViewById(R.id.ac_layoutParent);
-        parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        parent.setOnClickListener(view1 -> {
 
-            }
         });
 
-        txtCodeCountry =  view.findViewById(R.id.ac_txt_codeCountry);
         txtCodeCountry.setOnClickListener(v -> {
             new HelperFragment(new FragmentChooseCountry()).setReplace(false).load();
             closeKeyboard(v);
@@ -135,18 +142,17 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
 
         //when user clicked on edit text keyboard wont open with this code
         txtCodeCountry.setOnFocusChangeListener((v, hasFocus) -> {
-            if(hasFocus) {
+            if (hasFocus) {
                 closeKeyboard(txtCodeCountry);
 
             }
         });
 
-        edtFirstName =  view.findViewById(R.id.ac_edt_firstName);
-        edtLastName =  view.findViewById(R.id.ac_edt_lastName);
-        edtPhoneNumber =  view.findViewById(R.id.ac_edt_phoneNumber);
         if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
             edtPhoneNumber.setText(phoneFromUrl);
         }
+
+
 
         edtFirstName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -201,24 +207,17 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
 
-        onCountryCallBack = new OnCountryCallBack() {
-            @Override
-            public void countryName(final String nameCountry, final String code, final String mask) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtCodeCountry.setText(nameCountry);
-                        txtCodeCountry.setText("+" + code);
-                        // edtPhoneNumber.setText("");
-                        if (!mask.equals(" ")) {
-                            edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
-                        } else {
-                            edtPhoneNumber.setMask("##################");
-                        }
-                    }
-                });
+        onCountryCallBack = (nameCountry, code, mask) -> G.handler.post(() -> {
+            txtCodeCountry.setText(nameCountry);
+            txtCodeCountry.setText("+" + code);
+            // edtPhoneNumber.setText("");
+            if (!mask.equals(" ")) {
+                edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
+
+            } else {
+                edtPhoneNumber.setMask("##################");
             }
-        };
+        });
 
         if (countryCode.length() > 0) {
             txtCodeCountry.setText("+" + countryCode);
@@ -239,6 +238,8 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                 }
             }
         }
+
+
     }
 
     private void setupToolbar(View view) {
@@ -255,7 +256,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
 
         toolbarLayout.addView(mHelperToolbar.getView());
 
-       // mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.menu_add_contact));
+        // mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.menu_add_contact));
     }
 
     private void isEnableSetButton() {
@@ -356,13 +357,22 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                     addToContactList(view);
                 }
             }
-        }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                addContactToServer();
-                dialog.dismiss();
-                G.fragmentActivity.onBackPressed();
-            }
+        }).negativeText(R.string.no).onNegative((dialog, which) -> {
+            addContactToServer();
+            dialog.dismiss();
+            G.fragmentActivity.onBackPressed();
         }).show();
+    }
+
+    public EditText getEdtFirstName() {
+        return edtFirstName;
+    }
+
+    public EditText getEdtLastName() {
+        return edtLastName;
+    }
+
+    public MaskedEditText getEdtPhoneNumber() {
+        return edtPhoneNumber;
     }
 }

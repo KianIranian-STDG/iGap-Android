@@ -2788,4 +2788,5 @@
     <string name="view_contact">عرض الاتصال</string>
     <string name="new_group_call">New Group Call</string>
     <string name="dial_number">Dial Number</string>
+    <string name="call">Call</string>
 </resources>
