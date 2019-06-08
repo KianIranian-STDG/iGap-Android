@@ -10,29 +10,36 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.SharedPreferences;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.view.WindowManager;
 
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
 import net.iGap.fragments.FragmentEditImage;
-import net.iGap.fragments.ReagentFragment;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.interfaces.OnUserProfileSetRepresentative;
+import net.iGap.module.CountryListComparator;
+import net.iGap.module.CountryReader;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.structs.StructCountry;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
+import net.iGap.request.RequestUserProfileSetRepresentative;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import io.realm.Realm;
 
@@ -42,17 +49,31 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
     private boolean existAvatar = false;
     private String pathImageUser;
     private int idAvatar;
+    private String regex;
     private AvatarHandler avatarHandler;
+    private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
+
+    public MutableLiveData<Boolean> hideKeyboard = new MutableLiveData<>();
     public MutableLiveData<Integer> progressValue = new MutableLiveData<>();
     public MutableLiveData<BindingAdapter.AvatarImage> avatarImagePath = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorName = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorLastName = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showReagentPhoneNumberError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
+    public MutableLiveData<Long> goToMain = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
+    public ObservableField<String> reagentCountryCode = new ObservableField<>("+98");
+    public ObservableInt reagentPhoneNumberMaskMaxCount = new ObservableInt(11);
+    public ObservableField<String> reagentPhoneNumberMask = new ObservableField<>("###-###-####");
+    public ObservableField<String> reagentPhoneNumber = new ObservableField<>("");
 
-    public FragmentRegistrationNicknameViewModel(Long userId, AvatarHandler avatarHandler) {
+    public FragmentRegistrationNicknameViewModel(Long userId, AvatarHandler avatarHandler, SharedPreferences sharedPreferences) {
         this.userId = userId;
         this.avatarHandler = avatarHandler;
+        this.sharedPreferences = sharedPreferences;
         //ToDo: create repository and move this to that
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -81,11 +102,80 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
             });
         };
         G.onUserAvatarResponse = this;
+
+        CountryReader countryReade = new CountryReader();
+        StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.context);
+
+        String list = fileListBuilder.toString();
+        // Split line by line Into array
+        String[] listArray = list.split("\\r?\\n");
+        //Convert array
+        for (String s : listArray) {
+            StructCountry structCountry = new StructCountry();
+            String[] listItem = s.split(";");
+            structCountry.setCountryCode(listItem[0]);
+            structCountry.setAbbreviation(listItem[1]);
+            structCountry.setName(listItem[2]);
+            if (listItem.length > 3) {
+                structCountry.setPhonePattern(listItem[3]);
+            } else {
+                structCountry.setPhonePattern(" ");
+            }
+            structCountryArrayList.add(structCountry);
+        }
+
+        Collections.sort(structCountryArrayList, new CountryListComparator());
+
+        reagentCountryCode.set("+" + sharedPreferences.getInt("callingCode", 98));
+        String pattern = sharedPreferences.getString("pattern", "");
+        reagentPhoneNumberMask.set((pattern != null && !pattern.equals("")) ? pattern.replace("X", "#").replace(" ", "-") : "##################");
+        regex = sharedPreferences.getString("regex", "");
+    }
+
+    public ArrayList<StructCountry> getStructCountryArrayList() {
+        return structCountryArrayList;
     }
 
     public void selectAvatarOnClick() {
         if (!existAvatar) {
             showDialog.setValue(true);
+        }
+    }
+
+    public void onCountryCodeClick() {
+        showDialogSelectCountry.setValue(true);
+    }
+
+    public void setCountry(StructCountry country) {
+        prgVisibility.set(View.VISIBLE);
+        new RequestInfoCountry().infoCountry(country.getAbbreviation(), new OnInfoCountryResponse() {
+            @Override
+            public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
+                G.handler.post(() -> {
+                    prgVisibility.set(View.GONE);
+                    reagentCountryCode.set("+" + callingCode);
+                    if (pattern.equals("")) {
+                        reagentPhoneNumberMask.set("##################");
+                    } else {
+                        reagentPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                    }
+                    regex = regexR;
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                //empty
+                prgVisibility.set(View.GONE);
+            }
+        });
+        reagentPhoneNumber.set("");
+    }
+
+    public void onTextChanged(String reagentPhoneNumber) {
+        if (reagentPhoneNumber.startsWith("0")) {
+            this.reagentPhoneNumber.set("");
+            showReagentPhoneNumberStartWithZeroError.setValue(true);
         }
     }
 
@@ -95,24 +185,35 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
             showErrorName.setValue(false);
             if (lastName.length() > 0) {
                 showErrorLastName.setValue(false);
-                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                realm.executeTransaction(realm1 -> setNickName(name, lastName));
+                if (reagentPhoneNumber.get().isEmpty() || isValidReagentPhoneNumber()) {
+                    showReagentPhoneNumberError.setValue(false);
+                    hideKeyboard.setValue(true);
+                    setNickName(name, lastName, reagentPhoneNumber.get().isEmpty());
+                } else {
+                    showReagentPhoneNumberError.setValue(true);
+                }
             } else {
                 showErrorLastName.setValue(true);
             }
-            // TODO: 4/14/19 add Representer fragment
         } else {
             showErrorName.setValue(true);
         }
         realm.close();
     }
 
+    private boolean isValidReagentPhoneNumber() {
+        return reagentPhoneNumber.get().length() > 0 && regex.equals("") || (!regex.equals("") && reagentPhoneNumber.get().replace("-", "").matches(regex));
+    }
 
-    private void setNickName(String name, String lastName) {
+    private void setNickName(String name, String lastName, boolean isReagentIsEmpty) {
         new RequestUserProfileSetNickname().userProfileNickName(name + " " + lastName, new OnUserProfileSetNickNameResponse() {
             @Override
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                getUserInfo();
+                if (isReagentIsEmpty) {
+                    getUserInfo();
+                } else {
+                    setReagent();
+                }
             }
 
             @Override
@@ -127,29 +228,37 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
         });
     }
 
+    private void setReagent() {
+        new RequestUserProfileSetRepresentative().userProfileSetRepresentative(
+                reagentCountryCode.get().replace("+", "") + reagentPhoneNumber.get().replace("-", ""),
+                new OnUserProfileSetRepresentative() {
+                    @Override
+                    public void onSetRepresentative(String phone) {
+                        Realm realm = Realm.getDefaultInstance();
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                        RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
+                        realm.close();
+                        getUserInfo();
+                    }
+
+                    @Override
+                    public void onErrorSetRepresentative(int majorCode, int minorCode) {
+                        G.handler.post(() -> prgVisibility.set(View.GONE));
+                    }
+                });
+    }
+
     private void getUserInfo() {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 G.handler.post(() -> {
-                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
                     Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(realm1 -> {
-                        G.displayName = user.getDisplayName();
-                        RealmUserInfo.putOrUpdate(realm1, user);
-                        G.handler.post(() -> {
-                            prgVisibility.set(View.GONE);
-                            ReagentFragment reagentFragment = ReagentFragment.newInstance(true);
-                            FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
-                            reagentFragment.userId = user.getId();
-                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                            transaction.replace(R.id.ar_layout_root, reagentFragment);
-                            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
-                            transaction.commitAllowingStateLoss();
-                        });
-                    });
+                    realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, user));
                     realm.close();
+                    G.displayName = user.getDisplayName();
+                    prgVisibility.set(View.GONE);
+                    goToMain.setValue(userId);
                 });
             }
 

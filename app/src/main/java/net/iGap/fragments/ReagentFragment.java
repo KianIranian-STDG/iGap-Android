@@ -88,7 +88,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
         isNeedCloseActivity = getArguments().getBoolean("isNeedCloseActivity", true);
         setupViews(view);
         /*G.onCountryCode = this;*/
-        G.onUserProfileSetRepresentative = this;
+        /*G.onUserProfileSetRepresentative = this;*/
     }
 
     private void setupViews(View view) {
@@ -142,7 +142,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
             skipBtn.setText(G.fragmentActivity.getResources().getString(R.string.cancel));
 
         letsGoBtn.setOnClickListener(v -> {
-            new RequestUserProfileSetRepresentative().userProfileSetRepresentative(countryCode + phoneNumberEt.getText().toString().replace("-", ""));
+            /*new RequestUserProfileSetRepresentative().userProfileSetRepresentative(countryCode + phoneNumberEt.getText().toString().replace("-", ""));*/
             progressBar.setVisibility(View.VISIBLE);
             closeKeyboard(v);
         });

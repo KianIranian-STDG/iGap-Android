@@ -36,7 +36,6 @@ import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
-import net.iGap.viewmodel.FragmentRegisterViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
 
 import java.util.Locale;
@@ -119,14 +118,14 @@ public class FragmentActivation extends BaseFragment {
                     bundle.putBoolean("newUser", true);
                     bundle.putLong("userId", viewModel.userId);
                     fragment.setArguments(bundle);
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentActivation.this).commitAllowingStateLoss();
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentActivation.this).commitAllowingStateLoss();
                 } else {
-                    G.currentActivity.finish();
                     Intent intent = new Intent(getActivity(), ActivityMain.class);
                     intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, viewModel.userId);
                     intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    G.context.startActivity(intent);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });

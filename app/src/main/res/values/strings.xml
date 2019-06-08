@@ -63,9 +63,10 @@
 
     <!--Reagent-->
     <string name="ra_title">"referral"</string>
-    <string name="ra_enter_reagent_code">"enter reagent code"</string>
+    <string name="ra_enter_reagent_code">enter referral code(Optional)</string>
     <string name="ra_confirm">"Confirm"</string>
     <string name="ra_skip">"Skip"</string>
+    <string name="reagent_error_message">The number entered is incorrect for the referral.</string>
 
 
     <!-- Toast -->

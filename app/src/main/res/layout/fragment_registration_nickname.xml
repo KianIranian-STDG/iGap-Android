@@ -4,11 +4,7 @@
 
     <data>
 
-        <import type="android.graphics.Color" />
-
         <import type="android.view.View" />
-
-        <import type="net.iGap.G" />
 
         <variable
             name="viewModel"
@@ -67,9 +63,9 @@
             android:background="@drawable/add_image_background"
             android:onClick="@{()->viewModel.selectAvatarOnClick()}"
             android:src="@mipmap/pu_camera"
-            app:civ_border_width="0dp"
             app:avatarImage="@{viewModel.avatarImagePath}"
-            app:layout_constraintBottom_toTopOf="@id/pu_btn_letsGo"
+            app:civ_border_width="0dp"
+            app:layout_constraintBottom_toTopOf="@id/reagentPhoneNumber"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toRightOf="@id/name"
             app:layout_constraintRight_toRightOf="parent"
@@ -130,6 +126,42 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <com.vicmikhailau.maskededittext.MaskedEditText
+            android:id="@+id/reagentPhoneNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:afterTextChanged="@{(phoneNumber)->viewModel.onTextChanged(phoneNumber.toString())}"
+            android:gravity="left|center_vertical"
+            android:hint="@string/ra_enter_reagent_code"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="phone"
+            android:maxLength="18"
+            android:maxLines="@{viewModel.reagentPhoneNumberMaskMaxCount}"
+            android:padding="@dimen/dp8"
+            android:text="@={viewModel.reagentPhoneNumber}"
+            android:textAlignment="gravity"
+            android:textColor="@color/rg_black_register"
+            android:textSize="@dimen/dp14"
+            app:layout_constraintBottom_toTopOf="@id/pu_btn_letsGo"
+            app:layout_constraintLeft_toRightOf="@id/reagentCountryCode"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pu_profile_circle_image"
+            app:layout_constraintWidth_percent=".6"
+            app:mask="@{viewModel.reagentPhoneNumberMask}" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/reagentCountryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.onCountryCodeClick()}"
+            android:padding="@dimen/dp8"
+            android:text="@{viewModel.reagentCountryCode}"
+            app:layout_constraintBottom_toBottomOf="@id/reagentPhoneNumber"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/reagentPhoneNumber"
+            app:layout_constraintTop_toTopOf="@id/reagentPhoneNumber" />
+
         <android.support.design.button.MaterialButton
             android:id="@+id/pu_btn_letsGo"
             style="@style/IGapButtonStyle"
@@ -143,7 +175,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pu_profile_circle_image"
+            app:layout_constraintTop_toBottomOf="@id/reagentPhoneNumber"
             app:layout_constraintWidth_percent=".5" />
 
         <ProgressBar

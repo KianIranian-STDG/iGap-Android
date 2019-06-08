@@ -11,6 +11,7 @@ package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.SharedPreferences;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -19,7 +20,6 @@ import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.text.HtmlCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -30,12 +30,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.fragments.FragmentRegister;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
@@ -89,7 +87,6 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     public MutableLiveData<Uri> shareQrCodeIntent = new MutableLiveData<>();
     public MutableLiveData<Boolean> hideDialogQRCode = new MutableLiveData<>();
 
-
     public static String isoCode = "IR";
 
     public String regex;
@@ -140,7 +137,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
     ProtoUserRegister.UserRegisterResponse.Method methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
     private boolean isCallMethodSupported;
-    public ArrayList structCountryArrayList = new ArrayList();
+    public ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
     public String phoneNumber;
     public String userName;
     public String authorHash;
@@ -160,8 +157,10 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     private String countryName = "", pattern = "";
     private boolean locationFound;
     private int callingCode;
+    private SharedPreferences sharedPreferences;
 
-    public FragmentRegisterViewModel() {
+    public FragmentRegisterViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
         showConditionErrorDialog.setValue(false);
     }
 
@@ -182,7 +181,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
 
     public void onClicksStart() {
         phoneNumber = callBackEdtPhoneNumber.get() != null ? callBackEdtPhoneNumber.get() : "";
-        if (phoneNumber.length() > 0 && (regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex)))) {
+        if (phoneNumber.length() > 0 && regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex))) {
             if (termsAndConditionIsChecked.get()) {
                 showConfirmPhoneNumberDialog.setValue(true);
             } else {
@@ -287,7 +286,6 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         new RequestInfoCountry().infoCountry(country.getAbbreviation(), new OnInfoCountryResponse() {
             @Override
             public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
-                Log.wtf("register view model", "onInfoCountryResponse");
                 G.handler.post(() -> {
                     isShowLoading.set(View.GONE);
                     callbackEdtCodeNumber.set("+" + callingCode);
@@ -327,7 +325,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
         }
     }
 
-    public void saveQr(){
+    public void saveQr() {
         if (_resultQrCode == null) {
             return;
         }
@@ -500,17 +498,13 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                         userId = userIdR;
                         authorHash = authorHashR;
                         G.smsNumbers = smsNumbersR;
-                    /*if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
-                        errorVerifySms(FragmentRegister.Reason.SOCKET);
-                    } else {
-                        errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
-                    }*/
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("callingCode", callingCode);
+                        editor.putString("countryName", countryName);
+                        editor.putString("pattern", pattern);
+                        editor.putString("regex", FragmentRegisterViewModel.this.regex);
+                        editor.apply();
                         goNextStep.setValue(true);
-                    /*prgVerifyConnectVisibility.set(View.GONE);
-                    txtIconVerifyConnectVisibility.set(View.VISIBLE);
-                    imgVerifySmsVisibility.set(View.GONE);
-                    txtVerifyConnectColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-                    prgVerifySmsVisibility.set(View.VISIBLE);*/
                     });
                 }
 
@@ -586,6 +580,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
     /**
      * if the connection is established do verify otherwise start registration(step one) again
      */
+    //Todo : check it with userVerify in activation fragment
     private void userVerify(final String userName, final String verificationCode) {
         if (G.socketConnection) {
             prgVerifyKeyVisibility.set(View.VISIBLE);

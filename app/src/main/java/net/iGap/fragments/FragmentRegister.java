@@ -50,6 +50,7 @@ import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.viewmodel.FragmentRegisterViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -58,6 +59,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class FragmentRegister extends BaseFragment {
@@ -80,7 +82,7 @@ public class FragmentRegister extends BaseFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentRegisterBinding = DataBindingUtil.inflate(inflater, R.layout.activity_register, container, false);
-        fragmentRegisterViewModel = new FragmentRegisterViewModel();
+        fragmentRegisterViewModel = new FragmentRegisterViewModel(getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
         fragmentRegisterBinding.setFragmentRegisterViewModel(fragmentRegisterViewModel);
         fragmentRegisterBinding.setLifecycleOwner(this);
         return fragmentRegisterBinding.getRoot();
