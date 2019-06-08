@@ -254,9 +254,6 @@ public class ChatCell extends ConstraintLayout {
         set.connect(messageData.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
         set.connect(messageData.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
 
-        set.connect(mute.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
-        set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
-        set.connect(mute.getId(),ConstraintSet.RIGHT,messageData.getId(),ConstraintSet.LEFT, LayoutCreator.dp(4));
 
 
         set.constrainHeight(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
@@ -293,6 +290,7 @@ public class ChatCell extends ConstraintLayout {
             set.connect(badgeView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
             set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
+
             set.connect(messageStatus.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp8));
 
             set.connect(pinView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp32));
@@ -303,6 +301,11 @@ public class ChatCell extends ConstraintLayout {
             set.connect(bottomView.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp8));
             set.connect(bottomView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             set.connect(bottomView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.LEFT);
+
+            set.connect(mute.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
+            set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
+            set.connect(mute.getId(),ConstraintSet.LEFT,messageData.getId(),ConstraintSet.RIGHT, LayoutCreator.dp(4));
+
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
@@ -329,6 +332,10 @@ public class ChatCell extends ConstraintLayout {
             set.connect(pinView.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
             set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp2));
             set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp4));
+
+            set.connect(mute.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
+            set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
+            set.connect(mute.getId(),ConstraintSet.RIGHT,messageData.getId(),ConstraintSet.LEFT, LayoutCreator.dp(4));
 
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
