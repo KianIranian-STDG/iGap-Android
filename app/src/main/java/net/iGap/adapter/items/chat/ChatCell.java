@@ -289,7 +289,7 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(badgeView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
-            set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
+            set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp28), 135);
 
             set.connect(messageStatus.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp8));
 
@@ -320,7 +320,7 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(badgeView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
-            set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
+            set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp32), 135);
 
             set.connect(messageStatus.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
 

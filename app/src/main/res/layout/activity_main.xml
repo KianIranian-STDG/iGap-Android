@@ -225,8 +225,8 @@
                     android:layout_weight="1"
                     app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
                     app:unselected_icon="@drawable/ic_bottomnavigation_contact_off"
-                    app:dark_selected_icon="@drawable/ic_contact_selected_dark"
-                    app:dark_unselected_icon="@drawable/ic_contact_unselected_dark" />
+                    app:dark_selected_icon="@drawable/ic_bottomnavigation_contact_on_dark_mode"
+                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_contact_off_dark_mode" />
 
                 <net.iGap.libs.bottomNavigation.TabItem
                     android:id="@+id/ti_main_call"

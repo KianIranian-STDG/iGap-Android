@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:background="@drawable/backround_chatroom_root"
-    android:clickable="true"
-    android:orientation="vertical">
+    android:clickable="true">
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"
