@@ -660,8 +660,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         mediaLayout = findViewById(R.id.amr_ll_music_layout);
 
-        MusicPlayer.setMusicPlayer(mediaLayout);
-        MusicPlayer.mainLayout = mediaLayout;
+        //MusicPlayer.setMusicPlayer(mediaLayout);
+        //MusicPlayer.mainLayout = mediaLayout;
 
         ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
 

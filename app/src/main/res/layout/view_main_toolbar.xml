@@ -5,7 +5,28 @@
     android:layout_width="match_parent"
     android:layoutDirection="ltr"
     android:background="@android:color/transparent"
-    android:layout_height="@dimen/toolbar_height_root_with_search">
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/view_toolbar_player_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
+        android:background="@drawable/shape_toolbar_player">
+
+        <include
+            android:id="@+id/view_toolbar_layout_player_music"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/music_layout_small"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/toolbar_search_box_size"/>
+
+    </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/view_toolbar_main_constraint"
@@ -333,7 +354,7 @@
     <RelativeLayout
         android:id="@+id/view_toolbar_search_layout"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/toolbar_search_box_size"
         android:layout_marginStart="42dp"
         android:layout_marginLeft="42dp"
         android:layout_marginEnd="42dp"
@@ -417,6 +438,5 @@
         app:layout_constraintEnd_toEndOf="@+id/view_toolbar_img_big_avatar"
         app:layout_constraintStart_toStartOf="@+id/view_toolbar_img_big_avatar"
         app:layout_constraintTop_toBottomOf="@+id/view_toolbar_img_big_avatar" />
-
 
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,6 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp52"
-    style="?backgroundSubChatTheme"
     android:gravity="left|center">
 
 
@@ -49,7 +48,7 @@
           android:id="@+id/mls_txt_music_info"
           android:singleLine="true"
           android:text=""
-          android:layout_marginTop="@dimen/dp4"
+          android:layout_marginTop="@dimen/dp1"
           style="?textTitleColorSettingTheme"
           android:textColor="@color/gray_4c"
           android:textSize="@dimen/dp10" />

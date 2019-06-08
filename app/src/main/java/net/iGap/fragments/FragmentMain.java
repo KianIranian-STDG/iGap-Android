@@ -186,6 +186,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
                 .setLogoShown(true)
+                .setPlayerEnable(true)
                 .setSearchBoxShown(true, false)
                 .setListener(this);
 
@@ -204,6 +205,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             refreshChatList(position, false);
             setVisiblityForSelectedActionsInEverySelection();
         };
+
+        if(MusicPlayer.playerStateChangeListener != null){
+            MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
+                roomsAdapter.notifyDataSetChanged();
+            });
+        }
 
     }
 
@@ -1027,9 +1034,16 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             }
 
             if (holder.getAdapterPosition() == 0) {
-                ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
-                lp.setMargins(0, i_Dp(R.dimen.dp24), 0, 0);
-                holder.root.setLayoutParams(lp);
+
+                if (MusicPlayer.playerStateChangeListener.getValue() != null && MusicPlayer.playerStateChangeListener.getValue()){
+                    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
+                    lp.setMargins(0, i_Dp(R.dimen.dp70), 0, 0);
+                    holder.root.setLayoutParams(lp);
+                }else {
+                    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
+                    lp.setMargins(0, i_Dp(R.dimen.dp24), 0, 0);
+                    holder.root.setLayoutParams(lp);
+                }
             } else {
                 ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
                 lp.setMargins(0, 0, 0, 0);

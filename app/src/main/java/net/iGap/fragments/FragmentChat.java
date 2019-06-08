@@ -962,10 +962,10 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
-                MusicPlayer.chatLayout = mediaLayout;
+               // MusicPlayer.chatLayout = mediaLayout;
                 ActivityCall.stripLayoutChat = rootView.findViewById(R.id.ac_ll_strip_call);
 
-                ActivityMain.setMediaLayout();
+               // ActivityMain.setMediaLayout();
                 ActivityMain.setStripLayoutCall();
 
                 if (!G.twoPaneMode) {
@@ -1516,6 +1516,7 @@ public class FragmentChat extends BaseFragment
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
+                .setPlayerEnable(true)
                 .setListener(this);
 
         layoutToolbar = rootView.findViewById(R.id.ac_layout_toolbar);
@@ -1831,7 +1832,7 @@ public class FragmentChat extends BaseFragment
          * define views
          */
         mediaLayout = rootView.findViewById(R.id.ac_ll_music_layout);
-        MusicPlayer.setMusicPlayer(mediaLayout);
+        //MusicPlayer.setMusicPlayer(mediaLayout);
         initPinedMessage();
 
         lyt_user = rootView.findViewById(R.id.lyt_user);
