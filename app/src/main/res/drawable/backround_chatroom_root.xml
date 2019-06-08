@@ -5,4 +5,6 @@
         android:topLeftRadius="@dimen/dp8"
         android:topRightRadius="@dimen/dp8" />
     <solid android:color="#EEEEEE" />
+
+    <stroke android:color="@color/gray_9d" android:width="0.1dp"/>
 </shape>

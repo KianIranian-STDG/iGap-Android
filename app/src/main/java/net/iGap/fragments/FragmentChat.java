@@ -44,7 +44,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,7 +55,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.LayoutDirection;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -90,7 +88,6 @@ import com.google.gson.JsonSyntaxException;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.mikepenz.fastadapter.items.AbstractItem;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
@@ -314,7 +311,6 @@ import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.ActivityCallViewModel;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
@@ -336,7 +332,6 @@ import java.util.Set;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.fotoapparat.Fotoapparat;
-import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -2734,18 +2729,11 @@ public class FragmentChat extends BaseFragment
             });
             topSheetDialog.show();
 
-            /*final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-            View v = dialog.getCustomView();
-
-            DialogAnimation.animationUp(dialog);
-            dialog.show();*/
         });
 
 
-//        imvSmileButton = rootView.findViewById(R.id.chl_imv_smile_button);
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
 
-//        edtChat = rootView.findViewById(R.id.chl_edt_chat);
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         edtChat.requestFocus();
 
@@ -2761,24 +2749,18 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-//        imvSendButton = rootView.findViewById(R.id.chl_imv_send_button);
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
+
         if (G.isDarkTheme) {
             imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
         } else {
             imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
         }
 
-
-//        imvAttachFileButton = rootView.findViewById(R.id.chl_imv_attach_button);
         imvAttachFileButton = rootView.findViewById(R.id.vtn_chatRoom_attach);
         layoutAttachBottom = rootView.findViewById(R.id.ll_chatRoom_send);
-//        layoutAttachBottom = rootView.findViewById(R.id.layoutAttachBottom);
-
-//        imvMicButton = rootView.findViewById(R.id.chl_imv_mic_button);
         imvMicButton = rootView.findViewById(R.id.btn_chatRoom_mic);
 
-//        sendMoney = rootView.findViewById(R.id.chl_imv_sendMoney_button);
 
         if (isBot) {
             botInit = new BotInit(rootView, false);
@@ -2798,18 +2780,6 @@ public class FragmentChat extends BaseFragment
                 }
             }
 
-      /*      result = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
-            if (result.size() > 0) {
-                rm = result.last();
-                if (rm.getMessage() != null) {
-                    if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
-                        backToMenu = false;
-                    }
-                }
-
-            } else {
-                backToMenu = false;
-            }*/
             try {
                 if (rm.getRealmAdditional() != null && rm.getRealmAdditional().getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON) {
                     botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu, rm, rm.getRoomId());
@@ -2820,12 +2790,6 @@ public class FragmentChat extends BaseFragment
 
         }
 
-
-//        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
-//            sendMoney.setVisibility(View.VISIBLE);
-//        } else {
-//            sendMoney.setVisibility(View.GONE);
-//        }
 
         mAdapter = new MessagesAdapter<>(this, this, this, avatarHandler);
 
@@ -2849,8 +2813,6 @@ public class FragmentChat extends BaseFragment
         recyclerView.setAdapter(mAdapter);
         recyclerView.setItemViewCacheSize(20);
 
-      /*  icon = BitmapFactory.decodeResource(this.getResources(),
-                R.drawable.ic_launcher_foreground);*/
 
         if (realmRoom != null && !realmRoom.getReadOnly()) {
             ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
