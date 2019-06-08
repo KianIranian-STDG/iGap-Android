@@ -160,7 +160,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             initialVideoCallSurface.setValue(true);
             showImageBackground.set(View.VISIBLE);
-            endCallText.set(R.string.video_call_icon);
+            endCallText.set(R.string.end_video_call_icon);
             answerCallIcon.set(R.string.video_call_icon);
             G.videoCallListener = () -> G.handler.post(() -> showImageBackground.set(View.GONE));
         } else {
