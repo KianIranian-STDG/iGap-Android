@@ -225,8 +225,8 @@
                     android:layout_weight="1"
                     app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
                     app:unselected_icon="@drawable/ic_bottomnavigation_contact_off"
-                    app:dark_selected_icon="@drawable/ic_bottomnavigation_contact_on_dark_mode"
-                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_contact_off_dark_mode" />
+                    app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
+                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode" />
 
                 <net.iGap.libs.bottomNavigation.TabItem
                     android:id="@+id/ti_main_call"
@@ -235,8 +235,8 @@
                     android:layout_weight="1"
                     app:selected_icon="@drawable/ic_bottomnavigation_call_on"
                     app:unselected_icon="@drawable/ic_bottomnavigation_call_off"
-                    app:dark_selected_icon="@drawable/ic_call_selected_dark"
-                    app:dark_unselected_icon="@drawable/ic_call_unselected_dark" />
+                    app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
+                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode" />
 
                 <net.iGap.libs.bottomNavigation.TabItem
                     android:id="@+id/ti_main_chat"
@@ -245,8 +245,8 @@
                     android:layout_weight="1"
                     app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
                     app:unselected_icon="@drawable/ic_bottomnavigation_chat_off"
-                    app:dark_selected_icon="@drawable/ic_chat_selected_dark"
-                    app:dark_unselected_icon="@drawable/ic_chat_unselected_dark" />
+                    app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
+                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode" />
 
                 <net.iGap.libs.bottomNavigation.TabItem
                     android:id="@+id/ti_main_dashboard"
@@ -255,8 +255,8 @@
                     android:layout_weight="1"
                     app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
                     app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off"
-                    app:dark_selected_icon="@drawable/ic_app_selected_dark"
-                    app:dark_unselected_icon="@drawable/ic_app_unselected_dark" />
+                    app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
+                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode" />
 
                 <net.iGap.libs.bottomNavigation.TabItem
                     android:id="@+id/ti_main_setting"
@@ -265,8 +265,8 @@
                     android:layout_weight="1"
                     app:selected_icon="@drawable/ic_bottomnavigation_profile_on"
                     app:unselected_icon="@drawable/ic_bottomnavigation_profile_off"
-                    app:dark_selected_icon="@drawable/ic_me_selected_dark"
-                    app:dark_unselected_icon="@drawable/ic_me_unselected_dark" />
+                    app:dark_selected_icon="@drawable/ic_bottomnavigation_profile_on_darkmode"
+                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_profile_off_darkmode" />
 
             </net.iGap.libs.bottomNavigation.BottomNavigation>
 

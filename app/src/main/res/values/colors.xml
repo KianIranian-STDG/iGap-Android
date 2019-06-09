@@ -226,7 +226,7 @@
     <color name="sefid">#FFFFFF</color>
 
     <color name="voice_round">#468da7</color>
-    <color name="navigation_dark_mode_bg">#9b9a9a</color>
+    <color name="navigation_dark_mode_bg">#565656</color>
 
     <color name="read_status">#5ebc45</color>
     <color name="unread_status">#424242</color>
