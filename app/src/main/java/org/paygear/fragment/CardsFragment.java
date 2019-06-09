@@ -227,6 +227,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         mBinding.settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RaadApp.selectedMerchant = null;
                 if (getActivity() instanceof NavigationBarActivity) {
                     ((NavigationBarActivity) getActivity()).pushFullFragment(
                             FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
