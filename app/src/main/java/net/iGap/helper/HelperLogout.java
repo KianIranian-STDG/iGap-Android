@@ -25,6 +25,8 @@ import net.iGap.request.RequestClientGetRoomList;
 
 import ir.radsense.raadcore.model.Auth;
 
+import static org.paygear.utils.Utils.signOutWallet;
+
 
 /**
  * truncate realm and go to ActivityIntroduce for register again
@@ -38,6 +40,7 @@ public final class HelperLogout {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                signOutWallet();
                 HelperRealm.realmTruncate();
                 SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();
