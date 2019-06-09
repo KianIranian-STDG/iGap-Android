@@ -1296,7 +1296,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initTabStrip() {
 
         mViewPager = findViewById(R.id.viewpager);
-        mViewPager.setPagingEnabled(false);
 
         boolean isRtl = HelperCalander.isPersianUnicode;
 
@@ -1362,7 +1361,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(RegisteredContactsFragment.newInstance());
-
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
