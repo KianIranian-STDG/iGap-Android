@@ -61,13 +61,13 @@ public class PayBillsViewModel extends ViewModel {
             phoneOrIdErrorMessage.setValue(R.string.error);
         } else {
             phoneOrIdEnableError.setValue(false);
-            phoneOrIdErrorMessage.setValue(R.string.is_empty);
+            phoneOrIdErrorMessage.setValue(R.string.empty_error_message);
             if (field2.isEmpty()) {
                 operatorOrIdMessageEnable.setValue(true);
                 operatorOrIdErrorMessage.setValue(R.string.error);
             } else {
                 operatorOrIdMessageEnable.setValue(false);
-                operatorOrIdErrorMessage.setValue(R.string.is_empty);
+                operatorOrIdErrorMessage.setValue(R.string.empty_error_message);
                 completeListener.onCompleted();
             }
         }

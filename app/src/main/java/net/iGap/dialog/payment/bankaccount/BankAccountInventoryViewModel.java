@@ -51,13 +51,13 @@ public class BankAccountInventoryViewModel extends ViewModel {
             cardNumberErrorMessage.setValue(R.string.error);
             cardNumberEnableError.setValue(true);
         } else {
-            cardNumberErrorMessage.setValue(R.string.is_empty);
+            cardNumberErrorMessage.setValue(R.string.empty_error_message);
             cardNumberEnableError.setValue(false);
             if (pin.isEmpty()) {
                 secondsPasswordErrorMessage.setValue(R.string.error);
                 secondsPasswordMessageEnable.setValue(true);
             } else {
-                secondsPasswordErrorMessage.setValue(R.string.is_empty);
+                secondsPasswordErrorMessage.setValue(R.string.empty_error_message);
                 secondsPasswordMessageEnable.setValue(false);
                 completeListener.onCompleted();
             }

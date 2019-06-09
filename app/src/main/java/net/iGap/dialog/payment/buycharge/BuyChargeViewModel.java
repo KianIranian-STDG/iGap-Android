@@ -36,19 +36,19 @@ public class BuyChargeViewModel extends ViewModel {
             phoneErrorMessage.setValue(R.string.error);
         } else {
             phoneEnableError.setValue(false);
-            phoneErrorMessage.setValue(R.string.is_empty);
+            phoneErrorMessage.setValue(R.string.empty_error_message);
             if (operator.isEmpty()) {
                 operatorMessageEnable.setValue(true);
                 operatorErrorMessage.setValue(R.string.error);
             } else {
                 operatorMessageEnable.setValue(false);
-                operatorErrorMessage.setValue(R.string.is_empty);
+                operatorErrorMessage.setValue(R.string.empty_error_message);
                 if (amount.isEmpty()) {
                     amountMessageEnable.setValue(true);
                     amountErrorMessage.setValue(R.string.error);
                 } else {
                     amountMessageEnable.setValue(false);
-                    amountErrorMessage.setValue(R.string.is_empty);
+                    amountErrorMessage.setValue(R.string.empty_error_message);
                     completeListener.onCompleted();
                 }
             }

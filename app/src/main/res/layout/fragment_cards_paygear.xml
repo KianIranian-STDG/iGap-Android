@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
     android:orientation="vertical"
-  android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shadow">
@@ -31,6 +31,7 @@
             android:textColor="#de000000"
             android:textSize="19sp"
             android:text="@string/paygear_balance"
+            android:paddingLeft="8dp"
             android:paddingRight="8dp"/>
 
         <ImageView
@@ -183,6 +184,26 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:text="@string/cash_in_paygear" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/pin_layout"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/pin_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:drawablePadding="4dp"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:text="@string/recover_password" />
 
         </FrameLayout>
 

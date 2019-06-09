@@ -15,29 +15,18 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -46,36 +35,20 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentContactsProfileBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnReport;
-import net.iGap.interfaces.OnUserContactDelete;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.DialogAnimation;
-import net.iGap.module.EmojiEditTextE;
-import net.iGap.module.MEditText;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserReport;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestUserContactImport;
-import net.iGap.request.RequestUserContactsBlock;
-import net.iGap.request.RequestUserContactsDelete;
-import net.iGap.request.RequestUserContactsEdit;
-import net.iGap.request.RequestUserContactsUnblock;
-import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserReport;
 import net.iGap.viewmodel.FragmentContactsProfileViewModel;
 
@@ -84,8 +57,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
@@ -101,6 +72,8 @@ public class FragmentContactsProfile extends BaseFragment {
     private long roomId = 0;*/
     private String enterFrom = "";
     private String report;
+    private long roomId = 0;
+
     private FragmentContactsProfileBinding fragmentContactsProfileBinding;
     private FragmentContactsProfileViewModel fragmentContactsProfileViewModel;
 
@@ -126,7 +99,6 @@ public class FragmentContactsProfile extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         long userId = 0;
-        long roomId = 0;
 
         if (getArguments() != null) {
             userId = getArguments().getLong(PEER_ID);
@@ -143,6 +115,15 @@ public class FragmentContactsProfile extends BaseFragment {
                 if (aBoolean != null && aBoolean) {
                     popBackStackFragment();
                 }
+            }
+        });
+
+        fragmentContactsProfileViewModel.isMuteNotificationChangeListener.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isChecked) {
+                fragmentContactsProfileBinding.enableNotification.setChecked(isChecked);
+
+                new RequestClientMuteRoom().muteRoom(roomId, isChecked);
             }
         });
 

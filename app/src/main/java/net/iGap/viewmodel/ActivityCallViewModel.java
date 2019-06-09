@@ -9,41 +9,26 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-
 import android.arch.lifecycle.MutableLiveData;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHeadset;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Vibrator;
+import android.support.annotation.StringRes;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import com.afollestad.materialdialogs.GravityEnum;
-import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.ISignalingCallBack;
-import net.iGap.interfaces.SpeakerControlListener;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.AttachFile;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
@@ -58,7 +43,7 @@ import net.iGap.webrtc.WebRTC;
 
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
-import java.util.Set;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -66,236 +51,63 @@ import io.realm.Realm;
 
 public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
+    public ObservableInt showPeerSurface = new ObservableInt(View.GONE);
+    public ObservableInt showRendererSurface = new ObservableInt(View.GONE);
+    public ObservableInt showImageBackground = new ObservableInt(View.VISIBLE);
+    public ObservableInt showRippleView = new ObservableInt(View.VISIBLE);// never gone it, invisible it
+    public ObservableInt showUserAvatar = new ObservableInt(View.VISIBLE);
+    public ObservableInt showChatButton = new ObservableInt(View.VISIBLE);
+    public ObservableInt showAddMemberButton = new ObservableInt(View.GONE);
+    public ObservableInt showChangeToVideoCall = new ObservableInt(View.GONE);
+    public ObservableInt showSwitchCamera = new ObservableInt(View.GONE);
+    public ObservableField<String> callBackTxtName = new ObservableField<>("Name");
+    public ObservableInt callBackTxtStatus = new ObservableInt(R.string.empty_error_message);
+    public ObservableField<String> callBackTxtTimer = new ObservableField<>("00:00");
+    public ObservableInt txtTimerVisibility = new ObservableInt(View.GONE);
+    public ObservableInt endCallText = new ObservableInt(R.string.end_voice_call_icon);
+    public ObservableInt answerCallIcon = new ObservableInt(R.string.voice_call_icon);
+    public ObservableInt layoutAnswerCallVisibility = new ObservableInt(View.VISIBLE);
+    public ObservableInt cllBackBtnMic = new ObservableInt(R.string.mic_on_icon);
+    public ObservableInt cllBackBtnSpeaker = new ObservableInt(R.string.speaker_on_icon);
+    public ObservableBoolean enableEndCallButton = new ObservableBoolean(true);
+    //ui
+    public MutableLiveData<Boolean> changeViewState = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isMuteMusic = new MutableLiveData<>();
+    public MutableLiveData<Boolean> playRingTone = new MutableLiveData<>();
+    public MutableLiveData<String> imagePath = new MutableLiveData<>();
+    public MutableLiveData<Boolean> initialVideoCallSurface = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogChangeConnectedDevice = new MutableLiveData<>();
+    public MutableLiveData<Integer> playSound = new MutableLiveData<>();
+    public MutableLiveData<Boolean> setAudioManagerSpeakerphoneOn = new MutableLiveData<>();
+    public MutableLiveData<Boolean> setAudioManagerWithBluetooth = new MutableLiveData<>();
+
+
+    private boolean isIncomingCall;
+    private long userId;
+    private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
+    private boolean isHiddenButtons = false;
+    private boolean isBluetoothConnected = false;
+    private boolean isHandsFreeConnected = false;
+
+
     public static boolean isConnected = false;
     public static TextView txtTimeChat, txtTimerMain;
-    public Vibrator vibrator;
-    public ObservableField<String> cllBackBtnSpeaker = new ObservableField<>(G.context.getResources().getString(R.string.md_Mute));
-    public ObservableField<String> cllBackBtnMic = new ObservableField<>(G.context.getResources().getString(R.string.md_mic));
-    public ObservableField<String> callBackTxtTimer = new ObservableField<>("00:00");
-    public ObservableField<String> callBackTxtStatus = new ObservableField<>("Status");
-    public ObservableField<String> callBackTxtName = new ObservableField<>("Name");
     public ObservableInt txtAviVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutOptionVisibility = new ObservableInt(View.VISIBLE);
-    public ObservableInt txtTimerVisibility = new ObservableInt(View.GONE);
     public ObservableInt layoutChatCallVisibility = new ObservableInt(View.VISIBLE);
-    public ObservableInt layoutAnswerCallVisibility = new ObservableInt(View.VISIBLE);
-    public MutableLiveData<Boolean> changeColor = new MutableLiveData<>();
-    public MutableLiveData<Boolean> videoCallConnected = new MutableLiveData<>();
-    private boolean isIncomingCall = false;
-    private long userId;
+
     private boolean isSendLeave = false;
-    private int musicVolum = 0;
-    private boolean isMuteAllMusic = false;
     private Timer secendTimer;
     private int secend = 0;
     private int minute = 0;
-    private MediaPlayer player;
-    private MediaPlayer ringtonePlayer;
-    private Context context;
-    private ActivityCallBinding activityCallBinding;
-    private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
-    private boolean isFinish = false;
-    private AudioManager audioManager;
-    BluetoothManager bluetoothManager;
-    BluetoothHeadset bluetoothHeadset;
+    public ActivityCallViewModel(long userId, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
 
-
-    public ActivityCallViewModel(Context context, long userId, boolean isIncomingCall, ActivityCallBinding activityCallBinding, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
-
-        this.context = context;
         this.userId = userId;
         this.isIncomingCall = isIncomingCall;
-        this.activityCallBinding = activityCallBinding;
         this.callTYpe = callTYpe;
-        //   setPicture();
-        audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.getMode();
-        try {
-            Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
 
-            for (BluetoothDevice device : pairedDevices) {
-                Log.d("#peyman", " name=" + device.getName() + ", address=" + device.getAddress());
-
-                device.getAddress();
-            }
-        } catch (NullPointerException e) {
-        } catch (Exception e) {
-        }
-
-        changeColor.setValue(isIncomingCall);
-        videoCallConnected.setValue(false);
-
-        getInfo();
-
-    }
-
-    public void onClickBtnChat(View v) {
-
-        if (!isConnected && isIncomingCall) {
-            endCall();
-
-        }
-
-        HelperPublicMethod.goToChatRoom(userId, null, null);
-
-    }
-
-    public void addPersonClickListener(){
-
-    }
-
-    public void videoCallClickListener(){
-
-    }
-
-    public void onClickBtnMic(View v) {
-
-        if (cllBackBtnMic.get().toString().equals(G.context.getResources().getString(R.string.md_mic))) {
-            cllBackBtnMic.set(G.context.getResources().getString(R.string.md_mic_off));
-            WebRTC.getInstance().muteSound();
-        } else {
-            cllBackBtnMic.set(G.context.getResources().getString(R.string.md_mic));
-            WebRTC.getInstance().unMuteSound();
-        }
-    }
-
-
-    public void onClickBtnSpeaker(View v) {
-        if (cllBackBtnSpeaker != null && cllBackBtnSpeaker.get() != null) {
-
-            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_igap_bluetooth))) {
-                changeConnectedDevice(v);
-
-            } else if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_Mute))) {
-                if (G.isBluetoothConnected)
-                    changeConnectedDevice(v);
-                else {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-                    setSpeakerphoneOn(true);
-                }
-
-            } else {
-                if (G.isBluetoothConnected)
-                    changeConnectedDevice(v);
-                else {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                    setSpeakerphoneOn(false);
-                }
-            }
-        }
-    }
-
-    private void changeConnectedDevice(View v) {
-        try {
-
-            new MaterialDialog.Builder(v.getContext()).title(R.string.switchTo).itemsGravity(GravityEnum.CENTER).items(R.array.phone_selection).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
-                @Override
-                public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                    switch (position) {
-                        case 0:
-
-
-                           /* if (!bluetoothAdapter.isEnabled())
-                                bluetoothAdapter.enable();*/
-                            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
-                            //     audioManager.setBluetoothScoOn(true);
-                            setSpeakerphoneOn(false);
-                            audioManager.setMode(0);
-                            audioManager.startBluetoothSco();
-                            audioManager.setBluetoothScoOn(true);
-                            audioManager.setMode(AudioManager.MODE_IN_CALL);
-                            //  if (!audioManager.isBluetoothScoOn()) {
-
-
-                            //   }
-                            break;
-                        case 1:
-                            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-                            setSpeakerphoneOn(true);
-
-                            break;
-                        case 2:
-                            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                            //            setSpeakerphoneOn(false);
-                            audioManager.setMode(AudioManager.MODE_INVALID);
-                            //   if (audioManager.isBluetoothScoOn()) {
-                            audioManager.setBluetoothScoOn(false);
-                            audioManager.stopBluetoothSco();
-
-
-                            /** cancel bluetooth if could not stop it
-                             * if (audioManager.isBluetoothScoAvailableOffCall())
-                             */
-                            try {
-                                if (bluetoothAdapter != null && bluetoothAdapter.isEnabled())
-                                    bluetoothAdapter.disable();
-                            } catch (Exception e) {
-                            }
-
-                            /*audioManager.stopBluetoothSco();
-                            audioManager.setBluetoothScoOn(false);*/
-
-                            //     }
-                            break;
-
-                    }
-                }
-            }).show();
-
-        } catch (Exception e) {
-        }
-    }
-
-    public void onClickBtnSwitchCamera(View v) {
-        WebRTC.getInstance().switchCamera();
-    }
-
-    private void getInfo() {
-        initComponent();
-        initCallBack();
-        muteMusic();
-    }
-
-    private void initComponent() {
-        G.speakerControlListener = new SpeakerControlListener() {
-            @Override
-            public void setOnChangeSpeaker(int resId) {
-                cllBackBtnSpeaker.set(G.context.getResources().getString(resId));
-                if (G.isBluetoothConnected) {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
-                    setSpeakerphoneOn(false);
-                } else if (G.isHandsFreeConnected) {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                    setSpeakerphoneOn(false);
-                } else {
-                    if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-                        cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-                        setSpeakerphoneOn(true);
-                    } else {
-                        cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                        setSpeakerphoneOn(false);
-                    }
-
-                }
-            }
-        };
-
-
-        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            if (G.isBluetoothConnected) {
-                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
-                setSpeakerphoneOn(false);
-            } else if (G.isHandsFreeConnected) {
-                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                setSpeakerphoneOn(false);
-            } else {
-                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-                setSpeakerphoneOn(true);
-            }
-
-        }
+        changeViewState.setValue(isIncomingCall);
 
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
@@ -304,20 +116,185 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
             }
         }
 
-
         if (isIncomingCall) {
-            playRingtone();
-            callBackTxtStatus.set(G.context.getResources().getString(R.string.incoming_call));
+            playRingTone.setValue(true);
+            callBackTxtStatus.set(R.string.incoming_call);
             layoutOptionVisibility.set(View.GONE);
         } else {
-            playSound(R.raw.igap_signaling);
-            callBackTxtStatus.set(G.context.getResources().getString(R.string.signaling));
+            setPhoneSpeaker();
+            playSound.setValue(R.raw.igap_signaling);
+            callBackTxtStatus.set(R.string.signaling);
             layoutAnswerCallVisibility.set(View.GONE);
             layoutChatCallVisibility.set(View.GONE);
         }
 
-        //setAnimation();
+        //Todo: convert code setPicture
         setPicture();
+        initCallBack();
+        isMuteMusic.setValue(true);
+
+        WebRTC.getInstance().setCallType(callTYpe);
+        if (!isIncomingCall) {
+            WebRTC.getInstance().createOffer(userId);
+        }
+
+        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            initialVideoCallSurface.setValue(true);
+            showImageBackground.set(View.VISIBLE);
+            endCallText.set(R.string.video_call_icon);
+            answerCallIcon.set(R.string.video_call_icon);
+            G.videoCallListener = () -> G.handler.post(() -> showImageBackground.set(View.GONE));
+        } else {
+            showSwitchCamera.set(View.GONE);
+            showRendererSurface.set(View.GONE);
+            showPeerSurface.set(View.GONE);
+            endCallText.set(R.string.end_voice_call_icon);
+            answerCallIcon.set(R.string.voice_call_icon);
+        }
+    }
+
+    public void setBluetoothConnected(boolean bluetoothConnected) {
+        isBluetoothConnected = bluetoothConnected;
+        setSpeakerIcon();
+    }
+
+    public void setHandsFreeConnected(boolean handsFreeConnected) {
+        isHandsFreeConnected = handsFreeConnected;
+        setSpeakerIcon();
+    }
+
+    public boolean isVideoCall() {
+        return callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
+    }
+
+    public void onClickBtnChat() {
+        if (!isConnected && isIncomingCall) {
+            endCall();
+        }
+        HelperPublicMethod.goToChatRoom(userId, null, null);
+    }
+
+    public void addPersonClickListener() {
+
+    }
+
+    public void videoCallClickListener() {
+
+    }
+
+    public void onClickBtnMic() {
+        if (cllBackBtnMic.get() == R.string.mic_on_icon) {
+            cllBackBtnMic.set(R.string.mic_off_icon);
+            WebRTC.getInstance().muteSound();
+        } else {
+            cllBackBtnMic.set(R.string.mic_on_icon);
+            WebRTC.getInstance().unMuteSound();
+        }
+    }
+
+    public void onSurfaceViewRendererClick() {
+        if (G.isWebRtcConnected) {
+            if (!isHiddenButtons) {
+                showChatButton.set(View.INVISIBLE);
+                if (showUserAvatar.get() == View.VISIBLE) {
+                    showUserAvatar.set(View.INVISIBLE);
+                }
+                if (showSwitchCamera.get() == View.VISIBLE) {
+                    showSwitchCamera.set(View.INVISIBLE);
+                }
+                if (txtTimerVisibility.get() == View.VISIBLE) {
+                    txtTimerVisibility.set(View.INVISIBLE);
+                }
+                if (showChangeToVideoCall.get() == View.VISIBLE) {
+                    showChangeToVideoCall.set(View.INVISIBLE);
+                }
+                if (showAddMemberButton.get() == View.VISIBLE) {
+                    showAddMemberButton.set(View.INVISIBLE);
+                }
+            } else {
+                showChatButton.set(View.VISIBLE);
+                if (showUserAvatar.get() == View.INVISIBLE) {
+                    showUserAvatar.set(View.VISIBLE);
+                }
+                if (showSwitchCamera.get() == View.INVISIBLE) {
+                    showSwitchCamera.set(View.VISIBLE);
+                }
+                if (txtTimerVisibility.get() == View.INVISIBLE) {
+                    txtTimerVisibility.set(View.VISIBLE);
+                }
+                if (showChangeToVideoCall.get() == View.INVISIBLE) {
+                    showChangeToVideoCall.set(View.VISIBLE);
+                }
+                if (showAddMemberButton.get() == View.INVISIBLE) {
+                    showAddMemberButton.set(View.VISIBLE);
+                }
+            }
+            isHiddenButtons = !isHiddenButtons;
+        }
+    }
+
+    public void onClickBtnSpeaker() {
+        if (cllBackBtnSpeaker.get() == R.string.md_igap_bluetooth) {
+            showDialogChangeConnectedDevice.setValue(true);
+        } else if (cllBackBtnSpeaker.get() == R.string.speaker_off_icon) {
+            if (isBluetoothConnected) {
+                showDialogChangeConnectedDevice.setValue(true);
+            } else {
+                cllBackBtnSpeaker.set(R.string.speaker_on_icon);
+                setSpeakerphoneOn(true);
+            }
+        } else {
+            if (isBluetoothConnected) {
+                showDialogChangeConnectedDevice.setValue(true);
+            } else {
+                cllBackBtnSpeaker.set(R.string.speaker_off_icon);
+                setSpeakerphoneOn(false);
+            }
+        }
+    }
+
+    public void onEndCallClick() {
+        endCall();
+        enableEndCallButton.set(false);
+    }
+
+    public void onCallClick() {
+        if (isIncomingCall) {
+            G.isWebRtcConnected = true;
+            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                showRendererSurface.set(View.VISIBLE);
+                showImageBackground.set(View.GONE);
+            }
+            G.isVideoCallRinging = false;
+            UserStatusController.getInstance().setOnline();
+            WebRTC.getInstance().createAnswer();
+            playRingTone.setValue(false);
+            layoutAnswerCallVisibility.set(View.GONE);
+            showAddMemberButton.set(View.VISIBLE);
+            showChangeToVideoCall.set(View.VISIBLE);
+        }
+    }
+
+    public void onClickBtnSwitchCamera() {
+        WebRTC.getInstance().switchCamera();
+    }
+
+    private void setSpeakerIcon() {
+        if (isBluetoothConnected) {
+            cllBackBtnSpeaker.set(R.string.md_igap_bluetooth);
+            setSpeakerphoneOn(false);
+        } else if (isHandsFreeConnected) {
+            cllBackBtnSpeaker.set(R.string.speaker_off_icon);
+            setSpeakerphoneOn(false);
+        } else {
+            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                cllBackBtnSpeaker.set(R.string.speaker_on_icon);
+                setSpeakerphoneOn(true);
+            } else {
+                cllBackBtnSpeaker.set(R.string.speaker_off_icon);
+                setSpeakerphoneOn(false);
+            }
+        }
     }
 
     private void initCallBack() {
@@ -330,7 +307,8 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                 callBackTxtStatus.set(getTextString(callState));
                 switch (callState) {
                     case RINGING:
-                        playSound(R.raw.igap_ringing);
+                        setPhoneSpeaker();
+                        playSound.setValue(R.raw.igap_ringing);
                         txtAviVisibility.set(View.VISIBLE);
                         G.isVideoCallRinging = true;
                         break;
@@ -345,13 +323,17 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         layoutOptionVisibility.set(View.VISIBLE);
                         if (!isConnected) {
                             isConnected = true;
-                            playSound(R.raw.igap_connect);
                             G.handler.postDelayed(() -> {
-                                changeColor.setValue(false);
+                                changeViewState.setValue(false);
+                                playSound.setValue(R.raw.igap_connect);
+                                setPhoneSpeaker();
                                 if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-                                    videoCallConnected.setValue(true);
+                                    showRendererSurface.set(View.VISIBLE);
+                                    showUserAvatar.set(View.GONE);
+                                    showSwitchCamera.set(View.VISIBLE);
+                                    showPeerSurface.set(View.VISIBLE);
                                 }
-                                cancelRingtone();
+                                playRingTone.setValue(false);
                                 startTimer();
                             }, 350);
                         }
@@ -359,8 +341,9 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         break;
                     case DISCONNECTED:
                         txtAviVisibility.set(View.GONE);
-                        playSound(R.raw.igap_discounect);
                         G.handler.postDelayed(() -> {
+                            playSound.setValue(R.raw.igap_discounect);
+                            setPhoneSpeaker();
                             stopTimer();
                             endVoiceAndFinish();
                         }, 1000);
@@ -370,38 +353,41 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         isConnected = false;
                         break;
                     case BUSY:
-                        playSound(R.raw.igap_busy);
+                        setPhoneSpeaker();
+                        playSound.setValue(R.raw.igap_busy);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case REJECT:
-                        playSound(R.raw.igap_discounect);
+                        setPhoneSpeaker();
+                        playSound.setValue(R.raw.igap_discounect);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case FAILD:
-                        playSound(R.raw.igap_noresponse);
+                        setPhoneSpeaker();
+                        playSound.setValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
                         new RequestSignalingLeave().signalingLeave();
 
                         isConnected = false;
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                stopTimer();
-                                endVoiceAndFinish();
-                            }
+                        G.handler.postDelayed(() -> {
+                            stopTimer();
+                            endVoiceAndFinish();
                         }, 500);
 
                         break;
                     case NOT_ANSWERED:
-                        playSound(R.raw.igap_noresponse);
+                        setPhoneSpeaker();
+                        playSound.setValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case UNAVAILABLE:
-                        playSound(R.raw.igap_noresponse);
+                        setPhoneSpeaker();
+                        playSound.setValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case TOO_LONG:
-                        playSound(R.raw.igap_discounect);
+                        setPhoneSpeaker();
+                        playSound.setValue(R.raw.igap_discounect);
                         txtAviVisibility.set(View.GONE);
                         break;
                 }
@@ -411,201 +397,119 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         };
     }
 
-    private String getTextString(CallState callState) {
-
-        String result = "";
-
+    private @StringRes
+    int getTextString(CallState callState) {
         switch (callState) {
-
             case SIGNALING:
-                result = G.context.getResources().getString(R.string.signaling);
-                break;
+                return R.string.signaling;
             case INCAMING_CALL:
-                result = G.context.getResources().getString(R.string.incoming_call);
-                break;
+                return R.string.incoming_call;
             case RINGING:
-                result = G.context.getResources().getString(R.string.ringing);
-                break;
+                return R.string.ringing;
             case CONNECTING:
-                result = G.context.getResources().getString(R.string.connecting_call);
-                break;
+                return R.string.connecting_call;
             case CONNECTED:
-                result = G.context.getResources().getString(R.string.connected);
-                break;
+                return R.string.connected;
             case DISCONNECTED:
-                result = G.context.getResources().getString(R.string.disconnected);
-                break;
+                return R.string.disconnected;
             case FAILD:
-                result = G.context.getResources().getString(R.string.faild);
-                break;
+                return R.string.faild;
             case REJECT:
-                result = G.context.getResources().getString(R.string.reject);
-                break;
+                return R.string.reject;
             case BUSY:
-                result = G.context.getResources().getString(R.string.busy);
-                break;
+                return R.string.busy;
             case NOT_ANSWERED:
-                result = G.context.getResources().getString(R.string.not_answered);
-                break;
+                return R.string.not_answered;
             case UNAVAILABLE:
-                result = G.context.getResources().getString(R.string.unavalable);
-                break;
+                return R.string.unavalable;
             case TOO_LONG:
-                result = G.context.getResources().getString(R.string.too_long);
-                break;
+                return R.string.too_long;
             case ON_HOLD:
-                result = G.context.getResources().getString(R.string.on_hold);
-                break;
+                return R.string.on_hold;
+            default:
+                return R.string.empty_error_message;
         }
-
-        return result;
     }
 
-    /**
-     * *************** common methods ***************
-     */
+    public void chooseDevice(int position) {
+        switch (position) {
+            case 0:
+                cllBackBtnSpeaker.set(R.string.md_igap_bluetooth);
+                setSpeakerphoneOn(false);
+                setAudioManagerWithBluetooth.setValue(true);
+                break;
+            case 1:
+                cllBackBtnSpeaker.set(R.string.speaker_on_icon);
+                setSpeakerphoneOn(true);
+                break;
+            case 2:
+                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                cllBackBtnSpeaker.set(R.string.speaker_off_icon);
+                setAudioManagerWithBluetooth.setValue(false);
+                /** cancel bluetooth if could not stop it
+                 * if (audioManager.isBluetoothScoAvailableOffCall())
+                 */
+                try {
+                    if (bluetoothAdapter != null && bluetoothAdapter.isEnabled())
+                        bluetoothAdapter.disable();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+        }
+    }
 
     /**
      * Sets the speaker phone mode.
      */
-
-    public void setSpeakerphoneOn(boolean on) {
-
-
-        //  mAudioRecord.startRecording();
-/*        AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION,
-                48000,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                1024);
-        NoiseSuppressor ns;
-        AcousticEchoCanceler aec;
-        if (AcousticEchoCanceler.isAvailable()) {
-            aec = AcousticEchoCanceler.create(audioRecord.getAudioSessionId());
-            if (aec != null)
-                aec.setEnabled(true);
-        }
-        ns = NoiseSuppressor.create(audioRecord.getAudioSessionId());
-        if (ns != null)
-            ns.setEnabled(true);
-
-        audioRecord.startRecording();*/
+    private void setSpeakerphoneOn(boolean on) {
         try {
-
-
-     /*       AudioRecord  mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION, 16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, 2048);
-            NoiseSuppressor  mNoiseSuppressor = NoiseSuppressor.create(mAudioRecord.getAudioSessionId());
-            if (mNoiseSuppressor != null) {
-                int res = mNoiseSuppressor.setEnabled(true);
-            }
-
-            AcousticEchoCanceler  mAcousticEchoCanceler = AcousticEchoCanceler.create(mAudioRecord.getAudioSessionId());
-            if (mAcousticEchoCanceler != null) {
-                int res = mAcousticEchoCanceler.setEnabled(true);
-            }*/
-
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
             WebRtcAudioUtils.useWebRtcBasedAcousticEchoCanceler();
-    /*        int audioSessionId = id;
-
-            if (NoiseSuppressor.isAvailable()) {
-                NoiseSuppressor.create(audioSessionId);
-                Log.i("#peyman", " noise " + NoiseSuppressor.create(audioSessionId));
-            }
-            if (AutomaticGainControl.isAvailable()) {
-                AutomaticGainControl.create(audioSessionId);
-                Log.i("#peyman", " gain " + AutomaticGainControl.create(audioSessionId).getEnabled());
-            }
-            if (AcousticEchoCanceler.isAvailable()) {
-
-                AcousticEchoCanceler.create(audioSessionId);
-                Log.i("#peyman", " echo " + AcousticEchoCanceler.create(audioSessionId).getEnabled());
-            }*/
-
-
-        /*    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
-            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
-            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);*/
-          /*  WebRtcAudioUtils.useWebRtcBasedAutomaticGainControl();
-            WebRtcAudioUtils.useWebRtcBasedAcousticEchoCanceler();
-            WebRtcAudioUtils.useWebRtcBasedNoiseSuppressor();*/
-        /*    WebRtcAudioEffects.create().setAEC(true);
-            WebRtcAudioEffects.create().setNS(true);*/
         } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        boolean wasOn = false;
-        if (audioManager != null) {
-            wasOn = audioManager.isSpeakerphoneOn();
-        }
-        if (wasOn == on) {
-            return;
-        }
-        if (audioManager != null) {
-            audioManager.setSpeakerphoneOn(on);
-
-        }
+        setAudioManagerSpeakerphoneOn.setValue(on);
     }
 
-    public void endCall() {
+    private void endCall() {
         UserStatusController.getInstance().setOffline();
-
         G.isInCall = false;
-
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
-
         isConnected = false;
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                endVoiceAndFinish();
-            }
-        }, 1000);
+        G.handler.postDelayed(this::endVoiceAndFinish, 1000);
     }
 
     private void endVoiceAndFinish() {
-
         G.isInCall = false;
-
-        cancelRingtone();
-
+        playRingTone.setValue(false);
         if (ActivityCall.onFinishActivity != null) {
             ActivityCall.onFinishActivity.finishActivity();
         }
-
         if (G.iCallFinishChat != null) {
             G.iCallFinishChat.onFinish();
         }
-
         if (G.iCallFinishMain != null) {
             G.iCallFinishMain.onFinish();
         }
-
         if (MusicPlayer.pauseSoundFromIGapCall) {
             MusicPlayer.pauseSoundFromIGapCall = false;
             MusicPlayer.playSound();
         }
-
+        //todo: fixed this static view
         txtTimeChat = txtTimerMain = null;
-
     }
 
     private void startTimer() {
-
-
         txtTimerVisibility.set(View.VISIBLE);
         secend = 0;
         minute = 0;
-
         secendTimer = new Timer();
         secendTimer.schedule(new TimerTask() {
-
             @Override
             public void run() {
-
                 secend++;
                 if (secend >= 60) {
                     minute++;
@@ -614,37 +518,18 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                 if (minute >= 60) {
                     minute %= 60;
                 }
-
-                activityCallBinding.fcrTxtTimer.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        String s = "";
-                        if (minute < 10) {
-                            s += "0" + minute;
-                        } else {
-                            s += minute;
-                        }
-                        s += ":";
-                        if (secend < 10) {
-                            s += "0" + secend;
-                        } else {
-                            s += secend;
-                        }
-
-                        if (HelperCalander.isPersianUnicode) {
-                            s = HelperCalander.convertToUnicodeFarsiNumber(s);
-                        }
-
-                        callBackTxtTimer.set(s);
-
-                        if (txtTimeChat != null) {
-                            txtTimeChat.setText(s);
-                        }
-
-                        if (txtTimerMain != null) {
-                            txtTimerMain.setText(s);
-                        }
+                String s = String.format(Locale.getDefault(), "%02d:%02d", minute, secend);
+                if (HelperCalander.isPersianUnicode) {
+                    s = HelperCalander.convertToUnicodeFarsiNumber(s);
+                }
+                callBackTxtTimer.set(s);
+                String finalS = s;
+                G.handler.post(() -> {
+                    if (txtTimeChat != null) {
+                        txtTimeChat.setText(finalS);
+                    }
+                    if (txtTimerMain != null) {
+                        txtTimerMain.setText(finalS);
                     }
                 });
             }
@@ -652,11 +537,8 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     }
 
     private void stopTimer() {
-
         txtTimeChat = txtTimerMain = null;
-
         txtTimerVisibility.set(View.GONE);
-
         if (secendTimer != null) {
             secendTimer.cancel();
             secendTimer = null;
@@ -666,30 +548,24 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     private void setPicture() {
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-
         if (registeredInfo != null) {
             loadOrDownloadPicture(registeredInfo);
         } else {
+            //todo: add callback and remove delay :D
             new RequestUserInfo().userInfo(userId);
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Realm realm = Realm.getDefaultInstance();
-                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-
-                    if (registeredInfo != null) {
-                        loadOrDownloadPicture(registeredInfo);
-                    }
-                    realm.close();
+            G.handler.postDelayed(() -> {
+                Realm realm1 = Realm.getDefaultInstance();
+                RealmRegisteredInfo registeredInfo1 = RealmRegisteredInfo.getRegistrationInfo(realm1, userId);
+                if (registeredInfo1 != null) {
+                    loadOrDownloadPicture(registeredInfo1);
                 }
+                realm1.close();
             }, 3000);
         }
-
         realm.close();
     }
 
     private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo) {
-
         try {
             callBackTxtName.set(registeredInfo.getDisplayName());
             RealmAttachment av = registeredInfo.getLastAvatar().getFile();
@@ -700,15 +576,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                 @Override
                 public void OnProgress(final String path, int progress) {
                     if (progress == 100) {
-                        if (activityCallBinding.fcrImvBackground != null) {
-                            activityCallBinding.fcrImvBackground.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), activityCallBinding.fcrImvBackground);
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path),activityCallBinding.callingUserImage);
-                                }
-                            });
-                        }
+                        G.handler.post(() -> imagePath.setValue(path));
                     }
                 }
 
@@ -722,206 +590,39 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         }
     }
 
-    private void muteMusic() {
-
-        if (!isMuteAllMusic) {
-
-            if (audioManager == null) {
-                return;
-            }
-            int result = audioManager.requestAudioFocus(new AudioManager.OnAudioFocusChangeListener() {
-                @Override
-                public void onAudioFocusChange(int focusChange) {
-
-                }
-            }, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-            if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                musicVolum = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-                isMuteAllMusic = true;
-            }
-        }
-    }
-
-    private void unMuteMusic() {
-
-        if (isMuteAllMusic) {
-
-            if (audioManager != null) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolum, 0);
-                audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-                isMuteAllMusic = false;
-            }
-        }
-    }
-
-    public void playRingtone() {
-        boolean canPlay = false;
-
-
-        switch (audioManager.getRingerMode()) {
-            case AudioManager.RINGER_MODE_SILENT:
-                canPlay = false;
-                break;
-            case AudioManager.RINGER_MODE_VIBRATE:
-                canPlay = false;
-
-                vibrator = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                long[] pattern = {0, 100, 1000};
-                vibrator.vibrate(pattern, 0);
-
-                break;
-            case AudioManager.RINGER_MODE_NORMAL:
-                canPlay = true;
-                break;
-        }
-
-        if (audioManager.isWiredHeadsetOn()) {
-            canPlay = true;
-        }
-
-        if (canPlay) {
-
-            try {
-                Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-                String path = null;
-
-                try {
-                    path = AttachFile.getFilePathFromUri(alert);
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
-
-
-                ringtonePlayer = new MediaPlayer();
-
-                if (path == null) {
-                    ringtonePlayer.setDataSource(G.context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + R.raw.tone));
-                } else {
-                    ringtonePlayer.setDataSource(G.context, alert);
-                }
-
-                if (audioManager.isWiredHeadsetOn()) {
-                    ringtonePlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                } else {
-                    ringtonePlayer.setAudioStreamType(AudioManager.STREAM_RING);
-                }
-
-                ringtonePlayer.setLooping(true);
-                ringtonePlayer.prepare();
-                ringtonePlayer.start();
-            } catch (Exception e) {
-                HelperLog.setErrorLog(e);
-            }
-        }
-    }
-
-    private void playSound(final int resSound) {
-
+    private void setPhoneSpeaker() {
         try {
-            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_unMuted))) {
+            if (cllBackBtnSpeaker.get() == R.string.speaker_on_icon) {
                 if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING)
                     setSpeakerphoneOn(true);
                 else {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+                    cllBackBtnSpeaker.set(R.string.speaker_off_icon);
                     setSpeakerphoneOn(false);
                 }
             } else {
                 setSpeakerphoneOn(false);
             }
-
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-
-        if (player == null) {
-            try {
-                player = new MediaPlayer();
-                player.setDataSource(context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + resSound));
-
-                //if (audioManager.isWiredHeadsetOn()) {
-                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //} else {
-                //   player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //}
-                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-
-                player.setLooping(true);
-                player.prepare();
-                player.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-
-            try {
-                player.reset();
-                player.setDataSource(context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + resSound));
-
-                //if (audioManager.isWiredHeadsetOn()) {
-                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //} else {
-                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //}
-                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-
-                player.prepare();
-                player.setLooping(true);
-                player.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
-    private void cancelRingtone() {
-        try {
-            if (ringtonePlayer != null) {
-                ringtonePlayer.stop();
-                ringtonePlayer.release();
-                ringtonePlayer = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-
-            if (vibrator != null) {
-                vibrator.cancel();
-                vibrator = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (player != null) {
-                if (player.isPlaying()) {
-                    player.stop();
-                }
-
-                player.release();
-                player = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void leaveCall() {
+        G.isInCall = false;
+        if (isIncomingCall) {
+            WebRTC.getInstance().leaveCall();
         }
     }
 
     //*****************************  distance sensor  **********************************************************
 
     public void onDestroy() {
-
         G.isInCall = false;
         G.iSignalingCallBack = null;
         G.onCallLeaveView = null;
-
         setSpeakerphoneOn(false);
-
-        cancelRingtone();
-        unMuteMusic();
+        playRingTone.setValue(false);
+        isMuteMusic.setValue(false);
         new RequestSignalingGetLog().signalingGetLog(0, 1);
         if (!isSendLeave) {
             WebRTC.getInstance().leaveCall();
@@ -930,59 +631,23 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public void onLeaveView(String type) {
         isConnected = false;
-
         if (type.equals("error")) {
-
-            //G.handler(new Runnable() {
-            //    @Override
-            //    public void run() {
-            cancelRingtone();
+            playRingTone.setValue(false);
             txtAviVisibility.set(View.GONE);
-            callBackTxtStatus.set("");
-            //    }
-            //});
-
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    endVoiceAndFinish();
-                }
-            }, 2000);
+            callBackTxtStatus.set(R.string.empty_error_message);
+            G.handler.postDelayed(this::endVoiceAndFinish, 2000);
         } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    endVoiceAndFinish();
-                }
-            }, 1000);
+            G.handler.postDelayed(this::endVoiceAndFinish, 1000);
         }
     }
 
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
         Log.i("#peymanProxy", "Activity call view model");
-
     }
 
     @Override
     public void onServiceDisconnected(int profile) {
 
     }
-
-
-    //***************************************************************************************
-
-    class HeadsetPluginReciver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-                if (ringtonePlayer != null && ringtonePlayer.isPlaying()) {
-                    cancelRingtone();
-                    playRingtone();
-                }
-            }
-        }
-    }
-
 }

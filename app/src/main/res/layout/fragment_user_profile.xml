@@ -87,47 +87,66 @@
                 app:layout_constraintStart_toEndOf="@id/fup_user_image" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/fup_user_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/userFullName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp24"
                 android:layout_marginRight="@dimen/dp24"
-                android:layout_marginBottom="@dimen/dp10"
+                android:ellipsize="end"
+                android:fontFamily="@font/main_font"
+                android:singleLine="true"
+                android:text="@{viewModel.name}"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/fup_user_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fup_user_image"
+                app:layout_constraintTop_toTopOf="@id/fup_user_image" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/fup_user_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/main_font"
                 android:singleLine="true"
                 android:text="@{viewModel.userName}"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/fup_avatar_box"
-                app:layout_constraintStart_toEndOf="@id/fup_user_image" />
+                app:layout_constraintBottom_toTopOf="@id/fup_user_tel"
+                app:layout_constraintEnd_toEndOf="@id/userFullName"
+                app:layout_constraintStart_toStartOf="@id/userFullName"
+                app:layout_constraintTop_toBottomOf="@id/userFullName" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fup_user_tel"
                 style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp6"
                 android:fontFamily="@font/main_font"
                 android:singleLine="true"
                 android:text="@{viewModel.userPhoneNumber}"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/fup_user_name"
-                app:layout_constraintTop_toBottomOf="@id/fup_avatar_box" />
+                app:layout_constraintBottom_toTopOf="@id/fup_user_bio"
+                app:layout_constraintEnd_toEndOf="@id/userFullName"
+                app:layout_constraintStart_toStartOf="@id/userFullName"
+                app:layout_constraintTop_toBottomOf="@id/fup_user_name" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fup_user_bio"
                 style="?textSubColorSettingTheme"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp6"
                 android:fontFamily="@font/main_font"
                 android:singleLine="true"
                 android:text="@{viewModel.bio}"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/fup_user_name"
+                app:layout_constraintBottom_toBottomOf="@id/fup_user_image"
+                app:layout_constraintEnd_toEndOf="@id/userFullName"
+                app:layout_constraintStart_toStartOf="@id/userFullName"
                 app:layout_constraintTop_toBottomOf="@id/fup_user_tel" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -250,7 +269,7 @@
                 android:id="@+id/fup_btn_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:onClick="@{()->viewModel.onCreditClick()}"
                 app:layout_constraintEnd_toStartOf="@id/fup_splitter_2"
@@ -261,8 +280,9 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/fup_btn_credit_icon"
                     style="@style/myIconTextViewStyle"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text="@string/wallet_icon"
                     app:layout_constraintEnd_toStartOf="@id/fup_btn_credit_lbl"
                     app:layout_constraintHorizontal_chainStyle="packed"
@@ -274,9 +294,8 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10"
                     android:fontFamily="@font/main_font"
+                    android:padding="4dp"
                     android:text="@string/Credit"
                     android:textSize="@dimen/fup_items_textSize"
                     android:textStyle="bold"
@@ -327,8 +346,9 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/fup_btn_score_icon"
                     style="@style/myIconTextViewStyle"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text="@string/score_star_icon"
                     app:layout_constraintEnd_toStartOf="@id/fup_btn_score_lbl"
                     app:layout_constraintHorizontal_chainStyle="packed"
@@ -340,10 +360,8 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginTop="@dimen/dp6"
-                    android:layout_marginRight="@dimen/dp10"
                     android:fontFamily="@font/main_font"
+                    android:padding="4dp"
                     android:text="@string/score"
                     android:textSize="@dimen/fup_items_textSize"
                     android:textStyle="bold"
@@ -374,7 +392,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -489,13 +507,14 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/fup_btn_dark_mode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp32"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy">
@@ -508,23 +527,31 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/dark_mode_icon" />
 
-                <Switch
-                    android:id="@+id/darkTheme"
+                <TextView
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/dp10"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:checked="@={viewModel.isDarkMode}"
+                    android:layout_toEndOf="@id/fup_btn_dark_view_handler_view"
+                    android:layout_toRightOf="@id/fup_btn_dark_view_handler_view"
                     android:fontFamily="@font/main_font"
                     android:gravity="center_vertical"
-                    android:onCheckedChanged="@{()->viewModel.onThemeClick(darkTheme.isChecked())}"
                     android:text="@string/st_dark_theme"
                     android:textSize="@dimen/fup_items_textSize"
                     android:textStyle="bold" />
 
-            </LinearLayout>
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/darkTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="@={viewModel.isDarkMode}"
+                    android:onCheckedChanged="@{()->viewModel.onThemeClick(darkTheme.isChecked())}" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/fup_btn_faq"
@@ -624,7 +651,8 @@
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newName)->viewModel.nameTextChangeListener(newName.toString())}"
                     android:inputType="textPersonName"
-                    android:text="@={viewModel.name}" />
+                    android:text="@={viewModel.name}"
+                    android:textSize="16sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -648,7 +676,8 @@
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newUsername)->viewModel.usernameTextChangeListener(newUsername.toString())}"
                     android:inputType="textPersonName"
-                    android:text="@={viewModel.userName}" />
+                    android:text="@={viewModel.userName}"
+                    android:textSize="16sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -661,6 +690,7 @@
                 android:hint="@string/st_bio"
                 app:counterEnabled="true"
                 app:counterMaxLength="70"
+                app:counterTextAppearance="?hintColorSettingTheme"
                 app:layout_constraintLeft_toLeftOf="@id/name"
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/userName">
@@ -671,8 +701,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newBio)->viewModel.bioTextChangeListener(newBio.toString())}"
+                    android:fontFamily="@font/main_font"
                     android:inputType="text"
-                    android:text="@={viewModel.bio}" />
+                    android:maxLength="70"
+                    android:text="@={viewModel.bio}"
+                    android:textSize="16sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -696,7 +729,8 @@
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newEmail)->viewModel.emailTextChangeListener(newEmail.toString())}"
                     android:inputType="textEmailAddress"
-                    android:text="@={viewModel.email}" />
+                    android:text="@={viewModel.email}"
+                    android:textSize="16sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -717,7 +751,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
-                    android:text="@={viewModel.birthDate}" />
+                    android:text="@={viewModel.birthDate}"
+                    android:textSize="16sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -779,7 +814,7 @@
                 android:id="@+id/profileViewGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:constraint_referenced_ids="fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version" />
+                app:constraint_referenced_ids="fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName" />
 
             <android.support.constraint.Group
                 android:id="@+id/editProfileView"

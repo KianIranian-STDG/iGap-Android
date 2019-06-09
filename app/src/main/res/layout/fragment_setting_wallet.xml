@@ -8,9 +8,9 @@
 
     <import type="android.graphics.Color" />
 
-    <import type="org.paygear.wallet.WalletActivity" />
+    <import type="org.paygear.WalletActivity" />
 
-    <import type="org.paygear.wallet.RaadApp" />
+    <import type="org.paygear.RaadApp" />
   </data>
 
   <LinearLayout

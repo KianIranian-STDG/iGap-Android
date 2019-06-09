@@ -30,14 +30,12 @@
     style="?textTitleColorSettingTheme"
     android:textSize="@dimen/dp16" />
 
-  <ToggleButton
+  <net.iGap.module.CustomToggleButton
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
     android:id="@+id/btnMapChangeRegistration"
-    android:layout_width="@dimen/dp52"
-    android:layout_height="@dimen/dp52"
     android:background="@drawable/st_switch_button"
-    android:checked="true"
-    android:textOff=""
-    android:textOn="" />
+    android:checked="true"/>
 
 
 </LinearLayout>

@@ -16,7 +16,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
@@ -751,64 +750,65 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                                     if (HelperCalander.isPersianUnicode) {
                                         countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                                     }
-                                    String[] countList = countText.split("\n");
-                                    int countOFImage = Integer.parseInt(countList[0]);
-                                    int countOFVIDEO = Integer.parseInt(countList[1]);
-                                    int countOFAUDIO = Integer.parseInt(countList[2]);
-                                    int countOFVOICE = Integer.parseInt(countList[3]);
-                                    int countOFGIF = Integer.parseInt(countList[4]);
-                                    int countOFFILE = Integer.parseInt(countList[5]);
-                                    int countOFLink = Integer.parseInt(countList[6]);
-
-                                    if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
-                                        noMediaSharedVisibility.set(View.GONE);
-                                        Log.wtf("group profile view model", "image count: " + countOFImage);
-                                        if (countOFImage > 0) {
-                                            Log.wtf("group profile view model", "image visibility: VISIBLE");
-                                            sharedPhotoVisibility.set(View.VISIBLE);
-                                            sharedPhotoCount.setValue(countOFImage);
-                                        } else {
-                                            Log.wtf("group profile view model", "image visibility: Gone");
-                                            sharedPhotoVisibility.set(View.GONE);
-                                        }
-                                        if (countOFVIDEO > 0) {
-                                            sharedVideoVisibility.set(View.VISIBLE);
-                                            sharedVideoCount.setValue(countOFVIDEO);
-                                        } else {
-                                            sharedVideoVisibility.set(View.GONE);
-                                        }
-                                        if (countOFAUDIO > 0) {
-                                            sharedAudioVisibility.set(View.VISIBLE);
-                                            sharedAudioCount.setValue(countOFAUDIO);
-                                        } else {
-                                            sharedAudioVisibility.set(View.GONE);
-                                        }
-                                        if (countOFVOICE > 0) {
-                                            sharedVoiceVisibility.set(View.VISIBLE);
-                                            sharedVoiceCount.setValue(countOFVOICE);
-                                        } else {
-                                            sharedVoiceVisibility.set(View.GONE);
-                                        }
-                                        if (countOFGIF > 0) {
-                                            sharedGifVisibility.set(View.VISIBLE);
-                                            sharedGifCount.setValue(countOFGIF);
-                                        } else {
-                                            sharedGifVisibility.set(View.GONE);
-                                        }
-                                        if (countOFFILE > 0) {
-                                            sharedFileVisibility.set(View.VISIBLE);
-                                            sharedFileCount.setValue(countOFFILE);
-                                        } else {
-                                            sharedFileVisibility.set(View.GONE);
-                                        }
-                                        if (countOFLink > 0) {
-                                            sharedLinkVisibility.set(View.VISIBLE);
-                                            sharedLinkCount.setValue(countOFLink);
-                                        } else {
-                                            sharedLinkVisibility.set(View.GONE);
-                                        }
-                                    } else {
+                                    if (countText == null || countText.length() == 0) {
                                         noMediaSharedVisibility.set(View.VISIBLE);
+                                    } else {
+                                        String[] countList = countText.split("\n");
+                                        int countOFImage = Integer.parseInt(countList[0]);
+                                        int countOFVIDEO = Integer.parseInt(countList[1]);
+                                        int countOFAUDIO = Integer.parseInt(countList[2]);
+                                        int countOFVOICE = Integer.parseInt(countList[3]);
+                                        int countOFGIF = Integer.parseInt(countList[4]);
+                                        int countOFFILE = Integer.parseInt(countList[5]);
+                                        int countOFLink = Integer.parseInt(countList[6]);
+
+                                        if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
+                                            noMediaSharedVisibility.set(View.GONE);
+                                            if (countOFImage > 0) {
+                                                sharedPhotoVisibility.set(View.VISIBLE);
+                                                sharedPhotoCount.setValue(countOFImage);
+                                            } else {
+                                                sharedPhotoVisibility.set(View.GONE);
+                                            }
+                                            if (countOFVIDEO > 0) {
+                                                sharedVideoVisibility.set(View.VISIBLE);
+                                                sharedVideoCount.setValue(countOFVIDEO);
+                                            } else {
+                                                sharedVideoVisibility.set(View.GONE);
+                                            }
+                                            if (countOFAUDIO > 0) {
+                                                sharedAudioVisibility.set(View.VISIBLE);
+                                                sharedAudioCount.setValue(countOFAUDIO);
+                                            } else {
+                                                sharedAudioVisibility.set(View.GONE);
+                                            }
+                                            if (countOFVOICE > 0) {
+                                                sharedVoiceVisibility.set(View.VISIBLE);
+                                                sharedVoiceCount.setValue(countOFVOICE);
+                                            } else {
+                                                sharedVoiceVisibility.set(View.GONE);
+                                            }
+                                            if (countOFGIF > 0) {
+                                                sharedGifVisibility.set(View.VISIBLE);
+                                                sharedGifCount.setValue(countOFGIF);
+                                            } else {
+                                                sharedGifVisibility.set(View.GONE);
+                                            }
+                                            if (countOFFILE > 0) {
+                                                sharedFileVisibility.set(View.VISIBLE);
+                                                sharedFileCount.setValue(countOFFILE);
+                                            } else {
+                                                sharedFileVisibility.set(View.GONE);
+                                            }
+                                            if (countOFLink > 0) {
+                                                sharedLinkVisibility.set(View.VISIBLE);
+                                                sharedLinkCount.setValue(countOFLink);
+                                            } else {
+                                                sharedLinkVisibility.set(View.GONE);
+                                            }
+                                        } else {
+                                            noMediaSharedVisibility.set(View.VISIBLE);
+                                        }
                                     }
                                 }
                             }

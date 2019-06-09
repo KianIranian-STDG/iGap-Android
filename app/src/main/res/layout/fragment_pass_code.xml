@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -148,11 +147,10 @@
                             android:textStyle="normal" />
 
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/st_toggle_passCode"
-                            android:layout_width="@dimen/dp44"
-                            android:layout_height="@dimen/dp40"
-                            android:background="@drawable/st_switch_button"
+                            android:layout_width="@dimen/toggles_width"
+                            android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(fragmentPassCodeViewModel.isTogglePassCode)  , default =false}"
                             android:onClick="@{fragmentPassCodeViewModel::onClickTogglePassCode}"
                             android:textOff=""
@@ -194,11 +192,10 @@
                             android:textStyle="normal" />
 
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/st_toggle_patternPassCode"
-                            android:layout_width="@dimen/dp44"
-                            android:layout_height="@dimen/dp40"
-                            android:background="@drawable/st_switch_button"
+                            android:layout_width="@dimen/toggles_width"
+                            android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(fragmentPassCodeViewModel.isTogglePatternPassCode)  , default =false}"
                             android:onClick="@{fragmentPassCodeViewModel::onClickTogglePatternPassCode}"
                             android:textOff=""
@@ -241,11 +238,10 @@
                             android:textStyle="normal" />
 
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/st_toggle_tactileFeedback"
-                            android:layout_width="@dimen/dp44"
-                            android:layout_height="@dimen/dp40"
-                            android:background="@drawable/st_switch_button"
+                            android:layout_width="@dimen/toggles_width"
+                            android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(fragmentPassCodeViewModel.isToggleTactileFeedback)  , default =true}"
                             android:onClick="@{fragmentPassCodeViewModel::onClickTogglePatternTactileFeedback}"
                             android:textOff=""
@@ -358,11 +354,10 @@
                             android:textStyle="normal" />
 
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/st_toggle_FingerPrint"
-                            android:layout_width="@dimen/dp44"
-                            android:layout_height="@dimen/dp40"
-                            android:background="@drawable/st_switch_button"
+                            android:layout_width="@dimen/toggles_width"
+                            android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(fragmentPassCodeViewModel.isFingerPrint)}"
                             android:onClick="@{fragmentPassCodeViewModel::onClickChangeVgToggleFingerPrint}"
                             android:textOff=""
@@ -466,11 +461,10 @@
                             android:textStyle="normal" />
 
 
-                        <ToggleButton
+                        <net.iGap.module.CustomToggleButton
                             android:id="@+id/st_toggle_AllowScreenCapture"
-                            android:layout_width="@dimen/dp44"
-                            android:layout_height="@dimen/dp40"
-                            android:background="@drawable/st_switch_button"
+                            android:layout_width="@dimen/toggles_width"
+                            android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(fragmentPassCodeViewModel.isAllowScreenCapture)}"
                             android:onClick="@{fragmentPassCodeViewModel::onClickAllowScreenCapture}"
                             android:textOff=""

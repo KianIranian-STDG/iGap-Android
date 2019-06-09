@@ -19,12 +19,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.request.RequestWalletRegister;
 
-import org.paygear.wallet.WalletActivity;
+import org.paygear.WalletActivity;
 
 public class FragmentWalletAgreementViewModel {
 

@@ -39,7 +39,6 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
@@ -440,6 +439,9 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             textView.setText(realmResults.get(position).getDisplayName().toUpperCase().substring(0, 1));
+
+            if (G.isDarkTheme)
+                textView.setTextColor(G.context.getResources().getColor(R.color.white));
         }
 
         @Override

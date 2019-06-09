@@ -609,11 +609,10 @@
                     android:textStyle="normal" />
 
 
-                <ToggleButton
+                <net.iGap.module.CustomToggleButton
                     android:id="@+id/st_txt_st_toggle_theme_dark"
-                    android:layout_width="@dimen/dp44"
-                    android:layout_height="@dimen/dp40"
-                    android:background="@drawable/st_switch_button"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
                     android:textOff=""
                     android:textOn="" />
 

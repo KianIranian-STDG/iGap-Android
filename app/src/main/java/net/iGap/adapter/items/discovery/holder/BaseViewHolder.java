@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.adapter.items.discovery.DiscoveryItem;
+import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentIVandProfile;
 import net.iGap.fragments.FragmentPayment;
@@ -27,8 +29,6 @@ import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -45,7 +45,7 @@ import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.paygear.wallet.WalletActivity;
+import org.paygear.WalletActivity;
 
 import java.io.IOException;
 

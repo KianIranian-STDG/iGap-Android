@@ -90,7 +90,6 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
@@ -102,7 +101,6 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.ITowPanModDesinLayout;
-import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
@@ -162,10 +160,10 @@ import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
-import org.paygear.wallet.RaadApp;
-import org.paygear.wallet.fragment.PaymentHistoryFragment;
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.web.Web;
+import org.paygear.RaadApp;
+import org.paygear.fragment.PaymentHistoryFragment;
+import org.paygear.model.Card;
+import org.paygear.web.Web;
 
 import java.io.File;
 import java.io.IOException;
@@ -2030,7 +2028,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void setImage() {
         avatarHandler.getAvatar(new ParamWithAvatarType(imgNavImage, G.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
-        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
+        /*G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
             @Override
             public void onChangePhoto(final String imagePath) {
                 G.handler.post(new Runnable() {
@@ -2056,7 +2054,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
             }
-        };
+        };*/
     }
 
     @Override

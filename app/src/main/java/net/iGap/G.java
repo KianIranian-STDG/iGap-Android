@@ -50,8 +50,9 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
 
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.utils.Utils;
+import org.paygear.RaadApp;
+import org.paygear.model.Card;
+import org.paygear.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -403,9 +404,9 @@ public class G extends MultiDexApplication {
     public static Card selectedCard = null;
     public static long cardamount;
     public static String jwt = null;
-    public static boolean isBluetoothConnected = false;
-    public static boolean isHandsFreeConnected = false;
-    public static SpeakerControlListener speakerControlListener;
+    /*public static boolean isBluetoothConnected = false;
+    public static boolean isHandsFreeConnected = false;*/
+    /*public static SpeakerControlListener speakerControlListener;*/
     public static VideoCallListener videoCallListener;
     public static RefreshWalletBalance refreshWalletBalance;
     public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
@@ -486,6 +487,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
 
         new Thread(new Runnable() {

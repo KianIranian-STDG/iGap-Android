@@ -1323,6 +1323,7 @@
     <string name="responsible_for_all_financial_services">Responsible for all financial services</string>
     <string name="parsian_e_commerce_company_top">Parsian e-commerce company (top)</string>
     <string name="is_empty"></string>
+    <string name="empty_error_message"></string>
     <string name="customer_response_center_021_2318">Customer Support Center: 021-2318</string>
     <string name="ex_mobile_phone">Ex : 09123456789</string>
     <string name="ex_area">Ex : 021</string>
@@ -1743,13 +1744,27 @@
     <string name="card_bank">Bank Card</string>
     <string name="paygear_card">Wallet Card</string>
     <string name="set_password">Set Password</string>
-    <string name="change_password">Change Password</string>
+    <string name="change_password">Change Wallet Password</string>
     <string name="text_forgot">Wallet password sent to you.
 (The password will expire after 2 minutes, please change it after retrieving it)</string>
     <string name="text_forgot_title">Resend Password</string>
-    <string name="Forgot_Passwords">Password recovery</string>
+    <string name="Forgot_Passwords">Wallet Password recovery</string>
     <string name="enter_your_province">select your province</string>
 
+    <string name="cashier">finance</string>
+    <string name="balance_low">Your wallet balance is not enough.please top-up it.</string>
+    <string name="admin">admin</string>
+    <string name="taxi_balance">Taxi Balance</string>
+    <string name="shop_balance">Shop Balance</string>
+    <string name="cashout_taxi">Cashout</string>
+    <string name="bank_card">‌Bank Card</string>
+    <string name="wallet_card">Wallet</string>
+
+    <string name="amount_to_pay">Amount to pay (Rials) :</string>
+    <string name="club_balance">Club card balance (Rials)</string>
+    <string name="wallet_balance">Wallet balance (Rials)</string>
+    <string name="total_amount">Total Amount (Rials) :</string>
+    <string name="discount_amount">Discount Amount (Rials) :</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
@@ -1845,5 +1860,6 @@
     <string name="view_contact">View Contact</string>
     <string name="new_group_call">New Group Call</string>
     <string name="dial_number">Dial Number</string>
+    <string name="Select_Country">Select Country</string>
     <string name="call">Call</string>
 </resources>

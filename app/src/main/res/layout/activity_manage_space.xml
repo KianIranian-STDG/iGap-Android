@@ -331,13 +331,11 @@
               android:layout_alignParentRight="true"
               android:layout_centerInParent="true">
 
-            <ToggleButton
+            <net.iGap.module.CustomToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/st_toggle_enableAnimation"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn="" />
+                />
           </LinearLayout>
 
           <TextView
@@ -409,15 +407,12 @@
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
               android:id="@+id/st_toggle_autoGif"
-              android:layout_width="@dimen/dp44"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
               android:checked="@{safeUnbox(activityManageSpaceViewModel.isAutoGif)}"
-              android:onCheckedChanged="@{(switch, checked) -> activityManageSpaceViewModel.onCheckedChangeAutoGif(checked)}"
-              android:textOff=""
-              android:textOn="" />
+              android:onCheckedChanged="@{(switch, checked) -> activityManageSpaceViewModel.onCheckedChangeAutoGif(checked)}" />
 
         </LinearLayout>
 
@@ -588,15 +583,12 @@
             android:textStyle="normal"
             fontPath="fonts/IRANSansMobile.ttf" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
             android:id="@+id/stsp_toggle_use_sdk"
-            android:layout_width="@dimen/dp44"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
             android:checked="@{safeUnbox(activityManageSpaceViewModel.isSdkEnable)}"
             android:onCheckedChanged="@{(switch, checked) -> activityManageSpaceViewModel.onCheckedSdkEnable(checked)}"
-            android:textOff=""
-            android:textOn=""
             android:clickable="false" />
         </LinearLayout>
 

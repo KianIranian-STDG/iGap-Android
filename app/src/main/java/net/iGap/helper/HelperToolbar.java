@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,7 +23,6 @@ import net.iGap.R;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.enums.ConnectionState;
 
 
@@ -143,6 +141,11 @@ public class HelperToolbar {
 
     public HelperToolbar setRightSmallAvatarShown(boolean rightSmallAvatarShown) {
         this.isRightSmallAvatarShown = rightSmallAvatarShown;
+
+        if (mAvatarSmall != null) {
+            mAvatarSmall.setVisibility(View.VISIBLE);
+            mAvatarSmall.setOnClickListener(v -> mToolbarListener.onSmallAvatarClickListener(v));
+        }
         return this;
     }
 
@@ -158,6 +161,7 @@ public class HelperToolbar {
 
         if (mTxtLogo != null){
             mTxtLogo.setText(title);
+            checkIGapFont();
         }
 
         return this;
@@ -277,6 +281,8 @@ public class HelperToolbar {
 
         toolBarTitleHandler();
 
+        checkIGapFont();
+
         return rootView;
 
     }
@@ -365,7 +371,20 @@ public class HelperToolbar {
         return mChatMuteIcon;
     }
 
+    public CircleImageView getAvatarSmall() {
+        return mAvatarSmall;
+    }
+
     /*************************************************************/
+
+    private void checkIGapFont() {
+
+        if (mTxtLogo.getText().toString().toLowerCase().equals("igap")){
+            mTxtLogo.setTypeface(G.typeface_neuropolitical);
+        }else {
+            mTxtLogo.setTypeface(G.typeface_IRANSansMobile);
+        }
+    }
 
     private void toolBarTitleHandler() {
 
@@ -396,6 +415,8 @@ public class HelperToolbar {
                         mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
                         mTxtLogo.setText(defaultTitleText);
                     }
+
+                    checkIGapFont();
 
                 }
 

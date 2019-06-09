@@ -48,18 +48,18 @@ public class GetMoneyViewModel extends ViewModel {
             nameOrPhoneErrorMessage.setValue(R.string.error);
         } else {
             nameOrPhoneEnableError.setValue(false);
-            nameOrPhoneErrorMessage.setValue(R.string.is_empty);
+            nameOrPhoneErrorMessage.setValue(R.string.empty_error_message);
             if (amount.isEmpty()) {
                 amountErrorMessage.setValue(R.string.error);
                 amountEnableError.setValue(true);
             } else {
-                amountErrorMessage.setValue(R.string.is_empty);
+                amountErrorMessage.setValue(R.string.empty_error_message);
                 amountEnableError.setValue(false);
                 if (forDetail.isEmpty()) {
                     forDetailErrorMessage.setValue(R.string.error);
                     forDetailEnableError.setValue(true);
                 } else {
-                    forDetailErrorMessage.setValue(R.string.is_empty);
+                    forDetailErrorMessage.setValue(R.string.empty_error_message);
                     forDetailEnableError.setValue(false);
                     //every thing is ok and go next step
                     completeListener.onCompleted();

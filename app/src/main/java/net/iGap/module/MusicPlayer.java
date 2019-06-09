@@ -130,6 +130,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static TextView btnPlayMusic;
     private static TextView btnCloseMusic;
     private static TextView txt_music_name;
+    private static TextView txt_music_info;
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
     private static Notification notification;
@@ -236,6 +237,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         txt_music_time_counter = (TextView) layout.findViewById(R.id.mls_txt_music_time_counter);
         txt_music_name = (TextView) layout.findViewById(R.id.mls_txt_music_name);
+        txt_music_info = layout.findViewById(R.id.mls_txt_music_info);
 
         btnPlayMusic = (TextView) layout.findViewById(R.id.mls_btn_play_music);
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
@@ -256,13 +258,14 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (MusicPlayer.mp != null) {
             layout.setVisibility(View.VISIBLE);
             txt_music_name.setText(MusicPlayer.musicName);
+            txt_music_info.setText(MusicPlayer.musicInfo);
 
             txt_music_time.setText(musicTime);
 
             if (MusicPlayer.mp.isPlaying()) {
-                btnPlayMusic.setText(context.getString(R.string.md_pause_button));
+                btnPlayMusic.setText(context.getString(R.string.pause_icon));
             } else {
-                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.play_icon));
             }
         }
 
@@ -337,7 +340,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             stopTimer();
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.play_icon));
             }
 
             if (!isShowMediaPlayer) {
@@ -398,7 +401,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.md_pause_button));
+                btnPlayMusic.setText(context.getString(R.string.pause_icon));
             }
 
             if (!isShowMediaPlayer) {
@@ -453,7 +456,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.play_icon));
             }
 
             musicProgress = 0;
@@ -491,7 +494,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 if (isVoice) { // avoid from return to first voice
                     if (btnPlayMusic != null) {
-                        btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                        btnPlayMusic.setText(context.getString(R.string.play_icon));
                     }
                     stopSound();
                     return;
@@ -573,7 +576,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     if (selectedMedia >= mediaList.size()) {
                         if (isVoice) { // avoid from return to first voice
                             if (btnPlayMusic != null) {
-                                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                                btnPlayMusic.setText(context.getString(R.string.play_icon));
                             }
                             stopSound();
                             return;
@@ -770,8 +773,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
-            btnPlayMusic.setText(context.getString(R.string.md_pause_button));
+            btnPlayMusic.setText(context.getString(R.string.pause_icon));
             txt_music_name.setText(musicName);
+            txt_music_info.setText(musicInfo);
+
             updateName = new UpdateName() {
                 @Override
                 public void rename() {

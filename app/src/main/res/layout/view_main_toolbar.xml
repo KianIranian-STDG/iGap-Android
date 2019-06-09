@@ -20,11 +20,13 @@
             android:id="@+id/view_toolbar_user_small_avatar"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:padding="5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"
+            android:padding="2dp"
             android:visibility="gone"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -235,30 +237,28 @@
                 app:emojiSize="14dp" />
 
             <TextView
-                android:id="@+id/view_toolbar_chat_txt_isMute"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                style="@style/myIconTextViewStyle"
-                android:text="@string/mute_icon"
-                android:textAppearance="@style/TextIconAppearance.all"
-                android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/view_toolbar_chat_txt_verify"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 style="@style/myIconTextViewStyle"
                 android:text="@string/verify_icon"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@color/verify_color"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/view_toolbar_chat_txt_isMute"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                style="@style/myIconTextViewStyle"
+                android:text="@string/mute_icon"
+                android:textAppearance="@style/TextIconAppearance.all"
+                android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:visibility="gone" />
 
@@ -359,7 +359,6 @@
             android:hint="@string/search"
             android:singleLine="true"
             style="?hintColorSettingTheme"
-            android:textColorHint="@color/toolbar_search_box_txt_color"
             android:textSize="14sp"
             android:visibility="gone" />
 

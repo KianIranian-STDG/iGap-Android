@@ -123,11 +123,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
             android:id="@+id/stns_toggle_alert"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:gravity="start"
             android:textOff=""
             android:textOn="" />
@@ -163,11 +162,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
             android:id="@+id/stns_toggle_messagePreview"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:textOff=""
             android:textOn="" />
 
@@ -376,11 +374,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
-            android:id="@+id/stns_toggle_alert_group"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+          <net.iGap.module.CustomToggleButton
+              android:id="@+id/stns_toggle_alert_group"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:textOff=""
             android:textOn="" />
 
@@ -415,11 +412,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
             android:id="@+id/stns_toggle_messagePreview_group"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:textOff=""
             android:textOn="" />
 
@@ -625,11 +621,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
             android:id="@+id/stns_toggle_app_sound"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:textOff=""
             android:textOn="" />
 
@@ -664,11 +659,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
             android:id="@+id/stns_toggle_app_vibrate"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:textOff=""
             android:textOn="" />
 
@@ -705,11 +699,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
             android:id="@+id/stns_toggle_app_preview"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:textOff=""
             android:textOn="" />
 
@@ -744,11 +737,10 @@
             android:textSize="@dimen/dp16"
             android:textStyle="normal" />
 
-          <ToggleButton
+          <net.iGap.module.CustomToggleButton
             android:id="@+id/stns_toggle_chat_sound"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:textOff=""
             android:textOn="" />
 
@@ -804,8 +796,8 @@
 
           <ToggleButton
             android:id="@+id/stns_toggle_Contact_joined"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:background="@drawable/st_switch_button"
             android:textOff=""
             android:textOn="" />
@@ -836,8 +828,8 @@
 
             <ToggleButton
               android:id="@+id/stns_toggle_pinned_message"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
+                android:layout_width="@dimen/toggles_width"
+                android:layout_height="@dimen/toggles_height"
               android:background="@drawable/st_switch_button"
               android:textOff=""
               android:textOn="" />
@@ -922,8 +914,8 @@
 
           <ToggleButton
             android:id="@+id/stns_toggle_keep_alive_service"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
+              android:layout_width="@dimen/toggles_width"
+              android:layout_height="@dimen/toggles_height"
             android:background="@drawable/st_switch_button"
             android:textOff=""
             android:textOn="" />
@@ -959,8 +951,8 @@
 
             <ToggleButton
               android:id="@+id/stns_toggle_background_connection"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
+                android:layout_width="@dimen/toggles_width"
+                android:layout_height="@dimen/toggles_height"
               android:background="@drawable/st_switch_button"
               android:textOff=""
               android:textOn="" />
@@ -1020,8 +1012,8 @@
 
             <ToggleButton
               android:id="@+id/stns_badge_counter"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
+                android:layout_width="@dimen/toggles_width"
+                android:layout_height="@dimen/toggles_height"
               android:background="@drawable/st_switch_button"
               android:textOff=""
               android:textOn="" />
