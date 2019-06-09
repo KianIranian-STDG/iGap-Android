@@ -210,7 +210,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         onCountryCallBack = (nameCountry, code, mask) -> G.handler.post(() -> {
             txtCodeCountry.setText(nameCountry);
             txtCodeCountry.setText("+" + code);
-            // edtPhoneNumber.setText("");
             if (!mask.equals(" ")) {
                 edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
 
@@ -255,8 +254,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                 .setListener(this);
 
         toolbarLayout.addView(mHelperToolbar.getView());
-
-        // mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.menu_add_contact));
     }
 
     private void isEnableSetButton() {
@@ -264,13 +261,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         if ((edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) && edtPhoneNumber.getText().toString().length() > 0) {
 
             mHelperToolbar.getRightButton().setEnabled(true);
-            /*txtSet.setTextColor(G.context.getResources().getColor(R.color.white));
-            rippleSet.setEnabled(true);*/
         } else {
 
             mHelperToolbar.getRightButton().setEnabled(false);
-           /* txtSet.setTextColor(G.context.getResources().getColor(R.color.line_edit_text));
-            rippleSet.setEnabled(false);*/
+
         }
     }
 
@@ -278,6 +272,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         removeFromBaseFragment(FragmentAddContact.this);
+
     }
 
     /**
