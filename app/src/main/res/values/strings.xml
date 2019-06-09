@@ -1738,6 +1738,9 @@
     <string name="wallet_balance">Wallet balance (Rials)</string>
     <string name="total_amount">Total Amount (Rials) :</string>
     <string name="discount_amount">Discount Amount (Rials) :</string>
+    <string name="personalAccountType">Personal</string>
+    <string name="taxiAccountType">Driver</string>
+    <string name="shopAccountType">Shop</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
