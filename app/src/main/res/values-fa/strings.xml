@@ -1729,12 +1729,29 @@
     <string name="card_bank">کارت بانک</string>
     <string name="paygear_card">کیف پول کارت</string>
     <string name="set_password">ثبت رمز عبور</string>
-    <string name="change_password">تغییر رمز عبور</string>
+    <string name="change_password">تغییر رمز عبور کیف پول</string>
     <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
 ( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
     <string name="text_forgot_title">ارسال مجدد رمز</string>
-    <string name="Forgot_Passwords">بازیابی رمز</string>
+    <string name="Forgot_Passwords">بازیابی رمز عبور کیف پول</string>
+    <string name="cashier">مالی</string>
+    <string name="admin">ادمین</string>
+    <string name="taxi_balance">موجودی تاکسی</string>
+    <string name="shop_balance">موجودی فروشگاه</string>
+    <string name="cashout_taxi">برداشت از موجودی</string>
+    <string name="balance_low">موجودی کیف پول شما کم است. موجودی کیف پول خود را افزایش دهید.</string>
+    <string name="bank_card">کارت بانکی</string>
+    <string name="wallet_card">کیف پول</string>
+    <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>
+    <string name="club_balance">موجودی کارت باشگاهی (ریال)</string>
+    <string name="wallet_balance">موجودی کیف پول (ریال)</string>
+    <string name="total_amount">مبلغ کل (ریال) :</string>
+    <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
 
+
+    <string name="personalAccountType">شخصی</string>
+    <string name="taxiAccountType">راننده</string>
+    <string name="shopAccountType">فروشگاه</string>
 
     <string name="default_sheba_number">شماره شبا پیش فرض</string>
     <string name="default_sheba_number_message">آیا مایل به ذخیره این شماره به عنوان شماره شبای پیش فرض خود هستید؟\n دقت کنید! در صورت انتخاب پیشفرض از این پس تمام برداشت های عادی اتوماتیک با شماره شبا پیشفرض انجام می شود.</string>
