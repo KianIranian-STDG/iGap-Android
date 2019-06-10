@@ -83,9 +83,8 @@
         android:id="@+id/ll_chatRoom_send"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="3"
         android:layout_marginRight="@dimen/dp4"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -93,9 +92,8 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_wallet"
             style="?emojiChat"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="0"
@@ -105,9 +103,8 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
             style="?emojiChat"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/md_attachment_clip"
@@ -117,9 +114,8 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_mic"
             style="?emojiChat"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/md_voice_message_microphone_button"

@@ -104,7 +104,6 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterDrBot;
@@ -163,7 +162,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.FinishActivity;
-import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IOnBackPressed;
@@ -309,7 +307,6 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.viewmodel.ActivityCallViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -439,7 +436,7 @@ public class FragmentChat extends BaseFragment
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
-    //    private MaterialDesignTextView sendMoney;
+    private MaterialDesignTextView sendMoney;
     //  private MaterialDesignTextView btnReplaySelected;
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
@@ -708,8 +705,7 @@ public class FragmentChat extends BaseFragment
             chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
         else
             chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
-
-
+        sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
 
         return attachToSwipeBack(rootView);
     }
@@ -963,9 +959,9 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
-                try{
+                try {
                     mHelperToolbar.checkIsAvailableOnGoingCall();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -2271,7 +2267,7 @@ public class FragmentChat extends BaseFragment
         recyclerView = rootView.findViewById(R.id.chl_recycler_view_chat);
 
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-        Log.i("backGround", "pageSettings: "+backGroundPath);
+        Log.i("backGround", "pageSettings: " + backGroundPath);
         if (backGroundPath.length() > 0) {
             imgBackGround = rootView.findViewById(R.id.chl_img_view_chat);
             if (G.themeColor == Theme.DARK) {
@@ -2718,6 +2714,12 @@ public class FragmentChat extends BaseFragment
             topSheetDialog.show();
 
         });
+
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+            sendMoney.setVisibility(View.VISIBLE);
+        } else {
+            sendMoney.setVisibility(View.GONE);
+        }
 
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
@@ -3263,12 +3265,12 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-//        sendMoney.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showPaymentDialog();
-//            }
-//        });
+        sendMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPaymentDialog();
+            }
+        });
 
 
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
@@ -9297,174 +9299,6 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    /**
-     * *** SearchHash ***
-     */
-
-    private class SearchHash {
-
-        public String lastMessageId = "";
-        private String hashString = "";
-        private int currentHashPosition;
-
-        private ArrayList<String> hashList = new ArrayList<>();
-
-        void setHashString(String hashString) {
-            this.hashString = hashString.toLowerCase();
-        }
-
-        public void setPosition(String messageId) {
-
-            if (mAdapter == null) {
-                return;
-            }
-
-            if (lastMessageId.length() > 0) {
-                mAdapter.toggleSelection(lastMessageId, false, null);
-            }
-
-            currentHashPosition = 0;
-            hashList.clear();
-
-            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
-                if (mAdapter.getItem(i).mMessage != null) {
-
-                    if (messageId.length() > 0) {
-                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
-                            currentHashPosition = hashList.size();
-                            lastMessageId = messageId;
-                            mAdapter.getItem(i).mMessage.isSelected = true;
-                            mAdapter.notifyItemChanged(i);
-                        }
-                    }
-
-                    String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
-
-                    if (mText.toLowerCase().contains(hashString)) {
-                        hashList.add(mAdapter.getItem(i).mMessage.messageID);
-                    }
-                }
-            }
-
-            if (messageId.length() == 0) {
-                txtHashCounter.setText(hashList.size() + " / " + hashList.size());
-
-                if (hashList.size() > 0) {
-                    currentHashPosition = hashList.size() - 1;
-                    goToSelectedPosition(hashList.get(currentHashPosition));
-                }
-            } else {
-                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
-            }
-        }
-
-        void downHash() {
-            if (currentHashPosition < hashList.size() - 1) {
-
-                currentHashPosition++;
-
-                goToSelectedPosition(hashList.get(currentHashPosition));
-
-                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
-            }
-        }
-
-        void upHash() {
-            if (currentHashPosition > 0) {
-
-                currentHashPosition--;
-
-                goToSelectedPosition(hashList.get(currentHashPosition));
-                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
-            }
-        }
-
-        private void goToSelectedPosition(String messageid) {
-
-            mAdapter.toggleSelection(lastMessageId, false, null);
-
-            lastMessageId = messageid;
-
-            mAdapter.toggleSelection(lastMessageId, true, recyclerView);
-        }
-    }
-
-    /**
-     * *** VideoCompressor ***
-     */
-
-    class VideoCompressor extends AsyncTask<String, Void, StructCompress> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected StructCompress doInBackground(String... params) {
-            if (params[0] == null) { // if data is null
-                StructCompress structCompress = new StructCompress();
-                structCompress.compress = false;
-                return structCompress;
-            }
-            File file = new File(params[0]);
-            long originalSize = file.length();
-
-            StructCompress structCompress = new StructCompress();
-            structCompress.path = params[1];
-            structCompress.originalPath = params[0];
-            long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
-            try {
-                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
-
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-            structCompress.originalSize = originalSize;
-            return structCompress;
-        }
-
-        @Override
-        protected void onPostExecute(StructCompress structCompress) {
-            super.onPostExecute(structCompress);
-            if (structCompress.compress) {
-                compressedPath.put(structCompress.path, true);
-                for (StructUploadVideo structUploadVideo : structUploadVideos) {
-                    if (structUploadVideo != null && structUploadVideo.filePath.equals(structCompress.path)) {
-                        /**
-                         * update new info after compress file with notify item
-                         */
-
-                        long fileSize = new File(structUploadVideo.filePath).length();
-                        long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, structUploadVideo.filePath) / 1000;
-
-                        if (fileSize >= structCompress.originalSize) {
-                            structUploadVideo.filePath = structCompress.originalPath;
-                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, structCompress.originalSize);
-                        } else {
-                            RealmAttachment.updateFileSize(structUploadVideo.messageId, fileSize);
-                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
-                        }
-
-                        HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
-                            @Override
-                            public void OnProgress(int progress, FileUploadStructure struct) {
-                                if (canUpdateAfterDownload) {
-                                    insertItemAndUpdateAfterStartUpload(progress, struct);
-                                }
-                            }
-
-                            @Override
-                            public void OnError() {
-
-                            }
-                        });
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public void onLeftIconClickListener(View view) {
         if (webViewChatPage != null) {
@@ -9677,5 +9511,173 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onFourthRightIconClickListener(View view) {
 
+    }
+
+    /**
+     * *** SearchHash ***
+     */
+
+    private class SearchHash {
+
+        public String lastMessageId = "";
+        private String hashString = "";
+        private int currentHashPosition;
+
+        private ArrayList<String> hashList = new ArrayList<>();
+
+        void setHashString(String hashString) {
+            this.hashString = hashString.toLowerCase();
+        }
+
+        public void setPosition(String messageId) {
+
+            if (mAdapter == null) {
+                return;
+            }
+
+            if (lastMessageId.length() > 0) {
+                mAdapter.toggleSelection(lastMessageId, false, null);
+            }
+
+            currentHashPosition = 0;
+            hashList.clear();
+
+            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+                if (mAdapter.getItem(i).mMessage != null) {
+
+                    if (messageId.length() > 0) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                            currentHashPosition = hashList.size();
+                            lastMessageId = messageId;
+                            mAdapter.getItem(i).mMessage.isSelected = true;
+                            mAdapter.notifyItemChanged(i);
+                        }
+                    }
+
+                    String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
+
+                    if (mText.toLowerCase().contains(hashString)) {
+                        hashList.add(mAdapter.getItem(i).mMessage.messageID);
+                    }
+                }
+            }
+
+            if (messageId.length() == 0) {
+                txtHashCounter.setText(hashList.size() + " / " + hashList.size());
+
+                if (hashList.size() > 0) {
+                    currentHashPosition = hashList.size() - 1;
+                    goToSelectedPosition(hashList.get(currentHashPosition));
+                }
+            } else {
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
+            }
+        }
+
+        void downHash() {
+            if (currentHashPosition < hashList.size() - 1) {
+
+                currentHashPosition++;
+
+                goToSelectedPosition(hashList.get(currentHashPosition));
+
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
+            }
+        }
+
+        void upHash() {
+            if (currentHashPosition > 0) {
+
+                currentHashPosition--;
+
+                goToSelectedPosition(hashList.get(currentHashPosition));
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
+            }
+        }
+
+        private void goToSelectedPosition(String messageid) {
+
+            mAdapter.toggleSelection(lastMessageId, false, null);
+
+            lastMessageId = messageid;
+
+            mAdapter.toggleSelection(lastMessageId, true, recyclerView);
+        }
+    }
+
+    /**
+     * *** VideoCompressor ***
+     */
+
+    class VideoCompressor extends AsyncTask<String, Void, StructCompress> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected StructCompress doInBackground(String... params) {
+            if (params[0] == null) { // if data is null
+                StructCompress structCompress = new StructCompress();
+                structCompress.compress = false;
+                return structCompress;
+            }
+            File file = new File(params[0]);
+            long originalSize = file.length();
+
+            StructCompress structCompress = new StructCompress();
+            structCompress.path = params[1];
+            structCompress.originalPath = params[0];
+            long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
+            try {
+                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            structCompress.originalSize = originalSize;
+            return structCompress;
+        }
+
+        @Override
+        protected void onPostExecute(StructCompress structCompress) {
+            super.onPostExecute(structCompress);
+            if (structCompress.compress) {
+                compressedPath.put(structCompress.path, true);
+                for (StructUploadVideo structUploadVideo : structUploadVideos) {
+                    if (structUploadVideo != null && structUploadVideo.filePath.equals(structCompress.path)) {
+                        /**
+                         * update new info after compress file with notify item
+                         */
+
+                        long fileSize = new File(structUploadVideo.filePath).length();
+                        long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, structUploadVideo.filePath) / 1000;
+
+                        if (fileSize >= structCompress.originalSize) {
+                            structUploadVideo.filePath = structCompress.originalPath;
+                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, structCompress.originalSize);
+                        } else {
+                            RealmAttachment.updateFileSize(structUploadVideo.messageId, fileSize);
+                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
+                        }
+
+                        HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(int progress, FileUploadStructure struct) {
+                                if (canUpdateAfterDownload) {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                                }
+                            }
+
+                            @Override
+                            public void OnError() {
+
+                            }
+                        });
+                    }
+                }
+            }
+        }
     }
 }
