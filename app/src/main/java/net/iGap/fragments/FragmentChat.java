@@ -880,11 +880,11 @@ public class FragmentChat extends BaseFragment
                     new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
                 }
 
-                RealmRoom.setCount(mRoomId, 0);
                 //+final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
                 getRealmChat().executeTransactionAsync(new Realm.Transaction() {//ASYNC
                     @Override
                     public void execute(Realm realm) {
+                        RealmRoom.setCount(mRoomId, 0);
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
 
@@ -1096,8 +1096,15 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom.setCount(mRoomId, 0);
+            }
+        });
+        realm.close();
 
-        RealmRoom.setCount(mRoomId, 0);
     }
 
     @Override
