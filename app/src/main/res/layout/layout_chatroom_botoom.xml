@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?backgroundColorSettingTheme"
+    android:id="@+id/root_chatRoom_bottom_view"
     android:layout_width="match_parent"
     android:layout_height="45dp"
     android:clickable="true">
@@ -24,7 +26,8 @@
 
     <net.iGap.module.EmojiEditTextE
         android:id="@+id/et_chatRoom_writeMessage"
-        style="?emojiChat"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_4c"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

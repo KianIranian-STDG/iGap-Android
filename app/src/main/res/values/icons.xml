@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="md_check_symbol">\uf12c</string>
-    <string name="md_emoticon_with_happy_face">\,</string><!-- iGap_emoticon  -->
-    <string name="md_black_keyboard_with_white_keys">b</string> <!-- igap_keyboard  -->
-    <string name="md_send_button">Q</string>  <!-- igap_send  -->
+    <string name="md_emoticon_with_happy_face">,</string><!-- iGap_emoticon  -->
+    <string name="md_black_keyboard_with_white_keys">9</string> <!-- igap_keyboard  -->
+    <string name="md_send_button">\ý</string>  <!-- igap_send  -->
     <string name="md_attachment_clip">\o</string>  <!-- igap_attachment  -->
     <string name="md_bot">\uf757</string>
     <string name="md_voice_message_microphone_button">\F</string> <!-- igap_microphone  -->
@@ -18,7 +18,7 @@
     <string name="md_round_info_button">\uf2fd</string>  <!-- igap_information-outline  -->
     <string name="md_back_arrow">\uf141</string> <!-- igap_chevron-left  -->
     <string name="md_right_arrow">\uf142</string> <!-- igap_chevron-right  -->
-    <string name="md_crop_button">-</string>  <!-- igap_crop  -->
+    <string name="md_crop_button">r</string>  <!-- igap_crop  -->
     <string name="md_add_user_button">\uf014</string>  <!-- igap_account-plus  -->
     <string name="md_add_plus_button">\uf415</string>  <!-- igap_plus  -->
     <string name="md_user_account_box">\uf004</string>  <!-- igap_account  -->
@@ -49,7 +49,7 @@
     <string name="md_shuffle_mode">\uf49d</string> <!-- igap_shuffle  -->
     <string name="md_synchronization_arrows">\uf4e6</string> <!-- igap_sync  -->
     <string name="md_expand_arrow">\uf143</string>  <!-- igap_chevron-up  -->
-    <string name="md_downwards_arrow">_</string>  <!-- igap_chevron-down  -->
+    <string name="md_downwards_arrow">È</string>  <!-- igap_chevron-down  -->
     <string name="md_check_box">\uf132</string>  <!-- igap_checkbox-marked  -->
     <string name="md_rate_star">\uf4ce</string>  <!-- igap_star  -->
     <string name="md_muted">\uf581</string>  <!-- igap_volume-off  -->
@@ -137,7 +137,7 @@
     <string name="md_igap_account_alert">\uf005</string>
     <string name="md_igap_alert_box">\uf027</string>
     <string name="md_igap_chevron_double_up">\uf13f</string>
-    <string name="md_igap_tune">µ</string>
+    <string name="md_igap_tune">s</string>
     <string name="md_igap_credit_card">\uf19b</string>
     <string name="md_payment">\uf72c</string>
     <string name="md_barcode_scan">\uf072</string>
@@ -217,6 +217,7 @@
     <string name="speaker_off_icon">K</string>
     <string name="switch_camera_icon">Ã</string>
     <string name="end_voice_call_icon">Ý</string>
+    <string name="end_video_call_icon">Ê</string>
     <string name="play_icon">#</string>
     <string name="pause_icon">\?</string>
 </resources>

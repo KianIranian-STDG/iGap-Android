@@ -144,20 +144,36 @@
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/channelTypeTitle" />
 
-                <Switch
-                    android:id="@+id/signedMessage"
-                    style="?textTitleColorSettingTheme"
+                <RelativeLayout
+                    android:id="@+id/signedMessageLyt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:checked="@={viewModel.isSignedMessage}"
-                    android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}"
                     android:padding="8dp"
-                    android:text="@string/sign_message_title"
+                    android:onClick="@{()-> viewModel.onSignMessageClick()}"
+                    android:layout_marginTop="@dimen/dp8"
                     android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
-                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/channelType" />
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/channelType" >
+
+                    <TextView
+                        android:fontFamily="@font/main_font"
+                        android:id="@+id/signedMessageTxt"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sign_message_title" />
+
+                    <net.iGap.module.CustomToggleButton
+                        android:id="@+id/signedMessage"
+                        android:layout_width="@dimen/toggles_width"
+                        android:layout_height="@dimen/toggles_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="8dp"
+                        android:checked="@={viewModel.isSignedMessage}"
+                        android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}" />
+
+                </RelativeLayout>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/signedMessageDescription"
@@ -167,25 +183,45 @@
                     android:padding="8dp"
                     android:text="@string/sign_channel_message_description"
                     android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintLeft_toLeftOf="@id/signedMessage"
-                    app:layout_constraintTop_toBottomOf="@id/signedMessage"
+                    app:layout_constraintLeft_toLeftOf="@id/signedMessageLyt"
+                    app:layout_constraintTop_toBottomOf="@id/signedMessageLyt"
                     app:layout_constraintVertical_bias="0"
                     app:layout_constraintWidth_percent=".6" />
 
-                <Switch
-                    android:id="@+id/rateMessage"
-                    style="?textTitleColorSettingTheme"
+                <RelativeLayout
+                    android:id="@+id/rateMessageLyt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:checked="@={viewModel.isReactionMessage}"
-                    android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
-                    android:padding="8dp"
-                    android:text="@string/show_channel_vote"
+                    android:padding="@dimen/dp8"
+                    android:onClick="@{()-> viewModel.onReactionMessageClick()}"
                     android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE}"
                     app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/signedMessageDescription" />
+                    app:layout_constraintTop_toBottomOf="@id/signedMessageDescription" >
+
+                    <TextView
+                        android:id="@+id/rateMessageTxt"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:padding="8dp"
+                        android:text="@string/show_channel_vote"
+                        />
+
+                    <net.iGap.module.CustomToggleButton
+                        android:id="@+id/rateMessage"
+                        android:checked="@={viewModel.isReactionMessage}"
+                        android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
+                        android:layout_width="@dimen/toggles_width"
+                        android:layout_height="@dimen/toggles_height"
+                        android:layout_marginTop="8dp"
+                        android:enabled="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        />
+
+                </RelativeLayout>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/rateMessageDescription"
@@ -195,8 +231,8 @@
                     android:padding="8dp"
                     android:text="Add names of the admins to the messages they post."
                     android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintLeft_toLeftOf="@id/signedMessage"
-                    app:layout_constraintTop_toBottomOf="@id/rateMessage"
+                    app:layout_constraintLeft_toLeftOf="@id/signedMessageLyt"
+                    app:layout_constraintTop_toBottomOf="@id/rateMessageLyt"
                     app:layout_constraintVertical_bias="0"
                     app:layout_constraintWidth_percent=".6" />
 

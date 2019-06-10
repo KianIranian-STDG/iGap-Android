@@ -210,6 +210,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         if (isGoingfromApp) {
             isGoingfromApp = false;
         } else {
+            G.callStripLayoutVisiblityListener.setValue(false);
             G.isInCall = false;
             Intent intent = new Intent(this, ActivityMain.class);
             startActivity(intent);
@@ -218,6 +219,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         }
 
         G.isInCall = true;
+        G.callStripLayoutVisiblityListener.setValue(true);
 
         if (viewModel.isVideoCall()) {
             if (grantCameraAndVoicePermission()) {

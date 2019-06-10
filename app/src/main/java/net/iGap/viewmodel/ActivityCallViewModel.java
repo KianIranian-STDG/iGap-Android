@@ -111,7 +111,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
-                MusicPlayer.pauseSound();
+                MusicPlayer.stopSound();
                 MusicPlayer.pauseSoundFromIGapCall = true;
             }
         }
@@ -141,7 +141,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             initialVideoCallSurface.setValue(true);
             showImageBackground.set(View.VISIBLE);
-            endCallText.set(R.string.video_call_icon);
+            endCallText.set(R.string.end_video_call_icon);
             answerCallIcon.set(R.string.video_call_icon);
             G.videoCallListener = () -> G.handler.post(() -> showImageBackground.set(View.GONE));
         } else {
@@ -476,6 +476,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     private void endCall() {
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
@@ -484,6 +485,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     private void endVoiceAndFinish() {
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         playRingTone.setValue(false);
         if (ActivityCall.onFinishActivity != null) {
             ActivityCall.onFinishActivity.finishActivity();
@@ -496,7 +498,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         }
         if (MusicPlayer.pauseSoundFromIGapCall) {
             MusicPlayer.pauseSoundFromIGapCall = false;
-            MusicPlayer.playSound();
+           // MusicPlayer.playSound();
         }
         //todo: fixed this static view
         txtTimeChat = txtTimerMain = null;
@@ -609,6 +611,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public void leaveCall() {
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         if (isIncomingCall) {
             WebRTC.getInstance().leaveCall();
         }
@@ -618,6 +621,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public void onDestroy() {
         G.isInCall = false;
+        G.callStripLayoutVisiblityListener.setValue(false);
         G.iSignalingCallBack = null;
         G.onCallLeaveView = null;
         setSpeakerphoneOn(false);

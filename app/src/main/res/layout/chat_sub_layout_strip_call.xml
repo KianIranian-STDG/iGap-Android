@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#fec107"
   android:clickable="true"
   android:layoutDirection="locale"
   android:orientation="horizontal"
@@ -15,8 +14,9 @@
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:padding="@dimen/dp4"
+      android:layout_marginLeft="@dimen/dp10"
     android:text="@string/tab_to_return_to_call"
-    android:textColor="@color/black90"
+    android:textColor="@color/toolbar_player_base_color"
     android:textSize="@dimen/dp14" />
 
 
@@ -25,7 +25,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="@dimen/dp4"
-    android:text="00:00"
-    android:textColor="@color/black90"
+      android:layout_marginRight="@dimen/dp10"
+    android:text=""
+    android:textColor="@color/toolbar_player_base_color"
     android:textSize="@dimen/dp14" />
 </LinearLayout>

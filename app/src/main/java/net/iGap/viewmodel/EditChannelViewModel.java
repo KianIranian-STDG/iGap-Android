@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -63,6 +64,8 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public MutableLiveData<Boolean> showConvertChannelDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDeleteChannelDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    public MutableLiveData<Boolean> onSignClickListener = new MutableLiveData<>();
+    public MutableLiveData<Boolean> onReactionMessageClickListener = new MutableLiveData<>();
 
     public long roomId;
     private boolean isPrivate;
@@ -151,6 +154,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         channelName.setValue(realmRoom.getTitle());
         linkUsername = realmChannelRoom.getUsername();
         inviteLink = realmChannelRoom.getInviteLink();
+
         /*isVerifiedChannel.setValue(realmChannelRoom.isVerified());*/
         /*if (isPrivate) {
             channelLink.setValue(realmChannelRoom.getInviteLink());
@@ -249,6 +253,10 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         }
     }
 
+    public void onSignMessageClick(){
+        onSignClickListener.postValue(true);
+    }
+
     public void onChannelTypeClick() {
         showConvertChannelDialog.setValue(isPrivate);
     }
@@ -264,14 +272,17 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         }
     }
 
+    public void onReactionMessageClick(){
+        onReactionMessageClickListener.postValue(true);
+    }
+
     public void onReactionMessageCheckedChange(boolean state) {
-        Log.wtf("viewModel", "value of state: " + state);
         if (state != isReactionMessage.getValue()) {
-            if (state) {
-                new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, false);
-            } else {
-                new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, true);
-            }
+            //if (state) {
+                new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, state);
+           // } else {
+             //   new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, false);
+            //}
             isShowLoading.setValue(true);
         }
     }

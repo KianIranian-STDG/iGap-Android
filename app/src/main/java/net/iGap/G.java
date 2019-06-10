@@ -180,6 +180,7 @@ public class G extends MultiDexApplication {
     public static boolean showSenderNameInGroup = false;
     public static boolean needGetSignalingConfiguration = true;
     public static boolean isInCall = false;
+    public static MutableLiveData<Boolean> callStripLayoutVisiblityListener = new MutableLiveData<>();
     public static boolean isShowRatingDialog = false;
     public static boolean isUpdateNotificaionColorMain = false;
     public static boolean isUpdateNotificaionColorChannel = false;
@@ -376,7 +377,7 @@ public class G extends MultiDexApplication {
     public static OnPayment onPayment;
     public static OnMplResult onMplResult;
     public static OnVersionCallBack onVersionCallBack;
-    public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;
+    /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;

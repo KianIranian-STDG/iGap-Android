@@ -50,38 +50,27 @@ public class UserContactsGetListResponse extends MessageHandler {
         if (HelperTimeOut.timeoutChecking(0, getListTime, 0)) {//Config.GET_CONTACT_LIST_TIME_OUT
             getListTime = System.currentTimeMillis();
 
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
+            final Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.delete(RealmContacts.class);
+
+                    for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
+                        RealmRegisteredInfo.putOrUpdate(realm, registerUser);
+                        RealmContacts.putOrUpdate(realm, registerUser);
+                    }
+                }
+            });
+            realm.close();
+
+            G.refreshRealmUi();
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    final Realm realm = Realm.getDefaultInstance();
-
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-
-                            realm.delete(RealmContacts.class);
-
-                            for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                                RealmRegisteredInfo.putOrUpdate(realm, registerUser);
-                                RealmContacts.putOrUpdate(realm, registerUser);
-                            }
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-
-                            if (G.onContactsGetList != null) {
-                                G.onContactsGetList.onContactsGetList();
-                            }
-
-                            realm.close();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            realm.close();
-                        }
-                    });
+                    if (G.onContactsGetList != null) {
+                        G.onContactsGetList.onContactsGetList();
+                    }
                 }
             });
         }
