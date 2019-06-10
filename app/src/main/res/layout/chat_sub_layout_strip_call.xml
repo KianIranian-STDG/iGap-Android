@@ -24,7 +24,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="@dimen/dp4"
-    android:text="00:00"
+    android:text=""
     android:textColor="@color/toolbar_player_base_color"
     android:textSize="@dimen/dp14" />
 </LinearLayout>
