@@ -142,6 +142,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     private View view;
     private boolean isInit = false;
+    private LinearLayout layoutAppBarContainer;
 
     public static RegisteredContactsFragment newInstance(boolean isBackSwipable) {
         RegisteredContactsFragment registeredContactsFragment = new RegisteredContactsFragment();
@@ -563,6 +564,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
+        layoutAppBarContainer = view.findViewById(R.id.fc_layout_appbar_container);
+
         mBtnCancelSelected.setOnClickListener(v -> {
             setPageShowingMode(mPageMode);
             mActionMode = null;
@@ -575,6 +578,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     }
 
     private void setPageShowingMode(int mode) {
+
+        //set once when mode changes between contact and multi select first set in all mode then if
+        //that was multi select remove it and show at top in selected mode
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) layoutAppBarContainer.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+        layoutAppBarContainer.setLayoutParams(params);
 
         if (mode == 0 || mode == 1) { //contact mode
 
@@ -620,6 +630,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             btnDialNumber.setVisibility(View.GONE);
             mLayoutMultiSelected.setVisibility(View.VISIBLE);
 
+            //remove snap mode from multi select and always show layout at top 
+            params.setScrollFlags(0);
+            layoutAppBarContainer.setLayoutParams(params);
         }
     }
 

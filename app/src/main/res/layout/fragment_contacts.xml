@@ -27,6 +27,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat">
 
             <LinearLayout
+                android:id="@+id/fc_layout_appbar_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
