@@ -155,7 +155,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         linkUsername = realmChannelRoom.getUsername();
         inviteLink = realmChannelRoom.getInviteLink();
 
-        Toast.makeText(G.context, "" + isReactionMessage.getValue(), Toast.LENGTH_SHORT).show();
         /*isVerifiedChannel.setValue(realmChannelRoom.isVerified());*/
         /*if (isPrivate) {
             channelLink.setValue(realmChannelRoom.getInviteLink());
@@ -278,7 +277,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     }
 
     public void onReactionMessageCheckedChange(boolean state) {
-        Toast.makeText(G.context, "ddd" + state, Toast.LENGTH_SHORT).show();
         if (state != isReactionMessage.getValue()) {
             //if (state) {
                 new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, state);
