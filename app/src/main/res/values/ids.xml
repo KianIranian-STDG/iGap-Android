@@ -123,6 +123,7 @@
     <item name="ll_chatItem_contentDetailBloke" type="id" />
     <item name="tv_chatItem_time" type="id" />
     <item name="tv_chatItem_signature" type="id" />
+    <item name="ll_chatItem_detailContainer" type="id" />
 
     <!--music item-->
     <item name="iv_musicItem_cover" type="id" />

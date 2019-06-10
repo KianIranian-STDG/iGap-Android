@@ -448,10 +448,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * check failed state ,because if is failed we want show to user even is in channel
              */
             if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status)) {
-                mHolder.getTicTv().setVisibility(View.GONE);
+                mHolder.getMessageStatusTv().setVisibility(View.GONE);
             } else {
-                mHolder.getTicTv().setVisibility(View.VISIBLE);
-                AppUtils.rightMessageStatus(mHolder.getTicTv(), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
+                mHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
+                AppUtils.rightMessageStatus(mHolder.getMessageStatusTv(), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
             }
         }
         /**
@@ -509,9 +509,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         String time = HelperCalander.getClocktime(mMessage.time, false);
         if (HelperCalander.isPersianUnicode) {
-            mHolder.getTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(time));
+            mHolder.getMessageTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(time));
         } else {
-            mHolder.getTimeTv().setText(time);
+            mHolder.getMessageTimeTv().setText(time);
         }
 
         prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
@@ -719,23 +719,39 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
-        NewChatItemHolder mHolder;
+        NewChatItemHolder viewHolder;
         if (holder instanceof NewChatItemHolder)
-            mHolder = (NewChatItemHolder) holder;
+            viewHolder = (NewChatItemHolder) holder;
         else
             return;
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.receive_message_text_dark));
         }
 
 
         if (G.isDarkTheme) {
-            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.white));
-            ((mHolder.getChatBloke())).setBackgroundResource(R.drawable.rectangel_white_round_dark);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.shape_message_receive_dark);
+            setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getVoteUpIv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getVoteDownTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
+            setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
         } else {
-            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.colorOldBlack));
-            ((mHolder.getChatBloke())).setBackgroundResource(R.drawable.rectangel_white_round);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.shape_message_receive_light);
+            setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getVoteUpIv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getVoteDownTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
+            setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
         }
 
         /**
@@ -743,27 +759,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set to getItemContainer() not itemView because of selecting item foreground
          */
 
-        GradientDrawable circleDarkColor = (GradientDrawable) ((View) mHolder.getContentBloke().getParent()).getBackground();
-        circleDarkColor.setColor(Color.parseColor(G.bubbleChatReceive));
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
 
-        ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
-
-        ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
-        ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
 
     }
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
-        NewChatItemHolder mHolder;
+        NewChatItemHolder viewHolder;
         if (holder instanceof NewChatItemHolder)
-            mHolder = (NewChatItemHolder) holder;
+            viewHolder = (NewChatItemHolder) holder;
         else
             return;
-        ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).gravity = Gravity.RIGHT;
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.RIGHT;
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.send_message_text_dark));
         }
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
@@ -776,30 +789,34 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
-            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.read_status));
 
         } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
             if (G.isDarkTheme) {
-                mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.iGapColor));
+                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.iGapColor));
             } else {
-                mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.backgroundColorCall2));
+                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.backgroundColorCall2));
             }
-            mHolder.getTicTv().setVisibility(View.VISIBLE);
+            viewHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
         } else {
-            mHolder.getTicTv().setTextColor(mHolder.getColor(R.color.unread_status));
+            viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.unread_status));
         }
 
 
         if (G.isDarkTheme) {
-            ((View) (mHolder.getContentBloke()).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
+            setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
+            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
         } else {
-            ((View) (mHolder.getContentBloke()).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.rectangle_send_round_color);
+            setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
+            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_light));
         }
-        GradientDrawable circleDarkColor = (GradientDrawable) ((View) mHolder.getContentBloke().getParent()).getBackground();
-        circleDarkColor.setColor(Color.parseColor(G.bubbleChatSend));
-        ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
-        ((FrameLayout.LayoutParams) mHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
+    }
 
+    private void setThemeColor(TextView textView, int themeColor) {
+        textView.setTextColor(themeColor);
     }
 
     @CallSuper
@@ -827,8 +844,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             final View replayView = ViewMaker.getViewReplay();
 
             if (replayView != null) {
-                final TextView replyFrom =  replayView.findViewById(R.id.chslr_txt_replay_from);
-                final EmojiTextViewE replayMessage =  replayView.findViewById(R.id.chslr_txt_replay_message);
+                final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
+                final EmojiTextViewE replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(v -> {
                     if (FragmentChat.isInSelectionMode) {
                         holder.itemView.performLongClick();

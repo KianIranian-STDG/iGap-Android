@@ -2265,6 +2265,7 @@ public class FragmentChat extends BaseFragment
         recyclerView = rootView.findViewById(R.id.chl_recycler_view_chat);
 
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        Log.i("backGround", "pageSettings: "+backGroundPath);
         if (backGroundPath.length() > 0) {
             imgBackGround = rootView.findViewById(R.id.chl_img_view_chat);
             if (G.themeColor == Theme.DARK) {

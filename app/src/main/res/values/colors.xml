@@ -242,4 +242,16 @@
     <color name="not_now_button_selected">#a12c23</color>
     <color name="toolbar_player_base_color">#468DA7</color>
     <color name="toolbar_player_background">#EFEFEF</color>
+
+    <color name="send_message_time_dark">#777777</color>
+    <color name="receive_message_time_dark">#848484</color>
+    <color name="send_message_text_dark">#939696</color>
+    <color name="receive_message_text_dark">#afafaf</color>
+
+    <color name="send_message_time_light">#AAAAAA</color>
+    <color name="receive_message_time_light">#AAAAAA</color>
+    <color name="send_message_text_light">#7B7B7B</color>
+    <color name="receive_message_text_light">#AAAAAA</color>
+
+
 </resources>
