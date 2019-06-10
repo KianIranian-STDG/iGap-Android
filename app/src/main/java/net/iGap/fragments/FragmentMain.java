@@ -925,10 +925,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                     mBtnRemoveSelected.setVisibility(View.VISIBLE);
                 } else {
                     mBtnRemoveSelected.setVisibility(View.GONE);
+                    break;
                 }
 
             } else {
                 mBtnRemoveSelected.setVisibility(View.GONE);
+                break;
             }
 
         }
