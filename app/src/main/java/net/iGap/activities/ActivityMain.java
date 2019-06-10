@@ -834,7 +834,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void showToast(View view) {
-        Toast.makeText(ActivityMain.this, "نسخه نصب شده مناسب گوشی شما نیست!!", Toast.LENGTH_LONG).show();
+        Toast.makeText(ActivityMain.this, "نسخه نصب شده مناسب گوشی شما نیست!! \nلطفا از مارکت های معتبر دانلود کنید.", Toast.LENGTH_LONG).show();
         view.postDelayed(new Runnable() {
             @Override
             public void run() {
