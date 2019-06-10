@@ -266,8 +266,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             txt_music_name.setText(MusicPlayer.musicName);
             txt_music_info.setText(MusicPlayer.musicInfoTitle);
 
-            txt_music_time.setText(musicTime);
-
+            if (isVoice) {
+                txt_music_info.setVisibility(View.GONE);
+            }else {
+                txt_music_info.setVisibility(View.VISIBLE);
+                txt_music_time.setText(musicTime);
+            }
             if (MusicPlayer.mp.isPlaying()) {
                 btnPlayMusic.setText(context.getString(R.string.pause_icon));
             } else {
@@ -805,8 +809,13 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             txt_music_time.setText(musicTime);
             btnPlayMusic.setText(context.getString(R.string.pause_icon));
             txt_music_name.setText(musicName);
-            txt_music_info.setText(musicInfoTitle);
 
+            if (isVoice) {
+                txt_music_info.setVisibility(View.GONE);
+            }else {
+                txt_music_info.setVisibility(View.VISIBLE);
+                txt_music_info.setText(musicInfoTitle);
+            }
             updateName = new UpdateName() {
                 @Override
                 public void rename() {
