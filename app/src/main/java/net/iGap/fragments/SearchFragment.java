@@ -146,9 +146,9 @@ public class SearchFragment extends BaseFragment {
                 fillList(editable.toString());
             }
         });
-        edtSearch.requestFocus();
+       /* edtSearch.requestFocus();
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+        imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);*/
 
 
         btnClose = view.findViewById(R.id.sfl_btn_close);
