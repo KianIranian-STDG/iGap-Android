@@ -250,8 +250,8 @@
 
     <color name="send_message_time_light">#AAAAAA</color>
     <color name="receive_message_time_light">#AAAAAA</color>
-    <color name="send_message_text_light">#7B7B7B</color>
-    <color name="receive_message_text_light">#AAAAAA</color>
+    <color name="send_message_text_light">#5F5F5F</color>
+    <color name="receive_message_text_light">#5F5F5F</color>
 
 
 </resources>

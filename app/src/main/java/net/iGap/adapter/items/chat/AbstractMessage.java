@@ -726,7 +726,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.receive_message_text_dark));
+            if (G.isDarkTheme)
+                ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.receive_message_text_dark));
+            else
+                ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.receive_message_text_light));
         }
 
 
@@ -775,9 +778,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.RIGHT;
 
+
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.send_message_text_dark));
+            if (G.isDarkTheme)
+                ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.receive_message_text_dark));
+            else
+                ((ChatItemWithTextHolder) holder).messageView.setTextColor(G.context.getResources().getColor(R.color.receive_message_text_light));
         }
+
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
         if (mMessage.status != null) {
