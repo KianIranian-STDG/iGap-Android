@@ -1884,7 +1884,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         getIntent().setData(null);
         setDrawerInfo(false);
 
-        ActivityMain.setMediaLayout();
+        //ActivityMain.setMediaLayout();
 
         if (G.isPassCode) {
             iconLock.setVisibility(View.VISIBLE);

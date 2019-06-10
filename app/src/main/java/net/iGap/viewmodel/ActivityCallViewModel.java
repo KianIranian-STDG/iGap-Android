@@ -111,7 +111,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
-                MusicPlayer.pauseSound();
+                MusicPlayer.stopSound();
                 MusicPlayer.pauseSoundFromIGapCall = true;
             }
         }
@@ -498,7 +498,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         }
         if (MusicPlayer.pauseSoundFromIGapCall) {
             MusicPlayer.pauseSoundFromIGapCall = false;
-            MusicPlayer.playSound();
+           // MusicPlayer.playSound();
         }
         //todo: fixed this static view
         txtTimeChat = txtTimerMain = null;
