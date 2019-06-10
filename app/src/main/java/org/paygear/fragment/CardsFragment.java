@@ -37,6 +37,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
@@ -221,6 +222,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         mBinding.settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RaadApp.selectedMerchant = null;
                 if (getActivity() instanceof NavigationBarActivity) {
                     ((NavigationBarActivity) getActivity()).pushFullFragment(
                             FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
@@ -531,9 +533,9 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                 if (success) {
                     RaadApp.me = response.body();
                     try {
-                        SettingHelper.PrefsSave(getContext().getApplicationContext(), SettingHelper.USER_ACCOUNT, RaadApp.me);
+                        SettingHelper.PrefsSave(G.context, SettingHelper.USER_ACCOUNT, RaadApp.me);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
                     updateAppBar();
                 }
@@ -1011,7 +1013,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
 
     @Override
     public void merchantItemClick(SearchedAccount data, int position) {
-        if (position == 0) {
+        if (position == 1) {
             selectedMerchant = null;
             RaadApp.selectedMerchant = null;
             expandableLayout.collapse();

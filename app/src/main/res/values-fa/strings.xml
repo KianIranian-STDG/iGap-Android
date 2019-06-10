@@ -1753,6 +1753,9 @@
     <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
 
 
+    <string name="personalAccountType">شخصی</string>
+    <string name="taxiAccountType">راننده</string>
+    <string name="shopAccountType">فروشگاه</string>
 
     <string name="default_sheba_number">شماره شبا پیش فرض</string>
     <string name="default_sheba_number_message">آیا مایل به ذخیره این شماره به عنوان شماره شبای پیش فرض خود هستید؟\n دقت کنید! در صورت انتخاب پیشفرض از این پس تمام برداشت های عادی اتوماتیک با شماره شبا پیشفرض انجام می شود.</string>

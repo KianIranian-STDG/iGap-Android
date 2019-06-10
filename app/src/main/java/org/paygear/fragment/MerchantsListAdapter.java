@@ -3,14 +3,20 @@ package org.paygear.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.MerchantsListItemBinding;
 
 import org.paygear.RaadApp;
@@ -21,15 +27,39 @@ import java.util.ArrayList;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.widget.CircleImageTransform;
 
-public class MerchantsListAdapter extends RecyclerView.Adapter<MerchantsListAdapter.ViewHolder> {
-    private ArrayList<SearchedAccount> Data;
+public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private ArrayList<Object> Data;
     private Context _Context;
     private String userID;
     private MerchantsListAdapter.ItemClickListener clickListener;
 
 
     public MerchantsListAdapter(Context c, ArrayList<SearchedAccount> Data, String userID) {
-        this.Data = Data;
+        this.Data = new ArrayList<>();
+        this.Data.add(c.getResources().getString(R.string.personalAccountType));
+
+        ArrayList<SearchedAccount> shops = new ArrayList<>();
+        ArrayList<SearchedAccount> taxis = new ArrayList<>();
+
+        for (SearchedAccount searchedAccount: Data) {
+            if (searchedAccount.getAccount_type() != 4) {
+                if (searchedAccount.getBusiness_type()==2){
+                    taxis.add(searchedAccount);
+                } else {
+                    shops.add(searchedAccount);
+                }
+            } else {
+                this.Data.add(searchedAccount);
+            }
+        }
+        if (shops.size() > 0) {
+            this.Data.add(c.getResources().getString(R.string.shopAccountType));
+        }
+        this.Data.addAll(shops);
+        if (taxis.size() > 0) {
+            this.Data.add(c.getResources().getString(R.string.taxiAccountType));
+        }
+        this.Data.addAll(taxis);
         _Context = c;
         this.userID = userID;
     }
@@ -44,15 +74,29 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<MerchantsListAdap
     }
 
     @Override
-    public MerchantsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.merchants_list_item, parent, false);
-        return new MerchantsListAdapter.ViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == 1) {
+            AppCompatTextView textView = new AppCompatTextView(parent.getContext());
+            textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
+            textView.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+            textView.setTypeface(G.typeface_IRANSansMobile);
+            textView.setGravity(Gravity.START);
+
+            return new ViewHolderTitle(textView);
+        } else {
+            return new MerchantsListAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.merchants_list_item, parent, false));
+        }
     }
 
     @Override
-    public void onBindViewHolder(MerchantsListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (Data != null) {
-            holder.Load(Data.get(position), position);
+            if (holder instanceof ViewHolderTitle) {
+                ((ViewHolderTitle) holder).Load((String) this.Data.get(position), position);
+            } else {
+                ((MerchantsListAdapter.ViewHolder) holder).Load((SearchedAccount) Data.get(position), position);
+            }
         }
     }
 
@@ -61,6 +105,25 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<MerchantsListAdap
         return (Data == null) ? 0 : Data.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (this.Data.get(position) instanceof String) {
+            return 1;
+        }
+        return 2;
+    }
+
+    class ViewHolderTitle extends RecyclerView.ViewHolder {
+        TextView title;
+        public ViewHolderTitle(TextView view) {
+            super(view);
+            this.title = view;
+        }
+
+        void Load(String title, final int position) {
+            this.title.setText(title);
+        }
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         MerchantsListItemBinding mBinding;

@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -270,6 +271,26 @@ public class Utils {
 //        Intent i = new Intent(act, LoginActivity.class);
 //        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //        act.startActivity(i);
+    }
+
+    public static void signOutWallet() {
+        RaadApp.paygearCard = null;
+        RaadApp.cards = null;
+        RaadApp.me = null;
+
+        SettingHelper.PrefsSave(G.context,SettingHelper.USER_ACCOUNT,null);
+
+        SettingHelper.remove(G.context, SettingHelper.LOGIN_STEP);
+        SettingHelper.remove(G.context, SettingHelper.SCANNER_TIPS);
+        SettingHelper.remove(G.context, SettingHelper.DEVICE_TOKEN);
+        SettingHelper.remove(G.context, SettingHelper.TOKEN_SENT_TO_SERVER);
+
+        SettingHelper.remove(G.context, "service_token");
+
+        SettingHelper.remove(G.context, SettingHelper.USER_ACCOUNT);
+
+        Auth.release();
+        Web.getInstance().release();
     }
 
     public static void deleteAllUserData(Activity activity) {
