@@ -211,6 +211,15 @@ public class EditChannelFragment extends BaseFragment {
             }
         });
         onBackFragment = this::popBackStackFragment;
+
+        viewModel.onSignClickListener.observe(this , isClicked -> {
+            binding.signedMessage.setChecked(!binding.signedMessage.isChecked());
+        });
+
+        viewModel.onReactionMessageClickListener.observe(this , isClicked -> {
+            binding.rateMessage.setChecked(!binding.rateMessage.isChecked());
+        });
+
     }
 
     @Override
