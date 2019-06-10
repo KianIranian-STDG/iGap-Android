@@ -967,7 +967,7 @@ public class FragmentChat extends BaseFragment
                 try{
                     mHelperToolbar.checkIsAvailableOnGoingCall();
                 }catch (Exception e){
-                    e.printStackTrace()
+                    e.printStackTrace();
                 }
 
                 if (!G.twoPaneMode) {
