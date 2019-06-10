@@ -137,6 +137,7 @@ public class EditChannelFragment extends BaseFragment {
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
+                .setDefaultTitle(getContext().getResources().getString(R.string.tab_edit))
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)
                 .setListener(new ToolbarListener() {
@@ -152,7 +153,7 @@ public class EditChannelFragment extends BaseFragment {
                     }
                 });
         binding.toolbar.addView(mHelperToolbar.getView());
-        mHelperToolbar.getTextViewLogo().setText(R.string.tab_edit);
+
 
         viewModel.goToMembersPage.observe(this, b -> {
             if (b != null && b) {
