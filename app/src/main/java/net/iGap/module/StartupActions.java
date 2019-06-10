@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.downloader.PRDownloader;
 import com.downloader.PRDownloaderConfig;
@@ -587,7 +588,18 @@ public final class StartupActions {
         /**
          * before call RealmConfiguration client need to Realm.init(context);
          */
-        Realm.init(context);
+
+        try {
+            Realm.init(context);
+        } catch (Exception e) {
+            HelperLog.setErrorLog(e);
+            Toast.makeText(context, "نسخه نصب شده مناسب گوشی شما نیست!!", Toast.LENGTH_LONG).show();
+            throw e;
+        } catch (Error e) {
+            HelperLog.setErrorLog(new Exception(e.getMessage()));
+            Toast.makeText(context, "نسخه نصب شده مناسب گوشی شما نیست!!", Toast.LENGTH_LONG).show();
+            throw e;
+        }
 
         //  new SecureRandom().nextBytes(key);
 
