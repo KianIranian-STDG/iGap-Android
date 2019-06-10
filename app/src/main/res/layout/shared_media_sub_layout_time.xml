@@ -4,7 +4,6 @@
   android:layout_height="match_parent"
   android:clickable="true"
     android:layout_marginTop="@dimen/dp1"
-  style="?backgroundColorSettingTheme_2"
   android:orientation="vertical">
 
 
@@ -19,7 +18,7 @@
       android:textStyle="bold"
       android:visibility="gone"
       android:text="Images"
-      style="?textSubColorSettingTheme"
+      style="?textTitleColorSettingTheme"
       android:textSize="@dimen/dp20" />
 
   <View
@@ -31,7 +30,7 @@
       android:layout_marginBottom="@dimen/dp4"
       android:visibility="gone"
       android:layout_marginTop="@dimen/dp10"
-      android:background="@color/gray_3c"/>
+      style="?lineColorSettingTheme"/>
 
   <TextView
     android:id="@+id/smslt_txt_time"

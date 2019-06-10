@@ -1130,6 +1130,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     holder1.txtHeader.setText(context.getString(R.string.images));
                     holder1.txtHeader.setVisibility(View.VISIBLE);
                     holder1.vSplitter.setVisibility(View.VISIBLE);
+
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder1.txtHeader.getLayoutParams();
+                    lp.setMargins(getDimen(R.dimen.dp4) , getDimen(R.dimen.dp20) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp4) );
+                    holder1.txtHeader.setLayoutParams(lp);
+                }else if (position == 0 && mCurrentSharedMediaType != 1){
+
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder1.txtTime.getLayoutParams();
+                    lp.setMargins(getDimen(R.dimen.dp4) , getDimen(R.dimen.dp24) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp4) );
+                    holder1.txtTime.setLayoutParams(lp);
                 }
 
                 //convert numbers to persian if language was
@@ -1148,11 +1157,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             }
         }
 
+        private int getDimen(int id) {
+            return (int) context.getResources().getDimension(id);
+        }
+
         public View setLayoutHeaderTime(View parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
             RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(lp);
-            view.setBackgroundColor(Color.parseColor(G.appBarColor));
+           // view.setBackgroundColor(Color.parseColor(G.appBarColor));
             return view;
         }
 
