@@ -84,45 +84,46 @@ public class FragmentNotificationAndSound extends BaseFragment {
         fragmentNotificationAndSoundBinding.stLayoutResetAllNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                if (getActivity()!=null){
+                    sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                    new MaterialDialog.Builder(getActivity()).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0);
+                            editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
+                            editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
+                            editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+                            editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0);
+                            editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
+                            editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
+                            editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+                            editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND_NEW, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE_NEW, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW_NEW, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND_NEW, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
+                            editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
+                            editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.fragmentActivity.getResources().getString(R.string.array_1_hour));
+                            editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                            editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                            editor.apply();
+                            Toast.makeText(getActivity(), R.string.st_reset_all_notification, Toast.LENGTH_SHORT).show();
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
-                        editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
-                        editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
-                        editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
-                        editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND_NEW, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE_NEW, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW_NEW, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND_NEW, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
-                        editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
-                        editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.fragmentActivity.getResources().getString(R.string.array_1_hour));
-                        editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
-                        editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
-                        editor.apply();
-                        Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
-
-                        removeFromBaseFragment(FragmentNotificationAndSound.this);
-                        new HelperFragment(new FragmentNotificationAndSound()).setReplace(false).load();
-                    }
-                }).show();
+                            removeFromBaseFragment(FragmentNotificationAndSound.this);
+                            new HelperFragment(getActivity().getSupportFragmentManager(),new FragmentNotificationAndSound()).setReplace(false).load();
+                        }
+                    }).show();
+                }
             }
         });
     }

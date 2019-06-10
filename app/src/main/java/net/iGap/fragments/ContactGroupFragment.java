@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -64,7 +64,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ContactGroupFragment extends BaseFragment implements OnContactsGetList , ToolbarListener {
+public class ContactGroupFragment extends BaseFragment implements OnContactsGetList, ToolbarListener {
     private static ProtoGlobal.Room.Type type;
     ItemAdapter itemAdapter;
     private FastAdapter fastAdapter;
@@ -170,7 +170,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
                     selectedContacts.add(item.mContact);
 
-                  Uri uri = null;
+                    Uri uri = null;
                     if (item.mContact.avatar != null && item.mContact.avatar.getFile() != null && item.mContact.avatar.getFile().getLocalThumbnailPath() != null) {
                         uri = Uri.fromFile(new File(item.mContact.avatar.getFile().getLocalThumbnailPath()));
                     }
@@ -184,7 +184,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 }
 
 
-                    if (isRemove) {
+                if (isRemove) {
                     notifyAdapter(item, position);
                 }
 
@@ -214,7 +214,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
                 isRemove = false;
 
-                StructContactInfo contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact ;
+                StructContactInfo contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact;
                 selectedContacts.remove(contactInfo);
             }
 
@@ -243,10 +243,10 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             @Override
             public void onRemoved(StructContactInfo item) {
 
-                try{
+                try {
                     chipsInput.removeChipByLabel(item.displayName);
                     selectedContacts.remove(item);
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
 
@@ -293,9 +293,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId);
         RealmRoom.updateMemberCount(roomId, roomType, countMember + 1); // plus with 1 , for own account
-        if (isAdded()) {
+        if (getActivity()!=null&&isAdded()) {
             removeFromBaseFragment(ContactGroupFragment.this);
-            new GoToChatActivity(roomId).startActivity();
+            new GoToChatActivity(roomId).startActivity(getActivity());
         }
     }
 
@@ -422,20 +422,20 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             } else {
                 if (isAdded()) {
                     removeFromBaseFragment(ContactGroupFragment.this);
-                    new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
+                    new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity(getActivity());
                 }
             }
         } else if (typeCreate.equals("GROUP")) { // addMemberGroup
 
-            if (roomId == -127){
-
-                //setupSelectedList();
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle_ = new Bundle();
-                bundle_.putString("TYPE", "NewGroup");
-                fragment.setArguments(bundle_);
-                new HelperFragment(fragment).setReplace(false).load(true);
-                return;
+            if (roomId == -127) {
+                if (getActivity() != null) {
+                    FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                    Bundle bundle_ = new Bundle();
+                    bundle_.putString("TYPE", "NewGroup");
+                    fragment.setArguments(bundle_);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load(true);
+                    return;
+                }
             }
 
             G.onGroupAddMember = new OnGroupAddMember() {
@@ -469,9 +469,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 }
             } else {
 
-                if (isAdded()) {
+                if (getActivity()!=null&&isAdded()) {
                     removeFromBaseFragment(ContactGroupFragment.this);
-                    new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
+                    new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity(getActivity());
                 }
 
             }

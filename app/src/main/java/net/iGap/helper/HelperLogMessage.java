@@ -428,8 +428,8 @@ public class HelperLogMessage {
             bundle.putLong("RoomId", realmRoom.getId());
             bundle.putString("enterFrom", "GROUP");
             contactsProfile.setArguments(bundle);
-
-            new HelperFragment(contactsProfile).setReplace(false).load();
+            //ToDo:fixed it and change to do not use G.currentActivity
+            new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
 
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -444,7 +444,8 @@ public class HelperLogMessage {
                             bundle.putLong("RoomId", room.getId());
                             bundle.putString("enterFrom", "GROUP");
                             contactsProfile.setArguments(bundle);
-                            new HelperFragment(contactsProfile).setReplace(false).load();
+                            //ToDo:fixed it and change to do not use G.currentActivity
+                            new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
                             G.onChatGetRoom = null;
                         }
                     });
@@ -470,8 +471,9 @@ public class HelperLogMessage {
     private static void goToRoom(Long roomId) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        //ToDo:fixed it and change to do not use G.currentActivity
         if (realmRoom != null) {
-            new GoToChatActivity(realmRoom.getId()).startActivity();
+            new GoToChatActivity(realmRoom.getId()).startActivity(G.currentActivity);
         } else {
             RealmRoom.needUpdateRoomInfo(roomId);
         }

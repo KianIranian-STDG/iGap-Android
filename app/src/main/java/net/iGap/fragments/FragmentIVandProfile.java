@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import net.iGap.databinding.FragmentIvandProfileBinding;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
@@ -43,6 +44,12 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
         binding.setViewModel(viewModel);
         profileImage = binding.ivIvandProfile;
         titleTextView.setText(getString(R.string.ivand_profile_title));
+
+        viewModel.goToIVandPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentIVandActivities.newInstance()).setReplace(false).load();
+            }
+        });
 
     }
 

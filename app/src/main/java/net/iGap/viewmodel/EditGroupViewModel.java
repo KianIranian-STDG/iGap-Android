@@ -2,6 +2,8 @@ package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.text.SpannableStringBuilder;
 import android.view.WindowManager;
 
@@ -43,13 +45,13 @@ public class EditGroupViewModel extends ViewModel {
 
     //update ui data
     public MutableLiveData<BindingAdapter.AvatarImage> avatarImage = new MutableLiveData<>();
-    public MutableLiveData<Integer> chatHistoryForNewMemberStatus = new MutableLiveData<>();
-    public MutableLiveData<String> permissionCount = new MutableLiveData<>();
-    public MutableLiveData<String> administratorsCount = new MutableLiveData<>();
-    public MutableLiveData<String> moderatorsCount = new MutableLiveData<>();
-    public MutableLiveData<String> membersCount = new MutableLiveData<>();
-    public MutableLiveData<String> groupName = new MutableLiveData<>();
-    public MutableLiveData<String> groupDescription = new MutableLiveData<>();
+    public ObservableInt chatHistoryForNewMemberStatus = new ObservableInt();
+    public ObservableField<String> permissionCount = new ObservableField<>("");
+    public ObservableField<String> administratorsCount = new ObservableField<>("");
+    public ObservableField<String> moderatorsCount = new ObservableField<>("");
+    public ObservableField<String> membersCount = new ObservableField<>("");
+    public ObservableField<String> groupName = new ObservableField<>("");
+    public ObservableField<String> groupDescription = new ObservableField<>("");
     public MutableLiveData<Boolean> showImageProgress = new MutableLiveData<>();
     //observed in view for go to another page
     public MutableLiveData<Boolean> goToMembersPage = new MutableLiveData<>();
@@ -62,6 +64,7 @@ public class EditGroupViewModel extends ViewModel {
     public MutableLiveData<Boolean> showDialogLeaveGroup = new MutableLiveData<>();
     public MutableLiveData<Boolean> initEmoji = new MutableLiveData<>();
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
 
     public GroupChatRole role;
     public long roomId;
@@ -93,7 +96,7 @@ public class EditGroupViewModel extends ViewModel {
 
 
         realmGroupRoom = realmRoom.getGroupRoom();
-        groupName.setValue(realmRoom.getTitle());
+        groupName.set(realmRoom.getTitle());
         initials = realmRoom.getInitials();
         role = realmGroupRoom.getRole();
         //group link
@@ -105,11 +108,11 @@ public class EditGroupViewModel extends ViewModel {
         //group participantsCountLabel
         String c = realmGroupRoom.getParticipantsCountLabel();
         if (HelperCalander.isPersianUnicode) {
-            membersCount.setValue(HelperCalander.convertToUnicodeFarsiNumber(c));
+            membersCount.set(HelperCalander.convertToUnicodeFarsiNumber(c));
         } else {
-            membersCount.setValue(c);
+            membersCount.set(c);
         }
-        groupDescription.setValue(realmGroupRoom.getDescription());
+        groupDescription.set(realmGroupRoom.getDescription());
         /*if (role == GroupChatRole.OWNER) {
             callBackDeleteLeaveGroup.set(G.fragmentActivity.getResources().getString(R.string.delete_group));
         } else {
@@ -119,8 +122,8 @@ public class EditGroupViewModel extends ViewModel {
         //ToDo: add this code to repository
         RealmResults<RealmMember> realmMembers = RealmMember.filterRole(roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
         RealmResults<RealmMember> moderatorMembers = RealmMember.filterRole(roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
-        administratorsCount.setValue(String.valueOf(realmMembers.size()));
-        moderatorsCount.setValue(String.valueOf(moderatorMembers.size()));
+        administratorsCount.set(String.valueOf(realmMembers.size()));
+        moderatorsCount.set(String.valueOf(moderatorMembers.size()));
         int t;
         switch (realmGroupRoom.getStartFrom()) {
             case 0:
@@ -137,7 +140,7 @@ public class EditGroupViewModel extends ViewModel {
                 break;
 
         }
-        chatHistoryForNewMemberStatus.setValue(t);
+        chatHistoryForNewMemberStatus.set(t);
     }
 
     //TODO: move this code to repository
@@ -187,15 +190,14 @@ public class EditGroupViewModel extends ViewModel {
 
     public void leaveGroup() {
         //ToDo:move this code to repository
+        showLoading.setValue(true);
         G.onGroupLeft = new OnGroupLeft() {
             @Override
             public void onGroupLeft(final long roomId, long memberId) {
                 G.handler.post(() -> {
-                    if (FragmentChat.finishActivity != null) {
-                        FragmentChat.finishActivity.finishActivity();
-                    }
                     G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     showLoading.setValue(false);
+                    goToRoomListPage.setValue(true);
                 });
             }
 
@@ -220,12 +222,9 @@ public class EditGroupViewModel extends ViewModel {
             @Override
             public void onGroupDelete(final long roomId) {
                 G.handler.post(() -> {
-                    //G.fragmentActivity.finish();
                     G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     showLoading.setValue(false);
-                    if (FragmentChat.finishActivity != null) {
-                        FragmentChat.finishActivity.finishActivity();
-                    }
+                    goToRoomListPage.setValue(true);
                 });
             }
 
@@ -264,13 +263,14 @@ public class EditGroupViewModel extends ViewModel {
             public void onGroupEdit(long roomId, String name, String description) {
                 G.handler.post(() -> {
                     showLoading.setValue(false);
-                    groupName.setValue(name);
-                    SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
+                    groupName.set(name);
+                    groupDescription.set(description);
+                    /*SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
                     if (ds != null) {
-                        groupDescription.setValue(ds.toString());
+                        groupDescription.set(ds.toString());
                     } else {
-                        groupDescription.setValue("");
-                    }
+                        groupDescription.set("");
+                    }*/
                     goBack.setValue(true);
                 });
             }
@@ -338,7 +338,7 @@ public class EditGroupViewModel extends ViewModel {
                 break;
 
         }
-        chatHistoryForNewMemberStatus.setValue(t);
+        chatHistoryForNewMemberStatus.set(t);
     }
 
 }

@@ -209,6 +209,12 @@ public class EditChannelFragment extends BaseFragment {
                 popBackStackFragment();
             }
         });
+
+        viewModel.goToChatRoom.observe(this,go->{
+            if (getActivity()!=null&&go!=null&&go){
+                new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);
+            }
+        });
         onBackFragment = this::popBackStackFragment;
     }
 
@@ -227,26 +233,29 @@ public class EditChannelFragment extends BaseFragment {
 
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
+                    if (getActivity() != null) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
+                            FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                        } else {
+                            ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
 
-                        FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-                        new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
-                    } else {
-                        ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-
-                        FragmentEditImage.insertItemList(AttachFile.imagePath, false);
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
+                            FragmentEditImage.insertItemList(AttachFile.imagePath, false);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
+                        }
                     }
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     if (data.getData() == null) {
                         return;
                     }
-                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true); //rotate image
-                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                    new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                    if (getActivity() != null) {
+                        ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true); //rotate image
+                        FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                    }
                     break;
             }
         }
@@ -306,8 +315,10 @@ public class EditChannelFragment extends BaseFragment {
     }
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false , false);
-        new HelperFragment(fragment).setReplace(false).load();
+        if (getActivity() != null) {
+            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false, false);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        }
     }
 
     private void showPopUp(boolean isPrivate) {

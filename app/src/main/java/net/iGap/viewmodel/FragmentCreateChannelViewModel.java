@@ -9,9 +9,12 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,13 +53,14 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
     public static final int PUBLIC = 1;
     public Spannable wordtoSpan;
     public ObservableField<String> edtSetLink = new ObservableField<>(Config.IGAP_LINK_PREFIX);
-    public ObservableField<Integer> prgWaiting = new ObservableField<>(View.GONE);
-    public ObservableField<Integer> txtFinishColor = new ObservableField<>(Color.parseColor(G.appBarColor));
-    public ObservableField<Boolean> txtInputLinkEnable = new ObservableField<>(false);
-    public ObservableField<Boolean> txtFinishEnable = new ObservableField<>(true);
-    public ObservableField<Boolean> edtSetLinkEnable = new ObservableField<>(true);
-    public ObservableField<Boolean> isRadioButtonPrivate = new ObservableField<>(true);
+    public ObservableInt prgWaiting = new ObservableInt(View.GONE);
+    public ObservableInt txtFinishColor = new ObservableInt(Color.parseColor(G.appBarColor));
+    public ObservableBoolean txtInputLinkEnable = new ObservableBoolean(false);
+    public ObservableBoolean txtFinishEnable = new ObservableBoolean(true);
+    public ObservableBoolean edtSetLinkEnable = new ObservableBoolean(true);
+    public ObservableBoolean isRadioButtonPrivate = new ObservableBoolean(true);
     public ObservableField<Boolean> isRadioButtonPublic = new ObservableField<>(false);
+    public MutableLiveData<Long> getRoom = new MutableLiveData<>();
     private Long roomId;
     private String inviteLink;
     private String token;
@@ -144,7 +148,8 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
                     @Override
                     public void run() {
                         RealmRoom.updateUsername(roomId, username);
-                        getRoom(roomId);
+                        hideProgressBar();
+                        getRoom.setValue(roomId);
                     }
                 });
             }
@@ -172,7 +177,8 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
 
             if (isRadioButtonPrivate.get()) {
                 RealmRoom.setPrivate(roomId);
-                getRoom(roomId);
+                hideProgressBar();
+                getRoom.setValue(roomId);
             } else {
 
                 String userName = edtSetLink.get().replace(Config.IGAP_LINK_PREFIX, "");
@@ -215,32 +221,6 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
 
     public void onDetach() {
         hideProgressBar();
-    }
-
-    private void getRoom(final long roomId) {
-        try {
-            if (G.fragmentActivity != null) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                        Fragment fragment = ContactGroupFragment.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putLong("RoomId", roomId);
-                        bundle.putString("TYPE", ProtoGlobal.Room.Type.CHANNEL.toString());
-                        bundle.putBoolean("NewRoom", true);
-                        fragment.setArguments(bundle);
-
-                        if (FragmentCreateChannel.onRemoveFragment != null) {
-                            FragmentCreateChannel.onRemoveFragment.remove();
-                        }
-                        new HelperFragment(fragment).load();
-                    }
-                });
-            }
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
     }
 
     private void hideProgressBar() {

@@ -293,8 +293,8 @@ public class G extends MultiDexApplication {
     public static OnChannelAvatarAdd onChannelAvatarAdd;
     public static OnChannelAvatarDelete onChannelAvatarDelete;
     public static OnChannelCheckUsername onChannelCheckUsername;
-    public static OnGroupCheckUsername onGroupCheckUsername;
-    public static OnGroupUpdateUsername onGroupUpdateUsername;
+    /*public static OnGroupCheckUsername onGroupCheckUsername;*/
+    /*public static OnGroupUpdateUsername onGroupUpdateUsername;*/
     public static OnChannelUpdateUsername onChannelUpdateUsername;
     public static OnGroupAvatarDelete onGroupAvatarDelete;
     public static OnRefreshActivity onRefreshActivity;
@@ -315,8 +315,8 @@ public class G extends MultiDexApplication {
     public static OnClientResolveUsername onClientResolveUsername;
     public static OnClientSubscribeToRoom onClientSubscribeToRoom;
     public static OnClientUnsubscribeFromRoom onClientUnsubscribeFromRoom;
-    public static OnGroupRemoveUsername onGroupRemoveUsername;
-    public static OnGroupRevokeLink onGroupRevokeLink;
+    /*public static OnGroupRemoveUsername onGroupRemoveUsername;*/
+    /*public static OnGroupRevokeLink onGroupRevokeLink;*/
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
@@ -399,7 +399,6 @@ public class G extends MultiDexApplication {
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCode
     public static boolean isTimeWhole = false;
-    public static FragmentManager fragmentManager;
     public static Account iGapAccount;
     public static Card selectedCard = null;
     public static long cardamount;

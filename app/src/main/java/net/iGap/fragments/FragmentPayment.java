@@ -12,8 +12,11 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentPaymentViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,20 +37,20 @@ public class FragmentPayment extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentPaymentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment, container, false);
         return attachToSwipeBack(fragmentPaymentBinding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initDataBinding(getArguments());
+        initDataBinding();
     }
 
-    private void initDataBinding(Bundle arguments) {
+    private void initDataBinding() {
 
-        fragmentPaymentViewModel = new FragmentPaymentViewModel(arguments);
+        fragmentPaymentViewModel = new FragmentPaymentViewModel();
         fragmentPaymentBinding.setFragmentPaymentViewModel(fragmentPaymentViewModel);
 
         IBackHandler iBackHandler = new IBackHandler() {
@@ -58,6 +61,24 @@ public class FragmentPayment extends BaseFragment {
         };
 
         fragmentPaymentBinding.setBackHandler(iBackHandler);
+
+        fragmentPaymentViewModel.goToPaymentBillPage.observe(this, type -> {
+            if (getActivity() != null && type != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentBill.newInstance(type)).setReplace(false).load();
+            }
+        });
+
+        fragmentPaymentViewModel.goToPaymentInquiryPage.observe(this, type -> {
+            if (getActivity() != null && type != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(type, null)).setReplace(false).load();
+            }
+        });
+
+        fragmentPaymentViewModel.goToPaymentCharge.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentCharge.newInstance()).setReplace(false).load();
+            }
+        });
 
     }
 }

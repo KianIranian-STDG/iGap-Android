@@ -285,7 +285,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (!TextUtils.isEmpty(myText)) {
             ArrayList<Tuple<Integer, Integer>> results = MessageBoldSetup(myText.toString());
             if (mMessage.hasLinkInMessage) {
-                myText = SpannableString.valueOf(HelperUrl.getLinkText(myText.toString(), mMessage.linkInfo, mMessage.messageID));
+                //TODO: fixed this and do not use G.currentActivity
+                myText = SpannableString.valueOf(HelperUrl.getLinkText(G.currentActivity, myText.toString(), mMessage.linkInfo, mMessage.messageID));
             } else {
                 myText = new SpannableString(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(myText.toString()) : myText);
             }
@@ -827,8 +828,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             final View replayView = ViewMaker.getViewReplay();
 
             if (replayView != null) {
-                final TextView replyFrom =  replayView.findViewById(R.id.chslr_txt_replay_from);
-                final EmojiTextViewE replayMessage =  replayView.findViewById(R.id.chslr_txt_replay_message);
+                final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
+                final EmojiTextViewE replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(v -> {
                     if (FragmentChat.isInSelectionMode) {
                         holder.itemView.performLongClick();
@@ -930,7 +931,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     holder.itemView.performLongClick();
                 } else {
                     if (mMessage.username.length() > 0) {
-                        HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, (mMessage.forwardedFrom.getMessageId() * (-1)));
+                        //TODO: fixed this and do not use G.currentActivity
+                        HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, mMessage.username, HelperUrl.ChatEntry.profile, (mMessage.forwardedFrom.getMessageId() * (-1)));
                     }
                 }
             });
@@ -1655,7 +1657,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void onBotBtnClick(View v) {
         try {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+                //TODO: fixed this and do not use G.currentActivity
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
@@ -1670,7 +1673,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } catch (Exception e) {
                 }
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+                //TODO: fixed this and do not use G.currentActivity
+                HelperUrl.checkAndJoinToRoom(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
 
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
                 HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
@@ -1733,16 +1737,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
                 try {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
                 } catch (JSONException e) {
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
                 }
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.TRAFFIC_BILL_MENU.getNumber()) {
                 try {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
                 } catch (JSONException e) {
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
                 }
             }
 

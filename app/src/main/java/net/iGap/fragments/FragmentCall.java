@@ -69,7 +69,7 @@ import io.realm.Sort;
 import static net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-public class FragmentCall extends BaseFragment implements OnCallLogClear , ToolbarListener {
+public class FragmentCall extends BaseFragment implements OnCallLogClear, ToolbarListener {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
     public FloatingActionButton fabContactList;
@@ -88,7 +88,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
     private RecyclerView mRecyclerView;
     //private CallAdapterA mAdapter;
 
-    private TextView mBtnAllCalls , mBtnMissedCalls ;
+    private TextView mBtnAllCalls, mBtnMissedCalls;
     private HelperToolbar mHelperToolbar;
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
@@ -259,7 +259,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
 
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
-        LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearVertical);
 
         Realm realm = Realm.getDefaultInstance();
@@ -443,7 +443,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
         mBtnMissedCalls = view.findViewById(R.id.fc_btn_missed_calls);
 
         //todo : update recycler list when clicked on buttons
-        mBtnAllCalls.setOnClickListener( v -> {
+        mBtnAllCalls.setOnClickListener(v -> {
 
             mBtnAllCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
             mBtnMissedCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
@@ -451,7 +451,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
             //update recycler data
         });
 
-        mBtnMissedCalls.setOnClickListener( v -> {
+        mBtnMissedCalls.setOnClickListener(v -> {
 
             mBtnMissedCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
             mBtnAllCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
@@ -461,22 +461,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
     }
 
     public void showContactListForCall() {
-        final Fragment fragment = RegisteredContactsFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", "call");
-        bundle.putBoolean("ACTION", true);
-        fragment.setArguments(bundle);
-
         try {
-            //G.fragmentActivity.getSupportFragmentManager()
-            //    .beginTransaction()
-            //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            //    .addToBackStack(null)
-            //    .replace(R.id.fragmentContainer, fragment)
-            //    .commit();
-
-            new HelperFragment(fragment).setReplace(false).load();
-
+            if (getActivity() != null) {
+                final Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "call");
+                bundle.putBoolean("ACTION", true);
+                fragment.setArguments(bundle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
         } catch (Exception e) {
             e.getStackTrace();
         }
@@ -519,18 +512,18 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear , Toolb
             if (G.userLogin) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                            Realm realm = Realm.getDefaultInstance();
-                            try {
-                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
-                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                                imgCallEmpty.setVisibility(View.VISIBLE);
-                                empty_call.setVisibility(View.VISIBLE);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                realm.close();
-                            }
-                        }).negativeText(R.string.B_cancel).show();
+                    Realm realm = Realm.getDefaultInstance();
+                    try {
+                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                        imgCallEmpty.setVisibility(View.VISIBLE);
+                        empty_call.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        realm.close();
+                    }
+                }).negativeText(R.string.B_cancel).show();
             } else {
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
             }

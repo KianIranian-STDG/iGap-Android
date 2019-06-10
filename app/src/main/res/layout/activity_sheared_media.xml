@@ -203,7 +203,7 @@
         android:layout_height="match_parent"
         android:background="@null"
         android:gravity="center"
-        android:text="@string/md_forward"
+        android:text="@string/forward_icon"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/gray"
         android:paddingTop="@dimen/dp6"

@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentFragmentSecurityBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentSecurityViewModel;
@@ -78,6 +81,42 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void onChanged(@Nullable Integer visibility) {
                 mHelperToolbar.getRightButton().setVisibility(visibility);
+            }
+        });
+
+        fragmentSecurityViewModel.goToSetSecurityPassword.observe(this, password -> {
+            if (getActivity() != null && password != null) {
+                FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
+                Bundle bundle = new Bundle();
+                bundle.putString("OLD_PASSWORD", password);
+                fragmentSetSecurityPassword.setArguments(bundle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetSecurityPassword()).load();
+            }
+        });
+
+        fragmentSecurityViewModel.showForgetPasswordDialog.observe(this, listRes -> {
+            if (getActivity() != null && listRes != null) {
+                new MaterialDialog.Builder(getActivity()).title(R.string.set_recovery_dialog_title).items(listRes).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        fragmentSecurityViewModel.forgetPassword(text.equals(getString(R.string.recovery_by_email_dialog)));
+                    }
+                }).show();
+            }
+        });
+
+        fragmentSecurityViewModel.goToSecurityRecoveryPage.observe(this, data -> {
+            if (getActivity() != null && data != null) {
+                FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("PAGE", data.getSecurity());
+                bundle.putString("QUESTION_ONE", data.getQuestionOne());
+                bundle.putString("QUESTION_TWO", data.getQuestionTwo());
+                bundle.putString("PATERN_EMAIL", data.getEmailPatern());
+                bundle.putBoolean("IS_EMAIL", data.isEmail());
+                bundle.putBoolean("IS_CONFIRM_EMAIL", data.isConfirmEmail());
+                fragmentSecurityRecovery.setArguments(bundle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentSecurityRecovery).load();
             }
         });
 

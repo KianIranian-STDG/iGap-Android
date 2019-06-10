@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnGroupRemoveUsername;
 import net.iGap.proto.ProtoGroupRemoveUsername;
 
 public class RequestGroupRemoveUsername {
 
-    public void groupRemoveUsername(long roomId) {
+    public void groupRemoveUsername(long roomId, OnGroupRemoveUsername callback) {
         ProtoGroupRemoveUsername.GroupRemoveUsername.Builder builder = ProtoGroupRemoveUsername.GroupRemoveUsername.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(323, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(323, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

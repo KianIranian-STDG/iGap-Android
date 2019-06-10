@@ -159,8 +159,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private MaterialDesignTextView btnGoToPage;
     public static GoToPositionFromShardMedia goToPositionFromShardMedia;
     public static boolean goToPosition = false;
-    private int mCurrentSharedMediaType = 1 ; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
-    private HelperToolbar mHelperToolbar ;
+    private int mCurrentSharedMediaType = 1; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
+    private HelperToolbar mHelperToolbar;
     private boolean isToolbarInEditMode = false;
 
 
@@ -405,12 +405,10 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     }
                 }
                 FragmentChat.mForwardMessages = messageInfos;
-
-                popBackStackFragment();
-                if (FragmentChat.finishActivity != null) {
-                    FragmentChat.finishActivity.finishActivity();
-                }
                 adapter.resetSelected();
+                if (getActivity() != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);
+                }
             }
         });
 
@@ -503,8 +501,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     @Override
     public void onSearchClickListener(View view) {
-        if (!isToolbarInEditMode){
-            isToolbarInEditMode =true;
+        if (!isToolbarInEditMode) {
+            isToolbarInEditMode = true;
             openKeyBoard();
         }
     }
@@ -514,7 +512,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         if (mHelperToolbar.getEditTextSearch().getText().length() > 0) {
             mHelperToolbar.getEditTextSearch().setText("");
         } else {
-            isToolbarInEditMode = false ;
+            isToolbarInEditMode = false;
             closeKeyboard(getView());
         }
     }
@@ -565,24 +563,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         items.add(getString(R.string.shared_links));
 
         new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.shared_image))){
+            if (items.get(position).equals(getString(R.string.shared_image))) {
                 fillListImage();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_video))){
+            } else if (items.get(position).equals(getString(R.string.shared_video))) {
                 fillListVideo();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_audio))){
+            } else if (items.get(position).equals(getString(R.string.shared_audio))) {
                 fillListAudio();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_voice))){
+            } else if (items.get(position).equals(getString(R.string.shared_voice))) {
                 fillListVoice();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_gif))){
+            } else if (items.get(position).equals(getString(R.string.shared_gif))) {
                 fillListGif();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_file))){
+            } else if (items.get(position).equals(getString(R.string.shared_file))) {
                 fillListFile();
-            }else if (items.get(position).equals(getString(R.string.shared_links))){
+            } else if (items.get(position).equals(getString(R.string.shared_links))) {
                 fillListLink();
             }
         }).show();
@@ -633,7 +626,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     private void fillListImage() {
 
-        mCurrentSharedMediaType = 1 ;
+        mCurrentSharedMediaType = 1;
 
         isChangeSelectType = true;
 
@@ -648,7 +641,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     private void fillListVideo() {
 
-        mCurrentSharedMediaType = 2 ;
+        mCurrentSharedMediaType = 2;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_video);
@@ -663,7 +656,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     private void fillListAudio() {
 
-        mCurrentSharedMediaType = 3 ;
+        mCurrentSharedMediaType = 3;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_audio);
@@ -680,7 +673,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     private void fillListVoice() {
 
-        mCurrentSharedMediaType = 4 ;
+        mCurrentSharedMediaType = 4;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_voice);
@@ -697,7 +690,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     private void fillListGif() {
 
-        mCurrentSharedMediaType = 5 ;
+        mCurrentSharedMediaType = 5;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_gif);
@@ -713,7 +706,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     private void fillListFile() {
 
-        mCurrentSharedMediaType = 6 ;
+        mCurrentSharedMediaType = 6;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_file);
@@ -730,7 +723,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     private void fillListLink() {
 
-        mCurrentSharedMediaType = 7 ;
+        mCurrentSharedMediaType = 7;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_links);
@@ -989,7 +982,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
      * Simple Class to serialize object to byte arrays
      *
      * @author Nick Russler
-     *         http://www.whitebyte.info
+     * http://www.whitebyte.info
      */
     public static class SerializationUtils {
 
@@ -1059,7 +1052,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         boolean isItemTime = false;
         String messageTime;
         long messageId;
-        boolean isToday = false ;
+        boolean isToday = false;
     }
 
     private class PreCashGridLayout extends GridLayoutManager {
@@ -1126,25 +1119,25 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 mAdapter.ViewHolderTime holder1 = (mAdapter.ViewHolderTime) holder;
 
                 //check and show just first block with header
-                if (position == 0 && mCurrentSharedMediaType == 1 ) {
+                if (position == 0 && mCurrentSharedMediaType == 1) {
                     holder1.txtHeader.setText(context.getString(R.string.images));
                     holder1.txtHeader.setVisibility(View.VISIBLE);
                     holder1.vSplitter.setVisibility(View.VISIBLE);
                 }
 
                 //convert numbers to persian if language was
-                String date ;
+                String date;
                 if (G.selectedLanguage.equals("fa")) {
                     holder1.txtTime.setGravity(Gravity.RIGHT);
                     date = HelperCalander.convertToUnicodeFarsiNumber(mList.get(position).messageTime);
-                }else {
+                } else {
                     date = mList.get(position).messageTime;
                 }
                 //check if date was today set text to txtTime else set date
                 holder1.txtTime.setText(
                         !mList.get(position).isToday ?
                                 date : context.getString(R.string.today)
-                ) ;
+                );
             }
         }
 
@@ -1429,11 +1422,11 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         public class ViewHolderTime extends RecyclerView.ViewHolder {
             public TextView txtTime;
             public TextView txtHeader;
-            public View vSplitter ;
+            public View vSplitter;
 
             public ViewHolderTime(View view) {
                 super(view);
-                txtTime =  itemView.findViewById(R.id.smslt_txt_time);
+                txtTime = itemView.findViewById(R.id.smslt_txt_time);
                 txtHeader = itemView.findViewById(R.id.smslt_txt_header);
                 vSplitter = itemView.findViewById(R.id.smslt_time_shared_splitter);
             }
@@ -1539,19 +1532,17 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         }
 
         private void showImage(int position, View itemView) {
-            long selectedFileToken = mList.get(position).messageId;
-
-            FragmentShowImage fragment = FragmentShowImage.newInstance();
-            Bundle bundle = new Bundle();
-            bundle.putLong("RoomId", roomId);
-            bundle.putLong("SelectedImage", selectedFileToken);
-            bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
-            fragment.setArguments(bundle);
-
-            //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
-
-            fragment.appBarLayout = appBarLayout;
-            new HelperFragment(fragment).setReplace(false).load();
+            if (getActivity() != null) {
+                long selectedFileToken = mList.get(position).messageId;
+                FragmentShowImage fragment = FragmentShowImage.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putLong("RoomId", roomId);
+                bundle.putLong("SelectedImage", selectedFileToken);
+                bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
+                fragment.setArguments(bundle);
+                fragment.appBarLayout = appBarLayout;
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
         }
 
         public class ViewHolder extends mHolder {
@@ -1710,16 +1701,18 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
                 openVideoByDefaultApp(position);
             } else {
-                long selectedFileToken = mNewList.get(position).messageId;
-                Fragment fragment = FragmentShowImage.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putLong("RoomId", roomId);
-                bundle.putLong("SelectedImage", selectedFileToken);
-                bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
-                fragment.setArguments(bundle);
+                if (getActivity() != null) {
+                    long selectedFileToken = mNewList.get(position).messageId;
+                    Fragment fragment = FragmentShowImage.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("RoomId", roomId);
+                    bundle.putLong("SelectedImage", selectedFileToken);
+                    bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
+                    fragment.setArguments(bundle);
 
-                //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
-                new HelperFragment(fragment).setReplace(false).load();
+                    //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                }
             }
         }
 
@@ -1733,7 +1726,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             public ViewHolder(View view) {
                 super(view);
 
-                imvPicFile =  itemView.findViewById(R.id.smsl_imv_file_pic);
+                imvPicFile = itemView.findViewById(R.id.smsl_imv_file_pic);
 
                 layoutInfo = (LinearLayout) itemView.findViewById(R.id.smsl_ll_video);
 
@@ -2165,7 +2158,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             if (holder.getItemViewType() == 1) {
                 LinkAdapter.ViewHolder vh = (LinkAdapter.ViewHolder) holder;
 
-                vh.txtLink.setText(HelperUrl.setUrlLink(mList.get(position).item.getMessage(), true, false, "", true));
+                vh.txtLink.setText(HelperUrl.setUrlLink(getActivity(),mList.get(position).item.getMessage(), true, false, "", true));
 
                 vh.txtLink.setMovementMethod(LinkMovementMethod.getInstance());
                 vh.messageProgress.setVisibility(View.GONE);

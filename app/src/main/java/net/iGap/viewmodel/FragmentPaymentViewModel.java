@@ -9,6 +9,8 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableField;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -24,11 +26,14 @@ import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperFragment;
 
-public class FragmentPaymentViewModel {
+public class FragmentPaymentViewModel extends ViewModel {
 
     public ObservableField<Drawable> observeBackGround = new ObservableField<>();
+    public MutableLiveData<Integer> goToPaymentBillPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToPaymentCharge = new MutableLiveData<>();
+    public MutableLiveData<FragmentPaymentInquiryViewModel.OperatorType> goToPaymentInquiryPage = new MutableLiveData<>();
 
-    public FragmentPaymentViewModel(Bundle arguments) {
+    public FragmentPaymentViewModel() {
 
         Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green_sticker);
         myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
@@ -36,7 +41,7 @@ public class FragmentPaymentViewModel {
     }
 
     public void onClickCharge(View v) {
-        new HelperFragment(FragmentPaymentCharge.newInstance()).setReplace(false).load();
+        goToPaymentCharge.setValue(true);
     }
 
     public void onClickCardToCard(View v) {
@@ -44,19 +49,19 @@ public class FragmentPaymentViewModel {
     }
 
     public void onClickBill(View v) {
-        new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+        goToPaymentBillPage.setValue(R.string.pay_bills);
     }
 
     public void onClickBillTraffic(View v) {
-        new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+        goToPaymentBillPage.setValue(R.string.pay_bills_crime);
     }
 
     public void onClickInquiryMci(View v) {
-        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, null)).setReplace(false).load();
+        goToPaymentInquiryPage.setValue(FragmentPaymentInquiryViewModel.OperatorType.mci);
     }
 
     public void onClickInquiryTelecom(View v) {
-        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
+        goToPaymentInquiryPage.setValue(FragmentPaymentInquiryViewModel.OperatorType.telecome);
     }
 
 }

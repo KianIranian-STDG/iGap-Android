@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -127,23 +127,25 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
             }
         });
 
-        txtCodeCountry =  view.findViewById(R.id.ac_txt_codeCountry);
+        txtCodeCountry = view.findViewById(R.id.ac_txt_codeCountry);
         txtCodeCountry.setOnClickListener(v -> {
-            new HelperFragment(new FragmentChooseCountry()).setReplace(false).load();
-            closeKeyboard(v);
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChooseCountry()).setReplace(false).load();
+                closeKeyboard(v);
+            }
         });
 
         //when user clicked on edit text keyboard wont open with this code
         txtCodeCountry.setOnFocusChangeListener((v, hasFocus) -> {
-            if(hasFocus) {
+            if (hasFocus) {
                 closeKeyboard(txtCodeCountry);
 
             }
         });
 
-        edtFirstName =  view.findViewById(R.id.ac_edt_firstName);
-        edtLastName =  view.findViewById(R.id.ac_edt_lastName);
-        edtPhoneNumber =  view.findViewById(R.id.ac_edt_phoneNumber);
+        edtFirstName = view.findViewById(R.id.ac_edt_firstName);
+        edtLastName = view.findViewById(R.id.ac_edt_lastName);
+        edtPhoneNumber = view.findViewById(R.id.ac_edt_phoneNumber);
         if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
             edtPhoneNumber.setText(phoneFromUrl);
         }
@@ -255,7 +257,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
 
         toolbarLayout.addView(mHelperToolbar.getView());
 
-       // mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.menu_add_contact));
+        // mHelperToolbar.getTextViewLogo().setText(context.getResources().getString(R.string.menu_add_contact));
     }
 
     private void isEnableSetButton() {

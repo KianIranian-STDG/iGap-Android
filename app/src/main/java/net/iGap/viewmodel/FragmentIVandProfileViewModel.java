@@ -1,6 +1,7 @@
 package net.iGap.viewmodel;
 
 import android.app.Activity;
+import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 import android.view.View;
 
@@ -8,9 +9,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentIVandActivities;
-import net.iGap.fragments.FragmentIVandProfile;
-import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
@@ -19,6 +17,7 @@ import io.realm.Realm;
 
 public class FragmentIVandProfileViewModel {
     public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
+    public MutableLiveData<Boolean> goToIVandPage = new MutableLiveData<>();
     public ObservableField<String> profileNameTv = new ObservableField<>("");
     public ObservableField<String> referralTv = new ObservableField<>("0");
     public ObservableField<String> pointsTv = new ObservableField<>("-");
@@ -53,7 +52,7 @@ public class FragmentIVandProfileViewModel {
     }
 
     public void onOrderHistoryClick() {
-        new HelperFragment(FragmentIVandActivities.newInstance()).setReplace(false).load();
+        goToIVandPage.setValue(true);
     }
 
     public static void scanBarCode(Activity activity) {

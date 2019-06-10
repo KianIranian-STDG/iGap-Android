@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -34,6 +35,8 @@ public class FragmentThemColorViewModel {
     private SharedPreferences sharedPreferences;
     private FragmentThemColor fragmentThemColor;
     private FragmentThemColorBinding fragmentThemColorBinding;
+    public MutableLiveData<Boolean> goToThemeColorCustomPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToDarkThemePage = new MutableLiveData<>();
 
 
     public FragmentThemColorViewModel(FragmentThemColor fragmentThemColor, FragmentThemColorBinding fragmentThemColorBinding) {
@@ -48,7 +51,7 @@ public class FragmentThemColorViewModel {
 
 
     public void onClickThemCustom(View v) {
-        new HelperFragment(new FragmentThemColorCustom()).setReplace(false).load();
+        goToThemeColorCustomPage.setValue(true);
     }
 
     public void onClickThemeDefault(View v) {
@@ -57,8 +60,7 @@ public class FragmentThemColorViewModel {
     }
 
     public void onClickThemeDark(View v) {
-        new HelperFragment(FragmentDarkTheme.newInstance()).setReplace(false).load();
-
+        goToDarkThemePage.setValue(true);
     }
 
     public void onClickThemeRed(View v) {
@@ -116,7 +118,6 @@ public class FragmentThemColorViewModel {
 
     public void onClickThemeAmber(View v) {
         setSetting(Theme.AMBER, false);
-        ;
     }
 
     public void onClickThemeOrange(View v) {

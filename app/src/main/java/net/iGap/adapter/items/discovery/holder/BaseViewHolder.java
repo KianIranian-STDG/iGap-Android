@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -59,21 +60,23 @@ import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     private long mLastClickTime = 0;
+    private FragmentActivity activity;
 
-    BaseViewHolder(@NonNull View itemView) {
+    BaseViewHolder(@NonNull View itemView,FragmentActivity activity) {
         super(itemView);
+        this.activity = activity;
     }
 
     public abstract void bindView(DiscoveryItem item);
 
     void loadImage(ImageView imageView, String url) {
         if (url.endsWith(".gif")) {
-            Glide.with(G.context)
+            Glide.with(imageView.getContext())
                     .asGif()
                     .load(url)
                     .into(imageView);
         } else {
-            Glide.with(G.context).load(url).into(imageView);
+            Glide.with(imageView.getContext()).load(url).into(imageView);
         }
     }
 
@@ -95,14 +98,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 if (index >= 0 && index < discoveryField.value.length() - 1) {
                     String token = discoveryField.value.substring(index + 1);
                     if (discoveryField.value.toLowerCase().contains("join")) {
-                        HelperUrl.checkAndJoinToRoom(token);
+                        HelperUrl.checkAndJoinToRoom(activity,token);
                     } else {
-                        HelperUrl.checkUsernameAndGoToRoom(token, HelperUrl.ChatEntry.profile);
+                        HelperUrl.checkUsernameAndGoToRoom(activity,token, HelperUrl.ChatEntry.profile);
                     }
                 }
                 break;
             case WEB_LINK:/** tested **/
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = activity.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                 int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
                 if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openBrowser(discoveryField.value);
@@ -111,60 +114,60 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case IVAND:
-                new HelperFragment(new FragmentIVandProfile()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),new FragmentIVandProfile()).setReplace(false).load();
                 break;
             case IVANDQR:
-                scanBarCode(G.currentActivity);
+                scanBarCode(activity);
                 break;
             case IVANDLIST:
-                new HelperFragment(FragmentIVandActivities.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),FragmentIVandActivities.newInstance()).setReplace(false).load();
                 break;
             case WEB_VIEW_LINK:/** tested title needed**/
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
                 } else {
-                    new HelperFragment(FragmentWebView.newInstance(discoveryField.value)).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),FragmentWebView.newInstance(discoveryField.value)).setReplace(false).load();
                 }
                 break;
             case USERNAME_LINK:/** tested **/
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(activity,discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
                 break;
             case TOPUP_MENU:/** tested **/
-                new HelperFragment(FragmentPaymentCharge.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),FragmentPaymentCharge.newInstance()).setReplace(false).load();
                 break;
             case BILL_MENU:/** tested **/
                 try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
                 } catch (JSONException e) {
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
                 }
                 break;
             case TRAFFIC_BILL_MENU:/** tested **/
                 try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
                 } catch (JSONException e) {
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
                 }
                 break;
             case PHONE_BILL_MENU:/** tested **/
-                new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
                 break;
             case MOBILE_BILL_MENU:/** tested **/
-                new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, null)).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, null)).setReplace(false).load();
                 break;
             case FINANCIAL_MENU:/** tested **/
-                new HelperFragment(FragmentPayment.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),FragmentPayment.newInstance()).setReplace(false).load();
                 break;
             case WALLET_MENU:/** tested **/
                 try (Realm realm = Realm.getDefaultInstance()) {
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                     String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
                     if (!G.isWalletRegister) {
-                        new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
+                        new HelperFragment(activity.getSupportFragmentManager(),FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
                     } else {
-                        Intent intent = new Intent(G.context, WalletActivity.class);
+                        Intent intent = new Intent(activity, WalletActivity.class);
                         intent.putExtra("Language", "fa");
                         intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
                         intent.putExtra("PrimaryColor", G.appBarColor);
@@ -187,7 +190,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case NEARBY_MENU:/** tested **/
                 try {
-                    HelperPermission.getLocationPermission(G.currentActivity, new OnGetPermission() {
+                    HelperPermission.getLocationPermission(activity, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException {
                             try {
@@ -203,7 +206,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                                                         waitingForConfiguration = false;
                                                     }
                                                 }, 2000);
-                                                new HelperFragment(FragmentiGapMap.getInstance()).setReplace(false).load();
+                                                new HelperFragment(activity.getSupportFragmentManager(),FragmentiGapMap.getInstance()).setReplace(false).load();
 
                                             }
 
@@ -225,7 +228,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                                                 waitingForConfiguration = false;
                                             }
                                         }, 2000);
-                                        new HelperFragment(FragmentiGapMap.getInstance()).setReplace(false).load();
+                                        new HelperFragment(activity.getSupportFragmentManager(),FragmentiGapMap.getInstance()).setReplace(false).load();
                                     }
                                 }
 
@@ -263,10 +266,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case CALL: /** tested **/
-                dialPhoneNumber(G.context, discoveryField.value);
+                dialPhoneNumber(activity, discoveryField.value);
                 break;
             case SHOW_ALERT:/** tested **/
-                new MaterialDialog.Builder(G.currentActivity).content(discoveryField.value).positiveText(R.string.dialog_ok)
+                new MaterialDialog.Builder(activity).content(discoveryField.value).positiveText(R.string.dialog_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -279,13 +282,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 // coming soon
                 break;
             case STICKER_SHOP:/** tested **/
-                new HelperFragment(FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                 break;
             case CARD_TO_CARD:
-                CardToCardHelper.CallCardToCard(G.currentActivity);
+                CardToCardHelper.CallCardToCard(activity);
                 break;
             case IVANDSCORE:
-                ActivityMain.doIvandScore(discoveryField.value, G.currentActivity);
+                ActivityMain.doIvandScore(discoveryField.value, activity);
                 break;
             case NONE:
                 break;
@@ -295,12 +298,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void actionPage(String value) {
-        new HelperFragment(DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
+        new HelperFragment(activity.getSupportFragmentManager(),DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
     }
 
     public void dialPhoneNumber(Context context, String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
-        if (intent.resolveActivity(G.context.getPackageManager()) != null) {
+        if (intent.resolveActivity(activity.getPackageManager()) != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }

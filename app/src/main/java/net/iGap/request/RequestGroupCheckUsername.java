@@ -10,17 +10,18 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnGroupCheckUsername;
 import net.iGap.proto.ProtoGroupCheckUsername;
 
 public class RequestGroupCheckUsername {
 
-    public void GroupCheckUsername(long roomId, String username) {
+    public void GroupCheckUsername(long roomId, String username, OnGroupCheckUsername callback) {
 
         ProtoGroupCheckUsername.GroupCheckUsername.Builder builder = ProtoGroupCheckUsername.GroupCheckUsername.newBuilder();
         builder.setRoomId(roomId);
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(321, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(321, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

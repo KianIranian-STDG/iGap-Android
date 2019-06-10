@@ -15,7 +15,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -47,7 +49,7 @@ public class HelperGetDataFromOtherApp {
         public FileType fileType;
     }
 
-    public HelperGetDataFromOtherApp(Intent intent) {
+    public HelperGetDataFromOtherApp(AppCompatActivity activityCompat,Intent intent) {
 
         this.intent = intent;
 
@@ -55,7 +57,7 @@ public class HelperGetDataFromOtherApp {
             return;
         }
 
-        checkData(intent);
+        checkData(activityCompat,intent);
     }
 
     public static FileType getMimeType(Uri uri) {
@@ -92,7 +94,7 @@ public class HelperGetDataFromOtherApp {
     /**
      * check intent data and get type and address message
      */
-    private void checkData(Intent intent) {
+    private void checkData(AppCompatActivity activityCompat, Intent intent) {
 
         sharedList.clear();
 
@@ -142,7 +144,7 @@ public class HelperGetDataFromOtherApp {
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    new HelperFragment().removeAll(true);
+                    new HelperFragment(activityCompat.getSupportFragmentManager()).removeAll(true);
                 }
             });
         }

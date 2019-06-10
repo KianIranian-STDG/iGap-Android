@@ -1,8 +1,8 @@
 package net.iGap.adapter.items.discovery;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -21,11 +21,11 @@ import net.iGap.adapter.items.discovery.holder.TypeUnknownViewHolder;
 import java.util.ArrayList;
 
 public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
-    private Context context;
+    private FragmentActivity activity;
     private ArrayList<DiscoveryItem> discoveryList;
 
-    public DiscoveryAdapter(Context context, ArrayList<DiscoveryItem> discoveryList) {
-        this.context = context;
+    public DiscoveryAdapter(FragmentActivity activity, ArrayList<DiscoveryItem> discoveryList) {
+        this.activity = activity;
         this.discoveryList = discoveryList;
     }
 
@@ -36,24 +36,24 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context.getApplicationContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(activity);
         switch (i) {
             case 1:
-                return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false));
+                return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false),activity);
             case 2:
-                return new Type2ViewHolder(layoutInflater.inflate(R.layout.item_discovery_2, viewGroup, false));
+                return new Type2ViewHolder(layoutInflater.inflate(R.layout.item_discovery_2, viewGroup, false),activity);
             case 3:
-                return new Type3ViewHolder(layoutInflater.inflate(R.layout.item_discovery_3, viewGroup, false));
+                return new Type3ViewHolder(layoutInflater.inflate(R.layout.item_discovery_3, viewGroup, false),activity);
             case 4:
-                return new Type4ViewHolder(layoutInflater.inflate(R.layout.item_discovery_4, viewGroup, false));
+                return new Type4ViewHolder(layoutInflater.inflate(R.layout.item_discovery_4, viewGroup, false),activity);
             case 5:
-                return new Type5ViewHolder(layoutInflater.inflate(R.layout.item_discovery_5, viewGroup, false));
+                return new Type5ViewHolder(layoutInflater.inflate(R.layout.item_discovery_5, viewGroup, false),activity);
             case 6:
-                return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_discovery_6, viewGroup, false));
+                return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_discovery_6, viewGroup, false),activity);
             case 7:
-                return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_discovery_7, viewGroup, false));
+                return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_discovery_7, viewGroup, false),activity);
         }
-        return new TypeUnknownViewHolder(layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false));
+        return new TypeUnknownViewHolder(layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false),activity);
     }
 
     @Override

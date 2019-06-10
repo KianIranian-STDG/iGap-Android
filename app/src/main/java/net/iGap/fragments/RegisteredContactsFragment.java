@@ -138,11 +138,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private LinearLayout btnAddNewChannel, btnAddNewGroup, btnAddSecretChat;
     private LinearLayout btnAddNewGroupCall, btnAddNewContact, btnDialNumber;
 
-    private ViewGroup mLayoutMultiSelected ;
-    private TextView mTxtSelectedCount ;
-    private AppCompatTextView mBtnDeleteSelected ;
-    private MaterialDesignTextView mBtnCancelSelected ;
-    private int mNumberOfSelectedCounter ;
+    private ViewGroup mLayoutMultiSelected;
+    private TextView mTxtSelectedCount;
+    private AppCompatTextView mBtnDeleteSelected;
+    private MaterialDesignTextView mBtnCancelSelected;
+    private int mNumberOfSelectedCounter;
 
     private Context context = G.context;
 
@@ -327,7 +327,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         prgWaitingLoadContact = (ProgressBar) view.findViewById(R.id.prgWaitingLoadContact);
 
 
-        vgInviteFriend =  view.findViewById(R.id.menu_layout_inviteFriend);
+        vgInviteFriend = view.findViewById(R.id.menu_layout_inviteFriend);
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
         vgRoot.setBackgroundColor(G.context.getResources().getColor(R.color.white));
 
@@ -660,13 +660,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         });
 
         btnAddNewChannel.setOnClickListener(v -> {
-
-            FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-            Bundle bundle_ = new Bundle();
-            bundle_.putString("TYPE", "NewChanel");
-            fragment.setArguments(bundle_);
-            new HelperFragment(fragment).setReplace(false).load();
-
+            if (getActivity() != null) {
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle_ = new Bundle();
+                bundle_.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle_);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
         });
 
         btnAddNewGroup.setOnClickListener(v -> {
@@ -676,18 +676,19 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             bundle_.putString("TYPE", "NewGroup");
             fragment.setArguments(bundle_);
             new HelperFragment(fragment).setReplace(false).load(true);*/
+            if (getActivity() != null) {
+                Fragment fragment = ContactGroupFragment.newInstance();
+                Bundle bundle1 = new Bundle();
+                bundle1.putLong("RoomId", -127);
+                bundle1.putString("LIMIT", "5000");
+                bundle1.putString("TYPE", ProtoGlobal.Room.Type.GROUP.name());
+                bundle1.putBoolean("NewRoom", true);
+                fragment.setArguments(bundle1);
 
-            Fragment fragment = ContactGroupFragment.newInstance();
-            Bundle bundle1 = new Bundle();
-            bundle1.putLong("RoomId", -127);
-            bundle1.putString("LIMIT", "5000");
-            bundle1.putString("TYPE", ProtoGlobal.Room.Type.GROUP.name());
-            bundle1.putBoolean("NewRoom", true);
-            fragment.setArguments(bundle1);
-
-            if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-            new HelperFragment(fragment).setReplace(false).load();
+                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
 
 
             /*if (!G.fragmentActivity.isFinishing()) {
@@ -705,7 +706,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
-        btnDialNumber.setOnClickListener(v -> new HelperFragment(new DailNumberFragment()).setReplace(false).load());
+        btnDialNumber.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new DailNumberFragment()).setReplace(false).load();
+            }
+        });
 
         btnAddNewGroupCall.setOnClickListener(v -> {
         });
@@ -1113,11 +1118,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         if (mActionMode != null) {
             mActionMode.finish();
         }
-        FragmentAddContact fragment = FragmentAddContact.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
-        fragment.setArguments(bundle);
-        new HelperFragment(fragment).setReplace(false).load();
+        if (getActivity() != null) {
+            FragmentAddContact fragment = FragmentAddContact.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
+            fragment.setArguments(bundle);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        }
     }
 
     @Override

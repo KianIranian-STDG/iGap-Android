@@ -82,15 +82,16 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public ObservableInt sharedLinkCount = new ObservableInt(0);
     public ObservableInt sharedEmptyVisibility = new ObservableInt(View.VISIBLE);
 
-    public MutableLiveData<Boolean> isMuteNotification = new MutableLiveData<>();
+    public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
     public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isShowReportView = new MutableLiveData<>();
+    public ObservableBoolean isShowReportView = new ObservableBoolean(false);
 
     //ui event and observed
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     public MutableLiveData<Boolean> showMenu = new MutableLiveData<>();
     public MutableLiveData<Boolean> showClearChatDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToCustomNotificationPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToShowAvatarPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> setAvatar = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDeleteContactDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogReportContact = new MutableLiveData<>();
@@ -148,15 +149,13 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     }
 
     public void onNotificationCheckChange(boolean isChecked) {
-        Log.wtf("view model", "value: " + isMuteNotification.getValue() + "+" + isChecked);
-        isMuteNotification.setValue(isChecked);
+        isMuteNotification.set(isChecked);
 
     }
 
     public void onNotificationClick(){
-        isMuteNotification.setValue(!isMuteNotification.getValue());
-        isMuteNotificationChangeListener.setValue(isMuteNotification.getValue());
-
+        isMuteNotification.set(!isMuteNotification.get());
+        isMuteNotificationChangeListener.setValue(isMuteNotification.get());
     }
 
     public void onMoreButtonClick() {
@@ -266,9 +265,9 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         }
 
         if (!RealmRoom.isNotificationServices(roomId)) {
-            isShowReportView.setValue(true);
+            isShowReportView.set(true);
         } else {
-            isShowReportView.setValue(false);
+            isShowReportView.set(false);
         }
 
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
@@ -401,15 +400,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
 
     public void onImageClick() {
         if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
-            FragmentShowAvatars fragment;
-            if (userId == G.userId) {
-                fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
-            } else {
-                fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
-            }
-
-            //fragment.appBarLayout = fab; //TODO- check
-            new HelperFragment(fragment).setReplace(false).load();
+            goToShowAvatarPage.setValue(userId == G.userId);
         }
     }
 
@@ -509,7 +500,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public void onResume() {
         mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
         if (mRoom != null) {
-            isMuteNotification.setValue(mRoom.getMute());
+            isMuteNotification.set(mRoom.getMute());
             if (changeListener == null) {
                 changeListener = element -> G.handler.post(() -> {
                     if (((RealmRoom) element).isValid()) {

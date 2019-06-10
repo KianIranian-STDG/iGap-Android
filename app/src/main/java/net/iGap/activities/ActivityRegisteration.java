@@ -55,7 +55,7 @@ public class ActivityRegisteration extends ActivityEnhanced {
                 G.isUpdateNotificaionColorChat = false;
                 G.isUpdateNotificaionCall = false;
 
-                new HelperFragment().removeAll(false);
+                new HelperFragment(getSupportFragmentManager()).removeAll(false);
 
                 ActivityRegisteration.this.recreate();
 

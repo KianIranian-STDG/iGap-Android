@@ -50,14 +50,6 @@ public abstract class FragmentToolBarBack extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (G.fragmentActivity instanceof ActivityMain) {
-            ((ActivityMain) G.fragmentActivity).lockNavigation();
-        }
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         titleTextView = view.findViewById(R.id.title);

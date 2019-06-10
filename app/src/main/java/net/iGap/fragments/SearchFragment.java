@@ -720,7 +720,7 @@ public class SearchFragment extends BaseFragment {
             goToRoomWithRealm(realmRoom, type, id);
         } else if (type == SearchType.room) {
 
-            HelperUrl.checkUsernameAndGoToRoom(userName, HelperUrl.ChatEntry.profile);
+            HelperUrl.checkUsernameAndGoToRoom(getActivity(),userName, HelperUrl.ChatEntry.profile);
             popBackStackFragment();
 
         }
@@ -734,9 +734,9 @@ public class SearchFragment extends BaseFragment {
         if (realmRoom != null) {
             removeFromBaseFragment(SearchFragment.this);
             if (type == SearchType.message) {
-                new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity();
+                new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(getActivity());
             } else {
-                new GoToChatActivity(realmRoom.getId()).startActivity();
+                new GoToChatActivity(realmRoom.getId()).startActivity(getActivity());
             }
 
         } else {
@@ -750,7 +750,7 @@ public class SearchFragment extends BaseFragment {
                             if (G.fragmentActivity != null) {
                                 removeFromBaseFragment(SearchFragment.this);
                             }
-                            new GoToChatActivity(room.getId()).setPeerID(id).startActivity();
+                            new GoToChatActivity(room.getId()).setPeerID(id).startActivity(getActivity());
                             G.onChatGetRoom = null;
                         }
                     });

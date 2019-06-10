@@ -822,34 +822,32 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void onSearchClickListener(View view) {
-        Fragment fragment = SearchFragment.newInstance();
-
-        try {
-            new HelperFragment(fragment).load();
-        } catch (Exception e) {
-            e.getStackTrace();
+        if (getActivity() != null) {
+            Fragment fragment = SearchFragment.newInstance();
+            try {
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
         }
     }
 
     @Override
     public void onRightIconClickListener(View view) {
-
         final Fragment fragment = RegisteredContactsFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putString("TITLE", "ADD");
         fragment.setArguments(bundle);
-
         try {
-
-            new HelperFragment(fragment).load();
-
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+            }
         } catch (Exception e) {
             e.getStackTrace();
         }
     }
 
     private boolean isItemAvailableOnSelectedList(RealmRoom mInfo) {
-
         return mSelectedRoomList.contains(mInfo);
     }
 
@@ -1466,22 +1464,22 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                                 boolean openChat = true;
 
                                 if (G.twoPaneMode) {
-                                    Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
-                                    if (fragment != null) {
+                                    if (getActivity() != null) {
+                                        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChat.class.getName());
+                                        if (fragment != null) {
 
-                                        FragmentChat fm = (FragmentChat) fragment;
-                                        if (fm.isAdded() && fm.mRoomId == mInfo.getId()) {
-                                            openChat = false;
-                                        } else {
-                                            removeFromBaseFragment(fragment);
+                                            FragmentChat fm = (FragmentChat) fragment;
+                                            if (fm.isAdded() && fm.mRoomId == mInfo.getId()) {
+                                                openChat = false;
+                                            } else {
+                                                removeFromBaseFragment(fragment);
+                                            }
                                         }
-
-
                                     }
                                 }
 
                                 if (openChat) {
-                                    new GoToChatActivity(mInfo.getId()).startActivity();
+                                    new GoToChatActivity(mInfo.getId()).startActivity(getActivity());
 
                                     if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
                                         ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();

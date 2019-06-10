@@ -2,6 +2,7 @@ package net.iGap.helper;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -56,7 +57,7 @@ public class GoToChatActivity {
         return this;
     }
 
-    public void startActivity() {
+    public void startActivity(FragmentActivity activity) {
 
         String roomName = "";
 
@@ -69,8 +70,8 @@ public class GoToChatActivity {
                 roomName = realmRoom.getTitle();
 
                 if (realmRoom.getReadOnly()) {
-                    if (G.currentActivity != null && !(G.fragmentActivity).isFinishing()) {
-                        new MaterialDialog.Builder(G.currentActivity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
+                    if (activity != null && !(activity).isFinishing()) {
+                        new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
                     }
                     realm.close();
                     return;
@@ -90,12 +91,12 @@ public class GoToChatActivity {
 
             String message = G.context.getString(R.string.send_message_to) + " " + roomName;
 
-            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.fragmentActivity != null ? G.fragmentActivity : G.context).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat fragmentChat = new FragmentChat();
                     fragmentChat.setArguments(getBundle());
-                    new HelperFragment(fragmentChat).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
                 }
             }).onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
@@ -108,19 +109,19 @@ public class GoToChatActivity {
                     dialog.dismiss();
                 }
             });
-            if (G.fragmentActivity != null && !(G.fragmentActivity).isFinishing()) {
+            if (!activity.isFinishing()) {
                 mDialog.show();
             }
         } else if (FragmentChat.mForwardMessages != null) {
 
             String message = G.context.getString(R.string.send_forward_to) + " " + roomName + "?";
 
-            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.fragmentActivity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat fragmentChat = new FragmentChat();
                     fragmentChat.setArguments(getBundle());
-                    new HelperFragment(fragmentChat).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
                 }
             }).onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
@@ -133,13 +134,13 @@ public class GoToChatActivity {
                     dialog.dismiss();
                 }
             });
-            if (!(G.fragmentActivity).isFinishing()) {
+            if (!(activity).isFinishing()) {
                 mDialog.show();
             }
         } else {
             FragmentChat fragmentChat = new FragmentChat();
             fragmentChat.setArguments(getBundle());
-            new HelperFragment(fragmentChat).setReplace(false).load();
+            new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
         }
 
     }

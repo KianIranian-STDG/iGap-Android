@@ -144,7 +144,7 @@ import static net.iGap.G.inflater;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
 
-public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
+public class FragmentiGapMap extends BaseFragment implements ToolbarListener, OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
 
     public static final int pageiGapMap = 1;
     public static final int pageUserList = 2;
@@ -213,7 +213,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
     private int orientation = G.rotationState;
     private TopSheetDialog dialog;
 
-    private HelperToolbar mHelperToolbar ;
+    private HelperToolbar mHelperToolbar;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -444,13 +444,12 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
 
         KeyboardUtils.addKeyboardToggleListener(getActivity(), new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
-            public void onToggleSoftKeyboard(boolean isVisible)
-            {
+            public void onToggleSoftKeyboard(boolean isVisible) {
                 if (isVisible && fabStateSwitcher.isMenuOpened()) {
                     fabStateSwitcher.toggleMenu();
                 }
 
-                if (isVisible && orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE){
+                if (isVisible && orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
                     btnSatelliteView.hide();
                     btnOrginView.hide();
                     fabGps.hide();
@@ -512,7 +511,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
 
 
                 deleteMapFileCash();
-                if (isAdded()) {
+                if (getActivity() != null && isAdded()) {
                     changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
                             .getBoolean("state", false);
 
@@ -521,9 +520,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
                         deleteMapFileCash();
                         getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state", true).apply();
 
-                        new HelperFragment(FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
 
-                        new HelperFragment(FragmentiGapMap.getInstance()).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
                     }
 
                 }
@@ -539,7 +538,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
         btnSatelliteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isAdded()) {
+                if (getActivity() != null && isAdded()) {
                     changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
                             .getBoolean("state", false);
 
@@ -548,9 +547,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
                         deleteMapFileCash();
                         getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state", false).apply();
 
-                        new HelperFragment(FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
 
-                        new HelperFragment(FragmentiGapMap.getInstance()).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
                     }
 
                 }
@@ -1166,7 +1165,10 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
                 @Override
                 public void onClick(View v) {
                     // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
-                    if (G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1) != null && G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())) {
+                    if (getActivity() != null &&
+                            getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1) != null &&
+                            getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())
+                    ) {
                         return;
                     }
 
@@ -1199,25 +1201,25 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
                     dialog = new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
                         @Override
                         public void onClick(int position) {
-                            if (items.get(position).equals(getString(R.string.list_user_map))){
+                            if (items.get(position).equals(getString(R.string.list_user_map))) {
                                 fabGps.hide();
                                 fabStateSwitcher.setVisibility(View.GONE);
                                 rippleMoreMap.setVisibility(View.GONE);
                                 page = pageUserList;
                                 try {
-                                    new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                                    if (getActivity() != null) {
+                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                                    }
                                 } catch (Exception e) {
                                     e.getStackTrace();
                                 }
-                            }
-                            else if (items.get(position).equals(getString(R.string.nearby))){
+                            } else if (items.get(position).equals(getString(R.string.nearby))) {
                                 if (location != null && !isSendRequestGeoCoordinate) {
                                     new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
                                     showProgress(true);
                                     isSendRequestGeoCoordinate = true;
                                 }
-                            }
-                            else if (items.get(position).equals(getString(R.string.map_registration))){
+                            } else if (items.get(position).equals(getString(R.string.map_registration))) {
                                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1662,9 +1664,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
     @Override
     public void onResume() {
         super.onResume();
-        if (G.fragmentActivity != null) {
-            ((ActivityMain) G.fragmentActivity).lockNavigation();
-        }
         statusCheck();
         FragmentiGapMap.page = FragmentiGapMap.pageiGapMap;
     }
@@ -1888,8 +1887,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
             holder.layoutMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                    }
                 }
             });
 
@@ -1912,7 +1912,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
                 holder.comment.setText(context.getResources().getString(R.string.comment_no));
             }
 
-            holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
+            holder.distance.setText(String.format(getString(R.string.distance), item.getDistance()));
             if (HelperCalander.isPersianUnicode) {
                 holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
             }
@@ -1946,7 +1946,10 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
     @Override
     public void onLeftIconClickListener(View view) {
         // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
-        if (G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1) != null && G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())) {
+        if (getActivity() != null &&
+                getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1) != null &&
+                getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())
+        ) {
             return;
         }
 
@@ -1966,50 +1969,51 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener ,On
 
     @Override
     public void onRightIconClickListener(View view) {
+        if (getActivity() != null) {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.list_user_map));
+            items.add(getString(R.string.nearby));
+            items.add(getString(R.string.map_registration));
 
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.list_user_map));
-        items.add(getString(R.string.nearby));
-        items.add(getString(R.string.map_registration));
+            dialog = new TopSheetDialog(getActivity()).setListData(items, -1, new BottomSheetItemClickCallback() {
+                @Override
+                public void onClick(int position) {
+                    if (items.get(position).equals(getString(R.string.list_user_map))) {
+                        fabGps.hide();
+                        fabStateSwitcher.setVisibility(View.GONE);
+                        rippleMoreMap.setVisibility(View.GONE);
+                        page = pageUserList;
+                        try {
+                            if (getActivity() != null) {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                            }
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                    } else if (items.get(position).equals(getString(R.string.nearby))) {
+                        if (location != null && !isSendRequestGeoCoordinate) {
+                            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                            showProgress(true);
+                            isSendRequestGeoCoordinate = true;
+                        }
+                    } else if (items.get(position).equals(getString(R.string.map_registration))) {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-        dialog = new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
-            @Override
-            public void onClick(int position) {
-                if (items.get(position).equals(getString(R.string.list_user_map))){
-                    fabGps.hide();
-                    fabStateSwitcher.setVisibility(View.GONE);
-                    rippleMoreMap.setVisibility(View.GONE);
-                    page = pageUserList;
-                    try {
-                        new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
-                    } catch (Exception e) {
-                        e.getStackTrace();
+                                new RequestGeoRegister().register(false);
+
+                            }
+                        }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            }
+                        }).show();
                     }
                 }
-                else if (items.get(position).equals(getString(R.string.nearby))){
-                    if (location != null && !isSendRequestGeoCoordinate) {
-                        new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                        showProgress(true);
-                        isSendRequestGeoCoordinate = true;
-                    }
-                }
-                else if (items.get(position).equals(getString(R.string.map_registration))){
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            new RequestGeoRegister().register(false);
-
-                        }
-                    }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        }
-                    }).show();
-                }
-            }
-        });
-        dialog.show();
+            });
+            dialog.show();
+        }
     }
 }

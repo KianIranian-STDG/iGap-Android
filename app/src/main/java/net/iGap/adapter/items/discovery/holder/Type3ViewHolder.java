@@ -1,6 +1,7 @@
 package net.iGap.adapter.items.discovery.holder;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +16,8 @@ public class Type3ViewHolder extends BaseViewHolder {
     private ImageView img0, img1;
     private CardView card0, card1;
 
-    public Type3ViewHolder(@NonNull View itemView) {
-        super(itemView);
+    public Type3ViewHolder(@NonNull View itemView, FragmentActivity activity) {
+        super(itemView,activity);
         img0 = itemView.findViewById(R.id.type3_img0);
         img1 = itemView.findViewById(R.id.type3_img1);
         card0 = itemView.findViewById(R.id.type3_card0);

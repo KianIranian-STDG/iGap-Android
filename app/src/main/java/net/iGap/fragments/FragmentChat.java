@@ -381,7 +381,7 @@ public class FragmentChat extends BaseFragment
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, ToolbarListener {
 
-    public static FinishActivity finishActivity;
+    /*public static FinishActivity finishActivity;*/
     public static OnComplete onMusicListener;
     public static IUpdateLogItem iUpdateLogItem;
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
@@ -967,17 +967,6 @@ public class FragmentChat extends BaseFragment
 
                 ActivityMain.setMediaLayout();
                 ActivityMain.setStripLayoutCall();
-
-                if (!G.twoPaneMode) {
-                    try {
-                        if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
-                            ((ActivityMain) G.fragmentActivity).lockNavigation();
-                        }
-                    } catch (Exception e) {
-                        HelperLog.setErrorLog(e);
-                    }
-                }
-
             }
         }, Config.LOW_START_PAGE_TIME);
 
@@ -1000,13 +989,13 @@ public class FragmentChat extends BaseFragment
         G.onPinedMessage = this;
         G.onBotClick = this;
 
-        finishActivity = new FinishActivity() {
+        /*finishActivity = new FinishActivity() {
             @Override
             public void finishActivity() {
                 // ActivityChat.this.finish();
                 finishChat();
             }
-        };
+        };*/
 
         initCallbacks();
         HelperNotification.getInstance().isChatRoomNow = true;
@@ -1395,24 +1384,16 @@ public class FragmentChat extends BaseFragment
 
                             FragmentEditImage.itemGalleryList.clear();
                             FragmentEditImage.textImageList.clear();
-
+                            Uri uri = Uri.parse(listPathString.get(0));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-                                Uri uri = Uri.parse(listPathString.get(0));
-
                                 FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image), true);
-                                new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
-
-                                hideProgress();
                             } else {
-//                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-                                Uri uri = Uri.parse(listPathString.get(0));
                                 FragmentEditImage.insertItemList(uri.toString(), true);
-
-                                new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
-
-                                hideProgress();
                             }
+                            if (getActivity() != null) {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
+                            }
+                            hideProgress();
                         } else {
                             //# get gif there
 
@@ -1441,23 +1422,12 @@ public class FragmentChat extends BaseFragment
 
                         FragmentEditImage.itemGalleryList.clear();
                         FragmentEditImage.textImageList.clear();
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-
-                            ImageHelper.correctRotateImage(listPathString.get(0), true);
-
-                            FragmentEditImage.insertItemList(listPathString.get(0), true);
-
-                            new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
-                            hideProgress();
-                        } else {
-                            ImageHelper.correctRotateImage(listPathString.get(0), true);
-
-                            FragmentEditImage.insertItemList(listPathString.get(0), true);
-                            new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
-                            hideProgress();
+                        ImageHelper.correctRotateImage(listPathString.get(0), true);
+                        FragmentEditImage.insertItemList(listPathString.get(0), true);
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
                         }
+                        hideProgress();
                     } else {
                         showDraftLayout();
                         setDraftMessage(requestCode);
@@ -1726,7 +1696,7 @@ public class FragmentChat extends BaseFragment
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        HelperUrl.checkUsernameAndGoToRoom(favorite.getValue().replace("@", ""), HelperUrl.ChatEntry.chat);
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(),favorite.getValue().replace("@", ""), HelperUrl.ChatEntry.chat);
                                     }
                                 });
                             }
@@ -1738,9 +1708,11 @@ public class FragmentChat extends BaseFragment
                                     public void run() {
                                         if (!isChatReadOnly) {
                                             if (favorite.getValue().equals("$financial")) {
-                                                new HelperFragment(FragmentPayment.newInstance()).setReplace(false).load();
-                                                //lockNavigation();
-                                                return;
+                                                if (getActivity() != null) {
+                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
+                                                    //lockNavigation();
+                                                    return;
+                                                }
                                             }
                                             edtChat.setText(favorite.getValue());
                                             imvSendButton.performClick();
@@ -1854,15 +1826,15 @@ public class FragmentChat extends BaseFragment
 
         /**
          * Hint: don't need to get info here. currently do this action in {{@link #startPageFastInitialize()}}
-        Bundle extras = getArguments();
-        if (extras != null) {
-            mRoomId = extras.getLong("RoomId");
-            isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
-            isNotJoin = extras.getBoolean("ISNotJoin");
-            userName = extras.getString("UserName");
-            messageId = extras.getLong("MessageId");
-        }
-        */
+         Bundle extras = getArguments();
+         if (extras != null) {
+         mRoomId = extras.getLong("RoomId");
+         isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
+         isNotJoin = extras.getBoolean("ISNotJoin");
+         userName = extras.getString("UserName");
+         messageId = extras.getLong("MessageId");
+         }
+         */
 
         /**
          * get userId . use in chat set action.
@@ -1985,7 +1957,7 @@ public class FragmentChat extends BaseFragment
     /**
      * show join/mute layout if needed
      */
-    private void manageExtraLayout(){
+    private void manageExtraLayout() {
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
             if (layoutMute == null) {
@@ -1999,7 +1971,7 @@ public class FragmentChat extends BaseFragment
             layoutJoin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HelperUrl.showIndeterminateProgressDialog();
+                    HelperUrl.showIndeterminateProgressDialog(getActivity());
                     G.onClientJoinByUsername = new OnClientJoinByUsername() {
                         @Override
                         public void onClientJoinByUsernameResponse() {
@@ -2460,11 +2432,13 @@ public class FragmentChat extends BaseFragment
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
                 try {
-                    String[] split = messageOne.split(",");
-                    Double latitude = Double.parseDouble(split[0]);
-                    Double longitude = Double.parseDouble(split[1]);
-                    FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-                    new HelperFragment(fragment).setReplace(false).load();
+                    if (getActivity() != null) {
+                        String[] split = messageOne.split(",");
+                        Double latitude = Double.parseDouble(split[0]);
+                        Double longitude = Double.parseDouble(split[1]);
+                        FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                    }
                 } catch (Exception e) {
                     HelperLog.setErrorLog(e);
                 }
@@ -3784,8 +3758,9 @@ public class FragmentChat extends BaseFragment
          * set null for avoid from clear group room message adapter if user try for clearChatHistory
          */
         G.onClearChatHistory = null;
-
-        new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString())).setReplace(false).load();
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString())).setReplace(false).load();
+        }
     }
 
     @Override
@@ -5295,7 +5270,7 @@ public class FragmentChat extends BaseFragment
         }
 
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom == null || !realmRoom.isValid()){
+        if (realmRoom == null || !realmRoom.isValid()) {
             avatarHandler.getAvatar(new ParamWithAvatarType(imvUserPicture, chatPeerId).avatarSize(R.dimen.dp60).avatarType(AvatarHandler.AvatarType.USER).showMain());
         } else {
             Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), realmRoom.getInitials(), realmRoom.getColor());
@@ -5565,25 +5540,16 @@ public class FragmentChat extends BaseFragment
      * open profile for this room or user profile if room is chat
      */
     private void goToProfile() {
-        if (G.fragmentActivity != null) {
-            ((ActivityMain) G.fragmentActivity).lockNavigation();
-        }
-
-        if (chatType == CHAT) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString())).setReplace(false).load();
+        if (getActivity() != null) {
+            if (chatType == CHAT) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString())).setReplace(false).load();
+            } else if (chatType == GROUP) {
+                if (!isChatReadOnly) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentGroupProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
                 }
-            });
-        } else if (chatType == GROUP) {
-
-            if (!isChatReadOnly) {
-                new HelperFragment(FragmentGroupProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
-
+            } else if (chatType == CHANNEL) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChannelProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
             }
-        } else if (chatType == CHANNEL) {
-            new HelperFragment(FragmentChannelProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
         }
     }
 
@@ -5726,30 +5692,27 @@ public class FragmentChat extends BaseFragment
      * open fragment show image and show all image for this room
      */
     private void showImage(final StructMessageInfo messageInfo, View view) {
+        if (getActivity() != null) {
+            if (!isAdded() || getActivity().isFinishing()) {
+                return;
+            }
 
-        if (!isAdded() || G.fragmentActivity.isFinishing()) {
-            return;
+            // for gone app bar
+            InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            long selectedFileToken = parseLong(messageInfo.messageID);
+
+            FragmentShowImage fragment = FragmentShowImage.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putLong("RoomId", mRoomId);
+            bundle.putString("TYPE", messageInfo.messageType.toString());
+            bundle.putLong("SelectedImage", selectedFileToken);
+            fragment.setArguments(bundle);
+            fragment.appBarLayout = appBarLayout;
+
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
-
-        // for gone app bar
-        InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-        long selectedFileToken = parseLong(messageInfo.messageID);
-
-        FragmentShowImage fragment = FragmentShowImage.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putLong("RoomId", mRoomId);
-        bundle.putString("TYPE", messageInfo.messageType.toString());
-        bundle.putLong("SelectedImage", selectedFileToken);
-        fragment.setArguments(bundle);
-        fragment.appBarLayout = appBarLayout;
-
-        new HelperFragment(fragment).setReplace(false).load();
-        //FragmentTransitionLauncher.with(G.fragmentActivity).from(view).prepare(fragment);
-        //new HelperFragment(fragment).setAnimated(true).setReplace(false).load();
-
-        //getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).addToBackStack(null).commit();
     }
 
     /**
@@ -5989,12 +5952,16 @@ public class FragmentChat extends BaseFragment
                 .setOpenPageSticker(new OnOpenPageStickerListener() {
                     @Override
                     public void addSticker(String page) {
-                        new HelperFragment(FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                        }
                     }
 
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
-                        new HelperFragment(FragmentSettingRemoveStickers.newInstance(data, recentStickerList)).setReplace(false).load();
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(data, recentStickerList)).setReplace(false).load();
+                        }
                     }
                 })
                 .setBackgroundColor(BackgroundColor)
@@ -6778,7 +6745,7 @@ public class FragmentChat extends BaseFragment
                     bottomSheetDialog.dismiss();
 //                    FragmentEditImage.itemGalleryList.set(id, mList);
 //                    fastItemAdapter.notifyAdapterDataSetChanged();
-                    new HelperFragment(FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
 //                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
                 } else {
                     if (isCheck) {
@@ -7339,7 +7306,7 @@ public class FragmentChat extends BaseFragment
 
         });
 
-        mBtnForwardSelected.setOnClickListener( v -> {
+        mBtnForwardSelected.setOnClickListener(v -> {
 
             // forward selected messages to room list for selecting room
             if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
@@ -7673,7 +7640,7 @@ public class FragmentChat extends BaseFragment
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                fastItemAdapter.add(new AdapterCamera("",onClickCamera).withIdentifier(99));
+                                fastItemAdapter.add(new AdapterCamera("", onClickCamera).withIdentifier(99));
                                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
                                     fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
                                 }
@@ -8420,9 +8387,9 @@ public class FragmentChat extends BaseFragment
                         break;
                     case LOCATION:
                         if (!addTop) {
-                            mAdapter.add(new LocationItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new LocationItem(mAdapter, chatType, this,getActivity()).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new LocationItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LocationItem(mAdapter, chatType, this,getActivity()).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case FILE:
@@ -9203,14 +9170,14 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
 
-                if (isAdded()) {
+                /*if (isAdded()) {
                     Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
                     removeFromBaseFragment(fragment);
 
                     if (G.iTowPanModDesinLayout != null) {
                         G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.hide);
                     }
-                }
+                }*/
             }
         });
     }
@@ -9339,7 +9306,7 @@ public class FragmentChat extends BaseFragment
                 if (imvUserPicture != null && txtName != null) {
                     paymentDialog = PaymentFragment.newInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
 //                    paymentDialog.show(getFragmentManager(), "payment_dialog");
-                    new HelperFragment(paymentDialog).setTag("PaymentFragment").setReplace(false).load();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), paymentDialog).setTag("PaymentFragment").setReplace(false).load();
                 }
             }
         }

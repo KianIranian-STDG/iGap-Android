@@ -412,10 +412,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
-        new HelperGetDataFromOtherApp(intent);
+        new HelperGetDataFromOtherApp(this,intent);
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
-            new HelperFragment(new FragmentSetting()).load();
+            new HelperFragment(getSupportFragmentManager(),new FragmentSetting()).load();
         }
 
         Bundle extras = intent.getExtras();
@@ -428,7 +428,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (peerId > 0) {
                     goToChatActivity.setPeerID(peerId);
                 }
-                goToChatActivity.startActivity();
+                goToChatActivity.startActivity(this);
             }
             FragmentLanguage.languageChanged = false;
 
@@ -436,7 +436,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (openMediaPlayer) {
                 if (getSupportFragmentManager().findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
                     FragmentMediaPlayer fragment = new FragmentMediaPlayer();
-                    new HelperFragment(fragment).setReplace(false).load();
+                    new HelperFragment(getSupportFragmentManager(),fragment).setReplace(false).load();
                 }
             }
         }
@@ -520,9 +520,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             finish();
             return;
         }
-
-
-        G.fragmentManager = getSupportFragmentManager();
 
         //checkAppAccount();
 
@@ -752,11 +749,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         fragmentNewGroup.setArguments(bundle);
 
                         try {
-                            new HelperFragment(fragmentNewGroup).setStateLoss(true).load();
+                            new HelperFragment(getSupportFragmentManager(),fragmentNewGroup).setStateLoss(true).load();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
-                        lockNavigation();
                     }
                 });
             }
@@ -1155,7 +1151,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                     //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
 
-                    new HelperFragment(fragment).load();
+                    new HelperFragment(getSupportFragmentManager(),fragment).load();
 
                 } catch (Exception e) {
                     e.getStackTrace();
@@ -1163,8 +1159,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (arcMenu.isMenuOpened()) {
                     arcMenu.toggleMenu();
                 }
-
-                lockNavigation();
             }
         });
 
@@ -1177,12 +1171,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 try {
-                    new HelperFragment(fragment).load();
+                    new HelperFragment(getSupportFragmentManager(),fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
-                lockNavigation();
-
                 if (arcMenu.isMenuOpened()) {
                     arcMenu.toggleMenu();
                 }
@@ -1199,11 +1191,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    new HelperFragment(fragment).load();
+                    new HelperFragment(getSupportFragmentManager(),fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
-                lockNavigation();
                 if (arcMenu.isMenuOpened()) {
                     arcMenu.toggleMenu();
                 }
@@ -1494,7 +1485,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                                         waitingForConfiguration = false;
                                                     }
                                                 }, 2000);
-                                                new HelperFragment(FragmentiGapMap.getInstance()).load();
+                                                new HelperFragment(getSupportFragmentManager(),FragmentiGapMap.getInstance()).load();
                                             }
                                         });
                                     }
@@ -1517,19 +1508,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         waitingForConfiguration = false;
                                     }
                                 }, 2000);
-                                new HelperFragment(FragmentiGapMap.getInstance()).load();
+                                new HelperFragment(getSupportFragmentManager(),FragmentiGapMap.getInstance()).load();
                             }
                         }
 
                     } catch (Exception e) {
                         e.getStackTrace();
                     }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            lockNavigation();
-                        }
-                    });
                 }
 
                 @Override
@@ -1603,13 +1588,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 try {
                     //  getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
-                    new HelperFragment(fragment).load();
+                    new HelperFragment(getSupportFragmentManager(),fragment).load();
 
 
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
-                lockNavigation();
             }
         });
 
@@ -1794,7 +1778,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         super.onBackPressed();
-        if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() < 1) {
+        if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() < 1) {
             if (!this.isFinishing()) {
                 resume();
             }
@@ -1827,7 +1811,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.isUpdateNotificaionColorChat = false;
                 G.isUpdateNotificaionCall = false;
 
-                new HelperFragment().removeAll(false);
+                new HelperFragment(getSupportFragmentManager()).removeAll(false);
 
                 ActivityMain.this.recreate();
 
@@ -2157,10 +2141,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public void lockNavigation() {
-
-    }
-
     //*************************************************************
 
     public void openNavigation() {
@@ -2194,7 +2174,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         if (mode == chatLayoutMode.show) {
                             setWeight(frameChatContainer, 1);
                             setWeight(frameMainContainer, 0);
-                            lockNavigation();
                         } else if (mode == chatLayoutMode.hide) {
                             setWeight(frameChatContainer, 0);
                             setWeight(frameMainContainer, 1);
@@ -2203,7 +2182,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             if (frameChatContainer.getChildCount() > 0) {
                                 setWeight(frameChatContainer, 1);
                                 setWeight(frameMainContainer, 0);
-                                lockNavigation();
                             } else {
                                 setWeight(frameChatContainer, 0);
                                 setWeight(frameMainContainer, 1);

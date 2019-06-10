@@ -3,34 +3,33 @@ package net.iGap.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
-import android.databinding.ObservableField;
+import android.databinding.ObservableBoolean;
 import android.view.View;
 
 import net.iGap.G;
-import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class FragmentChatSettingViewModel  {
+public class FragmentChatSettingViewModel extends ViewModel {
 
 
     private SharedPreferences sharedPreferences;
 
     public MutableLiveData<String> callbackTextSize = new MutableLiveData<>();
-    public ObservableField<Boolean> isShowVote = new ObservableField<>();
-    public ObservableField<Boolean> isSenderNameGroup = new ObservableField<>();
-    public ObservableField<Boolean> isSendEnter = new ObservableField<>();
-    public ObservableField<Boolean> isInAppBrowser = new ObservableField<>();
-    public ObservableField<Boolean> isCompress = new ObservableField<>();
-    public ObservableField<Boolean> isTrim = new ObservableField<>();
-    public ObservableField<Boolean> isDefaultPlayer = new ObservableField<>();
-    public ObservableField<Boolean> isCrop = new ObservableField<>();
-    public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
+    public MutableLiveData<Boolean> goToChatBackgroundPage = new MutableLiveData<>();
+    public ObservableBoolean isShowVote = new ObservableBoolean();
+    public ObservableBoolean isSenderNameGroup = new ObservableBoolean();
+    public ObservableBoolean isSendEnter = new ObservableBoolean();
+    public ObservableBoolean isInAppBrowser = new ObservableBoolean();
+    public ObservableBoolean isCompress = new ObservableBoolean();
+    public ObservableBoolean isTrim = new ObservableBoolean();
+    public ObservableBoolean isDefaultPlayer = new ObservableBoolean();
+    public ObservableBoolean isCrop = new ObservableBoolean();
+    public ObservableBoolean isCameraButtonSheet = new ObservableBoolean(true);
 
     public FragmentChatSettingViewModel() {
         getInfo();
@@ -164,7 +163,7 @@ public class FragmentChatSettingViewModel  {
     }
 
     public void onClickChatBackground(View view) {
-        new HelperFragment(FragmentChatBackground.newInstance()).setReplace(false).load();
+        goToChatBackgroundPage.setValue(true);
     }
 
     public void onClickSenderNameGroup(View view) {

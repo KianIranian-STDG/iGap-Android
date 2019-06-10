@@ -19,73 +19,33 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.gson.Gson;
 import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
-import com.vanniktech.emoji.sticker.OnStickerListener;
-import com.vanniktech.emoji.sticker.OnUpdateStickerListener;
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
-import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
-import net.iGap.adapter.items.chat.StickerItem;
 import net.iGap.databinding.FragmentEditGroupBinding;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
-import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
-import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGroupDelete;
-import net.iGap.interfaces.OnGroupLeft;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.module.AndroidUtils;
-import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
-import net.iGap.module.TimeUtils;
-import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.enums.GroupChatRole;
-import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.module.structs.StructSendSticker;
-import net.iGap.proto.ProtoFileDownload;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.request.RequestFileDownload;
-import net.iGap.request.RequestGroupAvatarAdd;
-import net.iGap.request.RequestGroupDelete;
-import net.iGap.request.RequestGroupLeft;
 import net.iGap.viewmodel.EditGroupViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import io.realm.Realm;
-
-import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class EditGroupFragment extends BaseFragment implements FragmentEditImage.CompleteEditImage {
 
@@ -195,6 +155,12 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                 groupLeft();
             }
         });
+
+        viewModel.goToRoomListPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);
+            }
+        });
     }
 
     @Override
@@ -212,29 +178,29 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
+                    if (getActivity() != null) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                            FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, this);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                        FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, this);
-                        new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                        } else {
+                            ImageHelper.correctRotateImage(AttachFile.imagePath, true);
 
-                    } else {
-                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-
-                        FragmentEditImage.insertItemList(AttachFile.imagePath, false, this);
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
+                            FragmentEditImage.insertItemList(AttachFile.imagePath, false, this);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
+                        }
                     }
-
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     if (data.getData() == null) {
                         return;
                     }
-                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
-
-                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                    new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
-
+                    if (getActivity() != null) {
+                        ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
+                        FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                    }
                     break;
             }
         }
@@ -295,8 +261,10 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false , true);
-        new HelperFragment(fragment).setReplace(false).load();
+        if (getActivity() != null) {
+            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false, true);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        }
     }
 
     private void showDialog() {
@@ -363,100 +331,6 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                 .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
                 }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
                 .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
-                /*.setOnStickerListener(new OnStickerListener() {
-                    @Override
-                    public void onItemSticker(StructItemSticker st) {
-
-                        String additional = new Gson().toJson(new StructSendSticker(st.getId(), st.getName(), st.getGroupId(), st.getToken()));
-
-                        final RealmRoomMessage[] rm = new RealmRoomMessage[1];
-                        Long identity = AppUtils.makeRandomId();
-
-                        int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
-                        getRealmChat().executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                rm[0] = RealmRoomMessage.makeAdditionalData(viewModel.roomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.STICKER);
-                                rm[0].setAttachment(identity, st.getUri(), imageSize[0], imageSize[1], new File(st.getUri()).length(), new File(st.getUri()).getName(), 0, LocalFileType.FILE);
-                                rm[0].getAttachment().setToken(st.getToken());
-                                rm[0].setAuthorHash(G.authorHash);
-                                rm[0].setShowMessage(true);
-                                rm[0].setCreateTime(TimeUtils.currentLocalTime());
-                            }
-                        });
-
-                        StructMessageInfo sm = StructMessageInfo.convert(getRealmChat(), rm[0]);
-                        mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(sm));
-                        scrollToEnd();
-
-                        new ChatSendMessageUtil().build(chatType, mRoomId, rm[0]).sendMessage(identity + "");
-
-                    }
-                })*/
-                /*.setOnUpdateSticker(new OnUpdateStickerListener() {
-                    @Override
-                    public void onUpdateSticker(String token, String extention, long avatarSize, int positionAdapter) {
-
-                        HashMap<String, Integer> updateList = new HashMap<>();
-                        updateList.put(token, positionAdapter);
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-
-                                if (updateList.get(token) != null) {
-                                    emojiPopup.onUpdateSticker(updateList.get(token));
-                                    updateList.remove(token);
-                                }
-                            }
-
-                            @Override
-                            public void OnError(String token) {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onUpdateRecentSticker() {
-
-                    }
-
-                    @Override
-                    public void onUpdateTabSticker(String token, String extention, long avatarSize, int positionAdapter) {
-                        HashMap<String, Integer> updateList = new HashMap<>();
-                        updateList.put(token, positionAdapter);
-
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-
-                                if (updateList.get(token) != null && token != null) {
-                                    emojiPopup.onUpdateTabSticker(updateList.get(token));
-                                    updateList.remove(token);
-                                }
-                            }
-
-                            @Override
-                            public void OnError(String token) {
-
-                            }
-                        });
-
-                    }
-                })*/
-                /*.setOpenPageSticker(new OnOpenPageStickerListener() {
-                    @Override
-                    public void addSticker(String page) {
-                        new HelperFragment(FragmentSettingAddStickers.newInstance()).setReplace(false).load();
-                    }
-
-                    @Override
-                    public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
-                        new HelperFragment(FragmentSettingRemoveStickers.newInstance(data, recentStickerList)).setReplace(false).load();
-                    }
-                })*/
                 .setBackgroundColor(BackgroundColor)
                 .setIconColor(Color.parseColor(iconColor))
                 .setDividerColor(Color.parseColor(dividerColor))
@@ -465,7 +339,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void groupLeft() {
-        String text = "";
+        String text;
         int title;
         if (viewModel.role == GroupChatRole.OWNER) {
             text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_delete_this_group);
@@ -479,7 +353,6 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             @Override
             public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
                 viewModel.leaveGroup();
-                viewModel.showLoading.setValue(true);
                 G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         }).show();
@@ -487,7 +360,6 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     @Override
     public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-
         viewModel.setEditedImage(path);
     }
 }

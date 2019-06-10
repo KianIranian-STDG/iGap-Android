@@ -35,11 +35,11 @@ public class SubmitScoreDialog extends Dialog {
         TextView txt_message = findViewById(R.id.txt_message);
         txt_message.setText(message);
         if (isOk) {
-            image.setText(G.context.getString(R.string.md_get_score_ok));
-            image.setTextColor(G.context.getResources().getColor(R.color.green));
+            image.setText(getContext().getString(R.string.md_get_score_ok));
+            image.setTextColor(getContext().getResources().getColor(R.color.green));
         }  else {
             image.setText(G.context.getString(R.string.md_get_score_failed));
-            image.setTextColor(G.context.getResources().getColor(R.color.red));
+            image.setTextColor(getContext().getResources().getColor(R.color.red));
         }
 
         ok.setOnClickListener(new View.OnClickListener() {
