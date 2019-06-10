@@ -14,6 +14,7 @@
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:padding="@dimen/dp4"
+      android:layout_marginLeft="@dimen/dp10"
     android:text="@string/tab_to_return_to_call"
     android:textColor="@color/toolbar_player_base_color"
     android:textSize="@dimen/dp14" />
@@ -24,6 +25,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="@dimen/dp4"
+      android:layout_marginRight="@dimen/dp10"
     android:text=""
     android:textColor="@color/toolbar_player_base_color"
     android:textSize="@dimen/dp14" />

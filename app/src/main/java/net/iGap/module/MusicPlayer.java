@@ -47,6 +47,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -433,6 +434,15 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             HelperLog.setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
+
+
+        if (MusicPlayer.chatLayout != null) {
+            MusicPlayer.chatLayout.setVisibility(View.VISIBLE);
+        }
+
+        if (MusicPlayer.mainLayout != null) {
+            MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     public static void stopSound() {
@@ -489,6 +499,16 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             mp.stop();
             updateFastAdapter(MusicPlayer.messageId);
         }
+
+
+        if (MusicPlayer.chatLayout != null) {
+            MusicPlayer.chatLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.mainLayout != null) {
+            MusicPlayer.mainLayout.setVisibility(View.GONE);
+        }
+        MusicPlayer.playerStateChangeListener.setValue(false);
     }
 
     public static void nextMusic() {

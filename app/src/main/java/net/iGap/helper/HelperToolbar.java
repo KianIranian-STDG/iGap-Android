@@ -448,16 +448,29 @@ public class HelperToolbar {
             try{
 
                 if (isVisible){
-                    if (isChat)
+                    if (isChat) {
                         ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
-                    else
-                        ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
-                }else {
-                    if (isChat)
-                        ActivityCall.stripLayoutChat.setVisibility(View.GONE);
-                    else
-                        ActivityCall.stripLayoutMain.setVisibility(View.GONE);
 
+
+                    }else {
+                        ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
+
+                    }
+
+
+                    if (MusicPlayer.mainLayout != null) {
+                        MusicPlayer.mainLayout.setVisibility(View.GONE);
+                    }
+
+                    if (MusicPlayer.chatLayout != null) {
+                        MusicPlayer.chatLayout.setVisibility(View.GONE);
+                    }
+                }else {
+                    if (isChat) {
+                        ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+                    }else {
+                        ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+                    }
                 }
 
             }catch (Exception e){}

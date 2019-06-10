@@ -1122,8 +1122,8 @@ public class FragmentChat extends BaseFragment
 
         // room id have to be set to default, otherwise I'm in the room always!
 
-        MusicPlayer.chatLayout = null;
-        ActivityCall.stripLayoutChat = null;
+        //MusicPlayer.chatLayout = null;
+        //ActivityCall.stripLayoutChat = null;
 
 
         super.onStop();
