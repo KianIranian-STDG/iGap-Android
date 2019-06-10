@@ -2694,6 +2694,10 @@
     <string name="total_amount">مبلغ کل (ریال) :</string>
     <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
 
+    <string name="personalAccountType">الشخصية</string>
+    <string name="taxiAccountType">سائق</string>
+    <string name="shopAccountType">متجر</string>
+
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
     <string name="recover_password">Recover password</string>
