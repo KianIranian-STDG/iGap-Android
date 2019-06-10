@@ -884,10 +884,9 @@ public class FragmentChat extends BaseFragment
                 getRealmChat().executeTransactionAsync(new Realm.Transaction() {//ASYNC
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoom.setCount(mRoomId, 0);
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
-
+                            room.setUnreadCount(0);
                             if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                                 setConnectionText(G.connectionState);
                             } else {
@@ -1100,7 +1099,7 @@ public class FragmentChat extends BaseFragment
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom.setCount(mRoomId, 0);
+                RealmRoom.setCount(realm, mRoomId, 0);
             }
         });
         realm.close();
