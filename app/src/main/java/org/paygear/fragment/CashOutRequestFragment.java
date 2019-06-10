@@ -1,15 +1,15 @@
 package org.paygear.fragment;
 
 
-import android.app.Dialog;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -64,7 +64,6 @@ import org.paygear.model.Iban;
 import org.paygear.model.Order;
 import org.paygear.model.Payment;
 import org.paygear.model.PaymentAuth;
-import org.paygear.model.QRResponse;
 import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 

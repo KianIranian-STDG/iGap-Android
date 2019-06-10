@@ -6,12 +6,8 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import org.paygear.fragment.PaymentHistoryFragment;
-
-import net.iGap.R;
-
 import org.paygear.model.Card;
 import org.paygear.model.SearchedAccount;
 import org.paygear.utils.SettingHelper;
@@ -19,19 +15,13 @@ import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.model.Account;
-import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.socket.RaadWebSocket;
-import ir.radsense.raadcore.web.PostRequest;
 import ir.radsense.raadcore.web.WebBase;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**

@@ -22,7 +22,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-
 import net.iGap.R;
 
 import org.paygear.fragment.AccountPaymentDialog;

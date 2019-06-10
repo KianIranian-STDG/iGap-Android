@@ -5,17 +5,7 @@
     android:id="@+id/root_chatRoom_bottom_view"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:background="@drawable/backround_chatroom_root"
-    android:clickable="true"
-    android:orientation="vertical">
-
-    <View
-        style="?lineColorSettingTheme"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginRight="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp8"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:clickable="true">
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"

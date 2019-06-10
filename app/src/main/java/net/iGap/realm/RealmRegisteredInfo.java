@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
@@ -237,6 +237,14 @@ public class RealmRegisteredInfo extends RealmObject {
         return true;
     }
 
+    public static long getUserInfo(Realm realm, String phoneNumber) {
+        if (realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phoneNumber).findFirst() != null) {
+            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phoneNumber).findFirst().getId();
+        } else {
+            return 0;
+        }
+    }
+
     public long getId() {
         return id;
     }
@@ -428,4 +436,5 @@ public class RealmRegisteredInfo extends RealmObject {
         }
         return null;
     }
+
 }

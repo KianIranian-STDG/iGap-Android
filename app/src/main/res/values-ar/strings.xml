@@ -2803,6 +2803,7 @@
     <string name="new_group_call">New Group Call</string>
     <string name="dial_number">Dial Number</string>
     <string name="Select_Country">Select Country</string>
+    <string name="call">Call</string>
     <string name="ra_enter_reagent_code">أدخل رمز الكاشف (اختياري)</string>
     <string name="reagent_error_message">الرقم الذي تم إدخاله غير صحيح للرفض.</string>
 </resources>

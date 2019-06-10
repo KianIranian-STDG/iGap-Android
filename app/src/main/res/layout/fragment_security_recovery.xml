@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/rootRecoveryPassword"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  style="?backgroundColorSettingTheme"
-  android:clickable="true"
-  android:layoutDirection="ltr"
-  android:orientation="vertical"
-  tools:context="net.iGap.fragments.FragmentSecurityRecovery"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootRecoveryPassword"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="?backgroundColorSettingTheme"
+    android:clickable="true"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    tools:context="net.iGap.fragments.FragmentSecurityRecovery"
 
-  >
+    >
 
   <LinearLayout
       android:id="@+id/fsr_layout_toolbar"

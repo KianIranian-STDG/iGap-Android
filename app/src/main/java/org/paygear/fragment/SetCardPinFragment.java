@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -30,7 +29,6 @@ import org.paygear.WalletActivity;
 import org.paygear.model.Card;
 import org.paygear.utils.Utils;
 import org.paygear.web.Web;
-
 
 import java.util.HashMap;
 import java.util.Map;

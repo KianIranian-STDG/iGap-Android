@@ -90,7 +90,6 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
@@ -102,7 +101,6 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.ITowPanModDesinLayout;
-import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
@@ -1298,7 +1296,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initTabStrip() {
 
         mViewPager = findViewById(R.id.viewpager);
-        mViewPager.setPagingEnabled(false);
 
         boolean isRtl = HelperCalander.isPersianUnicode;
 
@@ -1364,7 +1361,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(RegisteredContactsFragment.newInstance());
-
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);

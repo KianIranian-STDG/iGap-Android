@@ -138,7 +138,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private RoomAdapter roomsAdapter;
     private List<RealmRoom> mSelectedRoomList = new ArrayList<>();
     private ViewGroup mLayoutMultiSelectedActions;
-    private View mBtnRemoveSelected, mBtnClearCacheSelected, mBtnReadAllSelected, mBtnMakeAsReadSelected;
+    private TextView mBtnRemoveSelected;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -228,9 +228,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private void initMultiSelectActions() {
 
         mBtnRemoveSelected = mView.findViewById(R.id.amr_btn_delete_selected);
-        mBtnClearCacheSelected = mView.findViewById(R.id.amr_btn_clear_cache_selected);
-        mBtnMakeAsReadSelected = mView.findViewById(R.id.amr_btn_make_as_read_selected);
-        mBtnReadAllSelected = mView.findViewById(R.id.amr_btn_read_all_selected);
+        TextView mBtnClearCacheSelected = mView.findViewById(R.id.amr_btn_clear_cache_selected);
+        TextView mBtnMakeAsReadSelected = mView.findViewById(R.id.amr_btn_make_as_read_selected);
+        TextView mBtnReadAllSelected = mView.findViewById(R.id.amr_btn_read_all_selected);
 
 
         mBtnRemoveSelected.setOnClickListener(v -> {
@@ -253,6 +253,29 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                 onLeftIconClickListener(v);
             }
         });
+
+        if (G.isDarkTheme) {
+            setColorToDarkMode(mBtnRemoveSelected);
+            setColorToDarkMode(mBtnClearCacheSelected);
+            setColorToDarkMode(mBtnMakeAsReadSelected);
+            setColorToDarkMode(mBtnReadAllSelected);
+        }else {
+            setColorToLightMode(mBtnRemoveSelected);
+            setColorToLightMode(mBtnClearCacheSelected);
+            setColorToLightMode(mBtnMakeAsReadSelected);
+            setColorToLightMode(mBtnReadAllSelected);
+        }
+
+    }
+
+    private void setColorToDarkMode(TextView textView) {
+        textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+        textView.setTextColor(getContext().getResources().getColor(R.color.gray10));
+    }
+
+    private void setColorToLightMode(TextView textView) {
+        textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
+        textView.setTextColor(getContext().getResources().getColor(R.color.black));
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {

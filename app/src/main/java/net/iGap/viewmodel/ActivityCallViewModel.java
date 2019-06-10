@@ -11,42 +11,24 @@ package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHeadset;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Vibrator;
 import android.support.annotation.StringRes;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.GravityEnum;
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.ISignalingCallBack;
-import net.iGap.interfaces.SpeakerControlListener;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.AttachFile;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
@@ -62,7 +44,6 @@ import net.iGap.webrtc.WebRTC;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.util.Locale;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 

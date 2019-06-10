@@ -43,7 +43,6 @@ import net.iGap.module.StatusBarUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 

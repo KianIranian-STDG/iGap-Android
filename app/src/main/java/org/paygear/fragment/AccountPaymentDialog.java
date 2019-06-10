@@ -33,7 +33,6 @@ import android.widget.Toast;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
-
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -49,7 +48,6 @@ import org.paygear.model.Transport;
 import org.paygear.utils.RSAUtils;
 import org.paygear.web.Web;
 import org.paygear.widget.BankCardView;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;

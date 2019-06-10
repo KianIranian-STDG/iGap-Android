@@ -35,10 +35,8 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserIVandGetScore;
@@ -52,7 +50,6 @@ import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
-import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
@@ -81,7 +78,6 @@ import org.paygear.web.Web;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 
 import io.realm.Realm;

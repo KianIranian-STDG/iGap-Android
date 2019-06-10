@@ -6,6 +6,7 @@
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:clickable="true"
     tools:ignore="MissingPrefix">
 
@@ -98,24 +99,17 @@
                             android:visibility="gone" />
 
                     </RelativeLayout>
-                    <!--
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/gray_4c"
-                        android:layout_marginTop=""
-                    -->
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/menu_layout_inviteFriend"
-                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
-                    android:paddingTop="@dimen/dp12"
+                    android:paddingTop="@dimen/dp16"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
                     android:paddingBottom="@dimen/dp6"
@@ -145,12 +139,11 @@
 
                 <LinearLayout
                     android:id="@+id/menu_layout_add_new_channel"
-                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal"
                     android:layoutDirection="locale"
+                    android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
@@ -181,7 +174,6 @@
 
                 <LinearLayout
                     android:id="@+id/menu_layout_add_new_group"
-                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -217,13 +209,12 @@
 
                 <LinearLayout
                     android:id="@+id/menu_layout_btn_secret_chat"
-                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:layoutDirection="locale"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
-                    android:layoutDirection="locale"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
@@ -254,7 +245,6 @@
 
                 <LinearLayout
                     android:id="@+id/menu_layout_new_group_call"
-                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -290,7 +280,6 @@
 
                 <LinearLayout
                     android:id="@+id/menu_layout_add_new_contact"
-                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -326,12 +315,11 @@
 
                 <LinearLayout
                     android:id="@+id/menu_layout_btn_dial_number"
-                    style="?backgroundSubChatTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal"
                     android:layoutDirection="locale"
+                    android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
@@ -394,11 +382,6 @@
                     android:layout_gravity="clip_horizontal"
                     android:indeterminate="true"
                     android:visibility="visible" />
-
-                <View
-                    style="?lineColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp" />
 
                 <TextView
                     android:id="@+id/txtNon_User"
@@ -556,7 +539,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:autoText="false"
                 android:background="@null"
                 android:hint="@string/search"
                 android:paddingStart="@dimen/dp8"

@@ -33,7 +33,6 @@ import net.iGap.R;
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
 import org.paygear.model.Order;
-import org.paygear.model.PaymentResult;
 import org.paygear.model.QRResponse;
 import org.paygear.model.Transport;
 import org.paygear.web.Web;

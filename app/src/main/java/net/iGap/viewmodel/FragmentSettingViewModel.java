@@ -15,6 +15,7 @@ import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.support.v4.app.Fragment;
+
 import net.iGap.G;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChatSettings;
@@ -28,6 +29,7 @@ import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.request.RequestUserSessionLogout;
+
 import java.util.Locale;
 
 public class FragmentSettingViewModel extends ViewModel {

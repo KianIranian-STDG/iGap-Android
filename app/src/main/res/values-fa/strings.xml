@@ -1859,5 +1859,6 @@
     <string name="view_contact">نمایش مخاطب</string>
     <string name="new_group_call">تماس گروهی جدید</string>
     <string name="dial_number">صفحه تماس</string>
+    <string name="call">تماس</string>
     <string name="Select_Country">انتخاب کشور</string>
 </resources>

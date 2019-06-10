@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.widget.Switch;
 import android.widget.ToggleButton;
 
 import net.iGap.G;

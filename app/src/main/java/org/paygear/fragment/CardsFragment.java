@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
@@ -36,8 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.iGap.R;
@@ -66,8 +63,6 @@ import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.model.JWT;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.utils.Typefaces;
-
-import ir.radsense.raadcore.widget.CircleImageTransform;
 import ir.radsense.raadcore.widget.ProgressLayout;
 import ir.radsense.raadcore.widget.RecyclerRefreshLayout;
 import retrofit2.Call;
