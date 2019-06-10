@@ -512,9 +512,6 @@ public class FragmentChat extends BaseFragment
     private TextView btnUp;
     private TextView btnDown;
     private TextView txtChannelMute;
-    // private TextView btnUpMessage;
-    // private TextView btnDownMessage;
-    // private TextView txtMessageCounter;
     private TextView btnUpHash;
     private TextView btnDownHash;
     private TextView txtHashCounter;
@@ -2715,12 +2712,6 @@ public class FragmentChat extends BaseFragment
 
         });
 
-        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
-            sendMoney.setVisibility(View.VISIBLE);
-        } else {
-            sendMoney.setVisibility(View.GONE);
-        }
-
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
 
@@ -3265,10 +3256,11 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        sendMoney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPaymentDialog();
+        sendMoney.setOnClickListener(view -> {
+            if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+                showSelectItem();
+            } else {
+                showCardToCard();
             }
         });
 
@@ -3385,6 +3377,29 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void showCardToCard() {
+        cardToCardClick(null);
+    }
+
+    private void showSelectItem() {
+        FragmentMoneyTransferAction transferAction = new FragmentMoneyTransferAction();
+        transferAction.show(getFragmentManager(),null);
+
+        transferAction.setMoneyTransferAction(new FragmentMoneyTransferAction.MoneyTransferAction() {
+            @Override
+            public void cardToCardClicked() {
+                showCardToCard();
+            }
+
+            @Override
+            public void sendMoneyClicked() {
+                showPaymentDialog();
+            }
+        });
+
+
     }
 
 
