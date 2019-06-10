@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
     android:id="@+id/root_chatRoom_bottom_view"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="45dp"
     android:clickable="true">
@@ -26,21 +26,21 @@
 
     <net.iGap.module.EmojiEditTextE
         android:id="@+id/et_chatRoom_writeMessage"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray_4c"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:paddingLeft="@dimen/dp8"
-        android:paddingRight="@dimen/dp8"
         android:background="@drawable/backround_chatroom_edittext"
         android:gravity="bottom"
         android:hint="@string/type_message"
         android:imeOptions="flagNoExtractUi"
         android:maxLines="4"
+        android:paddingLeft="@dimen/dp8"
         android:paddingTop="@dimen/dp4"
+        android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp4"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_4c"
         android:textSize="@dimen/dp16"
         app:emojiSize="@dimen/dp22"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -84,10 +84,23 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:weightSum="2"
+        android:weightSum="3"
+        android:layout_marginRight="@dimen/dp4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/btn_chatRoom_wallet"
+            style="?emojiChat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="0"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textSize="@dimen/dp20" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
@@ -104,10 +117,10 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_mic"
             style="?emojiChat"
-            android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/md_voice_message_microphone_button"
             android:textAppearance="@style/TextIconAppearance.all"
