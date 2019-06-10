@@ -2,7 +2,6 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -24,6 +23,9 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
 
 import static android.view.Gravity.BOTTOM;
+import static android.view.Gravity.CENTER;
+import static android.view.Gravity.CENTER_VERTICAL;
+import static android.view.Gravity.LEFT;
 
 public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
@@ -38,12 +40,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private AppCompatTextView signatureTv;
     private TextView viewsLabelTv;
     private AppCompatTextView editedIndicatorTv;
-    private AppCompatTextView timeTv;
-    private FontIconTextView ticTv;
+    private AppCompatTextView messageTimeTv;
+    private FontIconTextView messageStatusTv;
     private View cslm_view_left_dis;
     private FontIconTextView eyeIconTv;
-    private FontIconTextView voteDownIcon;
-    private FontIconTextView voteUpIcon;
+    private FontIconTextView voteDownIv;
+    private FontIconTextView voteUpIv;
 
     private LinearLayout voteContainer;
     private LinearLayout viewContainer;
@@ -82,102 +84,105 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         contentBloke = new LinearLayout(getContext());
         contentBloke.setId(R.id.ll_chatItem_contentBloke);
+        contentBloke.setOrientation(LinearLayout.VERTICAL);
 
         voteDownTv = new AppCompatTextView(getContext());
         voteUpTv = new AppCompatTextView(getContext());
         signatureTv = new AppCompatTextView(getContext());
         signatureTv.setId(R.id.tv_chatItem_signature);
+        signatureTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 
         viewsLabelTv = new TextView(getContext());
         viewsLabelTv.setId(R.id.tv_chatItem_viewLabel);
-        viewsLabelTv.setTextAppearance(context, R.style.ChatMessages_Time);
         viewsLabelTv.setSingleLine(true);
         setTypeFace(viewsLabelTv);
-        viewsLabelTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+        viewsLabelTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 
         eyeIconTv = new FontIconTextView(getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
         eyeIconTv.setText("Ë");
-        eyeIconTv.setTextColor(Color.parseColor(G.textBubble));
         eyeIconTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
         editedIndicatorTv = new AppCompatTextView(getContext());
         editedIndicatorTv.setId(R.id.tv_chatItem_edited);
+        editedIndicatorTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        editedIndicatorTv.setText(getResources().getString(R.string.edited));
+        editedIndicatorTv.setGravity(LEFT);
 
-        ticTv = new FontIconTextView(getContext());
-        ticTv.setId(R.id.tv_chatItem_status);
-        ticTv.setTextSize(16);
+        messageStatusTv = new FontIconTextView(getContext());
+        messageStatusTv.setId(R.id.tv_chatItem_status);
+        messageStatusTv.setTextSize(16);
         cslm_view_left_dis = new View(getContext());
 
-        timeTv = new AppCompatTextView(getContext());
-        timeTv.setId(R.id.tv_chatItem_time);
+        messageTimeTv = new AppCompatTextView(getContext());
+        messageTimeTv.setId(R.id.tv_chatItem_time);
+        messageTimeTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 
-        voteUpTv.setTextAppearance(context, R.style.ChatMessages_Time);
         voteUpTv.setSingleLine(true);
-        voteUpTv.setTextColor(Color.parseColor(G.voteIconTheme));
         setTypeFace(voteUpTv);
-        voteUpTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+        voteUpTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 
-        voteDownTv.setTextAppearance(context, R.style.ChatMessages_Time);
         voteDownTv.setSingleLine(true);
-        voteDownTv.setTextColor(Color.parseColor(G.voteIconTheme));
         setTypeFace(voteUpTv);
-        voteDownTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+        voteDownTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 
         itemContainer.setOrientation(LinearLayout.HORIZONTAL);
         itemContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         itemContainer.setPadding(ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4));
 
-        contentBloke.setOrientation(LinearLayout.VERTICAL);
-
         chatBloke.setPadding(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4));
 
-
-        timeTv.setTextColor(Color.parseColor(G.textBubble));
-        timeTv.setPadding(dpToPx(2), 0, dpToPx(2), 0);
-        timeTv.setSingleLine(true);
-        timeTv.setTextAppearance(getContext(), R.style.ChatMessages_Time);
-        setTypeFace(timeTv);
+        messageTimeTv.setPadding(dpToPx(2), 0, dpToPx(2), 0);
+        messageTimeTv.setSingleLine(true);
+        setTypeFace(messageTimeTv);
 
 
-        voteUpIcon = new FontIconTextView(context);
-        voteUpIcon.setText("Ö");
-        voteUpIcon.setGravity(BOTTOM);
-        voteUpIcon.setTextColor(Color.parseColor(G.voteIconTheme));
-        voteUpIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        voteUpIv = new FontIconTextView(context);
+        voteUpIv.setText("Ö");
+        voteUpIv.setGravity(BOTTOM);
+        voteUpIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
-        voteDownIcon = new FontIconTextView(context);
-        voteDownIcon.setText("Ü");
-        voteDownIcon.setGravity(BOTTOM);
-        voteDownIcon.setTextColor(Color.parseColor(G.voteIconTheme));
-        voteDownIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        voteDownIv = new FontIconTextView(context);
+        voteDownIv.setText("Ü");
+        voteDownIv.setGravity(BOTTOM);
+        voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
+
+        LinearLayout messageDetailContainer = new LinearLayout(getContext());
+        messageDetailContainer.setOrientation(LinearLayout.HORIZONTAL);
+        messageDetailContainer.setGravity(CENTER_VERTICAL);
+        messageDetailContainer.setId(R.id.ll_chatItem_detailContainer);
+
+        messageDetailContainer.addView(editedIndicatorTv,
+                LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER,
+                        4, 0, 4, 0));
+        messageDetailContainer.addView(signatureTv,
+                LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER,
+                        4, 0, 4, 0));
+
+
+        set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainHeight(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
 
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.TOP, dpToPx(6));
+        set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.TOP, dpToPx(6));
 
-        set.constrainHeight(ticTv.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(ticTv.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainHeight(messageStatusTv.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(messageStatusTv.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(ticTv.getId(), ConstraintSet.RIGHT, chatBloke.getId(), ConstraintSet.RIGHT,dpToPx(4));
-        set.connect(ticTv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        set.connect(messageStatusTv.getId(), ConstraintSet.RIGHT, chatBloke.getId(), ConstraintSet.RIGHT, dpToPx(4));
+        set.connect(messageStatusTv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
-        set.constrainHeight(timeTv.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(timeTv.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainHeight(messageTimeTv.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(messageTimeTv.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(timeTv.getId(), ConstraintSet.RIGHT, ticTv.getId(), ConstraintSet.LEFT, dpToPx(4));
-        set.connect(timeTv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        set.connect(messageTimeTv.getId(), ConstraintSet.RIGHT, messageStatusTv.getId(), ConstraintSet.LEFT, dpToPx(4));
+        set.connect(messageTimeTv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
-
-        set.constrainHeight(editedIndicatorTv.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(editedIndicatorTv.getId(), ConstraintSet.WRAP_CONTENT);
-
-        set.constrainHeight(voteDownIcon.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainHeight(voteDownIv.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(voteDownTv.getId(), ConstraintSet.WRAP_CONTENT);
-
-        set.constrainHeight(signatureTv.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(signatureTv.getId(), ConstraintSet.WRAP_CONTENT);
 
         set.constrainHeight(voteContainer.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(voteContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
@@ -190,28 +195,37 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         viewContainer.addView(eyeIconTv, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         set.connect(viewContainer.getId(), ConstraintSet.LEFT, chatBloke.getId(), ConstraintSet.LEFT);
-        set.connect(viewContainer.getId(), ConstraintSet.TOP, timeTv.getId(), ConstraintSet.TOP);
-        set.connect(viewContainer.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.BOTTOM);
+        set.connect(viewContainer.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
+        set.connect(viewContainer.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
 
         set.connect(voteContainer.getId(), ConstraintSet.LEFT, viewContainer.getId(), ConstraintSet.RIGHT, dpToPx(8));
-        set.connect(voteContainer.getId(), ConstraintSet.TOP, timeTv.getId(), ConstraintSet.TOP);
-        set.connect(voteContainer.getId(), ConstraintSet.BOTTOM, timeTv.getId(), ConstraintSet.BOTTOM);
+        set.connect(voteContainer.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
+        set.connect(voteContainer.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
 
-        voteUpContainer.addView(voteUpIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                Gravity.CENTER, 0, 0, dpToPx(1), 0));
+        set.connect(messageDetailContainer.getId(), ConstraintSet.RIGHT, messageTimeTv.getId(), ConstraintSet.LEFT);
+        set.connect(messageDetailContainer.getId(), ConstraintSet.LEFT, voteContainer.getId(), ConstraintSet.RIGHT);
+        set.connect(messageDetailContainer.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
+        set.connect(messageDetailContainer.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
+
+        voteUpContainer.addView(voteUpIv,
+                LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
+                        Gravity.CENTER, 0, 0, dpToPx(1), 0));
         voteUpContainer.addView(voteUpTv);
 
-        voteDownContainer.addView(voteDownIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                Gravity.CENTER, 0, 0, dpToPx(1), 0));
+        voteDownContainer.addView(voteDownIv,
+                LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
+                        Gravity.CENTER, 0, 0, dpToPx(1), 0));
         voteDownContainer.addView(voteDownTv);
 
-        voteContainer.addView(voteUpContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                Gravity.CENTER, 0, 0, dpToPx(2), 0));
+        voteContainer.addView(voteUpContainer,
+                LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
+                        Gravity.CENTER, 0, 0, dpToPx(2), 0));
         voteContainer.addView(voteDownContainer);
 
+        chatBloke.addView(messageDetailContainer);
         chatBloke.addView(contentBloke);
-        chatBloke.addView(timeTv);
-        chatBloke.addView(ticTv);
+        chatBloke.addView(messageTimeTv);
+        chatBloke.addView(messageStatusTv);
         chatBloke.addView(voteContainer);
         chatBloke.addView(viewContainer);
 
@@ -258,7 +272,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return ViewMaker.i_Dp(dpSrc);
     }
 
-
     protected void setTypeFace(TextView v) {
         ViewMaker.setTypeFace(v);
     }
@@ -304,12 +317,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return editedIndicatorTv;
     }
 
-    public AppCompatTextView getTimeTv() {
-        return timeTv;
+    public AppCompatTextView getMessageTimeTv() {
+        return messageTimeTv;
     }
 
-    public FontIconTextView getTicTv() {
-        return ticTv;
+    public FontIconTextView getMessageStatusTv() {
+        return messageStatusTv;
     }
 
     public View getCslm_view_left_dis() {
@@ -344,19 +357,15 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return getResources().getDrawable(drawableId);
     }
 
-    public FontIconTextView getVoteDownIcon() {
-        return voteDownIcon;
+    public FontIconTextView getVoteDownIv() {
+        return voteDownIv;
     }
 
-    public void setVoteDownIcon(FontIconTextView voteDownIcon) {
-        this.voteDownIcon = voteDownIcon;
+    public FontIconTextView getVoteUpIv() {
+        return voteUpIv;
     }
 
-    public FontIconTextView getVoteUpIcon() {
-        return voteUpIcon;
-    }
-
-    public void setVoteUpIcon(FontIconTextView voteUpIcon) {
-        this.voteUpIcon = voteUpIcon;
+    public FontIconTextView getEyeIconTv() {
+        return eyeIconTv;
     }
 }

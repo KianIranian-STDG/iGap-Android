@@ -6,6 +6,6 @@
     android:bottomRightRadius="12dp"
     android:topLeftRadius="0dp"
     android:topRightRadius="12dp" />
-  <solid android:color="@color/messageBox_receiveColor" />
+  <solid android:color="#ececee" />
 
 </shape>

@@ -9,8 +9,5 @@
 
 
     />
-  <solid android:color="@color/background_progress" />
-  <stroke
-    android:width="1dp"
-    android:color="#313131" />
+  <solid android:color="#3d3d3d" />
 </shape>

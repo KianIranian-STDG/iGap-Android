@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
 
-    <item>
+    <solid android:color="#383838" />
 
-        <shape android:shape="rectangle">
+    <corners
+        android:bottomLeftRadius="@dimen/toolbar_radius"
+        android:bottomRightRadius="@dimen/toolbar_radius" />
 
-            <gradient
-                android:angle="135"
-                android:endColor="#25851A"
-                android:startColor="#114602"/>
-            
-            <corners
-                android:bottomLeftRadius="@dimen/toolbar_radius"
-                android:bottomRightRadius="@dimen/toolbar_radius"/>
-
-        </shape>
-
-    </item>
-
-</selector>
+</shape>
