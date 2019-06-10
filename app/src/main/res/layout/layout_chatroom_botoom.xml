@@ -26,7 +26,8 @@
 
     <net.iGap.module.EmojiEditTextE
         android:id="@+id/et_chatRoom_writeMessage"
-        style="?emojiChat"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_4c"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
