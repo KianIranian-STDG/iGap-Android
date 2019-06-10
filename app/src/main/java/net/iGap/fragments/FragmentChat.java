@@ -797,7 +797,6 @@ public class FragmentChat extends BaseFragment
         };
         gongingHandler = new Handler(Looper.getMainLooper());
 
-
         startPageFastInitialize();
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -962,11 +961,13 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
-                MusicPlayer.chatLayout = mediaLayout;
-                ActivityCall.stripLayoutChat = rootView.findViewById(R.id.ac_ll_strip_call);
+               // MusicPlayer.chatLayout = mediaLayout;
+               // ActivityCall.stripLayoutChat = rootView.findViewById(R.id.ac_ll_strip_call);
 
-                ActivityMain.setMediaLayout();
-                ActivityMain.setStripLayoutCall();
+               // ActivityMain.setMediaLayout();
+                try{
+                    mHelperToolbar.checkIsAvailableOnGoingCall();
+                }catch (Exception e){}
 
                 if (!G.twoPaneMode) {
                     try {
@@ -1048,33 +1049,6 @@ public class FragmentChat extends BaseFragment
             }
 
             backGroundSeenList.clear();
-        }
-
-        if (G.isInCall) {
-            rootView.findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
-
-            ActivityCallViewModel.txtTimeChat = rootView.findViewById(R.id.cslcs_txt_timer);
-
-            TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(G.fragmentActivity, ActivityCall.class));
-                }
-            });
-
-            G.iCallFinishChat = new ICallFinish() {
-                @Override
-                public void onFinish() {
-                    try {
-                        rootView.findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-        } else {
-            rootView.findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
         }
 
         if (isCloudRoom) {
@@ -1516,6 +1490,7 @@ public class FragmentChat extends BaseFragment
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
+                .setPlayerEnable(true)
                 .setListener(this);
 
         layoutToolbar = rootView.findViewById(R.id.ac_layout_toolbar);
@@ -1831,7 +1806,7 @@ public class FragmentChat extends BaseFragment
          * define views
          */
         mediaLayout = rootView.findViewById(R.id.ac_ll_music_layout);
-        MusicPlayer.setMusicPlayer(mediaLayout);
+        //MusicPlayer.setMusicPlayer(mediaLayout);
         initPinedMessage();
 
         lyt_user = rootView.findViewById(R.id.lyt_user);
@@ -2740,7 +2715,6 @@ public class FragmentChat extends BaseFragment
             DialogAnimation.animationUp(dialog);
             dialog.show();*/
         });
-
 
 //        imvSmileButton = rootView.findViewById(R.id.chl_imv_smile_button);
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);

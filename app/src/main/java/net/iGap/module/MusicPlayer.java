@@ -16,6 +16,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.arch.lifecycle.MutableLiveData;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -99,6 +100,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static MediaPlayer mp;
     public static OnComplete onComplete = null;
     public static OnComplete onCompleteChat = null;
+    public static MutableLiveData<Boolean> playerStateChangeListener = new MutableLiveData<>();
     public static boolean isShowMediaPlayer = false;
     public static int musicProgress = 0;
     public static boolean isPause = false;
@@ -256,9 +258,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         });
 
         if (MusicPlayer.mp != null) {
+
+            getMusicArtist();
+
             layout.setVisibility(View.VISIBLE);
             txt_music_name.setText(MusicPlayer.musicName);
-            txt_music_info.setText(MusicPlayer.musicInfo);
+            txt_music_info.setText(MusicPlayer.musicInfoTitle);
 
             txt_music_time.setText(musicTime);
 
@@ -606,6 +611,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.GONE);
+                playerStateChangeListener.setValue(false);
             }
 
             if (onComplete != null) {
@@ -746,6 +752,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.VISIBLE);
+                playerStateChangeListener.setValue(true);
+
             }
             musicName = getMusicName(Long.parseLong(messageID), name);
             mp = new MediaPlayer();
@@ -770,12 +778,14 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 currentDuration = 0;
             }
 
+            getMusicArtist();
+
             updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
             btnPlayMusic.setText(context.getString(R.string.pause_icon));
             txt_music_name.setText(musicName);
-            txt_music_info.setText(musicInfo);
+            txt_music_info.setText(musicInfoTitle);
 
             updateName = new UpdateName() {
                 @Override
@@ -1176,6 +1186,51 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 Log.e("debug", " music plyer   getMusicInfo    " + uri + "       " + e.toString());
             }
         }
+    }
+
+    private static void getMusicArtist() {
+
+        MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+
+        Uri uri = null;
+
+        if (MusicPlayer.musicPath != null) {
+            uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+        }
+
+        if (uri != null) {
+
+            try {
+
+                mediaMetadataRetriever.setDataSource(context, uri);
+
+                String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+
+                if (title != null) {
+                    musicInfo += title + "       ";
+                    musicInfoTitle = title;
+                }
+
+                String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+                if (albumName != null) {
+                    musicInfo += albumName + "       ";
+                    musicInfoTitle = albumName;
+                }
+
+                String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                if (artist != null) {
+                    musicInfo += artist + "       ";
+                    musicInfoTitle = artist;
+                }
+
+            }catch (Exception e){
+
+                if (musicInfoTitle != null && musicInfoTitle.trim().equals("")){
+                    txt_music_info.setVisibility(View.GONE);
+                }
+            }
+        }
+
     }
 
     private static void getAttribute() {

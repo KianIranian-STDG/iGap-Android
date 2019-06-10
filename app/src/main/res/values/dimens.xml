@@ -121,5 +121,6 @@
 
   <dimen name="toggles_height">@dimen/dp20</dimen>
   <dimen name="toggles_width">@dimen/dp32</dimen>
+    <dimen name="toolbar_search_box_size">30dp</dimen>
 
 </resources>

@@ -1,6 +1,7 @@
 package net.iGap.helper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
@@ -12,21 +13,29 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityCall;
+import net.iGap.activities.ActivityMain;
+import net.iGap.interfaces.ICallFinish;
+import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.viewmodel.ActivityCallViewModel;
 
 
 /**
@@ -67,6 +76,7 @@ public class HelperToolbar {
     private boolean isInChatRoom;
     private boolean isCallModeEnable;
     private boolean isGroupProfile;
+    private boolean isMediaPlayerEnabled;
     private String defaultTitleText = null;
     private boolean isShowEditTextForSearch;
     private View rootView;
@@ -124,6 +134,11 @@ public class HelperToolbar {
 
     public HelperToolbar setLogoShown(boolean logoShown) {
         this.isLogoShown = logoShown;
+        return this;
+    }
+
+    public HelperToolbar setPlayerEnable(boolean isEnable) {
+        this.isMediaPlayerEnabled = isEnable;
         return this;
     }
 
@@ -270,6 +285,7 @@ public class HelperToolbar {
             rootView.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.GONE);
             rootView.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.GONE);
             mTxtChatSeenStatus.setVisibility(View.GONE);
+
         }
 
         setBigAvatarVisibility(rootView, isBigCenterAvatarShown);
@@ -284,11 +300,16 @@ public class HelperToolbar {
 
         toolBarTitleHandler();
 
+        if (isMediaPlayerEnabled){
+            setMusicPlayer(rootView , isInChatRoom);
+        }
+
         checkIGapFont();
 
         return rootView;
 
     }
+
 
     public TextView getTextViewCounter() {
         return mTxtCounter;
@@ -380,6 +401,170 @@ public class HelperToolbar {
 
     /*************************************************************/
 
+    private void setMusicPlayer(View view , boolean isChat) {
+
+        LinearLayout musicLayout = view.findViewById(R.id.view_toolbar_layout_player_music);
+        LinearLayout stripCallLayout = view.findViewById(R.id.view_toolbar_layout_strip_call);
+
+        if (!isSearchBoxShown){
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) musicLayout.getLayoutParams();
+            params.setMargins( 0 , (int) mContext.getResources().getDimension(R.dimen.dp14) , 0 , 0);
+            musicLayout.setLayoutParams(params);
+
+            LinearLayout.LayoutParams paramsCall = (LinearLayout.LayoutParams) stripCallLayout.getLayoutParams();
+            paramsCall.setMargins( 0 , (int) mContext.getResources().getDimension(R.dimen.dp14) , 0 , 0);
+            stripCallLayout.setLayoutParams(paramsCall);
+        }
+
+        if (isChat){
+            MusicPlayer.chatLayout = musicLayout;
+            ActivityCall.stripLayoutChat = view.findViewById(R.id.view_toolbar_layout_strip_call);
+
+            ActivityCallViewModel.txtTimeChat = rootView.findViewById(R.id.cslcs_txt_timer);
+
+            TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
+            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
+
+            checkIsAvailableOnGoingCall();
+
+        }else {
+            MusicPlayer.mainLayout = musicLayout;
+            ActivityCall.stripLayoutMain = view.findViewById(R.id.view_toolbar_layout_strip_call);
+
+
+            ActivityCallViewModel.txtTimerMain = rootView.findViewById(R.id.cslcs_txt_timer);
+
+            TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
+            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
+
+        }
+
+        MusicPlayer.setMusicPlayer(musicLayout);
+        setMediaLayout();
+        //setStripLayoutCall();
+
+        G.callStripLayoutVisiblityListener.observe(G.fragmentActivity , isVisible -> {
+
+            try{
+
+                if (isVisible){
+                    if (isChat)
+                        ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
+                    else
+                        ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
+                }else {
+                    if (isChat)
+                        ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+                    else
+                        ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+
+                }
+
+            }catch (Exception e){}
+
+        });
+
+
+    }
+
+    public void checkIsAvailableOnGoingCall() {
+
+        /*if (G.isInCall) {
+            rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.VISIBLE);
+
+
+            G.iCallFinishChat = () -> {
+                try {
+                    rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            };
+
+
+            G.iCallFinishMain = () -> {
+                try {
+                    rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            };
+
+        } else {
+            rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
+        }*/
+    }
+
+
+    private void setMediaLayout() {
+        try {
+            if (MusicPlayer.mp != null) {
+
+                if (MusicPlayer.shearedMediaLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.shearedMediaLayout);
+
+                    if (MusicPlayer.chatLayout != null) {
+                        MusicPlayer.chatLayout.setVisibility(View.GONE);
+                    }
+
+                    if (MusicPlayer.mainLayout != null) {
+                        MusicPlayer.mainLayout.setVisibility(View.GONE);
+                    }
+                } else if (MusicPlayer.chatLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.chatLayout);
+
+                    if (MusicPlayer.mainLayout != null) {
+                        MusicPlayer.mainLayout.setVisibility(View.GONE);
+                    }
+                } else if (MusicPlayer.mainLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
+                }
+            } else {
+
+                if (MusicPlayer.mainLayout != null) {
+                    MusicPlayer.mainLayout.setVisibility(View.GONE);
+                }
+
+                if (MusicPlayer.chatLayout != null) {
+                    MusicPlayer.chatLayout.setVisibility(View.GONE);
+                }
+
+                if (MusicPlayer.shearedMediaLayout != null) {
+                    MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            HelperLog.setErrorLog(e);
+        }
+    }
+
+
+    private void setStripLayoutCall() {
+        if (G.isInCall) {
+            if (ActivityCall.stripLayoutChat != null) {
+                ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
+
+                if (ActivityCall.stripLayoutMain != null) {
+                    ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+                }
+            } else {
+                if (ActivityCall.stripLayoutMain != null) {
+                    ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
+                }
+            }
+        } else {
+
+            if (ActivityCall.stripLayoutMain != null) {
+                ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+            }
+
+            if (ActivityCall.stripLayoutChat != null) {
+                ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+            }
+        }
+    }
+
     private void checkIGapFont() {
 
         if (mTxtLogo.getText().toString().toLowerCase().equals("igap")){
@@ -439,7 +624,7 @@ public class HelperToolbar {
             view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
                     new ConstraintLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height)
+                            ViewGroup.LayoutParams.WRAP_CONTENT//mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height)
                     ));
         }
 
@@ -467,7 +652,7 @@ public class HelperToolbar {
             view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
                     new ConstraintLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_root_with_search)
+                            ViewGroup.LayoutParams.WRAP_CONTENT//mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_root_with_search)
                     ));
 
             mSearchBox.setOnClickListener(v ->{
