@@ -11,14 +11,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:background="@color/green"
     android:padding="2dp">
 
     <pl.droidsonroids.gif.GifImageView
       android:id="@+id/smslg_gif_view"
       android:layout_width="@dimen/dp120"
       android:layout_height="@dimen/dp120"
-      android:background="@color/gray_f2"
+      android:background="@color/gray_shared_media_items"
       android:minHeight="@dimen/dp120"
       android:scaleType="centerCrop" />
 
