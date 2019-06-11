@@ -87,6 +87,16 @@
         android:animateLayoutChanges="true"
         android:visibility="gone">
 
+        <ProgressBar
+            android:id="@+id/pb_moneyAction"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_moneyAction_userName" />
+
         <net.iGap.module.CircleImageView
             android:id="@+id/iv_moneyAction_userAvatar"
             android:layout_width="65dp"
@@ -142,99 +152,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_moneyAction_userAvatar" />
 
-        <TextView
-            android:id="@+id/tv_moneyAction_amountText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/transfer_amount_hint"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintStart_toStartOf="@+id/iv_moneyAction_userAvatar"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
-
-        <EditText
-            android:id="@+id/et_moneyAction_amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/background_edittext_money_action"
-            android:hint="@string/amount_in_rial"
-            android:inputType="numberDecimal"
-            android:lines="1"
-            android:maxLength="10"
-            android:maxLines="1"
-            android:padding="6dp"
-            android:singleLine="true"
-            android:textColor="@color/black_register"
-            android:textColorHint="@color/pu_edtHintText"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintStart_toStartOf="@+id/tv_moneyAction_amountText"
-            app:layout_constraintTop_toBottomOf="@+id/tv_moneyAction_amountText" />
-
-        <EditText
-            android:id="@+id/et_moneyAction_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/background_edittext_money_action"
-            android:hint="@string/desc"
-            android:lines="1"
-            android:maxLines="1"
-            android:padding="6dp"
-            android:singleLine="true"
-            android:textAllCaps="false"
-            android:textColor="@color/black_register"
-            android:textColorHint="@color/pu_edtHintText"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintStart_toStartOf="@+id/tv_moneyAction_description"
-            app:layout_constraintTop_toBottomOf="@+id/tv_moneyAction_description" />
-
-        <TextView
-            android:id="@+id/tv_moneyAction_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/desc"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintStart_toStartOf="@+id/et_moneyAction_amount"
-            app:layout_constraintTop_toBottomOf="@+id/et_moneyAction_amount" />
-
-        <Button
-            android:id="@+id/btn_moneyAction_pay"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/background_pay_mony_action"
-            android:text="@string/pay"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
+        <FrameLayout
+            android:id="@+id/fl_moneyAction_Container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp240"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_moneyAction_cancel"
-            app:layout_constraintTop_toBottomOf="@+id/et_moneyAction_description" />
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            tools:layout_editor_absoluteX="0dp">
 
-        <Button
-            android:id="@+id/btn_moneyAction_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:background="@drawable/background_cancel_mony_action"
-            android:text="@string/cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/grayNew"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_moneyAction_pay"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_moneyAction_pay" />
+
+        </FrameLayout>
 
     </android.support.constraint.ConstraintLayout>
 

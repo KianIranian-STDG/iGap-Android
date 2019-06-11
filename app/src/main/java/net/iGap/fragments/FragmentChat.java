@@ -134,6 +134,7 @@ import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.PaymentFragment;
+import net.iGap.fragments.chatMoneyTransfer.FragmentMoneyTransferAction;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.DialogAddSticker;
@@ -3395,21 +3396,9 @@ public class FragmentChat extends BaseFragment
                     transferAction = FragmentMoneyTransferAction.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
 
                     if (getFragmentManager() != null)
-                        transferAction.show(getFragmentManager(), null);
-
-                    transferAction.setMoneyTransferAction(new FragmentMoneyTransferAction.MoneyTransferAction() {
-                        @Override
-                        public void cardToCardClicked() {
-                            showCardToCard();
-                        }
-
-                        @Override
-                        public void sendMoneyClicked() {
-                            showPaymentDialog();
-                        }
-                    });
-
-
+                        transferAction.show(getFragmentManager(), "PaymentFragment");
+//                        transferAction.show(getFragmentManager(), "PaymentFragment");
+                    transferAction.setMoneyTransferAction(this::showCardToCard);
                 }
             }
         }

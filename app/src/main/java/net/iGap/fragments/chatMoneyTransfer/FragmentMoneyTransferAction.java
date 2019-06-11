@@ -1,4 +1,4 @@
-package net.iGap.fragments;
+package net.iGap.fragments.chatMoneyTransfer;
 
 import android.animation.ValueAnimator;
 import android.content.res.Resources;
@@ -7,26 +7,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.eventbus.EventListener;
 import net.iGap.module.CircleImageView;
 
-import java.util.Locale;
-
-public class FragmentMoneyTransferAction extends BottomSheetDialogFragment implements EventListener {
+public class FragmentMoneyTransferAction extends BottomSheetDialogFragment {
     private static final String TAG = "aabolfazl";
-    private final String[] mPrice = {""};
 
     private View rootView;
     private View cardToCard;
@@ -37,14 +32,14 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment imple
     private CircleImageView userAvatarIv;
     private TextView userNameTv;
     private TextView creditTv;
-    private EditText amountEt;
-    private EditText descriptionEt;
-    private Button payBtn;
-    private Button cancelBtn;
-    private Long userId;
     private String userName;
     private Drawable drawable;
     private MoneyTransferAction moneyTransferAction;
+    private ProgressBar progressBar;
+
+    private FrameLayout layoutContainer;
+    private long userId;
+
 
     public static FragmentMoneyTransferAction getInstance(long userId, Drawable userPicture, String userName) {
         FragmentMoneyTransferAction transferAction = new FragmentMoneyTransferAction();
@@ -55,7 +50,6 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment imple
 
         return transferAction;
     }
-
 
     public void setMoneyTransferAction(MoneyTransferAction moneyTransferAction) {
         this.moneyTransferAction = moneyTransferAction;
@@ -77,10 +71,7 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment imple
         userAvatarIv = rootView.findViewById(R.id.iv_moneyAction_userAvatar);
         userNameTv = rootView.findViewById(R.id.tv_moneyAction_userName);
         creditTv = rootView.findViewById(R.id.tv_moneyAction_credit);
-        amountEt = rootView.findViewById(R.id.et_moneyAction_amount);
-        descriptionEt = rootView.findViewById(R.id.et_moneyAction_description);
-        payBtn = rootView.findViewById(R.id.btn_moneyAction_pay);
-        cancelBtn = rootView.findViewById(R.id.btn_moneyAction_cancel);
+        progressBar = rootView.findViewById(R.id.pb_moneyAction);
     }
 
     @Override
@@ -129,11 +120,11 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment imple
 
     private void sendMoneyClicked() {
         transferRootView.setVisibility(View.VISIBLE);
-
-        cancelBtn.setOnClickListener(v -> dismiss());
+        layoutContainer = rootView.findViewById(R.id.fl_moneyAction_Container);
 
         userAvatarIv.setImageDrawable(drawable);
         userNameTv.setText(userName);
+
         if (G.selectedCard != null) {
             creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
         } else {
@@ -141,35 +132,17 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment imple
         }
 
 
-        amountEt.addTextChangedListener(new TextWatcher() {
-            boolean isSettingText;
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mPrice[0] = s.toString().replaceAll(",", "");
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (isSettingText) return;
-                isSettingText = true;
-                String s = null;
-                try {
-                    s = String.format(Locale.US, "%,d", Long.parseLong(mPrice[0]));
-                } catch (NumberFormatException e) {
-                    Log.d(TAG, "afterTextChanged: " + e);
-                }
-                amountEt.setText(s);
-                amountEt.setSelection(amountEt.length());
-                isSettingText = false;
-            }
-        });
-
-
+        SendMoneyDetailFragment sendMoneyFragment = new SendMoneyDetailFragment();
+        sendMoneyFragment.setUserId(userId);
+        sendMoneyFragment.setProgressBar(progressBar);
+        sendMoneyFragment.setFragmentManager(getChildFragmentManager());
+        /**
+         * because add fragment in other fragment can not use getFragmentManager
+         * */
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fl_moneyAction_Container, sendMoneyFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public int getScreenHeight() {
@@ -185,14 +158,20 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment imple
         }
     }
 
-    @Override
-    public void receivedMessage(int id, Object... message) {
-
+    public void dismissProgress() {
+        progressBar.setVisibility(View.INVISIBLE);
     }
+
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
 
     public interface MoneyTransferAction {
         void cardToCardClicked();
+    }
 
-        void sendMoneyClicked();
+    public interface ProgressView {
+        ProgressBar prgressBar();
     }
 }
