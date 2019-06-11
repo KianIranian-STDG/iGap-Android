@@ -164,6 +164,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private HelperToolbar mHelperToolbar ;
     private boolean isToolbarInEditMode = false;
     private HashMap<Integer , String> mSharedTypesList = new HashMap<Integer, String>();
+    private List<SharedButtons> mSharedTypeButtonsList = new ArrayList<>();
     private LinearLayout mediaTypesLayout;
 
     private void initSharedTypes(){
@@ -360,6 +361,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         openLayout();
         initAppbarSelected(view);
         makeSharedTypesViews();
+        checkSharedButtonsBackgrounds();
     }
 
     private void openLayout() {
@@ -574,9 +576,37 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         textView.setLayoutParams(lp);
         textView.setPadding(getDimen(R.dimen.dp14) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp14) , getDimen(R.dimen.dp4));
 
-        textView.setOnClickListener(v -> mediaTypesClickHandler(pos));
+        mSharedTypeButtonsList.add(new SharedButtons(textView , pos));
+
+        textView.setOnClickListener(v -> {
+            mediaTypesClickHandler(pos);
+            checkSharedButtonsBackgrounds();
+        });
 
         mediaTypesLayout.addView(textView);
+    }
+
+    private void checkSharedButtonsBackgrounds() {
+
+        for (int i=0 ; i<mSharedTypeButtonsList.size() ; i++){
+            if (G.isDarkTheme){
+                if (mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId()){
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.black));
+                }else {
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
+                }
+            }else {
+                if (mCurrentSharedMediaType != mSharedTypeButtonsList.get(i).getId()){
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.black));
+                }else {
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
+                }
+            }
+        }
     }
 
     private void mediaTypesClickHandler(int pos) {
@@ -2300,5 +2330,32 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     public interface GoToPositionFromShardMedia {
         void goToPosition(Long aLong);
+    }
+
+    private class SharedButtons{
+
+        private TextView button ;
+        private int id ;
+
+        public SharedButtons(TextView button, int id) {
+            this.button = button;
+            this.id = id;
+        }
+
+        public TextView getButton() {
+            return button;
+        }
+
+        public void setButton(TextView button) {
+            this.button = button;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
     }
 }
