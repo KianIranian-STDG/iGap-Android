@@ -656,15 +656,24 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         }
 
         if (isFirst) {
-            runOnUiThread(() -> rotateScreen(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight()));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    rotateScreen(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight());
+                }
+            });
 
             isFirst = false;
         }
 
         if (rotateFrame != videoFrame.getRotation()) {
-            runOnUiThread(() -> {
-                isVerticalOrient = true;
-                rotateScreen(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight());
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    isVerticalOrient = true;
+                    rotateScreen(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight());
+                }
             });
             isFrameChange = true;
         }
@@ -696,7 +705,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
-        Log.i("#peymanProxy", "Activity call");
+
     }
 
     @Override

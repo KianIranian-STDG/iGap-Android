@@ -22,9 +22,23 @@ public class HelperTracker {
     public static final String TRACKER_ACTIVATION_CODE = "TRACKER_ACTIVATION_CODE";
     public static final String TRACKER_REGISTRATION_USER = "TRACKER_REGISTRATION_USER";
     public static final String TRACKER_REGISTRATION_NEW_USER = "TRACKER_REGISTRATION_NEW_USER";
-    public static final String TRACKER_CHAT_PAGE = "TRACKER_CHAT_PAGE";
+    public static final String TRACKER_ROOM_PAGE = "TRACKER_ROOM_PAGE";
     public static final String TRACKER_DISCOVERY_PAGE = "TRACKER_DISCOVERY_PAGE";
     public static final String TRACKER_CALL_PAGE = "TRACKER_CALL_PAGE";
+    public static final String TRACKER_CHAT_VIEW = "TRACKER_CHAT_VIEW";
+    public static final String TRACKER_GROUP_VIEW = "TRACKER_GROUP_VIEW";
+    public static final String TRACKER_CHANNEL_VIEW = "TRACKER_CHANNEL_VIEW";
+    public static final String TRACKER_BOT_VIEW = "TRACKER_BOT_VIEW";
+    public static final String TRACKER_WALLET_PAGE = "TRACKER_WALLET_PAGE";
+    public static final String TRACKER_NEARBY_PAGE = "TRACKER_NEARBY_PAGE";
+    public static final String TRACKER_CHANGE_LANGUAGE = "TRACKER_CHANGE_LANGUAGE";
+    public static final String TRACKER_CREATE_CHANNEL = "TRACKER_CREATE_CHANNEL";
+    public static final String TRACKER_CREATE_GROUP = "TRACKER_CREATE_GROUP";
+    public static final String TRACKER_VOICE_CALL_CONNECTING = "TRACKER_VOICE_CALL_CONNECTING";
+    public static final String TRACKER_VOICE_CALL_CONNECTED = "TRACKER_VOICE_CALL_CONNECTED";
+    public static final String TRACKER_VIDEO_CALL_CONNECTING = "TRACKER_VIDEO_CALL_CONNECTING";
+    public static final String TRACKER_VIDEO_CALL_CONNECTED = "TRACKER_VIDEO_CALL_CONNECTED";
+    public static final String TRACKER_FINANCIAL_SERVICES = "TRACKER_FINANCIAL_SERVICES";
 
     public static void sendTracker(String trackerTag) {
 

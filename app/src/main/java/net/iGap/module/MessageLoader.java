@@ -50,8 +50,6 @@ public final class MessageLoader {
      * @return Object[] ==> [0] -> ArrayList<StructMessageInfo>, [1] -> boolean hasMore, [2] -> boolean hasGap
      */
     public static Object[] getLocalMessage(Realm realm, long roomId, long messageId, long gapMessageId, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        //+Realm realm = Realm.getDefaultInstance();
-        Log.d("bagi" , "getLocalMessageCalled");
         boolean hasMore = true;
         boolean hasSpaceToGap = true;
         List<RealmRoomMessage> realmRoomMessages;

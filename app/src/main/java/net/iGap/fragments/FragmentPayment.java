@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBinding;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentPaymentViewModel;
 
@@ -45,6 +46,7 @@ public class FragmentPayment extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_FINANCIAL_SERVICES);
         initDataBinding();
     }
 

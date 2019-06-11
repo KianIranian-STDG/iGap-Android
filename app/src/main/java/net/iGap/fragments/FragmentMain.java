@@ -34,6 +34,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
+import net.iGap.helper.HelperTracker;
 import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -165,9 +166,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("bagi", "FragmentMain:onViewCreated:start");
-
-        //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
         this.mView = view;
         tagId = System.currentTimeMillis();
 
@@ -383,10 +382,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             });
         }
 
-        G.onNotifyTime = () -> {
-            if (mRecyclerView != null) {
-                if (mRecyclerView.getAdapter() != null) {
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
+        G.onNotifyTime = new OnNotifyTime() {
+            @Override
+            public void notifyTime() {
+                if (mRecyclerView != null) {
+                    if (mRecyclerView.getAdapter() != null) {
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                    }
                 }
             }
         };
@@ -406,10 +408,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
             case downScrool:
 
-                G.handler.post(() -> {
-                    int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                    if (firstVisibleItem < 5) {
-                        mRecyclerView.scrollToPosition(0);
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                        if (firstVisibleItem < 5) {
+                            mRecyclerView.scrollToPosition(0);
+                        }
                     }
                 });
 
@@ -427,18 +432,26 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         if (clientConditionGlobal != null) {
             new RequestClientCondition().clientCondition(clientConditionGlobal);
         } else {
-            G.handler.postDelayed(this::sendClientCondition, 1000);
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendClientCondition();
+                }
+            }, 1000);
         }
     }
 
     private void getChatLists() {
-        new Handler().postDelayed(() -> {
-            if (G.isSecure && G.userLogin) {
-                boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                if (send)
-                    progressBar.setVisibility(View.VISIBLE);
-            } else {
-                getChatLists();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.isSecure && G.userLogin) {
+                    boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                    if (send)
+                        progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    getChatLists();
+                }
             }
         }, 1000);
     }
@@ -510,16 +523,22 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     private void goToTop() {
-        G.handler.postDelayed(() -> {
-            if (((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
-                mRecyclerView.smoothScrollToPosition(0);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
+                    mRecyclerView.smoothScrollToPosition(0);
+                }
             }
         }, 50);
     }
 
 
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
-        return realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded();
+        if (realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded()) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -606,7 +625,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
-
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             mOffset = 0;
@@ -620,7 +638,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         }
 
 
-        isThereAnyMoreItemToLoad = roomList.size() != 0;
+        if (roomList.size() == 0) {
+            isThereAnyMoreItemToLoad = false;
+        } else {
+            isThereAnyMoreItemToLoad = true;
+        }
 
         putChatToDatabase(roomList);
 
@@ -643,7 +665,17 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         mOffset += roomList.size();
 
-        G.handler.post(() -> progressBar.setVisibility(View.GONE));
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        //else {
+        //    mOffset = 0;
+        //}
+
 
     }
 
@@ -664,9 +696,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     @Override
     public void onClientGetRoomListTimeout() {
 
-        G.handler.post(() -> {
-            progressBar.setVisibility(View.GONE);
-            getChatLists();
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                getChatLists();
+            }
         });
     }
 
@@ -709,8 +744,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     @Override
     public void onResume() {
         super.onResume();
-
-        Log.d("bagi", "FragmentMain:onResume:start");
 
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
@@ -810,28 +843,35 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     public void isUpdateAvailable() {
         try {
             if (getActivity() != null && !getActivity().isFinishing()) {
-                getActivity().runOnUiThread(() -> {
-                    if (getActivity().hasWindowFocus()) {
-                        new MaterialDialog.Builder(getActivity())
-                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
-                                .titleGravity(GravityEnum.CENTER)
-                                .buttonsGravity(GravityEnum.CENTER)
-                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getActivity().hasWindowFocus()) {
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                    .titleGravity(GravityEnum.CENTER)
+                                    .buttonsGravity(GravityEnum.CENTER)
+                                    .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                                    .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                dialog.dismiss();
-                            }
-                        }).positiveText(R.string.startUpdate).onPositive((dialog, which) -> {
+                                    dialog.dismiss();
+                                }
+                            }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            String url = "http://d.igap.net/update";
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setData(Uri.parse(url));
-                            startActivity(i);
-                            dialog.dismiss();
-                        })
-                                .show();
+                                    // HelperUrl.openBrowser("http://d.igap.net/update");
+                                    String url = "http://d.igap.net/update";
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setData(Uri.parse(url));
+                                    startActivity(i);
+                                    dialog.dismiss();
+                                }
+                            })
+                                    .show();
+                        }
                     }
                 });
             }
@@ -1027,37 +1067,40 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         @Override
         protected OrderedRealmCollectionChangeListener createListener() {
-            return (collection, changeSet) -> {
-                if (getData() != null && getData().size() > 0) {
-                    emptyView.setVisibility(View.GONE);
-                } else {
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-                if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
-                    loadingView.setVisibility(View.GONE);
-                    notifyDataSetChanged();
-                    return;
-                }
-                // For deletions, the adapter has to be notified in reverse order.
-                OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
-                for (int i = deletions.length - 1; i >= 0; i--) {
-                    OrderedCollectionChangeSet.Range range = deletions[i];
-                    notifyItemRangeRemoved(range.startIndex, range.length);
-                }
+            return new OrderedRealmCollectionChangeListener() {
+                @Override
+                public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
+                    if (getData() != null && getData().size() > 0) {
+                        emptyView.setVisibility(View.GONE);
+                    } else {
+                        emptyView.setVisibility(View.VISIBLE);
+                    }
+                    if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
+                        loadingView.setVisibility(View.GONE);
+                        notifyDataSetChanged();
+                        return;
+                    }
+                    // For deletions, the adapter has to be notified in reverse order.
+                    OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
+                    for (int i = deletions.length - 1; i >= 0; i--) {
+                        OrderedCollectionChangeSet.Range range = deletions[i];
+                        notifyItemRangeRemoved(range.startIndex, range.length);
+                    }
 
-                OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
-                for (OrderedCollectionChangeSet.Range range : insertions) {
-                    notifyItemRangeInserted(range.startIndex, range.length);
-                    //goToTop();
-                }
+                    OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
+                    for (OrderedCollectionChangeSet.Range range : insertions) {
+                        notifyItemRangeInserted(range.startIndex, range.length);
+                        //goToTop();
+                    }
 
-                if (!updateOnModification) {
-                    return;
-                }
+                    if (!updateOnModification) {
+                        return;
+                    }
 
-                OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
-                for (OrderedCollectionChangeSet.Range range : modifications) {
-                    notifyItemRangeChanged(range.startIndex, range.length);
+                    OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
+                    for (OrderedCollectionChangeSet.Range range : modifications) {
+                        notifyItemRangeChanged(range.startIndex, range.length);
+                    }
                 }
             };
         }
@@ -1549,37 +1592,39 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                     }
                 });
 
-                view.setOnLongClickListener(v -> {
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
 
-                    if (isChatMultiSelectEnable) return false;
+                        if (isChatMultiSelectEnable) return false;
+                        if (ActivityMain.isMenuButtonAddShown) {
 
-                    if (ActivityMain.isMenuButtonAddShown) {
-
-                        if (mComplete != null) {
-                            mComplete.complete(true, "closeMenuButton", "");
-                        }
-
-                    } else {
-                        if (mInfo.isValid() && G.fragmentActivity != null) {
-                            String role = null;
-                            if (mInfo.getType() == GROUP) {
-                                role = mInfo.getGroupRoom().getRole().toString();
-                            } else if (mInfo.getType() == CHANNEL) {
-                                role = mInfo.getChannelRoom().getRole().toString();
+                            if (mComplete != null) {
+                                mComplete.complete(true, "closeMenuButton", "");
                             }
 
-                            if (!G.fragmentActivity.isFinishing()) {
-                                long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
-                                    @Override
-                                    public void complete(boolean result, String messageOne, String MessageTow) {
-                                        onSelectRoomMenu(messageOne, mInfo);
-                                    }
-                                }, mInfo.isPinned());
+                        } else {
+                            if (mInfo.isValid() && G.fragmentActivity != null) {
+                                String role = null;
+                                if (mInfo.getType() == GROUP) {
+                                    role = mInfo.getGroupRoom().getRole().toString();
+                                } else if (mInfo.getType() == CHANNEL) {
+                                    role = mInfo.getChannelRoom().getRole().toString();
+                                }
+
+                                if (!G.fragmentActivity.isFinishing()) {
+                                    long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
+                                        @Override
+                                        public void complete(boolean result, String messageOne, String MessageTow) {
+                                            onSelectRoomMenu(messageOne, mInfo);
+                                        }
+                                    }, mInfo.isPinned());
+                                }
                             }
                         }
+                        return true;
                     }
-                    return true;
                 });
             }
 

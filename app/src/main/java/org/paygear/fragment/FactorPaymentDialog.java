@@ -503,7 +503,6 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("AccountPaymentDialog", "onDestroy: ");
         if (getActivity() != null) {
             ((NavigationBarActivity) getContext()).broadcastMessage(
                     FactorPaymentDialog.this, null, ScannerFragment.class);

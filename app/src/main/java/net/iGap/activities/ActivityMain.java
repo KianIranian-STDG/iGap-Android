@@ -446,7 +446,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (G.ISOK) {
-            Log.d("bagi", "ActivityMain:onCreate:start");
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -794,7 +793,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
 
-            // Log.i("#token",FirebaseInstanceId.getInstance().getToken().toString());
             String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
             if (backGroundPath.isEmpty()) {
                 getWallpaperAsDefault();
@@ -816,7 +814,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-            Log.d("bagi", "ActivityMain:onCreate:end");
+
         } else {
            super.onCreate(savedInstanceState);
            TextView textView = new TextView(this);
@@ -918,9 +916,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         message:مبلغ تراکنش کمتر از حد تعیین شده توسط صادرکننده کارت و یا بیشتر از حد مجاز می باشد
                         status:61
                          */
-                        Log.d("bagi", "enData:" + data.getStringExtra("enData"));
-                        Log.d("bagi", "message:" + data.getStringExtra("message"));
-                        Log.d("bagi", "status:" + data.getIntExtra("status", 0));
                         DirectPayHelper.setResultOfDirectPay(data.getStringExtra("enData"), 0, null, data.getStringExtra("message"));
                         break;
                     case 2:
@@ -1213,41 +1208,42 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        arcMenu.fabMenu.setOnClickListener(v -> {
+        arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            if (mViewPager == null || mViewPager.getAdapter() == null) {
-                return;
-            }
+                if (mViewPager == null || mViewPager.getAdapter() == null) {
+                    return;
+                }
 
-            try {
+                try {
 
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-                if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
+                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
-                    FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                    switch (fm.mainType) {
+                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
+                        switch (fm.mainType) {
 
-                        case all:
-                            //arcMenu.toggleMenu();
-                            btnStartNewChat.performClick();
-
-                            break;
-                        case chat:
-                            btnStartNewChat.performClick();
-                            break;
-                        case group:
-                            btnCreateNewGroup.performClick();
-                            break;
-                        case channel:
-                            btnCreateNewChannel.performClick();
-                            break;
-                    }
-                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+                            case all:
+                                btnStartNewChat.performClick();
+                                break;
+                            case chat:
+                                btnStartNewChat.performClick();
+                                break;
+                            case group:
+                                btnCreateNewGroup.performClick();
+                                break;
+                            case channel:
+                                btnCreateNewChannel.performClick();
+                                break;
+                        }
+                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
 
                         ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
                     }
                 } catch (Exception e) {
                     HelperLog.setErrorLog(e);
+                }
             }
         });
     }
@@ -1396,14 +1392,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         }
 
-
         MaterialDesignTextView txtMenu = findViewById(R.id.am_btn_menu);
 
-        txtMenu.setOnClickListener(v -> {
-            try {
-                fragmentCall.openDialogMenu();
-            } catch (Exception e) {
-                e.printStackTrace();
+        txtMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    fragmentCall.openDialogMenu();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -1807,13 +1805,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onResume() {
         super.onResume();
         if (G.ISOK) {
-
-            Log.d("bagi", "ActivityMain:onResume:start");
-
             resume();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-            Log.d("bagi", "ActivityMain:onResume:end");
         }
     }
 

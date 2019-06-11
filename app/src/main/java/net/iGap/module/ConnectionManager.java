@@ -102,7 +102,6 @@ public class ConnectionManager {
                              * hint : if call twice or more this receiver , in second time will be called this section .
                              */
                             if (HelperTimeOut.heartBeatTimeOut()) {
-                               // Log.i("HHH", "Connection heartBeatTimeOut");
                                 reconnect(true);
                                 if (BuildConfig.DEBUG) {
                                     G.handler.post(new Runnable() {

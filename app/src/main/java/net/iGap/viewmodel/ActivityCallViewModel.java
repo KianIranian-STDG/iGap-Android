@@ -26,6 +26,7 @@ import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.module.AndroidUtils;
@@ -151,6 +152,12 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
             endCallText.set(R.string.end_voice_call_icon);
             answerCallIcon.set(R.string.voice_call_icon);
         }
+        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTING);
+        } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTING);
+        }
+
     }
 
     public void setBluetoothConnected(boolean bluetoothConnected) {
@@ -319,10 +326,17 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         txtAviVisibility.set(View.VISIBLE);
                         break;
                     case CONNECTED:
+
                         txtAviVisibility.set(View.GONE);
                         layoutOptionVisibility.set(View.VISIBLE);
                         if (!isConnected) {
-                            isConnected = true;
+                            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTED);
+                            } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTED);
+                            }
+
+                                isConnected = true;
                             G.handler.postDelayed(() -> {
                                 changeViewState.setValue(false);
                                 playSound.setValue(R.raw.igap_connect);
@@ -369,9 +383,12 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         new RequestSignalingLeave().signalingLeave();
 
                         isConnected = false;
-                        G.handler.postDelayed(() -> {
-                            stopTimer();
-                            endVoiceAndFinish();
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                stopTimer();
+                                endVoiceAndFinish();
+                            }
                         }, 500);
 
                         break;
@@ -480,7 +497,14 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
-        G.handler.postDelayed(this::endVoiceAndFinish, 1000);
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                endVoiceAndFinish();
+            }
+        }, 1000);
     }
 
     private void endVoiceAndFinish() {
@@ -555,13 +579,17 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         } else {
             //todo: add callback and remove delay :D
             new RequestUserInfo().userInfo(userId);
-            G.handler.postDelayed(() -> {
-                Realm realm1 = Realm.getDefaultInstance();
-                RealmRegisteredInfo registeredInfo1 = RealmRegisteredInfo.getRegistrationInfo(realm1, userId);
-                if (registeredInfo1 != null) {
-                    loadOrDownloadPicture(registeredInfo1);
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+
+                    if (registeredInfo != null) {
+                        loadOrDownloadPicture(registeredInfo);
+                    }
+                    realm.close();
                 }
-                realm1.close();
             }, 3000);
         }
         realm.close();
@@ -641,13 +669,17 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
             callBackTxtStatus.set(R.string.empty_error_message);
             G.handler.postDelayed(this::endVoiceAndFinish, 2000);
         } else {
-            G.handler.postDelayed(this::endVoiceAndFinish, 1000);
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    endVoiceAndFinish();
+                }
+            }, 1000);
         }
     }
 
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
-        Log.i("#peymanProxy", "Activity call view model");
     }
 
     @Override

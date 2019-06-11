@@ -48,17 +48,24 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
 
         layoutMessageContainer.addView(BtnContainer);
 
-        messageView.setOnClickListener(view -> {
-            if (FragmentChat.isInSelectionMode) {
-                itemView.performLongClick();
-            } else {
-                getItemContainer().performClick();
+        messageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (FragmentChat.isInSelectionMode) {
+                    itemView.performLongClick();
+                } else {
+                    getItemContainer().performClick();
+                }
+
             }
         });
 
-        messageView.setOnLongClickListener(view -> {
-            itemView.performLongClick();
-            return true;
+        messageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                itemView.performLongClick();
+                return true;
+            }
         });
 
     }

@@ -41,6 +41,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
+import net.iGap.helper.HelperTracker;
 
 import org.paygear.RaadApp;
 import org.paygear.RefreshLayout;
@@ -137,6 +138,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_WALLET_PAGE);
         appBar = view.findViewById(R.id.app_bar);
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
         appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));

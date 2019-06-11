@@ -366,7 +366,6 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("AccountPaymentDialog", "onDestroy: ");
         if (getActivity() != null) {
             ((NavigationBarActivity) getContext()).broadcastMessage(
                     AccountPaymentDialog.this, null, ScannerFragment.class);
