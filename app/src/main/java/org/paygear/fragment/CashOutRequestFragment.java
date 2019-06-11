@@ -1043,6 +1043,11 @@ public class CashOutRequestFragment extends Fragment {
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         final View NEUTRAL = dialog.getActionButton(DialogAction.NEUTRAL);
+        if (RaadApp.selectedMerchant == null) {
+            NEUTRAL.setVisibility(View.GONE);
+        } else {
+            NEUTRAL.setVisibility(View.VISIBLE);
+        }
 
         NEUTRAL.setOnClickListener(new View.OnClickListener() {
             @Override
