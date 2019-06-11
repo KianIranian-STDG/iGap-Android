@@ -1724,7 +1724,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 holder1.txtVideoTime.setText(AppUtils.humanReadableDuration(at.getDuration()));
 
-                holder1.txtVideoSize.setText("(" + AndroidUtils.humanReadableByteCount(at.getSize(), true) + ")");
+                holder1.txtVideoSize.setVisibility(View.GONE);
+                //holder1.txtVideoIcon.setVisibility(View.GONE);
+                //holder1.txtVideoSize.setText("(" + AndroidUtils.humanReadableByteCount(at.getSize(), true) + ")");
 
                 tempFilePath = getThumpnailPath(position);
 
@@ -2195,14 +2197,20 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 vh.txtFileName.setText(at.getName());
                 vh.txtFileInfo.setText(AndroidUtils.humanReadableByteCount(at.getSize(), true));
 
-                File fileTemp = new File(vh.tempFilePath);
+                if (G.selectedLanguage.equals("en")) {
+                    vh.txtFileName.setGravity(Gravity.LEFT);
+                } else {
+                    vh.txtFileName.setGravity(Gravity.RIGHT);
+                }
+
+                /*File fileTemp = new File(vh.tempFilePath);
 
                 if (fileTemp.exists()) {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(vh.tempFilePath), vh.imvPicFile);
                 } else {
                     Bitmap bitmap = HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(mList.get(position).item.getAttachment().getName()));
                     if (bitmap != null) vh.imvPicFile.setImageBitmap(bitmap);
-                }
+                }*/
             }
         }
 
