@@ -3384,20 +3384,35 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showSelectItem() {
-        FragmentMoneyTransferAction transferAction = new FragmentMoneyTransferAction();
-        transferAction.show(getFragmentManager(),null);
+        FragmentMoneyTransferAction transferAction;
 
-        transferAction.setMoneyTransferAction(new FragmentMoneyTransferAction.MoneyTransferAction() {
-            @Override
-            public void cardToCardClicked() {
-                showCardToCard();
-            }
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+            chatType = realmRoom.getType();
+            if (chatType == CHAT) {
+                chatPeerId = realmRoom.getChatRoom().getPeerId();
+                if (imvUserPicture != null && txtName != null) {
+                    transferAction = FragmentMoneyTransferAction.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
 
-            @Override
-            public void sendMoneyClicked() {
-                showPaymentDialog();
+                    if (getFragmentManager() != null)
+                        transferAction.show(getFragmentManager(), null);
+
+                    transferAction.setMoneyTransferAction(new FragmentMoneyTransferAction.MoneyTransferAction() {
+                        @Override
+                        public void cardToCardClicked() {
+                            showCardToCard();
+                        }
+
+                        @Override
+                        public void sendMoneyClicked() {
+                            showPaymentDialog();
+                        }
+                    });
+
+
+                }
             }
-        });
+        }
 
 
     }

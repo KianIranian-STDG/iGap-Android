@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -18,10 +19,13 @@
         app:layout_constraintWidth_percent=".34" />
 
     <LinearLayout
+        android:id="@+id/ll_moneyAction_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
+        android:animateLayoutChanges="true"
         android:orientation="horizontal"
+        android:visibility="visible"
         android:weightSum="2">
 
 
@@ -35,12 +39,10 @@
             android:padding="@dimen/dp16">
 
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/ic_telephone" />
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/tv_moneyAction_cardToCard"
@@ -61,12 +63,10 @@
             android:padding="@dimen/dp16">
 
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp8"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/ic_chat" />
+                android:layout_marginBottom="@dimen/dp8" />
 
             <TextView
                 android:id="@+id/tv_moneyAction_money"
@@ -79,5 +79,163 @@
 
 
     </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_moneyAction_transferRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:visibility="gone">
+
+        <net.iGap.module.CircleImageView
+            android:id="@+id/iv_moneyAction_userAvatar"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:lines="1"
+            android:text="@string/transfer_to_dialog"
+            app:layout_constraintStart_toEndOf="@+id/iv_moneyAction_userAvatar"
+            app:layout_constraintTop_toTopOf="@+id/iv_moneyAction_userAvatar"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:id="@+id/tv_moneyAction_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="@string/user_name"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/tv_moneyAction_credit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/gray_300"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_moneyAction_userAvatar" />
+
+        <TextView
+            android:id="@+id/tv_moneyAction_amountText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/transfer_amount_hint"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/iv_moneyAction_userAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <EditText
+            android:id="@+id/et_moneyAction_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_edittext_money_action"
+            android:hint="@string/amount_in_rial"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:padding="6dp"
+            android:singleLine="true"
+            android:textColor="@color/black_register"
+            android:textColorHint="@color/pu_edtHintText"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/tv_moneyAction_amountText"
+            app:layout_constraintTop_toBottomOf="@+id/tv_moneyAction_amountText" />
+
+        <EditText
+            android:id="@+id/et_moneyAction_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_edittext_money_action"
+            android:hint="@string/desc"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="6dp"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            android:textColor="@color/black_register"
+            android:textColorHint="@color/pu_edtHintText"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/tv_moneyAction_description"
+            app:layout_constraintTop_toBottomOf="@+id/tv_moneyAction_description" />
+
+        <TextView
+            android:id="@+id/tv_moneyAction_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/desc"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/et_moneyAction_amount"
+            app:layout_constraintTop_toBottomOf="@+id/et_moneyAction_amount" />
+
+        <Button
+            android:id="@+id/btn_moneyAction_pay"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/background_pay_mony_action"
+            android:text="@string/pay"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_moneyAction_cancel"
+            app:layout_constraintTop_toBottomOf="@+id/et_moneyAction_description" />
+
+        <Button
+            android:id="@+id/btn_moneyAction_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/background_cancel_mony_action"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/grayNew"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_moneyAction_pay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_moneyAction_pay" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>
