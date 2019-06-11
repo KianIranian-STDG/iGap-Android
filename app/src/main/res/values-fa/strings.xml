@@ -1861,10 +1861,10 @@
     <string name="dial_number">صفحه تماس</string>
     <string name="call">تماس</string>
     <string name="Select_Country">انتخاب کشور</string>
-    <string name="videos">Videos</string>
-    <string name="audios">Audios</string>
-    <string name="voices">Voices</string>
-    <string name="gifs">Gifs</string>
-    <string name="files">Files</string>
-    <string name="links">Links</string>
+    <string name="videos">فیلم ها</string>
+    <string name="audios">صوت ها</string>
+    <string name="voices">پیغام های صوتی</string>
+    <string name="gifs">گیف ها</string>
+    <string name="files">فایل ها</string>
+    <string name="links">لینک ها</string>
 </resources>
