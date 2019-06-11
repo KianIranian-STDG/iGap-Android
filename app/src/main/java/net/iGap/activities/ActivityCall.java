@@ -47,6 +47,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
@@ -176,6 +177,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
         canSetUserStatus = false;
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
