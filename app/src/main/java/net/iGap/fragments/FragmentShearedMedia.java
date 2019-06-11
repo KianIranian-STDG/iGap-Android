@@ -1254,6 +1254,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     date = mList.get(position).messageTime;
                 }
                 //check if date was today set text to txtTime else set date
+                holder1.txtTime.setGravity(Gravity.LEFT);
                 holder1.txtTime.setText(
                         !mList.get(position).isToday ?
                                 date : context.getString(R.string.today)
@@ -1900,16 +1901,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 holder1.imvPicFile.setImageResource(R.drawable.green_music_note);
                 holder1.imvPicFile.setTag(mList.get(position).messageId);
+                holder1.imvPicFile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                 RealmAttachment at = mList.get(position).item.getAttachment();
 
                 String tempFilePath = getThumpnailPath(position);
                 holder1.filePath = getFilePath(position);
 
+                holder1.txtFileName.setGravity(Gravity.LEFT);
                 holder1.txtFileName.setText(at.getName());
 
-                holder1.txtFileSize.setText("(" + AndroidUtils.humanReadableByteCount(at.getSize(), true) + ")");
-
+                holder1.txtFileSize.setText("" + AndroidUtils.humanReadableByteCount(at.getSize(), true));
+                holder1.txtFileInfo.setVisibility(View.GONE);
+                holder1.txtFileSize.setGravity(Gravity.LEFT);
                 File file = new File(holder1.filePath);
 
                 if (file.exists()) {
@@ -1944,11 +1948,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             }
                         }
                     } catch (Exception e) {
+                        holder1.txtFileInfo.setVisibility(View.GONE);
                     }
                 } else {
                     needDownloadList.put(mList.get(position).messageId, true);
                     holder1.messageProgress.setVisibility(View.VISIBLE);
                     file = new File(tempFilePath);
+
                     if (file.exists()) {
 
                         if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
@@ -1974,7 +1980,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         }
 
         public class ViewHolder extends mHolder {
-            public ImageView imvPicFile;
+            public RadiusImageView imvPicFile;
             public TextView txtFileName;
             public TextView txtFileSize;
             public TextView txtFileInfo;
@@ -1983,7 +1989,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             public ViewHolder(View view) {
                 super(view);
 
-                imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
+                imvPicFile = itemView.findViewById(R.id.smslf_imv_icon_file);
 
                 txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
                 txtFileSize = (TextView) itemView.findViewById(R.id.smslf_txt_file_size);
@@ -2200,10 +2206,11 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 vh.txtFileName.setText(at.getName());
                 vh.txtFileInfo.setText(AndroidUtils.humanReadableByteCount(at.getSize(), true));
 
+                //do not change else , cause of layout that not support language change direction
                 if (G.selectedLanguage.equals("en")) {
                     vh.txtFileName.setGravity(Gravity.LEFT);
                 } else {
-                    vh.txtFileName.setGravity(Gravity.RIGHT);
+                    vh.txtFileName.setGravity(Gravity.LEFT);
                 }
 
                 /*File fileTemp = new File(vh.tempFilePath);
