@@ -178,6 +178,10 @@ public class SHP_SETTING {
     public static final String KEY_SWITCH_MAP_STATE = "KEY_SWITCH_MAP_STATE";
     public static final String KEY_PATTERN_TACTILE_DRAWN = "KEY_PATTERN_TACTILE_DRAWN";
 
+    // ========================================================================================== Send Google Tracker
+
+    public static final String KEY_TRACKER_FILE = "KEY_TRACKER_PREFERENCES";
+    public static final String KEY_TRACKER_INSTALL_USER = "KEY_INSTALL_USER";
 
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;

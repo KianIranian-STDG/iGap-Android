@@ -139,6 +139,7 @@ import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -775,7 +776,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        HelperTracker.sendTracker(HelperTracker.TRACKER_CHAT_PAGE);
         cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
         txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
 

@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.helper.HelperTracker;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserVerify;
 
@@ -35,6 +36,7 @@ public class UserVerifyResponse extends MessageHandler {
         if (G.onUserVerification != null) {
             G.onUserVerification.onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser());
         }
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ACTIVATION_CODE);
     }
 
     @Override

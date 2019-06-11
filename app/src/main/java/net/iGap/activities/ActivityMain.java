@@ -654,11 +654,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
             btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
-            final G application = (G) getApplication();
-            Tracker mTracker = application.getDefaultTracker();
-            mTracker.setScreenName("RoomList");
-            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
             mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
 
             MusicPlayer.setMusicPlayer(mediaLayout);

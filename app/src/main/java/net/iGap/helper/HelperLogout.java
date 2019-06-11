@@ -42,8 +42,7 @@ public final class HelperLogout {
             public void run() {
                 signOutWallet();
                 HelperRealm.realmTruncate();
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-                sharedPreferences.edit().clear().apply();
+                clearPreferences();
                 resetStaticField();
 
                 AppUtils.cleanBadge();
@@ -65,6 +64,15 @@ public final class HelperLogout {
             }
         });
     }
+
+    private static void clearPreferences(){
+        SharedPreferences sharedPreferencesFile = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferencesFile.edit().clear().apply();
+
+        SharedPreferences sharedPreferencesTrackerFile = G.context.getSharedPreferences(SHP_SETTING.KEY_TRACKER_FILE, Context.MODE_PRIVATE);
+        sharedPreferencesTrackerFile.edit().clear().apply();
+    }
+
 
     private static void resetStaticField() {
         Theme.setThemeColor();

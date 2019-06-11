@@ -37,6 +37,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.module.CustomCircleImage;
@@ -81,7 +82,7 @@ public class FragmentIntroduce extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         goToProgram(view, savedInstanceState);
-
+        HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
     }
 
     @Override
