@@ -101,6 +101,7 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -159,10 +160,23 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private MaterialDesignTextView btnGoToPage;
     public static GoToPositionFromShardMedia goToPositionFromShardMedia;
     public static boolean goToPosition = false;
-    private int mCurrentSharedMediaType = 1; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
-    private HelperToolbar mHelperToolbar;
+    private int mCurrentSharedMediaType = 1 ; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
+    private HelperToolbar mHelperToolbar ;
     private boolean isToolbarInEditMode = false;
+    private HashMap<Integer , String> mSharedTypesList = new HashMap<Integer, String>();
+    private List<SharedButtons> mSharedTypeButtonsList = new ArrayList<>();
+    private LinearLayout mediaTypesLayout;
 
+    private void initSharedTypes(){
+        mSharedTypesList.clear();
+        mSharedTypesList.put(1 , getString(R.string.images));
+        mSharedTypesList.put(2 , getString(R.string.videos));
+        mSharedTypesList.put(3 , getString(R.string.audios));
+        mSharedTypesList.put(4 , getString(R.string.voices));
+        mSharedTypesList.put(5 , getString(R.string.gifs));
+        mSharedTypesList.put(6 , getString(R.string.files));
+        mSharedTypesList.put(7 , getString(R.string.links));
+    }
 
     public static FragmentShearedMedia newInstance(long roomId) {
         Bundle args = new Bundle();
@@ -212,6 +226,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         roomId = getArguments().getLong(ROOM_ID);
         roomType = RealmRoom.detectType(roomId);
 
+        initSharedTypes();
         initComponent(view);
     }
 
@@ -275,6 +290,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         AppUtils.setProgresColler(progressBar);
 
         appBarLayout = (AppBarLayout) view.findViewById(R.id.asm_appbar_shared_media);
+        mediaTypesLayout = view.findViewById(R.id.asm_ll_media_types_buttons);
 
         view.findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -344,6 +360,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         openLayout();
         initAppbarSelected(view);
+        makeSharedTypesViews();
+        checkSharedButtonsBackgrounds();
     }
 
     private void openLayout() {
@@ -527,6 +545,115 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         popUpMenuSharedMedia();
     }
 
+    private void makeSharedTypesViews(){
+        for(int i=1 ; i<mSharedTypesList.size()+1 ; i++) makeButton(i);
+    }
+
+    private void makeButton(final int pos) {
+
+        TextView textView = new TextView(getContext());
+        textView.setText(mSharedTypesList.get(pos));
+        //textView.setTextSize(getDimen(R.dimen.dp8));
+        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setSingleLine(true);
+
+        if (G.isDarkTheme){
+            textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+            textView.setTextColor(getContext().getResources().getColor(R.color.white));
+        }else {
+            textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
+            textView.setTextColor(getContext().getResources().getColor(R.color.black));
+        }
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (pos == 1 || pos == mSharedTypesList.size()+1){
+            lp.setMargins(getDimen(R.dimen.dp10), getDimen(R.dimen.dp4), getDimen(R.dimen.dp10), getDimen(R.dimen.dp2));
+        }else {
+            lp.setMargins(getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp2));
+        }
+        textView.setLayoutParams(lp);
+        textView.setPadding(getDimen(R.dimen.dp14) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp14) , getDimen(R.dimen.dp4));
+
+        mSharedTypeButtonsList.add(new SharedButtons(textView , pos));
+
+        textView.setOnClickListener(v -> {
+            mediaTypesClickHandler(pos);
+            checkSharedButtonsBackgrounds();
+        });
+
+        mediaTypesLayout.addView(textView);
+    }
+
+    private void checkSharedButtonsBackgrounds() {
+
+        for (int i=0 ; i<mSharedTypeButtonsList.size() ; i++){
+            if (G.isDarkTheme){
+                if (mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId()){
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.black));
+                }else {
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
+                }
+            }else {
+                if (mCurrentSharedMediaType != mSharedTypeButtonsList.get(i).getId()){
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.black));
+                }else {
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
+                }
+            }
+        }
+    }
+
+    private void mediaTypesClickHandler(int pos) {
+        switch (pos){
+
+            case 1 :
+                if (mCurrentSharedMediaType != 1)
+                    fillListImage();
+                break;
+
+            case 2 :
+                if (mCurrentSharedMediaType != 2)
+                    fillListVideo();
+                break;
+
+            case 3 :
+                if (mCurrentSharedMediaType != 3)
+                    fillListAudio();
+                break;
+
+            case 4 :
+                if (mCurrentSharedMediaType != 4)
+                    fillListVoice();
+                break;
+
+            case 5 :
+                if (mCurrentSharedMediaType != 5)
+                    fillListGif();
+                break;
+
+            case 6 :
+                if (mCurrentSharedMediaType != 6)
+                    fillListFile();
+                break;
+
+            case 7 :
+                if (mCurrentSharedMediaType != 7)
+                    fillListLink();
+                break;
+
+            default:
+                    fillListImage();
+        }
+    }
+
+    private int getDimen(int id) {
+        return (int) getContext().getResources().getDimension(id);
+    }
+
     //********************************************************************************************
 
     private void callBack(boolean result, int whatAction, String number) {
@@ -554,30 +681,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     public void popUpMenuSharedMedia() {
 
         List<String> items = new ArrayList<>();
-        items.add(getString(R.string.shared_image));
-        items.add(getString(R.string.shared_video));
-        items.add(getString(R.string.shared_audio));
-        items.add(getString(R.string.shared_voice));
-        items.add(getString(R.string.shared_gif));
-        items.add(getString(R.string.shared_file));
-        items.add(getString(R.string.shared_links));
+        items.add(getString(R.string.name));
+        items.add(getString(R.string.date));
+        items.add(getString(R.string.size));
 
         new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.shared_image))) {
-                fillListImage();
-            } else if (items.get(position).equals(getString(R.string.shared_video))) {
-                fillListVideo();
-            } else if (items.get(position).equals(getString(R.string.shared_audio))) {
-                fillListAudio();
-            } else if (items.get(position).equals(getString(R.string.shared_voice))) {
-                fillListVoice();
-            } else if (items.get(position).equals(getString(R.string.shared_gif))) {
-                fillListGif();
-            } else if (items.get(position).equals(getString(R.string.shared_file))) {
-                fillListFile();
-            } else if (items.get(position).equals(getString(R.string.shared_links))) {
-                fillListLink();
-            }
+
         }).show();
     }
 
@@ -1121,8 +1230,17 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 //check and show just first block with header
                 if (position == 0 && mCurrentSharedMediaType == 1) {
                     holder1.txtHeader.setText(context.getString(R.string.images));
-                    holder1.txtHeader.setVisibility(View.VISIBLE);
+                    holder1.txtHeader.setVisibility(View.GONE);
                     holder1.vSplitter.setVisibility(View.VISIBLE);
+
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder1.txtHeader.getLayoutParams();
+                    lp.setMargins(getDimen(R.dimen.dp4) , getDimen(R.dimen.dp20) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp4) );
+                    holder1.txtHeader.setLayoutParams(lp);
+                }else if (position == 0 && mCurrentSharedMediaType != 1){
+
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder1.txtTime.getLayoutParams();
+                    lp.setMargins(getDimen(R.dimen.dp4) , getDimen(R.dimen.dp24) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp4) );
+                    holder1.txtTime.setLayoutParams(lp);
                 }
 
                 //convert numbers to persian if language was
@@ -1141,11 +1259,14 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             }
         }
 
+        private int getDimen(int id) {
+            return (int) context.getResources().getDimension(id);
+        }
+
         public View setLayoutHeaderTime(View parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
             RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(lp);
-            view.setBackgroundColor(Color.parseColor(G.appBarColor));
             return view;
         }
 
@@ -2183,5 +2304,32 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     public interface GoToPositionFromShardMedia {
         void goToPosition(Long aLong);
+    }
+
+    private class SharedButtons{
+
+        private TextView button ;
+        private int id ;
+
+        public SharedButtons(TextView button, int id) {
+            this.button = button;
+            this.id = id;
+        }
+
+        public TextView getButton() {
+            return button;
+        }
+
+        public void setButton(TextView button) {
+            this.button = button;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
     }
 }
