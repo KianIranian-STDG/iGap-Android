@@ -189,7 +189,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                 setMerchantsAdapter();
             }
         } else {
-            GetMerchantsList(Auth.getCurrentAuth().getJWT());
+            GetMerchantsList();
         }
 
 
@@ -197,7 +197,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         mCards = RaadApp.cards;
         if (mCards != null) {
             setAdapter();
-        } else {
+        } else if (Auth.getCurrentAuth() != null) {
             load();
         }
 
@@ -464,7 +464,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                     if (mCards == null || mCards.size() == 0)
                         progress.setStatus(-1, getString(R.string.error));
                 }
-                GetMerchantsList(Auth.getCurrentAuth().getJWT());
+                GetMerchantsList();
                 mRefreshLayout.setRefreshing(false);
             }
 
@@ -480,7 +480,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
 
     }
 
-    private void GetMerchantsList(JWT jwt) {
+    private void GetMerchantsList() {
         Web.getInstance().getWebService().searchAccounts(200, 1, "admin", "finance").enqueue(new Callback<MerchantsResult>() {
             @Override
             public void onResponse(Call<MerchantsResult> call, Response<MerchantsResult> response) {

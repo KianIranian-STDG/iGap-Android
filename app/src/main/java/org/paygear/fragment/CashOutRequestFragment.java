@@ -408,9 +408,9 @@ public class CashOutRequestFragment extends Fragment {
     }
 
     private void cashOutToPersonalWallet(Card mCard) {
-        /*if (getActivity() != null)
+        if (getActivity() != null)
             AccountPaymentDialog.newInstance(new QRResponse("", 8, Auth.getCurrentAuth().getId(), null, null, true), Long.parseLong(mPrice), true, mCard).show(
-                    getActivity().getSupportFragmentManager(), "AccountPaymentDialog");*/
+                    getActivity().getSupportFragmentManager(), "AccountPaymentDialog");
     }
 
 
@@ -1038,9 +1038,23 @@ public class CashOutRequestFragment extends Fragment {
                         .title(getActivity().getResources().getString(R.string.your_password))
                         .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD)
                         .positiveText(getActivity().getResources().getString(R.string.ok)).customView(layoutNickname, true)
+                        .neutralText(getActivity().getResources().getString(R.string.recover_password))
                         .widgetColor(Color.parseColor(WalletActivity.primaryColor)).negativeText(getActivity().getResources().getString(R.string.cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        final View NEUTRAL = dialog.getActionButton(DialogAction.NEUTRAL);
+
+        NEUTRAL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCard == null) {
+                    showOTPDialog(true, RaadApp.paygearCard);
+                } else {
+                    showOTPDialog(true, mCard);
+                }
+                dialog.dismiss();
+            }
+        });
 
         newPassWord.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
