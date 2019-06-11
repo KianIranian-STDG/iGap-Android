@@ -219,8 +219,6 @@ public class RealmRoom extends RealmObject {
         }
 
         realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), room.getDraft().getMessage(), room.getDraft().getReplyTo(), room.getDraft().getDraftTime()));
-        Log.i("CCCCCC", "2 put: " + realmRoom.getUpdatedTime());
-
 
         return realmRoom;
     }

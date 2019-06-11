@@ -118,8 +118,6 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
                 unSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_unselected_icon);
                 darkSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_dark_selected_icon);
                 darkUnSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_dark_unselected_icon);
-
-                Log.i(TAG, "parseAttr: loaded");
             } finally {
                 typedArray.recycle();
             }

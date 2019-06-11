@@ -458,7 +458,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 31
+        if (oldVersion == 31) {
 
             RealmObjectSchema realmRoomMessageWalletCardToCard = schema.create(RealmRoomMessageWalletCardToCard.class.getSimpleName())
                     .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
@@ -529,5 +529,12 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 32
+            RealmObjectSchema realmGroupRoom = schema.get(RealmGroupRoom.class.getSimpleName());
+            if (realmGroupRoom != null) {
+                realmGroupRoom.addField(RealmGroupRoomFields.START_FROM, int.class, FieldAttribute.REQUIRED);
+            }
+            oldVersion++;
+        }
     }
 }
