@@ -104,21 +104,16 @@ public class BaseFragment extends SwipeBackFragment {
         }
         hideKeyboard();
         if (getActivity() != null) {
-            for (int i = getActivity().getSupportFragmentManager().getFragments().size() - 1; i >= 0; i--) {
-
-                Fragment f = getActivity().getSupportFragmentManager().getFragments().get(i);
-
-                if (f == null || f == currentFragment) {
-                    continue;
+            if (getActivity() instanceof ActivityMain) {
+                for (int i = getActivity().getSupportFragmentManager().getFragments().size() - 1; i >= 0; i--) {
+                    Fragment f = getActivity().getSupportFragmentManager().getFragments().get(i);
+                    if (f instanceof BaseFragment && f != currentFragment) {
+                        if (((BaseFragment) f).isNeedResume) {
+                            f.onResume();
+                        }
+                        break;
+                    }
                 }
-
-                BaseFragment bf = (BaseFragment) f;
-
-                if (bf.isNeedResume) {
-                    bf.onResume();
-                }
-
-                break;
             }
         }
     }
