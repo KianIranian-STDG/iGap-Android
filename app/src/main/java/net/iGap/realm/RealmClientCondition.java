@@ -308,7 +308,6 @@ public class RealmClientCondition extends RealmObject {
                 }
 
                 clientCondition.addRooms(room);
-                Log.i("CLI", "room : " + room);
             }
         }
         realm.close();

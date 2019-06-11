@@ -37,6 +37,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -192,9 +193,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("bagi", "FragmentMain:onViewCreated:start");
-
-        //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
         this.mView = view;
         tagId = System.currentTimeMillis();
 
@@ -204,23 +203,12 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
         viewById.setVisibility(View.GONE);
-        /*switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
-        if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
-            allSwitcher = 1;
-            initRecycleView();
-        } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
-            allSwitcher = 1;
-            initRecycleView();
-        }*/
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 initRecycleView();
             }
         }, 10);
-        Log.d("bagi" ,"FragmentMain:onViewCreated:end");
-
-
     }
 
     private void initRecycleView() {
@@ -300,7 +288,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         if (mainType == all) {
             getChatLists();
         }
-        Log.d("bagi" , "" + mOffset);
 
         if (mView != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -724,8 +711,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
-
-        Log.d("bagi" , "onClientGetRoomList" + roomList.size() + "" + identity.offset);
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             mOffset = 0;
@@ -854,8 +839,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     public void onResume() {
         super.onResume();
 
-        Log.d("bagi", "FragmentMain:onResume:start");
-
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
         if (G.isDepricatedApp)
@@ -915,9 +898,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 }
             }
         }
-//        BotInit.checkDrIgap();
-
-        Log.d("bagi", "FragmentMain:onResume:end");
     }
 
     @Override

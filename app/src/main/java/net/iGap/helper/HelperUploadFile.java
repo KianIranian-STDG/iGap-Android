@@ -263,7 +263,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             new RequestFileUploadInit().fileUploadInit(bytesFromFirst, bytesFromLast, fileUploadStructure.fileSize, fileUploadStructure.fileHash, Long.toString(fileUploadStructure.messageId),
                     fileUploadStructure.fileName);
         } catch (IOException e) {
-            Log.i("BreakPoint", e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -301,7 +301,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
                 onFileUploadComplete(identity, response);
             } catch (Exception e) {
-                Log.i("BreakPoint", e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -334,7 +334,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
                 onFileUploadComplete(identity, response);
             }
         } catch (IOException e) {
-            Log.i("BreakPoint", e.getMessage());
+            e.printStackTrace();
         }
     }
 

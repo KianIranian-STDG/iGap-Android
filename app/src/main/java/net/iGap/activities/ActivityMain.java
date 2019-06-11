@@ -426,7 +426,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (G.ISOK) {
-            Log.d("bagi" ,"ActivityMain:onCreate:start");
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -798,7 +797,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
 
-            // Log.i("#token",FirebaseInstanceId.getInstance().getToken().toString());
             String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
             if (backGroundPath.isEmpty()) {
                 getWallpaperAsDefault();
@@ -818,8 +816,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void onFailure(Call<StructSticker> call, Throwable t) {
                 }
             });
-
-            Log.d("bagi" ,"ActivityMain:onCreate:end");
         } else {
            super.onCreate(savedInstanceState);
            TextView textView = new TextView(this);
@@ -922,9 +918,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         message:مبلغ تراکنش کمتر از حد تعیین شده توسط صادرکننده کارت و یا بیشتر از حد مجاز می باشد
                         status:61
                          */
-                        Log.d("bagi", "enData:" + data.getStringExtra("enData"));
-                        Log.d("bagi", "message:" + data.getStringExtra("message"));
-                        Log.d("bagi", "status:" + data.getIntExtra("status", 0));
                         DirectPayHelper.setResultOfDirectPay(data.getStringExtra("enData"), 0, null, data.getStringExtra("message"));
                         break;
                     case 2:
@@ -1516,8 +1509,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStart() {
         super.onStart();
         if (G.ISOK) {
-            Log.d("bagi" ,"ActivityMain:onstart:start");
-
             if (!G.isFirstPassCode) {
                 openActivityPassCode();
             }
@@ -1529,12 +1520,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
             //    }
             //});
-
-            Log.d("bagi" ,"ActivityMain:onstart:end");
-        } else {
-
         }
-
     }
 
     @SuppressLint("MissingSuperCall")
@@ -2579,13 +2565,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onResume() {
         super.onResume();
         if (G.ISOK) {
-
-            Log.d("bagi", "ActivityMain:onResume:start");
-
             resume();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-            Log.d("bagi", "ActivityMain:onResume:end");
         }
     }
 

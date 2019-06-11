@@ -521,7 +521,6 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("AccountPaymentDialog", "onDestroy: ");
         if (getActivity() != null) {
             ((NavigationBarActivity) getContext()).broadcastMessage(
                     CreditPaymentDialog.this, null, ScannerFragment.class);

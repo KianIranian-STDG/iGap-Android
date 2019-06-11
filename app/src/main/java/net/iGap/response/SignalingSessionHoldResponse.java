@@ -40,10 +40,8 @@ public class SignalingSessionHoldResponse extends MessageHandler {
         boolean hold = builder.getHold();
 
         if (hold) {
-            Log.i("#peyman", "recived hold");
             WebRTC.getInstance().muteSound();
         } else {
-            Log.i("#peyman", "hold relese");
             WebRTC.getInstance().unMuteSound();
         }
 

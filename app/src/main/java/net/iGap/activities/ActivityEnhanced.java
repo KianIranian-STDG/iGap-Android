@@ -21,14 +21,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.WindowManager;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -42,12 +39,9 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.proto.ProtoUserUpdateStatus;
-import net.iGap.request.RequestUserUpdateStatus;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
@@ -57,27 +51,15 @@ import static net.iGap.G.updateResources;
 public class ActivityEnhanced extends AppCompatActivity {
 
     public AvatarHandler avatarHandler;
-    protected boolean canSetUserStatus = true;
     public boolean isOnGetPermission = false;
-    BroadcastReceiver mybroadcast = new BroadcastReceiver() {
+    protected boolean canSetUserStatus = true;
+    BroadcastReceiver myBroadcast = new BroadcastReceiver() {
         //When Event is published, onReceive method is called
         @Override
         public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            Log.i("[BroadcastReceiver]", "MyReceiver");
-
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-//                if (G.isPassCode && !ActivityMain.isActivityEnterPassCode ) {
-//                    G.isFirstPassCode = true;
-//                    Intent i = new Intent(ActivityEnhanced.this, ActivityEnterPassCode.class);
-//                    startActivity(i);
-//                } else {
+            if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 if (G.isPassCode) ActivityMain.isLock = true;
-//                }
-
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             }
-
         }
     };
 
@@ -89,9 +71,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         makeDirectoriesIfNotExist();
-
         G.currentActivity = this;
     }
 
@@ -100,13 +80,12 @@ public class ActivityEnhanced extends AppCompatActivity {
             avatarHandler = new AvatarHandler();
             setThemeSetting();
 
-
             checkFont();
 
             IntentFilter screenStateFilter = new IntentFilter();
             screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
             screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
-            registerReceiver(mybroadcast, screenStateFilter);
+            registerReceiver(myBroadcast, screenStateFilter);
 
             SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
@@ -295,7 +274,7 @@ public class ActivityEnhanced extends AppCompatActivity {
                 G.isAppInFg = false;
             }
             G.isScrInFg = false;
-            try{
+            try {
 
                 HelperDataUsage.insertDataUsage(null, true, true);
                 HelperDataUsage.insertDataUsage(null, true, false);
@@ -303,7 +282,9 @@ public class ActivityEnhanced extends AppCompatActivity {
                 HelperDataUsage.insertDataUsage(null, false, true);
                 HelperDataUsage.insertDataUsage(null, false, false);
 
-            }catch (Exception e){};
+            } catch (Exception e) {
+            }
+            ;
 
             if (!AttachFile.isInAttach && canSetUserStatus) {
                 UserStatusController.getInstance().setOffline();
@@ -381,7 +362,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISOK) {
-            unregisterReceiver(mybroadcast);
+            unregisterReceiver(myBroadcast);
         }
     }
 

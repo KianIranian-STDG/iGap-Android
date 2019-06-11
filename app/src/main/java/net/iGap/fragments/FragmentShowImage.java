@@ -127,12 +127,12 @@ public class FragmentShowImage extends BaseFragment {
         //exitFragmentTransition.exitListener(new AnimatorListenerAdapter() {
         //    @Override
         //    public void onAnimationStart(Animator animation) {
-        //        Log.d("FFFFFFF", "onAnimationStart: ");
+        //
         //    }
         //
         //    @Override
         //    public void onAnimationEnd(Animator animation) {
-        //        Log.d("FFFFFFF", "onAnimationEnd: ");
+        //
         //    }
         //}).interpolator(new FastOutSlowInInterpolator());
         //exitFragmentTransition.startExitListening(view.findViewById(R.id.rooShowImage));

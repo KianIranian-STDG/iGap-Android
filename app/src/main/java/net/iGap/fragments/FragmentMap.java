@@ -447,10 +447,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                     try {
                         accuracy.setText("( " + String.format("%.6f", latitude) + " , " + String.format("%.6f", longitude) + " )");
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-
-                    Log.i("peyman", "log");
                     mMap.setOnMyLocationChangeListener(null);
                 }
             });

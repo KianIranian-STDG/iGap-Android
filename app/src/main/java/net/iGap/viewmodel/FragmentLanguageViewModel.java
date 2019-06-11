@@ -15,6 +15,7 @@ import android.view.View;
 import net.iGap.G;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 
@@ -41,7 +42,7 @@ public class FragmentLanguageViewModel {
 
     public void onClickEnglish(View v) {
         if (!G.selectedLanguage.equals("en")) {
-
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "English");
             editor.apply();
@@ -67,7 +68,7 @@ public class FragmentLanguageViewModel {
 
     public void onClickFarsi(View v) {
         if (!G.selectedLanguage.equals("fa")) {
-
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
             editor.apply();
@@ -94,7 +95,7 @@ public class FragmentLanguageViewModel {
     public void onClickArabi(View v) {
 
         if (!G.selectedLanguage.equals("ar")) {
-
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "العربی");
             editor.apply();

@@ -630,7 +630,6 @@ public class NewAccountPaymentDialog extends BottomSheetDialogFragment implement
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("AccountPaymentDialog", "onDestroy: ");
         if (getActivity() != null) {
             ((NavigationBarActivity) getContext()).broadcastMessage(
                     NewAccountPaymentDialog.this, null, ScannerFragment.class);

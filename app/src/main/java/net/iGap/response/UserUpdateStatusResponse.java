@@ -50,7 +50,6 @@ public class UserUpdateStatusResponse extends MessageHandler {
         } else {
             if (builder.getUserId() == userId) {
                 HelperLog.setErrorLog(new Exception("Wht the hel bagi"));
-                Log.d("bagi" , "Wht the hel bagi");
             }
         }
 

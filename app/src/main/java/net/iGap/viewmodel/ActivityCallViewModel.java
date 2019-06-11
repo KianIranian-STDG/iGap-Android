@@ -63,6 +63,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.interfaces.SpeakerControlListener;
@@ -143,30 +144,33 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         this.isIncomingCall = isIncomingCall;
         this.activityCallBinding = activityCallBinding;
         this.callTYpe = callTYpe;
-        //   setPicture();
         audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
         audioManager.getMode();
         try {
             Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
 
             for (BluetoothDevice device : pairedDevices) {
-                Log.d("#peyman", " name=" + device.getName() + ", address=" + device.getAddress());
-
                 device.getAddress();
             }
         } catch (NullPointerException e) {
+            e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         getInfo();
 
+        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTING);
+        } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTING);
+        }
     }
 
     public void onClickBtnChat(View v) {
 
         if (!isConnected && isIncomingCall) {
             endCall();
-
         }
 
         HelperPublicMethod.goToChatRoom(userId, null, null);
@@ -403,11 +407,18 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         txtAviVisibility.set(View.VISIBLE);
                         break;
                     case CONNECTED:
+
                         txtAviVisibility.set(View.GONE);
 
                         layoutOptionVisibility.set(View.VISIBLE);
                         if (!isConnected) {
-                            isConnected = true;
+                            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTED);
+                            } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTED);
+                            }
+
+                                isConnected = true;
                             playSound(R.raw.igap_connect);
                             G.handler.postDelayed(new Runnable() {
                                 @Override
@@ -575,16 +586,12 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
             if (NoiseSuppressor.isAvailable()) {
                 NoiseSuppressor.create(audioSessionId);
-                Log.i("#peyman", " noise " + NoiseSuppressor.create(audioSessionId));
             }
             if (AutomaticGainControl.isAvailable()) {
                 AutomaticGainControl.create(audioSessionId);
-                Log.i("#peyman", " gain " + AutomaticGainControl.create(audioSessionId).getEnabled());
             }
             if (AcousticEchoCanceler.isAvailable()) {
-
                 AcousticEchoCanceler.create(audioSessionId);
-                Log.i("#peyman", " echo " + AcousticEchoCanceler.create(audioSessionId).getEnabled());
             }*/
 
 
@@ -1110,7 +1117,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
-        Log.i("#peymanProxy", "Activity call view model");
 
     }
 
@@ -1134,13 +1140,10 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                /* int state = intent.getIntExtra("state", -1);
                 switch (state) {
                     case 0:
-                        Log.d("dddddd", "Headset is unplugged");
                         break;
                     case 1:
-                        Log.d("dddddd", "Headset is plugged");
                         break;
                     default:
-                        Log.d("dddddd", "I have no idea what the headset state is");
                 }
 
               */

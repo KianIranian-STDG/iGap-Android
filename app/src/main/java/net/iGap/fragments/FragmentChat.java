@@ -776,7 +776,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        HelperTracker.sendTracker(HelperTracker.TRACKER_CHAT_PAGE);
+
         cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
         txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
 
@@ -1956,6 +1956,22 @@ public class FragmentChat extends BaseFragment
                 }
             }
         };
+
+        sendChatTracker();
+    }
+
+    private void sendChatTracker() {
+        if (chatType == CHAT) {
+            if (isBot) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_BOT_VIEW);
+            } else {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_CHAT_VIEW);
+            }
+        } else if (chatType == GROUP) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_GROUP_VIEW);
+        } else if (chatType == CHANNEL) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANNEL_VIEW);
+        }
     }
 
     private void initPinedMessage() {

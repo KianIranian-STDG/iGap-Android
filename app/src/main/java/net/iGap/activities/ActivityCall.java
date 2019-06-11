@@ -890,7 +890,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
-        Log.i("#peymanProxy", "Activity call");
+
     }
 
     @Override
@@ -916,13 +916,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                /* int state = intent.getIntExtra("state", -1);
                 switch (state) {
                     case 0:
-                        Log.d("dddddd", "Headset is unplugged");
                         break;
                     case 1:
-                        Log.d("dddddd", "Headset is plugged");
                         break;
                     default:
-                        Log.d("dddddd", "I have no idea what the headset state is");
                 }
 
               */

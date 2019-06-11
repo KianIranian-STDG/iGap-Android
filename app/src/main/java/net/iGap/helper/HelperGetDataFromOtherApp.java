@@ -272,7 +272,6 @@ public class HelperGetDataFromOtherApp {
 
             while (it.hasNext()) {
                 String key = it.next();
-                Log.i("LOG", key + "=" + bundle.get(key));
             }
         }
     }

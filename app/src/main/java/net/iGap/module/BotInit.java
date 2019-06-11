@@ -157,26 +157,17 @@ public class BotInit implements View.OnClickListener {
                                 }
                             };
                             new RequestChatGetRoom().chatGetRoom(builder.getPromoteList().get(i).getId());
-
                         } else {
-
                             new RequestClientGetRoom().clientGetRoom(builder.getPromoteList().get(i).getId(), RequestClientGetRoom.CreateRoomMode.getPromote);
-
                         }
-
-
                     } else {
-
                         new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
-                        Log.i("#peymanSize", builder.getPromoteList().size() + "");
-
                     }
                 }
 
             }
 
         };
-        //   G.ipromote = null;
     }
 
     public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu, RealmRoomMessage roomMessage, long roomId) {

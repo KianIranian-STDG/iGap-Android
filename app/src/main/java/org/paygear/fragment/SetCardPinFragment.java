@@ -100,7 +100,6 @@ public class SetCardPinFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(WalletActivity.SH_SETTING, getActivity().MODE_PRIVATE);
         isResetPassword = sharedPreferences.getBoolean(WalletActivity.RESET_PASSWORD, false);
-        Log.i("CCCCCCCCCC", "0 isResetPassword: " + isResetPassword);
 
         View view = inflater.inflate(R.layout.fragment_set_card_pin, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);

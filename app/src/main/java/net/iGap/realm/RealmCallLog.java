@@ -96,11 +96,9 @@ public class RealmCallLog extends RealmObject {
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-            Log.i("#null", e.getMessage());
             return null;
 
         } catch (Exception e) {
-            Log.i("#null", e.getMessage());
             return null;
         }
         return null;
