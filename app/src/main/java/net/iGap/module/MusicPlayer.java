@@ -440,13 +440,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         updateFastAdapter(MusicPlayer.messageId);
 
 
-        if (MusicPlayer.chatLayout != null) {
-            MusicPlayer.chatLayout.setVisibility(View.VISIBLE);
-        }
-
-        if (MusicPlayer.mainLayout != null) {
-            MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
-        }
     }
 
     public static void stopSound() {
@@ -511,6 +504,14 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (MusicPlayer.mainLayout != null) {
             MusicPlayer.mainLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.shearedMediaLayout != null) {
+            MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.layoutTripMusic != null) {
+            MusicPlayer.layoutTripMusic.setVisibility(View.GONE);
         }
         MusicPlayer.playerStateChangeListener.setValue(false);
     }
@@ -867,6 +868,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
 
         inChangeStreamType = false;
+
+
+        if (MusicPlayer.chatLayout != null) {
+            MusicPlayer.chatLayout.setVisibility(View.VISIBLE);
+        }
+
+        if (MusicPlayer.mainLayout != null) {
+            MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
+        }
+
+        if (MusicPlayer.shearedMediaLayout != null) {
+            MusicPlayer.shearedMediaLayout.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private static void OnCompleteMusic() {

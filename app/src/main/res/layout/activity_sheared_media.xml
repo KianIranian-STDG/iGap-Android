@@ -39,7 +39,7 @@
       <LinearLayout
           android:id="@+id/frg_shared_media_ll_toolbar_layout"
           android:layout_width="match_parent"
-          android:layout_height="@dimen/toolbar_height_root_with_search"
+          android:layout_height="wrap_content"
           android:orientation="horizontal">
 
         <!--view added at runtime with toolbar helper-->

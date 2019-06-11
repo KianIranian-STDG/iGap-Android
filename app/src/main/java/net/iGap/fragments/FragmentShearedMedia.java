@@ -220,8 +220,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         super.onViewCreated(view, savedInstanceState);
 
         realmShearedMedia = Realm.getDefaultInstance();
-        mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
-        MusicPlayer.setMusicPlayer(mediaLayout);
+        //mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
+        //MusicPlayer.setMusicPlayer(mediaLayout);
 
         roomId = getArguments().getLong(ROOM_ID);
         roomType = RealmRoom.detectType(roomId);
@@ -238,8 +238,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         setListener();
 
-        MusicPlayer.shearedMediaLayout = mediaLayout;
-        ActivityMain.setMediaLayout();
+        //MusicPlayer.shearedMediaLayout = mediaLayout;
+        //ActivityMain.setMediaLayout();
     }
 
     @Override
@@ -262,7 +262,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         MusicPlayer.shearedMediaLayout = null;
 
-        ActivityMain.setMediaLayout();
+        //ActivityMain.setMediaLayout();
     }
 
     private Realm getRealm() {
@@ -279,6 +279,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.hamburger_menu_icon)
+                .setPlayerEnable(true)
+                .setIsSharedMedia(true)
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setListener(this);

@@ -1075,7 +1075,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
             if (holder.getAdapterPosition() == 0) {
 
-                if (MusicPlayer.playerStateChangeListener.getValue() != null && MusicPlayer.playerStateChangeListener.getValue()){
+                if (MusicPlayer.playerStateChangeListener.getValue() != null && MusicPlayer.playerStateChangeListener.getValue() && MusicPlayer.mainLayout != null /*&& MusicPlayer.mainLayout.isShown()*/){
                     ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
                     lp.setMargins(0, i_Dp(R.dimen.dp80), 0, 0);
                     holder.root.setLayoutParams(lp);
