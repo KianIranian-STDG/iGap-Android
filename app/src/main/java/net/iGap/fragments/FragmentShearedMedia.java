@@ -2200,14 +2200,20 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 vh.txtFileName.setText(at.getName());
                 vh.txtFileInfo.setText(AndroidUtils.humanReadableByteCount(at.getSize(), true));
 
-                File fileTemp = new File(vh.tempFilePath);
+                if (G.selectedLanguage.equals("en")) {
+                    vh.txtFileName.setGravity(Gravity.LEFT);
+                } else {
+                    vh.txtFileName.setGravity(Gravity.RIGHT);
+                }
+
+                /*File fileTemp = new File(vh.tempFilePath);
 
                 if (fileTemp.exists()) {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(vh.tempFilePath), vh.imvPicFile);
                 } else {
                     Bitmap bitmap = HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(mList.get(position).item.getAttachment().getName()));
                     if (bitmap != null) vh.imvPicFile.setImageBitmap(bitmap);
-                }
+                }*/
             }
         }
 
