@@ -275,9 +275,7 @@ public class FragmentAddStickers extends BaseFragment {
                                                 mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
                                                     @Override
                                                     public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                                                        progressBar.setVisibility(View.GONE);
                                                         if (response.body() != null && response.body().isSuccess()) {
-                                                            mData.get(getAdapterPosition()).setIsFavorite(true);
                                                             RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
                                                             if (realmStickers == null) {
                                                                 Realm realm = Realm.getDefaultInstance();
@@ -290,8 +288,17 @@ public class FragmentAddStickers extends BaseFragment {
                                                                 realm.close();
 
                                                             } else {
-                                                                RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), true);
+                                                                RealmStickers.updateFavorite(item.getId(), true);
                                                             }
+                                                        }
+
+                                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded()) {
+                                                            return;
+                                                        }
+
+                                                        progressBar.setVisibility(View.GONE);
+                                                        if (response.body() != null && response.body().isSuccess()) {
+                                                            mData.get(getAdapterPosition()).setIsFavorite(true);
                                                             if (FragmentChat.onUpdateSticker != null) {
                                                                 FragmentChat.onUpdateSticker.update();
                                                             }
