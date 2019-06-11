@@ -513,8 +513,8 @@ public class FragmentChat extends BaseFragment
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
     private TextView txtSpamUser;
     private TextView txtSpamClose;
-    private TextView send;
-    private TextView txtCountItem;
+    /*private TextView send;*/
+    /*private TextView txtCountItem;*/
     private TextView txtNewUnreadMessage;
     private TextView imvCancelForward;
     private TextView btnUp;
@@ -6666,32 +6666,32 @@ public class FragmentChat extends BaseFragment
 
         fastItemAdapter = new FastItemAdapter();
         viewBottomSheet = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-        send = viewBottomSheet.findViewById(R.id.txtSend);
+        /*send = viewBottomSheet.findViewById(R.id.txtSend);*/
 
-        txtCountItem = viewBottomSheet.findViewById(R.id.txtNumberItem);
-        ViewGroup camera = viewBottomSheet.findViewById(R.id.camera);
-        ViewGroup picture = viewBottomSheet.findViewById(R.id.picture);
-        ViewGroup video = viewBottomSheet.findViewById(R.id.video);
-        ViewGroup music = viewBottomSheet.findViewById(R.id.music);
-        ViewGroup request_cardToCard = viewBottomSheet.findViewById(R.id.request_cardToCard);
+        /*txtCountItem = viewBottomSheet.findViewById(R.id.txtNumberItem);*/
+        View camera = viewBottomSheet.findViewById(R.id.camera);
+        View picture = viewBottomSheet.findViewById(R.id.picture);
+        View video = viewBottomSheet.findViewById(R.id.video);
+        View music = viewBottomSheet.findViewById(R.id.music);
+        /*ViewGroup request_cardToCard = viewBottomSheet.findViewById(R.id.request_cardToCard);*/
         boolean isCardToCardEnabled = false;
-        request_cardToCard.setTag(false);
+        /*request_cardToCard.setTag(false);*/
         if (!isBot && chatType == CHAT) {
             isCardToCardEnabled = true;
-            request_cardToCard.setTag(true);
+            /*request_cardToCard.setTag(true);*/
         }
-        final ViewGroup close = viewBottomSheet.findViewById(R.id.close);
-        ViewGroup file = viewBottomSheet.findViewById(R.id.file);
-        ViewGroup paint = viewBottomSheet.findViewById(R.id.paint);
-        ViewGroup location = viewBottomSheet.findViewById(R.id.location);
-        ViewGroup contact = viewBottomSheet.findViewById(R.id.contact);
+        /*final ViewGroup close = viewBottomSheet.findViewById(R.id.close);*/
+        View file = viewBottomSheet.findViewById(R.id.file);
+        View paint = viewBottomSheet.findViewById(R.id.paint);
+        View location = viewBottomSheet.findViewById(R.id.location);
+        View contact = viewBottomSheet.findViewById(R.id.contact);
 
 
         TextView txtCamera = viewBottomSheet.findViewById(R.id.txtCamera);
         TextView textPicture = viewBottomSheet.findViewById(R.id.textPicture);
         TextView txtVideo = viewBottomSheet.findViewById(R.id.txtVideo);
         TextView txtMusic = viewBottomSheet.findViewById(R.id.txtMusic);
-        TextView txtDocument = viewBottomSheet.findViewById(R.id.txtDocument);
+        /*TextView txtDocument = viewBottomSheet.findViewById(R.id.txtDocument);*/
         TextView txtFile = viewBottomSheet.findViewById(R.id.txtFile);
         TextView txtPaint = viewBottomSheet.findViewById(R.id.txtPaint);
         TextView txtLocation = viewBottomSheet.findViewById(R.id.txtLocation);
@@ -6700,32 +6700,32 @@ public class FragmentChat extends BaseFragment
         TextView textPicture2 = viewBottomSheet.findViewById(R.id.textPicture2);
         TextView txtVideo2 = viewBottomSheet.findViewById(R.id.txtVideo2);
         TextView txtMusic2 = viewBottomSheet.findViewById(R.id.txtMusic2);
-        TextView txtDocument2 = viewBottomSheet.findViewById(R.id.txtDocument2);
+        /*TextView txtDocument2 = viewBottomSheet.findViewById(R.id.txtDocument2);*/
         TextView txtFile2 = viewBottomSheet.findViewById(R.id.txtFile2);
         TextView txtPaint2 = viewBottomSheet.findViewById(R.id.txtPaint2);
         TextView txtLocation2 = viewBottomSheet.findViewById(R.id.txtLocation2);
         TextView txtContact2 = viewBottomSheet.findViewById(R.id.txtContact2);
-        send = viewBottomSheet.findViewById(R.id.txtSend);
+        /*send = viewBottomSheet.findViewById(R.id.txtSend);*/
 
         txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
         textPicture.setTextColor(Color.parseColor(G.attachmentColor));
         txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
         txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
 
-        if (isCardToCardEnabled) {
+        /*if (isCardToCardEnabled) {
             txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
             txtDocument2.setTextColor(Color.parseColor(G.attachmentColor));
         } else {
             txtDocument.setTextColor(Color.parseColor("#555555"));
             txtDocument2.setTextColor(Color.parseColor("#555555"));
-        }
+        }*/
 
         txtFile.setTextColor(Color.parseColor(G.attachmentColor));
         txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
         txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
         txtContact.setTextColor(Color.parseColor(G.attachmentColor));
-        send.setTextColor(Color.parseColor(G.attachmentColor));
-        txtCountItem.setTextColor(Color.parseColor(G.attachmentColor));
+        /*send.setTextColor(Color.parseColor(G.attachmentColor));*/
+        /*txtCountItem.setTextColor(Color.parseColor(G.attachmentColor));*/
 
         txtCamera2.setTextColor(Color.parseColor(G.attachmentColor));
         textPicture2.setTextColor(Color.parseColor(G.attachmentColor));
@@ -6760,11 +6760,11 @@ public class FragmentChat extends BaseFragment
                         FragmentEditImage.textImageList.remove(path);
                     }
                     if (FragmentEditImage.textImageList.size() > 0) {
-                        send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
+                        /*send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));*/
+                        /*txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));*/
                     } else {
-                        send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                        txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                        /*send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));*/
+                        /*txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));*/
                     }
                 }
             }
@@ -6804,7 +6804,7 @@ public class FragmentChat extends BaseFragment
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 1, GridLayoutManager.HORIZONTAL, false));
         rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
-        bottomSheetDialog = new BottomSheetDialog(G.fragmentActivity);
+        bottomSheetDialog = new BottomSheetDialog(getActivity(),G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
         bottomSheetDialog.setContentView(viewBottomSheet);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheet.getParent());
 
@@ -6976,8 +6976,8 @@ public class FragmentChat extends BaseFragment
                 isNewBottomSheet = true;
                 dialog.dismiss();
                 //send.setImageResource(R.mipmap.ic_close);
-                send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                /*send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));*/
+                /*txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));*/
             }
         });
 
@@ -7029,13 +7029,13 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        request_cardToCard.setOnClickListener(new View.OnClickListener() {
+        /*request_cardToCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cardToCardClick(v);
             }
-        });
-        close.setOnClickListener(new View.OnClickListener() {
+        });*/
+        /*close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -7046,9 +7046,9 @@ public class FragmentChat extends BaseFragment
                     send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
                     txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
 
-                    /**
+                    *//**
                      * sort list
-                     */
+                     *//*
                     final ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
                     for (Map.Entry<String, StructBottomSheet> items : FragmentEditImage.textImageList.entrySet()) {
                         itemList.add(items.getValue());
@@ -7089,7 +7089,7 @@ public class FragmentChat extends BaseFragment
                     bottomSheetDialog.dismiss();
                 }
             }
-        });
+        });*/
         file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -7676,16 +7676,16 @@ public class FragmentChat extends BaseFragment
         bottomSheetDialog.show();
         if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
             //send.setText(R.mipmap.send2);
-            if (send != null)
-                send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-            if (txtCountItem != null)
-                txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
+            /*if (send != null)
+                send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));*/
+            /*if (txtCountItem != null)
+                txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));*/
         } else {
             //send.setImageResource(R.mipmap.ic_close);
-            if (send != null)
-                send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-            if (txtCountItem != null)
-                txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+            /*if (send != null)
+                send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));*/
+            /*if (txtCountItem != null)
+                txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));*/
         }
     }
 

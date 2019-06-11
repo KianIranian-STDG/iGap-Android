@@ -28,9 +28,8 @@
         android:id="@+id/txtIconCamera"
         android:layout_width="@dimen/dp100"
         android:layout_height="@dimen/dp100"
-        android:gravity="center"
+        style="@style/myIconTextViewStyle"
         android:text="@string/md_camera_alt"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/white"
         android:textSize="@dimen/dp32" />
     </RelativeLayout>

@@ -10,9 +10,11 @@
 
 package net.iGap.adapter;
 
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -98,42 +100,23 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         } else {
             holder.checkBoxSelect.setChecked(true);
         }
-        holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
 
-        holder.checkBoxSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (holder.checkBoxSelect.isChecked()) {
-                    holder.checkBoxSelect.setChecked(false);
-                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    onPathAdapterBottomSheet.path(mList.getPath(), false, false, mList, mList.getId());
-                    mList.setSelected(true);
-                } else {
-                    holder.checkBoxSelect.setChecked(true);
-                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    onPathAdapterBottomSheet.path(mList.getPath(), true, false, mList, mList.getId());
-                    mList.setSelected(false);
-                }
-            }
+        holder.checkBoxSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            onPathAdapterBottomSheet.path(mList.getPath(), isChecked, false, mList, mList.getId());
+            mList.setSelected(!isChecked);
         });
 
-        holder.cr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.checkBoxSelect.isChecked()) {
-                    holder.checkBoxSelect.setChecked(false);
-                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    onPathAdapterBottomSheet.path(mList.getPath(), false, true, mList, mList.getId());
-                    mList.setSelected(false);
-                } else {
-                    holder.checkBoxSelect.setChecked(true);
-                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    onPathAdapterBottomSheet.path(mList.getPath(), true, true, mList, mList.getId());
-                    mList.setSelected(true);
-                }
-
+        holder.cr.setOnClickListener(v -> {
+            if (holder.checkBoxSelect.isChecked()) {
+                holder.checkBoxSelect.setChecked(false);
+                onPathAdapterBottomSheet.path(mList.getPath(), false, true, mList, mList.getId());
+                mList.setSelected(false);
+            } else {
+                holder.checkBoxSelect.setChecked(true);
+                onPathAdapterBottomSheet.path(mList.getPath(), true, true, mList, mList.getId());
+                mList.setSelected(true);
             }
+
         });
     }
 
@@ -146,7 +129,7 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
     //The viewHolder used for this mList. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        protected AnimateCheckBox checkBoxSelect;
+        protected AppCompatCheckBox checkBoxSelect;
         private CardView cr;
         private ImageView imgSrc;
         private ProgressBar prgBottomSheet;
