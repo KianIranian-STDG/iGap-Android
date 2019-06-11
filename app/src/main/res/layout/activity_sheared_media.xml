@@ -17,9 +17,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="?backgroundSubChatTheme"
-    android:scrollbars="vertical"
-    android:paddingRight="@dimen/dp16"
-      android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
+      android:scrollbars="none"
+      android:paddingRight="@dimen/dp16"
+      android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_shared_media"
     android:paddingLeft="@dimen/dp16" />
 
   <android.support.design.widget.AppBarLayout
@@ -126,6 +126,25 @@
 
     </LinearLayout>
 
+    <HorizontalScrollView
+        android:id="@+id/asm_ll_media_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp36"
+        style="?backgroundColorSettingTheme"
+        android:scrollbars="none"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+      <LinearLayout
+          android:id="@+id/asm_ll_media_types_buttons"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:orientation="horizontal"
+          android:layout_gravity="center_vertical">
+
+      </LinearLayout>
+
+    </HorizontalScrollView>
 
   </android.support.design.widget.AppBarLayout>
 

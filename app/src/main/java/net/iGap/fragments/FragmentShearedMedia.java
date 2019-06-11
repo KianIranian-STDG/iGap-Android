@@ -101,6 +101,7 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -162,7 +163,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private int mCurrentSharedMediaType = 1 ; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
     private HelperToolbar mHelperToolbar ;
     private boolean isToolbarInEditMode = false;
+    private HashMap<Integer , String> mSharedTypesList = new HashMap<Integer, String>();
+    private LinearLayout mediaTypesLayout;
 
+    private void initSharedTypes(){
+        mSharedTypesList.clear();
+        mSharedTypesList.put(1 , getString(R.string.images));
+        mSharedTypesList.put(2 , getString(R.string.videos));
+        mSharedTypesList.put(3 , getString(R.string.audios));
+        mSharedTypesList.put(4 , getString(R.string.voices));
+        mSharedTypesList.put(5 , getString(R.string.gifs));
+        mSharedTypesList.put(6 , getString(R.string.files));
+        mSharedTypesList.put(7 , getString(R.string.links));
+    }
 
     public static FragmentShearedMedia newInstance(long roomId) {
         Bundle args = new Bundle();
@@ -212,6 +225,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         roomId = getArguments().getLong(ROOM_ID);
         roomType = RealmRoom.detectType(roomId);
 
+        initSharedTypes();
         initComponent(view);
     }
 
@@ -275,6 +289,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         AppUtils.setProgresColler(progressBar);
 
         appBarLayout = (AppBarLayout) view.findViewById(R.id.asm_appbar_shared_media);
+        mediaTypesLayout = view.findViewById(R.id.asm_ll_media_types_buttons);
 
         view.findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -344,6 +359,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         openLayout();
         initAppbarSelected(view);
+        makeSharedTypesViews();
     }
 
     private void openLayout() {
@@ -527,6 +543,87 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     @Override //menu button at toolbar
     public void onRightIconClickListener(View view) {
         popUpMenuSharedMedia();
+    }
+
+    private void makeSharedTypesViews(){
+        for(int i=1 ; i<mSharedTypesList.size()+1 ; i++) makeButton(i);
+    }
+
+    private void makeButton(final int pos) {
+
+        TextView textView = new TextView(getContext());
+        textView.setText(mSharedTypesList.get(pos));
+        //textView.setTextSize(getDimen(R.dimen.dp8));
+        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setSingleLine(true);
+
+        if (G.isDarkTheme){
+            textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+            textView.setTextColor(getContext().getResources().getColor(R.color.white));
+        }else {
+            textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
+            textView.setTextColor(getContext().getResources().getColor(R.color.black));
+        }
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (pos == 1 || pos == mSharedTypesList.size()+1){
+            lp.setMargins(getDimen(R.dimen.dp10), getDimen(R.dimen.dp4), getDimen(R.dimen.dp10), getDimen(R.dimen.dp2));
+        }else {
+            lp.setMargins(getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp2));
+        }
+        textView.setLayoutParams(lp);
+        textView.setPadding(getDimen(R.dimen.dp14) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp14) , getDimen(R.dimen.dp4));
+
+        textView.setOnClickListener(v -> mediaTypesClickHandler(pos));
+
+        mediaTypesLayout.addView(textView);
+    }
+
+    private void mediaTypesClickHandler(int pos) {
+        switch (pos){
+
+            case 1 :
+                if (mCurrentSharedMediaType != 1)
+                    fillListImage();
+                break;
+
+            case 2 :
+                if (mCurrentSharedMediaType != 2)
+                    fillListVideo();
+                break;
+
+            case 3 :
+                if (mCurrentSharedMediaType != 3)
+                    fillListAudio();
+                break;
+
+            case 4 :
+                if (mCurrentSharedMediaType != 4)
+                    fillListVoice();
+                break;
+
+            case 5 :
+                if (mCurrentSharedMediaType != 5)
+                    fillListGif();
+                break;
+
+            case 6 :
+                if (mCurrentSharedMediaType != 6)
+                    fillListFile();
+                break;
+
+            case 7 :
+                if (mCurrentSharedMediaType != 7)
+                    fillListLink();
+                break;
+
+            default:
+                    fillListImage();
+        }
+    }
+
+    private int getDimen(int id) {
+        return (int) getContext().getResources().getDimension(id);
     }
 
     //********************************************************************************************
@@ -1128,7 +1225,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 //check and show just first block with header
                 if (position == 0 && mCurrentSharedMediaType == 1 ) {
                     holder1.txtHeader.setText(context.getString(R.string.images));
-                    holder1.txtHeader.setVisibility(View.VISIBLE);
+                    holder1.txtHeader.setVisibility(View.GONE);
                     holder1.vSplitter.setVisibility(View.VISIBLE);
 
                     LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder1.txtHeader.getLayoutParams();
@@ -1563,7 +1660,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
 
-            fragment.appBarLayout = appBarLayout;
+            //fragment.appBarLayout = appBarLayout;
             new HelperFragment(fragment).setReplace(false).load();
         }
 
