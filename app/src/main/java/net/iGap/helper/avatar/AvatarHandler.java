@@ -74,6 +74,7 @@ public class AvatarHandler {
 
     private final Object mutex;
     private final Object mutex2;
+    private static final Object mutex3 = new Object();
     private HashMap<Long, Boolean> mRepeatList = new HashMap<>();
     private ArrayList<String> reDownloadFiles = new ArrayList<>();
 
@@ -118,7 +119,7 @@ public class AvatarHandler {
     private void notifyMe(String avatarPath, long avatarId, boolean isMain, long fileId) {
         final Bitmap bmImg = BitmapFactory.decodeFile(avatarPath);
         if (bmImg != null) {
-            synchronized (mutex) {
+            synchronized (mutex3) {
                 ArrayList<Long> myLimitedList;
                 ConcurrentHashMap<Long, CacheValue> myAvatarCache;
                 int limit;

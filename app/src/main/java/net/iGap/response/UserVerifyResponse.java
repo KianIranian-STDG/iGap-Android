@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.interfaces.OnUserVerification;
+import net.iGap.helper.HelperTracker;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserVerify;
 
@@ -37,6 +38,7 @@ public class UserVerifyResponse extends MessageHandler {
         } else {
             throw new ClassCastException("identity must be : " + OnUserVerification.class.getName());
         }
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ACTIVATION_CODE);
     }
 
     @Override

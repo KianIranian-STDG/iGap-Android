@@ -29,6 +29,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.helper.HelperTracker;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
@@ -55,11 +56,11 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         return discoveryFragment;
     }
 
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && !isInit) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_DISCOVERY_PAGE);
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

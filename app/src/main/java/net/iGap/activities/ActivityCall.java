@@ -51,6 +51,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnVideoCallFrame;
 import net.iGap.module.AndroidUtils;
@@ -174,6 +175,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
 
         canSetUserStatus = false;
 

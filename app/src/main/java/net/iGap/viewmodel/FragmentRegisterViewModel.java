@@ -34,6 +34,8 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperTracker;
+import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
@@ -778,7 +780,7 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
                         // get user info for set nick name and after from that go to ActivityMain
                         getUserInfo();
                         requestUserInfo();
-                    }
+                    HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);}
                     realm.close();
                 });
             }

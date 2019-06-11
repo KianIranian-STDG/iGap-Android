@@ -25,6 +25,8 @@ import net.iGap.request.RequestWalletRegister;
 
 import org.paygear.WalletActivity;
 
+import ir.radsense.raadcore.model.Auth;
+
 public class FragmentWalletAgreementViewModel {
 
 
@@ -48,22 +50,7 @@ public class FragmentWalletAgreementViewModel {
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (G.userLogin) {
                                 new RequestWalletRegister().walletRegister();
-                                Intent intent = new Intent(G.currentActivity, WalletActivity.class);
-                                intent.putExtra("Language", "fa");
-                                intent.putExtra("Mobile", "0" + phone);
-                                intent.putExtra("PrimaryColor", G.appBarColor);
-                                intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                                intent.putExtra("AccentColor", G.appBarColor);
-                                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
-                                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                                (G.currentActivity).startActivity(intent);
-
-                                G.fragmentActivity.onBackPressed();
+                                startWalletActivity(v);
                             } else {
                                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                             }
@@ -71,6 +58,36 @@ public class FragmentWalletAgreementViewModel {
                         }
                     }).show();
         }
+    }
+
+    private void startWalletActivity(View v) {
+        v.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (Auth.getCurrentAuth() != null) {
+                    Intent intent = new Intent(G.currentActivity, WalletActivity.class);
+                    intent.putExtra("Language", "fa");
+                    intent.putExtra("Mobile", "0" + phone);
+                    intent.putExtra("PrimaryColor", G.appBarColor);
+                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                    intent.putExtra("AccentColor", G.appBarColor);
+                    intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                    (G.currentActivity).startActivity(intent);
+
+                    G.fragmentActivity.onBackPressed();
+                } else {
+                    startWalletActivity(v);
+                }
+
+            }
+        }, 100);
+
     }
 
 }

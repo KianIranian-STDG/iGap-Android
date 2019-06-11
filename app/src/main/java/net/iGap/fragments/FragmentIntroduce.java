@@ -25,6 +25,7 @@ import android.widget.Button;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ParallaxPageTransformer;
 import net.iGap.module.CustomCircleImage;
 
@@ -43,6 +44,8 @@ public class FragmentIntroduce extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
 
         circleButton = view.findViewById(R.id.int_circleButton_introduce);
         circleButton.circleButtonCount(3);

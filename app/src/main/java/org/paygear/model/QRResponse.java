@@ -25,4 +25,13 @@ public class QRResponse implements Serializable {
     @SerializedName("disabled")
     public boolean isDisabled;
 
+
+    public QRResponse(String id, int type, String accountId, String value, String sequenceNumber, boolean isDisabled) {
+        this.id = id;
+        this.type = type;
+        this.accountId = accountId;
+        this.value = value;
+        this.sequenceNumber = sequenceNumber;
+        this.isDisabled = isDisabled;
+    }
 }

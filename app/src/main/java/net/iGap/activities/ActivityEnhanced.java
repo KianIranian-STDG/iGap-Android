@@ -91,52 +91,56 @@ public class ActivityEnhanced extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        if (G.ISOK) {
+            avatarHandler = new AvatarHandler();
+            setThemeSetting();
 
-        avatarHandler = new AvatarHandler();
-        setThemeSetting();
 
+            checkFont();
 
-        checkFont();
+            IntentFilter screenStateFilter = new IntentFilter();
+            screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
+            screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+            registerReceiver(mybroadcast, screenStateFilter);
 
-        IntentFilter screenStateFilter = new IntentFilter();
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mybroadcast, screenStateFilter);
+            SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
 
-        boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
-
-        if (G.isPassCode && !allowScreen) {
-            try {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-            } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+            if (G.isPassCode && !allowScreen) {
+                try {
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                } catch (Exception e) {
+                    HelperLog.setErrorLog(e);
+                }
+            } else {
+                try {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                } catch (Exception e) {
+                    HelperLog.setErrorLog(e);
+                }
             }
-        } else {
-            try {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+
+            super.onCreate(savedInstanceState);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
             }
-        }
 
-        super.onCreate(savedInstanceState);
+            makeDirectoriesIfNotExist();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
-        }
+            boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+            if (!checkedEnableDataShams) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+            }
 
-        makeDirectoriesIfNotExist();
-
-        boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
-        if (!checkedEnableDataShams) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+            super.onCreate(savedInstanceState);
         }
 
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     private void setThemeSetting() {
@@ -248,52 +252,59 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        if (G.ISOK) {
+            if (!G.isAppInFg) {
+                G.isAppInFg = true;
+                G.isChangeScrFg = false;
 
-        if (!G.isAppInFg) {
-            G.isAppInFg = true;
-            G.isChangeScrFg = false;
-
-            /**
-             * if user isn't login and page come in foreground try for reconnect
-             */
-            if (!G.userLogin) {
-                WebSocketClient.reconnect(true);
+                /**
+                 * if user isn't login and page come in foreground try for reconnect
+                 */
+                if (!G.userLogin) {
+                    WebSocketClient.reconnect(true);
+                }
+            } else {
+                G.isChangeScrFg = true;
             }
+            G.isScrInFg = true;
+
+            AttachFile.isInAttach = false;
+            if (canSetUserStatus)
+                UserStatusController.getInstance().setOnline();
+
+            super.onStart();
+            avatarHandler.registerChangeFromOtherAvatarHandler();
         } else {
-            G.isChangeScrFg = true;
+            super.onStart();
         }
-        G.isScrInFg = true;
 
-        AttachFile.isInAttach = false;
-        if (canSetUserStatus)
-            UserStatusController.getInstance().setOnline();
-
-        super.onStart();
-        avatarHandler.registerChangeFromOtherAvatarHandler();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        avatarHandler.unregisterChangeFromOtherAvatarHandler();
+        if (G.ISOK) {
+            avatarHandler.unregisterChangeFromOtherAvatarHandler();
 
-        if (!G.isScrInFg || !G.isChangeScrFg) {
-            G.isAppInFg = false;
+            if (!G.isScrInFg || !G.isChangeScrFg) {
+                G.isAppInFg = false;
+            }
+            G.isScrInFg = false;
+            try{
+
+                HelperDataUsage.insertDataUsage(null, true, true);
+                HelperDataUsage.insertDataUsage(null, true, false);
+
+                HelperDataUsage.insertDataUsage(null, false, true);
+                HelperDataUsage.insertDataUsage(null, false, false);
+
+            }catch (Exception e){};
+
+            if (!AttachFile.isInAttach && canSetUserStatus) {
+                UserStatusController.getInstance().setOffline();
+            }
         }
-        G.isScrInFg = false;
-        try{
 
-            HelperDataUsage.insertDataUsage(null, true, true);
-            HelperDataUsage.insertDataUsage(null, true, false);
-
-            HelperDataUsage.insertDataUsage(null, false, true);
-            HelperDataUsage.insertDataUsage(null, false, false);
-
-        }catch (Exception e){};
-
-        if (!AttachFile.isInAttach && canSetUserStatus) {
-            UserStatusController.getInstance().setOffline();
-        }
     }
 
     /**
@@ -372,7 +383,9 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mybroadcast);
+        if (G.ISOK) {
+            unregisterReceiver(mybroadcast);
+        }
     }
 
 

@@ -31,6 +31,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
+import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.module.CountryListComparator;
@@ -316,6 +317,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
         }
 
         if (isNeedCloseActivity) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
             Intent intent = new Intent(getContext(), ActivityMain.class);
             intent.putExtra(ARG_USER_ID, userId);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
