@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -294,14 +295,14 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 @Override
                 public void onMessageReceive() {
 
-                    viewPager.post(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             mList = HelperNotification.getInstance().getMessageList();
-                            viewPager.setAdapter(mAdapter);
                             btnMessageCounter.setText(1 + "/" + mList.size());
-                            setImageAndTextAppBar(viewPager.getCurrentItem());
                             listSize = mList.size();
+                            mAdapter.notifyDataSetChanged();
+                            setImageAndTextAppBar(viewPager.getCurrentItem());
                         }
                     });
                 }
@@ -555,6 +556,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE;
         }
     }
 }
