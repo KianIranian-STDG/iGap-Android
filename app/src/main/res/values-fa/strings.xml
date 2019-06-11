@@ -1871,4 +1871,5 @@
     <string name="files">فایل ها</string>
     <string name="links">لینک ها</string>
     <string name="size">اندازه</string>
+    <string name="copy_link_title">کپی لینک</string>
 </resources>
