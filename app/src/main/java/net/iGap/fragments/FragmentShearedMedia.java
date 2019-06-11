@@ -683,35 +683,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     public void popUpMenuSharedMedia() {
 
         List<String> items = new ArrayList<>();
-        items.add(getString(R.string.shared_image));
-        items.add(getString(R.string.shared_video));
-        items.add(getString(R.string.shared_audio));
-        items.add(getString(R.string.shared_voice));
-        items.add(getString(R.string.shared_gif));
-        items.add(getString(R.string.shared_file));
-        items.add(getString(R.string.shared_links));
+        items.add(getString(R.string.name));
+        items.add(getString(R.string.date));
+        items.add(getString(R.string.size));
 
         new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.shared_image))){
-                fillListImage();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_video))){
-                fillListVideo();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_audio))){
-                fillListAudio();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_voice))){
-                fillListVoice();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_gif))){
-                fillListGif();
-            }
-            else if (items.get(position).equals(getString(R.string.shared_file))){
-                fillListFile();
-            }else if (items.get(position).equals(getString(R.string.shared_links))){
-                fillListLink();
-            }
+
         }).show();
     }
 
