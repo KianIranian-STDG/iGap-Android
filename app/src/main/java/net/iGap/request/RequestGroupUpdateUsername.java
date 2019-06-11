@@ -10,17 +10,18 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnGroupUpdateUsername;
 import net.iGap.proto.ProtoGroupUpdateUsername;
 
 public class RequestGroupUpdateUsername {
 
-    public void groupUpdateUsername(long roomId, String username) {
+    public void groupUpdateUsername(long roomId, String username, OnGroupUpdateUsername callback) {
 
         ProtoGroupUpdateUsername.GroupUpdateUsername.Builder builder = ProtoGroupUpdateUsername.GroupUpdateUsername.newBuilder();
         builder.setRoomId(roomId);
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(322, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(322, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

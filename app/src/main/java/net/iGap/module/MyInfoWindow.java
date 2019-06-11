@@ -110,17 +110,17 @@ public class MyInfoWindow extends InfoWindow {
         DialogAnimation.animationDown(dialog);
         dialog.show();
 
-        final CircleImageView avatar = (CircleImageView) view.findViewById(R.id.img_info_avatar_map);
-        final TextView txtClose = (TextView) view.findViewById(R.id.txt_close_map);
-        final TextView txtBack = (TextView) view.findViewById(R.id.txt_info_back_map);
-        final TextView txtOpenComment = (TextView) view.findViewById(R.id.txt_open_comment_map);
-        final TextView txtChat = (TextView) view.findViewById(R.id.txt_chat_map);
-        final TextView txtCall = (TextView) view.findViewById(R.id.txt_call_map);
+        final CircleImageView avatar = view.findViewById(R.id.img_info_avatar_map);
+        final TextView txtClose = view.findViewById(R.id.txt_close_map);
+        final TextView txtBack = view.findViewById(R.id.txt_info_back_map);
+        final TextView txtOpenComment = view.findViewById(R.id.txt_open_comment_map);
+        final TextView txtChat = view.findViewById(R.id.txt_chat_map);
+        final TextView txtCall = view.findViewById(R.id.txt_call_map);
         txtCall.setVisibility(isCallEnable ? View.VISIBLE : View.GONE);
-        final TextView txtVideoCall = (TextView) view.findViewById(R.id.txt_video_call_map);
+        final TextView txtVideoCall = view.findViewById(R.id.txt_video_call_map);
         txtVideoCall.setVisibility(isVideoCallEnable ? View.VISIBLE : View.GONE);
-        TextView txtName = (TextView) view.findViewById(R.id.txt_name_info_map);
-        final TextView txtComment = (TextView) view.findViewById(R.id.txt_info_comment);
+        TextView txtName = view.findViewById(R.id.txt_name_info_map);
+        final TextView txtComment = view.findViewById(R.id.txt_info_comment);
 
         txtName.setText(realmRegisteredInfo.getDisplayName());
         txtName.setTypeface(G.typeface_IRANSansMobile_Bold, Typeface.BOLD);
@@ -165,7 +165,7 @@ public class MyInfoWindow extends InfoWindow {
                 HelperPublicMethod.goToChatRoom(userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
-                        new HelperFragment(fragmentiGapMap).remove();
+                        new HelperFragment(mActivity.getSupportFragmentManager(),fragmentiGapMap).remove();
                     }
                 }, null);
             }

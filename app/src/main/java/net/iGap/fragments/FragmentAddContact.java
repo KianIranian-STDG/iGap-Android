@@ -94,8 +94,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         if (bundle != null) {
             String contactName = bundle.getString(NAME);
             edtFirstName.setText(contactName);
-
-            Log.i("aabolfazl", "show contact: " + contactName);
         }
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -136,8 +134,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         });
 
         txtCodeCountry.setOnClickListener(v -> {
-            new HelperFragment(new FragmentChooseCountry()).setReplace(false).load();
-            closeKeyboard(v);
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChooseCountry()).setReplace(false).load();
+                closeKeyboard(v);
+            }
         });
 
         //when user clicked on edit text keyboard wont open with this code
@@ -151,8 +151,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
             edtPhoneNumber.setText(phoneFromUrl);
         }
-
-
 
         edtFirstName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -237,8 +235,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                 }
             }
         }
-
-
     }
 
     private void setupToolbar(View view) {
@@ -259,12 +255,9 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
     private void isEnableSetButton() {
 
         if ((edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) && edtPhoneNumber.getText().toString().length() > 0) {
-
             mHelperToolbar.getRightButton().setEnabled(true);
         } else {
-
             mHelperToolbar.getRightButton().setEnabled(false);
-
         }
     }
 
@@ -272,7 +265,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         removeFromBaseFragment(FragmentAddContact.this);
-
     }
 
     /**

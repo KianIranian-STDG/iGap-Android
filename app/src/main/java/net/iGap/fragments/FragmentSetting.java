@@ -19,6 +19,7 @@ import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
@@ -89,6 +90,30 @@ public class FragmentSetting extends BaseFragment {
             }
         });
 
+        viewModel.goToLanguagePage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(false).load();
+            }
+        });
+
+        viewModel.goToNotificationAndSoundPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentNotificationAndSound()).setReplace(false).load();
+            }
+        });
+
+        viewModel.goToPrivacyAndSecurityPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPrivacyAndSecurity()).setReplace(false).load();
+            }
+        });
+
+        viewModel.goToChatSettingsPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChatSettings()).setReplace(false).load();
+            }
+        });
+
         viewModel.showDialogLogout.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDialogLogout();
@@ -113,7 +138,20 @@ public class FragmentSetting extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        viewModel.onStop();
+        try {
+            if (getActivity() != null) {
+                for (Fragment f : getActivity().getSupportFragmentManager().getFragments()) {
+                    if (f == null) {
+                        continue;
+                    }
+                    if (f instanceof FragmentMain || f instanceof FragmentCall) {
+                        f.onResume();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            HelperLog.setErrorLog(e);
+        }
     }
 
     public void showMenu() {
@@ -176,12 +214,13 @@ public class FragmentSetting extends BaseFragment {
 
             txtOk.setOnClickListener(v1 -> {
                 inDialog.dismiss();
-                FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("PHONE", viewModel.phoneNumber);
-                fragmentDeleteAccount.setArguments(bundle);
-                new HelperFragment(fragmentDeleteAccount).setReplace(false).load();
+                if (getActivity() != null) {
+                    FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("PHONE", viewModel.phoneNumber);
+                    fragmentDeleteAccount.setArguments(bundle);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentDeleteAccount).setReplace(false).load();
+                }
             });
 
             txtCancel.setOnClickListener(v12 -> inDialog.dismiss());

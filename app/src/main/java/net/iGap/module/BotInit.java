@@ -485,7 +485,8 @@ public class BotInit implements View.OnClickListener {
     public void onClick(View v) {
         try {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
+                //TODO: fixed this and do not use G.currentActivity
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
@@ -503,7 +504,7 @@ public class BotInit implements View.OnClickListener {
                 } catch (Exception e) {
                 }
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).substring(14));
+                HelperUrl.checkAndJoinToRoom(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).substring(14));
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
                 HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {

@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
 */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -43,7 +44,7 @@ import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
 
 import java.util.regex.Pattern;
 
-public class FragmentSecurityViewModel {
+public class FragmentSecurityViewModel extends ViewModel {
 
     private static final int CHANGE_HINT = 1;
     private static final int CHANGE_EMAIL = 2;
@@ -77,6 +78,9 @@ public class FragmentSecurityViewModel {
     public ObservableField<String> edtSetQuestionPassTwo = new ObservableField<>("");
     public ObservableField<String> edtCheckPassword = new ObservableField<>("");
     public ObservableField<String> edtCheckPasswordHint = new ObservableField<>("");
+    public MutableLiveData<String> goToSetSecurityPassword = new MutableLiveData<>();
+    public MutableLiveData<Integer> showForgetPasswordDialog = new MutableLiveData<>();
+    public MutableLiveData<SecurityRecoveryModel> goToSecurityRecoveryPage = new MutableLiveData<>();
     private String txtQuestionOne = "";
     private String txtQuestionTwo = "";
     private String txtPatternEmail = "";
@@ -186,16 +190,12 @@ public class FragmentSecurityViewModel {
 
     public void onClickSetAdditionPassword(View view) {
         isFirstArrive = false;
-        new HelperFragment(new FragmentSetSecurityPassword()).load();
+        goToSetSecurityPassword.setValue("");
     }
 
     public void onClickChangePassword(View view) {
         isFirstArrive = false;
-        FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
-        Bundle bundle = new Bundle();
-        bundle.putString("OLD_PASSWORD", password);
-        fragmentSetSecurityPassword.setArguments(bundle);
-        new HelperFragment(fragmentSetSecurityPassword).setReplace(false).load();
+        goToSetSecurityPassword.setValue(password);
     }
 
     public void onClickChangeHint(View view) {
@@ -267,29 +267,7 @@ public class FragmentSecurityViewModel {
         } else {
             item = R.array.securityRecoveryPasswordWithoutEmail;
         }
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.set_recovery_dialog_title).items(item).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                if (text.equals(G.fragmentActivity.getResources().getString(R.string.recovery_by_email_dialog))) {
-                    isRecoveryByEmail = true;
-                } else {
-                    isRecoveryByEmail = false;
-                }
-
-                FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("PAGE", Security.SETTING);
-                bundle.putString("QUESTION_ONE", txtQuestionOne);
-                bundle.putString("QUESTION_TWO", txtQuestionTwo);
-                bundle.putString("PATERN_EMAIL", txtPatternEmail);
-                bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
-                bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
-
-                fragmentSecurityRecovery.setArguments(bundle);
-                new HelperFragment(fragmentSecurityRecovery).load();
-            }
-        }).show();
+        showForgetPasswordDialog.setValue(item);
     }
 
 
@@ -504,8 +482,9 @@ public class FragmentSecurityViewModel {
 
     }
 
-    public void onResume() {
-
+    public void forgetPassword(boolean isRecoveryByEmail){
+        this.isRecoveryByEmail = isRecoveryByEmail;
+        goToSecurityRecoveryPage.setValue(new SecurityRecoveryModel(Security.SETTING,txtQuestionOne,txtQuestionTwo,txtPatternEmail,isRecoveryByEmail,isConfirmedRecoveryEmail));
     }
 
 
@@ -703,6 +682,49 @@ public class FragmentSecurityViewModel {
         }
 
         closeKeyboard(v);
+    }
+
+    public class SecurityRecoveryModel{
+
+        private Security security;
+        private String questionOne;
+        private String questionTwo;
+        private String emailPatern;
+        private boolean isEmail;
+        private boolean isConfirmEmail;
+
+        public SecurityRecoveryModel(Security security, String questionOne, String questionTwo, String emailPatern, boolean isEmail, boolean isConfirmEmail) {
+            this.security = security;
+            this.questionOne = questionOne;
+            this.questionTwo = questionTwo;
+            this.emailPatern = emailPatern;
+            this.isEmail = isEmail;
+            this.isConfirmEmail = isConfirmEmail;
+        }
+
+        public Security getSecurity() {
+            return security;
+        }
+
+        public String getQuestionOne() {
+            return questionOne;
+        }
+
+        public String getQuestionTwo() {
+            return questionTwo;
+        }
+
+        public String getEmailPatern() {
+            return emailPatern;
+        }
+
+        public boolean isEmail() {
+            return isEmail;
+        }
+
+        public boolean isConfirmEmail() {
+            return isConfirmEmail;
+        }
     }
 
 }

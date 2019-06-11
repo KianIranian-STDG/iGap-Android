@@ -203,64 +203,65 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                 @Override
                                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                     if (progressDialog != null) progressDialog.dismiss();
+                                    if (getActivity()!=null) {
+                                        if (!new HelperFragment(getActivity().getSupportFragmentManager()).isFragmentVisible("PaymentFragment"))
+                                            return;
+                                        if (response.body() != null) {
+                                            selectedCard = null;
+                                            if (response.body().size() > 0)
+                                                selectedCard = response.body().get(0);
+                                            if (selectedCard != null) {
+                                                if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
+                                                    if (!selectedCard.isProtected) {
+                                                        if (progressDialog != null)
+                                                            progressDialog.dismiss();
 
-                                    if (!HelperFragment.isFragmentVisible("PaymentFragment"))
-                                        return;
-                                    if (response.body() != null) {
-                                        selectedCard = null;
-                                        if (response.body().size() > 0)
-                                            selectedCard = response.body().get(0);
-                                        if (selectedCard != null) {
-                                            if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
-                                                if (!selectedCard.isProtected) {
-                                                    if (progressDialog != null)
-                                                        progressDialog.dismiss();
+                                                        setNewPassword();
 
-                                                    setNewPassword();
+                                                    } else {
 
-                                                } else {
-
-                                                    if (progressDialog != null)
-                                                        progressDialog.dismiss();
-                                                    PaymentAuth paymentAuth = new PaymentAuth();
-                                                    paymentAuth.publicKey = initPayResponse.getPublicKey();
-                                                    paymentAuth.token = initPayResponse.getToken();
+                                                        if (progressDialog != null)
+                                                            progressDialog.dismiss();
+                                                        PaymentAuth paymentAuth = new PaymentAuth();
+                                                        paymentAuth.publicKey = initPayResponse.getPublicKey();
+                                                        paymentAuth.token = initPayResponse.getToken();
 //                                                    showPinConfirm(paymentAuth);
-                                                    setConfirmPassword(paymentAuth);
+                                                        setConfirmPassword(paymentAuth);
 
 
+                                                    }
+                                                } else {
+                                                    if (progressDialog != null)
+                                                        progressDialog.dismiss();
+
+                                                    Payment payment = new Payment();
+                                                    PaymentAuth paymentAuth = new PaymentAuth();
+                                                    paymentAuth.token = initPayResponse.getToken();
+                                                    paymentAuth.publicKey = initPayResponse.getPublicKey();
+                                                    payment.account = null;
+                                                    payment.paymentAuth = paymentAuth;
+                                                    payment.isCredit = false;
+                                                    payment.orderId = null;
+                                                    payment.price = Long.parseLong(mPrice[0]);
+                                                    Intent intent = new Intent(context, WalletActivity.class);
+                                                    intent.putExtra("Language", "fa");
+                                                    intent.putExtra("Mobile", "0" + String.valueOf(G.userId));
+                                                    intent.putExtra("IsP2P", true);
+                                                    intent.putExtra("Payment", payment);
+                                                    intent.putExtra("PrimaryColor", G.appBarColor);
+                                                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                                                    intent.putExtra("AccentColor", G.appBarColor);
+                                                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                                                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                                                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                                                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                                                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                                                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                                                    startActivityForResult(intent, 66);
+                                                    G.currentActivity.onBackPressed();
                                                 }
-                                            } else {
-                                                if (progressDialog != null)
-                                                    progressDialog.dismiss();
 
-                                                Payment payment = new Payment();
-                                                PaymentAuth paymentAuth = new PaymentAuth();
-                                                paymentAuth.token = initPayResponse.getToken();
-                                                paymentAuth.publicKey = initPayResponse.getPublicKey();
-                                                payment.account = null;
-                                                payment.paymentAuth = paymentAuth;
-                                                payment.isCredit = false;
-                                                payment.orderId = null;
-                                                payment.price = Long.parseLong(mPrice[0]);
-                                                Intent intent = new Intent(context, WalletActivity.class);
-                                                intent.putExtra("Language", "fa");
-                                                intent.putExtra("Mobile", "0" + String.valueOf(G.userId));
-                                                intent.putExtra("IsP2P", true);
-                                                intent.putExtra("Payment", payment);
-                                                intent.putExtra("PrimaryColor", G.appBarColor);
-                                                intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                                                intent.putExtra("AccentColor", G.appBarColor);
-                                                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                                                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                                                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                                                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
-                                                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                                                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                                                startActivityForResult(intent, 66);
-                                                G.currentActivity.onBackPressed();
                                             }
-
                                         }
                                     }
                                 }

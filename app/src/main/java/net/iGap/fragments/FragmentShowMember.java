@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperFragment;
@@ -100,7 +101,7 @@ import static net.iGap.G.context;
 import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentShowMember extends BaseFragment implements  ToolbarListener , OnGroupAddAdmin, OnGroupKickAdmin, OnGroupAddModerator, OnGroupKickModerator, OnGroupKickMember, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelAddModerator, OnChannelKickModerator, OnChannelKickMember {
+public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupAddAdmin, OnGroupKickAdmin, OnGroupAddModerator, OnGroupKickModerator, OnGroupKickMember, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelAddModerator, OnChannelKickModerator, OnChannelKickMember {
 
     public static final String ROOMIDARGUMENT = "ROOMID_ARGUMENT";
     public static final String MAINROOL = "MAIN_ROOL";
@@ -135,7 +136,7 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
 
     private Realm realmGroupProfile;
     private HelperToolbar mHelperToolbar;
-    private TextView mBtnAdd ;
+    private TextView mBtnAdd;
     private boolean isGroup;
 
 
@@ -164,7 +165,7 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
         return fragmentShowMember;
     }
 
-    public static FragmentShowMember newInstance2(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList , boolean isGroup) {
+    public static FragmentShowMember newInstance2(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup) {
         fragment = frg;
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
@@ -215,11 +216,11 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
             selectedRole = getArguments().getString(SELECTEDROLE);
             //isNeedGetMemberList = getArguments().getBoolean(ISNEEDGETMEMBERLIST);
             isNeedGetMemberList = true;
-            Log.i("iGap", "onCreateView: hi"+selectedRole);
+            Log.i("iGap", "onCreateView: hi" + selectedRole);
 
             try {
                 isGroup = getArguments().getBoolean(ISGROUP);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -454,39 +455,39 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
 
         //change toolbar title and set Add button text
-        if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())){
+        if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
 
-            if (isGroup){
+            if (isGroup) {
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_member));
-            }else{
+            } else {
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_subscriber));
             }
 
-        } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())){
+        } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_admin));
             mBtnAdd.setText(context.getResources().getString(R.string.add_admin));
 
-        } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())){
+        } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_modereator));
             mBtnAdd.setText(context.getResources().getString(R.string.add_modereator));
 
         }
 
-        mBtnAdd.setOnClickListener( v -> {
+        mBtnAdd.setOnClickListener(v -> {
 
-          if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())
-                  || selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())){
+            if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())
+                    || selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
 
-              openFragmentForAdd(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
+                openFragmentForAdd(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
 
-          }else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())){
+            } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
-              goToAddMember();
-          }
+                goToAddMember();
+            }
 
 
         });
@@ -595,17 +596,19 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
 
     private void goToAddMember() {
 
-            List<StructContactInfo> userList = Contacts.retrieve(null);
-            RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), mRoomID);
+        List<StructContactInfo> userList = Contacts.retrieve(null);
+        RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), mRoomID);
 
-            for (int i = 0; i < memberList.size(); i++) {
-                for (int j = 0; j < userList.size(); j++) {
-                    if (userList.get(j).peerId == memberList.get(i).getPeerId()) {
-                        userList.remove(j);
-                        break;
-                    }
+        for (int i = 0; i < memberList.size(); i++) {
+            for (int j = 0; j < userList.size(); j++) {
+                if (userList.get(j).peerId == memberList.get(i).getPeerId()) {
+                    userList.remove(j);
+                    break;
                 }
             }
+        }
+
+        if (getActivity() != null) {
 
             Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
                 @Override
@@ -615,22 +618,20 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
                         for (int i = 0; i < list.size(); i++) {
                             new RequestGroupAddMember().groupAddMember(mRoomID, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(mRoomID, countForShowLastMessage));
                         }
-                    }else {
+                    } else {
                         for (int i = 0; i < list.size(); i++) {
                             new RequestChannelAddMember().channelAddMember(mRoomID, list.get(i).peerId);
                         }
                     }
                 }
             });
-
             Bundle bundle = new Bundle();
             bundle.putBoolean("DIALOG_SHOWING", true);
             bundle.putLong("COUNT_MESSAGE", 0);
             fragment.setArguments(bundle);
 
-            new HelperFragment(fragment).setReplace(false).load();
-
-
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        }
     }
 
     private void loadMoreMember() {
@@ -757,17 +758,19 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
     }*/
 
     private void openFragmentForAdd(String SelectedRole) {
-        FragmentShowMember fragment1 = FragmentShowMember.newInstance1(fragment, mRoomID, role.toString(), G.userId, SelectedRole, true);
-        new HelperFragment(fragment1).setReplace(false).load(false);
+        if (getActivity() != null) {
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance1(fragment, mRoomID, role, G.userId, SelectedRole, true);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
+        }
     }
 
 
     @Override
     public void onBtnClearSearchClickListener(View view) {
 
-        if (mHelperToolbar.getEditTextSearch().getText().toString().trim().length() > 0){
+        if (mHelperToolbar.getEditTextSearch().getText().toString().trim().length() > 0) {
             mHelperToolbar.getEditTextSearch().setText("");
-        }else {
+        } else {
             InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
@@ -1132,21 +1135,23 @@ public class FragmentShowMember extends BaseFragment implements  ToolbarListener
                 @Override
                 public void onClick(View v) {
                     try {
-                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                if (mContact.peerId == userID) {
-                                    new HelperFragment(new FragmentSetting()).setReplace(false).load();
-                                } else {
-                                    new HelperFragment(FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                        if (getActivity() != null) {
+                            HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
+                                @Override
+                                public void Allow() {
+                                    if (mContact.peerId == userID) {
+                                        new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
+                                    } else {
+                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void deny() {
+                                @Override
+                                public void deny() {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -1,19 +1,20 @@
 package net.iGap.dialog.payment.buycharge;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableInt;
 
 import net.iGap.R;
 import net.iGap.dialog.payment.CompleteListener;
 
 public class BuyChargeViewModel extends ViewModel {
 
-    public MutableLiveData<Boolean> phoneEnableError = new MutableLiveData<>();
-    public MutableLiveData<Integer> phoneErrorMessage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> operatorMessageEnable = new MutableLiveData<>();
-    public MutableLiveData<Integer> operatorErrorMessage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> amountMessageEnable = new MutableLiveData<>();
-    public MutableLiveData<Integer> amountErrorMessage = new MutableLiveData<>();
+    public ObservableBoolean phoneEnableError = new ObservableBoolean(false);
+    public ObservableInt phoneErrorMessage = new ObservableInt(R.string.empty_error_message);
+    public ObservableBoolean operatorMessageEnable = new ObservableBoolean(false);
+    public ObservableInt operatorErrorMessage = new ObservableInt(R.string.empty_error_message);
+    public ObservableBoolean amountMessageEnable = new ObservableBoolean(false);
+    public ObservableInt amountErrorMessage = new ObservableInt(R.string.empty_error_message);
 
     private CompleteListener completeListener;
 
@@ -32,23 +33,23 @@ public class BuyChargeViewModel extends ViewModel {
 
     public void onContinueButtonClick(String phoneNumber, String operator, String amount) {
         if (phoneNumber.isEmpty()) {
-            phoneEnableError.setValue(true);
-            phoneErrorMessage.setValue(R.string.error);
+            phoneEnableError.set(true);
+            phoneErrorMessage.set(R.string.error);
         } else {
-            phoneEnableError.setValue(false);
-            phoneErrorMessage.setValue(R.string.empty_error_message);
+            phoneEnableError.set(false);
+            phoneErrorMessage.set(R.string.empty_error_message);
             if (operator.isEmpty()) {
-                operatorMessageEnable.setValue(true);
-                operatorErrorMessage.setValue(R.string.error);
+                operatorMessageEnable.set(true);
+                operatorErrorMessage.set(R.string.error);
             } else {
-                operatorMessageEnable.setValue(false);
-                operatorErrorMessage.setValue(R.string.empty_error_message);
+                operatorMessageEnable.set(false);
+                operatorErrorMessage.set(R.string.empty_error_message);
                 if (amount.isEmpty()) {
-                    amountMessageEnable.setValue(true);
-                    amountErrorMessage.setValue(R.string.error);
+                    amountMessageEnable.set(true);
+                    amountErrorMessage.set(R.string.error);
                 } else {
-                    amountMessageEnable.setValue(false);
-                    amountErrorMessage.setValue(R.string.empty_error_message);
+                    amountMessageEnable.set(false);
+                    amountErrorMessage.set(R.string.empty_error_message);
                     completeListener.onCompleted();
                 }
             }

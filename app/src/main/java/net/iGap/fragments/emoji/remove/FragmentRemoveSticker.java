@@ -182,7 +182,9 @@ public class FragmentRemoveSticker extends BaseFragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new HelperFragment(FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
+                        if (getActivity()!=null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(),FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
+                        }
                     }
                 });
 

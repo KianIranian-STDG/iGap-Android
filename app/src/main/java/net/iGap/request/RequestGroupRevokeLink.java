@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnGroupRevokeLink;
 import net.iGap.proto.ProtoGroupRevokeLink;
 
 public class RequestGroupRevokeLink {
 
-    public void groupRevokeLink(long roomId) {
+    public void groupRevokeLink(long roomId, OnGroupRevokeLink callback) {
         ProtoGroupRevokeLink.GroupRevokeLink.Builder builder = ProtoGroupRevokeLink.GroupRevokeLink.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(324, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(324, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

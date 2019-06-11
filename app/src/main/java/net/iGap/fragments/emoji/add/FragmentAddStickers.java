@@ -99,7 +99,7 @@ public class FragmentAddStickers extends BaseFragment {
         RecyclerView rcvSettingPage = view.findViewById(R.id.rcvSettingPage);
         adapterSettingPage = new AdapterSettingPage(getActivity(), new ArrayList<>());
         rcvSettingPage.setAdapter(adapterSettingPage);
-        final LinearLayoutManager layoutManager = new  LinearLayoutManager(getActivity());
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         rcvSettingPage.setLayoutManager(layoutManager);
@@ -250,7 +250,9 @@ public class FragmentAddStickers extends BaseFragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new HelperFragment(FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
+                        }
                     }
                 });
                 if (progressBar.getVisibility() == View.GONE)

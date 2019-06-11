@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -76,6 +77,8 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.viewmodel.FragmentNewGroupViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -92,7 +95,7 @@ import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_
 
 public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener {
 
-    public static RemoveSelectedContact removeSelectedContact ;
+    public static RemoveSelectedContact removeSelectedContact;
     public static long avatarId = 0;
     public static OnRemoveFragmentNewGroup onRemoveFragmentNewGroup;
     //  private String path;
@@ -111,7 +114,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     private int countMember = 0;
     private int countAddMemberRequest = 0;
 
-    private long createdRoomId = 0 ;
+    private long createdRoomId = 0;
     private HelperToolbar mHelperToolbar;
 
     public static FragmentNewGroup newInstance() {
@@ -120,13 +123,13 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentNewGroupBinding = DataBindingUtil.inflate(inflater, R.layout.activity_new_group, container, false);
         return attachToSwipeBack(fragmentNewGroupBinding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();
@@ -134,7 +137,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         Bundle bundle = getArguments();
 
-        if ( bundle.getString("TYPE") != null && bundle.getString("TYPE").equals("NewGroup")){
+        if (bundle.getString("TYPE") != null && bundle.getString("TYPE").equals("NewGroup")) {
             initGroupMembersRecycler();
         }
 
@@ -169,20 +172,63 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         };
 
         onRemoveFragmentNewGroup = new OnRemoveFragmentNewGroup() {
-                    @Override
-                    public void onRemove() {
-                        try {
-                            popBackStackFragment();
-                        } catch (IllegalStateException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
+            @Override
+            public void onRemove() {
+                try {
+                    popBackStackFragment();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        fragmentNewGroupViewModel.goToContactGroupPage.observe(this, data -> {
+            if (getActivity() != null && data != null) {
+                if (!getActivity().isFinishing()) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                }
+                Fragment fragment = ContactGroupFragment.newInstance();
+                Bundle b = new Bundle();
+                b.putLong("RoomId", data.getRoomId());
+                b.putString("LIMIT", data.getLimit());
+                b.putString("TYPE", data.getType());
+                b.putBoolean("NewRoom", data.isNewRoom());
+                fragment.setArguments(b);
+                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+            }
+        });
+
+        fragmentNewGroupViewModel.goToCreateChannelPage.observe(this, data -> {
+            if (getActivity() != null && data != null) {
+                if (!getActivity().isFinishing()) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                }
+                FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+                Bundle bdle = new Bundle();
+                bdle.putLong("ROOMID", data.getRoomId());
+                bdle.putString("INVITE_LINK", data.getInviteLink());
+                bdle.putString("TOKEN", data.getToken());
+                fragmentCreateChannel.setArguments(bdle);
+
+                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
+            }
+        });
     }
 
     private void initGroupMembersRecycler() {
 
-        if (ContactGroupFragment.selectedContacts.size() != 0 ){
+        if (ContactGroupFragment.selectedContacts.size() != 0) {
             fragmentNewGroupBinding.angLayoutMembers.setVisibility(View.VISIBLE);
         }
         RecyclerView rv = fragmentNewGroupBinding.angRecyclerViewSelectedContact;
@@ -200,7 +246,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         fragmentNewGroupViewModel.createdRoomId.observe(this, new Observer<Long>() {
             @Override
             public void onChanged(@Nullable Long aLong) {
-                createdRoomId = aLong ;
+                createdRoomId = aLong;
                 addMembersToGroup();
             }
         });
@@ -297,17 +343,18 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                         return;
                     }
                     // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentNewGroup.this);
+                    if (photoFile != null && getActivity() != null) {
+                        new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentNewGroup.this);
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-
             try {
-                new AttachFile(G.fragmentActivity).requestTakePicture(FragmentNewGroup.this);
+                if (getActivity() != null) {
+                    new AttachFile(getActivity()).requestTakePicture(FragmentNewGroup.this);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -461,39 +508,40 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     @Override
     public void onAvatarAddError() {
         fragmentNewGroupViewModel.hideProgressBar();
-        ;
     }
 
     private void startRoom(long roomId) {
-        Fragment fragment = ContactGroupFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putLong("RoomId", roomId);
+        if (getActivity() != null) {
+            Fragment fragment = ContactGroupFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putLong("RoomId", roomId);
 
-        if (fragmentNewGroupViewModel.prefix.equals("NewChanel")) {
-            bundle.putString("TYPE", ProtoGlobal.Room.Type.CHANNEL.toString());
-        } else {
-            bundle.putString("TYPE", ProtoGlobal.Room.Type.GROUP.toString());
+            if (FragmentNewGroupViewModel.prefix.equals("NewChanel")) {
+                bundle.putString("TYPE", ProtoGlobal.Room.Type.CHANNEL.toString());
+            } else {
+                bundle.putString("TYPE", ProtoGlobal.Room.Type.GROUP.toString());
+            }
+
+            bundle.putBoolean("NewRoom", true);
+            fragment.setArguments(bundle);
+
+            popBackStackFragment();
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
         }
-
-        bundle.putBoolean("NewRoom", true);
-        fragment.setArguments(bundle);
-
-        popBackStackFragment();
-        new HelperFragment(fragment).load();
     }
 
     private void startChannelRoom(long roomId) {
         fragmentNewGroupViewModel.hideProgressBar();
-        ;
-        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-        Bundle bundle = new Bundle();
-        bundle.putLong("ROOMID", roomId);
-        bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
-        bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
-        fragmentCreateChannel.setArguments(bundle);
-
-        popBackStackFragment();
-        new HelperFragment(fragmentCreateChannel).load();
+        if (getActivity() != null) {
+            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+            Bundle bundle = new Bundle();
+            bundle.putLong("ROOMID", roomId);
+            bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
+            bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
+            fragmentCreateChannel.setArguments(bundle);
+            popBackStackFragment();
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
+        }
     }
 
     //=======================result for picture
@@ -511,24 +559,23 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
 
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-
                 FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
-
-
             } else {
                 ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
                 FragmentEditImage.insertItemList(AttachFile.imagePath, false);
-                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+            }
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
                 ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
                 FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                if (getActivity() != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                }
             }
         }
     }
@@ -564,7 +611,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         }
 */
 
-         fragmentNewGroupViewModel.onClickCancel(view);
+        fragmentNewGroupViewModel.onClickCancel(view);
         //G.fragmentActivity.onBackPressed();
     }
 
@@ -573,7 +620,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         fragmentNewGroupViewModel.onClickNextStep(view);
     }
 
-    private void addMembersToGroup(){
+    private void addMembersToGroup() {
 
         G.onGroupAddMember = new OnGroupAddMember() {
             @Override
@@ -607,13 +654,13 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             }
         } else {
 
-            if (isAdded()) {
+            if (getActivity() != null && isAdded()) {
                /* if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
                     FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();*/
-               popBackStackFragment();
-               popBackStackFragment();
+                popBackStackFragment();
+                popBackStackFragment();
                 removeFromBaseFragment(FragmentNewGroup.this);
-                new GoToChatActivity(createdRoomId).startActivity();
+                new GoToChatActivity(createdRoomId).startActivity(getActivity());
             }
 
         }
@@ -634,17 +681,17 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId);
-        RealmRoom.updateMemberCount(roomId, roomType, ContactGroupFragment.selectedContacts.size()+ 1); // plus with 1 , for own account
-        if (isAdded()) {
+        RealmRoom.updateMemberCount(roomId, roomType, ContactGroupFragment.selectedContacts.size() + 1); // plus with 1 , for own account
+        if (getActivity() != null && isAdded()) {
             popBackStackFragment();
             popBackStackFragment();
             ContactGroupFragment.selectedContacts.clear();
             removeFromBaseFragment(FragmentNewGroup.this);
-            new GoToChatActivity(roomId).startActivity();
+            new GoToChatActivity(roomId).startActivity(getActivity());
         }
     }
 
-    private class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContactAdapter.ViewHolderSelectedContact>{
+    private class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContactAdapter.ViewHolderSelectedContact> {
 
         private List<StructContactInfo> mItems = new ArrayList<>();
         private LayoutInflater inflater;
@@ -657,7 +704,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         @Override
         public ViewHolderSelectedContact onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-            View view = inflater.inflate(R.layout.item_contact_chat , viewGroup , false);
+            View view = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
 
             return new ViewHolderSelectedContact(view);
         }
@@ -677,12 +724,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             return mItems.size();
         }
 
-        public class ViewHolderSelectedContact extends RecyclerView.ViewHolder{
+        public class ViewHolderSelectedContact extends RecyclerView.ViewHolder {
 
-            private TextView txtName , txtPhone ;
-            private de.hdodenhof.circleimageview.CircleImageView imgAvatar ;
+            private TextView txtName, txtPhone;
+            private de.hdodenhof.circleimageview.CircleImageView imgAvatar;
             private TextView btnRemove;
-            private CheckBox chSelected ;
+            private CheckBox chSelected;
 
             public ViewHolderSelectedContact(@NonNull View itemView) {
                 super(itemView);
@@ -694,12 +741,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 chSelected = itemView.findViewById(R.id.iv_itemContactChat_checkBox);
             }
 
-            public void bindData(final StructContactInfo data){
+            public void bindData(final StructContactInfo data) {
 
-                if (G.isDarkTheme){
+                if (G.isDarkTheme) {
                     txtName.setTextColor(context.getResources().getColor(R.color.white));
                     txtPhone.setTextColor(context.getResources().getColor(R.color.white));
-                }else{
+                } else {
                     txtName.setTextColor(context.getResources().getColor(R.color.white));
                     txtPhone.setTextColor(context.getResources().getColor(R.color.white));
                 }
@@ -721,7 +768,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         }
     }
 
-    public interface RemoveSelectedContact{
+    public interface RemoveSelectedContact {
         void onRemoved(StructContactInfo item);
     }
 

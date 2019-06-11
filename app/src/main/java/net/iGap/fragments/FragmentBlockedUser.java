@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -58,12 +58,12 @@ import io.realm.RealmResults;
 
 import static net.iGap.G.inflater;
 
-public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged , ToolbarListener {
+public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged, ToolbarListener {
 
     //private BlockListAdapter mAdapter;
     private Realm realmBlockedUser;
     private StickyRecyclerHeadersDecoration decoration;
-    private HelperToolbar mHelperToolbar ;
+    private HelperToolbar mHelperToolbar;
 
     private Realm getRealmBlockedUser() {
         if (realmBlockedUser == null || realmBlockedUser.isClosed()) {
@@ -97,24 +97,25 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
                     @Override
                     public void onRightIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            List<StructContactInfo> userList = Contacts.retrieve(null);
 
-                        List<StructContactInfo> userList = Contacts.retrieve(null);
+                            Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
+                                @Override
+                                public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
 
-                        Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
-                            @Override
-                            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+                                    for (int i = 0; i < list.size(); i++) {
 
-                                for (int i = 0; i < list.size(); i++) {
-
-                                    new RequestUserContactsBlock().userContactsBlock(list.get(i).peerId);
+                                        new RequestUserContactsBlock().userContactsBlock(list.get(i).peerId);
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                        Bundle bundle = new Bundle();
-                        // if you want to have  single select in select list
-                        fragment.setArguments(bundle);
-                        new HelperFragment(fragment).setReplace(false).load();
+                            Bundle bundle = new Bundle();
+                            // if you want to have  single select in select list
+                            fragment.setArguments(bundle);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                        }
                     }
                 });
 
@@ -358,9 +359,9 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         }
 
         private void unblock(ViewHolder viewHolder, long id) {
-            Log.d("bagi" , "unblock");
+            Log.d("bagi", "unblock");
             if (!viewHolder.isOpenDialog) {
-                Log.d("bagi" , "unblock2");
+                Log.d("bagi", "unblock2");
                 viewHolder.isOpenDialog = true;
                 MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override

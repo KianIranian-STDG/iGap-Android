@@ -1,25 +1,25 @@
 package net.iGap.dialog.payment.paybills;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableInt;
 
 import net.iGap.R;
 import net.iGap.dialog.payment.CompleteListener;
 
 public class PayBillsViewModel extends ViewModel {
 
-    public MutableLiveData<Boolean> mobileBillsModeIsSelected = new MutableLiveData<>();
-    public MutableLiveData<Integer> phoneOrId = new MutableLiveData<>();
-    public MutableLiveData<Boolean> phoneOrIdEnableError = new MutableLiveData<>();
-    public MutableLiveData<Integer> phoneOrIdErrorMessage = new MutableLiveData<>();
-    public MutableLiveData<Integer> operatorOrId = new MutableLiveData<>();
-    public MutableLiveData<Boolean> operatorOrIdMessageEnable = new MutableLiveData<>();
-    public MutableLiveData<Integer> operatorOrIdErrorMessage = new MutableLiveData<>();
+    public ObservableBoolean mobileBillsModeIsSelected = new ObservableBoolean(false);
+    public ObservableInt phoneOrId = new ObservableInt();
+    public ObservableBoolean phoneOrIdEnableError = new ObservableBoolean(false);
+    public ObservableInt phoneOrIdErrorMessage = new ObservableInt(R.string.empty_error_message);
+    public ObservableInt operatorOrId = new ObservableInt();
+    public ObservableBoolean operatorOrIdMessageEnable = new ObservableBoolean(false);
+    public ObservableInt operatorOrIdErrorMessage = new ObservableInt(R.string.empty_error_message);
 
     private CompleteListener completeListener;
 
     public PayBillsViewModel(CompleteListener completeListener) {
-        mobileBillsModeIsSelected.setValue(false);
         this.completeListener = completeListener;
     }
 
@@ -28,22 +28,18 @@ public class PayBillsViewModel extends ViewModel {
     }
 
     public void onMobileBillsClick() {
-        if (mobileBillsModeIsSelected.getValue() != null) {
-            if (!mobileBillsModeIsSelected.getValue()) {
-                mobileBillsModeIsSelected.setValue(true);
-                phoneOrId.setValue(R.string.phone_number);
-                operatorOrId.setValue(R.string.operator);
-            }
+        if (!mobileBillsModeIsSelected.get()) {
+            mobileBillsModeIsSelected.set(true);
+            phoneOrId.set(R.string.phone_number);
+            operatorOrId.set(R.string.operator);
         }
     }
 
     public void onBillsClick() {
-        if (mobileBillsModeIsSelected.getValue() != null) {
-            if (mobileBillsModeIsSelected.getValue()) {
-                mobileBillsModeIsSelected.setValue(false);
-                phoneOrId.setValue(R.string.billing_id);
-                operatorOrId.setValue(R.string.payment_code);
-            }
+        if (mobileBillsModeIsSelected.get()) {
+            mobileBillsModeIsSelected.set(false);
+            phoneOrId.set(R.string.billing_id);
+            operatorOrId.set(R.string.payment_code);
         }
     }
 
@@ -51,23 +47,23 @@ public class PayBillsViewModel extends ViewModel {
 
     }
 
-    public void onScanBarcodeClick(){
+    public void onScanBarcodeClick() {
 
     }
 
     public void onContinueButtonClick(String field1, String field2) {
         if (field1.isEmpty()) {
-            phoneOrIdEnableError.setValue(true);
-            phoneOrIdErrorMessage.setValue(R.string.error);
+            phoneOrIdEnableError.set(true);
+            phoneOrIdErrorMessage.set(R.string.error);
         } else {
-            phoneOrIdEnableError.setValue(false);
-            phoneOrIdErrorMessage.setValue(R.string.empty_error_message);
+            phoneOrIdEnableError.set(false);
+            phoneOrIdErrorMessage.set(R.string.empty_error_message);
             if (field2.isEmpty()) {
-                operatorOrIdMessageEnable.setValue(true);
-                operatorOrIdErrorMessage.setValue(R.string.error);
+                operatorOrIdMessageEnable.set(true);
+                operatorOrIdErrorMessage.set(R.string.error);
             } else {
-                operatorOrIdMessageEnable.setValue(false);
-                operatorOrIdErrorMessage.setValue(R.string.empty_error_message);
+                operatorOrIdMessageEnable.set(false);
+                operatorOrIdErrorMessage.set(R.string.empty_error_message);
                 completeListener.onCompleted();
             }
         }

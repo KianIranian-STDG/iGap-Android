@@ -58,7 +58,7 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
-        viewModel = new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE),avatarHandler);
+        viewModel = new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -69,14 +69,22 @@ public class FragmentUserProfile extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel.goToAddMemberPage.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                goToAddMemberPage();
+            if (getActivity() != null && aBoolean != null && aBoolean) {
+                Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "ADD");
+                fragment.setArguments(bundle);
+                try {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
             }
         });
 
         viewModel.goToWalletAgreementPage.observe(this, phoneNumber -> {
-            if (phoneNumber != null) {
-                new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            if (getActivity() != null && phoneNumber != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
             }
         });
 
@@ -155,8 +163,8 @@ public class FragmentUserProfile extends BaseFragment {
         });
 
         viewModel.goToIGapMapPage.observe(this, isGo -> {
-            if (isGo != null && isGo) {
-                new HelperFragment(FragmentiGapMap.getInstance()).load();
+            if (getActivity() != null && isGo != null && isGo) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
             }
         });
 
@@ -166,10 +174,22 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
+        viewModel.goToSettingPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).load();
+            }
+        });
+
         viewModel.goToShowAvatarPage.observe(this, userId -> {
-            if (userId != null) {
+            if (getActivity() != null && userId != null) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
-                new HelperFragment(fragment).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+        });
+
+        viewModel.goToUserScorePage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();
             }
         });
 
@@ -199,8 +219,8 @@ public class FragmentUserProfile extends BaseFragment {
         });
 
         viewModel.goToChatPage.observe(this, roomId -> {
-            if (roomId != null) {
-                new GoToChatActivity(roomId).startActivity();
+            if (getActivity() != null && roomId != null) {
+                new GoToChatActivity(roomId).startActivity(getActivity());
             }
         });
 
@@ -253,33 +273,24 @@ public class FragmentUserProfile extends BaseFragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
                 FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             } else {
                 ImageHelper.correctRotateImage(viewModel.pathSaveImage, true); //rotate image
                 FragmentEditImage.insertItemList(viewModel.pathSaveImage, false);
-                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+            }
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 if (data.getData() == null) {
                     return;
                 }
-                ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
-                FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                if (getActivity() != null) {
+                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
+                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                }
             }
-        }
-    }
-
-    private void goToAddMemberPage() {
-        final Fragment fragment = RegisteredContactsFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", "ADD");
-        fragment.setArguments(bundle);
-        try {
-            new HelperFragment(fragment).load();
-        } catch (Exception e) {
-            e.getStackTrace();
         }
     }
 

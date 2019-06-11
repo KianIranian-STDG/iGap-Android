@@ -49,6 +49,8 @@ import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructBottomSheet;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,14 +122,14 @@ public class FragmentEditImage extends BaseFragment {
 
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initView(view);
 
         if (itemGalleryList == null || itemGalleryList.size() == 0) {
-            if (G.fragmentManager != null) {
-                G.fragmentManager.beginTransaction().remove(FragmentEditImage.this).commit();
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentEditImage.this).commit();
             }
             return;
         }
@@ -191,7 +193,9 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 AndroidUtils.closeKeyboard(v);
-                new HelperFragment(FragmentEditImage.this).remove();
+                if (getActivity() != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+                }
                 if (G.openBottomSheetItem != null && isChatPage)
                     G.openBottomSheetItem.openBottomSheet(false);
             }
@@ -214,8 +218,9 @@ public class FragmentEditImage extends BaseFragment {
                 if (completeEditImage != null) {
                     completeEditImage.result(itemGalleryList.get(0).getPath(), "", null);
                 }
-
-                new HelperFragment(FragmentEditImage.this).remove();
+                if (getActivity() != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+                }
                 AndroidUtils.closeKeyboard(v);
             }
         });
@@ -223,7 +228,9 @@ public class FragmentEditImage extends BaseFragment {
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(FragmentEditImage.this).remove();
+                if (getActivity()!=null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(),FragmentEditImage.this).remove();
+                }
 
                 if (textImageList.size() == 0) {
                     setValueCheckBox(viewPager.getCurrentItem());
@@ -265,11 +272,13 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 AndroidUtils.closeKeyboard(v);
-                if (!isNicknamePage) {
-                    new HelperFragment(FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
-                } else {
-                    FragmentFilterImage fragment = FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                if (getActivity()!=null) {
+                    if (!isNicknamePage) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(),FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
+                    } else {
+                        FragmentFilterImage fragment = FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
+                        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                    }
                 }
             }
         });
@@ -458,17 +467,17 @@ public class FragmentEditImage extends BaseFragment {
             case Theme.TEAL_COMPLETE:
             case Theme.DARK:
 
-                setEmojiColor(view,G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
+                setEmojiColor(view, G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
                 break;
             default:
-                setEmojiColor(view,Color.parseColor("#eceff1"), "#61000000", "#61000000");
+                setEmojiColor(view, Color.parseColor("#eceff1"), "#61000000", "#61000000");
 
 
         }
 
     }
 
-    private void setEmojiColor(View view,int BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor(View view, int BackgroundColor, String iconColor, String dividerColor) {
 
         emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
@@ -508,8 +517,6 @@ public class FragmentEditImage extends BaseFragment {
     }
 
 
-
-
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
         imvSmileButton.setText(drawableResourceId);
     }
@@ -530,9 +537,9 @@ public class FragmentEditImage extends BaseFragment {
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK&&getActivity()!=null) {
                     AndroidUtils.closeKeyboard(v);
-                    new HelperFragment(FragmentEditImage.this).remove();
+                    new HelperFragment(getActivity().getSupportFragmentManager(),FragmentEditImage.this).remove();
                     if (G.openBottomSheetItem != null && isChatPage)
                         G.openBottomSheetItem.openBottomSheet(false);
                     return true;
@@ -650,7 +657,7 @@ public class FragmentEditImage extends BaseFragment {
 
     private void goToCropPage(View v) {
         AndroidUtils.closeKeyboard(v);
-        if (itemGalleryList.size() == 0){
+        if (itemGalleryList.size() == 0) {
             return;
         }
         String newPath = "file://" + itemGalleryList.get(viewPager.getCurrentItem()).path;
@@ -710,7 +717,7 @@ public class FragmentEditImage extends BaseFragment {
         return itemGalleryList;
     }
 
-    public static ArrayList<StructBottomSheet> insertItemList(String path, boolean isSelected,CompleteEditImage completeEdit) {
+    public static ArrayList<StructBottomSheet> insertItemList(String path, boolean isSelected, CompleteEditImage completeEdit) {
 
         if (itemGalleryList == null) {
             itemGalleryList = new ArrayList<>();
@@ -727,7 +734,7 @@ public class FragmentEditImage extends BaseFragment {
         itemGalleryList.add(0, item);
         textImageList.put(path, item);
 
-        completeEditImage= completeEdit;
+        completeEditImage = completeEdit;
 
         return itemGalleryList;
     }

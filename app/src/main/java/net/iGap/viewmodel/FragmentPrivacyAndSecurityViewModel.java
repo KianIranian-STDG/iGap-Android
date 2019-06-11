@@ -9,6 +9,8 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.view.View;
@@ -38,7 +40,7 @@ import io.realm.RealmModel;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FragmentPrivacyAndSecurityViewModel {
+public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
     private final int SEE_MY_AVATAR = 0;
     private final int INVITE_CHANNEL = 1;
@@ -53,6 +55,10 @@ public class FragmentPrivacyAndSecurityViewModel {
     public ObservableField<String> callbackVideoCall = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.everybody));
     public ObservableField<String> callbackSeeLastSeen = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.everybody));
     public ObservableField<String> callbackSelfDestruction = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.everybody));
+    public MutableLiveData<Boolean> goToBlockedUserPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToPassCodePage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToSecurityPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToActiveSessionsPage = new MutableLiveData<>();
     int poSelfRemove;
     private Realm realm;
     private RealmUserInfo realmUserInfo;
@@ -79,7 +85,7 @@ public class FragmentPrivacyAndSecurityViewModel {
     }
 
     public void onClickBlocked(View view) {
-        new HelperFragment(new FragmentBlockedUser()).setReplace(false).load();
+        goToBlockedUserPage.setValue(true);
     }
 
     public void onClickSeeMyAvatar(View view) {
@@ -107,15 +113,15 @@ public class FragmentPrivacyAndSecurityViewModel {
     }
 
     public void onClickPassCode(View view) {
-        new HelperFragment(new FragmentPassCode()).setReplace(false).load();
+        goToPassCodePage.setValue(true);
     }
 
     public void onClickTwoStepVerification(View view) {
-        new HelperFragment(new FragmentSecurity()).setReplace(false).load();
+        goToSecurityPage.setValue(true);
     }
 
     public void onClickActivitySessions(View view) {
-        new HelperFragment(new FragmentActiveSessions()).setReplace(false).load();
+        goToActiveSessionsPage.setValue(true);
     }
 
     public void onClickSelfDestruction(View view) {

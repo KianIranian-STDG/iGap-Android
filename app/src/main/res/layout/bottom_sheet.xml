@@ -1,388 +1,288 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/cardView"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  style="?backgroundColorSettingTheme"
-  android:clickable="true"
-  android:layoutDirection="ltr"
-  android:orientation="vertical"
-  app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-  tools:ignore="MissingPrefix">
-
-  <LinearLayout
-    android:id="@+id/layout_recyclerView"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <android.support.v7.widget.RecyclerView
-      android:id="@+id/rcvContent"
-      android:layout_width="wrap_content"
-      android:layout_height="@dimen/dp100"
-      style="?textColorMenuTheme"
-      android:layout_marginLeft="@dimen/dp6" />
-
-  </LinearLayout>
-
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/layout_recyclerView"
-    android:orientation="vertical">
+        android:id="@+id/rcvContent"
+        style="?textColorMenuTheme"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp100"
+        android:layout_margin="@dimen/dp8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:layout_marginTop="@dimen/dp8"
-      style="?lineColorSettingTheme" />
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-
-      android:layout_gravity="bottom"
-      android:orientation="horizontal">
-
-
-      <LinearLayout
-        android:id="@+id/request_cardToCard"
+        android:id="@+id/divider"
+        style="?lineColorSettingTheme"
         android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/dp8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rcvContent" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtCamera"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:layout_marginTop="@dimen/dp8"
+        android:text="@string/md_camera_alt"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/textPicture"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtCamera2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:singleLine="true"
+        android:text="@string/am_camera"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintLeft_toLeftOf="@id/txtCamera"
+        app:layout_constraintRight_toRightOf="@id/txtCamera"
+        app:layout_constraintTop_toBottomOf="@id/txtCamera" />
 
-
-        <TextView
-          android:id="@+id/txtDocument"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/iconCardToCard"
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtDocument2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-            android:gravity="center"
-          android:layout_gravity="center_horizontal"
-          android:text="@string/amCardToCardIconText"
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/music"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-
-        <TextView
-          android:id="@+id/txtMusic"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/icon_music"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtMusic2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:singleLine="true"
-          android:text="@string/am_music"
-
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/video"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-
-          android:id="@+id/txtVideo"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/md_videocam"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtVideo2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:text="@string/am_video"
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/picture"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-          android:id="@+id/textPicture"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/md_igap_folder_image"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/textPicture2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:singleLine="true"
-          android:text="@string/am_picture"
-
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
+    <View
         android:id="@+id/camera"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/txtCamera2"
+        app:layout_constraintLeft_toLeftOf="@id/txtCamera"
+        app:layout_constraintRight_toRightOf="@id/txtCamera"
+        app:layout_constraintTop_toTopOf="@id/txtCamera" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textPicture"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:text="@string/md_igap_folder_image"
+        app:layout_constraintBottom_toBottomOf="@id/txtCamera"
+        app:layout_constraintLeft_toRightOf="@id/txtCamera"
+        app:layout_constraintRight_toLeftOf="@id/txtVideo"
+        app:layout_constraintTop_toTopOf="@id/txtCamera" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textPicture2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:singleLine="true"
+        android:text="@string/am_picture"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintLeft_toLeftOf="@id/textPicture"
+        app:layout_constraintRight_toRightOf="@id/textPicture"
+        app:layout_constraintTop_toBottomOf="@id/textPicture" />
 
-
-        <TextView
-          android:id="@+id/txtCamera"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/md_camera_alt"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtCamera2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:singleLine="true"
-          android:text="@string/am_camera"
-
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom"
-      android:orientation="horizontal"
-
-      >
-
-      <LinearLayout
-        android:id="@+id/contact"
+    <View
+        android:id="@+id/picture"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/textPicture2"
+        app:layout_constraintLeft_toLeftOf="@id/textPicture"
+        app:layout_constraintRight_toRightOf="@id/textPicture"
+        app:layout_constraintTop_toTopOf="@id/textPicture" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtVideo"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:text="@string/video_call_icon"
+        app:layout_constraintBottom_toBottomOf="@id/txtCamera"
+        app:layout_constraintLeft_toRightOf="@id/textPicture"
+        app:layout_constraintRight_toLeftOf="@id/txtMusic"
+        app:layout_constraintTop_toTopOf="@id/txtCamera" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtVideo2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:text="@string/am_video"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintLeft_toLeftOf="@id/txtVideo"
+        app:layout_constraintRight_toRightOf="@id/txtVideo"
+        app:layout_constraintTop_toBottomOf="@id/txtVideo" />
 
-        <TextView
-          android:id="@+id/txtContact"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/md_user_account_box"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtContact2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:text="@string/am_contact"
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/location"
+    <View
+        android:id="@+id/video"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/txtVideo2"
+        app:layout_constraintLeft_toLeftOf="@id/txtVideo"
+        app:layout_constraintRight_toRightOf="@id/txtVideo"
+        app:layout_constraintTop_toTopOf="@id/txtVideo" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtMusic"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:text="@string/icon_music"
+        app:layout_constraintBottom_toBottomOf="@id/txtCamera"
+        app:layout_constraintLeft_toRightOf="@id/txtVideo"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txtCamera" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtMusic2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:singleLine="true"
+        android:text="@string/am_music"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintLeft_toLeftOf="@id/txtMusic"
+        app:layout_constraintRight_toRightOf="@id/txtMusic"
+        app:layout_constraintTop_toBottomOf="@id/txtMusic" />
 
-
-        <TextView
-          android:id="@+id/txtLocation"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/md_room"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtLocation2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:singleLine="true"
-          android:text="@string/am_location"
-
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/paint"
+    <View
+        android:id="@+id/music"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/txtMusic2"
+        app:layout_constraintLeft_toLeftOf="@id/txtMusic"
+        app:layout_constraintRight_toRightOf="@id/txtMusic"
+        app:layout_constraintTop_toTopOf="@id/txtMusic" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtFile"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:layout_marginTop="@dimen/dp8"
+        android:text="@string/md_igap_file"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/txtContact"
+        app:layout_constraintTop_toBottomOf="@id/txtCamera2" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtFile2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_marginBottom="@dimen/dp8"
+        android:text="@string/am_file"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/txtFile"
+        app:layout_constraintRight_toRightOf="@id/txtFile"
+        app:layout_constraintTop_toBottomOf="@id/txtFile" />
 
-        <TextView
-          android:id="@+id/txtPaint"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/md_brush"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtPaint2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:singleLine="true"
-          android:text="@string/am_paint"
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
+    <View
         android:id="@+id/file"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/txtFile2"
+        app:layout_constraintLeft_toLeftOf="@id/txtFile"
+        app:layout_constraintRight_toRightOf="@id/txtFile"
+        app:layout_constraintTop_toTopOf="@id/txtFile" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtContact"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:text="@string/md_user_account_box"
+        app:layout_constraintBottom_toBottomOf="@id/txtFile"
+        app:layout_constraintLeft_toRightOf="@id/txtFile"
+        app:layout_constraintRight_toLeftOf="@id/txtLocation"
+        app:layout_constraintTop_toTopOf="@id/txtFile" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtContact2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:text="@string/am_contact"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintBottom_toBottomOf="@id/txtFile2"
+        app:layout_constraintLeft_toLeftOf="@id/txtContact"
+        app:layout_constraintRight_toRightOf="@id/txtContact"
+        app:layout_constraintTop_toBottomOf="@id/txtContact" />
 
-        <TextView
-          android:id="@+id/txtFile"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:text="@string/md_igap_file"
-
-          android:textSize="@dimen/dp20" />
-
-        <TextView
-          android:id="@+id/txtFile2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:text="@string/am_file"
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/close"
+    <View
+        android:id="@+id/contact"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/txtContact2"
+        app:layout_constraintLeft_toLeftOf="@id/txtContact"
+        app:layout_constraintRight_toRightOf="@id/txtContact"
+        app:layout_constraintTop_toTopOf="@id/txtContact" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtLocation"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:text="@string/md_room"
+        app:layout_constraintBottom_toBottomOf="@id/txtFile"
+        app:layout_constraintLeft_toRightOf="@id/txtContact"
+        app:layout_constraintRight_toLeftOf="@id/txtPaint"
+        app:layout_constraintTop_toTopOf="@id/txtFile" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtLocation2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:singleLine="true"
+        android:text="@string/am_location"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintBottom_toBottomOf="@id/txtFile2"
+        app:layout_constraintLeft_toLeftOf="@id/txtLocation"
+        app:layout_constraintRight_toRightOf="@id/txtLocation"
+        app:layout_constraintTop_toBottomOf="@id/txtLocation" />
 
-        <TextView
-          android:id="@+id/txtSend"
-          fontPath="fonts/iGap-Fontico.ttf"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="@dimen/dp52"
-          android:layout_gravity="center_horizontal"
-          android:gravity="center"
-          android:paddingTop="2dp"
-          android:text="@string/igap_chevron_double_down"
-          android:textSize="@dimen/dp20" />
+    <View
+        android:id="@+id/location"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/txtLocation2"
+        app:layout_constraintLeft_toLeftOf="@id/txtLocation"
+        app:layout_constraintRight_toRightOf="@id/txtLocation"
+        app:layout_constraintTop_toTopOf="@id/txtLocation" />
 
-        <TextView
-          android:id="@+id/txtNumberItem"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:text="@string/navigation_drawer_close"
-          android:textSize="@dimen/dp10" />
-      </LinearLayout>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtPaint"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:text="@string/md_brush"
+        app:layout_constraintBottom_toBottomOf="@id/txtFile"
+        app:layout_constraintLeft_toRightOf="@id/txtLocation"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txtFile" />
 
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txtPaint2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="@string/am_paint"
+        android:textSize="@dimen/dp10"
+        app:layout_constraintBottom_toBottomOf="@id/txtFile2"
+        app:layout_constraintLeft_toLeftOf="@id/txtPaint"
+        app:layout_constraintRight_toRightOf="@id/txtPaint"
+        app:layout_constraintTop_toBottomOf="@id/txtPaint" />
 
-    </LinearLayout>
-  </LinearLayout>
-</RelativeLayout>
+    <View
+        android:id="@+id/paint"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/txtPaint2"
+        app:layout_constraintLeft_toLeftOf="@id/txtPaint"
+        app:layout_constraintRight_toRightOf="@id/txtPaint"
+        app:layout_constraintTop_toTopOf="@id/txtPaint" />
+</android.support.constraint.ConstraintLayout>

@@ -25,6 +25,7 @@ import static net.iGap.fragments.FragmentCall.OPEN_IN_FRAGMENT_MAIN;
 public class HelperFragment {
 
     private static String chatName = FragmentChat.class.getName();
+    private FragmentManager fragmentManager;
     private Fragment fragment;
     private boolean addToBackStack = true;
     private boolean animated = true;
@@ -39,16 +40,17 @@ public class HelperFragment {
     private int popEnter;
     private int popExit;
 
-
-    public HelperFragment() {
+    public HelperFragment(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
 
-    public HelperFragment(Fragment fragment) {
+    public HelperFragment(FragmentManager fragmentManager, Fragment fragment) {
+        this.fragmentManager = fragmentManager;
         this.fragment = fragment;
     }
 
-    public static boolean isFragmentVisible(String fragmentTag) {
-        Fragment fragment = G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    public boolean isFragmentVisible(String fragmentTag) {
+        Fragment fragment = fragmentManager.findFragmentByTag(fragmentTag);
         if (fragment != null) {
             return fragment.isVisible();
         }
@@ -127,9 +129,7 @@ public class HelperFragment {
                     } else {
                         return;
                     }
-                }
-
-                else if ((G.fragmentActivity.getSupportFragmentManager().getBackStackEntryAt(G.fragmentActivity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))){
+                } else if ((fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))) {
                     return;
                 }
             }
@@ -138,12 +138,12 @@ public class HelperFragment {
             e.printStackTrace();
         }
 
-        if (G.fragmentManager == null) {
+        if (fragmentManager == null) {
             HelperLog.setErrorLog(new Exception("helper fragment loadFragment -> " + fragment.getClass().getName()));
             return;
         }
 
-        FragmentTransaction fragmentTransaction = G.fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (tag == null) {
             tag = fragment.getClass().getName();
@@ -195,12 +195,12 @@ public class HelperFragment {
             if (fragment == null) {
                 return;
             }
-            G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            fragmentManager.beginTransaction().remove(fragment).commit();
 
-            if (immediateRemove){
-                G.fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
+            if (immediateRemove) {
+                fragmentManager.popBackStackImmediate();
             } else {
-                G.fragmentActivity.getSupportFragmentManager().popBackStack();
+                fragmentManager.popBackStack();
             }
 
             if (G.iTowPanModDesinLayout != null) {
@@ -213,7 +213,7 @@ public class HelperFragment {
 
     public void removeAll(boolean keepMain) {
         if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {
-            for (Fragment fragment : G.fragmentActivity.getSupportFragmentManager().getFragments()) {
+            for (Fragment fragment : fragmentManager.getFragments()) {
                 if (fragment != null) {
 
                     if (keepMain) {
@@ -231,13 +231,13 @@ public class HelperFragment {
                             }
                         }
 
-                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                        fragmentManager.beginTransaction().remove(fragment).commit();
                     } else {
-                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                        fragmentManager.beginTransaction().remove(fragment).commit();
                     }
                 }
             }
-            G.fragmentActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         if (G.iTowPanModDesinLayout != null) {
@@ -246,7 +246,13 @@ public class HelperFragment {
     }
 
     public void popBackStack() {
-        G.fragmentActivity.getSupportFragmentManager().popBackStack();
+        fragmentManager.popBackStack();
+    }
+
+    public void popBackStack(int count) {
+        for (int i = 0; i < count; i++) {
+            fragmentManager.popBackStack();
+        }
     }
 
     private boolean getAnimation(String tag) {

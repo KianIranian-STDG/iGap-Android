@@ -376,7 +376,7 @@ public class FragmentContactsProfile extends BaseFragment {
         fragmentContactsProfileViewModel.showPhoneNumberDialog.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean!=null&&aBoolean){
+                if (aBoolean != null && aBoolean) {
                     try {
                         HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
@@ -410,13 +410,13 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         fragmentContactsProfileViewModel.goToCustomNotificationPage.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
+            if (getActivity() != null && aBoolean != null && aBoolean) {
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
                 bundle.putString("PAGE", "CONTACT");
                 bundle.putLong("ID", fragmentContactsProfileViewModel.roomId);
                 fragmentNotification.setArguments(bundle);
-                new HelperFragment(fragmentNotification).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentNotification).setReplace(false).load();
             }
         });
 
@@ -427,7 +427,7 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         fragmentContactsProfileViewModel.showDeleteContactDialog.observe(this, aBoolean -> {
-            if (aBoolean!=null&&aBoolean){
+            if (aBoolean != null && aBoolean) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -438,14 +438,26 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         fragmentContactsProfileViewModel.showDialogReportContact.observe(this, aBoolean -> {
-            if (aBoolean!=null&&aBoolean){
+            if (aBoolean != null && aBoolean) {
                 openDialogReport();
             }
         });
 
         fragmentContactsProfileViewModel.showDialogStartSecretChat.observe(this, aBoolean -> {
-            if (aBoolean!=null&&aBoolean){
-                Toast.makeText(getContext(),"secret chat",Toast.LENGTH_LONG).show();
+            if (aBoolean != null && aBoolean) {
+                Toast.makeText(getContext(), "secret chat", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        fragmentContactsProfileViewModel.goToShowAvatarPage.observe(this, isCurrentUser -> {
+            if (getActivity() != null && isCurrentUser != null) {
+                FragmentShowAvatars fragment;
+                if (isCurrentUser) {
+                    fragment = FragmentShowAvatars.newInstance(fragmentContactsProfileViewModel.userId, FragmentShowAvatars.From.setting);
+                } else {
+                    fragment = FragmentShowAvatars.newInstance(fragmentContactsProfileViewModel.userId, FragmentShowAvatars.From.chat);
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }

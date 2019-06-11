@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -103,11 +103,10 @@ public class BaseFragment extends SwipeBackFragment {
             G.oneFragmentIsOpen.justOne();
         }
         hideKeyboard();
-        try {
+        if (getActivity() != null) {
+            for (int i = getActivity().getSupportFragmentManager().getFragments().size() - 1; i >= 0; i--) {
 
-            for (int i = G.fragmentManager.getFragments().size() - 1; i >= 0; i--) {
-
-                Fragment f = G.fragmentManager.getFragments().get(i);
+                Fragment f = getActivity().getSupportFragmentManager().getFragments().get(i);
 
                 if (f == null || f == currentFragment) {
                     continue;
@@ -121,9 +120,6 @@ public class BaseFragment extends SwipeBackFragment {
 
                 break;
             }
-        } catch (Exception e) {
-
-            // try need for activity register
         }
     }
 
@@ -160,10 +156,12 @@ public class BaseFragment extends SwipeBackFragment {
 
 
     protected void hideKeyboard() {
-        View view = G.fragmentActivity.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (getActivity() != null) {
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 
@@ -177,24 +175,28 @@ public class BaseFragment extends SwipeBackFragment {
                 G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
             }
         } catch (Exception empty) {
-
+            empty.printStackTrace();
         }
     }
 
     public void removeFromBaseFragment() {
-        new HelperFragment(currentFragment).remove();
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), currentFragment).remove();
+        }
     }
 
     public void removeFromBaseFragment(Fragment fragment) {
-        new HelperFragment(fragment).remove();
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).remove();
+        }
     }
 
-    public void openKeyBoard(){
+    public void openKeyBoard() {
 
         try {
             InputMethodManager im = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             im.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        }catch (Exception e){
+        } catch (Exception e) {
             //nothing
         }
     }

@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.net.Uri;
@@ -47,7 +48,7 @@ import net.iGap.request.RequestGroupCreate;
 
 import static net.iGap.module.MusicPlayer.roomId;
 
-public class FragmentNewGroupViewModel {
+public class FragmentNewGroupViewModel extends ViewModel {
 
     public static String prefix = "NewGroup";
     public static long avatarId = 0;
@@ -71,6 +72,8 @@ public class FragmentNewGroupViewModel {
     public ObservableField<Boolean> nextStepEnable = new ObservableField<>(true);
     private long groomId = 0;
     public MutableLiveData<Long> createdRoomId = new MutableLiveData<>();
+    public MutableLiveData<ContactGroupFragmentModel> goToContactGroupPage = new MutableLiveData<>();
+    public MutableLiveData<CreateChannelModel> goToCreateChannelPage = new MutableLiveData<>();
 
 
     public FragmentNewGroupViewModel(Bundle arguments) {
@@ -212,25 +215,7 @@ public class FragmentNewGroupViewModel {
                             new RequestChannelAvatarAdd().channelAvatarAdd(room.getId(), token);
                         } else {
                             hideProgressBar();
-                            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-                            Bundle bundle = new Bundle();
-                            bundle.putLong("ROOMID", room.getId());
-                            bundle.putString("INVITE_LINK", mInviteLink);
-                            bundle.putString("TOKEN", token);
-                            fragmentCreateChannel.setArguments(bundle);
-
-                            if (!G.fragmentActivity.isFinishing()) {
-                                G.fragmentActivity.getSupportFragmentManager().popBackStack();
-                            }
-
-                            if (G.iTowPanModDesinLayout != null) {
-                                G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
-                            }
-
-                            if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                                FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-
-                            new HelperFragment(fragmentCreateChannel).load();
+                            goToCreateChannelPage.setValue(new CreateChannelModel(room.getId(), mInviteLink,token));
                         }
                     }
                 });
@@ -349,31 +334,8 @@ public class FragmentNewGroupViewModel {
                                     new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
                                 }
                             } else {
-                                Fragment fragment = ContactGroupFragment.newInstance();
-                                Bundle bundle = new Bundle();
-                                bundle.putLong("RoomId", roomId);
-
-                                if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                    bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                } else {
-                                    bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                }
-
-                                if (!G.fragmentActivity.isFinishing()) {
-                                    G.fragmentActivity.getSupportFragmentManager().popBackStack();
-                                }
-
-                                if (G.iTowPanModDesinLayout != null) {
-                                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
-                                }
-
-                                bundle.putString("TYPE", typeCreate.toString());
-                                bundle.putBoolean("NewRoom", true);
-                                fragment.setArguments(bundle);
-
-                                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-                                new HelperFragment(fragment).load();
+                                hideProgressBar();
+                                goToContactGroupPage.setValue(new ContactGroupFragmentModel(roomId,room.getGroupRoomExtra().getParticipantsCountLimitLabel(),typeCreate.toString(),true));
                             }
                         }
                     });
@@ -424,5 +386,59 @@ public class FragmentNewGroupViewModel {
         });
 
 
+    }
+
+    public class ContactGroupFragmentModel{
+        private Long roomId;
+        private String limit;
+        private String type;
+        private boolean newRoom;
+
+        ContactGroupFragmentModel(Long roomId, String limit, String type, boolean newRoom) {
+            this.roomId = roomId;
+            this.limit = limit;
+            this.type = type;
+            this.newRoom = newRoom;
+        }
+
+        public Long getRoomId() {
+            return roomId;
+        }
+
+        public String getLimit() {
+            return limit;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public boolean isNewRoom() {
+            return newRoom;
+        }
+    }
+
+    public class CreateChannelModel{
+        private long roomId;
+        private String inviteLink;
+        private String token;
+
+        public CreateChannelModel(long roomId, String inviteLink, String token) {
+            this.roomId = roomId;
+            this.inviteLink = inviteLink;
+            this.token = token;
+        }
+
+        public long getRoomId() {
+            return roomId;
+        }
+
+        public String getInviteLink() {
+            return inviteLink;
+        }
+
+        public String getToken() {
+            return token;
+        }
     }
 }

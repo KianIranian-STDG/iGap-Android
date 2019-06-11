@@ -1,37 +1,37 @@
 package net.iGap.dialog.payment.charity;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableInt;
 
 import net.iGap.R;
 import net.iGap.dialog.payment.CompleteListener;
 
 public class CharityViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> charityNameEnableError;
-    private MutableLiveData<Integer> charityNameErrorMessage;
-    private MutableLiveData<Boolean> amountMessageEnable;
-    private MutableLiveData<Integer> amountErrorMessage;
+    private ObservableBoolean charityNameEnableError = new ObservableBoolean(false);
+    private ObservableInt charityNameErrorMessage = new ObservableInt(R.string.empty_error_message);
+    private ObservableBoolean amountMessageEnable = new ObservableBoolean(false);
+    private ObservableInt amountErrorMessage = new ObservableInt(R.string.empty_error_message);
     private CompleteListener completeListener;
 
     public CharityViewModel(CompleteListener completeListener){
         this.completeListener = completeListener;
     }
 
-    public LiveData<Boolean> getCharityNameEnableError() {
+    public ObservableBoolean getCharityNameEnableError() {
         return charityNameEnableError;
     }
 
-    public LiveData<Integer> getCharityNameErrorMessage() {
+    public ObservableInt getCharityNameErrorMessage() {
         return charityNameErrorMessage;
     }
 
-    public LiveData<Boolean> getAmountMessageEnable() {
+    public ObservableBoolean getAmountMessageEnable() {
         return amountMessageEnable;
     }
 
-    public LiveData<Integer> getAmountErrorMessage() {
+    public ObservableInt getAmountErrorMessage() {
         return amountErrorMessage;
     }
 
@@ -45,17 +45,17 @@ public class CharityViewModel extends ViewModel {
 
     public void onContinueButtonClick(String charityName, String amount) {
         if (charityName.isEmpty()) {
-            charityNameEnableError.setValue(true);
-            charityNameErrorMessage.setValue(R.string.error);
+            charityNameEnableError.set(true);
+            charityNameErrorMessage.set(R.string.error);
         } else {
-            charityNameEnableError.setValue(false);
-            charityNameErrorMessage.setValue(R.string.empty_error_message);
+            charityNameEnableError.set(false);
+            charityNameErrorMessage.set(R.string.empty_error_message);
             if (amount.isEmpty()) {
-                amountMessageEnable.setValue(true);
-                amountErrorMessage.setValue(R.string.error);
+                amountMessageEnable.set(true);
+                amountErrorMessage.set(R.string.error);
             } else {
-                amountMessageEnable.setValue(false);
-                amountErrorMessage.setValue(R.string.empty_error_message);
+                amountMessageEnable.set(false);
+                amountErrorMessage.set(R.string.empty_error_message);
                 completeListener.onCompleted();
             }
         }

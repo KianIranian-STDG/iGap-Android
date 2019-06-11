@@ -285,19 +285,14 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private void initComponent(View view, int type, long roomId, String senderId) {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
-
-        //G.fragmentActivity.getSupportFragmentManager()
-        //    .beginTransaction()
-        //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-        //    .replace(mf_fragment_map_view, mapFragment, null)
-        //    .commit();
-
-        new HelperFragment(mapFragment).setReplace(false).setAddToBackStack(false).setResourceContainer(mf_fragment_map_view).load();
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), mapFragment).setReplace(false).setAddToBackStack(false).setResourceContainer(mf_fragment_map_view).load();
+        }
 
         mapFragment.getMapAsync(FragmentMap.this);
 
 
-        rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
+        rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
 
 
         //  rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));

@@ -32,7 +32,9 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
@@ -88,7 +90,7 @@ public class AttachFile {
     public static String videoPath = "";
     OnComplete complete;
     private PopupWindow popupWindow;
-    private Context context;
+    private FragmentActivity context;
     private LocationManager locationManager;
     private ProgressDialog pd;
     private Boolean sendPosition = false;
@@ -142,7 +144,7 @@ public class AttachFile {
 
     //=================================== Start Android 7
 
-    public AttachFile(Context context) {
+    public AttachFile(FragmentActivity context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
     }
@@ -636,10 +638,9 @@ public class AttachFile {
             public void Allow() {
                 FragmentExplorer fragment = new FragmentExplorer();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", (Serializable) listener);
+                bundle.putSerializable("Listener",listener);
                 fragment.setArguments(bundle);
-
-                new HelperFragment(fragment).setReplace(false).load();
+                new HelperFragment(context.getSupportFragmentManager(),fragment).setReplace(false).load();
             }
 
             @Override
@@ -667,7 +668,7 @@ public class AttachFile {
                 bundle.putString("Mode", "documnet");
                 fragment.setArguments(bundle);
 
-                new HelperFragment(fragment).setReplace(false).load();
+                /*new HelperFragment(fragment).setReplace(false).load();*/
             }
 
             @Override

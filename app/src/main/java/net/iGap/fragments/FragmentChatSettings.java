@@ -16,11 +16,14 @@ import android.widget.SeekBar;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentChatSettingsBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.viewmodel.FragmentChatSettingViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import yogesh.firzen.mukkiasevaigal.M;
 
@@ -29,8 +32,8 @@ public class FragmentChatSettings extends BaseFragment {
     private final int MAX_TEXT_SIZE = 30;
     private final int MIN_TEXT_SIZE = 11;
 
-    private FragmentChatSettingViewModel fcsViewModel ;
-    private FragmentChatSettingsBinding fcsBinding ;
+    private FragmentChatSettingViewModel fcsViewModel;
+    private FragmentChatSettingsBinding fcsBinding;
     private HelperToolbar mHelperToolbar;
 
     public FragmentChatSettings() {
@@ -38,8 +41,8 @@ public class FragmentChatSettings extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fcsBinding = DataBindingUtil.inflate(inflater , R.layout.fragment_chat_settings , container , false);
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fcsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat_settings, container, false);
         return attachToSwipeBack(fcsBinding.getRoot());
     }
 
@@ -50,6 +53,12 @@ public class FragmentChatSettings extends BaseFragment {
         initDataBinding();
         setupToolbar();
         setupTextSizeSetting();
+
+        fcsViewModel.goToChatBackgroundPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChatBackground.newInstance()).setReplace(false).load();
+            }
+        });
     }
 
     private void setupTextSizeSetting() {
@@ -82,9 +91,9 @@ public class FragmentChatSettings extends BaseFragment {
             public void onChanged(@Nullable String s) {
                 fcsBinding.stTxtMessageTextSizeNumber.setText(s);
 
-                try{
+                try {
                     sb.setProgress(Integer.valueOf(s) - MIN_TEXT_SIZE);
-                }catch (Exception e){
+                } catch (Exception e) {
                     sb.setProgress(16 - MIN_TEXT_SIZE);//16 - min = 5 -> for skipping setMin that not support on Apis fewer than 26
                 }
             }

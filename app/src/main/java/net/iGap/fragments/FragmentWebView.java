@@ -224,7 +224,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            boolean a = HelperUrl.handleAppUrl(url);
+            boolean a = HelperUrl.handleAppUrl(getActivity(),url);
             if (a) {
                 onBackButtonClicked(view);
             }

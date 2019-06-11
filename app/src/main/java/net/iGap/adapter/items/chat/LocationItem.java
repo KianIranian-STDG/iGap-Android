@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -30,14 +31,19 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessageLocation;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
 
-    public LocationItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    private FragmentActivity activity;
+
+    public LocationItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener,FragmentActivity activity) {
         super(mAdapter, true, type, messageClickListener);
+        this.activity = activity;
     }
 
     @Override
@@ -94,14 +100,13 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                 }
 
                 try {
-                    HelperPermission.getLocationPermission(G.currentActivity, new OnGetPermission() {
-
+                    HelperPermission.getLocationPermission(activity, new OnGetPermission() {
                         @Override
                         public void Allow() {
                             G.handler.post(() -> {
                                 FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
                                         RealmRoom.detectType(mMessage.roomId).getNumber(), mMessage.roomId, mMessage.senderID);
-                                new HelperFragment(fragment).setReplace(false).load();
+                                new HelperFragment(activity.getSupportFragmentManager(),fragment).setReplace(false).load();
                             });
                         }
 
@@ -127,8 +132,9 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         super.updateLayoutForSend(holder);
     }
 
+    @NotNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NotNull View v) {
         return new ViewHolder(v);
     }
 

@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentChannelProfile extends BaseFragment implements /*OnChannelAvatarAdd,*/ OnChannelAvatarDelete {
+public class FragmentChannelProfile extends BaseFragment /*implements OnChannelAvatarAdd, OnChannelAvatarDelete*/ {
 
 
     public static final String FRAGMENT_TAG = "FragmentChannelProfile";
@@ -107,7 +107,9 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
 
                     @Override
                     public void onSecondRightIconClickListener(View view) {
-                        new HelperFragment(EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
+                        }
                     }
                 });
         // because actionbar not in this view do that and not correct in viewModel
@@ -142,6 +144,12 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
                 binding.enableNotification.setChecked(isChecked);
 
                 new RequestClientMuteRoom().muteRoom(roomId, !isChecked);
+            }
+        });
+
+        viewModel.goToShowAvatarPage.observe(this, roomId -> {
+            if (getActivity() != null && roomId != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel)).setReplace(false).load();
             }
         });
 
@@ -348,7 +356,7 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
     }*/
 
     //***On Avatar Delete
-    @Override
+    /*@Override
     public void onChannelAvatarDelete(final long roomId, final long avatarId) {
         G.handler.post(new Runnable() {
             @Override
@@ -362,9 +370,9 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
                         }), avatarId);
             }
         });
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onError(int majorCode, int minorCode) {
         viewModel.showLoading.setValue(false);
         G.handler.post(new Runnable() {
@@ -374,9 +382,9 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
                 HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
             }
         });
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onTimeOut() {
         viewModel.showLoading.setValue(false);
         G.handler.post(new Runnable() {
@@ -386,7 +394,7 @@ public class FragmentChannelProfile extends BaseFragment implements /*OnChannelA
                 HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
             }
         });
-    }
+    }*/
 
 
     //*** set avatar image

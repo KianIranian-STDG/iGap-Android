@@ -126,7 +126,9 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
             public void path(String path, boolean isCheck, boolean isEdit, StructBottomSheet mList, int id) {
                 if (isEdit) {
                     dismiss();
-                    new HelperFragment(FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
+                    }
                 } else {
                     if (isCheck) {
                         StructBottomSheet item = new StructBottomSheet();
@@ -345,7 +347,9 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                                     public void onclickCamera() {
                                         try {
                                             dismiss();
-                                            new AttachFile(getContext()).requestTakePicture(SelectImageBottomSheetDialog.this);
+                                            if (getActivity() != null) {
+                                                new AttachFile(getActivity()).requestTakePicture(SelectImageBottomSheetDialog.this);
+                                            }
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }

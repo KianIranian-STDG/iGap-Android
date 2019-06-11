@@ -40,6 +40,10 @@ public class FragmentSettingViewModel extends ViewModel {
     //ui
     public MutableLiveData<Boolean> showDialogDeleteAccount = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToManageSpacePage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToLanguagePage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToNotificationAndSoundPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToPrivacyAndSecurityPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToChatSettingsPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLogout = new MutableLiveData<>();
     public MutableLiveData<Boolean> showError = new MutableLiveData<>();
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
@@ -57,15 +61,15 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public void onLanguageClick(){
-        new HelperFragment(new FragmentLanguage()).setReplace(false).load();
+        goToLanguagePage.setValue(true);
     }
 
     public void onClickNotifyAndSound() {
-        new HelperFragment(new FragmentNotificationAndSound()).setReplace(false).load();
+        goToNotificationAndSoundPage.setValue(true);
     }
 
     public void onClickPrivacySecurity() {
-        new HelperFragment(new FragmentPrivacyAndSecurity()).setReplace(false).load();
+        goToPrivacyAndSecurityPage.setValue(true);
     }
 
     public void onClickDataStorage() {
@@ -73,7 +77,7 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public void onChatSettingClick() {
-        new HelperFragment(new FragmentChatSettings()).setReplace(false).load();
+        goToChatSettingsPage.setValue(true);
     }
 
     public void onLogoutClick() {
@@ -108,28 +112,5 @@ public class FragmentSettingViewModel extends ViewModel {
 
     public void onDeleteAccountClick() {
         showDialogDeleteAccount.setValue(true);
-    }
-
-    public void onStop() {
-        updateRoomListIfNeeded();
-    }
-
-    private void updateRoomListIfNeeded() {
-
-        try {
-
-            for (Fragment f : G.fragmentManager.getFragments()) {
-
-                if (f == null) {
-                    continue;
-                }
-
-                if (f instanceof FragmentMain || f instanceof FragmentCall) {
-                    f.onResume();
-                }
-            }
-        } catch (Exception e) {
-            HelperLog.setErrorLog(e);
-        }
     }
 }

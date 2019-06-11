@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentThemColorBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -30,7 +33,7 @@ public class FragmentThemColor extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentThemColorBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_them_color, container, false);
         return attachToSwipeBack(fragmentThemColorBinding.getRoot());
@@ -46,6 +49,18 @@ public class FragmentThemColor extends BaseFragment {
             public void onClick(View v) {
                 // mActivity.getSupportFragmentManager().popBackStack();
                 popBackStackFragment();
+            }
+        });
+
+        fragmentThemColorViewModel.goToThemeColorCustomPage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentThemColorCustom()).setReplace(false).load();
+            }
+        });
+
+        fragmentThemColorViewModel.goToDarkThemePage.observe(this, go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(),FragmentDarkTheme.newInstance()).setReplace(false).load();
             }
         });
     }

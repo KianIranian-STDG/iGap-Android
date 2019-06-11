@@ -133,10 +133,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private LinearLayout btnAddNewChannel, btnAddNewGroup, btnAddSecretChat;
     private LinearLayout btnAddNewGroupCall, btnAddNewContact, btnDialNumber;
 
-    private ViewGroup mLayoutMultiSelected ;
-    private TextView mTxtSelectedCount ;
-    private AppCompatTextView mBtnDeleteSelected ;
-    private MaterialDesignTextView mBtnCancelSelected ;
+    private ViewGroup mLayoutMultiSelected;
+    private TextView mTxtSelectedCount;
+    private AppCompatTextView mBtnDeleteSelected;
+    private MaterialDesignTextView mBtnCancelSelected;
+    private int mNumberOfSelectedCounter;
 
     private Context context = G.context;
 
@@ -221,7 +222,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && !isInit) {
-            G.handler.postDelayed(() -> init(), 800);
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    init();
+                }
+            }, 800);
         }
     }
 
@@ -256,7 +262,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         toolbarLayout.addView(mHelperToolbar.getView());
         mHelperToolbar.setListener(this);
 
-        G.handler.postDelayed(() -> init(), 100);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                init();
+            }
+        }, 100);
     }
 
     private void init() {
@@ -357,56 +368,73 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
 
         toolbar = view.findViewById(R.id.fc_layot_title);
-        menu_txt_titleToolbar = view.findViewById(R.id.menu_txt_titleToolbar);
+        menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);
 
-        final RippleView txtClose = view.findViewById(R.id.menu_ripple_close);
-        final TextView txtSearch = view.findViewById(R.id.menu_btn_search);
-        final TextView txtSync = view.findViewById(R.id.menu_btn_sync);
-        txtSearch.setOnClickListener(v -> {
-            txtClose.setVisibility(View.VISIBLE);
-            edtSearch.setVisibility(View.VISIBLE);
-            edtSearch.setFocusable(true);
-            menu_txt_titleToolbar.setVisibility(View.GONE);
-            txtSearch.setVisibility(View.GONE);
-            txtSync.setVisibility(View.GONE);
-        });
-
-        txtClose.setOnClickListener(v -> {
-            if (edtSearch.getText().length() > 0) {
-                edtSearch.setText("");
-            } else {
-                txtClose.setVisibility(View.GONE);
-                edtSearch.setVisibility(View.GONE);
-                mHelperToolbar.getTextViewSearch().setVisibility(View.VISIBLE);
-                menu_txt_titleToolbar.setVisibility(View.VISIBLE);
-                txtSearch.setVisibility(View.VISIBLE);
-                txtSync.setVisibility(View.VISIBLE);
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        final RippleView txtClose = (RippleView) view.findViewById(R.id.menu_ripple_close);
+        final TextView txtSearch = (TextView) view.findViewById(R.id.menu_btn_search);
+        final TextView txtSync = (TextView) view.findViewById(R.id.menu_btn_sync);
+        txtSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtClose.setVisibility(View.VISIBLE);
+                edtSearch.setVisibility(View.VISIBLE);
+                edtSearch.setFocusable(true);
+                menu_txt_titleToolbar.setVisibility(View.GONE);
+                txtSearch.setVisibility(View.GONE);
+                txtSync.setVisibility(View.GONE);
             }
         });
 
-        vgInviteFriend.setOnClickListener(view -> {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
-            sendIntent.setType("text/plain");
-            Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
-            getActivity().startActivity(openInChooser);
+        txtClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (edtSearch.getText().length() > 0) {
+                    edtSearch.setText("");
+                } else {
+                    txtClose.setVisibility(View.GONE);
+                    edtSearch.setVisibility(View.GONE);
+                    mHelperToolbar.getTextViewSearch().setVisibility(View.VISIBLE);
+                    menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+                    txtSearch.setVisibility(View.VISIBLE);
+                    txtSync.setVisibility(View.VISIBLE);
+                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
         });
 
-        RippleView rippleMenu = view.findViewById(R.id.menu_ripple_txtBack);
-        rippleMenu.setOnRippleCompleteListener(rippleView -> {
-            G.fragmentActivity.onBackPressed();
-            InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
+        vgInviteFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
+                sendIntent.setType("text/plain");
+                Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
+                getActivity().startActivity(openInChooser);
+            }
         });
 
-        RippleView rippleSync = view.findViewById(R.id.menu_sync);
-        rippleSync.setOnRippleCompleteListener(rippleView -> ContactUtils.syncContacts());
+        RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                G.fragmentActivity.onBackPressed();
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
+            }
+        });
 
-        realmRecyclerView = view.findViewById(R.id.recycler_view);
+        RippleView rippleSync = (RippleView) view.findViewById(R.id.menu_sync);
+        rippleSync.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                ContactUtils.syncContacts();
+            }
+        });
+
+        realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -414,40 +442,106 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
-        G.handler.postDelayed(() -> {
-            contactListAdapter = new ContactListAdapter(results);
-            realmRecyclerView.setAdapter(contactListAdapter);
-            prgWaitingLoadContact.setVisibility(View.GONE);
-            realmRecyclerView.setVisibility(View.VISIBLE);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                contactListAdapter = new ContactListAdapter(results);
+                realmRecyclerView.setAdapter(contactListAdapter);
+                prgWaitingLoadContact.setVisibility(View.GONE);
+                realmRecyclerView.setVisibility(View.VISIBLE);
 
+            }
         }, 500);
+
+
+        //fastAdapter
+        //mAdapter = new ContactListAdapterA();
+        //for (RealmContacts contact : results) {
+        //    mAdapter.add(new ContactItem().setInfo(contact).withIdentifier(contact.getId()));
+        //}
+        //realmRecyclerView.setAdapter(mAdapter);
+        //mAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
+        //    @Override
+        //    public boolean onClick(View v, IAdapter adapter, IItem item, int position) {
+        //        if (isCallAction) {
+        //            popBackStackFragment();
+        //            long userId = ((ContactItem) item).contact.getId();
+        //            if (userId != 134 && G.userId != userId) {
+        //                FragmentCall.call(userId, false);
+        //            }
+        //        } else {
+        //            showProgress();
+        //            HelperPublicMethod.goToChatRoom(((ContactItem) item).contact.getId(), new HelperPublicMethod.OnComplete() {
+        //                @Override
+        //                public void complete() {
+        //                    hideProgress();
+        //                    popBackStackFragment();
+        //                }
+        //            }, new HelperPublicMethod.OnError() {
+        //                @Override
+        //                public void error() {
+        //                    hideProgress();
+        //                }
+        //            });
+        //        }
+        //        return true;
+        //    }
+        //});
 
         StickyHeader stickyHeader = new StickyHeader(results);
         decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
         realmRecyclerView.addItemDecoration(decoration);
 
-        onCliclRecyclerView = (view, position) -> {
+//        realmRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(G.fragmentActivity, realmRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                if (isMultiSelect) {
+//                    multi_select(position);
+//                }
+//            }
+//
+//
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//                if (!isMultiSelect) {
+//                    isMultiSelect = true;
+//                    refreshAdapter(0, true);
+//                    if (mActionMode == null) {
+//                        mActionMode = G.fragmentActivity.startActionMode(mActionModeCallback);
+//                    }
+//                }
+//                multi_select(position);
+//            }
+//        }));
 
-            if (isMultiSelect) {
+        onCliclRecyclerView = new onClickRecyclerView() {
+            @Override
+            public void onClick(View view, int position) {
+
+                if (isMultiSelect) {
+                    multi_select(position);
+                }
+            }
+        };
+
+        onLongClickRecyclerView = new onLongClickRecyclerView() {
+            @Override
+            public void onClick(View view, int position) {
+                if (!isMultiSelect) {
+                    isMultiSelect = true;
+                    refreshAdapter(0, true);
+
+                    if (!mLayoutMultiSelected.isShown()) {
+                        setPageShowingMode(4);
+
+                    }
+
+                }
                 multi_select(position);
             }
         };
 
-        onLongClickRecyclerView = (view, position) -> {
-            if (!isMultiSelect) {
-                isMultiSelect = true;
-                refreshAdapter(0, true);
-
-                if (!mLayoutMultiSelected.isShown()) {
-                    setPageShowingMode(4);
-
-                }
-
-            }
-            multi_select(position);
-        };
-
-        rcvListContact = view.findViewById(R.id.rcv_friends_to_invite);
+        rcvListContact = (RecyclerView) view.findViewById(R.id.rcv_friends_to_invite);
         fastItemAdapter = new FastItemAdapter();
 
         try {
@@ -463,7 +557,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         if (results.size() == 0) {
                             LoginActions.importContact();
                         }
-                        G.handler.post(() -> prgWaitingLiadList.setVisibility(View.VISIBLE));
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                prgWaitingLiadList.setVisibility(View.VISIBLE);
+                            }
+                        });
                         new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
 
@@ -472,7 +571,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         if (results.size() == 0) {
                             new RequestUserContactsGetList().userContactGetList();
                         }
-                        G.handler.post(() -> prgWaitingLiadList.setVisibility(View.GONE));
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                prgWaitingLiadList.setVisibility(View.GONE);
+                            }
+                        });
                     }
                 });
             } else {
@@ -481,7 +585,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 }
 
                 if (HelperPermission.grantedContactPermission()) {
-                    G.handler.post(() -> prgWaitingLiadList.setVisibility(View.VISIBLE));
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            prgWaitingLiadList.setVisibility(View.VISIBLE);
+                        }
+                    });
                     new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 } else {
                     prgWaitingLiadList.setVisibility(View.GONE);
@@ -498,46 +607,53 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         rcvListContact.setNestedScrollingEnabled(false);
 
 
-        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (Contacts.isEndLocal) {
-                return;
-            }
-            if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (Contacts.isEndLocal) {
+                    return;
+                }
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
             }
         });
 
         btnAddNewChannel.setOnClickListener(v -> {
-
-            FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-            Bundle bundle_ = new Bundle();
-            bundle_.putString("TYPE", "NewChanel");
-            fragment.setArguments(bundle_);
-            new HelperFragment(fragment).setReplace(false).load();
-
+            if (getActivity() != null) {
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle_ = new Bundle();
+                bundle_.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle_);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
         });
 
         btnAddNewGroup.setOnClickListener(v -> {
-            Fragment fragment = ContactGroupFragment.newInstance();
-            Bundle bundle1 = new Bundle();
-            bundle1.putLong("RoomId", -127);
-            bundle1.putString("LIMIT", "5000");
-            bundle1.putString("TYPE", ProtoGlobal.Room.Type.GROUP.name());
-            bundle1.putBoolean("NewRoom", true);
-            fragment.setArguments(bundle1);
+            if (getActivity() != null) {
+                Fragment fragment = ContactGroupFragment.newInstance();
+                Bundle bundle1 = new Bundle();
+                bundle1.putLong("RoomId", -127);
+                bundle1.putString("LIMIT", "5000");
+                bundle1.putString("TYPE", ProtoGlobal.Room.Type.GROUP.name());
+                bundle1.putBoolean("NewRoom", true);
+                fragment.setArguments(bundle1);
 
-            if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-            new HelperFragment(fragment).setReplace(false).load();
-
-
+                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
         });
 
         btnAddSecretChat.setOnClickListener(v -> {
 
         });
 
-        btnDialNumber.setOnClickListener(v -> new HelperFragment(new DailNumberFragment()).setReplace(false).load());
+        btnDialNumber.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new DailNumberFragment()).setReplace(false).load();
+            }
+        });
 
         btnAddNewGroupCall.setOnClickListener(v -> {
         });
@@ -630,7 +746,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             btnDialNumber.setVisibility(View.GONE);
             mLayoutMultiSelected.setVisibility(View.VISIBLE);
 
-            //remove snap mode from multi select and always show layout at top 
+            //remove snap mode from multi select and always show layout at top
             params.setScrollFlags(0);
             layoutAppBarContainer.setLayoutParams(params);
         }
@@ -638,16 +754,22 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     private void hideProgress() {
 
-        G.handler.post(() -> {
-            G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prgWaiting.setVisibility(View.GONE);
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                prgWaiting.setVisibility(View.GONE);
+            }
         });
     }
 
     private void showProgress() {
-        G.handler.post(() -> {
-            G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prgWaiting.setVisibility(View.VISIBLE);
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                prgWaiting.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -767,19 +889,25 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
-        edtFirstName.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
-            } else {
-                viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                } else {
+                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                }
             }
         });
 
-        edtLastName.setOnFocusChangeListener((view, b) -> {
-            if (b) {
-                viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
-            } else {
-                viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                } else {
+                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                }
             }
         });
 
@@ -884,19 +1012,22 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         items.add(getString(R.string.sync_contact));
         items.add(getString(R.string.mark_as_several));
 
-        new BottomSheetFragment().setData(items, -1, position -> {
-            if (position == 0) {
-                ContactUtils.syncContacts();
-            } else {
-                if (!isMultiSelect) {
-                    isMultiSelect = true;
-                    refreshAdapter(0, true);
+        new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (position == 0) {
+                    ContactUtils.syncContacts();
+                } else {
+                    if (!isMultiSelect) {
+                        isMultiSelect = true;
+                        refreshAdapter(0, true);
 
-                    if (!mLayoutMultiSelected.isShown()) {
-                        setPageShowingMode(4);
+                        if (!mLayoutMultiSelected.isShown()) {
+                            setPageShowingMode(4);
+                        }
+                        isLongClick = true;
+
                     }
-                    isLongClick = true;
-
                 }
             }
         }).show(getFragmentManager(), "contactToolbar");
@@ -935,11 +1066,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         if (mActionMode != null) {
             mActionMode.finish();
         }
-        FragmentAddContact fragment = FragmentAddContact.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
-        fragment.setArguments(bundle);
-        new HelperFragment(fragment).setReplace(false).load();
+        if (getActivity() != null) {
+            FragmentAddContact fragment = FragmentAddContact.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
+            fragment.setArguments(bundle);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        }
     }
 
     @Override
@@ -997,10 +1130,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             if (getData() != null && count != getData().size()) {
                 count = getData().size();
 
-                realmRecyclerView.post(() -> {
-                    realmRecyclerView.removeItemDecoration(decoration);
-                    decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(getData().sort(RealmContactsFields.DISPLAY_NAME)));
-                    realmRecyclerView.addItemDecoration(decoration);
+                realmRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        realmRecyclerView.removeItemDecoration(decoration);
+                        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(getData().sort(RealmContactsFields.DISPLAY_NAME)));
+                        realmRecyclerView.addItemDecoration(decoration);
+                    }
                 });
             }
 
@@ -1129,45 +1265,73 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 title = view.findViewById(R.id.tv_itemContactChat_userName);
                 subtitle = view.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
 
-                root.setOnClickListener(v -> {
+               /* root.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (onLongClickRecyclerView != null) {
+                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
+                            isLongClick = true;
 
-                    if (!isMultiSelect) {
-                        if (isCallAction) {
-                            //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-
-                            long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
-
-
-                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback((dialog, view1, which, text) -> {
-
-                                    switch (which) {
-                                        case 0:
-                                            FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                                            popBackStackFragment();
-                                            break;
-                                        case 1:
-                                            FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-                                            popBackStackFragment();
-                                            break;
-                                    }
-
-                                    dialog.dismiss();
-                                }).show();
-                            }
-
-                        } else {
-                            showProgress();
-
-                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), () -> {
-                                hideProgress();
-                                popBackStackFragment();
-                            }, () -> hideProgress());
                         }
-                    } else {
-                        if (onCliclRecyclerView != null)
-                            onCliclRecyclerView.onClick(v, getAdapterPosition());
+
+                        return false;
+                    }
+                });*/
+
+
+                root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (!isMultiSelect) {
+                            if (isCallAction) {
+                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+
+                                long userId = realmContacts.getId();
+                                if (userId != 134 && G.userId != userId) {
+
+
+                                    new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                        @Override
+                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                            switch (which) {
+                                                case 0:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                                case 1:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                            }
+
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
+                                }
+
+                            } else {
+                                showProgress();
+
+                                HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                                    @Override
+                                    public void complete() {
+                                        hideProgress();
+                                        popBackStackFragment();
+                                    }
+                                }, new HelperPublicMethod.OnError() {
+                                    @Override
+                                    public void error() {
+                                        hideProgress();
+                                    }
+                                });
+                            }
+                        } else {
+                            if (onCliclRecyclerView != null)
+                                onCliclRecyclerView.onClick(v, getAdapterPosition());
+                        }
                     }
                 });
             }
@@ -1194,6 +1358,20 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 btnVoiceCall = view.findViewById(R.id.tv_itemContactCall_voiceCall);
                 btnVideoCall = view.findViewById(R.id.tv_itemContactCall_videoCall);
 
+
+               /* root.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (onLongClickRecyclerView != null) {
+                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
+                            isLongClick = true;
+
+                        }
+
+                        return false;
+                    }
+                });*/
+
                 btnVoiceCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
                     if (userId != 134 && G.userId != userId) {
@@ -1210,46 +1388,59 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     }
                 });
 
-                root.setOnClickListener(v -> {
+                root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    if (!isMultiSelect) {
-                        if (isCallAction) {
-
-                            long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
+                        if (!isMultiSelect) {
+                            if (isCallAction) {
+                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
 
-                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
-                                    @Override
-                                    public void onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
+                                long userId = realmContacts.getId();
+                                if (userId != 134 && G.userId != userId) {
 
-                                        switch (which) {
-                                            case 0:
-                                                FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                                                popBackStackFragment();
-                                                break;
-                                            case 1:
-                                                FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-                                                popBackStackFragment();
-                                                break;
+
+                                    new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                        @Override
+                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                            switch (which) {
+                                                case 0:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                                case 1:
+                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                                                    popBackStackFragment();
+                                                    break;
+                                            }
+
+                                            dialog.dismiss();
                                         }
+                                    }).show();
+                                }
 
-                                        dialog.dismiss();
+                            } else {
+                                showProgress();
+
+                                HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                                    @Override
+                                    public void complete() {
+                                        hideProgress();
+                                        popBackStackFragment();
                                     }
-                                }).show();
+                                }, new HelperPublicMethod.OnError() {
+                                    @Override
+                                    public void error() {
+                                        hideProgress();
+                                    }
+                                });
                             }
-
                         } else {
-                            showProgress();
-
-                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), () -> {
-                                hideProgress();
-                                popBackStackFragment();
-                            }, () -> hideProgress());
+                            if (onCliclRecyclerView != null)
+                                onCliclRecyclerView.onClick(v, getAdapterPosition());
                         }
-                    } else {
-                        if (onCliclRecyclerView != null)
-                            onCliclRecyclerView.onClick(v, getAdapterPosition());
                     }
                 });
             }
@@ -1353,21 +1544,32 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             holder.title.setText(mPhoneContactList.get(position).getDisplayName());
             holder.subtitle.setText(mPhoneContactList.get(position).getPhone());
 
-            holder.mRoot.setOnClickListener(v -> new MaterialDialog.Builder(G.fragmentActivity)
-                    .title(G.fragmentActivity.getResources()
-                            .getString(R.string.igap))
-                    .content(G.fragmentActivity.getResources().getString(R.string.invite_friend))
-                    .positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel))
-                    .onPositive((dialog, which) -> {
 
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra("address", phone);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + G.userId);
-                        sendIntent.setType("text/plain");
-                        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        G.context.startActivity(sendIntent);
-                    }).show());
+            holder.mRoot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new MaterialDialog.Builder(G.fragmentActivity)
+                            .title(G.fragmentActivity.getResources()
+                                    .getString(R.string.igap))
+                            .content(G.fragmentActivity.getResources().getString(R.string.invite_friend))
+                            .positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    Intent sendIntent = new Intent();
+                                    sendIntent.setAction(Intent.ACTION_SEND);
+                                    sendIntent.putExtra("address", phone);
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + G.userId);
+                                    sendIntent.setType("text/plain");
+                                    sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    G.context.startActivity(sendIntent);
+                                }
+                            }).show();
+
+
+                }
+            });
 
 
         }
@@ -1389,9 +1591,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             public ViewHolder(View view) {
                 super(view);
 
-                mRoot = view.findViewById(R.id.liContactItem);
-                title = view.findViewById(R.id.title);
-                subtitle = view.findViewById(R.id.subtitle);
+                mRoot = (ViewGroup) view.findViewById(R.id.liContactItem);
+                title = (TextView) view.findViewById(R.id.title);
+                subtitle = (TextView) view.findViewById(R.id.subtitle);
 
             }
         }

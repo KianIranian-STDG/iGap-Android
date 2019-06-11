@@ -180,8 +180,8 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         try {
             if (!G.twoPaneMode) {
-                if (isAdded()) {
-                    G.fragmentManager.beginTransaction().detach(this).attach(this).commit();
+                if (getActivity() != null && isAdded()) {
+                    getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commit();
                 }
             }
         } catch (Exception e) {
@@ -538,7 +538,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         });
 
 
-        HelperDownloadFile.getInstance().startDownload(messageType,MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
+        HelperDownloadFile.getInstance().startDownload(messageType, MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
             @Override
             public void OnProgress(String path, final int progress) {
 

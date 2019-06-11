@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -45,7 +46,7 @@ import io.realm.RealmModel;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 
-public class FragmentChannelProfileViewModel
+public class FragmentChannelProfileViewModel extends ViewModel
         /*implements OnChannelAddMember, OnChannelAddModerator, OnChannelUpdateReactionStatus, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete,
         OnChannelLeft, OnChannelEdit, OnChannelRevokeLink*/ {
 
@@ -54,16 +55,17 @@ public class FragmentChannelProfileViewModel
     public MutableLiveData<String> channelName = new MutableLiveData<>();
     public MutableLiveData<Integer> menuPopupVisibility = new MutableLiveData<>();
     public MutableLiveData<Boolean> isVerifiedChannel = new MutableLiveData<>();
-    public MutableLiveData<String> channelLinkTitle = new MutableLiveData<>();
+    public ObservableInt channelLinkTitle = new ObservableInt(R.string.invite_link_title);
     public MutableLiveData<Boolean> isShowLink = new MutableLiveData<>();
-    public MutableLiveData<String> channelLink = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
+    public ObservableField<String> channelLink = new ObservableField<>("Link");
+    public ObservableInt showLoading = new ObservableInt(View.GONE);
     public MutableLiveData<String> subscribersCount = new MutableLiveData<>();
-    public MutableLiveData<String> administratorsCount = new MutableLiveData<>();
-    public MutableLiveData<String> moderatorsCount = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isMuteNotification = new MutableLiveData<>();
+    public ObservableField<String> administratorsCount = new ObservableField<>("");
+    public ObservableField<String> moderatorsCount = new ObservableField<>("");
+    public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
     public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
     public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
+    public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
 
     public static OnMenuClick onMenuClick;
     public ChannelChatRole role;
@@ -140,15 +142,14 @@ public class FragmentChannelProfileViewModel
         channelName.setValue(realmRoom.getTitle());
         isVerifiedChannel.setValue(realmChannelRoom.isVerified());
         if (isPrivate) {
-            channelLink.setValue(realmChannelRoom.getInviteLink());
-            channelLinkTitle.setValue(G.fragmentActivity.getResources().getString(R.string.channel_link));
+            channelLink.set(realmChannelRoom.getInviteLink());
+            channelLinkTitle.set(R.string.channel_link);
         } else {
-            channelLink.setValue(realmChannelRoom.getUsername());
-            channelLinkTitle.setValue(G.fragmentActivity.getResources().getString(R.string.st_username));
+            channelLink.set(realmChannelRoom.getUsername());
+            channelLinkTitle.set(R.string.st_username);
         }
-        isShowLink.setValue(!(isPrivate && ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR))));
-        Log.wtf("view model", "value234: " + realmRoom.getMute());
-        isMuteNotification.setValue(!realmRoom.getMute());
+        isShowLink.setValue((!isPrivate && (role == ChannelChatRole.ADMIN)));
+        isMuteNotification.set(!realmRoom.getMute());
 
         //todo: move to edit channel fragment
         /*if (realmChannelRoom.isReactionStatus()) {
@@ -167,8 +168,8 @@ public class FragmentChannelProfileViewModel
         participantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
         members = realmChannelRoom.getMembers();
         subscribersCount.setValue(String.valueOf(participantsCountLabel));
-        administratorsCount.setValue(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.setValue(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
         //todo:move to edit channel fragment
         /*if (isNotJoin) {
@@ -213,7 +214,8 @@ public class FragmentChannelProfileViewModel
 
         if (description != null && !description.isEmpty()) {
             haveDescription.set(View.VISIBLE);
-            SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
+            //TODO: fixed this and do not use G.currentActivity
+            SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(G.currentActivity,description, true, false, null, true);
             if (spannableStringBuilder != null) {
                 callbackChannelDescription.set(spannableStringBuilder);
             }
@@ -236,13 +238,12 @@ public class FragmentChannelProfileViewModel
     }
 
     public void onNotificationCheckChange(boolean isChecked) {
-        Log.wtf("view model", "value: " + isMuteNotification.getValue() + "+" + isChecked);
-        isMuteNotification.setValue(isChecked);
+        isMuteNotification.set(isChecked);
     }
 
     public void onNotificationClick(){
-        isMuteNotification.setValue(!isMuteNotification.getValue());
-        isMuteNotificationChangeListener.setValue(isMuteNotification.getValue());
+        isMuteNotification.set(!isMuteNotification.get());
+        isMuteNotificationChangeListener.setValue(isMuteNotification.get());
 
     }
     //Todo: move to edit channel fragment
@@ -262,12 +263,8 @@ public class FragmentChannelProfileViewModel
 
     public void onClickCircleImage() {
         if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
-            FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
-            //fragment.appBarLayout = fab;
-            //new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_channel_profile).load();
-            new HelperFragment(fragment).setReplace(false).load();
+            goToShowAvatarPage.setValue(roomId);
         }
-
     }
 
     //share link
@@ -356,7 +353,7 @@ public class FragmentChannelProfileViewModel
         if (mRoom != null) {
             mRoom.removeAllChangeListeners();
         }
-        showLoading.setValue(false);
+        showLoading.set(View.GONE);
     }
 
     public void onDestroy() {
@@ -756,20 +753,6 @@ public class FragmentChannelProfileViewModel
     //************************************************** interfaces
 
     //***On Add Avatar Response From Server
-
-    //***Edit Channel
-
-    private void closeActivity() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                showLoading.setValue(false);
-                if (FragmentChat.finishActivity != null) {
-                    FragmentChat.finishActivity.finishActivity();
-                }
-            }
-        });
-    }
 
     //***
 

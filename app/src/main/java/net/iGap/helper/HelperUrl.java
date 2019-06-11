@@ -31,7 +31,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,9 +53,7 @@ import net.iGap.interfaces.OnClientCheckInviteLink;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.libs.Tuple;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientResolveUsername;
@@ -74,10 +71,6 @@ import net.iGap.request.RequestClientResolveUsername;
 
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,12 +81,12 @@ import io.realm.Realm;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-import static net.iGap.G.context;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
 
+    //TODO: change this class. dependency is in all line of code
     public static int LinkColor = Color.BLUE;
     public static int LinkColorDark = Color.CYAN;
     public static MaterialDialog dialogWaiting;
@@ -109,7 +102,7 @@ public class HelperUrl {
         return text.matches("(https?\\:\\/\\/)?igap.net/(.*)");
     }
 
-    public static SpannableStringBuilder setUrlLink(String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
+    public static SpannableStringBuilder setUrlLink(FragmentActivity activity, String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
 
         if (text == null) return null;
 
@@ -117,7 +110,7 @@ public class HelperUrl {
 
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(text);
 
-        if (withAtSign) strBuilder = analaysAtSign(strBuilder);
+        if (withAtSign) strBuilder = analaysAtSign(activity,strBuilder);
 
         if (withHash) strBuilder = analaysHash(strBuilder, messageID);
 
@@ -128,13 +121,11 @@ public class HelperUrl {
         int count = 0;
 
         for (int i = 0; i < list.length; i++) {
-
             String str = list[i];
-
             if (isIgapLink(str)) {
-                insertIgapLink(strBuilder, count, count + str.length());
+                insertIgapLink(activity, strBuilder, count, count + str.length());
             } else if (str.contains(igapResolve)) {
-                insertIgapResolveLink(strBuilder, count, count + str.length());
+                insertIgapResolveLink(activity, strBuilder, count, count + str.length());
             } else if (isTextLink(str)) {
                 insertLinkSpan(strBuilder, count, count + str.length(), withClickable);
             }
@@ -144,20 +135,20 @@ public class HelperUrl {
         return strBuilder;
     }
 
-    public static boolean handleAppUrl(String url) {
+    public static boolean handleAppUrl(FragmentActivity activity, String url) {
         Matcher matcher2 = HelperUrl.patternMessageLink2.matcher(url);
         Matcher matcher4 = HelperUrl.patternRoom2.matcher(url);
         Matcher matcher5 = HelperUrl.patternRoom3.matcher(url);
         if (matcher2.find()) {
             String username = matcher2.group(1);
             long messageId = Long.parseLong(matcher2.group(2));
-            checkUsernameAndGoToRoomWithMessageId(username, HelperUrl.ChatEntry.profile, messageId);
+            checkUsernameAndGoToRoomWithMessageId(activity, username, HelperUrl.ChatEntry.profile, messageId);
             return true;
         } else if (matcher4.find()) {
-            checkUsernameAndGoToRoom(matcher4.group(1), HelperUrl.ChatEntry.profile);
+            checkUsernameAndGoToRoom(activity, matcher4.group(1), HelperUrl.ChatEntry.profile);
             return true;
         } else if (matcher5.find()) {
-            checkAndJoinToRoom(matcher5.group(1));
+            checkAndJoinToRoom(activity, matcher5.group(1));
             return true;
         }
         return false;
@@ -272,7 +263,7 @@ public class HelperUrl {
         listApps.add("t.me");
 
         for (String string : listApps) {
-            if(url.contains(string)){
+            if (url.contains(string)) {
                 return true;
             }
         }
@@ -287,12 +278,12 @@ public class HelperUrl {
             G.fragmentActivity.startActivity(intent);
         } else {
 //            Toast.makeText(G.fragmentActivity, "", Toast.LENGTH_SHORT).show();
-            HelperError.showSnackMessage(G.context.getResources().getString(R.string.error),false);
+            HelperError.showSnackMessage(G.context.getResources().getString(R.string.error), false);
         }
     }
 
     public static void openBrowser(String url) {
-        final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo((FragmentActivity) G.currentActivity);
+        final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
         int mColorPrimary = Color.parseColor(G.appBarColor);
         final Uri PROJECT_URI = Uri.parse(url);
@@ -322,7 +313,7 @@ public class HelperUrl {
         });
     }
 
-    private static void insertIgapLink(final SpannableStringBuilder strBuilder, final int start, final int end) {
+    private static void insertIgapLink(FragmentActivity activity, final SpannableStringBuilder strBuilder, final int start, final int end) {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
@@ -335,15 +326,15 @@ public class HelperUrl {
                     String token = url.substring(index + 1);
 
                     if (url.toLowerCase().contains("join")) {
-                        checkAndJoinToRoom(token);
+                        checkAndJoinToRoom(activity, token);
                     } else {
                         Matcher matcher = patternMessageLink.matcher(url);
                         if (matcher.find()) {
                             String username = matcher.group(6);
                             long messageId = Long.parseLong(matcher.group(8));
-                            checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                            checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
                         } else {
-                            checkUsernameAndGoToRoom(token, ChatEntry.profile);
+                            checkUsernameAndGoToRoom(activity, token, ChatEntry.profile);
                         }
                     }
                 }
@@ -390,7 +381,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static void insertIgapResolveLink(final SpannableStringBuilder strBuilder, final int start, final int end) {
+    private static void insertIgapResolveLink(FragmentActivity activity, final SpannableStringBuilder strBuilder, final int start, final int end) {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
@@ -399,10 +390,10 @@ public class HelperUrl {
 
                 G.isLinkClicked = true;
                 Matcher matcher2 = patternMessageLink2.matcher(url);
-                if (matcher2.find()){
+                if (matcher2.find()) {
                     String username = matcher2.group(1);
                     long messageId = Long.parseLong(matcher2.group(2));
-                    checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                    checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
                 } else {
                     try {
                         Uri path = Uri.parse(url);
@@ -410,7 +401,7 @@ public class HelperUrl {
                         String domain = path.getQueryParameter("domain");
 
                         if (domain != null && domain.length() > 0) {
-                            checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                            checkUsernameAndGoToRoom(activity, domain, ChatEntry.profile);
                         }
                     } catch (Exception e) {
 
@@ -434,13 +425,13 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static void insertDigitLink(final SpannableStringBuilder strBuilder, final int start, final int end) {
+    private static void insertDigitLink(FragmentActivity activity, final SpannableStringBuilder strBuilder, final int start, final int end) {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
                 G.isLinkClicked = true;
                 String digitLink = strBuilder.toString().substring(start, end);
-                openDialogDigitClick(digitLink);
+                openDialogDigitClick(activity, digitLink);
             }
 
             @Override
@@ -529,7 +520,7 @@ public class HelperUrl {
 
     //*********************************************************************************************************
 
-    private static SpannableStringBuilder analaysAtSign(SpannableStringBuilder builder) {
+    private static SpannableStringBuilder analaysAtSign(FragmentActivity activity,SpannableStringBuilder builder) {
 
         if (builder == null) return builder;
 
@@ -561,7 +552,7 @@ public class HelperUrl {
                     //    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
                     //    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
                     if (tmp.length() > 0) {
-                        insertAtSignLink(tmp, builder, start);
+                        insertAtSignLink(activity,tmp, builder, start);
                     }
 
                     tmp = "";
@@ -573,19 +564,19 @@ public class HelperUrl {
         }
 
         if (isAtSign) {
-            if (tmp.length() > 0) insertAtSignLink(tmp, builder, start);
+            if (tmp.length() > 0) insertAtSignLink(activity,tmp, builder, start);
         }
 
         return builder;
     }
 
-    private static void insertAtSignLink(final String text, SpannableStringBuilder builder, int start) {
+    private static void insertAtSignLink(FragmentActivity activity, final String text, SpannableStringBuilder builder, int start) {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View view) {
                 G.isLinkClicked = true;
-                checkUsernameAndGoToRoom(text, ChatEntry.profile);
+                checkUsernameAndGoToRoom(activity, text, ChatEntry.profile);
             }
 
             @Override
@@ -607,7 +598,7 @@ public class HelperUrl {
 
     //*********************************************************************************************************
 
-    public static SpannableStringBuilder getLinkText(String text, String linkInfo, String messageID) {
+    public static SpannableStringBuilder getLinkText(FragmentActivity activity, String text, String linkInfo, String messageID) {
 
         if (text == null) return null;
         if (text.trim().length() < 1) return null;
@@ -632,13 +623,13 @@ public class HelperUrl {
                             insertHashLink(text.substring(start + 1, end), strBuilder, start, messageID);
                             break;
                         case "atSighn":
-                            insertAtSignLink(text.substring(start + 1, end), strBuilder, start);
+                            insertAtSignLink(activity,text.substring(start + 1, end), strBuilder, start);
                             break;
                         case "igapLink":
-                            insertIgapLink(strBuilder, start, end);
+                            insertIgapLink(activity, strBuilder, start, end);
                             break;
                         case "igapResolve":
-                            insertIgapResolveLink(strBuilder, start, end);
+                            insertIgapResolveLink(activity, strBuilder, start, end);
                             break;
                         case "bot":
                             insertIgapBot(strBuilder, start, end);
@@ -647,7 +638,7 @@ public class HelperUrl {
                             insertLinkSpan(strBuilder, start, end, true);
                             break;
                         case "digitLink":
-                            insertDigitLink(strBuilder, start, end);
+                            insertDigitLink(activity, strBuilder, start, end);
                             break;
                     }
                 } catch (IndexOutOfBoundsException e) {
@@ -742,18 +733,18 @@ public class HelperUrl {
         return result;
     }
 
-    public static void checkAndJoinToRoom(final String token) {
+    public static void checkAndJoinToRoom(FragmentActivity activity, final String token) {
 
         if (token == null || token.length() < 0 || isInCurrentChat(token)) return;
 
         if (G.userLogin) {
-            showIndeterminateProgressDialog();
+            showIndeterminateProgressDialog(activity);
 
             G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
                 @Override
                 public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
                     closeDialogWaiting();
-                    openDialogJoin(room, token);
+                    openDialogJoin(activity, room, token);
                 }
 
                 @Override
@@ -769,16 +760,15 @@ public class HelperUrl {
         }
     }
 
-    private static void openDialogJoin(final ProtoGlobal.Room room, final String token) {
+    private static void openDialogJoin(FragmentActivity activity, final ProtoGlobal.Room room, final String token) {
         if (room == null) {
             return;
-
         }
         final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
         if (realmRoom != null) {
             if (room.getId() != FragmentChat.lastChatRoomId) {
-                new GoToChatActivity(room.getId()).startActivity();
+                new GoToChatActivity(room.getId()).startActivity(activity);
             }
             realm.close();
             return;
@@ -793,7 +783,7 @@ public class HelperUrl {
         });
         realm.close();
 
-        String title = G.context.getString(R.string.do_you_want_to_join_to_this);
+        String title = activity.getString(R.string.do_you_want_to_join_to_this);
         String memberNumber = "";
         final CircleImageView[] imageView = new CircleImageView[1];
 
@@ -801,9 +791,9 @@ public class HelperUrl {
             case CHANNEL:
 
                 if (HelperCalander.isPersianUnicode) {
-                    title += G.context.getString(R.string.channel) + " " + "عضو شوید؟";
+                    title += activity.getString(R.string.channel) + " " + "عضو شوید؟";
                 } else {
-                    title += G.context.getString(R.string.channel) + "?";
+                    title += activity.getString(R.string.channel) + "?";
                 }
 
                 memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member_chat);
@@ -811,26 +801,26 @@ public class HelperUrl {
             case GROUP:
 
                 if (HelperCalander.isPersianUnicode) {
-                    title += G.context.getString(R.string.group) + " " + "عضو شوید؟";
+                    title += activity.getString(R.string.group) + " " + "عضو شوید؟";
                 } else {
-                    title += G.context.getString(R.string.group) + "?";
+                    title += activity.getString(R.string.group) + "?";
                 }
 
-                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member_chat);
+                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + activity.getString(R.string.member_chat);
                 break;
         }
 
         final String finalMemberNumber = memberNumber;
         final String finalTitle = title;
 
-        G.currentActivity.runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle).customView(R.layout.dialog_alert_join, true).positiveText(R.string.join).cancelable(true).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                final MaterialDialog dialog = new MaterialDialog.Builder(activity).title(finalTitle).customView(R.layout.dialog_alert_join, true).positiveText(R.string.join).cancelable(true).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        joinToRoom(token, room);
+                        joinToRoom(activity, token, room);
                     }
                 }).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -847,17 +837,17 @@ public class HelperUrl {
                 TextView txtMemberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
                 txtMemberNumber.setText(finalMemberNumber);
 
-                if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing() && !G.currentActivity.isFinishing()) {
-                    G.currentActivity.avatarHandler.getAvatar(new ParamWithAvatarType(imageView[0], room.getId()).avatarType(AvatarHandler.AvatarType.ROOM));
+                if (!activity.isFinishing() && !activity.isFinishing() && activity instanceof ActivityEnhanced) {
+                    ((ActivityEnhanced) activity).avatarHandler.getAvatar(new ParamWithAvatarType(imageView[0], room.getId()).avatarType(AvatarHandler.AvatarType.ROOM));
                     dialog.show();
                 }
             }
         });
     }
 
-    private static void joinToRoom(String token, final ProtoGlobal.Room room) {
+    private static void joinToRoom(FragmentActivity activity, String token, final ProtoGlobal.Room room) {
         if (G.userLogin) {
-            showIndeterminateProgressDialog();
+            showIndeterminateProgressDialog(activity);
 
             G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
                 @Override
@@ -867,7 +857,7 @@ public class HelperUrl {
                     RealmRoom.joinByInviteLink(room.getId());
 
                     if (room.getId() != FragmentChat.lastChatRoomId) {
-                        new GoToChatActivity(room.getId()).startActivity();
+                        new GoToChatActivity(room.getId()).startActivity(activity);
                     }
 
                 }
@@ -924,8 +914,8 @@ public class HelperUrl {
         return false;
     }
 
-    public static void checkUsernameAndGoToRoom(final String userName, final ChatEntry chatEntery) {
-        checkUsernameAndGoToRoomWithMessageId(userName, chatEntery, 0);
+    public static void checkUsernameAndGoToRoom(FragmentActivity activity, final String userName, final ChatEntry chatEntery) {
+        checkUsernameAndGoToRoomWithMessageId(activity, userName, chatEntery, 0);
     }
 
 
@@ -935,7 +925,7 @@ public class HelperUrl {
      * @param messageId // use for detect message position
      */
 
-    public static void checkUsernameAndGoToRoomWithMessageId(final String username, final ChatEntry chatEntry, final long messageId) {
+    public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity, final String username, final ChatEntry chatEntry, final long messageId) {
         if (username == null || username.length() < 1) return;
 
         if (G.userLogin) {
@@ -945,9 +935,9 @@ public class HelperUrl {
                 @Override
                 public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
                     if (messageId == 0 || type == ProtoClientResolveUsername.ClientResolveUsernameResponse.Type.USER) {
-                        openChat(username, type, user, room, user.getBot() ? ChatEntry.chat : chatEntry, messageId);
+                        openChat(activity, username, type, user, room, user.getBot() ? ChatEntry.chat : chatEntry, messageId);
                     } else {
-                        resolveMessageAndOpenChat(messageId, username, user.getBot() ? ChatEntry.chat : chatEntry, type, user, room);
+                        resolveMessageAndOpenChat(activity, messageId, username, user.getBot() ? ChatEntry.chat : chatEntry, type, user, room);
                     }
                 }
 
@@ -957,7 +947,7 @@ public class HelperUrl {
                 }
             };
 
-            showIndeterminateProgressDialog();
+            showIndeterminateProgressDialog(activity);
 
             new RequestClientResolveUsername().clientResolveUsername(username);
         } else {
@@ -969,13 +959,13 @@ public class HelperUrl {
     /**
      * if message isn't exist in Realm resolve from server and then open chat
      */
-    private static void resolveMessageAndOpenChat(final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
+    private static void resolveMessageAndOpenChat(FragmentActivity activity, final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
         if (rm != null) {
-            openChat(username, type, user, room, chatEntry, messageId);
+            openChat(activity, username, type, user, room, chatEntry, messageId);
         } else {
-            new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1 , 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+            new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
                 @Override
                 public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
                     if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
@@ -983,8 +973,8 @@ public class HelperUrl {
                             @Override
                             public void run() {
                                 closeDialogWaiting();
-                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
-                                openChat(username, type, user, room, chatEntry, 0);
+                                HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
+                                openChat(activity, username, type, user, room, chatEntry, 0);
                             }
                         });
                     } else {
@@ -1007,24 +997,24 @@ public class HelperUrl {
                             @Override
                             public void run() {
                                 G.refreshRealmUi();
-                                openChat(username, type, user, room, chatEntry, messageList.get(0).getMessageId());
+                                openChat(activity, username, type, user, room, chatEntry, messageList.get(0).getMessageId());
                             }
                         });
                     }
                 }
 
                 @Override
-                public void onErrorHistory(int major , int minor) {
+                public void onErrorHistory(int major, int minor) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             closeDialogWaiting();
                             if (major == 626) {
-                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                                HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
                             } else if (minor == 624) {
-                                HelperError.showSnackMessage(G.context.getString(R.string.ivnalid_data_provided), false);
+                                HelperError.showSnackMessage(activity.getString(R.string.ivnalid_data_provided), false);
                             } else {
-                                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                                HelperError.showSnackMessage(activity.getString(R.string.there_is_no_connection_to_server), false);
                             }
                         }
                     });
@@ -1049,19 +1039,18 @@ public class HelperUrl {
 
     //************************************  go to room by userName   *********************************************************************
 
-    private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery, long messageId) {
-
+    private static void openChat(FragmentActivity activity, String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery, long messageId) {
         switch (type) {
             case USER:
-                goToChat(user, chatEntery, messageId);
+                goToChat(activity, user, chatEntery, messageId);
                 break;
             case ROOM:
-                goToRoom(username, room, messageId);
+                goToRoom(activity, username, room, messageId);
                 break;
         }
     }
 
-    private static void goToActivity(final long roomId, final long peerId, ChatEntry chatEntry, final long messageId) {
+    private static void goToActivity(FragmentActivity activity, final long roomId, final long peerId, ChatEntry chatEntry, final long messageId) {
 
         switch (chatEntry) {
             case chat:
@@ -1070,7 +1059,7 @@ public class HelperUrl {
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
                     if (realmRoom != null) {
-                        new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity();
+                        new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(activity);
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
@@ -1079,11 +1068,12 @@ public class HelperUrl {
                                 G.handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity();
+                                        new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
                                         G.onChatGetRoom = null;
                                     }
-                                },500);
+                                }, 500);
                             }
+
                             @Override
                             public void onChatGetRoomTimeOut() {
 
@@ -1111,29 +1101,25 @@ public class HelperUrl {
                         bundle.putLong("RoomId", roomId);
                         bundle.putString("enterFrom", GROUP.toString());
                         contactsProfile.setArguments(bundle);
-                        new HelperFragment(contactsProfile).setReplace(false).load();
+                        new HelperFragment(activity.getSupportFragmentManager(), contactsProfile).setReplace(false).load();
                     }
                 });
                 break;
         }
     }
 
-    private static void goToChat(final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
-
-        Long id = user.getId();
-
+    private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
+        long id = user.getId();
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
 
         if (realmRoom != null) {
             closeDialogWaiting();
-
-            goToActivity(realmRoom.getId(), id, user.getBot() ? ChatEntry.chat : chatEntery, messageId);
-
+            goToActivity(activity, realmRoom.getId(), id, user.getBot() ? ChatEntry.chat : chatEntery, messageId);
             realm.close();
         } else {
             if (G.userLogin) {
-                addChatToDatabaseAndGoToChat(user, -1, user.getBot() ? ChatEntry.chat : chatEntery);
+                addChatToDatabaseAndGoToChat(activity, user, -1, user.getBot() ? ChatEntry.chat : chatEntery);
             } else {
                 closeDialogWaiting();
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -1141,17 +1127,17 @@ public class HelperUrl {
         }
     }
 
-    public static void showIndeterminateProgressDialog() {
+    public static void showIndeterminateProgressDialog(Activity activity) {
 
         try {
-            if (G.currentActivity != null) {
-                G.currentActivity.runOnUiThread(new Runnable() {
+            if (activity != null) {
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (dialogWaiting != null && dialogWaiting.isShowing()) {
 
-                        } else if (!(G.currentActivity).isFinishing()) {
-                            dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title("").content(R.string.please_wait).progress(true, 0).cancelable(false).progressIndeterminateStyle(false).show();
+                        } else if (!(activity).isFinishing()) {
+                            dialogWaiting = new MaterialDialog.Builder(activity).title("").content(R.string.please_wait).progress(true, 0).cancelable(false).progressIndeterminateStyle(false).show();
                         }
                     }
                 });
@@ -1163,7 +1149,7 @@ public class HelperUrl {
         }
     }
 
-    private static void addChatToDatabaseAndGoToChat(final ProtoGlobal.RegisteredUser user, final long roomId, final ChatEntry chatEntery) {
+    private static void addChatToDatabaseAndGoToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final long roomId, final ChatEntry chatEntery) {
 
         closeDialogWaiting();
 
@@ -1181,7 +1167,7 @@ public class HelperUrl {
                     @Override
                     public void onSuccess() {
 
-                        goToActivity(roomId, user.getId(), user.getBot() ? ChatEntry.chat : chatEntery, 0);
+                        goToActivity(activity, roomId, user.getId(), user.getBot() ? ChatEntry.chat : chatEntery, 0);
 
                         realm.close();
                     }
@@ -1195,7 +1181,7 @@ public class HelperUrl {
         });
     }
 
-    private static void goToRoom(String username, final ProtoGlobal.Room room, long messageId) {
+    private static void goToRoom(FragmentActivity activity, String username, final ProtoGlobal.Room room, long messageId) {
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -1204,17 +1190,17 @@ public class HelperUrl {
         if (realmRoom != null) {
 
             if (realmRoom.isDeleted()) {
-                addRoomToDataBaseAndGoToRoom(username, room, messageId);
+                addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
             } else {
                 closeDialogWaiting();
 
                 if (room.getId() != FragmentChat.lastChatRoomId) {
-                    new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                    new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity(activity);
                 } else {
                     try {
-                        if (G.fragmentManager != null) {
-                            G.fragmentManager.popBackStack();
-                            new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                        if (activity != null) {
+                            activity.getSupportFragmentManager().popBackStack();
+                            new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity(activity);
                         }
                     } catch (Exception e) {
                         HelperLog.setErrorLog(e);
@@ -1225,12 +1211,11 @@ public class HelperUrl {
 
             realm.close();
         } else {
-
-            addRoomToDataBaseAndGoToRoom(username, room, messageId);
+            addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
         }
     }
 
-    private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room, long messageId) {
+    private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity, final String username, final ProtoGlobal.Room room, long messageId) {
         closeDialogWaiting();
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -1251,12 +1236,12 @@ public class HelperUrl {
                     public void onSuccess() {
                         realm.refresh();
                         if (room.getId() != FragmentChat.lastChatRoomId) {
-                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity();
+                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
                         } else {
                             try {
-                                if (G.fragmentManager != null) {
-                                    G.fragmentManager.popBackStack();
-                                    new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity();
+                                if (activity != null) {
+                                    activity.getSupportFragmentManager().popBackStack();
+                                    new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
                                 }
                             } catch (Exception e) {
                                 HelperLog.setErrorLog(e);
@@ -1275,7 +1260,7 @@ public class HelperUrl {
         });
     }
 
-    public static void getLinkinfo(final Intent intent, final Activity activity) {
+    public static void getLinkinfo(Intent intent, FragmentActivity activity) {
 
         String action = intent.getAction();
 
@@ -1283,12 +1268,12 @@ public class HelperUrl {
 
         if (action.equals(Intent.ACTION_VIEW)) {
             G.currentActivity = (ActivityEnhanced) activity;
-            showIndeterminateProgressDialog();
-            checkConnection(intent.getData(), 0);
+            showIndeterminateProgressDialog(activity);
+            checkConnection(activity, intent.getData(), 0);
         }
     }
 
-    private static void checkConnection(final Uri path, int countTime) {
+    private static void checkConnection(FragmentActivity activity, final Uri path, int countTime) {
         countTime++;
 
         if (G.userLogin) {
@@ -1297,13 +1282,13 @@ public class HelperUrl {
             if (matcher.find()) {
                 String username = matcher.group(6);
                 long messageId = Long.parseLong(matcher.group(8));
-                checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
             } else if (matcher2.find()) {
                 String username = matcher2.group(1);
                 long messageId = Long.parseLong(matcher2.group(2));
-                checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
             } else {
-                getToRoom(path);
+                getToRoom(activity,path);
             }
 
 
@@ -1313,58 +1298,57 @@ public class HelperUrl {
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
-                        checkConnection(path, finalCountTime);
+                        checkConnection(activity, path, finalCountTime);
                     }
                 }, 1000);
             } else {
                 closeDialogWaiting();
-                HelperError.showSnackMessage(G.context.getString(R.string.can_not_connent_to_server), false);
+                HelperError.showSnackMessage(activity.getString(R.string.can_not_connent_to_server), false);
             }
         }
     }
 
-    private static void openDialogDigitClick(String text) {
+    private static void openDialogDigitClick(FragmentActivity activity, String text) {
 
         try {
-            if (G.fragmentActivity != null) {
-                G.fragmentActivity.runOnUiThread(() -> {
+            if (activity != null) {
+                activity.runOnUiThread(() -> {
                     List<String> items = new ArrayList<>();
-                    items.add(G.fragmentActivity.getString(R.string.copy_item_dialog));
-                    items.add(G.fragmentActivity.getString(R.string.verify_register_call));
-                    items.add(G.fragmentActivity.getString(R.string.add_to_contact));
-                    items.add(G.fragmentActivity.getString(R.string.verify_register_sms));
+                    items.add(activity.getString(R.string.copy_item_dialog));
+                    items.add(activity.getString(R.string.verify_register_call));
+                    items.add(activity.getString(R.string.add_to_contact));
+                    items.add(activity.getString(R.string.verify_register_sms));
 
                     new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
                         @Override
                         public void onClick(int position) {
-                            if (items.get(position).equals(G.fragmentActivity.getString(R.string.copy_item_dialog))){
-                                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                            if (items.get(position).equals(activity.getString(R.string.copy_item_dialog))) {
+                                ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
                                 ClipData clip = ClipData.newPlainText("Copied Text", text);
                                 clipboard.setPrimaryClip(clip);
-                                Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
-                            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.verify_register_call))){
+                                Toast.makeText(activity, R.string.text_copied, Toast.LENGTH_SHORT).show();
+                            } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.verify_register_call))) {
                                 String uri = "tel:" + text;
                                 Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse(uri));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                G.context.startActivity(intent);
-                            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.add_to_contact))){
+                                activity.startActivity(intent);
+                            } else if (items.get(position).equals(activity.getString(R.string.add_to_contact))) {
                                 FragmentAddContact fragment = FragmentAddContact.newInstance();
                                 Bundle bundle = new Bundle();
-                                bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
+                                bundle.putString("TITLE", activity.getString(R.string.fac_Add_Contact));
                                 bundle.putString("PHONE", text);
                                 fragment.setArguments(bundle);
-                                new HelperFragment(fragment).setReplace(false).load();
-                            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.verify_register_sms))){
+                                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
+                            } else if (items.get(position).equals(activity.getString(R.string.verify_register_sms))) {
                                 String uri = "smsto:" + text;
                                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                                 intent.setData(Uri.parse(uri));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                G.context.startActivity(intent);
+                                activity.startActivity(intent);
                             }
                         }
-                    }).show(G.fragmentManager,"bottom sheet");
+                    }).show(activity.getSupportFragmentManager(), "bottom sheet");
                 });
             }
         } catch (RuntimeException e) {
@@ -1378,7 +1362,7 @@ public class HelperUrl {
 
     //************************************  go to room by urlLink   *********************************************************************
 
-    private static void getToRoom(Uri path) {
+    private static void getToRoom(FragmentActivity activity,Uri path) {
 
         if (path != null) {
             if (isIgapLink(path.toString().toLowerCase())) {
@@ -1389,9 +1373,9 @@ public class HelperUrl {
                     String token = url.substring(index + 1);
 
                     if (url.toLowerCase().contains("join")) {
-                        checkAndJoinToRoom(token);
+                        checkAndJoinToRoom(activity,token);
                     } else {
-                        checkUsernameAndGoToRoom(token, ChatEntry.profile);
+                        checkUsernameAndGoToRoom(activity,token, ChatEntry.profile);
                     }
                 }
             } else {
@@ -1400,10 +1384,10 @@ public class HelperUrl {
                     String domain = path.getQueryParameter("domain");
 
                     if (domain != null && domain.length() > 0) {
-                        checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                        checkUsernameAndGoToRoom(activity,domain, ChatEntry.profile);
                     }
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
         } else {

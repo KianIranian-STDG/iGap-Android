@@ -1,6 +1,7 @@
 package net.iGap.adapter.items.discovery.holder;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,8 +15,8 @@ public class Type1ViewHolder extends BaseViewHolder {
     private ImageView img0;
     private CardView card0;
 
-    public Type1ViewHolder(@NonNull View itemView) {
-        super(itemView);
+    public Type1ViewHolder(@NonNull View itemView, FragmentActivity activity) {
+        super(itemView,activity);
         img0 = itemView.findViewById(R.id.type1_img0);
         card0 = itemView.findViewById(R.id.type1_card0);
         card0.setCardBackgroundColor(G.getThemeBackgroundColor());

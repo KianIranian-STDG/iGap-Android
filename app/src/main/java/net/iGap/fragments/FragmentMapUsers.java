@@ -364,15 +364,9 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             holder.layoutMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //for close FragmentMapUsers
-                    //if (btnBack != null){
-                    //    btnBack.performClick();
-                    //}
-                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
-                    //for close FragmentiGapMap
-                    //if (G.onMapClose != null) {
-                    //    G.onMapClose.onClose();
-                    //}
+                    if (getActivity()!=null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                    }
                 }
             });
 

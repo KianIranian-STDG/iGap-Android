@@ -121,6 +121,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public MutableLiveData<Boolean> checkLocationPermission = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToIGapMapPage = new MutableLiveData<>();
     public MutableLiveData<String> goToFAQPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToSettingPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToUserScorePage = new MutableLiveData<>();
     public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
     public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
     public MutableLiveData<DeleteAvatarModel> deleteAvatar = new MutableLiveData<>();
@@ -392,7 +394,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onSettingClick() {
-        new HelperFragment(new FragmentSetting()).load();
+        goToSettingPage.setValue(true);
     }
 
     public void onAddClick() {
@@ -408,7 +410,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onScoreClick() {
-        new HelperFragment(new FragmentUserScore()).setReplace(false).load();
+        goToUserScorePage.setValue(true);
     }
 
     public void onInviteFriendsClick() {
