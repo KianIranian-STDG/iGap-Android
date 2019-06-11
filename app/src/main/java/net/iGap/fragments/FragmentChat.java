@@ -45,6 +45,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -6563,13 +6564,13 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
-        final TextView textSend = (MaterialDesignTextView) viewBottomSheetForward.findViewById(R.id.txtSend);
+        final AppCompatTextView textSend = viewBottomSheetForward.findViewById(R.id.txtSend);
         textSend.setVisibility(View.INVISIBLE);
         final RecyclerView rcvItem = viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
         rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
         rcvItem.setAdapter(fastItemAdapterForward);
-        bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity);
+        bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity, G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
 
