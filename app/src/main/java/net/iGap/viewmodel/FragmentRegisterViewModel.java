@@ -588,7 +588,9 @@ public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCh
             prgVerifyKeyVisibility.set(View.VISIBLE);
             try {
                 ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
-                userVerify.setCode(Integer.parseInt(verificationCode));
+                userVerify.setCode(Integer.parseInt(verificationCode
+                        .replaceAll("[^0-9]", "")
+                        .replaceAll("[\u0000-\u001f]", "")));
                 userVerify.setUsername(userName);
 
                 RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
