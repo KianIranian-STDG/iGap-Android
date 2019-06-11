@@ -249,8 +249,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
             viewContactBtn.setOnClickListener(v -> {
                 if (contactStatus == IN_CONTACT_AND_HAVE_IGAP) {
-                    new HelperFragment(FragmentContactsProfile.newInstance(0, contactId,
-                            "Others")).setReplace(false).load();
+                    //new HelperFragment(FragmentContactsProfile.newInstance(0, contactId,"Others")).setReplace(false).load();
                 } else if (contactStatus == NOT_CONTACT_AND_HAVE_NOT_IGAP) {
                     Intent intent = new Intent(Intent.ACTION_INSERT);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -266,7 +265,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
                 if (contactStatus == NOT_CONTACT_AND_HAVE_NOT_IGAP) {
                     FragmentCallAction callAction = new FragmentCallAction();
                     callAction.setPhoneNumber(getContactNumberTv());
-                    callAction.show(G.fragmentManager, null);
+                    //callAction.show(G.fragmentManager, null);
                 }
             });
         }

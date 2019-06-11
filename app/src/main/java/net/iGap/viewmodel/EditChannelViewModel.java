@@ -49,9 +49,9 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public ObservableField<String> administratorsCount = new ObservableField<>("");
     public ObservableField<String> moderatorsCount = new ObservableField<>("");
     public ObservableField<String> subscribersCount = new ObservableField<>("");
-    public ObservableInt showLayoutReactStatus = new ObservableInt(View.GONE);
+    public ObservableBoolean showLayoutReactStatus = new ObservableBoolean(false);
     public ObservableBoolean canChangeChannelName = new ObservableBoolean(false);
-    public ObservableInt isShowLoading = new ObservableInt(View.GONE);
+    public ObservableBoolean isShowLoading = new ObservableBoolean(false);
     public ObservableInt leaveChannelText = new ObservableInt();
     //ui
     public MutableLiveData<Boolean> goToMembersPage = new MutableLiveData<>();
@@ -117,7 +117,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             long avatarId = SUID.id().get();
             long lastUploadedAvatarId = avatarId + 1L;
 
-            isShowLoading.set(View.VISIBLE);
+            isShowLoading.set(true);
             HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
                 @Override
                 public void OnProgress(int progress, FileUploadStructure struct) {
@@ -130,7 +130,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
                 @Override
                 public void OnError() {
-                    isShowLoading.set(View.GONE);
+                    isShowLoading.set(false);
                 }
             });
         };
@@ -166,11 +166,11 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         /*isShowLink.setValue(!(isPrivate && ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR))));*/
 
         if (role == ChannelChatRole.OWNER) {
-            showLayoutReactStatus.set(View.VISIBLE);
+            showLayoutReactStatus.set(true);
             canChangeChannelName.set(true);
             G.onChannelUpdateReactionStatus = this;
         } else {
-            showLayoutReactStatus.set(View.GONE);
+            showLayoutReactStatus.set(false);
             canChangeChannelName.set(false);
             G.onChannelUpdateReactionStatus = null;
         }
@@ -208,7 +208,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        isShowLoading.set(View.GONE);
+                        isShowLoading.set(false);
                     }
                 });
             }
@@ -259,7 +259,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             } else {
                 new RequestChannelUpdateSignature().channelUpdateSignature(roomId, false);
             }
-            isShowLoading.set(View.VISIBLE);
+            isShowLoading.set(true);
         }
     }
 
@@ -270,7 +270,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public void onReactionMessageCheckedChange(boolean state) {
         if (state != isReactionMessage.get()) {
             new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, state);
-            isShowLoading.set(View.VISIBLE);
+            isShowLoading.set(true);
         }
     }
 
@@ -295,12 +295,12 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     }
 
     public void setData(String channelName, String channelDescription) {
-        isShowLoading.set(View.VISIBLE);
+        isShowLoading.set(true);
         new RequestChannelEdit().channelEdit(roomId, channelName, channelDescription, new OnChannelEdit() {
             @Override
             public void onChannelEdit(final long roomId, final String name, final String description) {
                 G.handler.post(() -> {
-                    isShowLoading.set(View.GONE);
+                    isShowLoading.set(false);
                     EditChannelViewModel.this.channelName.set(name);
                     EditChannelViewModel.this.channelDescription.set(description);
                     /*SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
@@ -316,12 +316,12 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                G.handler.post(() -> isShowLoading.set(View.GONE));
+                G.handler.post(() -> isShowLoading.set(false));
             }
 
             @Override
             public void onTimeOut() {
-                G.handler.post(() -> isShowLoading.set(View.GONE));
+                G.handler.post(() -> isShowLoading.set(false));
             }
         });
     }
@@ -333,7 +333,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
          * to download avatars . for do this action call HelperAvatar.getAvatar
          */
 
-        isShowLoading.set(View.GONE);
+        isShowLoading.set(false);
         /*if (pathSaveImage == null) {
             setAvatar();
         } else {
@@ -356,7 +356,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
     @Override
     public void onAvatarAddError() {
-        isShowLoading.set(View.GONE);
+        isShowLoading.set(false);
     }
 
     @Override
@@ -393,14 +393,14 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
     @Override
     public void OnChannelUpdateReactionStatusError() {
-        G.handler.post(() -> isShowLoading.set(View.GONE));
+        G.handler.post(() -> isShowLoading.set(false));
     }
 
     @Override
     public void OnChannelUpdateReactionStatusResponse(long roomId, boolean status) {
         G.handler.post(() -> {
             if (roomId == EditChannelViewModel.this.roomId) {
-                isShowLoading.set(View.GONE);
+                isShowLoading.set(false);
             }
         });
     }
@@ -412,7 +412,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
     private void closeActivity() {
         G.handler.post(() -> {
-            isShowLoading.set(View.GONE);
+            isShowLoading.set(false);
             goToChatRoom.setValue(true);
         });
     }

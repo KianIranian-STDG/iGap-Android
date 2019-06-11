@@ -961,17 +961,6 @@ public class FragmentChat extends BaseFragment
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                if (!G.twoPaneMode) {
-                    try {
-                        if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
-                            ((ActivityMain) G.fragmentActivity).lockNavigation();
-                        }
-                    } catch (Exception e) {
-                        HelperLog.setErrorLog(e);
-                    }
-                }
-
             }
         }, Config.LOW_START_PAGE_TIME);
 
@@ -1696,7 +1685,6 @@ public class FragmentChat extends BaseFragment
                                             if (favorite.getValue().equals("$financial")) {
                                                 if (getActivity() != null) {
                                                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
-                                                    //lockNavigation();
                                                     return;
                                                 }
                                             }
@@ -9450,5 +9438,173 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onFourthRightIconClickListener(View view) {
 
+    }
+
+    /**
+     * *** SearchHash ***
+     */
+
+    private class SearchHash {
+
+        public String lastMessageId = "";
+        private String hashString = "";
+        private int currentHashPosition;
+
+        private ArrayList<String> hashList = new ArrayList<>();
+
+        void setHashString(String hashString) {
+            this.hashString = hashString.toLowerCase();
+        }
+
+        public void setPosition(String messageId) {
+
+            if (mAdapter == null) {
+                return;
+            }
+
+            if (lastMessageId.length() > 0) {
+                mAdapter.toggleSelection(lastMessageId, false, null);
+            }
+
+            currentHashPosition = 0;
+            hashList.clear();
+
+            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+                if (mAdapter.getItem(i).mMessage != null) {
+
+                    if (messageId.length() > 0) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                            currentHashPosition = hashList.size();
+                            lastMessageId = messageId;
+                            mAdapter.getItem(i).mMessage.isSelected = true;
+                            mAdapter.notifyItemChanged(i);
+                        }
+                    }
+
+                    String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
+
+                    if (mText.toLowerCase().contains(hashString)) {
+                        hashList.add(mAdapter.getItem(i).mMessage.messageID);
+                    }
+                }
+            }
+
+            if (messageId.length() == 0) {
+                txtHashCounter.setText(hashList.size() + " / " + hashList.size());
+
+                if (hashList.size() > 0) {
+                    currentHashPosition = hashList.size() - 1;
+                    goToSelectedPosition(hashList.get(currentHashPosition));
+                }
+            } else {
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
+            }
+        }
+
+        void downHash() {
+            if (currentHashPosition < hashList.size() - 1) {
+
+                currentHashPosition++;
+
+                goToSelectedPosition(hashList.get(currentHashPosition));
+
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
+            }
+        }
+
+        void upHash() {
+            if (currentHashPosition > 0) {
+
+                currentHashPosition--;
+
+                goToSelectedPosition(hashList.get(currentHashPosition));
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
+            }
+        }
+
+        private void goToSelectedPosition(String messageid) {
+
+            mAdapter.toggleSelection(lastMessageId, false, null);
+
+            lastMessageId = messageid;
+
+            mAdapter.toggleSelection(lastMessageId, true, recyclerView);
+        }
+    }
+
+    /**
+     * *** VideoCompressor ***
+     */
+
+    class VideoCompressor extends AsyncTask<String, Void, StructCompress> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected StructCompress doInBackground(String... params) {
+            if (params[0] == null) { // if data is null
+                StructCompress structCompress = new StructCompress();
+                structCompress.compress = false;
+                return structCompress;
+            }
+            File file = new File(params[0]);
+            long originalSize = file.length();
+
+            StructCompress structCompress = new StructCompress();
+            structCompress.path = params[1];
+            structCompress.originalPath = params[0];
+            long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
+            try {
+                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            structCompress.originalSize = originalSize;
+            return structCompress;
+        }
+
+        @Override
+        protected void onPostExecute(StructCompress structCompress) {
+            super.onPostExecute(structCompress);
+            if (structCompress.compress) {
+                compressedPath.put(structCompress.path, true);
+                for (StructUploadVideo structUploadVideo : structUploadVideos) {
+                    if (structUploadVideo != null && structUploadVideo.filePath.equals(structCompress.path)) {
+                        /**
+                         * update new info after compress file with notify item
+                         */
+
+                        long fileSize = new File(structUploadVideo.filePath).length();
+                        long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, structUploadVideo.filePath) / 1000;
+
+                        if (fileSize >= structCompress.originalSize) {
+                            structUploadVideo.filePath = structCompress.originalPath;
+                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, structCompress.originalSize);
+                        } else {
+                            RealmAttachment.updateFileSize(structUploadVideo.messageId, fileSize);
+                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
+                        }
+
+                        HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(int progress, FileUploadStructure struct) {
+                                if (canUpdateAfterDownload) {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                                }
+                            }
+
+                            @Override
+                            public void OnError() {
+
+                            }
+                        });
+                    }
+                }
+            }
+        }
     }
 }
