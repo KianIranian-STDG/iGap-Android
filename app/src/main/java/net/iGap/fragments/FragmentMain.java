@@ -54,6 +54,7 @@ import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
+import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
