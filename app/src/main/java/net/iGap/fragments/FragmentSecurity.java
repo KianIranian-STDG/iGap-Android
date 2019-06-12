@@ -112,7 +112,7 @@ public class FragmentSecurity extends BaseFragment {
                 bundle.putSerializable("PAGE", data.getSecurity());
                 bundle.putString("QUESTION_ONE", data.getQuestionOne());
                 bundle.putString("QUESTION_TWO", data.getQuestionTwo());
-                bundle.putString("PATERN_EMAIL", data.getEmailPatern());
+                bundle.putString("PATERN_EMAIL", data.getEmailPattern());
                 bundle.putBoolean("IS_EMAIL", data.isEmail());
                 bundle.putBoolean("IS_CONFIRM_EMAIL", data.isConfirmEmail());
                 fragmentSecurityRecovery.setArguments(bundle);

@@ -139,7 +139,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
             if (getActivity() != null && data != null) {
                 FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("PAGE", data.getSecurityType());
+                bundle.putSerializable("PAGE", data.getSecurity());
                 bundle.putString("QUESTION_ONE", data.getQuestionOne());
                 bundle.putString("QUESTION_TWO", data.getQuestionTwo());
                 bundle.putString("PATERN_EMAIL", data.getEmailPattern());

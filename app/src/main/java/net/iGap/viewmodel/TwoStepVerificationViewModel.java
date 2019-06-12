@@ -14,6 +14,7 @@ import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.OnSecurityCheckPassword;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
+import net.iGap.model.SecurityRecoveryModel;
 import net.iGap.module.enums.Security;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmUserInfo;
@@ -258,48 +259,6 @@ public class TwoStepVerificationViewModel extends ViewModel {
             new RequestUserInfo().userInfo(userId);
         } else {
             G.handler.postDelayed(this::requestUserInfo, 1000);
-        }
-    }
-
-    public class SecurityRecoveryModel {
-        private Security securityType;
-        private String questionOne;
-        private String questionTwo;
-        private String emailPattern;
-        private boolean isEmail;
-        private boolean isConfirmEmail;
-
-        public SecurityRecoveryModel(Security securityType, String questionOne, String questionTwo, String emailPattern, boolean isEmail, boolean isConfirmEmail) {
-            this.securityType = securityType;
-            this.questionOne = questionOne;
-            this.questionTwo = questionTwo;
-            this.emailPattern = emailPattern;
-            this.isEmail = isEmail;
-            this.isConfirmEmail = isConfirmEmail;
-        }
-
-        public Security getSecurityType() {
-            return securityType;
-        }
-
-        public String getQuestionOne() {
-            return questionOne;
-        }
-
-        public String getQuestionTwo() {
-            return questionTwo;
-        }
-
-        public String getEmailPattern() {
-            return emailPattern;
-        }
-
-        public boolean isEmail() {
-            return isEmail;
-        }
-
-        public boolean isConfirmEmail() {
-            return isConfirmEmail;
         }
     }
 }
