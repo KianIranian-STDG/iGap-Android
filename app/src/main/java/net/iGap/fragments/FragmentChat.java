@@ -44,6 +44,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -308,6 +309,7 @@ import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
@@ -504,8 +506,8 @@ public class FragmentChat extends BaseFragment
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
     private TextView txtSpamUser;
     private TextView txtSpamClose;
-    /*private TextView send;*/
-    /*private TextView txtCountItem;*/
+    private TextView send;
+    private TextView txtCountItem;
     private TextView txtNewUnreadMessage;
     private TextView imvCancelForward;
     private TextView btnUp;
@@ -692,7 +694,7 @@ public class FragmentChat extends BaseFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
@@ -6510,7 +6512,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
-        final TextView textSend = (MaterialDesignTextView) viewBottomSheetForward.findViewById(R.id.txtSend);
+        final AppCompatTextView textSend = viewBottomSheetForward.findViewById(R.id.txtSend);
         textSend.setVisibility(View.INVISIBLE);
         final RecyclerView rcvItem = viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
         rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
@@ -6614,6 +6616,8 @@ public class FragmentChat extends BaseFragment
         fastItemAdapter = new FastItemAdapter();
         viewBottomSheet = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
+        send = viewBottomSheet.findViewById(R.id.txtSend);
+        txtCountItem = viewBottomSheet.findViewById(R.id.txtNumberItem);
         View camera = viewBottomSheet.findViewById(R.id.camera);
         View picture = viewBottomSheet.findViewById(R.id.picture);
         View video = viewBottomSheet.findViewById(R.id.video);
@@ -6622,8 +6626,9 @@ public class FragmentChat extends BaseFragment
         if (!isBot && chatType == CHAT) {
             isCardToCardEnabled = true;
         }
+        View close = viewBottomSheet.findViewById(R.id.close);
         View file = viewBottomSheet.findViewById(R.id.file);
-        View paint = viewBottomSheet.findViewById(R.id.paint);
+        /*View paint = viewBottomSheet.findViewById(R.id.paint);*/
         View location = viewBottomSheet.findViewById(R.id.location);
         View contact = viewBottomSheet.findViewById(R.id.contact);
 
@@ -6633,7 +6638,7 @@ public class FragmentChat extends BaseFragment
         TextView txtVideo = viewBottomSheet.findViewById(R.id.txtVideo);
         TextView txtMusic = viewBottomSheet.findViewById(R.id.txtMusic);
         TextView txtFile = viewBottomSheet.findViewById(R.id.txtFile);
-        TextView txtPaint = viewBottomSheet.findViewById(R.id.txtPaint);
+        /*TextView txtPaint = viewBottomSheet.findViewById(R.id.txtPaint);*/
         TextView txtLocation = viewBottomSheet.findViewById(R.id.txtLocation);
         TextView txtContact = viewBottomSheet.findViewById(R.id.txtContact);
         TextView txtCamera2 = viewBottomSheet.findViewById(R.id.txtCamera2);
@@ -6641,7 +6646,7 @@ public class FragmentChat extends BaseFragment
         TextView txtVideo2 = viewBottomSheet.findViewById(R.id.txtVideo2);
         TextView txtMusic2 = viewBottomSheet.findViewById(R.id.txtMusic2);
         TextView txtFile2 = viewBottomSheet.findViewById(R.id.txtFile2);
-        TextView txtPaint2 = viewBottomSheet.findViewById(R.id.txtPaint2);
+        /*TextView txtPaint2 = viewBottomSheet.findViewById(R.id.txtPaint2);*/
         TextView txtLocation2 = viewBottomSheet.findViewById(R.id.txtLocation2);
         TextView txtContact2 = viewBottomSheet.findViewById(R.id.txtContact2);
 
@@ -6651,16 +6656,18 @@ public class FragmentChat extends BaseFragment
         txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
 
         txtFile.setTextColor(Color.parseColor(G.attachmentColor));
-        txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
+        /*txtPaint.setTextColor(Color.parseColor(G.attachmentColor));*/
         txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
         txtContact.setTextColor(Color.parseColor(G.attachmentColor));
+        send.setTextColor(Color.parseColor(G.attachmentColor));
+        txtCountItem.setTextColor(Color.parseColor(G.attachmentColor));
 
         txtCamera2.setTextColor(Color.parseColor(G.attachmentColor));
         textPicture2.setTextColor(Color.parseColor(G.attachmentColor));
         txtVideo2.setTextColor(Color.parseColor(G.attachmentColor));
         txtMusic2.setTextColor(Color.parseColor(G.attachmentColor));
         txtFile2.setTextColor(Color.parseColor(G.attachmentColor));
-        txtPaint2.setTextColor(Color.parseColor(G.attachmentColor));
+        /*txtPaint2.setTextColor(Color.parseColor(G.attachmentColor));*/
         txtLocation2.setTextColor(Color.parseColor(G.attachmentColor));
         txtContact2.setTextColor(Color.parseColor(G.attachmentColor));
 
@@ -6681,6 +6688,13 @@ public class FragmentChat extends BaseFragment
                         FragmentEditImage.textImageList.put(path, item);
                     } else {
                         FragmentEditImage.textImageList.remove(path);
+                    }
+                    if (FragmentEditImage.textImageList.size() > 0) {
+                        send.setText(getString(R.string.md_send_button));
+                        txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + getString(item));
+                    } else {
+                        send.setText(getString(R.string.close_icon));
+                        txtCountItem.setText(getString(R.string.navigation_drawer_close));
                     }
                 }
             }
@@ -6942,13 +6956,7 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        /*request_cardToCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cardToCardClick(v);
-            }
-        });*/
-        /*close.setOnClickListener(new View.OnClickListener() {
+        close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -6956,12 +6964,10 @@ public class FragmentChat extends BaseFragment
                     bottomSheetDialog.dismiss();
                     fastItemAdapter.clear();
                     //send.setImageResource(R.mipmap.ic_close);
-                    send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                    txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                    send.setText(getString(R.string.close_icon));
+                    txtCountItem.setText(getString(R.string.navigation_drawer_close));
 
-                    *//**
-                     * sort list
-                     *//*
+
                     final ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
                     for (Map.Entry<String, StructBottomSheet> items : FragmentEditImage.textImageList.entrySet()) {
                         itemList.add(items.getValue());
@@ -7002,7 +7008,7 @@ public class FragmentChat extends BaseFragment
                     bottomSheetDialog.dismiss();
                 }
             }
-        });*/
+        });
         file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -7023,7 +7029,7 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
-        paint.setOnClickListener(new View.OnClickListener() {
+        /*paint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
@@ -7033,7 +7039,7 @@ public class FragmentChat extends BaseFragment
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -7589,16 +7595,16 @@ public class FragmentChat extends BaseFragment
         bottomSheetDialog.show();
         if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
             //send.setText(R.mipmap.send2);
-            /*if (send != null)
-                send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));*/
-            /*if (txtCountItem != null)
-                txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));*/
+            if (send != null)
+                send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+            if (txtCountItem != null)
+                txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
         } else {
             //send.setImageResource(R.mipmap.ic_close);
-            /*if (send != null)
-                send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));*/
-            /*if (txtCountItem != null)
-                txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));*/
+            if (send != null)
+                send.setText(G.fragmentActivity.getResources().getString(R.string.close_icon));
+            if (txtCountItem != null)
+                txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
         }
     }
 
