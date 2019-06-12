@@ -1842,25 +1842,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     public void onBotBtnClick(View v) {
-        try {
+        try (final Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
-                try {
-                    Long identity = System.currentTimeMillis();
-                    Realm realm = Realm.getDefaultInstance();
+                Long identity = System.currentTimeMillis();
 
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
-                            G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
-                            messageClickListener.sendFromBot(realmRoomMessage);
-                        }
-                    });
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
+                        G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
+                        messageClickListener.sendFromBot(realmRoomMessage);
+                    }
+                });
 
-                } catch (Exception e) {
-                }
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
                 HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
 
@@ -1875,7 +1871,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Long identity = System.currentTimeMillis();
-                            Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -1910,7 +1905,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 @Override
                                 public void setLocationResponse(Double latitude, Double longitude) {
                                     Long identity = System.currentTimeMillis();
-                                    Realm realm = Realm.getDefaultInstance();
 
                                     realm.executeTransaction(new Realm.Transaction() {
                                         @Override
@@ -1935,7 +1929,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                 JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                Realm realm = Realm.getDefaultInstance();
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
                 long peerId;
                 if (room != null && room.getChatRoom() != null) {
@@ -1943,7 +1936,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } else {
                     peerId = Long.parseLong(mMessage.senderID);
                 }
-                realm.close();
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
                 CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
