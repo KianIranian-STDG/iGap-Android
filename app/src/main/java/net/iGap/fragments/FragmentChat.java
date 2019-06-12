@@ -2535,7 +2535,7 @@ public class FragmentChat extends BaseFragment
         rippleMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View rippleView) {
-
+                if (!AndroidUtils.canOpenDialog()) {return;}
                 final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
 
@@ -3811,6 +3811,7 @@ public class FragmentChat extends BaseFragment
 
     private void dialogReport(final boolean isMessage, final long messageId) {
 
+        if (!AndroidUtils.canOpenDialog()) {return;}
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
 
         View v = dialog.getCustomView();
@@ -4715,6 +4716,7 @@ public class FragmentChat extends BaseFragment
             roomMessageType = message.messageType;
         }
 
+        if (!AndroidUtils.canOpenDialog()) {return;}
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
 
         View v = dialog.getCustomView();
@@ -5072,6 +5074,7 @@ public class FragmentChat extends BaseFragment
                         delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
                     }
 
+                    if (!AndroidUtils.canOpenDialog()) {return;}
                     new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
