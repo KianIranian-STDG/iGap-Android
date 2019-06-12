@@ -14,7 +14,6 @@ import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -28,10 +27,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentSecurity;
 import net.iGap.fragments.FragmentSecurityRecovery;
-import net.iGap.fragments.FragmentSetSecurityPassword;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnTwoStepPassword;
+import net.iGap.model.SecurityRecoveryModel;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationChangeHint;
 import net.iGap.request.RequestUserTwoStepVerificationChangeRecoveryEmail;
@@ -682,49 +680,6 @@ public class FragmentSecurityViewModel extends ViewModel {
         }
 
         closeKeyboard(v);
-    }
-
-    public class SecurityRecoveryModel{
-
-        private Security security;
-        private String questionOne;
-        private String questionTwo;
-        private String emailPatern;
-        private boolean isEmail;
-        private boolean isConfirmEmail;
-
-        public SecurityRecoveryModel(Security security, String questionOne, String questionTwo, String emailPatern, boolean isEmail, boolean isConfirmEmail) {
-            this.security = security;
-            this.questionOne = questionOne;
-            this.questionTwo = questionTwo;
-            this.emailPatern = emailPatern;
-            this.isEmail = isEmail;
-            this.isConfirmEmail = isConfirmEmail;
-        }
-
-        public Security getSecurity() {
-            return security;
-        }
-
-        public String getQuestionOne() {
-            return questionOne;
-        }
-
-        public String getQuestionTwo() {
-            return questionTwo;
-        }
-
-        public String getEmailPatern() {
-            return emailPatern;
-        }
-
-        public boolean isEmail() {
-            return isEmail;
-        }
-
-        public boolean isConfirmEmail() {
-            return isConfirmEmail;
-        }
     }
 
 }

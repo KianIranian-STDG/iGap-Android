@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -41,8 +42,11 @@ import io.realm.Realm;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
 
-    public ContactItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    private FragmentActivity activity;
+
+    public ContactItem(FragmentActivity activity, MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
+        this.activity = activity;
     }
 
     @Override
@@ -102,7 +106,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
     @Override
     public ViewHolder getViewHolder(View v) {
-        return new ViewHolder(v);
+        return new ViewHolder(activity,v);
     }
 
     protected static class ViewHolder extends NewChatItemHolder {
@@ -121,7 +125,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         private int contactStatus;
         private long contactId;
 
-        public ViewHolder(View view) {
+        public ViewHolder(FragmentActivity activity,View view) {
             super(view);
 
             contactImage = new AppCompatImageView(getContext());
@@ -249,7 +253,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
             viewContactBtn.setOnClickListener(v -> {
                 if (contactStatus == IN_CONTACT_AND_HAVE_IGAP) {
-                    //new HelperFragment(FragmentContactsProfile.newInstance(0, contactId,"Others")).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, contactId,"Others")).setReplace(false).load();
                 } else if (contactStatus == NOT_CONTACT_AND_HAVE_NOT_IGAP) {
                     Intent intent = new Intent(Intent.ACTION_INSERT);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -265,7 +269,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
                 if (contactStatus == NOT_CONTACT_AND_HAVE_NOT_IGAP) {
                     FragmentCallAction callAction = new FragmentCallAction();
                     callAction.setPhoneNumber(getContactNumberTv());
-                    //callAction.show(G.fragmentManager, null);
+                    callAction.show(activity.getSupportFragmentManager(), null);
                 }
             });
         }

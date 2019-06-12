@@ -1697,6 +1697,8 @@
 
     <string name="two_step_verification_description">يمكنك تحديد رمز المرور لحسابك و في حال الدخول إلى الحساب بواسطة جهاز آخر تحتاج إلى ادخال هذا الرمز. إضافة إلى ذلك هذا الرمز ستستلم رمزاً للتأكيد عبر الرسالة القصيرة أثناء الدخول إلى حسابك بواسطة جهاز آخر.. </string>
 
+    <string name="two_step_verification_disable">التحقق من خطوتين معطل</string>
+
     <string name="enter_a_password"> أدخل رمز المرور</string>
 
     <string name="please_enter_your_password"> من فضلك أدخل رمز المرور</string>

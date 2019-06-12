@@ -104,6 +104,7 @@ public class BaseFragment extends SwipeBackFragment {
         }
         hideKeyboard();
         if (getActivity() != null) {
+            //Todo : check logic and fixed this
             if (getActivity() instanceof ActivityMain) {
                 for (int i = getActivity().getSupportFragmentManager().getFragments().size() - 1; i >= 0; i--) {
                     Fragment f = getActivity().getSupportFragmentManager().getFragments().get(i);

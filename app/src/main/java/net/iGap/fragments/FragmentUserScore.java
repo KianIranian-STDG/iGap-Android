@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.LinearLayout;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentUserScoreBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.UserScoreViewModel;
@@ -47,7 +47,7 @@ public class FragmentUserScore extends BaseFragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        if (getActivity()!=null){
+                        if (getActivity() != null) {
                             getActivity().onBackPressed();
                         }
                     }
@@ -55,6 +55,9 @@ public class FragmentUserScore extends BaseFragment {
                     @Override
                     public void onRightIconClickListener(View view) {
                         // to go history
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentIVandActivities.newInstance()).setReplace(false).load();
+                        }
                     }
                 });
 
