@@ -145,7 +145,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         RaadApp.selectedMerchant = null;
 
         mHelperToolbar = HelperToolbar.create()
-                .setContext(G.context)
+                .setContext(getContext())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.setting_icon , R.string.group_icon)
