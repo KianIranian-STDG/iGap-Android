@@ -13,6 +13,7 @@ import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
@@ -25,7 +26,6 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
-import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestWrapper;
 
 import java.util.List;
@@ -133,7 +133,9 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
             showLoading.setValue(true);
             try {
                 ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
-                userVerify.setCode(Integer.parseInt(verificationCode));
+                userVerify.setCode(Integer.parseInt(verificationCode
+                        .replaceAll("[^0-9]", "")
+                        .replaceAll("[\u0000-\u001f]", "")));
                 userVerify.setUsername(userName);
                 RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
                     @Override
@@ -246,6 +248,7 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
                         // get user info for set nick name and after from that go to ActivityMain
                         getUserInfo();
                         requestUserInfo();
+                        HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);
                     }
                     realm.close();
                 });

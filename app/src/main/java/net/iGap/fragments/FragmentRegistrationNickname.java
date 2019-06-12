@@ -42,6 +42,7 @@ import net.iGap.databinding.FragmentRegistrationNicknameBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
@@ -146,6 +147,7 @@ public class FragmentRegistrationNickname extends BaseFragment {
         });
 
         viewModel.goToMain.observe(this, userId -> {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
             if (getActivity() != null && userId != null) {
                 Intent intent = new Intent(getActivity(), ActivityMain.class);
                 intent.putExtra(ARG_USER_ID, userId);
