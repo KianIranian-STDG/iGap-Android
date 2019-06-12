@@ -1126,6 +1126,18 @@ public class FragmentChat extends BaseFragment
         //MusicPlayer.chatLayout = null;
         //ActivityCall.stripLayoutChat = null;
 
+        try {
+            MusicPlayer.chatLayout = null;
+            MusicPlayer.shearedMediaLayout = null;
+
+            if (MusicPlayer.mp != null && MusicPlayer.mainLayout != null) {
+                MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
+                MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
+                MusicPlayer.playerStateChangeListener.postValue(false);
+            }
+        }catch (Exception ex){
+
+        }
 
         super.onStop();
     }
@@ -1152,6 +1164,7 @@ public class FragmentChat extends BaseFragment
         if (realmChat != null && !realmChat.isClosed()) {
             realmChat.close();
         }
+
 
     }
 

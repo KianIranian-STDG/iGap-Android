@@ -27,6 +27,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
@@ -109,6 +110,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
+import yogesh.firzen.mukkiasevaigal.M;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
@@ -239,7 +241,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         setListener();
 
         //MusicPlayer.shearedMediaLayout = mediaLayout;
-        //ActivityMain.setMediaLayout();
+        ActivityMain.setMediaLayout();
     }
 
     @Override
@@ -262,7 +264,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         MusicPlayer.shearedMediaLayout = null;
 
-        //ActivityMain.setMediaLayout();
+        ActivityMain.setMediaLayout();
     }
 
     private Realm getRealm() {
@@ -360,10 +362,29 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         recyclerView.addOnScrollListener(onScrollListener);
 
+        MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
+            checkMusicPlayerView();
+        });
+
         openLayout();
         initAppbarSelected(view);
         makeSharedTypesViews();
         checkSharedButtonsBackgrounds();
+        checkMusicPlayerView();
+    }
+
+    private void checkMusicPlayerView() {
+
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
+
+        if (MusicPlayer.shearedMediaLayout != null && MusicPlayer.mp != null ){
+            lp.setMargins(0 , getDimen(R.dimen.margin_for_below_layouts_of_toolbar_with_shared_media_with_player) , 0 , 0);
+        }else {
+            lp.setMargins(0 , getDimen(R.dimen.margin_for_below_layouts_of_toolbar_with_shared_media) , 0 , 0);
+        }
+
+        recyclerView.setLayoutParams(lp);
+
     }
 
     private void openLayout() {

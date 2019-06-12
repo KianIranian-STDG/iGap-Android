@@ -495,25 +495,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (mp != null) {
             mp.stop();
             updateFastAdapter(MusicPlayer.messageId);
+
         }
 
 
-        if (MusicPlayer.chatLayout != null) {
-            MusicPlayer.chatLayout.setVisibility(View.GONE);
-        }
-
-        if (MusicPlayer.mainLayout != null) {
-            MusicPlayer.mainLayout.setVisibility(View.GONE);
-        }
-
-        if (MusicPlayer.shearedMediaLayout != null) {
-            MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
-        }
-
-        if (MusicPlayer.layoutTripMusic != null) {
-            MusicPlayer.layoutTripMusic.setVisibility(View.GONE);
-        }
-        MusicPlayer.playerStateChangeListener.setValue(false);
     }
 
     public static void nextMusic() {
@@ -636,7 +621,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.GONE);
-                playerStateChangeListener.setValue(false);
+                //playerStateChangeListener.setValue(false);
             }
 
             if (onComplete != null) {
@@ -679,6 +664,24 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             mRealm.close();
             mRealm = null;
         }
+
+
+        if (MusicPlayer.chatLayout != null) {
+            MusicPlayer.chatLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.mainLayout != null) {
+            MusicPlayer.mainLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.shearedMediaLayout != null) {
+            MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.layoutTripMusic != null) {
+            MusicPlayer.layoutTripMusic.setVisibility(View.GONE);
+        }
+        MusicPlayer.playerStateChangeListener.setValue(false);
     }
 
     private static String getMusicName(long messageId, String name) {
@@ -774,14 +777,13 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 mp.reset();
                 mp.release();
             }
+            musicName = getMusicName(Long.parseLong(messageID), name);
+            mp = new MediaPlayer();
 
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.VISIBLE);
                 playerStateChangeListener.setValue(true);
-
             }
-            musicName = getMusicName(Long.parseLong(messageID), name);
-            mp = new MediaPlayer();
         } catch (Exception e) {
             e.printStackTrace();
         }
