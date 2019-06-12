@@ -12,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -74,15 +77,22 @@ public class OrderInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_info, container, false);
-        /*ViewGroup rootView = view.findViewById(R.id.rootView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
-        }*/
-        RaadToolBar appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        appBar.showBack();
-        appBar.setTitle(getString(R.string.order_info));
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.order_info))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
 
         mOrderView = view.findViewById(R.id.order_view);
         showReceiptButton = view.findViewById(R.id.show_receipt_button);
