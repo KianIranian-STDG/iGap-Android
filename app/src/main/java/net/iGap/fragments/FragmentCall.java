@@ -235,16 +235,13 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
                             positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Realm realm = Realm.getDefaultInstance();
-                            try {
+                            try (Realm realm = Realm.getDefaultInstance()) {
                                 RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
                                 new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                                 imgCallEmpty.setVisibility(View.VISIBLE);
                                 empty_call.setVisibility(View.VISIBLE);
                             } catch (Exception e) {
                                 e.printStackTrace();
-                            } finally {
-                                realm.close();
                             }
                         }
                     }).negativeText(R.string.B_cancel).show();

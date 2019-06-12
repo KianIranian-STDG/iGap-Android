@@ -104,6 +104,7 @@ public class FileUploadResponse extends MessageHandler {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
+                                G.refreshRealmUi();
                                 final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identityFileUpload.identify)).findFirst();
                                 if (message != null && message.isValid()) {
                                     G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
