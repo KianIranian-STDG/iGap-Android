@@ -1673,7 +1673,7 @@ public class FragmentChat extends BaseFragment
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(),favorite.getValue().replace("@", ""), HelperUrl.ChatEntry.chat);
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), favorite.getValue().replace("@", ""), HelperUrl.ChatEntry.chat);
                                     }
                                 });
                             }
@@ -6734,7 +6734,7 @@ public class FragmentChat extends BaseFragment
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 1, GridLayoutManager.HORIZONTAL, false));
         rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
-        bottomSheetDialog = new BottomSheetDialog(getActivity(),G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
+        bottomSheetDialog = new BottomSheetDialog(getActivity(), G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
         bottomSheetDialog.setContentView(viewBottomSheet);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheet.getParent());
 
@@ -7559,7 +7559,7 @@ public class FragmentChat extends BaseFragment
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                fastItemAdapter.add(new AdapterCamera("",onClickCamera).withIdentifier(99));
+                                fastItemAdapter.add(new AdapterCamera("", onClickCamera).withIdentifier(99));
                                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
                                     fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
                                 }
@@ -8011,7 +8011,7 @@ public class FragmentChat extends BaseFragment
 
             if (finalMessageType == CONTACT) {
                 messageInfo.channelExtra = new StructChannelExtra();
-                mAdapter.add(new ContactItem(mAdapter, chatType, this).setMessage(messageInfo));
+                mAdapter.add(new ContactItem(getActivity(), mAdapter, chatType, this).setMessage(messageInfo));
             }
         }
 
@@ -8306,9 +8306,9 @@ public class FragmentChat extends BaseFragment
                         break;
                     case LOCATION:
                         if (!addTop) {
-                            mAdapter.add(new LocationItem(mAdapter, chatType, this,getActivity()).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new LocationItem(mAdapter, chatType, this, getActivity()).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new LocationItem(mAdapter, chatType, this,getActivity()).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LocationItem(mAdapter, chatType, this, getActivity()).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case FILE:
@@ -8343,9 +8343,9 @@ public class FragmentChat extends BaseFragment
                         break;
                     case CONTACT:
                         if (!addTop) {
-                            mAdapter.add(new ContactItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ContactItem(getActivity(), mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ContactItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ContactItem(getActivity(), mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case GIF:
