@@ -34,6 +34,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.helper.HelperFragment;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -147,6 +148,12 @@ public class FragmentActivation extends BaseFragment {
         viewModel.clearActivationCode.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 clearActivationCode();
+            }
+        });
+
+        viewModel.goToTwoStepVerificationPage.observe(this, userId -> {
+            if (getActivity() != null && userId != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), TwoStepVerificationFragment.newInstant(userId)).setResourceContainer(R.id.ar_layout_root).load(false);
             }
         });
 

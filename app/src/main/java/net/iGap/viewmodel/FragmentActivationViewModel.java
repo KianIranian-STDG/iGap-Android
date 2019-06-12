@@ -48,6 +48,7 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
+    public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
 
     private CountDownTimer countDownTimer;
     private ProtoUserRegister.UserRegisterResponse.Method methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
@@ -148,7 +149,7 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
                     public void onUserVerifyError(final int majorCode, int minorCode, final int time) {
                         try {
                             if (majorCode == 184 && minorCode == 1) {
-                                checkPassword(verificationCode, false);
+                                G.handler.post(()->goToTwoStepVerificationPage.setValue(userId));
                             } else if (majorCode == 102 && minorCode == 1) {
                                 G.handler.post(() -> {
                                     showLoading.setValue(false);
@@ -412,39 +413,6 @@ public class FragmentActivationViewModel extends ViewModel /*implements OnSecuri
         } else {
             G.handler.postDelayed(() -> requestRegister(), 1000);
         }
-    }
-
-    private void checkPassword(final String verificationCode, final boolean isQrCode) {
-        new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                if (!isQrCode) {
-                    /*callBackTxtVerifySms.set((G.fragmentActivity.getResources().getString(R.string.rg_verify_register2)));
-                    prgVerifySmsVisibility.set(View.GONE);
-                    imgVerifySmsVisibility.set(View.VISIBLE);
-                    //imgVerifySmsColor.set(R.mipmap.check);
-                    imgVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-                    txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));*/
-
-
-                    //newUser = newUserR;
-                    //token = tokenR;
-
-                    /*prgVerifyKeyVisibility.set(View.GONE);
-                    imgVerifyKeyVisibility.set(View.VISIBLE);
-                    txtVerifyKeColor.set(G.context.getResources().getColor(R.color.rg_text_verify));*/
-                    //userLogin(token);
-
-                }
-                /*rootMainLayoutVisibility.set(View.GONE);
-                rootCheckPasswordVisibility.set(View.VISIBLE);
-                txtOkVisibility.set(View.VISIBLE);
-                qrCodeVisibility.set(View.GONE);*/
-
-            }
-        });
     }
 
     private void errorVerifySms(Reason reason) { //when don't receive sms and open rg_dialog for enter code

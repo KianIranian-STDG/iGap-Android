@@ -49,6 +49,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.helper.HelperFragment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
@@ -230,6 +231,26 @@ public class FragmentRegister extends BaseFragment {
                     dialogQrCode.dismiss();
             }
         });
+
+        fragmentRegisterViewModel.goToWelcomePage.observe(this, userId -> {
+            if (getActivity() != null && userId != null) {
+                WelcomeFragment fragment = new WelcomeFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("newUser", true);
+                bundle.putLong("userId", userId);
+                fragment.setArguments(bundle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
+            }
+        });
+
+        fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(this, userId -> {
+            if (getActivity() != null && userId != null) {
+                if (dialogQrCode != null && dialogQrCode.isShowing()) {
+                    dialogQrCode.dismiss();
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), TwoStepVerificationFragment.newInstant(userId)).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
+            }
+        });
     }
 
     private void showCountryDialog() {
@@ -383,7 +404,7 @@ public class FragmentRegister extends BaseFragment {
             dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
             dialogTermsAndCondition.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
-            termsText.setText(fragmentRegisterViewModel.callbackTxtAgreement.get());
+            termsText.setText(fragmentRegisterViewModel.getAgreementDescription());
             dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
             dialogTermsAndCondition.show();
         }
@@ -449,7 +470,7 @@ public class FragmentRegister extends BaseFragment {
         savedInstanceState.putString(KEY_SAVE_PHONE_NUMBER_NUMBER, fragmentRegisterViewModel.callBackEdtPhoneNumber.get());
         savedInstanceState.putString(KEY_SAVE_NAME_COUNTRY, fragmentRegisterBinding.country.getText().toString());
         savedInstanceState.putString(KEY_SAVE_REGEX, fragmentRegisterViewModel.regex);
-        savedInstanceState.putString(KEY_SAVE_AGREEMENT, fragmentRegisterViewModel.callbackTxtAgreement.get());
+        savedInstanceState.putString(KEY_SAVE_AGREEMENT, fragmentRegisterViewModel.getAgreementDescription());
         savedInstanceState.putInt(KEY_SAVE, fragmentRegisterViewModel.ONETIME);
 
         // Always call the superclass so it can save the view hierarchy state
