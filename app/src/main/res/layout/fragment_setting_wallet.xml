@@ -22,21 +22,11 @@
     android:orientation="vertical">
 
 
-      <ir.radsense.raadcore.app.RaadToolBar
-        android:id="@+id/app_bar"
+    <LinearLayout
+        android:id="@+id/toolbarLayout"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
-
-        <android.support.v7.widget.AppCompatImageButton
-          android:id="@+id/back_button"
-          android:layout_width="56dp"
-          android:layout_height="56dp"
-          android:layout_alignParentLeft="true"
-          android:background="#00ffffff"
-          android:padding="8dp"
-          android:scaleType="centerInside"
-          app:srcCompat="@drawable/ic_action_back_white" />
-      </ir.radsense.raadcore.app.RaadToolBar>
+        android:layout_height="@dimen/toolbar_height" />
 
     <LinearLayout
       android:id="@+id/btnSetNewPassword"
