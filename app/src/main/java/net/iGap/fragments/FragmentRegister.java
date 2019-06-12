@@ -133,7 +133,7 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.goNextStep.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
+            if (getActivity()!=null&&aBoolean != null && aBoolean) {
                 FragmentActivation fragment = new FragmentActivation();
                 Bundle bundle = new Bundle();
                 bundle.putString("userName", fragmentRegisterViewModel.userName);
@@ -141,8 +141,7 @@ public class FragmentRegister extends BaseFragment {
                 bundle.putString("authorHash", fragmentRegisterViewModel.authorHash);
                 bundle.putString("phoneNumber", fragmentRegisterViewModel.callBackEdtPhoneNumber.get());
                 fragment.setArguments(bundle);
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentRegister.this).commitAllowingStateLoss();
+                new HelperFragment(getActivity().getSupportFragmentManager(),fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
             }
         });
 
@@ -165,10 +164,10 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                new DefaultRoundDialog(G.fragmentActivity).setMessage(getString(R.string.Re_dialog_verify_number_part1) + "\n" +
+            if (getActivity()!=null&&aBoolean != null && aBoolean) {
+                new DefaultRoundDialog(getActivity()).setMessage(getString(R.string.Re_dialog_verify_number_part1) + "\n" +
                         fragmentRegisterViewModel.callbackEdtCodeNumber.get() + "" + fragmentRegisterViewModel.callBackEdtPhoneNumber.get() + "\n" +
-                        G.fragmentActivity.getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, (dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber()).setNegativeButton(R.string.B_edit, null).show();
+                        getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, (dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber()).setNegativeButton(R.string.B_edit, null).show();
             }
         });
 
@@ -254,102 +253,104 @@ public class FragmentRegister extends BaseFragment {
     }
 
     private void showCountryDialog() {
-        Dialog dialogChooseCountry = new Dialog(G.fragmentActivity);
-        dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogChooseCountry.setContentView(R.layout.rg_dialog);
-        dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if (getActivity()!=null){
+            Dialog dialogChooseCountry = new Dialog(getActivity());
+            dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogChooseCountry.setContentView(R.layout.rg_dialog);
+            dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        int setWidth = (int) (G.context.getResources().getDisplayMetrics().widthPixels * 0.9);
-        int setHeight = (int) (G.context.getResources().getDisplayMetrics().heightPixels * 0.9);
-        dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
-        //
-        final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
-        SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
+            int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
+            int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
+            dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
+            //
+            final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
+            SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
 
-        txtTitle.setOnClickListener(view -> {
-            edtSearchView.setIconified(false);
-            edtSearchView.setIconifiedByDefault(true);
-            txtTitle.setVisibility(View.GONE);
-        });
+            txtTitle.setOnClickListener(view -> {
+                edtSearchView.setIconified(false);
+                edtSearchView.setIconifiedByDefault(true);
+                txtTitle.setVisibility(View.GONE);
+            });
 
-        // close SearchView and show title again
-        edtSearchView.setOnCloseListener(() -> {
-            txtTitle.setVisibility(View.VISIBLE);
-            return false;
-        });
+            // close SearchView and show title again
+            edtSearchView.setOnCloseListener(() -> {
+                txtTitle.setVisibility(View.VISIBLE);
+                return false;
+            });
 
-        final ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
-        AdapterDialog adapterDialog = new AdapterDialog(G.fragmentActivity, fragmentRegisterViewModel.structCountryArrayList);
-        listView.setAdapter(adapterDialog);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            fragmentRegisterViewModel.setCountry(adapterDialog.getItem(position));
-            dialogChooseCountry.dismiss();
-        });
+            final ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
+            AdapterDialog adapterDialog = new AdapterDialog(getActivity(), fragmentRegisterViewModel.structCountryArrayList);
+            listView.setAdapter(adapterDialog);
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                fragmentRegisterViewModel.setCountry(adapterDialog.getItem(position));
+                dialogChooseCountry.dismiss();
+            });
 
-        final ViewGroup root = dialogChooseCountry.findViewById(android.R.id.content);
-        InputMethodManager im = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
-        SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
-        softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-            @Override
-            public void onSoftKeyboardHide() {
-                G.handler.post(() -> {
-                    if (edtSearchView.getQuery().toString().length() > 0) {
-                        edtSearchView.setIconified(false);
-                        edtSearchView.clearFocus();
-                        txtTitle.setVisibility(View.GONE);
-                    } else {
-                        edtSearchView.setIconified(true);
-                        txtTitle.setVisibility(View.VISIBLE);
-                    }
-                    adapterDialog.notifyDataSetChanged();
-                });
-            }
-
-            @Override
-            public void onSoftKeyboardShow() {
-                G.handler.post(() -> txtTitle.setVisibility(View.GONE));
-            }
-        });
-
-        final View border = dialogChooseCountry.findViewById(R.id.rg_borderButton);
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i > 0) {
-                    border.setVisibility(View.VISIBLE);
-                } else {
-                    border.setVisibility(View.GONE);
+            final ViewGroup root = dialogChooseCountry.findViewById(android.R.id.content);
+            InputMethodManager im = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
+            softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+                @Override
+                public void onSoftKeyboardHide() {
+                    G.handler.post(() -> {
+                        if (edtSearchView.getQuery().toString().length() > 0) {
+                            edtSearchView.setIconified(false);
+                            edtSearchView.clearFocus();
+                            txtTitle.setVisibility(View.GONE);
+                        } else {
+                            edtSearchView.setIconified(true);
+                            txtTitle.setVisibility(View.VISIBLE);
+                        }
+                        adapterDialog.notifyDataSetChanged();
+                    });
                 }
+
+                @Override
+                public void onSoftKeyboardShow() {
+                    G.handler.post(() -> txtTitle.setVisibility(View.GONE));
+                }
+            });
+
+            final View border = dialogChooseCountry.findViewById(R.id.rg_borderButton);
+            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                    if (i > 0) {
+                        border.setVisibility(View.VISIBLE);
+                    } else {
+                        border.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            AdapterDialog.mSelectedVariation = positionRadioButton;
+
+            adapterDialog.notifyDataSetChanged();
+
+            edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+
+                    adapterDialog.getFilter().filter(s);
+                    return false;
+                }
+            });
+
+            dialogChooseCountry.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialogChooseCountry.dismiss());
+
+            if (!(getActivity()).isFinishing()) {
+                dialogChooseCountry.show();
             }
-        });
-
-        AdapterDialog.mSelectedVariation = positionRadioButton;
-
-        adapterDialog.notifyDataSetChanged();
-
-        edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-
-                adapterDialog.getFilter().filter(s);
-                return false;
-            }
-        });
-
-        dialogChooseCountry.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialogChooseCountry.dismiss());
-
-        if (!(G.fragmentActivity).isFinishing()) {
-            dialogChooseCountry.show();
         }
     }
 
@@ -368,7 +369,7 @@ public class FragmentRegister extends BaseFragment {
             return;
         }
 
-        MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(data.getTitle()).customView(R.layout.dialog_remind_time, true)
+        MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(data.getTitle()).customView(R.layout.dialog_remind_time, true)
                 .positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive((dialog, which) -> {
                     fragmentRegisterViewModel.timerFinished();
                     dialog.dismiss();

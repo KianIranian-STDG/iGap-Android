@@ -25,11 +25,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentActivationBinding;
@@ -112,7 +109,7 @@ public class FragmentActivation extends BaseFragment {
             }
         });
         viewModel.isNewUser.observe(this, aBoolean -> {
-            if (aBoolean != null) {
+            if (getActivity() != null && aBoolean != null) {
                 if (aBoolean) {
                     WelcomeFragment fragment = new WelcomeFragment();
                     Bundle bundle = new Bundle();
@@ -170,12 +167,10 @@ public class FragmentActivation extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        try {
+        if (getActivity() != null) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
-            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
-        } catch (Exception e) {
-            e.printStackTrace();
+            getActivity().registerReceiver(smsReceiver, intentFilter);
         }
     }
 
@@ -209,34 +204,18 @@ public class FragmentActivation extends BaseFragment {
             });
 
             SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
-
             Task<Void> task = client.startSmsRetriever();
-            task.addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.e(TAG, "sms API successfully started   ");
-                }
-            });
-
-            task.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "sms Fail to start API   ");
-                }
-            });
+            task.addOnSuccessListener(aVoid -> Log.e(TAG, "sms API successfully started   "));
+            task.addOnFailureListener(e -> Log.e(TAG, "sms Fail to start API   "));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void unregisterReceiver() {
-        try {
-            if (smsReceiver != null) {
-                G.fragmentActivity.unregisterReceiver(smsReceiver);
-                smsReceiver = null;
-            }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        if (smsReceiver != null && getActivity() != null) {
+            getActivity().unregisterReceiver(smsReceiver);
+            smsReceiver = null;
         }
     }
 
