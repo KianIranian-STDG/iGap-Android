@@ -471,13 +471,12 @@ public class BotInit implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        try {
+        try (Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
-                    Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -502,7 +501,6 @@ public class BotInit implements View.OnClickListener {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Long identity = System.currentTimeMillis();
-                            Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -537,7 +535,6 @@ public class BotInit implements View.OnClickListener {
                                 @Override
                                 public void setLocationResponse(Double latitude, Double longitude) {
                                     Long identity = System.currentTimeMillis();
-                                    Realm realm = Realm.getDefaultInstance();
                                     realm.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {

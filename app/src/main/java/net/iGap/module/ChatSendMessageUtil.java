@@ -248,15 +248,14 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
      * @param fakeMessageId messageId that create when created this message
      */
     private void makeFailed(final long fakeMessageId) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
-            }
-        });
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
+                }
+            });
+        }
     }
 
     @Override

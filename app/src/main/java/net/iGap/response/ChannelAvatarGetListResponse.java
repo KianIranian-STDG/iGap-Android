@@ -35,18 +35,17 @@ public class ChannelAvatarGetListResponse extends MessageHandler {
         super.handler();
         final ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder builder = (ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder) message;
         final long ownerId = Long.parseLong(identity);
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAvatar.deleteAllAvatars(ownerId, realm);
-                for (ProtoGlobal.Avatar avatar : builder.getAvatarList()) {
-                    RealmAvatar.putOrUpdate(realm, ownerId, avatar);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAvatar.deleteAllAvatars(ownerId, realm);
+                    for (ProtoGlobal.Avatar avatar : builder.getAvatarList()) {
+                        RealmAvatar.putOrUpdate(realm, ownerId, avatar);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     @Override

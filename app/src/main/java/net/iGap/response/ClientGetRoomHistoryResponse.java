@@ -67,7 +67,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-                            realm.close();
 
                             G.handler.post(new Runnable() {
                                 @Override
@@ -79,9 +78,9 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     }, new Realm.Transaction.OnError() {
                         @Override
                         public void onError(Throwable error) {
-                            realm.close();
                         }
                     });
+                    realm.close();
                 }
             });
         } else {
