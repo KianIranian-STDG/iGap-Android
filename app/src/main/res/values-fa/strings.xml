@@ -915,6 +915,7 @@
     <string name="set_additional_password">تعیین رمزعبور</string>
     <string name="two_step_verification_title">فعال سازی دو مرحله ای </string>
     <string name="two_step_verification_description">شما می توانید رمزعبوری برای حساب کاربری خود تعیین کنید، این رمز زمانی مورد نیاز است که بخواهید جهت ورود به حساب کاربریتان از دستگاه دیگری استفاده نمایید. بعلاوهٔ این رمز شما زمان ورود به حساب کاربری کد تأییدی نیز به صورت پیامک دریافت خواهید کرد. </string>
+    <string name="two_step_verification_disable">فعال سازی دو مرحله ای غیر فعال شد.</string>
     <string name="enter_a_password"> رمز عبور را وارد کنید</string>
     <string name="please_enter_your_password"> لطفاً رمز عبور خود را وارد نمایید</string>
     <string name="your_password">رمزعبور </string>

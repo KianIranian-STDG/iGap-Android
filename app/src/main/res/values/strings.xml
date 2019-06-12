@@ -949,6 +949,7 @@
     <string name="set_additional_password">Set Additional Password</string>
     <string name="two_step_verification_title">Two-Step Verification</string>
     <string name="two_step_verification_description">You can set a password that will be required when you log in on a new device in addition to the code you get via SMS.</string>
+    <string name="two_step_verification_disable">Two-Step Verification is disable</string>
     <string name="enter_a_password">Enter a Password</string>
     <string name="please_enter_your_password">Please enter your Password</string>
     <string name="your_password">Your Password</string>

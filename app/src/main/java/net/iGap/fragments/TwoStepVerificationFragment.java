@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentTwoStepVerificationBinding;
+import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -48,7 +50,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
         viewModel = new TwoStepVerificationViewModel(getArguments().getLong(USER_ID));
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_two_step_verification, container, false);
         binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getActivity());
         return binding.getRoot();
     }
 
@@ -87,15 +89,20 @@ public class TwoStepVerificationFragment extends BaseFragment {
             }
         });
 
-        viewModel.goToMainPage.observe(this, go -> {
-            if (getActivity() != null && go != null) {
-                Intent intent = new Intent(getActivity(), ActivityMain.class);
-                intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, viewModel.userId);
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                getActivity().startActivity(intent);
-                getActivity().finish();
-            }
-        });
+        //ToDo:
+        if (getActivity() != null) {
+            viewModel.goToMainPage.observe(getActivity(), go -> {
+                if (getActivity() != null && go != null && go) {
+                    new DefaultRoundDialog(getActivity()).setTitle(R.string.warning).setMessage(R.string.two_step_verification_disable).setPositiveButton(R.string.dialog_ok, (dialog, which) -> {
+                        Intent intent = new Intent(getActivity(), ActivityMain.class);
+                        intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, viewModel.userId);
+                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                        getActivity().finish();
+                    }).show();
+                }
+            });
+        }
 
         viewModel.showDialogWaitTime.observe(this, time -> {
             if (getActivity() != null && time != null) {
@@ -147,7 +154,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
                 bundle.putBoolean("IS_CONFIRM_EMAIL", data.isConfirmEmail());
                 fragmentSecurityRecovery.setArguments(bundle);
 
-                new HelperFragment(getActivity().getSupportFragmentManager(),fragmentSecurityRecovery).setResourceContainer(R.id.ar_layout_root).load(false);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentSecurityRecovery).setResourceContainer(R.id.ar_layout_root).setAddToBackStack(true).load(false);
             }
         });
     }
