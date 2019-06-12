@@ -18,11 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -33,6 +36,7 @@ import org.paygear.web.Web;
 import java.util.HashMap;
 import java.util.Map;
 
+import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.utils.Typefaces;
@@ -44,7 +48,6 @@ import retrofit2.Response;
 
 public class SetCardPinFragment extends Fragment {
 
-    private RaadToolBar appBar;
     private EditText currentPass;
     private EditText newPass;
     private EditText confirmPass;
@@ -104,21 +107,35 @@ public class SetCardPinFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setTitle(getString(R.string.paygear_card_pin));
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.paygear_card_pin))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
         if (RaadApp.selectedMerchant != null) {
             if (RaadApp.selectedMerchant.getName() != null && !RaadApp.selectedMerchant.getName().equals("")) {
-                appBar.setTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getName());
+                toolbar.setDefaultTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getName());
             } else {
-                appBar.setTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getUsername());
+                toolbar.setDefaultTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getUsername());
             }
         } else {
-            appBar.setTitle(getString(R.string.paygear_card_pin));
+            toolbar.setDefaultTitle(getString(R.string.paygear_card_pin));
         }
 
-        appBar.showBack();
         ViewGroup root_current = view.findViewById(R.id.root_current);
         root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
 
