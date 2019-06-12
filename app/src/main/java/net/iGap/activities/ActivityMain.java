@@ -1152,6 +1152,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 //bundle.putString("TITLE", "New Chat");
+                bundle.putBoolean("isBackSwipable", true);
                 bundle.putString("TITLE", "ADD");
                 fragment.setArguments(bundle);
 
@@ -1362,7 +1363,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
-                pages.add(RegisteredContactsFragment.newInstance());
+                pages.add(RegisteredContactsFragment.newInstance(false));
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
@@ -1375,7 +1376,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             G.handler.postDelayed(() -> {
 
-                pages.add(RegisteredContactsFragment.newInstance());
+                pages.add(RegisteredContactsFragment.newInstance(false));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
