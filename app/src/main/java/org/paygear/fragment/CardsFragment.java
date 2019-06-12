@@ -41,7 +41,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.RefreshLayout;
@@ -72,11 +74,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CardsFragment extends Fragment implements OnFragmentInteraction, RefreshLayout, MerchantsListAdapter.ItemClickListener {
+public class CardsFragment extends Fragment implements ToolbarListener , OnFragmentInteraction, RefreshLayout, MerchantsListAdapter.ItemClickListener {
 
     private static final int COLLAPSE = 60;
 
-    private RaadToolBar appBar;
+    //private RaadToolBar appBar;
     private ImageView appBarImage;
     private TextView appBarTitle;
     private RecyclerRefreshLayout mRefreshLayout;
@@ -98,6 +100,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
     Dialog otpDialog;
 
     FragmentCardsBinding mBinding;
+    private HelperToolbar mHelperToolbar;
 
     public CardsFragment() {
     }
@@ -139,19 +142,24 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_WALLET_PAGE);
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         RaadApp.selectedMerchant = null;
 
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.setting_icon , R.string.group_icon)
+                .setListener(this)
+                .setDefaultTitle(getString(R.string.wallet));
 
 
+        mBinding.toolbarLayout.addView(mHelperToolbar.getView());
 
         if (mPayment != null) {
-            appBar.showBack();
-            appBar.setTitle(getString(R.string.select_card));
+            mHelperToolbar.setDefaultTitle(getString(R.string.select_card));
         } else {
-            setAppBar();
+            mHelperToolbar.setDefaultTitle(getString(R.string.wallet));
+           // mHelperToolbar.getLeftButton().setVisibility(View.INVISIBLE);
         }
         mRefreshLayout = view.findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(new RecyclerRefreshLayout.OnRefreshListener() {
@@ -180,7 +188,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         expandableLayout = view.findViewById(R.id.merchants_expandable_layout);
         merchantsRecycler = view.findViewById(R.id.merchants_recycler);
         merchantsList = RaadApp.merchants;
-        mBinding.WalletMenu.setVisibility(View.GONE);
+        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
         if (merchantsList != null) {
             if (merchantsList.size() > 0) {
                 setMerchantsAdapter();
@@ -198,39 +206,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
             load();
         }
 
-        mBinding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null)
-                    getActivity().onBackPressed();
-            }
-        });
-
-        mBinding.WalletMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() instanceof NavigationBarActivity) {
-                    if (expandableLayout != null) {
-                        if (expandableLayout.isExpanded())
-                            expandableLayout.collapse(true);
-                        else {
-                            expandableLayout.expand(true);
-                        }
-                    }
-                }
-            }
-        });
-
-        mBinding.settingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RaadApp.selectedMerchant = null;
-                if (getActivity() instanceof NavigationBarActivity) {
-                    ((NavigationBarActivity) getActivity()).pushFullFragment(
-                            FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
-                }
-            }
-        });
 
 
     }
@@ -250,9 +225,9 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         }
 
         if (merchantsList != null && merchantsList.size() > 0){
-            mBinding.WalletMenu.setVisibility(View.VISIBLE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
         } else {
-            mBinding.WalletMenu.setVisibility(View.GONE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
         }
 
         merchantsListAdapter = new MerchantsListAdapter(getContext(), merchantsList, Auth.getCurrentAuth().getId());
@@ -272,81 +247,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                 fragment instanceof CashOutRequestFragment) {
             load();
         }
-    }
-
-
-    private void setAppBar() {
-        FrameLayout appBarView = appBar.getBack();
-
-        Context context = getContext();
-        int dp8 = RaadCommonUtils.getPx(8, context);
-        int dp16 = RaadCommonUtils.getPx(16, context);
-
-        LinearLayout titleLayout = new LinearLayout(context);
-        titleLayout.setOrientation(LinearLayout.HORIZONTAL);
-        FrameLayout.LayoutParams titleLayoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        titleLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-        titleLayout.setLayoutParams(titleLayoutParams);
-        titleLayout.setGravity(Gravity.CENTER_VERTICAL);
-        appBarView.addView(titleLayout);
-
-        appBarImage = new AppCompatImageView(context);
-        int dp40 = RaadCommonUtils.getPx(40, context);
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp40, dp40);
-        imageParams.rightMargin = dp16;
-        imageParams.leftMargin = dp16;
-        appBarImage.setLayoutParams(imageParams);
-        titleLayout.addView(appBarImage);
-
-        appBarTitle = new AppCompatTextView(context);
-        appBarTitle.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        //appBarTitle.setGravity(Gravity.CENTER);
-        appBarTitle.setTextColor(Color.WHITE);
-        appBarTitle.setText(getResources().getString(R.string.wallet));
-        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
-        titleLayout.addView(appBarTitle);
-
-        titleLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                ((NavigationBarActivity) getActivity()).pushFullFragment(
-//                        new EditProfileFragment(), "EditProfileFragment");
-            }
-        });
-
-//        if (merchantsList != null)
-//            if (merchantsList.size() > 0) {
-//                appBar.addRightButton(R.drawable.ic_store_white_24dp, new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (getActivity() instanceof NavigationBarActivity) {
-//                            if (expandableLayout != null) {
-//                                if (expandableLayout.isExpanded())
-//                                    expandableLayout.collapse(true);
-//                                else {
-//                                    expandableLayout.expand(true);
-//                                }
-//                            }
-//                        }
-//
-//                    }
-//                });
-//
-//            }
-//        appBar.addRightButton(R.drawable.ic_action_settings, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (getActivity() instanceof NavigationBarActivity) {
-//                    RaadApp.selectedMerchant = null;
-//                    ((NavigationBarActivity) getActivity()).replaceFragment(
-//                            new SettingsFragment(), "SettingsFragment", true);
-//                }
-//            }
-//        });
-
     }
 
     private void load() {
@@ -558,12 +458,12 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         Account me = RaadApp.me;
         if (RaadApp.selectedMerchant == null) {
             if (!TextUtils.isEmpty(me.name)) {
-                appBarTitle.setText(me.name);
+                mHelperToolbar.setDefaultTitle(me.name);
             } else {
-                appBarTitle.setText(R.string.paygear_user);
+                mHelperToolbar.setDefaultTitle(getString(R.string.paygear_user));
             }
         } else {
-            appBarTitle.setText(RaadApp.selectedMerchant.getName());
+            mHelperToolbar.setDefaultTitle(RaadApp.selectedMerchant.getName());
         }
 
 //        if (merchantsList != null && merchantsList.size() > 0) {
@@ -1147,5 +1047,33 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         } catch (Exception e) {
         }
 
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        if (getActivity() != null)
+            getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+        RaadApp.selectedMerchant = null;
+        if (getActivity() instanceof NavigationBarActivity) {
+            ((NavigationBarActivity) getActivity()).pushFullFragment(
+                    FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
+        }
+    }
+
+    @Override
+    public void onSecondRightIconClickListener(View view) {
+        if (getActivity() instanceof NavigationBarActivity) {
+            if (expandableLayout != null) {
+                if (expandableLayout.isExpanded())
+                    expandableLayout.collapse(true);
+                else {
+                    expandableLayout.expand(true);
+                }
+            }
+        }
     }
 }

@@ -20,54 +20,13 @@
       android:orientation="vertical"
       tools:context="org.paygear.fragment.CardsFragment">
 
-    <!--<android.support.v7.widget.CardView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="-8dp"-->
-    <!--app:cardCornerRadius="1dp"-->
-    <!--app:cardElevation="@dimen/app_bar_card_view_elevation"-->
-    <!--app:cardMaxElevation="0dp"-->
-    <!--app:cardPreventCornerOverlap="false">-->
+    <LinearLayout
+        android:id="@+id/toolbarLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/toolbar_height" />
 
-    <ir.radsense.raadcore.app.RaadToolBar
-      android:id="@+id/app_bar"
-      android:layout_width="match_parent"
-      android:layout_height="?actionBarSize">
-
-      <android.support.v7.widget.AppCompatImageButton
-        android:id="@+id/back_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentLeft="true"
-        android:background="#00ffffff"
-        android:padding="8dp"
-        android:scaleType="centerInside"
-        app:srcCompat="@drawable/ic_action_back_white" />
-
-      <android.support.v7.widget.AppCompatImageButton
-        android:id="@+id/setting_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentRight="true"
-        android:background="#00ffffff"
-        android:padding="8dp"
-        android:tint="@android:color/white"
-        android:scaleType="centerInside"
-        android:src="@drawable/settings_wallet" />
-
-      <android.support.v7.widget.AppCompatImageButton
-          android:id="@+id/WalletMenu"
-          android:layout_width="56dp"
-          android:layout_height="56dp"
-          android:layout_toLeftOf="@+id/setting_button"
-          android:background="#00ffffff"
-          android:padding="8dp"
-          android:scaleType="centerInside"
-          app:srcCompat="@drawable/ic_store_white_24dp" />
-
-    </ir.radsense.raadcore.app.RaadToolBar>
-
-    <!--</android.support.v7.widget.CardView>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
