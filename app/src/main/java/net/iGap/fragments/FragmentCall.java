@@ -466,6 +466,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "call");
+                bundle.putBoolean("isBackSwipable", true);
                 bundle.putBoolean("ACTION", true);
                 fragment.setArguments(bundle);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

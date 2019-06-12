@@ -10,21 +10,11 @@
     android:orientation="vertical"
     tools:context="org.paygear.fragment.PaymentHistoryFragment">
 
-    <!--<android.support.v7.widget.CardView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:cardCornerRadius="1dp"-->
-    <!--app:cardPreventCornerOverlap="false"-->
-    <!--app:cardMaxElevation="0dp"-->
-    <!--app:cardElevation="@dimen/app_bar_card_view_elevation"-->
-    <!--android:layout_marginTop="-8dp">-->
-
-    <ir.radsense.raadcore.app.RaadToolBar
-        android:id="@+id/app_bar"
+    <LinearLayout
+        android:id="@+id/toolbarLayout"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize" />
-
-    <!--</android.support.v7.widget.CardView>-->
+        android:layout_height="@dimen/toolbar_height" />
 
     <FrameLayout
         android:layout_width="match_parent"

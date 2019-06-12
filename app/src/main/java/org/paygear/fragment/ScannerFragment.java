@@ -43,6 +43,8 @@ import com.journeyapps.barcodescanner.BarcodeView;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -76,7 +78,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     private static final int LOCATION_REQUEST_CODE = 400;
 
     private View rootView;
-    private RaadToolBar appBar;
     private ImageView appBarImage;
     private TextView appBarTitle;
     private RelativeLayout contentLayout;
@@ -115,29 +116,38 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         View view = rootView = inflater.inflate(R.layout.fragment_scanner, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
-        appBar = view.findViewById(R.id.app_bar);
 
-        setAppBar();
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.scan_qr_code_icon)
+                .setDefaultTitle(getString(R.string.payment_history))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
 
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        if (getActivity() instanceof NavigationBarActivity) {
+                            isVisible = false;
+                            ((NavigationBarActivity) getActivity()).pushFullFragment(new MyQRFragment(), "MyQRFragment");
+                        }
+                    }
+                });
 
-        ViewGroup root_current = view.findViewById(R.id.root_current);
-        root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
 
-        appBar.addButton(getString(R.string.my_qr), false, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getActivity() instanceof NavigationBarActivity) {
-                    isVisible = false;
-                    ((NavigationBarActivity) getActivity()).pushFullFragment(new MyQRFragment(), "MyQRFragment");
-                }
-            }
-        }, false);
 
-        appBar.showBack();
+        //ViewGroup root_current = view.findViewById(R.id.root_current);
+        //root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+
 
         balanceText = view.findViewById(R.id.balance);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -397,40 +407,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         flashImage.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void setAppBar() {
-        FrameLayout appBarView = appBar.getBack();
-
-        Context context = getContext();
-        int dp8 = RaadCommonUtils.getPx(8, context);
-        int dp16 = RaadCommonUtils.getPx(16, context);
-
-        LinearLayout titleLayout = new LinearLayout(context);
-        titleLayout.setOrientation(LinearLayout.HORIZONTAL);
-        FrameLayout.LayoutParams titleLayoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        titleLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-        titleLayout.setLayoutParams(titleLayoutParams);
-        titleLayout.setGravity(Gravity.CENTER_VERTICAL);
-        appBarView.addView(titleLayout);
-
-        appBarImage = new AppCompatImageView(context);
-        int dp40 = RaadCommonUtils.getPx(40, context);
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp40, dp40);
-        imageParams.rightMargin = dp16;
-        imageParams.leftMargin = dp16;
-        appBarImage.setLayoutParams(imageParams);
-        titleLayout.addView(appBarImage);
-
-        appBarTitle = new AppCompatTextView(context);
-        appBarTitle.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        //appBarTitle.setGravity(Gravity.CENTER);
-        appBarTitle.setTextColor(Color.WHITE);
-        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
-        titleLayout.addView(appBarTitle);
-
-    }
 
     private void addTipText(String text, int gravity, boolean above, View anchorView) {
         Context context = getContext();

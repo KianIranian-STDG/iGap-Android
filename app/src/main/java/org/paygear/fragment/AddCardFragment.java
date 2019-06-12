@@ -21,11 +21,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.WalletActivity;
 import org.paygear.model.Card;
@@ -47,7 +50,6 @@ import retrofit2.Response;
 
 public class AddCardFragment extends Fragment {
 
-    private RaadToolBar appBar;
     private ImageView imageView;
     private EditText cardNumberText;
     private EditText monthText;
@@ -61,6 +63,7 @@ public class AddCardFragment extends Fragment {
     private String mNumber;
     private int mMonth;
     private int mYear;
+    private HelperToolbar mHelperToolbar;
 
     public AddCardFragment() {
     }
@@ -77,13 +80,21 @@ public class AddCardFragment extends Fragment {
             rootCardView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
 
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.add_new_card))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
 
-
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
-        appBar.setTitle(getString(R.string.add_new_card));
-        appBar.showBack();
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(mHelperToolbar.getView());
 
         cardNumberText = view.findViewById(R.id.card_number);
 

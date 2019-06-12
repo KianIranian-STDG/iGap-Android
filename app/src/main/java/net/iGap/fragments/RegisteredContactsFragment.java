@@ -145,12 +145,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private View view;
     private boolean isInit = false;
     private LinearLayout layoutAppBarContainer;
+    private boolean isContact ;
 
     public static RegisteredContactsFragment newInstance(boolean isBackSwipable) {
         RegisteredContactsFragment registeredContactsFragment = new RegisteredContactsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("isBackSwipable", isBackSwipable);
-        registeredContactsFragment.setArguments(bundle);
+        //Bundle bundle = new Bundle();
+        //bundle.putBoolean("isBackSwipable", isBackSwipable);
+        //registeredContactsFragment.setArguments(bundle);
         return registeredContactsFragment;
     }
 
@@ -235,7 +236,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getArguments().getBoolean("isBackSwipable")) {
+        boolean isSwipe = false;
+        if (getArguments() != null) {
+            isSwipe = getArguments().getBoolean("isBackSwipable" ,false) ;
+        }
+        if (isSwipe) {
             return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
         } else {
             return inflater.inflate(R.layout.fragment_contacts, container, false);
@@ -260,8 +265,23 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 .setSearchBoxShown(true)
                 .setLogoShown(true);
 
+        Bundle bundle =getArguments();
+
+        //in contact mode user dont set swipeable or is false
+        //for replace back btn instead of edit in every mode except contact use it
+        if (bundle != null) {
+            isContact = !bundle.getBoolean("isBackSwipable" , true);
+        }else {
+            isContact = true ;
+        }
+
+        if(!isContact){
+            mHelperToolbar.setLeftIcon(R.string.back_icon);
+        }
+
         toolbarLayout.addView(mHelperToolbar.getView());
         mHelperToolbar.setListener(this);
+
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -301,7 +321,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
 
         vgInviteFriend =  view.findViewById(R.id.menu_layout_inviteFriend);
-        LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
+     /*   LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -311,7 +331,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 .setLogoShown(true)
                 .setListener(this);
 
-        toolbarLayout.addView(mHelperToolbar.getView());
+        toolbarLayout.addView(mHelperToolbar.getView());*/
 
         btnAddNewGroupCall = view.findViewById(R.id.menu_layout_new_group_call);
         btnAddNewContact = view.findViewById(R.id.menu_layout_add_new_contact);
@@ -1001,9 +1021,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         }
     }
 
-    @Override //btn edit
+    @Override //btn edit or back
     public void onLeftIconClickListener(View view) {
-        showDialog();
+        if (!isContact)
+            popBackStackFragment();
+        else
+            showDialog();
     }
 
     // Add/Remove the item from/to the list

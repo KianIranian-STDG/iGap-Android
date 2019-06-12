@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -22,6 +23,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentSettingWalletBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.WalletActivity;
 import org.paygear.model.Card;
@@ -82,16 +85,22 @@ public class FragmentSettingWallet extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RaadToolBar appBar = fragmentSettingWalletBinding.appBar;
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        appBar.setTitle(getString(R.string.settings));
-        fragmentSettingWalletBinding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.settings))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
 
         ViewGroup btnSetPassword = fragmentSettingWalletBinding.btnSetNewPassword;
         ViewGroup btnForgotPassword = fragmentSettingWalletBinding.btnForgotPassword;

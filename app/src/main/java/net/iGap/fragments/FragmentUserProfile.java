@@ -72,6 +72,7 @@ public class FragmentUserProfile extends BaseFragment {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
+                bundle.putBoolean("isBackSwipable", true);
                 bundle.putString("TITLE", "ADD");
                 fragment.setArguments(bundle);
                 try {

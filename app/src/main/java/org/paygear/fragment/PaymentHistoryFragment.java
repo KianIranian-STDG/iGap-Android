@@ -19,7 +19,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -112,13 +115,25 @@ public class PaymentHistoryFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
-        RaadToolBar appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        appBar.setTitle(getString(R.string.payment_history));
-        appBar.showBack();
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.payment_history))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
         if (!mShowAppBar)
-            appBar.hide();
+            lytToolbar.setVisibility(View.GONE);
 
         mList = view.findViewById(R.id.list);
         mList.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));

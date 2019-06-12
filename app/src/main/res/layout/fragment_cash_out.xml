@@ -15,10 +15,11 @@
         android:layout_height="wrap_content"
         android:background="@drawable/app_bar_with_tab_back_shape">
 
-        <ir.radsense.raadcore.app.RaadToolBar
-            android:id="@+id/app_bar"
+        <LinearLayout
+            android:id="@+id/toolbarLayout"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize" />
+            android:layout_height="@dimen/toolbar_height" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"

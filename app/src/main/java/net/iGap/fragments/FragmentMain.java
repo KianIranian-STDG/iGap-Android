@@ -922,6 +922,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     public void onRightIconClickListener(View view) {
         final Fragment fragment = RegisteredContactsFragment.newInstance();
         Bundle bundle = new Bundle();
+        bundle.putBoolean("isBackSwipable", true);
         bundle.putString("TITLE", "ADD");
         fragment.setArguments(bundle);
         try {

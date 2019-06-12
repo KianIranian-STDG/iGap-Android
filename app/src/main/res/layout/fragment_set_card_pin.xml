@@ -9,22 +9,11 @@
     android:clickable="true"
     tools:context="org.paygear.fragment.SetCardPinFragment">
 
-    <!--<android.support.v7.widget.CardView
+    <LinearLayout
+        android:id="@+id/toolbarLayout"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardMaxElevation="0dp"
-        app:cardElevation="@dimen/app_bar_card_view_elevation"
-        android:layout_marginTop="-8dp">-->
-
-        <ir.radsense.raadcore.app.RaadToolBar
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-          />
-
-  <!--  </android.support.v7.widget.CardView>-->
+        android:layout_height="@dimen/toolbar_height" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -36,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:elevation="4dp"
             android:layout_marginTop="8dp">
 
             <TextView

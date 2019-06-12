@@ -19,9 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -42,7 +45,6 @@ public class MyQRFragment extends Fragment {
     File sdDir;
     File file;
 
-    private RaadToolBar appBar;
 
     public MyQRFragment() {
     }
@@ -56,37 +58,48 @@ public class MyQRFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.share_icon)
+                .setDefaultTitle(getString(R.string.my_qr))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        if (isStoragePermissionGranted()) {
+
+                            Bitmap qrBitmap = QRUtils.getQR(getContext(), QRUtils.generateQRContent(QR.QR_TYPE_DIRECT_PAY, RaadApp.me), RaadCommonUtils.getPx(200, getContext()));
+                            share(qrBitmap);
+                        }
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
         if (RaadApp.selectedMerchant==null) {
-            appBar.setTitle(getString(R.string.my_qr));
+            toolbar.setDefaultTitle(getString(R.string.my_qr));
         }else {
             if (RaadApp.selectedMerchant.getName() != null && !RaadApp.selectedMerchant.getName().equals("")) {
-                appBar.setTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getName());
+                toolbar.setDefaultTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getName());
             } else {
-                appBar.setTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getUsername());
+                toolbar.setDefaultTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getUsername());
             }
         }
-        appBar.addRightButton(R.drawable.ic_share_whire_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               if (isStoragePermissionGranted()) {
-
-                   Bitmap qrBitmap = QRUtils.getQR(getContext(), QRUtils.generateQRContent(QR.QR_TYPE_DIRECT_PAY, RaadApp.me), RaadCommonUtils.getPx(200, getContext()));
-                   share(qrBitmap);
-               }
-
-
-            }
-        });
 
 
         ViewGroup root_current = view.findViewById(R.id.root_current);
         root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
 
-        appBar.showBack();
 
 
 

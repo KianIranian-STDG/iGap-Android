@@ -16,9 +16,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -31,7 +34,6 @@ import ir.radsense.raadcore.utils.Typefaces;
 
 public class CashOutFragment extends Fragment {
 
-    RaadToolBar appBar;
     ViewPager mPager;
     WalletPagerAdapter mPagerAdapter;
 
@@ -69,11 +71,22 @@ public class CashOutFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setTitle(getString(isCashOut ? R.string.cashout_taxi : R.string.charge_paygear));
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
-        appBar.showBack();
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(isCashOut ? R.string.cashout_taxi : R.string.charge_paygear))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
 
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         mPager = view.findViewById(R.id.view_pager);
