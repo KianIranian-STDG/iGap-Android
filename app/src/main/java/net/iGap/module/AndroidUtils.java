@@ -11,6 +11,7 @@
 package net.iGap.module;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -45,6 +46,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public final class AndroidUtils {
     private AndroidUtils() throws InstantiationException {
@@ -578,5 +580,38 @@ public final class AndroidUtils {
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    }
+
+
+    /**
+     * check latest activity or base activity from latest open fragment currently is running or no.
+     * Hint: usage of this method is for related action to open activity. for example: open alert dialog,...
+     **/
+    public static Boolean isActivityRunning() {
+
+        Class activityClass;
+        Context context;
+        if (G.fragmentActivity != null) {
+            activityClass = G.fragmentActivity.getClass();
+            context = G.fragmentActivity.getBaseContext();
+        } else if (G.currentActivity != null) {
+            activityClass = G.currentActivity.getClass();
+            context = G.currentActivity.getBaseContext();
+        } else {
+            return false;
+        }
+
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+        for (ActivityManager.RunningTaskInfo task : tasks) {
+            if (activityClass.getCanonicalName() != null && activityClass.getCanonicalName().equalsIgnoreCase(task.baseActivity.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean canOpenDialog(){
+        return isActivityRunning();
     }
 }
