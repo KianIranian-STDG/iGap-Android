@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import retrofit2.Response;
 import static org.paygear.utils.RSAUtils.getRSA;
 
 public class WalletPasswordFragment extends BaseFragment {
+    private static final String TAG = "aabolfazlWalletPassword";
     private View rootView;
     private ProgressBar progressBar;
     private Button confirmBtn;
@@ -116,6 +118,7 @@ public class WalletPasswordFragment extends BaseFragment {
             public void onFailure(Call<PaymentResult> call, Throwable t) {
                 dismissProgress();
                 HelperError.showSnackMessage(getResources().getString(R.string.wallet_error_server), false);
+                Log.i(TAG, "onFailure: 1" + t.getMessage());
             }
         });
     }

@@ -146,6 +146,15 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                                 Log.e(TAG, "receivedMessage: ", e);
                             }
 
+                        Log.i(TAG, "onFailure: user have not internet");
+                        WalletDialogFragment dialogFragment = new WalletDialogFragment();
+                        dialogFragment.setMessage(getResources().getString(R.string.PayGear_unavailable));
+                        dialogFragment.setTitle(getResources().getString(R.string.wallet));
+                        dialogFragment.setShowStatus(true);
+
+                        if (dialogFragment.isShowStatus())
+                            dialogFragment.show(fragmentManager, null);
+
                     });
                     return;
                 }
@@ -191,6 +200,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                                             if (confirmBtn != null)
                                                 confirmBtn.setEnabled(true);
                                             dismissProgress();
+                                            Log.i(TAG, "onFailure: 1" + t.getMessage());
                                             HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                                         }
                                     }));
@@ -206,6 +216,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                     case socketMessages.PaymentResultRecievedSuccess:
                         new android.os.Handler(getContext().getMainLooper()).post(() -> {
                             fragmentActivity.onBackPressed();
+                            Log.i(TAG, "onFailure: 3");
 
                             HelperError.showSnackMessage(getResources().getString(R.string.result_4), false);
                         });
@@ -216,6 +227,8 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                         new android.os.Handler(getContext().getMainLooper()).post(() -> {
                             fragmentActivity.onBackPressed();
                             HelperError.showSnackMessage(getResources().getString(R.string.not_success_2), false);
+                            Log.i(TAG, "onFailure: 4");
+
                         });
                         break;
 
@@ -223,6 +236,8 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                         new android.os.Handler(getContext().getMainLooper()).post(() -> {
                             fragmentActivity.onBackPressed();
                             HelperError.showSnackMessage(getResources().getString(R.string.result_3), false);
+                            Log.i(TAG, "onFailure: 5");
+
                         });
                         break;
                 }
@@ -317,14 +332,16 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                             + String.valueOf(paymentResult.traceNumber)
                             + getResources().getString(R.string.amount_2)
                             + String.valueOf(paymentResult.amount), false);
-
+                    Log.i(TAG, "onFailure: 6");
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
                 } else {
                     HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
+                    Log.i(TAG, "onFailure: 7");
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed);
                 }
             } else {
                 HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
+                Log.i(TAG, "onFailure: 8");
                 EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved);
             }
         }
