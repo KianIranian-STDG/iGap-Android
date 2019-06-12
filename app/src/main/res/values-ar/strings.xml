@@ -2812,6 +2812,7 @@
     <string name="call">Call</string>
     <string name="ra_enter_reagent_code">أدخل رمز الكاشف (اختياري)</string>
     <string name="reagent_error_message">الرقم الذي تم إدخاله غير صحيح للرفض.</string>
+    <string name="enter_wallet_password">أدخل كلمة مرور المحفظة</string>
     <string name="videos">Videos</string>
     <string name="audios">Audios</string>
     <string name="voices">Voices</string>

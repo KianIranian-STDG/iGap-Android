@@ -135,6 +135,7 @@ import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.PaymentFragment;
+import net.iGap.fragments.chatMoneyTransfer.MoneyTransferActionFragment;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.DialogAddSticker;
@@ -514,9 +515,6 @@ public class FragmentChat extends BaseFragment
     private TextView btnUp;
     private TextView btnDown;
     private TextView txtChannelMute;
-    // private TextView btnUpMessage;
-    // private TextView btnDownMessage;
-    // private TextView txtMessageCounter;
     private TextView btnUpHash;
     private TextView btnDownHash;
     private TextView txtHashCounter;
@@ -2716,12 +2714,6 @@ public class FragmentChat extends BaseFragment
 
         });
 
-        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
-            sendMoney.setVisibility(View.VISIBLE);
-        } else {
-            sendMoney.setVisibility(View.GONE);
-        }
-
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
 
@@ -3266,10 +3258,11 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        sendMoney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPaymentDialog();
+        sendMoney.setOnClickListener(view -> {
+            if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+                showSelectItem();
+            } else {
+                showCardToCard();
             }
         });
 
@@ -3385,6 +3378,32 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void showCardToCard() {
+        cardToCardClick(null);
+    }
+
+    private void showSelectItem() {
+        MoneyTransferActionFragment transferAction;
+
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+            chatType = realmRoom.getType();
+            if (chatType == CHAT) {
+                chatPeerId = realmRoom.getChatRoom().getPeerId();
+                if (imvUserPicture != null && txtName != null) {
+                    transferAction = MoneyTransferActionFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+
+                    if (getFragmentManager() != null)
+                        transferAction.show(getFragmentManager(), "PaymentFragment");
+//                        transferAction.show(getFragmentManager(), "PaymentFragment");
+                    transferAction.setMoneyTransferAction(this::showCardToCard);
+                }
+            }
+        }
+
+
     }
 
 
