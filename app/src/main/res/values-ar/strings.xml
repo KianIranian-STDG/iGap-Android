@@ -2731,4 +2731,5 @@
     <string name="cardToCardBtnText">بطاقة إلى بطاقة</string>
 
     <string name="crad_to_card_dest_name">اسم صاحب الحساب</string>
+    <string name="location_dialog_message">هل تريد استخدام موقعك؟</string>
 </resources>
