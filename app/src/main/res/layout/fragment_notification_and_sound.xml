@@ -881,7 +881,6 @@
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:onClick="@{FragmentNotificationAndSoundViewModel::onClickKeepService}"
           android:orientation="vertical"
           android:paddingBottom="@dimen/dp4"
           android:paddingTop="@dimen/dp8"
@@ -943,6 +942,7 @@
             android:layout_height="wrap_content"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
+              android:onClick="@{FragmentNotificationAndSoundViewModel::onClickKeepService}"
             android:paddingRight="@dimen/dp16"
             android:paddingStart="@dimen/dp16"
             android:text="@string/st_keep_alive_service"
@@ -955,6 +955,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/dp12"
+              android:onClick="@{FragmentNotificationAndSoundViewModel::onClickKeepService}"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
