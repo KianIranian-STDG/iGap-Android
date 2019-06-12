@@ -26,6 +26,7 @@ import net.iGap.interfaces.IOnBackPressed;
 public class FragmentWebView extends FragmentToolBarBack implements IOnBackPressed {
 
     private String url;
+    private boolean forceCloseFragment;
     private WebView webView;
     private TextView webViewError;
     private SwipeRefreshLayout pullToRefresh;
@@ -49,6 +50,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        forceCloseFragment = false;
         url = getArguments().getString("url");
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             url = "http://" + url;
@@ -143,7 +145,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     @Override
     protected void onBackButtonClicked(View view) {
         webView.stopLoading();
-        if (webView.canGoBack()) {
+        if (webView.canGoBack() && !forceCloseFragment) {
             webView.clearView();
             webView.goBack();
             customWebViewClient.isWebViewVisible = true;
@@ -174,6 +176,11 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            if (url.toLowerCase().equals("igap://close")) {
+                isWebViewVisible = false;
+                forceCloseFragment = true;
+                FragmentWebView.this.onBackButtonClicked(view);
+            }
 
         }
 
@@ -190,6 +197,10 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             boolean a = HelperUrl.handleAppUrl(url);
             if (a) {
+                // onBackButtonClicked(view);
+            }
+            if (url.toLowerCase().equals("igap://close")) {
+                forceCloseFragment = true;
                 onBackButtonClicked(view);
             }
             return a;
