@@ -449,6 +449,9 @@ public class FragmentChat extends BaseFragment
     private AppCompatImageView txtVerifyRoomIcon;
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
+    private RealmRoom managedRoom;
+    private RealmRoom unmanagedRoom;
+
     private WebView webViewChatPage;
     private boolean isStopBot;
     private String urlWebViewForSpecialUrlChat;
@@ -776,6 +779,8 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("bagi", Realm.getLocalInstanceCount(Realm.getDefaultConfiguration()) + "");
+        Log.d("bagi", "onViewCreated");
 
         cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
         txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
@@ -1137,6 +1142,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onDestroy() {
 
+        Log.d("bagi", "onDestroy");
         super.onDestroy();
 
         mRoomId = -1;
@@ -1738,6 +1744,10 @@ public class FragmentChat extends BaseFragment
         });
     }
 
+    private void updateUnmanagedRoom() {
+        unmanagedRoom = getRealmChat().copyFromRealm(managedRoom);
+    }
+
     private void initMain() {
         HelperGetMessageState.clearMessageViews();
 
@@ -1847,18 +1857,18 @@ public class FragmentChat extends BaseFragment
             }
             userId = realmUserInfo.getUserId();
 
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            managedRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            unmanagedRoom = getRealmChat().copyFromRealm(managedRoom);
+            if (managedRoom != null) { // room exist
 
-            if (realmRoom != null) { // room exist
-
-                title = realmRoom.getTitle();
-                initialize = realmRoom.getInitials();
-                color = realmRoom.getColor();
-                isChatReadOnly = realmRoom.getReadOnly();
-                unreadCount = realmRoom.getUnreadCount();
-                firstUnreadMessage = realmRoom.getFirstUnreadMessage();
-                savedScrollMessageId = realmRoom.getLastScrollPositionMessageId();
-                firstVisiblePositionOffset = realmRoom.getLastScrollPositionOffset();
+                title = managedRoom.getTitle();
+                initialize = managedRoom.getInitials();
+                color = managedRoom.getColor();
+                isChatReadOnly = managedRoom.getReadOnly();
+                unreadCount = managedRoom.getUnreadCount();
+                firstUnreadMessage = managedRoom.getFirstUnreadMessage();
+                savedScrollMessageId = managedRoom.getLastScrollPositionMessageId();
+                firstVisiblePositionOffset = managedRoom.getLastScrollPositionOffset();
 
                 if (messageId != 0) {
                     savedScrollMessageId = messageId;
@@ -1883,17 +1893,17 @@ public class FragmentChat extends BaseFragment
                         }
 
                     } else {
-                        title = realmRoom.getTitle();
-                        initialize = realmRoom.getInitials();
-                        color = realmRoom.getColor();
+                        title = managedRoom.getTitle();
+                        initialize = managedRoom.getInitials();
+                        color = managedRoom.getColor();
                         userStatus = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
                     }
                 } else if (chatType == GROUP) {
-                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    RealmGroupRoom realmGroupRoom = managedRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
                 } else if (chatType == CHANNEL) {
-                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    RealmChannelRoom realmChannelRoom = managedRoom.getChannelRoom();
                     channelRole = realmChannelRoom.getRole();
                     channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
                 }
