@@ -518,7 +518,6 @@ public class HelperToolbar {
         }*/
     }
 
-
     private void setMediaLayout() {
         try {
             if (MusicPlayer.mp != null) {
@@ -562,7 +561,6 @@ public class HelperToolbar {
         }
     }
 
-
     private void setStripLayoutCall() {
         if (G.isInCall) {
             if (ActivityCall.stripLayoutChat != null) {
@@ -590,8 +588,29 @@ public class HelperToolbar {
 
     private void checkIGapFont() {
 
+        if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.waiting_for_network))) {
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp16) / mContext.getResources().getDisplayMetrics().density));
+
+        } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.connecting))) {
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+
+        } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.updating))) {
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+
+        } else {
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
+            mTxtLogo.setText(defaultTitleText);
+        }
+
         if (mTxtLogo.getText().toString().toLowerCase().equals("igap")){
-            mTxtLogo.setTypeface(G.typeface_neuropolitical);
+            mTxtLogo.setTextSize((int) mContext.getResources().getDimension(R.dimen.toolbar_igap_icon_textSize));
+            mTxtLogo.setTypeface(G.typeface_FonticonNew);
+            mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
+        }else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
+            mTxtLogo.setTypeface(G.typeface_FonticonNew);
+            mTxtLogo.setTextSize((int) mContext.getResources().getDimension(R.dimen.toolbar_igap_icon_textSize));
+            mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
+
         }else {
             mTxtLogo.setTypeface(G.typeface_IRANSansMobile);
         }
@@ -606,24 +625,18 @@ public class HelperToolbar {
                 if (mTxtLogo != null && connectionState != null){
 
                     if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp16) / mContext.getResources().getDisplayMetrics().density));
                         mTxtLogo.setText(R.string.waiting_for_network);
 
                     } else if (connectionState == ConnectionState.CONNECTING) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
                         mTxtLogo.setText(R.string.connecting);
 
                     } else if (connectionState == ConnectionState.UPDATING) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
-
                         mTxtLogo.setText(R.string.updating);
 
                     } else if (connectionState == ConnectionState.IGAP) {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
                         mTxtLogo.setText(defaultTitleText);
 
                     } else {
-                        mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
                         mTxtLogo.setText(defaultTitleText);
                     }
 

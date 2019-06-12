@@ -220,4 +220,6 @@
     <string name="end_video_call_icon">Ê</string>
     <string name="play_icon">#</string>
     <string name="pause_icon">\?</string>
+    <string name="igap_en_icon">«</string>
+    <string name="igap_fa_icon">»</string>
 </resources>
