@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
           android:padding="@dimen/dp4">
 
-        <ImageView
+        <net.iGap.module.RadiusImageView
           android:id="@+id/smslf_imv_icon_file"
           android:layout_width="@dimen/dp52"
           android:layout_height="@dimen/dp52"

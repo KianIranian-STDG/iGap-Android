@@ -27,6 +27,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
@@ -109,6 +110,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
+import yogesh.firzen.mukkiasevaigal.M;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
@@ -220,8 +222,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         super.onViewCreated(view, savedInstanceState);
 
         realmShearedMedia = Realm.getDefaultInstance();
-        mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
-        MusicPlayer.setMusicPlayer(mediaLayout);
+        //mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
+        //MusicPlayer.setMusicPlayer(mediaLayout);
 
         roomId = getArguments().getLong(ROOM_ID);
         roomType = RealmRoom.detectType(roomId);
@@ -238,7 +240,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         setListener();
 
-        MusicPlayer.shearedMediaLayout = mediaLayout;
+        //MusicPlayer.shearedMediaLayout = mediaLayout;
         ActivityMain.setMediaLayout();
     }
 
@@ -279,6 +281,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.hamburger_menu_icon)
+                .setPlayerEnable(true)
+                .setIsSharedMedia(true)
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setListener(this);
@@ -358,10 +362,29 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         recyclerView.addOnScrollListener(onScrollListener);
 
+        MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
+            checkMusicPlayerView();
+        });
+
         openLayout();
         initAppbarSelected(view);
         makeSharedTypesViews();
         checkSharedButtonsBackgrounds();
+        checkMusicPlayerView();
+    }
+
+    private void checkMusicPlayerView() {
+
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
+
+        if (MusicPlayer.shearedMediaLayout != null && MusicPlayer.mp != null ){
+            lp.setMargins(0 , getDimen(R.dimen.margin_for_below_layouts_of_toolbar_with_shared_media_with_player) , 0 , 0);
+        }else {
+            lp.setMargins(0 , getDimen(R.dimen.margin_for_below_layouts_of_toolbar_with_shared_media) , 0 , 0);
+        }
+
+        recyclerView.setLayoutParams(lp);
+
     }
 
     private void openLayout() {
@@ -1252,6 +1275,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     date = mList.get(position).messageTime;
                 }
                 //check if date was today set text to txtTime else set date
+                holder1.txtTime.setGravity(Gravity.LEFT);
                 holder1.txtTime.setText(
                         !mList.get(position).isToday ?
                                 date : context.getString(R.string.today)
@@ -1897,16 +1921,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 holder1.imvPicFile.setImageResource(R.drawable.green_music_note);
                 holder1.imvPicFile.setTag(mList.get(position).messageId);
+                holder1.imvPicFile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                 RealmAttachment at = mList.get(position).item.getAttachment();
 
                 String tempFilePath = getThumpnailPath(position);
                 holder1.filePath = getFilePath(position);
 
+                holder1.txtFileName.setGravity(Gravity.LEFT);
                 holder1.txtFileName.setText(at.getName());
 
-                holder1.txtFileSize.setText("(" + AndroidUtils.humanReadableByteCount(at.getSize(), true) + ")");
-
+                holder1.txtFileSize.setText("" + AndroidUtils.humanReadableByteCount(at.getSize(), true));
+                holder1.txtFileInfo.setVisibility(View.GONE);
+                holder1.txtFileSize.setGravity(Gravity.LEFT);
                 File file = new File(holder1.filePath);
 
                 if (file.exists()) {
@@ -1941,11 +1968,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             }
                         }
                     } catch (Exception e) {
+                        holder1.txtFileInfo.setVisibility(View.GONE);
                     }
                 } else {
                     needDownloadList.put(mList.get(position).messageId, true);
                     holder1.messageProgress.setVisibility(View.VISIBLE);
                     file = new File(tempFilePath);
+
                     if (file.exists()) {
 
                         if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
@@ -1971,7 +2000,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         }
 
         public class ViewHolder extends mHolder {
-            public ImageView imvPicFile;
+            public RadiusImageView imvPicFile;
             public TextView txtFileName;
             public TextView txtFileSize;
             public TextView txtFileInfo;
@@ -1980,7 +2009,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             public ViewHolder(View view) {
                 super(view);
 
-                imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
+                imvPicFile = itemView.findViewById(R.id.smslf_imv_icon_file);
 
                 txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
                 txtFileSize = (TextView) itemView.findViewById(R.id.smslf_txt_file_size);
@@ -2197,10 +2226,11 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 vh.txtFileName.setText(at.getName());
                 vh.txtFileInfo.setText(AndroidUtils.humanReadableByteCount(at.getSize(), true));
 
+                //do not change else , cause of layout that not support language change direction
                 if (G.selectedLanguage.equals("en")) {
                     vh.txtFileName.setGravity(Gravity.LEFT);
                 } else {
-                    vh.txtFileName.setGravity(Gravity.RIGHT);
+                    vh.txtFileName.setGravity(Gravity.LEFT);
                 }
 
                 /*File fileTemp = new File(vh.tempFilePath);

@@ -38,6 +38,7 @@
           android:id="@+id/mls_txt_music_name"
           android:singleLine="true"
           android:text=""
+          android:gravity="center_vertical|left"
           style="?textTitleColorSettingTheme"
           android:textColor="@color/toolbar_player_base_color"
           android:textSize="@dimen/dp13" />
@@ -48,6 +49,7 @@
           android:id="@+id/mls_txt_music_info"
           android:singleLine="true"
           android:text=""
+          android:gravity="center_vertical|left"
           android:layout_marginTop="@dimen/dp1"
           style="?textTitleColorSettingTheme"
           android:textColor="@color/gray_4c"
@@ -82,7 +84,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginRight="@dimen/dp4"
-      android:text="time"
+      android:text=""
       style="?textTitleColorSettingTheme"
         android:textColor="@color/toolbar_player_base_color"
       android:textSize="@dimen/dp12" />

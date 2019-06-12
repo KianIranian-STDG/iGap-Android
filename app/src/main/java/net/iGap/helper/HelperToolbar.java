@@ -78,6 +78,7 @@ public class HelperToolbar {
     private String defaultTitleText = null;
     private boolean isShowEditTextForSearch;
     private View rootView;
+    private boolean isSharedMedia;
 
     private HelperToolbar() {
     }
@@ -142,6 +143,12 @@ public class HelperToolbar {
 
     public HelperToolbar setChatRoom(boolean isChatRoom) {
         this.isInChatRoom = isChatRoom;
+        return this;
+    }
+
+    public HelperToolbar setIsSharedMedia(boolean isSharedMedia) {
+ 
+        this.isSharedMedia = isSharedMedia;
         return this;
     }
 
@@ -402,6 +409,7 @@ public class HelperToolbar {
     private void setMusicPlayer(View view , boolean isChat) {
 
         LinearLayout musicLayout = view.findViewById(R.id.view_toolbar_layout_player_music);
+
         LinearLayout stripCallLayout = view.findViewById(R.id.view_toolbar_layout_strip_call);
 
         if (!isSearchBoxShown){
@@ -424,6 +432,10 @@ public class HelperToolbar {
             txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
 
             checkIsAvailableOnGoingCall();
+
+        }else if (isSharedMedia){
+
+            MusicPlayer.shearedMediaLayout = musicLayout;
 
         }else {
             MusicPlayer.mainLayout = musicLayout;
