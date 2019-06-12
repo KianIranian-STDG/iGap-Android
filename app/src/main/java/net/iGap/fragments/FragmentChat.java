@@ -1858,8 +1858,8 @@ public class FragmentChat extends BaseFragment
             userId = realmUserInfo.getUserId();
 
             managedRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            unmanagedRoom = getRealmChat().copyFromRealm(managedRoom);
             if (managedRoom != null) { // room exist
+                unmanagedRoom = getRealmChat().copyFromRealm(managedRoom);
 
                 title = managedRoom.getTitle();
                 initialize = managedRoom.getInitials();
