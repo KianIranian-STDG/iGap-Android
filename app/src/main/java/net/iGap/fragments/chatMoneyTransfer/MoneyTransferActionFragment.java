@@ -8,11 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,34 +19,34 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.CircleImageView;
 
-public class FragmentMoneyTransferAction extends BottomSheetDialogFragment {
+public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
     private static final String TAG = "aabolfazl";
 
     private View rootView;
     private View cardToCard;
     private View sendMoney;
     private View moneyActionRootView;
-    private ValueAnimator anim;
     private View transferRootView;
     private CircleImageView userAvatarIv;
     private TextView userNameTv;
     private TextView creditTv;
-    private String userName;
     private Drawable drawable;
-    private MoneyTransferAction moneyTransferAction;
     private ProgressBar progressBar;
+    private Button confirmBtn;
+    private Button cancelBtn;
 
-    private FrameLayout layoutContainer;
     private long userId;
+    private ValueAnimator anim;
+    private MoneyTransferAction moneyTransferAction;
+    private String userName;
+    private int windowHeight;
 
 
-    public static FragmentMoneyTransferAction getInstance(long userId, Drawable userPicture, String userName) {
-        FragmentMoneyTransferAction transferAction = new FragmentMoneyTransferAction();
-
+    public static MoneyTransferActionFragment getInstance(long userId, Drawable userPicture, String userName) {
+        MoneyTransferActionFragment transferAction = new MoneyTransferActionFragment();
         transferAction.userId = userId;
         transferAction.userName = userName;
         transferAction.drawable = userPicture;
-
         return transferAction;
     }
 
@@ -72,15 +71,23 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment {
         userNameTv = rootView.findViewById(R.id.tv_moneyAction_userName);
         creditTv = rootView.findViewById(R.id.tv_moneyAction_credit);
         progressBar = rootView.findViewById(R.id.pb_moneyAction);
+        confirmBtn = rootView.findViewById(R.id.btn_moneyAction_confirm);
+        cancelBtn = rootView.findViewById(R.id.btn_moneyAction_cancel);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        int windowHeight = getScreenHeight();
+        windowHeight = getScreenHeight()/2;
 
-        anim = ValueAnimator.ofInt(600, windowHeight);
-        anim.setDuration(350);
+        userAvatarIv.setImageDrawable(drawable);
+        userNameTv.setText(userName);
+
+        if (G.selectedCard != null) {
+            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
+        } else {
+            creditTv.setVisibility(View.GONE);
+        }
 
         transferActionInit();
     }
@@ -93,7 +100,7 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment {
 
         sendMoney.setOnClickListener(v -> {
             moneyActionRootView.setVisibility(View.GONE);
-            anim.start();
+            transferRootView.setVisibility(View.VISIBLE);
             sendMoneyClicked();
         });
 
@@ -107,42 +114,40 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment {
             cardToCardTv.setTextColor(getResources().getColor(R.color.black));
             sendMoneyTv.setTextColor(getResources().getColor(R.color.black));
         }
-
-        anim.addUpdateListener(animation -> {
-            int animProgress = (Integer) animation.getAnimatedValue();
-            rootView.getLayoutParams().height = (int) (animProgress / 1.8);
-            rootView.requestLayout();
-
-            Log.i(TAG, "transferActionInit: " + animProgress);
-        });
-
     }
 
     private void sendMoneyClicked() {
-        transferRootView.setVisibility(View.VISIBLE);
-        layoutContainer = rootView.findViewById(R.id.fl_moneyAction_Container);
 
-        userAvatarIv.setImageDrawable(drawable);
-        userNameTv.setText(userName);
+//        anim = ValueAnimator.ofInt(600, windowHeight);
+//        anim.setDuration(500);
+//
+//        anim.addUpdateListener(animation -> {
+//            int animProgress = (Integer) animation.getAnimatedValue();
+//            rootView.getLayoutParams().height = animProgress;
+//            rootView.requestLayout();
+//
+//            Log.i(TAG, "transferActionInit: " + animProgress);
+//        });
+//
+//        anim.start();
 
-        if (G.selectedCard != null) {
-            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
-        } else {
-            creditTv.setVisibility(View.GONE);
-        }
-
-
-        SendMoneyDetailFragment sendMoneyFragment = new SendMoneyDetailFragment();
+        WalletTransferFragment sendMoneyFragment = new WalletTransferFragment();
+        sendMoneyFragment.setCancelBtn(cancelBtn);
+        sendMoneyFragment.setConfirmBtn(confirmBtn);
         sendMoneyFragment.setUserId(userId);
         sendMoneyFragment.setProgressBar(progressBar);
         sendMoneyFragment.setFragmentManager(getChildFragmentManager());
+
         /**
          * because add fragment in other fragment can not use getFragmentManager
          * */
+
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fl_moneyAction_Container, sendMoneyFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+
+
     }
 
     public int getScreenHeight() {
@@ -158,20 +163,7 @@ public class FragmentMoneyTransferAction extends BottomSheetDialogFragment {
         }
     }
 
-    public void dismissProgress() {
-        progressBar.setVisibility(View.INVISIBLE);
-    }
-
-    public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-
     public interface MoneyTransferAction {
         void cardToCardClicked();
-    }
-
-    public interface ProgressView {
-        ProgressBar prgressBar();
     }
 }

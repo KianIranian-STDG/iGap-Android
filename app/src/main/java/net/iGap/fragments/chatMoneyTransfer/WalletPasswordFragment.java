@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -17,6 +18,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.webservice.APIService;
 import net.iGap.webservice.ApiUtils;
 import net.iGap.webservice.Post;
@@ -41,12 +43,12 @@ import retrofit2.Response;
 
 import static org.paygear.utils.RSAUtils.getRSA;
 
-public class SendMoneyPasswordFragment extends BaseFragment {
+public class WalletPasswordFragment extends BaseFragment {
     private View rootView;
     private ProgressBar progressBar;
-    private Button payBtn;
+    private Button confirmBtn;
     private EditText passwordEt;
-    private Button recentStepBtn;
+    private Button cancelBtn;
     private Card selectedCard = null;
     private PaymentAuth paymentAuth;
 
@@ -60,8 +62,6 @@ public class SendMoneyPasswordFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        payBtn = rootView.findViewById(R.id.btn_enterPassword_pay);
-        recentStepBtn = rootView.findViewById(R.id.btn_enterPassword_cancel);
         passwordEt = rootView.findViewById(R.id.et_enterPassword);
 
     }
@@ -70,11 +70,14 @@ public class SendMoneyPasswordFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
-        payBtn.setOnClickListener(v -> {
+        confirmBtn.setOnClickListener(v -> {
             startPay(paymentAuth, passwordEt.getText().toString());
         });
 
-        recentStepBtn.setOnClickListener(v -> {
+        cancelBtn.setOnClickListener(v -> {
+            if (HelperFragment.isFragmentVisible("passwordFragment"))
+                Toast.makeText(_mActivity, "passwordFragment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(_mActivity, "not passwordFragment + " + this.getTag(), Toast.LENGTH_SHORT).show();
 
         });
 
@@ -94,7 +97,7 @@ public class SendMoneyPasswordFragment extends BaseFragment {
             @Override
             public void onResponse(Call<PaymentResult> call, final Response<PaymentResult> response) {
 
-                Boolean success = Web.checkResponse(SendMoneyPasswordFragment.this, call, response);
+                Boolean success = Web.checkResponse(WalletPasswordFragment.this, call, response);
                 if (success == null)
                     return;
 
@@ -171,12 +174,12 @@ public class SendMoneyPasswordFragment extends BaseFragment {
 
     private void dismissProgress() {
         progressBar.setVisibility(View.INVISIBLE);
-        payBtn.setEnabled(true);
+        confirmBtn.setEnabled(true);
     }
 
     private void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
-        payBtn.setEnabled(false);
+        confirmBtn.setEnabled(false);
     }
 
     public void setProgressBar(ProgressBar progressBar) {
@@ -189,5 +192,13 @@ public class SendMoneyPasswordFragment extends BaseFragment {
 
     public void setPaymentAuth(PaymentAuth paymentAuth) {
         this.paymentAuth = paymentAuth;
+    }
+
+    public void setConfirmBtn(Button confirmBtn) {
+        this.confirmBtn = confirmBtn;
+    }
+
+    public void setCancelBtn(Button cancelBtn) {
+        this.cancelBtn = cancelBtn;
     }
 }

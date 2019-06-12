@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp240">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tv_moneyAction_amountText"
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/transfer_amount_hint"
@@ -22,6 +22,8 @@
         android:id="@+id/et_moneyAction_amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/background_edittext_money_action"
         android:hint="@string/amount_in_rial"
@@ -42,6 +44,8 @@
         android:id="@+id/et_moneyAction_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/background_edittext_money_action"
         android:hint="@string/desc"
@@ -64,39 +68,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/desc"
         app:layout_constraintEnd_toEndOf="@+id/et_moneyAction_amount"
-        app:layout_constraintStart_toStartOf="@+id/et_moneyAction_amount"
+        app:layout_constraintStart_toStartOf="@+id/tv_moneyAction_amountText"
         app:layout_constraintTop_toBottomOf="@+id/et_moneyAction_amount" />
-
-    <Button
-        android:id="@+id/btn_moneyAction_pay"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp40"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/background_pay_mony_action"
-        android:text="@string/next"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_moneyAction_cancel" />
-
-    <Button
-        android:id="@+id/btn_moneyAction_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp40"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:background="@drawable/background_cancel_mony_action"
-        android:text="@string/cancel"
-        android:textAllCaps="false"
-        android:textColor="@color/grayNew"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_moneyAction_pay"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_moneyAction_pay" />
-
 
 </android.support.constraint.ConstraintLayout>

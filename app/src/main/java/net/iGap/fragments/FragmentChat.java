@@ -134,7 +134,7 @@ import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.PaymentFragment;
-import net.iGap.fragments.chatMoneyTransfer.FragmentMoneyTransferAction;
+import net.iGap.fragments.chatMoneyTransfer.MoneyTransferActionFragment;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.DialogAddSticker;
@@ -3385,7 +3385,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showSelectItem() {
-        FragmentMoneyTransferAction transferAction;
+        MoneyTransferActionFragment transferAction;
 
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
@@ -3393,7 +3393,7 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 chatPeerId = realmRoom.getChatRoom().getPeerId();
                 if (imvUserPicture != null && txtName != null) {
-                    transferAction = FragmentMoneyTransferAction.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+                    transferAction = MoneyTransferActionFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
 
                     if (getFragmentManager() != null)
                         transferAction.show(getFragmentManager(), "PaymentFragment");

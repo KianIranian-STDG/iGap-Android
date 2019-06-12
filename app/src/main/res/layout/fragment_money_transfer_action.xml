@@ -39,10 +39,11 @@
             android:padding="@dimen/dp16">
 
 
-            <TextView
+            <net.iGap.module.FontIconTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_moneyAction_cardToCard"
@@ -63,7 +64,7 @@
             android:padding="@dimen/dp16">
 
 
-            <TextView
+            <net.iGap.module.FontIconTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp8" />
@@ -89,8 +90,8 @@
 
         <ProgressBar
             android:id="@+id/pb_moneyAction"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:visibility="invisible"
@@ -155,13 +156,45 @@
         <FrameLayout
             android:id="@+id/fl_moneyAction_Container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp240"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view"
-            tools:layout_editor_absoluteX="0dp">
-
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="@+id/view">
 
         </FrameLayout>
+
+        <Button
+            android:id="@+id/btn_moneyAction_confirm"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/background_pay_mony_action"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_moneyAction_cancel"
+            app:layout_constraintTop_toBottomOf="@+id/fl_moneyAction_Container" />
+
+        <Button
+            android:id="@+id/btn_moneyAction_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/background_cancel_mony_action"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/grayNew"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_moneyAction_confirm"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_moneyAction_confirm" />
+
 
     </android.support.constraint.ConstraintLayout>
 
