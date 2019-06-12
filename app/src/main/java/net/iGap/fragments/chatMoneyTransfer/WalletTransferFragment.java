@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -48,12 +49,13 @@ import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
 
 public class WalletTransferFragment extends BaseFragment implements EventListener {
+    private static final String TAG = "aabolfazlWallet";
+
     private final String[] mPrice = {""};
     private View rootView;
     private EditText amountEt;
     private EditText descriptionEt;
     private Button confirmBtn;
-    private String TAG = "aabolfazlWallet";
     private Card selectedCard = null;
     private Long userId;
     private ProgressBar progressBar;
@@ -72,6 +74,15 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         amountEt = rootView.findViewById(R.id.et_moneyAction_amount);
         descriptionEt = rootView.findViewById(R.id.et_moneyAction_description);
+        TextView amountTextTv = rootView.findViewById(R.id.tv_moneyAction_amountText);
+        TextView descriptionTv = rootView.findViewById(R.id.tv_moneyAction_description);
+
+        amountEt.setTextColor(darkModeHandler());
+        descriptionEt.setTextColor(darkModeHandler());
+        amountTextTv.setTextColor(darkModeHandler());
+        descriptionTv.setTextColor(darkModeHandler());
+
+        darkModeHandler(rootView);
 
         confirmBtn.setOnClickListener(v -> {
             if (mPrice[0] != null && !mPrice[0].isEmpty()) {
@@ -86,9 +97,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
 
         EventManager.getInstance().addEventListener(EventManager.ON_INIT_PAY, this);
 
-
-        if (getActivity() != null)
-            cancelBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
         amountEt.addTextChangedListener(new TextWatcher() {
             boolean isSettingText;
@@ -231,20 +239,15 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         paymentAuth.token = initPayResponse.getToken();
 
         WalletPasswordFragment passwordFragment = new WalletPasswordFragment();
-        passwordFragment.setCancelBtn(cancelBtn);
         passwordFragment.setConfirmBtn(confirmBtn);
         passwordFragment.setPaymentAuth(paymentAuth);
         passwordFragment.setProgressBar(progressBar);
+        passwordFragment.setCancelBtn(cancelBtn);
         passwordFragment.setSelectedCard(selectedCard);
-
-
-        /**
-         * because add fragment in other fragment can not use getFragmentManager
-         * */
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-        fragmentTransaction.replace(R.id.fl_moneyAction_Container, passwordFragment,"passwordFragment");
+        fragmentTransaction.replace(R.id.fl_moneyAction_Container, passwordFragment, "passwordFragment");
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
@@ -282,13 +285,12 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
 
     private void setWalletPassword() {
         WalletConfirmPasswordFragment confirmPasswordFragment = new WalletConfirmPasswordFragment();
-        confirmPasswordFragment.setCancelBtn(cancelBtn);
         confirmPasswordFragment.setConfirmBtn(confirmBtn);
         confirmPasswordFragment.setProgressBar(progressBar);
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-        fragmentTransaction.replace(R.id.fl_moneyAction_Container, confirmPasswordFragment,"confirmPasswordFragment");
+        fragmentTransaction.replace(R.id.fl_moneyAction_Container, confirmPasswordFragment, "confirmPasswordFragment");
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
@@ -330,6 +332,22 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void darkModeHandler(View view) {
+        if (G.isDarkTheme) {
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.background_setting_dark));
+        } else {
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.white));
+        }
+    }
+
+    private int darkModeHandler() {
+        if (G.isDarkTheme) {
+            return getContext().getResources().getColor(R.color.white);
+        } else {
+            return getContext().getResources().getColor(R.color.black);
+        }
+    }
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -342,11 +360,11 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         this.fragmentManager = fragmentManager;
     }
 
-    public void setCancelBtn(Button cancelBtn) {
-        this.cancelBtn = cancelBtn;
-    }
-
     public void setConfirmBtn(Button confirmBtn) {
         this.confirmBtn = confirmBtn;
+    }
+
+    public void setCancelBtn(Button cancelBtn) {
+        this.cancelBtn = cancelBtn;
     }
 }

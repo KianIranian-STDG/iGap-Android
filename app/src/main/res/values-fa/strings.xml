@@ -1864,4 +1864,5 @@
     <string name="dial_number">صفحه تماس</string>
     <string name="call">تماس</string>
     <string name="Select_Country">انتخاب کشور</string>
+    <string name="enter_wallet_password">رمز کیف پول خود را وارد کنید</string>
 </resources>

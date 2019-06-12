@@ -8,10 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,15 +36,12 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
     private TextView userNameTv;
     private TextView creditTv;
     private Drawable drawable;
-    private ProgressBar progressBar;
-    private Button confirmBtn;
     private Button cancelBtn;
 
     private long userId;
     private ValueAnimator anim;
     private MoneyTransferAction moneyTransferAction;
     private String userName;
-    private int windowHeight;
 
 
     public static MoneyTransferActionFragment getInstance(long userId, Drawable userPicture, String userName) {
@@ -70,15 +72,36 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
         userAvatarIv = rootView.findViewById(R.id.iv_moneyAction_userAvatar);
         userNameTv = rootView.findViewById(R.id.tv_moneyAction_userName);
         creditTv = rootView.findViewById(R.id.tv_moneyAction_credit);
-        progressBar = rootView.findViewById(R.id.pb_moneyAction);
-        confirmBtn = rootView.findViewById(R.id.btn_moneyAction_confirm);
         cancelBtn = rootView.findViewById(R.id.btn_moneyAction_cancel);
+        TextView transferToTv = rootView.findViewById(R.id.tv_moneyAction_transferTo);
+        Button confirmBtn = rootView.findViewById(R.id.btn_moneyAction_confirm);
+        ProgressBar progressBar = rootView.findViewById(R.id.pb_moneyAction);
+        FrameLayout layoutContainer = rootView.findViewById(R.id.fl_moneyAction_Container);
+        WalletTransferFragment sendMoneyFragment = new WalletTransferFragment();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+        darkModeHandler(layoutContainer);
+        darkModeHandler(creditTv);
+        darkModeHandler(userNameTv);
+        darkModeHandler(transferToTv);
+
+
+        /**
+         * because add fragment in other fragment can not use getFragmentManager
+         * */
+
+        sendMoneyFragment.setConfirmBtn(confirmBtn);
+        sendMoneyFragment.setCancelBtn(cancelBtn);
+        sendMoneyFragment.setUserId(userId);
+        sendMoneyFragment.setProgressBar(progressBar);
+        sendMoneyFragment.setFragmentManager(getChildFragmentManager());
+        fragmentTransaction.add(layoutContainer.getId(), sendMoneyFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        windowHeight = getScreenHeight()/2;
 
         userAvatarIv.setImageDrawable(drawable);
         userNameTv.setText(userName);
@@ -98,10 +121,17 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
             dismiss();
         });
 
+        cancelBtn.setOnClickListener(v -> dismiss());
+
         sendMoney.setOnClickListener(v -> {
             moneyActionRootView.setVisibility(View.GONE);
             transferRootView.setVisibility(View.VISIBLE);
-            sendMoneyClicked();
+
+            Animation fadeIn = new AlphaAnimation(0, 1);
+            fadeIn.setInterpolator(new DecelerateInterpolator());
+            fadeIn.setDuration(300);
+            transferRootView.setAnimation(fadeIn);
+
         });
 
         TextView cardToCardTv = rootView.findViewById(R.id.tv_moneyAction_cardToCard);
@@ -117,37 +147,17 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
     }
 
     private void sendMoneyClicked() {
+        anim = ValueAnimator.ofInt(500, transferRootView.getMeasuredHeight());
+        anim.setDuration(500);
 
-//        anim = ValueAnimator.ofInt(600, windowHeight);
-//        anim.setDuration(500);
-//
-//        anim.addUpdateListener(animation -> {
-//            int animProgress = (Integer) animation.getAnimatedValue();
-//            rootView.getLayoutParams().height = animProgress;
-//            rootView.requestLayout();
-//
-//            Log.i(TAG, "transferActionInit: " + animProgress);
-//        });
-//
-//        anim.start();
+        anim.addUpdateListener(animation -> {
+            int animProgress = (Integer) animation.getAnimatedValue();
+            rootView.getLayoutParams().height = animProgress;
+            rootView.requestLayout();
+            Log.i(TAG, "transferActionInit: " + animProgress);
+        });
 
-        WalletTransferFragment sendMoneyFragment = new WalletTransferFragment();
-        sendMoneyFragment.setCancelBtn(cancelBtn);
-        sendMoneyFragment.setConfirmBtn(confirmBtn);
-        sendMoneyFragment.setUserId(userId);
-        sendMoneyFragment.setProgressBar(progressBar);
-        sendMoneyFragment.setFragmentManager(getChildFragmentManager());
-
-        /**
-         * because add fragment in other fragment can not use getFragmentManager
-         * */
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fl_moneyAction_Container, sendMoneyFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-
-
+        anim.start();
     }
 
     public int getScreenHeight() {
@@ -160,6 +170,22 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
             return R.style.BaseBottomSheetDialog;
         } else {
             return R.style.BaseBottomSheetDialogLight;
+        }
+    }
+
+    private void darkModeHandler(View view) {
+        if (G.isDarkTheme) {
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.background_setting_dark));
+        } else {
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.white));
+        }
+    }
+
+    private void darkModeHandler(TextView textView) {
+        if (G.isDarkTheme) {
+            textView.setTextColor(getContext().getResources().getColor(R.color.white));
+        } else {
+            textView.setTextColor(getContext().getResources().getColor(R.color.black));
         }
     }
 

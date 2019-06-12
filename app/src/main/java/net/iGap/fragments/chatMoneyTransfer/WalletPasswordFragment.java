@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -18,7 +18,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
 import net.iGap.webservice.APIService;
 import net.iGap.webservice.ApiUtils;
 import net.iGap.webservice.Post;
@@ -47,11 +46,10 @@ public class WalletPasswordFragment extends BaseFragment {
     private View rootView;
     private ProgressBar progressBar;
     private Button confirmBtn;
-    private EditText passwordEt;
     private Button cancelBtn;
+    private EditText passwordEt;
     private Card selectedCard = null;
     private PaymentAuth paymentAuth;
-
 
     @Nullable
     @Override
@@ -63,7 +61,12 @@ public class WalletPasswordFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         passwordEt = rootView.findViewById(R.id.et_enterPassword);
+        confirmBtn.setText(getContext().getResources().getString(R.string.pay));
+        TextView descriptionTv = rootView.findViewById(R.id.tv_moneyAction_description);
 
+        passwordEt.setTextColor(darkModeHandler());
+        descriptionTv.setTextColor(darkModeHandler());
+        darkModeHandler(rootView);
     }
 
     @Override
@@ -73,14 +76,6 @@ public class WalletPasswordFragment extends BaseFragment {
         confirmBtn.setOnClickListener(v -> {
             startPay(paymentAuth, passwordEt.getText().toString());
         });
-
-        cancelBtn.setOnClickListener(v -> {
-            if (HelperFragment.isFragmentVisible("passwordFragment"))
-                Toast.makeText(_mActivity, "passwordFragment", Toast.LENGTH_SHORT).show();
-            Toast.makeText(_mActivity, "not passwordFragment + " + this.getTag(), Toast.LENGTH_SHORT).show();
-
-        });
-
 
     }
 
@@ -113,6 +108,7 @@ public class WalletPasswordFragment extends BaseFragment {
                         G.cardamount -= response.body().amount;
                     }, G.appBarColor);
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
+                    cancelBtn.performClick();
                 }
             }
 
@@ -170,6 +166,22 @@ public class WalletPasswordFragment extends BaseFragment {
         }
 
         return getRSA(publicKey, cardInfoJson);
+    }
+
+    private void darkModeHandler(View view) {
+        if (G.isDarkTheme) {
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.background_setting_dark));
+        } else {
+            view.setBackgroundColor(getContext().getResources().getColor(R.color.white));
+        }
+    }
+
+    private int darkModeHandler() {
+        if (G.isDarkTheme) {
+            return getContext().getResources().getColor(R.color.white);
+        } else {
+            return getContext().getResources().getColor(R.color.black);
+        }
     }
 
     private void dismissProgress() {

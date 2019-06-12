@@ -61,10 +61,6 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
             startSavePin(passwordEt.getText().toString(), confirmPasswordEt.getText().toString());
         });
 
-        cancelBtn.setOnClickListener(v -> {
-
-        });
-
     }
 
     private void startSavePin(String newPassword, String confirmPassword) {
