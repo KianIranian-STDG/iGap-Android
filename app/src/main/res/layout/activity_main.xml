@@ -150,14 +150,30 @@
                 </net.iGap.module.MyAppBarLayout>
 
 
-                <net.iGap.module.NotSwipeableViewPager
-                    android:id="@+id/viewpager"
+                <RelativeLayout
                     style="?backgroundColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layoutDirection="ltr"
                     android:overScrollMode="never"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:id="@+id/mainActivityFakeToolbar"/>
+
+                    <net.iGap.module.NotSwipeableViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layoutDirection="ltr"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                </RelativeLayout>
 
 
                 <net.iGap.libs.floatingAddButton.ArcMenu

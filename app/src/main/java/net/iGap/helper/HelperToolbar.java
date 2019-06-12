@@ -1,5 +1,6 @@
 package net.iGap.helper;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.OnComplete;
@@ -453,40 +455,44 @@ public class HelperToolbar {
         setMediaLayout();
         //setStripLayoutCall();
 
-        G.callStripLayoutVisiblityListener.observe(G.fragmentActivity , isVisible -> {
+        try {
+            G.callStripLayoutVisiblityListener.observe(G.fragmentActivity, isVisible -> {
 
-            try{
+                try {
 
-                if (isVisible){
-                    if (isChat) {
-                        ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
+                    if (isVisible) {
+                        if (isChat) {
+                            ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
 
 
-                    }else {
-                        ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
+                        } else {
+                            ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
 
+                        }
+
+
+                        if (MusicPlayer.mainLayout != null) {
+                            MusicPlayer.mainLayout.setVisibility(View.GONE);
+                        }
+
+                        if (MusicPlayer.chatLayout != null) {
+                            MusicPlayer.chatLayout.setVisibility(View.GONE);
+                        }
+                    } else {
+                        if (isChat) {
+                            ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+                        } else {
+                            ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+                        }
                     }
 
-
-                    if (MusicPlayer.mainLayout != null) {
-                        MusicPlayer.mainLayout.setVisibility(View.GONE);
-                    }
-
-                    if (MusicPlayer.chatLayout != null) {
-                        MusicPlayer.chatLayout.setVisibility(View.GONE);
-                    }
-                }else {
-                    if (isChat) {
-                        ActivityCall.stripLayoutChat.setVisibility(View.GONE);
-                    }else {
-                        ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                    }
+                } catch (Exception e) {
                 }
 
-            }catch (Exception e){}
+            });
+        }catch (Exception e){
 
-        });
-
+        }
 
     }
 
@@ -618,11 +624,25 @@ public class HelperToolbar {
 
     private void toolBarTitleHandler() {
 
-        G.connectionStateMutableLiveData.observe(G.fragmentActivity, new android.arch.lifecycle.Observer<ConnectionState>() {
+        try {
+            connectionStateChecker(G.fragmentActivity);
+        }catch (Exception e){
+            try{
+                connectionStateChecker(G.currentActivity);
+            }catch (Exception e2){
+
+            }
+        }
+
+    }
+
+    private void connectionStateChecker(LifecycleOwner owner ) {
+
+        G.connectionStateMutableLiveData.observe(owner, new android.arch.lifecycle.Observer<ConnectionState>() {
             @Override
             public void onChanged(@Nullable ConnectionState connectionState) {
 
-                if (mTxtLogo != null && connectionState != null){
+                if (mTxtLogo != null && connectionState != null) {
 
                     if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                         mTxtLogo.setText(R.string.waiting_for_network);
@@ -646,7 +666,6 @@ public class HelperToolbar {
 
             }
         });
-
     }
 
     private void setNormalSizeToRootViews(View view) {

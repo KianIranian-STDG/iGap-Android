@@ -96,6 +96,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -1539,6 +1540,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void initComponent() {
 
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getApplicationContext())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon)
+                .setPlayerEnable(false)
+                .setLogoShown(true)
+                .setPlayerEnable(true)
+                .setSearchBoxShown(true, false)
+                .setListener(this);
+
+        ViewGroup layoutToolbar =findViewById(R.id.mainActivityFakeToolbar);
+        layoutToolbar.addView(toolbar.getView());
 
         iconLock = findViewById(R.id.am_btn_lock);
 
@@ -2469,5 +2482,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         public int getCount() {
             return pages.size();
         }
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
     }
 }
