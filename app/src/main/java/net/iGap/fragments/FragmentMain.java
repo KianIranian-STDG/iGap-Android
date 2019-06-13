@@ -208,21 +208,24 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         if(MusicPlayer.playerStateChangeListener != null){
             MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
-                try {
-                    roomsAdapter.notifyDataSetChanged();
-                }catch (Exception e){}
-
+                notifyChatRoomsList();
             });
         }
 
         G.callStripLayoutVisiblityListener.observe(this , isVisible -> {
-            try {
-                roomsAdapter.notifyDataSetChanged();
-            }catch (Exception e){}
-
+           notifyChatRoomsList();
         });
 
 
+    }
+
+    private void notifyChatRoomsList() {
+        try {
+            roomsAdapter.notifyItemChanged(0);
+            roomsAdapter.notifyItemChanged(1);
+        }catch (Exception e){
+
+        }
     }
 
     private void initMultiSelectActions() {
@@ -521,6 +524,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         if (!isPinned) {
             goToTop();
         }
+        notifyChatRoomsList();
     }
 
     private void goToTop() {
