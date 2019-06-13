@@ -112,9 +112,8 @@ public class PaymentHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_payment_history, container, false);
 
         ViewGroup rootView = view.findViewById(R.id.rootView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
-        }
+        rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -137,6 +136,7 @@ public class PaymentHistoryFragment extends Fragment {
 
         mList = view.findViewById(R.id.list);
         mList.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+        lytToolbar.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         DividerItemDecoration divider = new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
@@ -262,7 +262,7 @@ public class PaymentHistoryFragment extends Fragment {
             OrderView orderView = new OrderView(getContext());
             orderView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            orderView.setBackgroundResource(R.drawable.simple_selector);
+            orderView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
             orderView.setTag("OrderView");
             root.addView(orderView);
 

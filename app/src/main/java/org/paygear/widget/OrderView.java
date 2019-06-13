@@ -1,6 +1,7 @@
 package org.paygear.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -19,6 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
 
+import org.paygear.WalletActivity;
 import org.paygear.model.Order;
 
 import java.util.Calendar;
@@ -102,7 +104,7 @@ public class OrderView extends LinearLayout {
         //par.gravity = Gravity.CENTER_VERTICAL;
         title.setLayoutParams(titleParams);
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        title.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
+        title.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         title.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         textsLayout.addView(title);
 
@@ -112,7 +114,7 @@ public class OrderView extends LinearLayout {
         //par.gravity = Gravity.CENTER_VERTICAL;
         subtitle.setLayoutParams(subtitleParams);
         subtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        subtitle.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
+        subtitle.setTextColor(Color.parseColor(WalletActivity.textSubTheme));
         subtitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         textsLayout.addView(subtitle);
 
@@ -122,7 +124,7 @@ public class OrderView extends LinearLayout {
         //par.gravity = Gravity.CENTER_VERTICAL;
         date.setLayoutParams(dateParams);
         date.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        date.setTextColor(ContextCompat.getColor(context, R.color.secondary_text));
+        date.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         date.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         textsLayout.addView(date);
 
@@ -132,7 +134,7 @@ public class OrderView extends LinearLayout {
         priceParams.gravity = Gravity.CENTER_VERTICAL;
         price.setLayoutParams(priceParams);
         price.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        price.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
+        price.setTextColor(Color.parseColor(WalletActivity.textSubTheme));
         price.setGravity(Gravity.END);
         price.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         addView(price);
@@ -164,7 +166,7 @@ public class OrderView extends LinearLayout {
 
                 subtitle.setText(R.string.paygear_card);
                 imgRes = R.drawable.ic_history;
-                price.setTextColor(ContextCompat.getColor(getContext(), order.isPaid ? R.color.primary_text : R.color.disabled_text));
+                price.setTextColor(Color.parseColor(order.isPaid ? WalletActivity.textTitleTheme : WalletActivity.textSubTheme));
             } else if (order.orderType == Order.ORDER_TYPE_CHARGE_CREDIT
                     && order.receiver.id.equals(Auth.getCurrentAuth().getId())) {
 
@@ -172,7 +174,7 @@ public class OrderView extends LinearLayout {
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 subtitle.setText(R.string.paygear_card);
                 imgRes = R.drawable.ic_history;
-                price.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
+                price.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
             } else {
                 if (order.transactionType == Order.TRANSACTION_TYPE_DIRECT_CARD) {
                     if (order.orderType == Order.ORDER_TYPE_DEFAULT ||
@@ -192,7 +194,7 @@ public class OrderView extends LinearLayout {
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_out, 0);
                 subtitle.setText(order.receiver.getName());
                 img = order.receiver.profilePicture;
-                price.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
+                price.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
             }
 
         } else { //daryafti
@@ -209,14 +211,14 @@ public class OrderView extends LinearLayout {
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_in, 0);
                 subtitle.setText(order.sender.getName());
                 img = order.sender.profilePicture;
-                price.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
+                price.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
             } else {
                 title.setText(R.string.payment_pending);
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0,
                         order.isPaid ? R.drawable.ic_payment_out : R.drawable.ic_payment_pending, 0);
                 subtitle.setText("-");
                 imgRes = R.drawable.ic_money;
-                price.setTextColor(ContextCompat.getColor(getContext(), R.color.disabled_text));
+                price.setTextColor(Color.parseColor(WalletActivity.textSubTheme));
             }
 
         }
