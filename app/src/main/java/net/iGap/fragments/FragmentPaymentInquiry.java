@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentInquiryBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IBackHandler;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
 /**
@@ -57,19 +59,27 @@ public class FragmentPaymentInquiry extends BaseFragment {
         FragmentPaymentInquiryViewModel fragmentPaymentInquiryViewModel = new FragmentPaymentInquiryViewModel(fragmentPaymentInquiryBinding, type);
         fragmentPaymentInquiryBinding.setFragmentPaymentInquiryViewModel(fragmentPaymentInquiryViewModel);
 
-        IBackHandler iBackHandler = new IBackHandler() {
-            @Override
-            public void onBack() {
-                popBackStackFragment();
-            }
-        };
-        fragmentPaymentInquiryBinding.setBackHandler(iBackHandler);
-
         String phone = getArguments().getString("phone");
         if (phone != null && phone.length() > 0) {
             fragmentPaymentInquiryBinding.fpiEdtMci.setText(phone);
             fragmentPaymentInquiryViewModel.onInquiryClick(null);
         }
+
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setDefaultTitle(fragmentPaymentInquiryViewModel.observeTitleToolbar.getValue())
+                .setLeftIcon(R.string.back_icon)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        fragmentPaymentInquiryBinding.fpiLayoutToolbar.addView(toolbar.getView());
+
     }
 
 
