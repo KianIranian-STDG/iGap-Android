@@ -1,6 +1,10 @@
 package net.iGap.fragments;
 
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -8,7 +12,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebChromeClient;
+import android.webkit.CookieManager;
+import android.webkit.GeolocationPermissions;
+import android.webkit.PermissionRequest;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -20,12 +26,17 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IOnBackPressed;
+import net.iGap.interfaces.OnGetPermission;
+
+import java.io.IOException;
 
 public class FragmentWebView extends FragmentToolBarBack implements IOnBackPressed {
 
     private String url;
+    private boolean forceCloseFragment;
     private WebView webView;
     private TextView webViewError;
     private SwipeRefreshLayout pullToRefresh;
@@ -49,6 +60,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        forceCloseFragment = false;
         url = getArguments().getString("url");
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             url = "http://" + url;
@@ -78,6 +90,12 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             }
         });
 
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+        } else {
+            CookieManager.getInstance().setAcceptCookie(true);
+        }
+
         titleTextView.setText(G.context.getString(R.string.igap));
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
@@ -85,19 +103,19 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         webView.clearHistory();
         webView.clearView();
         webView.clearFormData();
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int progress) {
-                if (progress == 100) {
-                    pullToRefresh.setRefreshing(false);
-                } else {
-                    pullToRefresh.setRefreshing(true);
-                }
-            }
-        });
+        webView.getSettings().setDatabaseEnabled(true);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setGeolocationEnabled(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        webView.getSettings().setGeolocationDatabasePath(getActivity().getFilesDir().getPath());
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        webView.setWebChromeClient(new GeoWebChromeClient());
         customWebViewClient = new CustomWebViewClient();
         webView.setWebViewClient(customWebViewClient);
         webView.loadUrl(url);
@@ -143,7 +161,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     @Override
     protected void onBackButtonClicked(View view) {
         webView.stopLoading();
-        if (webView.canGoBack()) {
+        if (webView.canGoBack() && !forceCloseFragment) {
             webView.clearView();
             webView.goBack();
             customWebViewClient.isWebViewVisible = true;
@@ -174,6 +192,11 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            if (url.toLowerCase().equals("igap://close")) {
+                isWebViewVisible = false;
+                forceCloseFragment = true;
+                FragmentWebView.this.onBackButtonClicked(view);
+            }
 
         }
 
@@ -190,9 +213,89 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             boolean a = HelperUrl.handleAppUrl(url);
             if (a) {
+                // onBackButtonClicked(view);
+            }
+            if (url.toLowerCase().equals("igap://close")) {
+                forceCloseFragment = true;
                 onBackButtonClicked(view);
             }
             return a;
         }
     }
+
+    public class GeoWebChromeClient extends android.webkit.WebChromeClient {
+        private boolean remember;
+        public GeoWebChromeClient() {
+            remember = false;
+        }
+
+        @Override
+        public void onProgressChanged(WebView view, int progress) {
+            if (progress == 100) {
+                pullToRefresh.setRefreshing(false);
+            } else {
+                pullToRefresh.setRefreshing(true);
+            }
+        }
+
+        @Override
+        public void onPermissionRequest(final PermissionRequest request) {
+            G.handler.post(new Runnable() {
+                @TargetApi(Build.VERSION_CODES.M)
+                @Override
+                public void run() {
+                    if(request.getOrigin().toString().equals("file:///")) {
+                        request.grant(request.getResources());
+                    } else {
+                        request.deny();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onGeolocationPermissionsShowPrompt(final String origin,
+                                                       final GeolocationPermissions.Callback callback) {
+            super.onGeolocationPermissionsShowPrompt(origin, callback);
+            if (remember) {
+                getLocation(origin, callback);
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(getActivity().getString(R.string.location_dialog_message))
+                        .setCancelable(true).setPositiveButton(getActivity().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getLocation(origin, callback);
+                        remember = true;
+
+                    }
+                }).setNegativeButton(getActivity().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        callback.invoke(origin, false, false);
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
+    }
+
+    private void getLocation(String origin,
+                             GeolocationPermissions.Callback callback) {
+        try{
+            HelperPermission.getLocationPermission(getActivity(), new OnGetPermission() {
+                @Override
+                public void Allow() throws IOException {
+                    callback.invoke(origin, true, false);
+                }
+
+                @Override
+                public void deny() {
+                    callback.invoke(origin, false, false);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

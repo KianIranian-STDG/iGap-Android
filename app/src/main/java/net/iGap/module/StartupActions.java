@@ -156,6 +156,7 @@ public final class StartupActions {
         RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
         if (realmDataUsage.size() == 0)
             HelperDataUsage.initializeRealmDataUsage();
+        realm.close();
     }
 
     private void manageTime() {

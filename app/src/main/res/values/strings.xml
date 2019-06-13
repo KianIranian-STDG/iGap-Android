@@ -1749,8 +1749,8 @@
     <string name="cash_to_wallet">to Personal wallet</string>
     <string name="person">person</string>
     <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">Enter Four digits code</string>
-    <string name="four_digit_code">Four digit code</string>
+    <string name="enter_four_digit_code">Enter Six digits code</string>
+    <string name="four_digit_code">Six digit code</string>
     <string name="show_receipt">مشاهده رسید</string>
     <string name="reciever_name">Receiver</string>
     <string name="date_time">date and time</string>
@@ -1779,4 +1779,5 @@
     <string name="amCardToCardIconText">Transfer Request</string>
     <string name="cardToCardBtnText">Card to Card</string>
     <string name="crad_to_card_dest_name">Account Owner Name</string>
+    <string name="location_dialog_message">Do you want to use your location?</string>
 </resources>
