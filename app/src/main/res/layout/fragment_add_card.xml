@@ -180,13 +180,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <android.support.design.button.MaterialButton
+                    style="@style/IGapButtonStyle"
                     android:id="@+id/button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@drawable/button_green_selector_24dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
                     android:text="@string/save"
                     android:gravity="center"
                     android:layout_marginTop="16dp"

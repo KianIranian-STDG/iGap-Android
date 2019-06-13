@@ -205,20 +205,19 @@
 
             </LinearLayout>
 
-            <Button
+            <android.support.design.button.MaterialButton
+                style="@style/IGapButtonStyle"
                 android:id="@+id/pay_button"
                 fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp10"
                 android:layout_marginTop="@dimen/dp32"
-                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                 android:paddingBottom="@dimen/dp12"
                 android:paddingLeft="@dimen/dp36"
                 android:paddingRight="@dimen/dp36"
                 android:paddingTop="@dimen/dp12"
                 android:text="@string/pay"
-                android:textColor="@color/white"
                 android:textSize="@dimen/dp16" />
 
           </LinearLayout>

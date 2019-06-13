@@ -115,7 +115,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         } else {
             paymentDialogBinding.amountCard.setVisibility(View.GONE);
         }
-        paymentDialogBinding.payButton.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+        //paymentDialogBinding.payButton.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         paymentDialogBinding.dialogHeader.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
         paymentDialogBinding.outside.setOnClickListener(new View.OnClickListener() {

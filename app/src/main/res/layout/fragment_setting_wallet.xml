@@ -39,7 +39,8 @@
       android:gravity="center">
 
 
-      <TextView
+      <android.support.design.button.MaterialButton
+          style="@style/IGapButtonStyle"
         android:id="@+id/txtSetPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -47,7 +48,6 @@
         android:gravity="center"
         android:padding="@dimen/dp4"
         android:text="@{RaadApp.paygearCard.isProtected ? @string/change_password : @string/set_password}"
-        android:textColor="#fff"
         android:textSize="@dimen/dp16" />
     </LinearLayout>
 
@@ -61,7 +61,8 @@
       android:gravity="center"
       android:visibility="@{RaadApp.paygearCard.isProtected ? View.VISIBLE : View.GONE}">
 
-      <TextView
+      <android.support.design.button.MaterialButton
+          style="@style/IGapButtonStyle"
         android:id="@+id/txtForgotPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -69,7 +70,6 @@
         android:gravity="center"
         android:padding="@dimen/dp4"
         android:text="@string/Forgot_Passwords"
-        android:textColor="#fff"
         android:textSize="@dimen/dp16" />
     </LinearLayout>
 

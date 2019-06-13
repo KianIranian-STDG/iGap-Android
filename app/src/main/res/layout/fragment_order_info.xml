@@ -38,18 +38,17 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
 
-        <Button
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
             android:id="@+id/show_receipt_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            style="?textTitleColorSettingTheme"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:text="@string/show_receipt"
-            android:background="@drawable/button_blue_selector"/>
+            android:text="@string/show_receipt"/>
 
 
 

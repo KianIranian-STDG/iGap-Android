@@ -149,13 +149,13 @@ public class SetCardPinFragment extends Fragment {
         confirmPass = view.findViewById(R.id.confirm_pass);
 
         button = view.findViewById(R.id.button);
-        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
+        /*Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
         if (mDrawableSkip != null) {
             mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 button.setBackground(mDrawableSkip);
             }
-        }
+        }*/
 
         if (WalletActivity.isDarkTheme) {
             currentPass.setHintTextColor(Color.parseColor(WalletActivity.textTitleTheme));
