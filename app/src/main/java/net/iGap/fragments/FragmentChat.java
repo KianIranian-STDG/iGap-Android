@@ -333,6 +333,7 @@ import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -8886,16 +8887,27 @@ public class FragmentChat extends BaseFragment
             direction = UP;
         }
 
-        resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        /**
+         * Hint: don't use "findFirst()" for find biggest message, because "findFirst()" just will be
+         * returned latest message that inserted to "RealmRoomMessage" and it is not biggest always
+         **/
+        Number latestMessageId = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).max(RealmRoomMessageFields.MESSAGE_ID);
+        if (latestMessageId != null) {
+            resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, latestMessageId.longValue()).findAll();
+        } else {
+            /** use fake query for make empty RealmResult */
+            resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, -100).findAll();
+        }
 
         long gapMessageId;
         if (direction == DOWN) {
-            resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+            RealmQuery realmQuery = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true);
             /**
              * if for UP changeState client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
              */
-            if (resultsUp.size() > 1) {
+            if (realmQuery.count() > 1) {
+                resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll();
                 gapDetection(resultsUp, UP);
             } else {
                 getOnlineMessage(fetchMessageId, UP);
