@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -39,7 +40,6 @@ public class FragmentPaymentBillViewModel {
     private FragmentPaymentBill fragmentPaymentBill;
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
-    public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
     public ObservableField<String> PID = new ObservableField<>("");
     public ObservableField<String> BID = new ObservableField<>("");
     public ObservableBoolean observePolice = new ObservableBoolean(false);
@@ -53,7 +53,6 @@ public class FragmentPaymentBillViewModel {
     public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId, String PID_Str, String BID_Str) {
         this.fragmentPaymentBill = fragmentPaymentBill;
         this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
-        observeTitleToolbar.set(G.context.getString(resTitleId));
 
         isPolice = resTitleId == R.string.pay_bills_crime;
 

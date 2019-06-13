@@ -15,7 +15,9 @@ import com.google.zxing.integration.android.IntentResult;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBillBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IBackHandler;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentBillViewModel;
 
 import org.json.JSONException;
@@ -77,14 +79,20 @@ public class FragmentPaymentBill extends BaseFragment {
         FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId, PID, BID);
         fragmentPaymentBillBinding.setFragmentPaymentBillViewModel(fragmentPaymentBillViewModel);
 
-        IBackHandler iBackHandler = new IBackHandler() {
-            @Override
-            public void onBack() {
-                popBackStackFragment();
-            }
-        };
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setDefaultTitle(getString(resTitleId))
+                .setLeftIcon(R.string.back_icon)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
 
-        fragmentPaymentBillBinding.setBackHandler(iBackHandler);
+        fragmentPaymentBillBinding.fpbLayoutToolbar.addView(toolbar.getView());
+
     }
 
 
