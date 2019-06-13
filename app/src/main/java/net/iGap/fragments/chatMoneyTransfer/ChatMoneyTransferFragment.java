@@ -1,7 +1,6 @@
 package net.iGap.fragments.chatMoneyTransfer;
 
 import android.animation.ValueAnimator;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,9 +21,10 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 
-public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
+public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
     private static final String TAG = "aabolfazl";
 
     private View rootView;
@@ -44,8 +44,8 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
     private String userName;
 
 
-    public static MoneyTransferActionFragment getInstance(long userId, Drawable userPicture, String userName) {
-        MoneyTransferActionFragment transferAction = new MoneyTransferActionFragment();
+    public static ChatMoneyTransferFragment getInstance(long userId, Drawable userPicture, String userName) {
+        ChatMoneyTransferFragment transferAction = new ChatMoneyTransferFragment();
         transferAction.userId = userId;
         transferAction.userName = userName;
         transferAction.drawable = userPicture;
@@ -79,11 +79,24 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
         FrameLayout layoutContainer = rootView.findViewById(R.id.fl_moneyAction_Container);
         WalletTransferFragment sendMoneyFragment = new WalletTransferFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        TextView cardToCardIv = rootView.findViewById(R.id.iv_moneyAction_cardToCard);
+        TextView walletTransferIv = rootView.findViewById(R.id.iv_moneyAction_wallet);
 
-        darkModeHandler(layoutContainer);
-        darkModeHandler(creditTv);
-        darkModeHandler(userNameTv);
-        darkModeHandler(transferToTv);
+        walletTransferIv.setText("0");
+        cardToCardIv.setText("4");
+
+        walletTransferIv.setTypeface(G.typeface_FonticonNew);
+        cardToCardIv.setTypeface(G.typeface_FonticonNew);
+
+        Utils.darkModeHandler(layoutContainer);
+        Utils.darkModeHandler(creditTv);
+        Utils.darkModeHandler(userNameTv);
+        Utils.darkModeHandler(transferToTv);
+        Utils.darkModeHandler(userNameTv);
+        Utils.darkModeHandler(cardToCardIv);
+        Utils.darkModeHandler(walletTransferIv);
+
+        creditTv.setTextColor(Utils.darkModeHandler(getContext()));
 
 
         /**
@@ -160,32 +173,12 @@ public class MoneyTransferActionFragment extends BottomSheetDialogFragment {
         anim.start();
     }
 
-    public int getScreenHeight() {
-        return Resources.getSystem().getDisplayMetrics().heightPixels;
-    }
-
     @Override
     public int getTheme() {
         if (G.isDarkTheme) {
             return R.style.BaseBottomSheetDialog;
         } else {
             return R.style.BaseBottomSheetDialogLight;
-        }
-    }
-
-    private void darkModeHandler(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.background_setting_dark));
-        } else {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.white));
-        }
-    }
-
-    private void darkModeHandler(TextView textView) {
-        if (G.isDarkTheme) {
-            textView.setTextColor(getContext().getResources().getColor(R.color.white));
-        } else {
-            textView.setTextColor(getContext().getResources().getColor(R.color.black));
         }
     }
 
