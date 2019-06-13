@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -65,7 +66,7 @@ public class FragmentPaymentInquiryViewModel {
     public ObservableBoolean observeInquiry = new ObservableBoolean(false);
     public ObservableBoolean observableLastTermMessage = new ObservableBoolean(false);
     public ObservableBoolean observableMidTermMessage = new ObservableBoolean(false);
-    public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
+    public MutableLiveData<String> observeTitleToolbar = new MutableLiveData<>();
 
     public ObservableField<String> lastTermBillId = new ObservableField<>("");
     public ObservableField<String> lastTermPayId = new ObservableField<>("");
@@ -94,14 +95,14 @@ public class FragmentPaymentInquiryViewModel {
             case mci:
                 observeMci.set(View.VISIBLE);
                 observeTelecom.set(View.GONE);
-                observeTitleToolbar.set(G.context.getString(R.string.bills_inquiry_mci));
+                observeTitleToolbar.setValue(G.context.getString(R.string.bills_inquiry_mci));
                 fragmentPaymentInquiryBinding.fpiEdtMci.requestFocus();
 
                 break;
             case telecome:
                 observeMci.set(View.GONE);
                 observeTelecom.set(View.VISIBLE);
-                observeTitleToolbar.set(G.context.getString(R.string.bills_inquiry_telecom));
+                observeTitleToolbar.setValue(G.context.getString(R.string.bills_inquiry_telecom));
                 fragmentPaymentInquiryBinding.fpiEdtTelecomArea.requestFocus();
                 break;
         }

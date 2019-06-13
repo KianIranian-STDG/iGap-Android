@@ -33,11 +33,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/amr_layout_toolbar"
+            style="?backgroundColorSettingTheme"
             android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/amr_layout_selected_actions"
-                style="?backgroundColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:orientation="horizontal"

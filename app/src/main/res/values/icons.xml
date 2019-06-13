@@ -213,8 +213,8 @@
     <string name="message_icon">h</string>
     <string name="mic_on_icon">F</string>
     <string name="mic_off_icon">D</string>
-    <string name="speaker_on_icon">È</string>
-    <string name="speaker_off_icon">K</string>
+    <string name="speaker_on_icon">Â</string>
+    <string name="speaker_off_icon">Á</string>
     <string name="switch_camera_icon">Ã</string>
     <string name="end_voice_call_icon">Ý</string>
     <string name="end_video_call_icon">Ê</string>

@@ -169,13 +169,13 @@ public class CashOutRequestFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
         button = view.findViewById(R.id.button);
-        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
+      /*  Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
         if (mDrawableSkip != null) {
             mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 button.setBackground(mDrawableSkip);
             }
-        }
+        }*/
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

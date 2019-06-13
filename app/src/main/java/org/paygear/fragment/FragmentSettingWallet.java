@@ -108,18 +108,18 @@ public class FragmentSettingWallet extends Fragment {
         TextView txtForgotPassword = fragmentSettingWalletBinding.txtForgotPassword;
 
 
-        Drawable mDrawableSetPassword = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
+        /*Drawable mDrawableSetPassword = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
         mDrawableSetPassword.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             btnSetPassword.setBackground(mDrawableSetPassword);
             btnForgotPassword.setBackground(mDrawableSetPassword);
-        }
+        }*/
 
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, txtForgotPassword, txtSetPassword);
 
-        btnSetPassword.setOnClickListener(new View.OnClickListener() {
+        txtSetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -127,7 +127,7 @@ public class FragmentSettingWallet extends Fragment {
             }
         });
 
-        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

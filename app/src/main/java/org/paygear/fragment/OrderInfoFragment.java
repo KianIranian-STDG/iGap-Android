@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
@@ -94,6 +95,8 @@ public class OrderInfoFragment extends Fragment {
         LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
         lytToolbar.addView(toolbar.getView());
 
+        RelativeLayout root= view.findViewById(R.id.rootView);
+        root.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         mOrderView = view.findViewById(R.id.order_view);
         showReceiptButton = view.findViewById(R.id.show_receipt_button);
         showReceiptButton.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_MEDIUM));

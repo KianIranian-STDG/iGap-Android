@@ -105,14 +105,12 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <TextView
+                <android.support.design.button.MaterialButton
+                    style="@style/IGapButtonStyle"
                     android:id="@+id/button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center"
-                    android:background="@drawable/button_green_selector_24dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
                     android:text="@string/ok"/>
 
                 <ProgressBar

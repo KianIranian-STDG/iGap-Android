@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,7 +56,7 @@ public class AddCardFragment extends Fragment {
     private EditText monthText;
     private EditText yearText;
     private SwitchCompat defaultCardSwitch;
-    private TextView button;
+    private Button button;
     private ProgressBar progressBar;
 
     private int bankLogoRes = R.drawable.bank_logo_default;

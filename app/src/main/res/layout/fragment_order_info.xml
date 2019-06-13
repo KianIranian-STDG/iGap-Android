@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rootView"
-    android:background="@android:color/white"
+    android:background="@color/white"
+    style="?backgroundColorSettingTheme"
     android:clickable="true"
     tools:context="org.paygear.fragment.OrderInfoFragment">
 
@@ -18,10 +19,11 @@
         android:layout_height="@dimen/toolbar_height" />
 
     <LinearLayout
-        android:layout_below="@+id/app_bar"
+        android:layout_below="@+id/toolbarLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        style="?backgroundColorSettingTheme">
 
         <!--<include layout="@layout/fragment_payment_history_list_item" />-->
         <org.paygear.widget.OrderView
@@ -36,18 +38,17 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
 
-        <Button
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
             android:id="@+id/show_receipt_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:text="@string/show_receipt"
-            android:background="@drawable/button_blue_selector"/>
+            android:text="@string/show_receipt"/>
 
 
 
