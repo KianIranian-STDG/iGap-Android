@@ -170,7 +170,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                                         @Override
                                         public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                             dismissProgress();
-                                            if (!HelperFragment.isFragmentVisible("PaymentFragment"))
+                                            if (!new HelperFragment(getFragmentManager()).isFragmentVisible("PaymentFragment"))
                                                 return;
                                             if (response.body() != null) {
                                                 selectedCard = null;
