@@ -1867,4 +1867,5 @@
     <string name="Select_Country">Select Country</string>
     <string name="call">Call</string>
     <string name="enter_wallet_password">Enter wallet password</string>
+    <string name="forward_slash">/</string>
 </resources>
