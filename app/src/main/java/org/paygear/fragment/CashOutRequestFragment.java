@@ -220,6 +220,10 @@ public class CashOutRequestFragment extends Fragment {
                         startUserConfirm();
                         break;
                     case REQUEST_CASH_OUT_TO_WALLET:
+                        if (TextUtils.isEmpty(priceText.getText())) {
+                            Toast.makeText(getContext(), R.string.enter_info_completely, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         cashOutToPersonalWallet(mCard);
                 }
                 Utils.hideKeyboard(getContext(), priceText);

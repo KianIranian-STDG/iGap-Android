@@ -2707,8 +2707,8 @@
     <string name="cash_to_wallet">to Personal wallet</string>
     <string name="person">person</string>
     <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">Enter Four digits code that we`ve sent to your phone number</string>
-    <string name="four_digit_code">Four digit code</string>
+    <string name="enter_four_digit_code">Enter Six digits code that we`ve sent to your phone number</string>
+    <string name="four_digit_code">Six digit code</string>
     <string name="show_receipt">مشاهده رسید</string>
     <string name="reciever_name">Receiver</string>
     <string name="date_time">date and time</string>
@@ -2821,4 +2821,6 @@
     <string name="links">Links</string>
     <string name="size">Size</string>
     <string name="copy_link_title">انسخ الرابط</string>
+    <string name="location_dialog_message">هل تريد استخدام موقعك؟</string>
+
 </resources>

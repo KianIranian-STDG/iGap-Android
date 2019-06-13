@@ -1765,7 +1765,7 @@
     <string name="cash_to_wallet">کیف ‌پولی</string>
     <string name="person">نفر</string>
     <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">کد چهار رقمی  را وارد کنید</string>
+    <string name="enter_four_digit_code">کد شش رقمی  را وارد کنید</string>
     <string name="four_digit_code">کد شش رقمی پیامک شده</string>
     <string name="show_receipt">مشاهده رسید</string>
     <string name="reciever_name">نام گیرنده</string>
@@ -1874,4 +1874,6 @@
     <string name="links">لینک ها</string>
     <string name="size">اندازه</string>
     <string name="copy_link_title">کپی لینک</string>
+    <string name="location_dialog_message">آیا می خواهید از موقیعت مکانی شما استفاده شود؟</string>
+
 </resources>
