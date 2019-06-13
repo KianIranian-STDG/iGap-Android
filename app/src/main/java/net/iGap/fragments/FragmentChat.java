@@ -1847,10 +1847,8 @@ public class FragmentChat extends BaseFragment
 
             managedRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             if (managedRoom != null) { // room exist
+
                 unmanagedRoom = getRealmChat().copyFromRealm(managedRoom);
-
-            if (managedRoom != null) { // room exist
-
                 title = managedRoom.getTitle();
                 initialize = managedRoom.getInitials();
                 color = managedRoom.getColor();
@@ -1860,39 +1858,39 @@ public class FragmentChat extends BaseFragment
                 savedScrollMessageId = managedRoom.getLastScrollPositionMessageId();
                 firstVisiblePositionOffset = managedRoom.getLastScrollPositionOffset();
 
-            if (messageId != 0) {
-                savedScrollMessageId = messageId;
-                firstVisiblePositionOffset = 0;
-            }
-
-            if (chatType == CHAT) {
-
-                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
-                if (realmRegisteredInfo != null) {
-                    initialize = realmRegisteredInfo.getInitials();
-                    color = realmRegisteredInfo.getColor();
-                    phoneNumber = realmRegisteredInfo.getPhoneNumber();
-
-                    if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
-                        // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
-                        initDrBot();
-                    }
-
-                } else {
-                    title = managedRoom.getTitle();
-                    initialize = managedRoom.getInitials();
-                    color = managedRoom.getColor();
-                    userStatus = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
+                if (messageId != 0) {
+                    savedScrollMessageId = messageId;
+                    firstVisiblePositionOffset = 0;
                 }
-            } else if (chatType == GROUP) {
-                RealmGroupRoom realmGroupRoom = managedRoom.getGroupRoom();
-                groupRole = realmGroupRoom.getRole();
-                groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-            } else if (chatType == CHANNEL) {
-                RealmChannelRoom realmChannelRoom = managedRoom.getChannelRoom();
-                channelRole = realmChannelRoom.getRole();
-                channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
-            }
+
+                if (chatType == CHAT) {
+
+                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
+                    if (realmRegisteredInfo != null) {
+                        initialize = realmRegisteredInfo.getInitials();
+                        color = realmRegisteredInfo.getColor();
+                        phoneNumber = realmRegisteredInfo.getPhoneNumber();
+
+                        if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
+                            // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
+                            initDrBot();
+                        }
+
+                    } else {
+                        title = managedRoom.getTitle();
+                        initialize = managedRoom.getInitials();
+                        color = managedRoom.getColor();
+                        userStatus = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
+                    }
+                } else if (chatType == GROUP) {
+                    RealmGroupRoom realmGroupRoom = managedRoom.getGroupRoom();
+                    groupRole = realmGroupRoom.getRole();
+                    groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
+                } else if (chatType == CHANNEL) {
+                    RealmChannelRoom realmChannelRoom = managedRoom.getChannelRoom();
+                    channelRole = realmChannelRoom.getRole();
+                    channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
+                }
         } else {
             //chatPeerId = extras.getLong("peerId");
             chatType = CHAT;

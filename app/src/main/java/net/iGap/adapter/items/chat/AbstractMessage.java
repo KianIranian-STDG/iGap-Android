@@ -65,6 +65,8 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnProgressUpdate;
 import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messageprogress.OnMessageProgressClick;
+import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
@@ -156,16 +158,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                             String p = percent + "";
 
-                    if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
-                        p = convertToUnicodeFarsiNumber(p);
+                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
+                                p = convertToUnicodeFarsiNumber(p);
+                            }
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
+                        } else {
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.Uploading)));
+                        }
                     }
-                    duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
-                } else {
-                    duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.Uploading)));
-                }
-            });
+                });
+            }
         };
     }
+
+
 
     public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
         ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
@@ -238,25 +244,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         updateMessageText();
 
         return this;
-    }
-
-    public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
-        ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
-        int start = -1;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '*' && (i + 1) < text.length() && text.charAt(i+1) == '*') {
-                if (start == -1) {
-                    start = i;
-                } else {
-                    Tuple<Integer, Integer> t = new Tuple<>(start, i);
-                    result.add(t);
-                    start = -1;
-                }
-                i += 1;
-            }
-        }
-
-        return result;
     }
 
     public static String removeBoldMark(String text, ArrayList<Tuple<Integer, Integer>> boldPlaces) {
@@ -1643,6 +1630,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     progressBar.withProgress(0);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
 
+                                }
                             }
                         });
                     }
