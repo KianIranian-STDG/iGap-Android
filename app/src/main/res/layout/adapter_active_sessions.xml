@@ -23,12 +23,12 @@
       android:padding="@dimen/dp12">
 
 
-      <net.iGap.module.HeaderTextView
+      <TextView
         android:id="@+id/adp_currentSession"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/current_session"
-        android:textColor="@color/toolbar_background"
+        android:textColor="@color/setting_items_value_color"
         android:textSize="@dimen/dp14" />
 
 
