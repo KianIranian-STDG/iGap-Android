@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
     private Button cancelBtn;
 
     private long userId;
-    private ValueAnimator anim;
     private MoneyTransferAction moneyTransferAction;
     private String userName;
 
@@ -160,14 +158,13 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
     }
 
     private void sendMoneyClicked() {
-        anim = ValueAnimator.ofInt(500, transferRootView.getMeasuredHeight());
+        ValueAnimator anim = ValueAnimator.ofInt(500, transferRootView.getMeasuredHeight());
         anim.setDuration(500);
 
         anim.addUpdateListener(animation -> {
             int animProgress = (Integer) animation.getAnimatedValue();
             rootView.getLayoutParams().height = animProgress;
             rootView.requestLayout();
-            Log.i(TAG, "transferActionInit: " + animProgress);
         });
 
         anim.start();

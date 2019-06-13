@@ -310,16 +310,13 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                             + String.valueOf(paymentResult.traceNumber)
                             + getResources().getString(R.string.amount_2)
                             + String.valueOf(paymentResult.amount), false);
-                    Log.i(TAG, "onFailure: 6");
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
                 } else {
                     HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
-                    Log.i(TAG, "onFailure: 7");
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed);
                 }
             } else {
                 HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
-                Log.i(TAG, "onFailure: 8");
                 EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved);
             }
         }
