@@ -241,19 +241,20 @@
             </LinearLayout>
 
           </LinearLayout>
+<!--
+          android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
+-->
 
-          <Button
+          <android.support.design.button.MaterialButton
+              style="@style/IGapButtonStyle"
             android:layout_width="@dimen/dp180"
             android:layout_height="@dimen/dp44"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp12"
             android:textAllCaps="false"
             android:layout_marginBottom="@dimen/dp12"
-            android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
             android:onClick="@{fragmentPaymentInquiryViewModel::onInquiryClick}"
-            android:text="@string/inquiry"
-            android:textColor="@color/whit_background"
-            android:textSize="@dimen/dp18" />
+            android:text="@string/inquiry" />
 
           <ProgressBar
             android:layout_width="wrap_content"
@@ -379,16 +380,15 @@
                   android:textSize="@dimen/dp16" />
               </LinearLayout>
 
-              <Button
-                android:layout_width="match_parent"
+
+              <android.support.design.button.MaterialButton
+                  style="@style/IGapButtonStyle"
+                  android:layout_width="match_parent"
                 android:layout_height="@dimen/dp44"
                 android:layout_margin="@dimen/dp20"
                 android:textAllCaps="false"
-                android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
                 android:onClick="@{fragmentPaymentInquiryViewModel::onLastTermPayment}"
-                android:text="@string/last_term_payment"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/dp18" />
+                android:text="@string/last_term_payment" />
 
 
             </LinearLayout>
@@ -500,16 +500,15 @@
                   android:textSize="@dimen/dp16" />
               </LinearLayout>
 
-              <Button
-                android:layout_width="match_parent"
+
+              <android.support.design.button.MaterialButton
+                  style="@style/IGapButtonStyle"
+                  android:layout_width="match_parent"
                 android:layout_height="@dimen/dp44"
                 android:layout_margin="@dimen/dp20"
                 android:textAllCaps="false"
-                android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
                 android:onClick="@{fragmentPaymentInquiryViewModel::onMidTermPayment}"
-                android:text="@string/intermediate_payment"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/dp18" />
+                android:text="@string/intermediate_payment"/>
 
             </LinearLayout>
 

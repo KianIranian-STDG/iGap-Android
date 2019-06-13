@@ -189,33 +189,32 @@
           android:visibility="@{fragmentPaymentBillViewModel.observeEnabledPayment ? View.GONE :View.VISIBLE}" />
 
 
-        <Button
-          android:layout_width="@dimen/dp180"
-          android:layout_height="@dimen/dp40"
+
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
+            android:layout_width="@dimen/dp180"
+            android:layout_height="wrap_content"
+          android:minHeight="@dimen/dp40"
           android:layout_gravity="center"
           android:layout_marginTop="@dimen/dp20"
           android:enabled="@{fragmentPaymentBillViewModel.observeEnabledPayment}"
-          android:background="@{fragmentPaymentBillViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentBillViewModel::onPayBillClick}"
-          android:text="@string/payment"
-          android:textAllCaps="false"
-          android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp16" />
+          android:text="@string/payment"/>
 
-        <Button
-          android:layout_width="@dimen/dp180"
-          android:layout_height="@dimen/dp40"
+
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
+            android:layout_width="@dimen/dp180"
+            android:layout_height="wrap_content"
+          android:minHeight="@dimen/dp40"
           android:layout_gravity="center"
           android:layout_marginTop="@dimen/dp8"
           android:enabled="@{fragmentPaymentBillViewModel.observeEnabledPayment}"
           android:layout_marginBottom="@dimen/dp40"
-          android:background="@{fragmentPaymentBillViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentBillViewModel::onClickBarCode}"
           android:text="@string/barcode_reader"
           android:visibility="@{fragmentPaymentBillViewModel.observePolice? View.GONE: View.VISIBLE }"
-          android:textAllCaps="false"
-          android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp16" />
+          />
 
       </LinearLayout>
 
