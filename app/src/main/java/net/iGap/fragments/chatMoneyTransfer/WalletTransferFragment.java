@@ -25,6 +25,7 @@ import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
 import net.iGap.request.RequestWalletPaymentInit;
@@ -77,12 +78,12 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         TextView amountTextTv = rootView.findViewById(R.id.tv_moneyAction_amountText);
         TextView descriptionTv = rootView.findViewById(R.id.tv_moneyAction_description);
 
-        amountEt.setTextColor(darkModeHandler());
-        descriptionEt.setTextColor(darkModeHandler());
-        amountTextTv.setTextColor(darkModeHandler());
-        descriptionTv.setTextColor(darkModeHandler());
+        amountEt.setTextColor(Utils.darkModeHandler(getContext()));
+        descriptionEt.setTextColor(Utils.darkModeHandler(getContext()));
+        amountTextTv.setTextColor(Utils.darkModeHandler(getContext()));
+        descriptionTv.setTextColor(Utils.darkModeHandler(getContext()));
 
-        darkModeHandler(rootView);
+        Utils.darkModeHandler(rootView);
 
         confirmBtn.setOnClickListener(v -> {
             if (mPrice[0] != null && !mPrice[0].isEmpty()) {
@@ -145,16 +146,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                             } catch (Exception e) {
                                 Log.e(TAG, "receivedMessage: ", e);
                             }
-
-                        Log.i(TAG, "onFailure: user have not internet");
-                        WalletDialogFragment dialogFragment = new WalletDialogFragment();
-                        dialogFragment.setMessage(getResources().getString(R.string.PayGear_unavailable));
-                        dialogFragment.setTitle(getResources().getString(R.string.wallet));
-                        dialogFragment.setShowStatus(true);
-
-                        if (dialogFragment.isShowStatus())
-                            dialogFragment.show(fragmentManager, null);
-
                     });
                     return;
                 }
@@ -182,10 +173,8 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                                                     if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
                                                         if (!selectedCard.isProtected) {
                                                             setWalletPassword();
-                                                            Log.i(TAG, "onResponse: set wallet password must show");
                                                         } else {
                                                             showPasswordFragment(initPayResponse);
-                                                            Log.i(TAG, "onResponse: wallet password must show");
                                                         }
                                                     } else {
                                                         showWalletActivity(initPayResponse);
@@ -200,7 +189,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                                             if (confirmBtn != null)
                                                 confirmBtn.setEnabled(true);
                                             dismissProgress();
-                                            Log.i(TAG, "onFailure: 1" + t.getMessage());
                                             HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                                         }
                                     }));
@@ -216,8 +204,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                     case socketMessages.PaymentResultRecievedSuccess:
                         new android.os.Handler(getContext().getMainLooper()).post(() -> {
                             fragmentActivity.onBackPressed();
-                            Log.i(TAG, "onFailure: 3");
-
                             HelperError.showSnackMessage(getResources().getString(R.string.result_4), false);
                         });
 
@@ -227,8 +213,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                         new android.os.Handler(getContext().getMainLooper()).post(() -> {
                             fragmentActivity.onBackPressed();
                             HelperError.showSnackMessage(getResources().getString(R.string.not_success_2), false);
-                            Log.i(TAG, "onFailure: 4");
-
                         });
                         break;
 
@@ -236,8 +220,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                         new android.os.Handler(getContext().getMainLooper()).post(() -> {
                             fragmentActivity.onBackPressed();
                             HelperError.showSnackMessage(getResources().getString(R.string.result_3), false);
-                            Log.i(TAG, "onFailure: 5");
-
                         });
                         break;
                 }
@@ -265,8 +247,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         fragmentTransaction.replace(R.id.fl_moneyAction_Container, passwordFragment, "passwordFragment");
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
-        Log.i(TAG, "showPasswordFragment: enter password");
     }
 
     private void showWalletActivity(ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse) {
@@ -308,8 +288,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         fragmentTransaction.replace(R.id.fl_moneyAction_Container, confirmPasswordFragment, "confirmPasswordFragment");
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
-        Log.i(TAG, "setWalletPassword: user have not password");
     }
 
     private void dismissProgress() {
@@ -332,16 +310,13 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                             + String.valueOf(paymentResult.traceNumber)
                             + getResources().getString(R.string.amount_2)
                             + String.valueOf(paymentResult.amount), false);
-                    Log.i(TAG, "onFailure: 6");
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
                 } else {
                     HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
-                    Log.i(TAG, "onFailure: 7");
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed);
                 }
             } else {
                 HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
-                Log.i(TAG, "onFailure: 8");
                 EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved);
             }
         }
@@ -349,21 +324,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void darkModeHandler(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.background_setting_dark));
-        } else {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.white));
-        }
-    }
-
-    private int darkModeHandler() {
-        if (G.isDarkTheme) {
-            return getContext().getResources().getColor(R.color.white);
-        } else {
-            return getContext().getResources().getColor(R.color.black);
-        }
-    }
 
     public void setUserId(Long userId) {
         this.userId = userId;

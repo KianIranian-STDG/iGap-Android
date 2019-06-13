@@ -39,17 +39,19 @@
             android:padding="@dimen/dp16">
 
 
-            <net.iGap.module.FontIconTextView
+            <TextView
+                android:id="@+id/iv_moneyAction_cardToCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_moneyAction_cardToCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Card To Card"
+                android:text="@string/card_to_card"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dp12" />
         </LinearLayout>
@@ -64,16 +66,18 @@
             android:padding="@dimen/dp16">
 
 
-            <net.iGap.module.FontIconTextView
+            <TextView
+                android:id="@+id/iv_moneyAction_wallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp8" />
+                android:layout_marginBottom="@dimen/dp8"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_moneyAction_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send Money"
+                android:text="@string/WALLET_TRANSFER_MONEY"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dp12" />
         </LinearLayout>

@@ -21,14 +21,6 @@ public class WalletDialogFragment extends DialogFragment {
     private String message;
     private String title;
     private TextView confirm;
-    private boolean showStatus;
-
-//    public WalletDialogFragment getInstance(String title, String message) {
-//        WalletDialogFragment dialogFragment = new WalletDialogFragment();
-//        dialogFragment.message = message;
-//        dialogFragment.title = title;
-//        return dialogFragment;
-//    }
 
     @NonNull
     @Override
@@ -82,12 +74,4 @@ public class WalletDialogFragment extends DialogFragment {
         this.title = title;
     }
 
-
-    public boolean isShowStatus() {
-        return showStatus;
-    }
-
-    public void setShowStatus(boolean showStatus) {
-        this.showStatus = showStatus;
-    }
 }
