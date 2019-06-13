@@ -42,11 +42,11 @@ public class FragmentCallAction extends BottomSheetDialogFragment {
         View messageAction = rootView.findViewById(R.id.ll_callAction_textMessage);
         messageAction.setOnClickListener(v -> {
             if (phoneNumber != null) {
-                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                smsIntent.setType("vnd.android-dir/mms-sms");
-                smsIntent.putExtra("address", phoneNumber);
-                getContext().startActivity(smsIntent);
                 dismiss();
+                Uri uri = Uri.parse("smsto:"+phoneNumber);
+                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                intent.putExtra("sms_body", "");
+                startActivity(intent);
             }
         });
 
