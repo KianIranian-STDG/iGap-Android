@@ -52,14 +52,9 @@ import io.realm.RealmModel;
 
 public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
 
-    public ObservableInt videoCallVisibility = new ObservableInt(View.GONE);
-    public ObservableInt callVisibility = new ObservableInt(View.GONE);
-    public ObservableInt menuVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt bioVisibility = new ObservableInt(View.VISIBLE);
     public ObservableBoolean showNumber = new ObservableBoolean(true);
     public ObservableField<String> username = new ObservableField<>();
-    public ObservableField<String> contactName = new ObservableField<>();
-    public ObservableField<String> lastSeen = new ObservableField<>();
     public ObservableField<String> phone = new ObservableField<>("0");
     public ObservableField<String> bio = new ObservableField<>();
     public ObservableField<Integer> verifyTextVisibility = new ObservableField<>(View.VISIBLE);
@@ -85,7 +80,6 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public ObservableBoolean isShowReportView = new ObservableBoolean(false);
 
     //ui event and observed
-    public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     public MutableLiveData<Boolean> showMenu = new MutableLiveData<>();
     public MutableLiveData<Boolean> showClearChatDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToCustomNotificationPage = new MutableLiveData<>();
@@ -95,6 +89,11 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public MutableLiveData<Boolean> showDialogReportContact = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogStartSecretChat = new MutableLiveData<>();
     public MutableLiveData<Boolean> showPhoneNumberDialog = new MutableLiveData<>();
+    public MutableLiveData<Integer> menuVisibility = new MutableLiveData<>();
+    public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
+    public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
+    public MutableLiveData<String> contactName = new MutableLiveData<>();
+    public MutableLiveData<String> lastSeen = new MutableLiveData<>();
 
     public List<String> items;
     private Realm realm;
@@ -134,10 +133,6 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         new RequestUserInfo().userInfo(userId);
     }
 
-    public void onBackButtonOnClick() {
-        goBack.setValue(true);
-    }
-
     public void onVideoCallClick() {
         FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
     }
@@ -151,7 +146,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
 
     }
 
-    public void onNotificationClick(){
+    public void onNotificationClick() {
         isMuteNotification.set(!isMuteNotification.get());
         isMuteNotificationChangeListener.setValue(isMuteNotification.get());
     }
@@ -273,9 +268,13 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         if (registeredInfo != null) {
             isBot = registeredInfo.isBot();
             if (isBot) {
-                callVisibility.set(View.GONE);
-                menuVisibility.set(View.GONE);
-                videoCallVisibility.set(View.GONE);
+                callVisibility.setValue(View.GONE);
+                menuVisibility.setValue(View.GONE);
+                videoCallVisibility.setValue(View.GONE);
+            } else {
+                callVisibility.setValue(View.VISIBLE);
+                menuVisibility.setValue(View.VISIBLE);
+                videoCallVisibility.setValue(View.VISIBLE);
             }
 
             isBlockUser = registeredInfo.isBlockUser();
@@ -296,9 +295,9 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
 
         if (registeredInfo != null) {
             if (registeredInfo.getDisplayName() != null && !registeredInfo.getDisplayName().equals("")) {
-                contactName.set(registeredInfo.getDisplayName());
+                contactName.setValue(registeredInfo.getDisplayName());
             } else {
-                contactName.set(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
+                contactName.setValue(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
             }
 
             if (registeredInfo.getBio() == null || registeredInfo.getBio().length() == 0) {
@@ -318,9 +317,9 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             isVerified = registeredInfo.isVerified();
         } else if (realmUser != null) {
             if (realmUser.getDisplay_name() != null && !realmUser.getDisplay_name().equals("")) {
-                contactName.set(realmUser.getDisplay_name());
+                contactName.setValue(realmUser.getDisplay_name());
             } else {
-                contactName.set(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
+                contactName.setValue(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
             }
             username.set(realmUser.getUsername());
             phone.set(Long.toString(realmUser.getPhone()));
@@ -350,16 +349,16 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             if (callConfig != null) {
 
                 if (isBot) {
-                    callVisibility.set(View.GONE);
-                    videoCallVisibility.set(View.GONE);
+                    callVisibility.setValue(View.GONE);
+                    videoCallVisibility.setValue(View.GONE);
                 } else {
 
                     if (callConfig.isVoice_calling()) {
-                        callVisibility.set(View.VISIBLE);
+                        callVisibility.setValue(View.VISIBLE);
                     }
 
                     if (callConfig.isVideo_calling()) {
-                        videoCallVisibility.set(View.VISIBLE);
+                        videoCallVisibility.setValue(View.VISIBLE);
                     }
                 }
 
@@ -413,7 +412,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                 @Override
                 public void run() {
                     if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
-                        contactName.set(user.getDisplayName());
+                        contactName.setValue(user.getDisplayName());
                     }
                     setAvatar.setValue(true);
                 }
@@ -437,7 +436,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             @Override
             public void run() {
                 setAvatar.setValue(true);
-                contactName.set(firstName + " " + lastName);
+                contactName.setValue(firstName + " " + lastName);
             }
         });
     }
@@ -473,7 +472,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         this.lastSeenValue = time;
 
         if (isBot) {
-            lastSeen.set(G.context.getResources().getString(R.string.bot));
+            lastSeen.setValue(G.context.getResources().getString(R.string.bot));
             return;
         }
 
@@ -481,9 +480,9 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                 String status = LastSeenTimeUtil.computeTime(userId, time, false);
 
-                lastSeen.set(status);
+                lastSeen.setValue(status);
             } else {
-                lastSeen.set(userStatus);
+                lastSeen.setValue(userStatus);
             }
         }
     }
