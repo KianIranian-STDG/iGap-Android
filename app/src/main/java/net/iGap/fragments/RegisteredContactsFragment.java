@@ -382,7 +382,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 //visible add buttons
                 btnAddNewChannel.setVisibility(View.VISIBLE);
                 btnAddNewGroup.setVisibility(View.VISIBLE);
-                btnAddSecretChat.setVisibility(View.VISIBLE);
+                //btnAddSecretChat.setVisibility(View.VISIBLE);
                 vgInviteFriend.setVisibility(View.GONE);
             }
         }

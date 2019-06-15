@@ -100,8 +100,8 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
             mHelperToolbar.setLeftIcon(R.string.back_icon);
             mHelperToolbar.setRightSmallAvatarShown(false);
         }else {
-            mHelperToolbar.setLeftIcon(R.string.flag_icon);
-            mHelperToolbar.setRightSmallAvatarShown(true);
+            //mHelperToolbar.setLeftIcon(R.string.flag_icon);
+            //mHelperToolbar.setRightSmallAvatarShown(true);
         }
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
