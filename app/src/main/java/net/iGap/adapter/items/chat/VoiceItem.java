@@ -389,7 +389,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             waveView.setChunkRadius(dpToPx(8));
             waveView.setExpansionAnimated(true);
             waveView.setChunkSpacing(dpToPx(1));
-            waveView.setChunkWidth(dpToPx(2));
+            waveView.setChunkWidth(dpToPx(3));
 
 
             set.constrainHeight(btnPlayMusic.getId(), dpToPx(40));
