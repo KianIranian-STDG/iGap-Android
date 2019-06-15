@@ -110,6 +110,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/language"
+            android:textColor="@color/ivand_green_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
