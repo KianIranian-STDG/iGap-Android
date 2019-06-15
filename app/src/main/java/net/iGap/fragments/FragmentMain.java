@@ -711,6 +711,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
+        // todo : we must change roomList with the change of out client condition. merge roomList with clientCondition.
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             mOffset = 0;
