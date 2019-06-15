@@ -2717,6 +2717,10 @@
     <string name="card_to_card_message">بطاقة إلى رسالة بطاقة</string>
     <string name="payment_message">رسالة الدفع</string>
 
+    <string name="available_merchants">مشاهده فروشگاه های پذیرنده این کارت</string>
+    <string name="available_merchants_title">پذیرندگان این کارت</string>
+    <string name="balance_title">موجودی :</string>
+
     <string name="WALLET_TRANSFER_MONEY">محفظة تحويل الأموال</string>
     <string name="CARD_TRANSFER_MONEY">بطاقة إلى بطاقة تحويل الأموال</string>
     <string name="PAYMENT_TRANSFER_MONEY">دفع تحويل الأموال</string>
