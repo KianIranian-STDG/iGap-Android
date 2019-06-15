@@ -26,14 +26,19 @@ public class FragmentWalletAgrement extends BaseFragment {
     private FragmentWalletAgrementBinding fragmentWalletAgrementBinding;
     private final static String PHONE = "PATH";
     private static String mPhone;
+    private boolean isScan;
 
-    public static FragmentWalletAgrement newInstance(String phone) {
-
+    public static FragmentWalletAgrement newInstance(String phone, boolean isScan) {
         Bundle args = new Bundle();
         args.putString(PHONE, phone);
+        args.putBoolean("isScan", isScan);
         FragmentWalletAgrement fragmentWalletAgrement = new FragmentWalletAgrement();
         fragmentWalletAgrement.setArguments(args);
         return fragmentWalletAgrement;
+    }
+
+    public static FragmentWalletAgrement newInstance(String phone) {
+        return newInstance(phone , false);
     }
 
     public FragmentWalletAgrement() {
@@ -65,11 +70,12 @@ public class FragmentWalletAgrement extends BaseFragment {
         if (bundle != null) {
 //            path = bundle.getString(PATH);
             mPhone = bundle.getString(PHONE);
+            isScan = bundle.getBoolean("isScan", false);
         }
 
         fragmentWalletAgrementBinding.setBackHandler(iBackHandler);
 
-        FragmentWalletAgreementViewModel fragmentWalletAgreementViewModel = new FragmentWalletAgreementViewModel(fragmentWalletAgrementBinding, mPhone);
+        FragmentWalletAgreementViewModel fragmentWalletAgreementViewModel = new FragmentWalletAgreementViewModel(fragmentWalletAgrementBinding, mPhone, isScan);
         fragmentWalletAgrementBinding.setFragmentWalletAgreementViewModel(fragmentWalletAgreementViewModel);
 
 

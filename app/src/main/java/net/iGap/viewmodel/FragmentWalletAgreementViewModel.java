@@ -33,10 +33,12 @@ public class FragmentWalletAgreementViewModel {
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.loading_wallet_agreement));
     private FragmentWalletAgrementBinding fragmentWalletAgrementBinding;
     private String phone;
+    private boolean isScan;
 
-    public FragmentWalletAgreementViewModel(FragmentWalletAgrementBinding fragmentWalletAgrementBinding, String mPhone) {
+    public FragmentWalletAgreementViewModel(FragmentWalletAgrementBinding fragmentWalletAgrementBinding, String mPhone, boolean isScan) {
         this.fragmentWalletAgrementBinding = fragmentWalletAgrementBinding;
         phone = mPhone;
+        this.isScan = isScan;
     }
 
     public void checkBoxAgreement(View v, boolean checked) {
@@ -78,6 +80,7 @@ public class FragmentWalletAgreementViewModel {
                     intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
                     intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                     intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                    intent.putExtra("isScan", isScan);
                     (G.currentActivity).startActivity(intent);
 
                     G.fragmentActivity.onBackPressed();
