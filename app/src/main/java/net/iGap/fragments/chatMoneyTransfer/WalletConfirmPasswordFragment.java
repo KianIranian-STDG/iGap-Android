@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import org.paygear.RaadApp;
 import org.paygear.web.Web;
@@ -36,7 +38,6 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
     private Button confirmBtn;
     private EditText passwordEt;
     private EditText confirmPasswordEt;
-    private Button cancelBtn;
 
 
     @Nullable
@@ -50,6 +51,13 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         passwordEt = rootView.findViewById(R.id.et_confirm_enterPassword);
         confirmPasswordEt = rootView.findViewById(R.id.et_confirm_confirmPassword);
+
+        TextView descriptionTv = rootView.findViewById(R.id.tv_confirm_description);
+        TextView confirmDescriptionTv = rootView.findViewById(R.id.tv_confirm_confirmDescription);
+
+        Utils.darkModeHandler(rootView);
+        Utils.darkModeHandler(confirmDescriptionTv);
+        Utils.darkModeHandler(descriptionTv);
         dismissProgress();
     }
 
@@ -122,9 +130,5 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
 
     public void setConfirmBtn(Button confirmBtn) {
         this.confirmBtn = confirmBtn;
-    }
-
-    public void setCancelBtn(Button cancelBtn) {
-        this.cancelBtn = cancelBtn;
     }
 }
