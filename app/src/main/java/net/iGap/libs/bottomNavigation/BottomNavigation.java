@@ -10,7 +10,6 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
@@ -27,7 +26,7 @@ import java.util.List;
 
 public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
-    public static final String TAG = "BottomNavigation";
+    public static final String TAG = "aabolfazlNavigation";
     private OnItemChangeListener onItemChangeListener;
     private List<TabItem> tabItems = new ArrayList<>();
     private int defaultItem;
@@ -148,7 +147,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     public void setCurrentItem(int position) {
         defaultItem = position;
-        Log.i(TAG, "setCurrentItem: " + tabItems.size());
         for (int i = 0; i < tabItems.size(); i++) {
             if (tabItems.get(i).getPosition() == position) {
                 if (position != selectedItemPosition) {
@@ -179,7 +177,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     public void setDefaultItem(int defaultItem) {
         this.defaultItem = defaultItem;
         this.selectedItemPosition = defaultItem;
-        Log.i(TAG, "setDefaultItem: " + defaultItem);
     }
 
     public void setOnItemChangeListener(OnItemChangeListener onItemChangeListener) {

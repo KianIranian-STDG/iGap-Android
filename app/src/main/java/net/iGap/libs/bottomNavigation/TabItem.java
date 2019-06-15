@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v7.content.res.AppCompatResources;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -91,8 +91,6 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             if (getParent() instanceof BottomNavigation) {
                 bottomNavigation = (BottomNavigation) getParent();
                 setupViews();
-
-                Log.i(TAG, "checkParent: parent loaded");
             }
         });
     }
@@ -114,10 +112,16 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.TabItem);
 
             try {
-                selectedIcon = typedArray.getDrawable(R.styleable.TabItem_selected_icon);
-                unSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_unselected_icon);
-                darkSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_dark_selected_icon);
-                darkUnSelectedIcon = typedArray.getDrawable(R.styleable.TabItem_dark_unselected_icon);
+                int selectedIv = typedArray.getResourceId(R.styleable.TabItem_selected_icon, -1);
+                int unSelectedIv = typedArray.getResourceId(R.styleable.TabItem_unselected_icon, -1);
+                int darkSelectedIv = typedArray.getResourceId(R.styleable.TabItem_dark_selected_icon, -1);
+                int darkUnSelectedIv = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
+
+                selectedIcon = AppCompatResources.getDrawable(getContext(), selectedIv);
+                unSelectedIcon = AppCompatResources.getDrawable(getContext(), unSelectedIv);
+                darkSelectedIcon = AppCompatResources.getDrawable(getContext(), darkSelectedIv);
+                darkUnSelectedIcon = AppCompatResources.getDrawable(getContext(), darkUnSelectedIv);
+
             } finally {
                 typedArray.recycle();
             }
@@ -136,8 +140,6 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     public void onClick(View v) {
         if (onTabItemSelected != null)
             onTabItemSelected.selectedTabItem(position);
-
-        Log.i(TAG, "onClick: " + position);
     }
 
     public void setSelectedItem(boolean isActive) {
@@ -159,7 +161,6 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             }
         }
 
-        Log.i(TAG, "setSelected: " + position + " " + isActive);
     }
 
     public void setOnTabItemSelected(OnItemSelected onItemSelected) {
@@ -181,9 +182,6 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             badgeView.getTextView().setText("+99");
         } else
             badgeView.setVisibility(VISIBLE);
-
-        Log.i(TAG, "setBadgeCount: " + count);
-
     }
 
     public void setBadgeColor(int color) {

@@ -47,7 +47,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -82,7 +81,14 @@ import static net.iGap.G.context;
 
 public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
+    public static final int PLAY = 0;
+    public static final int PAUSE = 1;
+    public static final int RESUME = 2;
+    public static final int STOP = 3;
+
     public static final int notificationId = 19;
+    public static final int limitMediaList = 50;
+    public static final String musicChannelId = "music_channel";
     public static boolean canDoAction = true;
     public static String repeatMode = RepeatMode.noRepeat.toString();
     public static boolean isShuffelOn = false;
@@ -102,11 +108,11 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static OnComplete onComplete = null;
     public static OnComplete onCompleteChat = null;
     public static MutableLiveData<Boolean> playerStateChangeListener = new MutableLiveData<>();
+    public static MutableLiveData<Integer> playerStatusObservable = new MutableLiveData<>();
     public static boolean isShowMediaPlayer = false;
     public static int musicProgress = 0;
     public static boolean isPause = false;
     public static ArrayList<RealmRoomMessage> mediaList;
-    public static final int limitMediaList = 50;
     public static String strTimer = "";
     public static String messageId = "";
     public static boolean isNearDistance = false;
@@ -149,7 +155,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static ComponentName remoteComponentName;
     private static Realm mRealm;
     private static boolean isRegisterSensor = false;
-    public static final String musicChannelId = "music_channel";
 
     private static Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
@@ -326,8 +331,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (mp != null) {
             if (mp.isPlaying()) {
                 pauseSound();
+                MusicPlayer.playerStatusObservable.setValue(PAUSE);
             } else {
                 playSound();
+                MusicPlayer.playerStatusObservable.setValue(PLAY);
             }
         } else {
             playSound();
@@ -488,6 +495,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "updateTime", zeroTime);
             }
             stopTimer();
+            MusicPlayer.playerStatusObservable.setValue(STOP);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -665,7 +673,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             mRealm = null;
         }
 
-
         if (MusicPlayer.chatLayout != null) {
             MusicPlayer.chatLayout.setVisibility(View.GONE);
         }
@@ -783,6 +790,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.VISIBLE);
                 playerStateChangeListener.setValue(true);
+                MusicPlayer.playerStatusObservable.setValue(PLAY);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1063,9 +1071,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         }
 
-        if (setSelectedItem)
-
-        {
+        if (setSelectedItem) {
             for (int i = mediaList.size() - 1; i >= 0; i--) {
                 try {
                     RealmRoomMessage _rm = RealmRoomMessage.getFinalMessage(mediaList.get(i));

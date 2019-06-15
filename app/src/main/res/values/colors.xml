@@ -234,6 +234,7 @@
     <color name="unread_status_dark">#FFFFFF</color>
 
     <color name="voice_item">#468ba7</color>
+    <color name="voice_item_dark">#5D92A7</color>
     <color name="colorWhite">#fff</color>
 
     <color name="onboard_button_normal">#1fa8f2</color>

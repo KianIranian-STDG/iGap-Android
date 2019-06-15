@@ -4,7 +4,7 @@
     android:id="@+id/root_chatRoom_bottom_view"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="wrap_content"
     android:clickable="true">
 
     <net.iGap.module.MaterialDesignTextView
@@ -43,6 +43,7 @@
         android:textColorHint="@color/gray_4c"
         android:textSize="@dimen/dp16"
         app:emojiSize="@dimen/dp22"
+        android:layout_margin="@dimen/dp8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_chatRoom_botAction"
         app:layout_constraintStart_toEndOf="@+id/tv_chatRoom_emoji"

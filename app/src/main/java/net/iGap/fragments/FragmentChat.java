@@ -114,7 +114,6 @@ import net.iGap.adapter.items.AdapterBottomSheetForward;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
-import net.iGap.adapter.items.chat.ChatItemHolder;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
 import net.iGap.adapter.items.chat.GifWithTextItem;
@@ -123,6 +122,7 @@ import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.LogWalletCardToCard;
+import net.iGap.adapter.items.chat.NewChatItemHolder;
 import net.iGap.adapter.items.chat.ProgressWaiting;
 import net.iGap.adapter.items.chat.StickerItem;
 import net.iGap.adapter.items.chat.TextItem;
@@ -2854,7 +2854,7 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                    if (viewHolder instanceof ChatItemHolder) {
+                    if (viewHolder instanceof NewChatItemHolder) {
                         return super.getSwipeDirs(recyclerView, viewHolder);
                     }
                     // we disable swipe with returning Zero
