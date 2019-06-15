@@ -6577,7 +6577,7 @@ public class FragmentChat extends BaseFragment
         rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
         rcvItem.setAdapter(fastItemAdapterForward);
-        bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity);
+        bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity,G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
 

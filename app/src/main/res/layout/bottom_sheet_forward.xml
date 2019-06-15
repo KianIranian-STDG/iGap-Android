@@ -2,13 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <View
         android:id="@+id/v"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp8"
         android:background="@drawable/bottom_sheet_dialog_line"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -43,12 +43,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcvBottomSheetForward"
-        style="?backgroundColorSettingTheme_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
-        android:minHeight="@dimen/dp240"
         android:padding="@dimen/dp10"
+        app:layout_constraintBottom_toTopOf="@id/divider1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edtSearch" />
@@ -60,9 +59,9 @@
         android:layout_marginLeft="@dimen/dp8"
         android:layout_marginRight="@dimen/dp8"
         android:background="@color/gray_5c"
+        app:layout_constraintBottom_toTopOf="@id/copyLink"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rcvBottomSheetForward" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/copyLink"
@@ -72,9 +71,9 @@
         android:background="?attr/selectableItemBackground"
         android:padding="8dp"
         android:text="@string/copy_link_title"
+        app:layout_constraintBottom_toTopOf="@id/txtSend"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider1"
         app:layout_constraintWidth_percent=".9" />
 
     <android.support.v7.widget.AppCompatTextView
@@ -88,8 +87,8 @@
         android:paddingTop="8dp"
         android:paddingBottom="16dp"
         android:text="@string/send"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/copyLink" />
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
