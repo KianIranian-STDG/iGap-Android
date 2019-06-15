@@ -158,7 +158,7 @@ dependencies {
     implementation('com.github.KianIranian-STDG:VideoTrimmer:1.1.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
-    implementation 'com.github.KianIranian-STDG:Websocket:1.0.1'
+    implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
     releaseImplementation 'com.github.KianIranian-STDG:Proto:Build111'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta1'
