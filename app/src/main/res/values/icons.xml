@@ -159,9 +159,9 @@
     <string name="md_igap_bluetooth">\uf0af</string>
     <string name="md_igap_stop">\uf4db</string>
 
-    <string name="md_igap_arrow_up_thick">\uf05f</string>
-    <string name="md_igap_arrow_down_thick">\uf047</string>
-    <string name="md_igap_minus">\uf1fd</string>
+    <string name="md_igap_arrow_up_thick">ì</string>
+    <string name="md_igap_arrow_down_thick">ï</string>
+    <string name="md_igap_minus">c</string>
 
 
     <string name="md_get_score_ok">\uf5e0</string>
