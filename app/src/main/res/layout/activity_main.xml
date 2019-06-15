@@ -263,10 +263,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:selected_icon="@drawable/ic_bottomnavigation_profile_on"
-                    app:unselected_icon="@drawable/ic_bottomnavigation_profile_off"
-                    app:dark_selected_icon="@drawable/ic_bottomnavigation_profile_on_darkmode"
-                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_profile_off_darkmode" />
+                    app:selected_icon="@drawable/ic_bottomnavigation_setting_on"
+                    app:unselected_icon="@drawable/ic_bottomnavigation_setting_off"
+                    app:dark_selected_icon="@drawable/ic_bottomnavigation_setting_on_darkmode"
+                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_setting_off_darkmode" />
 
             </net.iGap.libs.bottomNavigation.BottomNavigation>
 
