@@ -374,6 +374,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (mp != null && mp.isPlaying()) {
                 mp.pause();
                 isPause = true;
+                MusicPlayer.playerStatusObservable.setValue(PAUSE);
             }
         } catch (Exception e) {
             HelperLog.setErrorLog(e);
@@ -397,6 +398,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (mp.isPlaying()) {
             return;
         }
+
+        MusicPlayer.playerStatusObservable.setValue(PLAY);
 
         if (FragmentShowImage.focusAudioListener != null)
             FragmentShowImage.focusAudioListener.audioPlay(true);

@@ -57,7 +57,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     private static final String PAUSE = "pause";
     private static final String TAG = "aabolfazlPlayer";
 
-    private String playStatus;
+    private int playStatus = MusicPlayer.STOP;
 
     public VoiceItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -99,15 +99,20 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.waveView.setProgress(animProgress);
         });
 
-        if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
+        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.playerStatusObservable.observe(G.fragmentActivity, playerStatus -> {
-                if (playerStatus == MusicPlayer.PLAY)
-                    voiceIsPlaying(holder, anim);
-                if (playerStatus == MusicPlayer.PAUSE)
-                    voiceIsPause(holder, anim);
-                if (playerStatus == MusicPlayer.STOP)
-                    voiceIsStop(holder, anim);
-
+                if (playerStatus != null) {
+                    if (playerStatus == MusicPlayer.PLAY) {
+                        voiceIsPlaying(holder, anim);
+                    }
+                    if (playerStatus == MusicPlayer.PAUSE) {
+                        voiceIsPause(holder, anim);
+                    }
+                    if (playerStatus == MusicPlayer.STOP) {
+                        voiceIsStop(holder, anim);
+                    }
+                } else
+                    Log.d(TAG, "play status");
             });
         }
 
@@ -116,10 +121,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                 switch (messageOne) {
                     case PLAY:
-                        holder.btnPlayMusic.setText("#");
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
                         break;
                     case PAUSE:
-                        holder.btnPlayMusic.setText("?");
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
                         break;
                     case "updateTime":
                         if (result) {
@@ -180,7 +185,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 messageClickListener.onPlayMusic(holder.mMessageID);
                 holder.mTimeMusic = MusicPlayer.musicTime;
             }
-
+            MusicPlayer.messageId = mMessage.messageID;
         });
 
         holder.waveView.setOnTouchListener((v, event) -> {
@@ -228,14 +233,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    holder.btnPlayMusic.setText("?");
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
                 } else {
-                    holder.btnPlayMusic.setText("#");
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
                 }
             }
         } else {
             holder.waveView.setProgress(0);
-            holder.btnPlayMusic.setText("#");
+            holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
         }
 
         holder.mMessageID = mMessage.messageID;
@@ -246,27 +251,35 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     }
 
     private void voiceIsStop(ViewHolder holder, ValueAnimator anim) {
-        voiceIsPause(holder, anim);
-        holder.waveView.setProgress(0);
-        Log.i(TAG, "voiceIsStop: " + MusicPlayer.messageId);
+        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+            voiceIsPause(holder, anim);
+            holder.waveView.setProgress(0);
+            playStatus = MusicPlayer.STOP;
+        }
     }
 
     private void voiceIsPause(ViewHolder holder, ValueAnimator anim) {
-        if (mMessage.messageID.equals(MusicPlayer.messageId))
+        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                 anim.pause();
             else
                 anim.cancel();
-
-        Log.i(TAG, "voiceIsPause: " + MusicPlayer.messageId);
-
+            playStatus = MusicPlayer.PAUSE;
+        }
     }
 
     private void voiceIsPlaying(ViewHolder holder, ValueAnimator anim) {
-        if (mMessage.messageID.equals(MusicPlayer.messageId))
-            anim.start();
-
-        Log.i(TAG, "voiceIsPlaying: " + MusicPlayer.messageId);
+        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+            if (playStatus == MusicPlayer.PAUSE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    anim.resume();
+                    playStatus = MusicPlayer.PAUSE;
+                }
+            } else {
+                anim.start();
+                playStatus = MusicPlayer.PLAY;
+            }
+        }
     }
 
 
@@ -356,15 +369,19 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             Date currentTime = Calendar.getInstance().getTime();
             String value = currentTime.toString() + currentTime.toString();
 
-            byte[] soundBytes = hexStringToByteArray(value + value + value);
+            byte[] soundBytes = hexStringToByteArray(value + value);
 
-            waveView.setWaveColor(getColor(R.color.voice_item));
+            if (G.isDarkTheme)
+                waveView.setWaveColor(getColor(R.color.voice_item_dark));
+            else
+                waveView.setWaveColor(getColor(R.color.voice_item));
+
             waveView.setScaledData(soundBytes);
             waveView.setChunkHeight(dpToPx(16));
             waveView.setMinChunkHeight(dpToPx(2));
             waveView.setChunkRadius(dpToPx(8));
             waveView.setExpansionAnimated(true);
-            waveView.setChunkSpacing(dpToPx(2));
+            waveView.setChunkSpacing(dpToPx(1));
             waveView.setChunkWidth(dpToPx(3));
 
 
