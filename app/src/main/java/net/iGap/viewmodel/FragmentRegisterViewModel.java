@@ -31,6 +31,7 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.BotInit;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.structs.StructCountry;
@@ -562,6 +563,7 @@ public class FragmentRegisterViewModel extends ViewModel /*implements OnSecurity
             public void onLogin() {
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
+                BotInit.setCheckDrIgap(true);
                 if (newUser) {
                     G.handler.post(() -> goToWelcomePage.setValue(userId));
                 } else {

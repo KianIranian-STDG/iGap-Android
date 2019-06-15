@@ -44,35 +44,32 @@ public class MyDialog {
         realm.close();
 
         List<String> items = new ArrayList<>();
-        if (mInfo != null && !RealmRoom.isPromote(mInfo.getId())) {
-            if (isPinned) {
-                items.add(activity.getString(R.string.Unpin_to_top));
-            } else if (pinCount < 5) {
-                items.add(activity.getString(R.string.pin_to_top));
-            }
+        if (isPinned) {
+            items.add(activity.getString(R.string.Unpin_to_top));
+        } else if (pinCount < 5) {
+            items.add(activity.getString(R.string.pin_to_top));
         }
+
         if (isMute) {
             items.add(activity.getString(R.string.unmute));
         } else {
             items.add(activity.getString(R.string.mute));
         }
         items.add(activity.getString(R.string.clear_history));
-        if (mInfo != null && !RealmRoom.isPromote(mInfo.getId())) {
-            if (mType == ProtoGlobal.Room.Type.CHAT) {
-                items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.chat));
-            } else if (mType == ProtoGlobal.Room.Type.GROUP) {
-                if (role.equals("OWNER")) {
-                    items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.group));
-                } else {
-                    items.add(activity.getString(R.string.left) + " " + activity.getString(R.string.group));
-                }
-            } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
+        if (mType == ProtoGlobal.Room.Type.CHAT) {
+            items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.chat));
+        } else if (mType == ProtoGlobal.Room.Type.GROUP) {
+            if (role.equals("OWNER")) {
+                items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.group));
+            } else {
+                items.add(activity.getString(R.string.left) + " " + activity.getString(R.string.group));
+            }
+        } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
+            items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.channel));
+            if (role.equals("OWNER")) {
                 items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.channel));
-                if (role.equals("OWNER")) {
-                    items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.channel));
-                } else {
-                    items.add(activity.getString(R.string.left) + " " + activity.getString(R.string.channel));
-                }
+            } else {
+                items.add(activity.getString(R.string.left) + " " + activity.getString(R.string.channel));
             }
         }
 

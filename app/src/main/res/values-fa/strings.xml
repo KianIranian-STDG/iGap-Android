@@ -1832,6 +1832,10 @@
     <string name="card_to_card_message">پیام کارت به کارت</string>
     <string name="payment_message">پیام پرداخت</string>
 
+    <string name="available_merchants">مشاهده فروشگاه های پذیرنده این کارت</string>
+    <string name="available_merchants_title">پذیرندگان باشگاه</string>
+    <string name="balance_title">موجودی : </string>
+
     <string name="WALLET_TRANSFER_MONEY">انتقال وجه کیف پول</string>
     <string name="CARD_TRANSFER_MONEY">انتقال وجه کارت به کارت</string>
     <string name="PAYMENT_TRANSFER_MONEY">پرداخت</string>

@@ -1835,6 +1835,10 @@
     <string name="card_to_card_message">Card to Card Message</string>
     <string name="payment_message">Payment Message</string>
 
+    <string name="available_merchants">See merchants that accepts this card</string>
+    <string name="available_merchants_title">See merchants that accepts this card</string>
+    <string name="balance_title">balance : </string>
+
     <string name="WALLET_TRANSFER_MONEY">Wallet Money Transfer</string>
     <string name="CARD_TRANSFER_MONEY">Card To Card Money Transfer</string>
     <string name="PAYMENT_TRANSFER_MONEY">Payment Money Transfer</string>

@@ -55,6 +55,20 @@
                 android:layout_margin="16dp" />
 
 
+            <TextView
+                android:id="@+id/balance"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginBottom="16dp"
+                android:background="#1e96ff"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:text="موجودی : *"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+
+
             <LinearLayout
               android:id="@+id/rootCardView"
                 android:orientation="vertical"
@@ -178,6 +192,16 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/available_merchants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/login_button_normal"
+                    android:textSize="14sp"
+                    android:text="@string/available_merchants"
+                    android:background="@color/transparent"
+                    android:visibility="gone"/>
 
 
                 <FrameLayout
