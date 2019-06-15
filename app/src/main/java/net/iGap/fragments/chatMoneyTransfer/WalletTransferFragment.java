@@ -275,7 +275,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
         intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
         startActivityForResult(intent, 66);
-        G.currentActivity.onBackPressed();
+        cancelBtn.performClick();
     }
 
     private void setWalletPassword() {
