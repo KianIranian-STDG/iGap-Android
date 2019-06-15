@@ -55,9 +55,12 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     private static final String PLAY = "play";
     private static final String PAUSE = "pause";
+    private static final String UPDATE = "updateTime";
+
     private static final String TAG = "aabolfazlPlayer";
 
     private int playStatus = MusicPlayer.STOP;
+
 
     public VoiceItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -102,17 +105,16 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         if (holder.mMessageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.playerStatusObservable.observe(G.fragmentActivity, playerStatus -> {
                 if (playerStatus != null) {
-                    if (playerStatus == MusicPlayer.PLAY) {
+                    if (playerStatus == MusicPlayer.PLAY)
                         voiceIsPlaying(holder, anim);
-                    }
-                    if (playerStatus == MusicPlayer.PAUSE) {
+
+                    if (playerStatus == MusicPlayer.PAUSE)
                         voiceIsPause(holder, anim);
-                    }
-                    if (playerStatus == MusicPlayer.STOP) {
+
+                    if (playerStatus == MusicPlayer.STOP)
                         voiceIsStop(holder, anim);
-                    }
                 } else
-                    Log.d(TAG, "play status");
+                    Log.d(TAG, "play status: " + playStatus);
             });
         }
 
@@ -126,7 +128,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                     case PAUSE:
                         holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
                         break;
-                    case "updateTime":
+                    case UPDATE:
                         if (result) {
                             G.handler.post(() -> {
 
@@ -164,6 +166,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             if (holder.mFilePath.length() < 1)
                 return;
+
+//            Log.i(TAG, "selected voice    id: " + holder.mMessageID + " status: " + playStatus);
+
 
             G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
 
@@ -276,7 +281,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                     playStatus = MusicPlayer.PAUSE;
                 }
             } else {
-                anim.start();
+                if (playStatus == MusicPlayer.STOP) {
+                    anim.start();
+                }
                 playStatus = MusicPlayer.PLAY;
             }
         }
@@ -382,7 +389,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             waveView.setChunkRadius(dpToPx(8));
             waveView.setExpansionAnimated(true);
             waveView.setChunkSpacing(dpToPx(1));
-            waveView.setChunkWidth(dpToPx(3));
+            waveView.setChunkWidth(dpToPx(2));
 
 
             set.constrainHeight(btnPlayMusic.getId(), dpToPx(40));

@@ -83,7 +83,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     public static final int PLAY = 0;
     public static final int PAUSE = 1;
-    public static final int STOP = 2;
+    public static final int RESUME = 2;
+    public static final int STOP = 3;
 
     public static final int notificationId = 19;
     public static final int limitMediaList = 50;
@@ -374,7 +375,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (mp != null && mp.isPlaying()) {
                 mp.pause();
                 isPause = true;
-                MusicPlayer.playerStatusObservable.setValue(PAUSE);
+//                MusicPlayer.playerStatusObservable.setValue(PAUSE);
             }
         } catch (Exception e) {
             HelperLog.setErrorLog(e);
@@ -399,7 +400,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             return;
         }
 
-        MusicPlayer.playerStatusObservable.setValue(PLAY);
+//        MusicPlayer.playerStatusObservable.setValue(PLAY);
 
         if (FragmentShowImage.focusAudioListener != null)
             FragmentShowImage.focusAudioListener.audioPlay(true);
