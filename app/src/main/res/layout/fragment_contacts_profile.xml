@@ -18,6 +18,12 @@
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
 
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,8 +59,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="0dp"
                             android:onClick="@{()->viewModel.onImageClick()}"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/welcome_background" />
+                            android:scaleType="centerCrop" />
 
                     </android.support.design.card.MaterialCardView>
 

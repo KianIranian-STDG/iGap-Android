@@ -39,9 +39,11 @@ import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserReport;
@@ -109,12 +111,39 @@ public class FragmentContactsProfile extends BaseFragment {
         fragmentContactsProfileViewModel = new FragmentContactsProfileViewModel(roomId, userId, enterFrom, avatarHandler);
         fragmentContactsProfileBinding.setViewModel(fragmentContactsProfileViewModel);
 
-        fragmentContactsProfileViewModel.goBack.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean != null && aBoolean) {
-                    popBackStackFragment();
-                }
+        HelperToolbar t = HelperToolbar.create().setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon, R.string.video_call_icon,R.string.voice_call_icon)
+                .setGroupProfile(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        fragmentContactsProfileViewModel.onMoreButtonClick();
+                    }
+
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        fragmentContactsProfileViewModel.onVideoCallClick();
+                    }
+
+                    @Override
+                    public void onThirdRightIconClickListener(View view) {
+                        fragmentContactsProfileViewModel.onVoiceCallButtonClick();
+                    }
+                });
+
+        fragmentContactsProfileBinding.toolbar.addView(t.getView());
+
+        t.getGroupAvatar().setOnClickListener(v -> fragmentContactsProfileViewModel.onImageClick());
+
+        fragmentContactsProfileViewModel.goBack.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                popBackStackFragment();
             }
         });
 
