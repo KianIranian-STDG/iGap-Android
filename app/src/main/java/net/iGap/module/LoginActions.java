@@ -137,33 +137,6 @@ public class LoginActions {
             return;
         }
 
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                // fill own user info
-                if (userId == user.getId()) {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRegisteredInfo.putOrUpdate(realm, user);
-                        }
-                    });
-
-                    realm.close();
-                }
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-
-            }
-
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
-
-            }
-        };
         new RequestUserInfo().userInfo(userId);
     }
 
