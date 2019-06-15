@@ -2,8 +2,7 @@
 
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
   <data>
 
@@ -108,7 +107,7 @@
                 style="@style/hint_style_setting_black"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp44"
-                android:background="@drawable/oval_gray"
+                  android:background="@drawable/background_cancel_money_action"
                 android:hint="@string/phone"
                 android:inputType="phone"
                 android:maxLength="11"
@@ -149,7 +148,7 @@
                 android:layout_width="@dimen/dp44"
                 android:layout_height="@dimen/dp44"
                 android:gravity="center"
-                android:text="@string/md_format_list_bulleted"
+                android:text="="
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                 android:textSize="@dimen/dp22"
@@ -165,7 +164,7 @@
                   style="@style/hint_style_setting_black"
                   android:layout_width="match_parent"
                   android:layout_height="@dimen/dp44"
-                  android:background="@drawable/oval_gray"
+                    android:background="@drawable/background_cancel_money_action"
                   android:hint="@string/area_code"
                   android:inputType="phone"
                   android:maxLength="4"
@@ -215,7 +214,7 @@
                   style="@style/hint_style_setting_black"
                   android:layout_width="match_parent"
                   android:layout_height="@dimen/dp44"
-                  android:background="@drawable/oval_gray"
+                    android:background="@drawable/background_cancel_money_action"
                   android:hint="@string/phone"
                   android:inputType="phone"
                   android:maxLength="8"
