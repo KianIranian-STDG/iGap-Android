@@ -619,7 +619,6 @@
                 android:id="@+id/ac_ll_attach_text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:backgroundTint="@color/messageBox_replyBoxBackgroundSend"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -631,7 +630,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp12"
                     android:singleLine="true"
                     android:text="New Text"
                     android:textSize="@dimen/dp13" />
@@ -645,7 +643,7 @@
                     android:text="@string/md_close_button"
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textColor="@color/red"
-
+                    android:layout_margin="@dimen/dp8"
                     />
             </LinearLayout>
 
