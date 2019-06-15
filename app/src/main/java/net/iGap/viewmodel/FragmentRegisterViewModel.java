@@ -69,6 +69,7 @@ import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.BotInit;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
@@ -1274,6 +1275,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         imgVerifyServerVisibility.set(View.VISIBLE);
 
                         txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+                        BotInit.setCheckDrIgap(true);
 
                         if (newUser) {
                             G.handler.post(new Runnable() {
