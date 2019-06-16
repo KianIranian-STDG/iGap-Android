@@ -164,7 +164,6 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
-import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IOnBackPressed;
@@ -217,6 +216,7 @@ import net.iGap.interfaces.OpenBottomSheetItem;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -2522,6 +2522,13 @@ public class FragmentChat extends BaseFragment
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
         ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
+
+        if (G.isDarkTheme) {
+            ll_attach_text.setBackgroundColor(getContext().getResources().getColor(R.color.navigation_dark_mode_bg));
+        } else {
+            ll_attach_text.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
+        }
+
         txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
         btnCancelSendingFile = rootView.findViewById(R.id.ac_btn_cancel_sending_file);
         btnCancelSendingFile.setOnClickListener(new View.OnClickListener() {
@@ -6077,7 +6084,6 @@ public class FragmentChat extends BaseFragment
                 if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
 
                     ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
-//                    layoutAttachBottom = rootView.findViewById(R.id.layoutAttachBottom);
                     layoutAttachBottom = rootView.findViewById(R.id.ll_chatRoom_send);
                     imvSendButton = rootView.findViewById(R.id.chl_imv_send_button);
                 }
@@ -6086,6 +6092,8 @@ public class FragmentChat extends BaseFragment
                 if (isCardToCardMessage) {
                     txtFileNameForSend.setText(R.string.cardToCardRequest);
                 }
+
+                Utils.darkModeHandler(txtFileNameForSend);
 
                 ll_attach_text.setVisibility(View.VISIBLE);
                 // set maxLength  when layout attachment is visible
@@ -9505,12 +9513,12 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
     }
 
     @Override
     public void onThirdRightIconClickListener(View view) {
-        FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
     }
 
     @Override

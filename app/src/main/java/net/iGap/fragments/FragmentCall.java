@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
@@ -27,7 +26,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -47,14 +45,10 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
-import net.iGap.proto.ProtoSignalingOffer;
-import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
-import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
-import net.iGap.webrtc.WebRTC;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -102,53 +96,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         return fragmentCall;
     }
 
-    public static void call(long userID, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
 
-        if (G.userLogin) {
-
-            if (!G.isInCall) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
-
-                if (realmCallConfig == null) {
-                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                } else if (!G.isCalling) {
-                    if (G.currentActivity != null) {
-                        Intent intent = new Intent(G.currentActivity, ActivityCall.class);
-                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                        intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                        ActivityCall.isGoingfromApp = true;
-                        G.currentActivity.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(G.context, ActivityCall.class);
-                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                        intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        ActivityCall.isGoingfromApp = true;
-                        G.context.startActivity(intent);
-                    }
-
-
-                } else {
-                    try {
-                        WebRTC.getInstance().leaveCall();
-                    } catch (Exception e) {
-                    }
-
-                }
-
-                realm.close();
-            }
-
-
-        } else {
-
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-        }
-    }
 
     private boolean isInit = false;
 
@@ -852,7 +800,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                             long userId = callLog.getUser().getId();
 
                             if (userId != 134 && G.userId != userId) {
-                                call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.valueOf(callLog.getType()));
+                                CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId,false,callLog.getType());
+                                callSelectFragment.show(getFragmentManager(),null);
                             }
                         }
                     }

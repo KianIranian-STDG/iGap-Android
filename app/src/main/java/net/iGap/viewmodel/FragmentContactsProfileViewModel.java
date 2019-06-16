@@ -5,7 +5,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -13,11 +12,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentShearedMedia;
-import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.OnUserContactEdit;
@@ -134,11 +131,11 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     }
 
     public void onVideoCallClick() {
-        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+        CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
     }
 
     public void onVoiceCallButtonClick() {
-        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+        CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
     }
 
     public void onNotificationCheckChange(boolean isChecked) {

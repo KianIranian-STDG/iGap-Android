@@ -52,14 +52,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
@@ -71,6 +68,7 @@ import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
+import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
@@ -102,7 +100,6 @@ import net.iGap.helper.ServiceContact;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.FinishActivity;
-import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
@@ -160,7 +157,6 @@ import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
-import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
 import org.paygear.RaadApp;
@@ -1998,7 +1994,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void check(final long userId) {
         if (G.userLogin) {
-            FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+            CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
         } else {
             G.handler.postDelayed(new Runnable() {
                 @Override

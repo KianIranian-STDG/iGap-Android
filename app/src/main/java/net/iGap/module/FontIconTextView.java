@@ -23,7 +23,7 @@ public class FontIconTextView extends android.support.v7.widget.AppCompatTextVie
     }
 
     private void init() {
-        setTypeface(G.typeface_iGap);
+        setTypeface(G.typeface_FonticonNew);
         setGravity(Gravity.CENTER);
     }
 }

@@ -1322,11 +1322,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
                                             switch (which) {
                                                 case 0:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                    CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                                                     popBackStackFragment();
                                                     break;
                                                 case 1:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                                                    CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
                                                     popBackStackFragment();
                                                     break;
                                             }
@@ -1399,7 +1399,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 btnVoiceCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
                     if (userId != 134 && G.userId != userId) {
-                        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                        CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                         popBackStackFragment();
                     }
                 });
@@ -1407,7 +1407,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 btnVideoCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
                     if (userId != 134 && G.userId != userId) {
-                        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                        CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
                         popBackStackFragment();
                     }
                 });
@@ -1431,11 +1431,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
                                             switch (which) {
                                                 case 0:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                    CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                                                     popBackStackFragment();
                                                     break;
                                                 case 1:
-                                                    FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                                                    CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
                                                     popBackStackFragment();
                                                     break;
                                             }
