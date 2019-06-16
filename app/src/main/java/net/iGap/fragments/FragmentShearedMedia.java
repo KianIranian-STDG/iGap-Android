@@ -589,7 +589,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         }
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (pos == 1 || pos == mSharedTypesList.size()+1){
+        if (pos == 0 || pos == mSharedTypesList.size()+1){
             lp.setMargins(getDimen(R.dimen.dp10), getDimen(R.dimen.dp4), getDimen(R.dimen.dp10), getDimen(R.dimen.dp2));
         }else {
             lp.setMargins(getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp2));
@@ -2216,9 +2216,11 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 File file = new File(vh.filePath);
                 if (file.exists()) {
                     vh.messageProgress.setVisibility(View.GONE);
+                    vh.iconPicFile.setText(getString(R.string.attach_icon));
                 } else {
                     needDownloadList.put(mList.get(position).messageId, true);
                     vh.messageProgress.setVisibility(View.VISIBLE);
+                    vh.iconPicFile.setText("");
                 }
 
                 vh.txtFileSize.setVisibility(View.INVISIBLE);
@@ -2267,7 +2269,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         }
 
         public class ViewHolder extends mHolder {
-            public ImageView imvPicFile;
+            public TextView iconPicFile;
             public String tempFilePath;
             public String filePath;
 
@@ -2278,7 +2280,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             public ViewHolder(View view) {
                 super(view);
 
-                imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
+                iconPicFile =  itemView.findViewById(R.id.smslf_imv_icon_file);
 
                 txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
                 txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
