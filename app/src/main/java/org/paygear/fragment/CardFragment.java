@@ -16,6 +16,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ public class CardFragment extends Fragment {
     private BankCardView cardView;
     private SwitchCompat defaultCardSwitch;
     private TextView button;
+    private TextView balance;
     private ProgressBar progressBar;
     private ProgressBar defaultCardProgress;
 
@@ -67,6 +69,7 @@ public class CardFragment extends Fragment {
     private Payment mPayment;
 
     private boolean isUpdating;
+    private Button availableMerchants;
 
     public CardFragment() {
     }
@@ -113,7 +116,10 @@ public class CardFragment extends Fragment {
         if (mPayment != null) {
             appBar.setTitle(getString(R.string.payment));
         } else {
-            appBar.setTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName(getActivity()));
+            if (mCard.bankCode != 69)
+                appBar.setTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName(getActivity()));
+            else
+                appBar.setTitle(mCard.cardNumber);
         }
 
         cardView = view.findViewById(R.id.card_view);
@@ -133,10 +139,12 @@ public class CardFragment extends Fragment {
                 button.setBackground(mDrawableSkip);
             }
         }
+        balance = view.findViewById(R.id.balance);
         progressBar = view.findViewById(R.id.progress);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
         defaultCardProgress = view.findViewById(R.id.default_card_progress);
         defaultCardProgress.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
+        availableMerchants = view.findViewById(R.id.available_merchants);
 
         TextView paymentPriceText = view.findViewById(R.id.payment_price);
 
@@ -157,15 +165,22 @@ public class CardFragment extends Fragment {
         }
 
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, defaultCardTitle, button,
-                pinTitle, cvv2Title, paymentPriceText);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, pinText, cvv2Text);
-
+                pinTitle, cvv2Title, paymentPriceText, balance);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, pinText, cvv2Text, availableMerchants);
         int cardHeight = BankCardView.getDefaultCardHeight(getContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, cardHeight);
         int dp16 = RaadCommonUtils.getPx(16, getContext());
         params.setMargins(dp16, dp16, dp16, dp16);
         cardView.setLayoutParams(params);
+        if (mCard.bankCode == 69 && !mCard.isRaadCard()) {
+            balance.setVisibility(View.VISIBLE);
+            balance.setText(getString(R.string.balance_title) + " " + RaadCommonUtils.formatPrice(mCard.balance, true));
+            button.setVisibility(View.GONE);
+        } else {
+            balance.setVisibility(View.GONE);
+            button.setVisibility(View.VISIBLE);
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,14 +196,15 @@ public class CardFragment extends Fragment {
 
         if (mPayment != null) {
             paymentPriceText.setVisibility(View.VISIBLE);
+            availableMerchants.setVisibility(View.GONE);
             paymentPriceText.setText(getString(R.string.pay_with_price_x)
                     .replace("*", RaadCommonUtils.formatPrice(mPayment.getPaymentPrice(), true)));
             view.findViewById(R.id.pin_layout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.switch_layout).setVisibility(View.GONE);
 
-//            if (mPayment.getPaymentPrice() <= Payment.MAX_PRICE_CVV2) {
-//                cvv2Title.setVisibility(View.GONE);
-//                cvv2Text.setVisibility(View.GONE);
+//            if (mPayment.getPaymentPrice() <= Payment.MAX_PRICE_CVV2&&mPayment.getPaymentPrice()>=Payment.MIN_PRICE_CVV2) {
+//            cvv2Title.setVisibility(View.GONE);
+//            cvv2Text.setVisibility(View.GONE);
 //            }
 
 
@@ -196,11 +212,14 @@ public class CardFragment extends Fragment {
                 button.setBackground(mDrawableSkip);
             }
             button.setText(R.string.pay);
+            button.setBackgroundResource(R.drawable.button_green_selector_24dp);
+
         } else {
             button.setText(R.string.delete_card);
             button.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
             button.setTextColor(Color.WHITE);
-//            ViewCompat.setBackground(button, RaadCommonUtils.getSelector(getContext(), R.color.remove_card_button_normal, R.color.remove_card_button_selected, 0, 24, 0));
+            //ViewCompat.setBackground(button, RaadCommonUtils.getSelector(getContext(),
+            //        R.color.remove_card_button_normal, R.color.remove_card_button_selected, 0, 24, 0));
             defaultCardSwitch.setChecked(mCard.isDefault);
             defaultCardSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -209,9 +228,26 @@ public class CardFragment extends Fragment {
                         updateCard();
                 }
             });
+            if (mCard.clubId != null) {
+                availableMerchants.setVisibility(View.GONE);
+                availableMerchants.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        ((NavigationBarActivity) getActivity()).pushFullFragment(
+//                                AvailableMerchantsFragment.newInstance(mCard.clubId),
+//                                "AvailableMerchantsFragment");
+                    }
+                });
+            } else {
+                availableMerchants.setVisibility(View.GONE);
+            }
         }
 
         cardView.setCard(mCard, true);
+        if (mCard.clubId!=null)
+            view.findViewById(R.id.switch_layout).setVisibility(View.GONE);
+        else
+            view.findViewById(R.id.switch_layout).setVisibility(View.VISIBLE);
         return view;
     }
 

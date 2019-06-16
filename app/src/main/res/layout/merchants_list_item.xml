@@ -31,15 +31,17 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp">
 
-            <TextView
+            <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/title"
+                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/primary_text"
                 android:textSize="14sp" />
 
-            <TextView
+            <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/subtitle"
+                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondary_text"

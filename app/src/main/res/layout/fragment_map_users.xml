@@ -98,7 +98,7 @@
           android:adjustViewBounds="true"
           android:paddingTop="@dimen/dp20"
           android:visibility="gone"
-          app:srcCompat="@drawable/empty_map_list"
+          app:srcCompat="@drawable/empty_chat"
 
           />
 

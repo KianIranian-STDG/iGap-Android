@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import net.iGap.R;
 
 import org.paygear.fragment.CardsFragment;
+import org.paygear.fragment.ScannerFragment;
 import org.paygear.model.Payment;
 import org.paygear.utils.Utils;
 import org.paygear.web.Web;
@@ -53,6 +54,7 @@ public class WalletActivity extends NavigationBarActivity {
     public static boolean isDarkTheme = false;
     public static String selectedLanguage = "en";
     public static RefreshLayout refreshLayout;
+    public static boolean isScan;
 
     @Override
     protected void onPause() {
@@ -109,6 +111,7 @@ public class WalletActivity extends NavigationBarActivity {
         lineBorder = intent.getStringExtra(LINE_BORDER);
         backgroundTheme = intent.getStringExtra(BACKGROUND);
         backgroundTheme_2 = intent.getStringExtra(BACKGROUND_2);
+        isScan = intent.getBooleanExtra("isScan", false);
 
         if (backgroundTheme_2.length() == 9) {
             backgroundTheme_2 = "#FF" + backgroundTheme_2.substring(3);
@@ -139,6 +142,10 @@ public class WalletActivity extends NavigationBarActivity {
             ft.add(R.id.content_container, new CardsFragment());
         }
         ft.commit();
+
+        if (isScan) {
+            pushFullFragment(new ScannerFragment(), "ScannerFragment");
+        }
     }
 
     @Override

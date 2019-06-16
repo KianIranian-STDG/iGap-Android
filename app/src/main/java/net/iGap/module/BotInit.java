@@ -3,6 +3,7 @@ package net.iGap.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -54,6 +55,7 @@ import java.util.HashMap;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static net.iGap.G.context;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
@@ -72,6 +74,8 @@ public class BotInit implements View.OnClickListener {
     private int additionalType;
     private MaterialDesignTextView btnShowBot;
     private long roomId;
+
+    private static String prefrenceName = "DrIgap";
     // private boolean state;
 
 
@@ -81,12 +85,27 @@ public class BotInit implements View.OnClickListener {
 
     }
 
+    public static void setCheckDrIgap(boolean check) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(BotInit.prefrenceName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("check", check);
+        editor.apply();
+    }
+
+    public static boolean getCheckDrIgap() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(BotInit.prefrenceName, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("check", false);
+    }
+
     public static void checkDrIgap() {
+        if (!BotInit.getCheckDrIgap())
+            return;
 
         new RequestClientGetPromote().getPromote();
         G.ipromote = new Ipromote() {
             @Override
             public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
+                setCheckDrIgap(false);
                 ArrayList<Long> promoteIds = new ArrayList<>();
 
                 for (int i = 0; i < builder.getPromoteList().size(); i++)

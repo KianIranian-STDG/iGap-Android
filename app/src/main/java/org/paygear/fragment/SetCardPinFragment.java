@@ -243,7 +243,11 @@ public class SetCardPinFragment extends Fragment {
                     if (mCard == null)
                         RaadApp.paygearCard.isProtected = true;
                     else {
-                        CashOutRequestFragment.mCard.isProtected = true;
+                        try {
+                            CashOutRequestFragment.mCard.isProtected = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     getActivity().getSupportFragmentManager().popBackStack();
                 }

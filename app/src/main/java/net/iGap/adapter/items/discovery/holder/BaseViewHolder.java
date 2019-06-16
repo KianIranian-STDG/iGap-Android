@@ -162,8 +162,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                     String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
                     if (!G.isWalletRegister) {
-                        new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
+                        if (discoveryField.value.equals("QR_USER_WALLET")) {
+                            new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2), true)).load();
+                        } else {
+                            new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2), false)).load();
+                        }
                     } else {
+
                         Intent intent = new Intent(G.context, WalletActivity.class);
                         intent.putExtra("Language", "fa");
                         intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
@@ -178,6 +183,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
                         intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                         intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                        if (discoveryField.value.equals("QR_USER_WALLET")) {
+                            intent.putExtra("isScan", true);
+                        } else {
+                            intent.putExtra("isScan", true);
+                        }
                         G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
                     }
                 } catch (Exception e) {

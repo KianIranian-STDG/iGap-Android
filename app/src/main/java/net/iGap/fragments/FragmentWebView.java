@@ -12,14 +12,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.PermissionRequest;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,9 +43,12 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     private WebView webView;
     private TextView webViewError;
     private SwipeRefreshLayout pullToRefresh;
+    private FrameLayout frameLayout;
     Handler delayHandler = new Handler();
     Runnable taskMakeVisibleWebViewWithDelay;
     CustomWebViewClient customWebViewClient;
+    private View customView;
+    private WebChromeClient.CustomViewCallback callback;
 
     public static FragmentWebView newInstance(String url) {
         FragmentWebView discoveryFragment = new FragmentWebView();
@@ -66,6 +72,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             url = "http://" + url;
         }
 
+        frameLayout = view.findViewById(R.id.full);
         webView = view.findViewById(R.id.webView);
         webViewError = view.findViewById(R.id.webViewError);
 
@@ -227,6 +234,33 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         private boolean remember;
         public GeoWebChromeClient() {
             remember = false;
+        }
+
+        @Override
+        public void onShowCustomView(View view, CustomViewCallback callback) {
+            customView = view;
+            FragmentWebView.this.callback = callback;
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            frameLayout.addView(view);
+            appBarLayout.setVisibility(View.GONE);
+            pullToRefresh.setVisibility(View.GONE);
+            frameLayout.setVisibility(View.VISIBLE);
+            frameLayout.bringToFront();
+        }
+
+        @Override
+        public void onHideCustomView() {
+            if (customView == null)
+                return;
+
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            customView.setVisibility(View.GONE);
+            frameLayout.removeView(customView);
+            customView = null;
+            frameLayout.setVisibility(View.GONE);
+            callback.onCustomViewHidden();
+            pullToRefresh.setVisibility(View.VISIBLE);
+            appBarLayout.setVisibility(View.VISIBLE);
         }
 
         @Override
