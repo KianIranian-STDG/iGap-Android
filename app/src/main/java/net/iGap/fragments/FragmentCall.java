@@ -45,6 +45,7 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
+import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
@@ -800,7 +801,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                             long userId = callLog.getUser().getId();
 
                             if (userId != 134 && G.userId != userId) {
-                                CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId,false,callLog.getType());
+                                CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId,false, ProtoSignalingOffer.SignalingOffer.Type.valueOf(callLog.getType()));
                                 callSelectFragment.show(getFragmentManager(),null);
                             }
                         }
