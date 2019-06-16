@@ -93,13 +93,16 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void dispatchDraw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(backgroundColor);
-        canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius, true), paint);
-        super.dispatchDraw(canvas);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius, true), paint);
+            super.dispatchDraw(canvas);
+        } else {
+            super.dispatchDraw(canvas);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

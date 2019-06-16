@@ -6,11 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -42,16 +44,12 @@ public class ChatCell extends ConstraintLayout {
          * init pinned room on top
          * */
 
-        View pinView = new View(getContext());
+        ImageView pinView = new AppCompatImageView(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
         if (isRtl) {
-            Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_pin_rtl_dark
-                    : R.drawable.shape_pin_rtl, null);
-            pinView.setBackground(drawable);
+            pinView.setImageResource(isDarkTheme ? R.drawable.shape_pin_rtl_dark : R.drawable.shape_pin_rtl);
         } else {
-            Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_pin_dark
-                    : R.drawable.shape_pin, null);
-            pinView.setBackground(drawable);
+            pinView.setImageResource(isDarkTheme ? R.drawable.shape_pin_dark : R.drawable.shape_pin);
         }
         addView(pinView);
 
@@ -59,7 +57,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * add check box
          */
-        CheckBox cellCheckbox = new CheckBox(G.context);
+        CheckBox cellCheckbox = new CheckBox(getContext());
         cellCheckbox.setId(R.id.iv_itemContactChat_checkBox);
         cellCheckbox.setButtonDrawable(R.drawable.check_box_background);
         cellCheckbox.setPadding(10, 0, 0, 0);
