@@ -59,7 +59,8 @@
         android:layout_marginBottom="@dimen/dp8"
         tools:text="" />
 
-    <Button
+    <android.support.design.button.MaterialButton
+        style="@style/IGapButtonStyle"
         android:id="@+id/pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,11 +69,8 @@
         android:textAllCaps="false"
         android:layout_marginTop="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp8"
-        android:background="@drawable/shape_background_ivand_order_history"
         android:paddingStart="@dimen/dp32"
         android:paddingEnd="@dimen/dp32"
-        android:text="@string/pay"
-        android:textSize="@dimen/dp18"
-        android:textColor="@color/white" />
+        android:text="@string/pay" />
 
 </LinearLayout>

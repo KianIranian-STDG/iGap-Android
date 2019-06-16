@@ -88,7 +88,7 @@ public class DirectPayHelper {
             priceTxt.setTextColor(Color.parseColor(G.appBarColor));
         }
         Button pay = v.findViewById(R.id.pay);
-        pay.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+        //pay.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
 
         pay.setOnClickListener(new View.OnClickListener() {
             @Override

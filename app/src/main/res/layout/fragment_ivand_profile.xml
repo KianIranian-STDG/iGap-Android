@@ -111,7 +111,8 @@
 
         </ScrollView>
 
-        <Button
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
             android:id="@+id/btn_ivand_orderHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,7 +128,6 @@
             android:paddingStart="@dimen/dp32"
             android:paddingEnd="@dimen/dp32"
             android:text="@string/order_history"
-            android:textColor="@color/white"
 
             />
 

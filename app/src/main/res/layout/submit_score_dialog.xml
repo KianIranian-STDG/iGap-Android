@@ -54,13 +54,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image" />
 
-        <Button
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
             android:id="@+id/ok"
-            android:background="@drawable/btn_rounded"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
-            android:textSize="@dimen/dp12"
             android:text="@string/dialog_ok"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

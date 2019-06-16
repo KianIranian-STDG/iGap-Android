@@ -35,7 +35,6 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUpViews();
-        view.findViewById(R.id.btn_ivand_orderHistory).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
 
     }
 
