@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPublicMethod;
@@ -174,7 +174,7 @@ public class MyInfoWindow extends InfoWindow {
         txtCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
             }
         });
 
@@ -182,7 +182,7 @@ public class MyInfoWindow extends InfoWindow {
         txtVideoCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
             }
         });
 

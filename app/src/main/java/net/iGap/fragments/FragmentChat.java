@@ -9500,12 +9500,12 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
     }
 
     @Override
     public void onThirdRightIconClickListener(View view) {
-        FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
     }
 
     @Override
