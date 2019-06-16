@@ -192,7 +192,7 @@
     <string name="more_icon">&lt;</string>
     <string name="voice_call_icon">d</string>
     <string name="video_call_icon">É</string>
-    <string name="voice_call_made_icon">&gt;</string>
+    <string name="voice_call_made_icon">d</string>
     <string name="voice_call_missed_icon">H</string>
     <string name="voice_call_received_icon">U</string>
     <string name="group_icon">;</string>
