@@ -142,7 +142,10 @@ public class FragmentRegisterViewModel extends ViewModel /*implements OnSecurity
     }
 
     public void onClicksStart() {
-        phoneNumber = callBackEdtPhoneNumber.get() != null ? callBackEdtPhoneNumber.get() : "";
+        phoneNumber = callBackEdtPhoneNumber.get();
+        if (phoneNumber == null)
+            phoneNumber = "";
+
         if (phoneNumber.length() > 0 && regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex))) {
             if (termsAndConditionIsChecked) {
                 showConfirmPhoneNumberDialog.setValue(true);
