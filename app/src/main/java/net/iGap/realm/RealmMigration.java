@@ -12,7 +12,6 @@ package net.iGap.realm;
 
 import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;
-import io.realm.RealmList;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
@@ -101,7 +100,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 9) {
             schema.create(RealmCallConfig.class.getSimpleName()).addField(RealmCallConfigFields.VOICE_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.VIDEO_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.SCREEN_SHARING, boolean.class, FieldAttribute.REQUIRED).addField("IceServer", byte[].class);
 
-            RealmObjectSchema realmCallLog = schema.create(RealmCallLog.class.getSimpleName()).addField(RealmCallLogFields.ID, long.class, FieldAttribute.REQUIRED).addField(RealmCallLogFields.NAME, String.class).addField(RealmCallLogFields.TIME, long.class, FieldAttribute.REQUIRED).addField(RealmCallLogFields.LOG_PROTO, byte[].class);
+            RealmObjectSchema realmCallLog = schema.create(RealmCallLog.class.getSimpleName()).addField(RealmCallLogFields.ID, long.class, FieldAttribute.REQUIRED).addField("name", String.class).addField("time", long.class, FieldAttribute.REQUIRED).addField("logProto", byte[].class);
             realmCallLog.addPrimaryKey(RealmCallLogFields.ID);
             oldVersion++;
         }
@@ -529,10 +528,34 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 32
+        if (oldVersion == 32) {
             RealmObjectSchema realmGroupRoom = schema.get(RealmGroupRoom.class.getSimpleName());
             if (realmGroupRoom != null) {
                 realmGroupRoom.addField(RealmGroupRoomFields.START_FROM, int.class, FieldAttribute.REQUIRED);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 33
+            RealmObjectSchema realmCallLog = schema.get(RealmCallLog.class.getSimpleName());
+            if (realmCallLog != null) {
+                if (realmCallLog.hasField("name")) {
+                    realmCallLog.removeField("name");
+                }
+                if (realmCallLog.hasField("time")) {
+                    realmCallLog.removeField("time");
+                }
+                if (realmCallLog.hasField("logProto")) {
+                    realmCallLog.removeField("logProto");
+                }
+
+                RealmObjectSchema realmRegisteredInfoSchema = schema.get(RealmRegisteredInfo.class.getSimpleName());
+
+                realmCallLog.addField("type", String.class).
+                        addField("status", String.class).
+                        addRealmObjectField("user", realmRegisteredInfoSchema).
+                        addField("offerTime", int.class, FieldAttribute.REQUIRED).
+                        addField("duration", int.class, FieldAttribute.REQUIRED);
             }
             oldVersion++;
         }

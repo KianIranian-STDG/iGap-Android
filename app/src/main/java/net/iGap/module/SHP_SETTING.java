@@ -183,6 +183,9 @@ public class SHP_SETTING {
     public static final String KEY_TRACKER_FILE = "KEY_TRACKER_PREFERENCES";
     public static final String KEY_TRACKER_INSTALL_USER = "KEY_INSTALL_USER";
 
+    // ========================================================================================== Popular
+    public static final String KEY_CLEAR_CALL_LOG = "KEY_CLEAR_CALL_LOG"; // changed struct of "RealmCallLog" so for schema version 33 should clear realm data for "RealmCallLog"
+
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;
     }

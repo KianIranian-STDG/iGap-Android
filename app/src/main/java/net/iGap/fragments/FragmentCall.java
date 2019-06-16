@@ -34,9 +34,9 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnCallLogClear;
 import net.iGap.interfaces.ToolbarListener;
@@ -170,6 +170,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        RealmCallLog.manageClearCallLog();
         openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
         if (openInMain) {
             return inflater.inflate(R.layout.fragment_call, container, false);
@@ -264,7 +265,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         Realm realm = Realm.getDefaultInstance();
 
-        final RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING);
+        final RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
 
         if (results.size() > 0) {
             imgCallEmpty.setVisibility(View.GONE);
@@ -515,7 +516,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
                     Realm realm = Realm.getDefaultInstance();
                     try {
-                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
                         new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         imgCallEmpty.setVisibility(View.VISIBLE);
                         empty_call.setVisibility(View.VISIBLE);
@@ -764,13 +765,14 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         @Override
         public void onBindViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
 
-            final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = viewHolder.callLog = getItem(i).getLogProto();
+            final RealmCallLog item = viewHolder.callLog = getItem(i);
 
             if (item == null) {
                 return;
             }
             // set icon and icon color
-            switch (item.getStatus()) {
+
+            switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
                 case OUTGOING:
                     viewHolder.icon.setText(R.string.voice_call_made_icon);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
@@ -795,7 +797,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     break;
             }
 
-            if (item.getType() == VIDEO_CALLING) {
+            if (ProtoSignalingOffer.SignalingOffer.Type.valueOf(item.getType()) == VIDEO_CALLING) {
                 viewHolder.icon.setText(R.string.video_call_icon);
             }
 
@@ -815,13 +817,13 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 viewHolder.timeDuration.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDuration.getText().toString()));
             }
 
-            viewHolder.name.setText(item.getPeer().getDisplayName());
-            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, item.getPeer().getId()).registeredUser(item.getPeer()).avatarType(AvatarHandler.AvatarType.USER));
+            viewHolder.name.setText(item.getUser().getDisplayName());
+            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, item.getUser().getId()).avatarType(AvatarHandler.AvatarType.USER));
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
-            private ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog;
+            private RealmCallLog callLog;
             private CircleImageView image;
             private EmojiTextViewE name;
             private MaterialDesignTextView icon;
@@ -847,10 +849,10 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                         // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getLogProto().getPeer().getId(), null, null);
 
                         if (canclick) {
-                            long userId = callLog.getPeer().getId();
+                            long userId = callLog.getUser().getId();
 
                             if (userId != 134 && G.userId != userId) {
-                                call(userId, false, callLog.getType());
+                                call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.valueOf(callLog.getType()));
                             }
                         }
                     }
