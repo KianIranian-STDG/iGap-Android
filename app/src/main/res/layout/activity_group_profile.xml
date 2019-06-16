@@ -7,7 +7,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="fragmentGroupProfileViewModel"
+            name="viewModel"
             type="net.iGap.viewmodel.FragmentGroupProfileViewModel" />
     </data>
 
@@ -28,6 +28,7 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -44,11 +45,45 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:padding="8dp"
-                    android:text="@{fragmentGroupProfileViewModel.callbackGroupDescription}"
-                    android:visibility="@{fragmentGroupProfileViewModel.haveDescription}"
-                    app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
-                    app:layout_constraintRight_toRightOf="@id/notificationTitle"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:visibility="@{viewModel.haveDescription}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".9" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/inviteLink"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="4dp"
+                    android:text="@{viewModel.inviteLink}"
+                    android:visibility="@{viewModel.showLink}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/description"
+                    app:layout_constraintWidth_percent=".9" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/inviteLinkTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.inviteLinkTitle}"
+                    android:visibility="@{viewModel.showLink}"
+                    app:layout_constraintLeft_toLeftOf="@id/inviteLink"
+                    app:layout_constraintRight_toRightOf="@+id/inviteLink"
+                    app:layout_constraintTop_toBottomOf="@id/inviteLink" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onInviteLinkClick()}"
+                    app:layout_constraintBottom_toBottomOf="@id/inviteLinkTitle"
+                    app:layout_constraintLeft_toLeftOf="@id/inviteLink"
+                    app:layout_constraintRight_toRightOf="@id/inviteLink"
+                    app:layout_constraintTop_toTopOf="@id/inviteLink" />
 
                 <View
                     android:id="@+id/divider0"
@@ -56,10 +91,10 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:visibility="@{fragmentGroupProfileViewModel.haveDescription}"
+                    android:visibility="@{viewModel.haveDescription}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
-                    app:layout_constraintTop_toBottomOf="@id/description"
+                    app:layout_constraintTop_toBottomOf="@id/inviteLinkTitle"
                     app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -80,10 +115,31 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{fragmentGroupProfileViewModel.notificationState}"
+                    android:text="@{viewModel.notificationState}"
                     app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
                     app:layout_constraintRight_toRightOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/notificationTitle" />
+
+                <View
+                    android:id="@+id/notificationView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onNotificationClick()}"
+                    app:layout_constraintBottom_toBottomOf="@id/notificationStatus"
+                    app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
+                    app:layout_constraintRight_toRightOf="@id/notificationTitle"
+                    app:layout_constraintTop_toTopOf="@id/notificationTitle" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/enableNotification"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isUnMuteNotification}"
+                    android:onCheckedChanged="@{()->viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
+                    app:layout_constraintBottom_toBottomOf="@id/notificationStatus"
+                    app:layout_constraintRight_toRightOf="@id/notificationTitle"
+                    app:layout_constraintTop_toTopOf="@id/notificationTitle" />
 
                 <View
                     android:id="@+id/divider1"
@@ -102,10 +158,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->fragmentGroupProfileViewModel.onClickGroupShearedMedia()}"
                     android:padding="8dp"
                     android:text="@string/chi_shared_Media"
+                    android:visibility="@{viewModel.noMediaSharedVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
                     app:layout_constraintRight_toRightOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
@@ -116,9 +171,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(0)}"
                     android:padding="8dp"
                     android:text="@string/shared_image"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedPhotoVisibility}"
+                    android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/photoCount"
                     app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
@@ -129,9 +186,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedPhotoCount)}"
+                    android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedPhotoVisibility}"
+                    android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/photo" />
@@ -141,9 +198,11 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(1)}"
                     android:padding="8dp"
                     android:text="@string/shared_video"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedVideoVisibility}"
+                    android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/photoCount"
                     app:layout_constraintTop_toBottomOf="@id/photo" />
@@ -154,9 +213,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedVideoCount)}"
+                    android:text="@{String.valueOf(viewModel.sharedVideoCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedVideoVisibility}"
+                    android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/video"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/video" />
@@ -166,9 +225,11 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(2)}"
                     android:padding="8dp"
                     android:text="@string/shared_audio"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedAudioVisibility}"
+                    android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/audioFilesCount"
                     app:layout_constraintTop_toBottomOf="@id/video" />
@@ -179,9 +240,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedAudioCount)}"
+                    android:text="@{String.valueOf(viewModel.sharedAudioCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedAudioVisibility}"
+                    android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/audioFiles"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/audioFiles" />
@@ -191,9 +252,11 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(3)}"
                     android:padding="8dp"
                     android:text="@string/shared_voice"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedVoiceVisibility}"
+                    android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/voiceMessageCount"
                     app:layout_constraintTop_toBottomOf="@id/audioFiles" />
@@ -204,9 +267,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedVoiceCount)}"
+                    android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedVoiceVisibility}"
+                    android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/voiceMessage" />
@@ -216,9 +279,11 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(4)}"
                     android:padding="8dp"
                     android:text="@string/shared_gif"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedGifVisibility}"
+                    android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/gifCount"
                     app:layout_constraintTop_toBottomOf="@id/voiceMessage" />
@@ -229,9 +294,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedGifCount)}"
+                    android:text="@{String.valueOf(viewModel.sharedGifCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedGifVisibility}"
+                    android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/gif"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/gif" />
@@ -241,9 +306,11 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(5)}"
                     android:padding="8dp"
                     android:text="@string/shared_files"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedFileVisibility}"
+                    android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/filesCount"
                     app:layout_constraintTop_toBottomOf="@id/gif" />
@@ -254,9 +321,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedFileCount)}"
+                    android:text="@{String.valueOf(viewModel.sharedFileCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedFileVisibility}"
+                    android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/files"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/files" />
@@ -266,9 +333,11 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(6)}"
                     android:padding="8dp"
                     android:text="@string/shared_links"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedLinkVisibility}"
+                    android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toLeftOf="@id/linksCount"
                     app:layout_constraintTop_toBottomOf="@id/files" />
@@ -278,24 +347,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(fragmentGroupProfileViewModel.sharedLinkCount)}"
+                    android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
                     android:textColor="@color/green"
-                    android:visibility="@{fragmentGroupProfileViewModel.sharedLinkVisibility}"
+                    android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/links"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/links" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/noMediaShared"
-                    style="?textSubColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="@string/there_is_no_sheared_media"
-                    android:visibility="@{fragmentGroupProfileViewModel.noMediaSharedVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
-                    app:layout_constraintTop_toBottomOf="@id/links" />
 
                 <View
                     android:id="@+id/divider2"
@@ -303,9 +360,10 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:visibility="@{viewModel.noMediaSharedVisibility}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/noMediaShared"
+                    app:layout_constraintTop_toBottomOf="@id/links"
                     app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -315,35 +373,39 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->fragmentGroupProfileViewModel.addNewMember()}"
+                    android:onClick="@{()->viewModel.addNewMember()}"
                     android:padding="8dp"
                     android:text="@string/add_new_member"
+                    android:visibility="@{viewModel.addMemberVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/notificationTitle"
                     app:layout_constraintRight_toRightOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/memberList"
-                    android:layout_width="match_parent"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/showMemberList"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onShowMemberClick()}"
+                    android:padding="@dimen/dp8"
+                    android:text="@string/show_member"
+                    app:layout_constraintLeft_toLeftOf="@id/addMember"
+                    app:layout_constraintRight_toRightOf="@id/addMember"
                     app:layout_constraintTop_toBottomOf="@id/addMember" />
-
-                <ProgressBar
-                    android:id="@+id/loading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v4.widget.NestedScrollView>
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

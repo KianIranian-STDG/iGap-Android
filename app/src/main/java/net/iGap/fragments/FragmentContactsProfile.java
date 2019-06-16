@@ -37,11 +37,15 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserReport;
@@ -62,7 +66,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
-
+//todo : fixed view mode and view and remove logic code from view
 public class FragmentContactsProfile extends BaseFragment {
 
     private static final String ROOM_ID = "RoomId";
@@ -70,12 +74,11 @@ public class FragmentContactsProfile extends BaseFragment {
     private static final String ENTER_FROM = "enterFrom";
     /*private long userId = 0;
     private long roomId = 0;*/
-    private String enterFrom = "";
     private String report;
-    private long roomId = 0;
 
-    private FragmentContactsProfileBinding fragmentContactsProfileBinding;
-    private FragmentContactsProfileViewModel fragmentContactsProfileViewModel;
+    private FragmentContactsProfileBinding binding;
+    private FragmentContactsProfileViewModel viewModel;
+    private CircleImageView userAvatarImageView;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -90,46 +93,95 @@ public class FragmentContactsProfile extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentContactsProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_contacts_profile, container, false);
-        return attachToSwipeBack(fragmentContactsProfileBinding.getRoot());
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contacts_profile, container, false);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         long userId = 0;
-
+        long roomId = 0;
+        String enterFrom = "";
         if (getArguments() != null) {
             userId = getArguments().getLong(PEER_ID);
             roomId = getArguments().getLong(ROOM_ID);
             enterFrom = getArguments().getString(ENTER_FROM);
         }
+        viewModel = new FragmentContactsProfileViewModel(roomId, userId, enterFrom, avatarHandler);
+        binding.setViewModel(viewModel);
 
-        fragmentContactsProfileViewModel = new FragmentContactsProfileViewModel(roomId, userId, enterFrom, avatarHandler);
-        fragmentContactsProfileBinding.setViewModel(fragmentContactsProfileViewModel);
+        HelperToolbar t = HelperToolbar.create().setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon, R.string.video_call_icon, R.string.voice_call_icon)
+                .setGroupProfile(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
 
-        fragmentContactsProfileViewModel.goBack.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean != null && aBoolean) {
-                    popBackStackFragment();
-                }
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        viewModel.onMoreButtonClick();
+                    }
+
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        viewModel.onVideoCallClick();
+                    }
+
+                    @Override
+                    public void onThirdRightIconClickListener(View view) {
+                        viewModel.onVoiceCallButtonClick();
+                    }
+                });
+
+        binding.toolbar.addView(t.getView());
+
+        userAvatarImageView = t.getGroupAvatar();
+
+        userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
+
+        viewModel.menuVisibility.observe(this, visibility -> {
+            if (visibility != null) {
+                t.getRightButton().setVisibility(visibility);
             }
         });
 
-        fragmentContactsProfileViewModel.isMuteNotificationChangeListener.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean isChecked) {
-                fragmentContactsProfileBinding.enableNotification.setChecked(isChecked);
-
-                new RequestClientMuteRoom().muteRoom(roomId, isChecked);
+        viewModel.videoCallVisibility.observe(this, visibility -> {
+            if (visibility != null) {
+                t.getSecondRightButton().setVisibility(visibility);
             }
         });
 
-        /*fragmentContactsProfileBinding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fragmentContactsProfileBinding.chiFabSetPic.setColorFilter(Color.WHITE);
-        fragmentContactsProfileBinding.chiFabSetPic.setOnClickListener(new View.OnClickListener() { //fab button
+        viewModel.callVisibility.observe(this, visibility -> {
+            if (visibility != null) {
+                t.getThirdRightButton().setVisibility(visibility);
+            }
+        });
+
+        //todo: fixed it and move to viewModel
+        viewModel.isMuteNotificationChangeListener.observe(this, isChecked -> {
+            binding.enableNotification.setChecked(isChecked);
+            new RequestClientMuteRoom().muteRoom(viewModel.roomId, isChecked);
+        });
+
+        viewModel.contactName.observe(this,name->{
+            if (name!=null){
+                t.getGroupName().setText(name);
+            }
+        });
+
+        viewModel.lastSeen.observe(this,lastSeen->{
+            if (lastSeen!=null){
+                t.getGroupMemberCount().setText(HelperCalander.unicodeManage(lastSeen));
+            }
+        });
+
+        /*binding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        binding.chiFabSetPic.setColorFilter(Color.WHITE);
+        binding.chiFabSetPic.setOnClickListener(new View.OnClickListener() { //fab button
             @Override
             public void onClick(View view) {
 
@@ -175,19 +227,19 @@ public class FragmentContactsProfile extends BaseFragment {
             }
         });*/
 
-        /*if (fragmentContactsProfileViewModel.showNumber.get()) {
-            fragmentContactsProfileBinding.chiLayoutNickname.setOnClickListener(new View.OnClickListener() {
+        /*if (viewModel.showNumber.get()) {
+            binding.chiLayoutNickname.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    if (fragmentContactsProfileViewModel.contactName.get() == null) {
+                    if (viewModel.contactName.get() == null) {
                         return;
                     }
 
                     final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
                     layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
-                    String splitNickname[] = fragmentContactsProfileViewModel.contactName.get().split(" ");
+                    String splitNickname[] = viewModel.contactName.get().split(" ");
                     String firsName = "";
                     String lastName = "";
                     StringBuilder stringBuilder = null;
@@ -332,7 +384,7 @@ public class FragmentContactsProfile extends BaseFragment {
                     positive.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            long po = Long.parseLong(fragmentContactsProfileViewModel.phone.get());
+                            long po = Long.parseLong(viewModel.phone.get());
                             String firstName = edtFirstName.getText().toString().trim();
                             String lastName = edtLastName.getText().toString().trim();
                             new RequestUserContactsEdit().contactsEdit(userId, po, firstName, lastName);
@@ -345,35 +397,35 @@ public class FragmentContactsProfile extends BaseFragment {
             });
         }*/
 
-        /*fragmentContactsProfileBinding.chiAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        /*binding.chiAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                ViewGroup viewGroup = fragmentContactsProfileBinding.chiRootCircleImage;
+                ViewGroup viewGroup = binding.chiRootCircleImage;
                 if (verticalOffset < -5) {
                     viewGroup.animate().alpha(0).setDuration(700);
                     viewGroup.setVisibility(View.GONE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.setVisibility(View.VISIBLE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.animate().alpha(1).setDuration(300);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.setVisibility(View.VISIBLE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.animate().alpha(1).setDuration(300);
+                    binding.chiTxtTitleToolbarDisplayName.setVisibility(View.VISIBLE);
+                    binding.chiTxtTitleToolbarDisplayName.animate().alpha(1).setDuration(300);
+                    binding.chiTxtTitleToolbarLastSeen.setVisibility(View.VISIBLE);
+                    binding.chiTxtTitleToolbarLastSeen.animate().alpha(1).setDuration(300);
                 } else {
                     viewGroup.setVisibility(View.VISIBLE);
                     viewGroup.animate().alpha(1).setDuration(700);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.setVisibility(View.GONE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.animate().alpha(0).setDuration(500);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.setVisibility(View.GONE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.animate().alpha(0).setDuration(500);
+                    binding.chiTxtTitleToolbarDisplayName.setVisibility(View.GONE);
+                    binding.chiTxtTitleToolbarDisplayName.animate().alpha(0).setDuration(500);
+                    binding.chiTxtTitleToolbarLastSeen.setVisibility(View.GONE);
+                    binding.chiTxtTitleToolbarLastSeen.animate().alpha(0).setDuration(500);
                 }
             }
         });*/
 
-        fragmentContactsProfileViewModel.showMenu.observe(this, aBoolean -> {
+        viewModel.showMenu.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showPopUp();
             }
         });
 
-        fragmentContactsProfileViewModel.showPhoneNumberDialog.observe(this, new Observer<Boolean>() {
+        viewModel.showPhoneNumberDialog.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean != null && aBoolean) {
@@ -381,7 +433,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
-                                showPopupPhoneNumber(fragmentContactsProfileBinding.phoneNumber, fragmentContactsProfileViewModel.phone.get());
+                                showPopupPhoneNumber(binding.phoneNumber, viewModel.phone.get());
                             }
 
                             @Override
@@ -396,66 +448,66 @@ public class FragmentContactsProfile extends BaseFragment {
             }
         });
 
-        /*fragmentContactsProfileBinding.chiLayoutSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
+        /*binding.chiLayoutSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
-                new HelperFragment(FragmentShearedMedia.newInstance(fragmentContactsProfileViewModel.shearedId)).setReplace(false).load();
+                new HelperFragment(FragmentShearedMedia.newInstance(viewModel.shearedId)).setReplace(false).load();
             }
         });*/
 
-        fragmentContactsProfileViewModel.showClearChatDialog.observe(this, aBoolean -> {
+        viewModel.showClearChatDialog.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
             }
         });
 
-        fragmentContactsProfileViewModel.goToCustomNotificationPage.observe(this, aBoolean -> {
+        viewModel.goToCustomNotificationPage.observe(this, aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
                 bundle.putString("PAGE", "CONTACT");
-                bundle.putLong("ID", fragmentContactsProfileViewModel.roomId);
+                bundle.putLong("ID", viewModel.roomId);
                 fragmentNotification.setArguments(bundle);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragmentNotification).setReplace(false).load();
             }
         });
 
-        fragmentContactsProfileViewModel.setAvatar.observe(this, aBoolean -> {
+        viewModel.setAvatar.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
-                avatarHandler.getAvatar(new ParamWithAvatarType(fragmentContactsProfileBinding.profileAvatar, fragmentContactsProfileViewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarImageView, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
             }
         });
 
-        fragmentContactsProfileViewModel.showDeleteContactDialog.observe(this, aBoolean -> {
+        viewModel.showDeleteContactDialog.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        fragmentContactsProfileViewModel.deleteContact();
+                        viewModel.deleteContact();
                     }
                 }).negativeText(R.string.B_cancel).show();
             }
         });
 
-        fragmentContactsProfileViewModel.showDialogReportContact.observe(this, aBoolean -> {
+        viewModel.showDialogReportContact.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 openDialogReport();
             }
         });
 
-        fragmentContactsProfileViewModel.showDialogStartSecretChat.observe(this, aBoolean -> {
+        viewModel.showDialogStartSecretChat.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 Toast.makeText(getContext(), "secret chat", Toast.LENGTH_LONG).show();
             }
         });
 
-        fragmentContactsProfileViewModel.goToShowAvatarPage.observe(this, isCurrentUser -> {
+        viewModel.goToShowAvatarPage.observe(this, isCurrentUser -> {
             if (getActivity() != null && isCurrentUser != null) {
                 FragmentShowAvatars fragment;
                 if (isCurrentUser) {
-                    fragment = FragmentShowAvatars.newInstance(fragmentContactsProfileViewModel.userId, FragmentShowAvatars.From.setting);
+                    fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.setting);
                 } else {
-                    fragment = FragmentShowAvatars.newInstance(fragmentContactsProfileViewModel.userId, FragmentShowAvatars.From.chat);
+                    fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.chat);
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
@@ -465,25 +517,25 @@ public class FragmentContactsProfile extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        fragmentContactsProfileViewModel.onResume();
+        viewModel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        fragmentContactsProfileViewModel.onPause();
+        viewModel.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        fragmentContactsProfileViewModel.onStop();
+        viewModel.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        fragmentContactsProfileViewModel.onDestroy();
+        viewModel.onDestroy();
     }
 
     /**
@@ -507,7 +559,7 @@ public class FragmentContactsProfile extends BaseFragment {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback((dialog, view, which, text) -> {
                     switch (which) {
                         case 0:
-                            String call = "+" + Long.parseLong(fragmentContactsProfileViewModel.phone.get());
+                            String call = "+" + Long.parseLong(viewModel.phone.get());
                             try {
                                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                 callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
@@ -519,7 +571,7 @@ public class FragmentContactsProfile extends BaseFragment {
                             break;
                         case 1:
                             String copy;
-                            copy = fragmentContactsProfileViewModel.phone.get();
+                            copy = viewModel.phone.get();
                             ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
                             clipboard.setPrimaryClip(clip);
@@ -533,8 +585,8 @@ public class FragmentContactsProfile extends BaseFragment {
                         switch (which) {
                             case 0:
 
-                                String name = fragmentContactsProfileViewModel.contactName.get();
-                                String phone = "+" + fragmentContactsProfileViewModel.phone.get();
+                                String name = viewModel.contactName.getValue();
+                                String phone = "+" + viewModel.phone.get();
 
                                 ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
@@ -566,7 +618,7 @@ public class FragmentContactsProfile extends BaseFragment {
                                 break;
                             case 1:
 
-                                String call = "+" + Long.parseLong(fragmentContactsProfileViewModel.phone.get());
+                                String call = "+" + Long.parseLong(viewModel.phone.get());
                                 try {
                                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                     callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
@@ -580,7 +632,7 @@ public class FragmentContactsProfile extends BaseFragment {
                             case 2:
 
                                 ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", fragmentContactsProfileViewModel.phone.get());
+                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", viewModel.phone.get());
                                 clipboard.setPrimaryClip(clip);
 
                                 break;
@@ -605,9 +657,9 @@ public class FragmentContactsProfile extends BaseFragment {
 
         List<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
-        contact.firstName = fragmentContactsProfileViewModel.firstName;
-        contact.lastName = fragmentContactsProfileViewModel.lastName;
-        contact.phone = fragmentContactsProfileViewModel.phone.get() + "";
+        contact.firstName = viewModel.firstName;
+        contact.lastName = viewModel.lastName;
+        contact.phone = viewModel.phone.get() + "";
 
         contacts.add(contact);
 
@@ -615,7 +667,7 @@ public class FragmentContactsProfile extends BaseFragment {
     }
 
     private void showPopUp() {
-        new TopSheetDialog(getContext()).setListData(fragmentContactsProfileViewModel.items, -1, position -> fragmentContactsProfileViewModel.onMenuItemClick(position)).show();
+        new TopSheetDialog(getContext()).setListData(viewModel.items, -1, position -> viewModel.onMenuItemClick(position)).show();
     }
 
     private void openDialogReport() {
@@ -627,11 +679,11 @@ public class FragmentContactsProfile extends BaseFragment {
         items.add(getString(R.string.st_Other));
         new BottomSheetFragment().setData(items, -1, position -> {
             if (items.get(position).equals(getString(R.string.st_Spam))) {
-                new RequestUserReport().userReport(fragmentContactsProfileViewModel.userId, ProtoUserReport.UserReport.Reason.SPAM, "");
+                new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.SPAM, "");
             } else if (items.get(position).equals(getString(R.string.st_Abuse))) {
-                new RequestUserReport().userReport(fragmentContactsProfileViewModel.userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
+                new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
             } else if (items.get(position).equals(getString(R.string.st_FakeAccount))) {
-                new RequestUserReport().userReport(fragmentContactsProfileViewModel.userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
+                new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
             } else if (items.get(position).equals(getString(R.string.st_Other))) {
                 final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
                     @Override
@@ -646,7 +698,7 @@ public class FragmentContactsProfile extends BaseFragment {
                             positive.setEnabled(false);
                         }
                     }
-                }).positiveText(R.string.ok).onPositive((dialog, which) -> new RequestUserReport().userReport(fragmentContactsProfileViewModel.roomId, ProtoUserReport.UserReport.Reason.OTHER, report)).negativeText(R.string.cancel).build();
+                }).positiveText(R.string.ok).onPositive((dialog, which) -> new RequestUserReport().userReport(viewModel.roomId, ProtoUserReport.UserReport.Reason.OTHER, report)).negativeText(R.string.cancel).build();
 
                 final View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -668,14 +720,14 @@ public class FragmentContactsProfile extends BaseFragment {
                 dialog.dismiss();
                 clearHistory();
                 if (FragmentChat.onComplete != null) {
-                    FragmentChat.onComplete.complete(false, fragmentContactsProfileViewModel.roomId + "", "");
+                    FragmentChat.onComplete.complete(false, viewModel.roomId + "", "");
                 }
             }
         }).negativeText(negative).show();
     }
 
     private void clearHistory() {
-        RealmRoomMessage.clearHistoryMessage(fragmentContactsProfileViewModel.shearedId);
+        RealmRoomMessage.clearHistoryMessage(viewModel.shearedId);
     }
 
     private void error(String error) {

@@ -2,23 +2,15 @@ package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
-import net.iGap.fragments.ShowCustomList;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupRemoveUsername;
@@ -36,26 +28,17 @@ import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestUserInfo;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmList;
-import io.realm.RealmModel;
-
-import static net.iGap.G.context;
-import static net.iGap.R.string.array_Default;
-
-/**
- * Created by amir on 15/12/2017.
- */
+import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentGroupProfileViewModel extends ViewModel {
 
@@ -63,9 +46,10 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private static final int ENABLE = 1;
     private static final int DISABLE = 2;
 
-    public MutableLiveData<String> callbackGroupName = new MutableLiveData<>();
-    public MutableLiveData<String> callbackMemberNumber = new MutableLiveData<>();
-    public ObservableInt notificationState = new ObservableInt(array_Default);
+    public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
+    public ObservableBoolean isUnMuteNotification = new ObservableBoolean(true);
+    public ObservableInt notificationState = new ObservableInt(R.string.array_Default);
+    public ObservableInt noMediaSharedVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoCount = new ObservableInt(0);
     public ObservableInt sharedVideoVisibility = new ObservableInt(View.GONE);
@@ -80,75 +64,119 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public ObservableInt sharedFileCount = new ObservableInt(0);
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
-    public ObservableInt noMediaSharedVisibility = new ObservableInt(View.VISIBLE);
-    public ObservableField<SpannableStringBuilder> callbackGroupDescription = new ObservableField<>();
-    public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
-    public MutableLiveData<Long> goToShearedMediaPage = new MutableLiveData<>();
+    public ObservableInt addMemberVisibility = new ObservableInt(View.GONE);
+    public ObservableField<String> inviteLink = new ObservableField<>("");
+    public ObservableInt inviteLinkTitle = new ObservableInt(R.string.group_link);
+    public ObservableInt showLoading = new ObservableInt(View.GONE);
+    public ObservableInt showLink = new ObservableInt(View.GONE);
+
+    //ui Observable
+    public MutableLiveData<String> groupName = new MutableLiveData<>();
+    public MutableLiveData<String> groupNumber = new MutableLiveData<>();
     public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
-    public MutableLiveData<List<String>> showMenu = new MutableLiveData<>();
+    public MutableLiveData<List<Integer>> showMenu = new MutableLiveData<>();
+    public MutableLiveData<Long> goToShearedMediaPage = new MutableLiveData<>();
     public MutableLiveData<String> goToShowMemberPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogConvertToPublic = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogConvertToPrivate = new MutableLiveData<>();
     public MutableLiveData<Integer> showRequestError = new MutableLiveData<>();
     public MutableLiveData<List<StructContactInfo>> goToShowCustomListPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    public MutableLiveData<String> groupDescription = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showMoreMenu = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showEditButton = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showNotificationDialog = new MutableLiveData<>();
+    public MutableLiveData<String> showDialogCopyLink = new MutableLiveData<>();
 
-    private int realmNotification = 0;
-    private RealmNotificationSetting realmNotificationSetting;
-    public static OnMenuClick onMenuClick;
-    public long roomId;
+    private RealmRoom realmRoom;
+    private boolean isNotJoin;
     public GroupChatRole role;
     public boolean isPrivate;
-    public ObservableField<String> callbackGroupLink = new ObservableField<>("");
-    /*public ObservableField<String> callbackGroupShearedMedia = new ObservableField<>("");*/
-    /*public ObservableField<String> callBackDeleteLeaveGroup = new ObservableField<>(G.context.getResources().getString(R.string.Delete_and_leave_Group));*/
-    public ObservableField<String> callbackGroupLinkTitle = new ObservableField<>(G.context.getResources().getString(R.string.group_link));
-    public ObservableField<Integer> callbackAddMemberVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> prgWaitingVisibility = new ObservableField<>(View.GONE);
-    public ObservableField<Integer> settingVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> groupDescriptionVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> groupSetAdminVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> lineAdminVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> setModereatorVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> layoutMemberCanAddMember = new ObservableField<>(View.GONE);
-    private String tmp = "";
-    /*private String title;*/
-    private String description;
+
+    public static OnMenuClick onMenuClick;
+    public long roomId;
     private String initials;
-    private String inviteLink;
     public String linkUsername;
     private String color;
     private long noLastMessage;
-    private String participantsCountLabel;
     private String pathSaveImage;
     public boolean isPopup = false;
     private long startMessageId = 0;
     public boolean isNeedgetContactlist = true;
-    private RealmChangeListener<RealmModel> changeListener;
-    private RealmRoom mRoom;
     private Realm realmGroupProfile;
-    public boolean isNotJoin = false;
     private String memberCount;
 
 
     public FragmentGroupProfileViewModel(long roomId, boolean isNotJoin) {
+
         this.roomId = roomId;
         this.isNotJoin = isNotJoin;
-        getInfo();
-    }
 
-    public void onClickRippleBack(View v) {
-        if (FragmentGroupProfile.onBackFragment != null)
-            FragmentGroupProfile.onBackFragment.onBack();
+        realmGroupProfile = Realm.getDefaultInstance();
+
+        //group info
+        realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom == null || realmRoom.getGroupRoom() == null) {
+            goBack.setValue(true);
+            return;
+        }
+
+        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+
+        groupName.setValue(realmRoom.getTitle());
+        groupNumber.setValue(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(realmGroupRoom.getParticipantsCountLabel()) : realmGroupRoom.getParticipantsCountLabel());
+        role = realmGroupRoom.getRole();
+        isPrivate = realmGroupRoom.isPrivate();
+        switch (realmRoom.getGroupRoom().getRealmNotificationSetting().getNotification()) {
+            case DEFAULT:
+                notificationState.set(R.string.array_Default);
+                break;
+            case ENABLE:
+                notificationState.set(R.string.array_enable);
+                break;
+            case DISABLE:
+                notificationState.set(R.string.array_Disable);
+                break;
+        }
+
+        initials = realmRoom.getInitials();
+        color = realmRoom.getColor();
+
+        inviteLink.set(realmGroupRoom.getInvite_link());
+        linkUsername = realmGroupRoom.getUsername();
+
+        if (realmGroupRoom.getDescription() != null && !realmGroupRoom.getDescription().isEmpty()) {
+            haveDescription.set(View.VISIBLE);
+            groupDescription.setValue(realmGroupRoom.getDescription());
+        } else {
+            haveDescription.set(View.GONE);
+        }
+
+        setTextGroupLik();
+
+        //OWNER,ADMIN,MODERATOR,MEMBER can add member to group
+        addMemberVisibility.set(View.VISIBLE);
+        showEditButton.setValue(role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER);
+
+        showMoreMenu.setValue(!isNotJoin);
+
+        FragmentShearedMedia.getCountOfSharedMedia(roomId);
+
+        /*initRecycleView();*/
+        onGroupAddMemberCallback();
+        onGroupKickMemberCallback();
+
     }
 
     public void onClickRippleMenu() {
-        List<String> items = new ArrayList<>();
-        items.add(context.getString(R.string.clear_history));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.clear_history);
         if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
             if (isPrivate) {
-                items.add(context.getString(R.string.group_title_convert_to_public));
+                items.add(R.string.group_title_convert_to_public);
             } else {
-                items.add(context.getString(R.string.group_title_convert_to_private));
+                items.add(R.string.group_title_convert_to_private);
             }
         }
         showMenu.setValue(items);
@@ -169,6 +197,50 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
+    public void onNotificationCheckChange(boolean isUmMute) {
+        if (isUmMute) {
+            notificationState.set(R.string.array_enable);
+            RealmNotificationSetting.popupNotification(roomId, GROUP, ENABLE);
+        } else {
+            notificationState.set(R.string.array_Disable);
+            RealmNotificationSetting.popupNotification(roomId, GROUP, DISABLE);
+        }
+    }
+
+    public void onNotificationClick() {
+        showNotificationDialog.setValue(true);
+    }
+
+    public void onInviteLinkClick() {
+        isPopup = false;
+        showDialogCopyLink.setValue(inviteLink.get());
+    }
+
+    public void onShowMemberClick() {
+        goToShowMemberPage.setValue(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
+        isNeedgetContactlist = false;
+    }
+
+    public void setNotificationState(int type) {
+        switch (type) {
+            case DEFAULT:
+                notificationState.set(R.string.array_Default);
+                RealmNotificationSetting.popupNotification(roomId, GROUP, DEFAULT);
+                break;
+            case ENABLE:
+                notificationState.set(R.string.array_enable);
+                isUnMuteNotification.set(true);
+                RealmNotificationSetting.popupNotification(roomId, GROUP, ENABLE);
+                break;
+            case DISABLE:
+                notificationState.set(R.string.array_Disable);
+                isUnMuteNotification.set(false);
+                RealmNotificationSetting.popupNotification(roomId, GROUP, DISABLE);
+                break;
+        }
+    }
+
+
     public void sendRequestRemoveGroupUsername() {
         if (G.userLogin) {
             showProgressBar();
@@ -176,12 +248,12 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                 @Override
                 public void onGroupRemoveUsername(final long roomId) {
                     isPrivate = true;
-                    if (inviteLink == null || inviteLink.isEmpty() || inviteLink.equals("https://")) {
+                    if (inviteLink.get() == null || inviteLink.get().isEmpty() || inviteLink.equals("https://")) {
                         new RequestGroupRevokeLink().groupRevokeLink(roomId, new OnGroupRevokeLink() {
                             @Override
                             public void onGroupRevokeLink(long roomId, String inviteLink, String inviteToken) {
                                 hideProgressBar();
-                                G.handler.post(() -> callbackGroupLink.set("" + inviteLink));
+                                G.handler.post(() -> FragmentGroupProfileViewModel.this.inviteLink.set(inviteLink));
                             }
 
                             @Override
@@ -219,58 +291,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
-    /*public void onClickGroupName(View v) {
-        ChangeGroupName(v);
-    }*/
-
-    /*public void onClickGroupLink(View v) {
-        isPopup = false;
-
-        if (role == GroupChatRole.OWNER) {
-            if (isPrivate) {
-                dialogRevoke();
-            } else {
-                setUsername(v);
-            }
-        } else {
-            dialogCopyLink();
-        }
-    }*/
-
-    /*public void onClickGroupDescription(View v) {
-        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
-            ChangeGroupDescription();
-        }
-    }*/
-
-    public void onClickGroupShearedMedia() {
+    //type: 0=image 1=video 2=audio 3=voice 4=gif 5=file 6=link
+    public void onClickGroupShearedMedia(int type) {
         goToShearedMediaPage.setValue(roomId);
-    }
-
-    /*public void onClickGroupAddMember(View v) {
-        addMemberToGroup();
-    }*/
-
-    public void onClickGroupShowMember(View v) {
-        showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
-
-    }
-
-    public void onClickGroupSetAdmin(View v) {
-        showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-    }
-
-    public void onClickGroupModereator(View v) {
-        showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
-    }
-
-    public void onClickGroupNotification(View v) {
-        /*FragmentNotification fragmentNotification = new FragmentNotification();
-        Bundle bundle = new Bundle();
-        bundle.putString("PAGE", "GROUP");
-        bundle.putLong("ID", roomId);
-        fragmentNotification.setArguments(bundle);
-        new HelperFragment(fragmentNotification).setReplace(false).load();*/
     }
 
     public void addNewMember() {
@@ -290,120 +313,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         goToShowCustomListPage.setValue(userList);
     }
 
-    //===============================================================================
-    //================================Method========================================
-    //===============================================================================
-
-    /*public void onClickGroupLeftGroup(View v) {
-        groupLeft();
-    }*/
-
-    private void getInfo() {
-        realmGroupProfile = Realm.getDefaultInstance();
-
-        //group info
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom == null || realmRoom.getGroupRoom() == null) {
-            if (FragmentGroupProfile.onBackFragment != null)
-                FragmentGroupProfile.onBackFragment.onBack();
-            return;
-        } else if (realmRoom.getGroupRoom() != null) {
-            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-            if (realmGroupRoom != null) {
-                if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                    setRealm(Realm.getDefaultInstance(), realmGroupRoom);
-                } else {
-                    realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
-                }
-                getRealm();
-                realmNotification = realmNotificationSetting.getNotification();
-            }
-        }
-
-
-        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-        callbackGroupName.setValue(realmRoom.getTitle());
-        initials = realmRoom.getInitials();
-        color = realmRoom.getColor();
-        role = realmGroupRoom.getRole();
-        inviteLink = realmGroupRoom.getInvite_link();
-        linkUsername = realmGroupRoom.getUsername();
-        isPrivate = realmGroupRoom.isPrivate();
-        participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-        description = realmGroupRoom.getDescription();
-        //TODO: fixed this and do not use G.currentActivity
-        SpannableStringBuilder ds = HelperUrl.setUrlLink(G.currentActivity,description, true, false, null, true);
-        if (ds != null) {
-            haveDescription.set(View.VISIBLE);
-            callbackGroupDescription.set(ds);
-        } else {
-            haveDescription.set(View.GONE);
-            callbackGroupDescription.set(new SpannableStringBuilder(""));
-        }
-
-        callbackAddMemberVisibility.set(View.VISIBLE);
-        if (role == GroupChatRole.MODERATOR || role == GroupChatRole.MEMBER) {
-            if (!isPrivate) {
-                callbackAddMemberVisibility.set(View.GONE);
-            }
-        }
-        try {
-            if (realmRoom.getLastMessage() != null) {
-                noLastMessage = realmRoom.getLastMessage().getMessageId();
-            }
-        } catch (NullPointerException e) {
-            e.getStackTrace();
-        }
-
-        FragmentShearedMedia.getCountOfSharedMedia(roomId);
-
-        if (isNotJoin) {
-            settingVisibility.set(View.GONE);
-        }
-
-        /**
-         *  visibility layout Description
-         */
-
-        if (role == GroupChatRole.OWNER) {
-            groupDescriptionVisibility.set(View.VISIBLE);
-        } else {
-            if (description.length() == 0) {
-                groupDescriptionVisibility.set(View.GONE);
-            }
-        }
-
-        /*if (role == GroupChatRole.OWNER) {
-            callBackDeleteLeaveGroup.set(G.fragmentActivity.getResources().getString(R.string.delete_group));
-        } else {
-            callBackDeleteLeaveGroup.set(G.fragmentActivity.getResources().getString(R.string.left_group));
-        }*/
-
-
-        callbackMemberNumber.setValue(participantsCountLabel);
-        if (HelperCalander.isPersianUnicode) {
-            callbackMemberNumber.setValue(HelperCalander.convertToUnicodeFarsiNumber(callbackMemberNumber.getValue()));
-        }
-
-        switch (realmNotification) {
-            case DEFAULT:
-                notificationState.set(R.string.array_Default);
-                break;
-            case ENABLE:
-                notificationState.set(R.string.array_enable);
-                break;
-            case DISABLE:
-                notificationState.set(R.string.array_Disable);
-                break;
-        }
-
-        setTextGroupLik();
-        setUiIndependentRole();
-        initRecycleView();
-        onGroupAddMemberCallback();
-        onGroupKickMemberCallback();
-    }
-
     private Realm getRealm() {
         if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
             realmGroupProfile = Realm.getDefaultInstance();
@@ -412,110 +321,98 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     public void setTextGroupLik() {
-
         if (isPrivate) {
-            callbackGroupLink.set("" + inviteLink);
-            callbackGroupLinkTitle.set(G.fragmentActivity.getResources().getString(R.string.group_link));
+            showLink.set(View.GONE);
+            inviteLinkTitle.set(R.string.group_link);
         } else {
-            callbackGroupLink.set("" + linkUsername);
-            callbackGroupLinkTitle.set(G.fragmentActivity.getResources().getString(R.string.st_username));
+            showLink.set(View.VISIBLE);
+            inviteLink.set(linkUsername);
+            inviteLinkTitle.set(R.string.st_username);
         }
     }
 
     public void onResume() {
-        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (mRoom != null) {
-            if (changeListener == null) {
-                changeListener = new RealmChangeListener<RealmModel>() {
-                    @Override
-                    public void onChange(final RealmModel element) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (((RealmRoom) element).isValid()) {
-                                    String countText = ((RealmRoom) element).getSharedMediaCount();
-                                    Log.wtf("group profile view model", "value: " + countText);
-                                    if (HelperCalander.isPersianUnicode) {
-                                        countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
-                                    }
-                                    if (countText == null || countText.length() == 0) {
-                                        noMediaSharedVisibility.set(View.VISIBLE);
-                                    } else {
-                                        String[] countList = countText.split("\n");
-                                        int countOFImage = Integer.parseInt(countList[0]);
-                                        int countOFVIDEO = Integer.parseInt(countList[1]);
-                                        int countOFAUDIO = Integer.parseInt(countList[2]);
-                                        int countOFVOICE = Integer.parseInt(countList[3]);
-                                        int countOFGIF = Integer.parseInt(countList[4]);
-                                        int countOFFILE = Integer.parseInt(countList[5]);
-                                        int countOFLink = Integer.parseInt(countList[6]);
+        if (realmRoom != null) {
+            realmRoom.addChangeListener((realmModel, changeSet) -> {
+                if (changeSet != null) {
+                    if (changeSet.isDeleted()) {
+                        goToRoomListPage.setValue(true);
+                    } else if (((RealmRoom) realmModel).isValid()) {
+                        String countText = ((RealmRoom) realmModel).getSharedMediaCount();
+                        if (HelperCalander.isPersianUnicode) {
+                            countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
+                        }
+                        if (countText == null || countText.length() == 0) {
+                            noMediaSharedVisibility.set(View.GONE);
+                        } else {
+                            String[] countList = countText.split("\n");
+                            int countOFImage = Integer.parseInt(countList[0]);
+                            int countOFVIDEO = Integer.parseInt(countList[1]);
+                            int countOFAUDIO = Integer.parseInt(countList[2]);
+                            int countOFVOICE = Integer.parseInt(countList[3]);
+                            int countOFGIF = Integer.parseInt(countList[4]);
+                            int countOFFILE = Integer.parseInt(countList[5]);
+                            int countOFLink = Integer.parseInt(countList[6]);
 
-                                        if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
-                                            noMediaSharedVisibility.set(View.GONE);
-                                            if (countOFImage > 0) {
-                                                sharedPhotoVisibility.set(View.VISIBLE);
-                                                sharedPhotoCount.set(countOFImage);
-                                            } else {
-                                                sharedPhotoVisibility.set(View.GONE);
-                                            }
-                                            if (countOFVIDEO > 0) {
-                                                sharedVideoVisibility.set(View.VISIBLE);
-                                                sharedVideoCount.set(countOFVIDEO);
-                                            } else {
-                                                sharedVideoVisibility.set(View.GONE);
-                                            }
-                                            if (countOFAUDIO > 0) {
-                                                sharedAudioVisibility.set(View.VISIBLE);
-                                                sharedAudioCount.set(countOFAUDIO);
-                                            } else {
-                                                sharedAudioVisibility.set(View.GONE);
-                                            }
-                                            if (countOFVOICE > 0) {
-                                                sharedVoiceVisibility.set(View.VISIBLE);
-                                                sharedVoiceCount.set(countOFVOICE);
-                                            } else {
-                                                sharedVoiceVisibility.set(View.GONE);
-                                            }
-                                            if (countOFGIF > 0) {
-                                                sharedGifVisibility.set(View.VISIBLE);
-                                                sharedGifCount.set(countOFGIF);
-                                            } else {
-                                                sharedGifVisibility.set(View.GONE);
-                                            }
-                                            if (countOFFILE > 0) {
-                                                sharedFileVisibility.set(View.VISIBLE);
-                                                sharedFileCount.set(countOFFILE);
-                                            } else {
-                                                sharedFileVisibility.set(View.GONE);
-                                            }
-                                            if (countOFLink > 0) {
-                                                sharedLinkVisibility.set(View.VISIBLE);
-                                                sharedLinkCount.set(countOFLink);
-                                            } else {
-                                                sharedLinkVisibility.set(View.GONE);
-                                            }
-                                        } else {
-                                            noMediaSharedVisibility.set(View.VISIBLE);
-                                        }
-                                    }
+                            if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
+                                noMediaSharedVisibility.set(View.VISIBLE);
+                                if (countOFImage > 0) {
+                                    sharedPhotoVisibility.set(View.VISIBLE);
+                                    sharedPhotoCount.set(countOFImage);
+                                } else {
+                                    sharedPhotoVisibility.set(View.GONE);
                                 }
+                                if (countOFVIDEO > 0) {
+                                    sharedVideoVisibility.set(View.VISIBLE);
+                                    sharedVideoCount.set(countOFVIDEO);
+                                } else {
+                                    sharedVideoVisibility.set(View.GONE);
+                                }
+                                if (countOFAUDIO > 0) {
+                                    sharedAudioVisibility.set(View.VISIBLE);
+                                    sharedAudioCount.set(countOFAUDIO);
+                                } else {
+                                    sharedAudioVisibility.set(View.GONE);
+                                }
+                                if (countOFVOICE > 0) {
+                                    sharedVoiceVisibility.set(View.VISIBLE);
+                                    sharedVoiceCount.set(countOFVOICE);
+                                } else {
+                                    sharedVoiceVisibility.set(View.GONE);
+                                }
+                                if (countOFGIF > 0) {
+                                    sharedGifVisibility.set(View.VISIBLE);
+                                    sharedGifCount.set(countOFGIF);
+                                } else {
+                                    sharedGifVisibility.set(View.GONE);
+                                }
+                                if (countOFFILE > 0) {
+                                    sharedFileVisibility.set(View.VISIBLE);
+                                    sharedFileCount.set(countOFFILE);
+                                } else {
+                                    sharedFileVisibility.set(View.GONE);
+                                }
+                                if (countOFLink > 0) {
+                                    sharedLinkVisibility.set(View.VISIBLE);
+                                    sharedLinkCount.set(countOFLink);
+                                } else {
+                                    sharedLinkVisibility.set(View.GONE);
+                                }
+                            } else {
+                                noMediaSharedVisibility.set(View.GONE);
                             }
-                        });
+                        }
                     }
-                };
-            }
-
-            mRoom.addChangeListener(changeListener);
-            changeListener.onChange(mRoom);
+                }
+            });
         } else {
-            noMediaSharedVisibility.set(View.VISIBLE);
-            /*callbackGroupShearedMedia.set(context.getString(R.string.there_is_no_sheared_media));*/
+            noMediaSharedVisibility.set(View.GONE);
         }
     }
 
     public void onStop() {
-        if (mRoom != null) {
-            mRoom.removeAllChangeListeners();
+        if (realmRoom != null) {
+            realmRoom.removeAllChangeListeners();
         }
     }
 
@@ -525,278 +422,12 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
-    private void showListForCustomRole(String SelectedRole) {
-        isNeedgetContactlist = false;
-        goToShowMemberPage.setValue(SelectedRole);
-    }
-
-    /*private void addMemberToGroup() {
-        List<StructContactInfo> userList = Contacts.retrieve(null);
-        RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), roomId);
-
-        for (int i = 0; i < memberList.size(); i++) {
-            for (int j = 0; j < userList.size(); j++) {
-                if (userList.get(j).peerId == memberList.get(i).getPeerId()) {
-                    userList.remove(j);
-                    break;
-                }
-            }
-        }
-
-        Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
-            @Override
-            public void getSelectedList(boolean result, final String type, final int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < list.size(); i++) {
-                            new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(roomId, countForShowLastMessage));
-                        }
-                    }
-                });
-            }
-        });
-
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("DIALOG_SHOWING", true);
-        bundle.putLong("COUNT_MESSAGE", noLastMessage);
-        fragment.setArguments(bundle);
-        new HelperFragment(fragment).setReplace(false).load();
-    }*/
-
-    /*private void groupLeft() {
-
-        String text;
-        int title;
-        if (role == GroupChatRole.OWNER) {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_delete_this_group);
-            title = R.string.delete_group;
-        } else {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
-            title = R.string.left_group;
-        }
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
-
-                G.onGroupLeft = new OnGroupLeft() {
-                    @Override
-                    public void onGroupLeft(final long roomId, long memberId) {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //   G.fragmentActivity.finish();
-                                if (FragmentChat.finishActivity != null) {
-                                    FragmentChat.finishActivity.finishActivity();
-                                }
-                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaitingVisibility.set(View.GONE);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaitingVisibility.set(View.GONE);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onTimeOut() {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaitingVisibility.set(View.GONE);
-                            }
-                        });
-                    }
-                };
-
-                G.onGroupDelete = new OnGroupDelete() {
-                    @Override
-                    public void onGroupDelete(final long roomId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //G.fragmentActivity.finish();
-                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaitingVisibility.set(View.GONE);
-                                if (FragmentChat.finishActivity != null) {
-                                    FragmentChat.finishActivity.finishActivity();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void Error(int majorCode, int minorCode) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaitingVisibility.set(View.GONE);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onTimeOut() {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaitingVisibility.set(View.GONE);
-                            }
-                        });
-                    }
-                };
-
-                if (role == GroupChatRole.OWNER) {
-                    new RequestGroupDelete().groupDelete(roomId);
-                } else {
-                    new RequestGroupLeft().groupLeft(roomId);
-                }
-                prgWaitingVisibility.set(View.VISIBLE);
-                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        }).show();
-    }*/
-
-    /*private void dialogRevoke() {
-
-        String link = callbackGroupLink.get();
-
-        final LinearLayout layoutRevoke = new LinearLayout(G.fragmentActivity);
-        layoutRevoke.setOrientation(LinearLayout.VERTICAL);
-
-        final View viewRevoke = new View(G.fragmentActivity);
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        final TextInputLayout inputRevoke = new TextInputLayout(G.fragmentActivity);
-        MEditText edtRevoke = new MEditText(G.fragmentActivity);
-        edtRevoke.setHint(G.fragmentActivity.getResources().getString(R.string.group_link_hint_revoke));
-        edtRevoke.setTypeface(G.typeface_IRANSansMobile);
-        edtRevoke.setText(link);
-        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        edtRevoke.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtRevoke.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        edtRevoke.setPadding(0, 8, 0, 8);
-        edtRevoke.setEnabled(false);
-        edtRevoke.setSingleLine(true);
-        inputRevoke.addView(edtRevoke);
-        inputRevoke.addView(viewRevoke, viewParams);
-
-        viewRevoke.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtRevoke.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        layoutRevoke.addView(inputRevoke, layoutParams);
-
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_link_hint_revoke))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.revoke))
-                .customView(layoutRevoke, true)
-                .widgetColor(Color.parseColor(G.appBarColor))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .neutralText(R.string.array_Copy)
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String copy;
-                        copy = callbackGroupLink.get();
-                        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                        clipboard.setPrimaryClip(clip);
-                    }
-                })
-                .build();
-
-        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new RequestGroupRevokeLink().groupRevokeLink(roomId);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }*/
-
-    /*private void dialogCopyLink() {
-
-        String link = callbackGroupLink.get();
-
-        final LinearLayout layoutGroupLink = new LinearLayout(G.fragmentActivity);
-        layoutGroupLink.setOrientation(LinearLayout.VERTICAL);
-
-        final View viewRevoke = new View(G.fragmentActivity);
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        final TextInputLayout inputGroupLink = new TextInputLayout(G.fragmentActivity);
-        MEditText edtLink = new MEditText(G.fragmentActivity);
-        edtLink.setHint(G.fragmentActivity.getResources().getString(R.string.group_link_hint_revoke));
-        edtLink.setTypeface(G.typeface_IRANSansMobile);
-        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        edtLink.setText(link);
-        edtLink.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtLink.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        edtLink.setPadding(0, 8, 0, 8);
-        edtLink.setEnabled(false);
-        edtLink.setSingleLine(true);
-        inputGroupLink.addView(edtLink);
-        inputGroupLink.addView(viewRevoke, viewParams);
-
-        TextView txtLink = new AppCompatTextView(G.fragmentActivity);
-        txtLink.setText(Config.IGAP_LINK_PREFIX);
-        txtLink.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
-
-        viewRevoke.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtLink.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        layoutGroupLink.addView(inputGroupLink, layoutParams);
-        layoutGroupLink.addView(txtLink, layoutParams);
-
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_link))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
-                .customView(layoutGroupLink, true)
-                .widgetColor(Color.parseColor(G.appBarColor))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.no))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String copy;
-                        copy = callbackGroupLink.get();
-                        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                        clipboard.setPrimaryClip(clip);
-                    }
-                })
-                .build();
-
-        dialog.show();
-    }*/
-
     private void showProgressBar() {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (prgWaitingVisibility.get() != null) {
-                    prgWaitingVisibility.set(View.VISIBLE);
-                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
+                showLoading.set(View.VISIBLE);
+                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }
@@ -805,7 +436,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                prgWaitingVisibility.set(View.GONE);
+                showLoading.set(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
@@ -866,325 +497,20 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private void setMemberCount(final long roomId) {
         getRealm().executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NotNull Realm realm) {
                 memberCount = RealmRoom.getMemberCount(realm, roomId);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        callbackMemberNumber.setValue(memberCount);
                         if (HelperCalander.isPersianUnicode) {
-                            callbackMemberNumber.setValue(HelperCalander.convertToUnicodeFarsiNumber(callbackMemberNumber.getValue()));
+                            groupName.setValue(HelperCalander.convertToUnicodeFarsiNumber(memberCount));
+                        } else {
+                            groupNumber.setValue(memberCount);
                         }
                     }
                 });
             }
         });
 
-    }
-
-    private void setUiIndependentRole() {
-
-        if (role == GroupChatRole.MEMBER) {
-
-            groupSetAdminVisibility.set(View.GONE);
-            lineAdminVisibility.set(View.GONE);
-            setModereatorVisibility.set(View.GONE);
-            layoutMemberCanAddMember.set(View.GONE);
-        } else if (role == GroupChatRole.MODERATOR) {
-            groupSetAdminVisibility.set(View.GONE);
-            lineAdminVisibility.set(View.GONE);
-            setModereatorVisibility.set(View.GONE);
-        } else if (role == GroupChatRole.ADMIN) {
-            groupSetAdminVisibility.set(View.GONE);
-            lineAdminVisibility.set(View.GONE);
-        } else if (role == GroupChatRole.OWNER) {
-
-        }
-    }
-
-    private void initRecycleView() {
-
-        /*onMenuClick = new OnMenuClick() {
-            @Override
-            public void clicked(View view, StructContactInfo info) {
-                new CreatePopUpMessage().show(view, info);
-            }
-        };*/
-    }
-
-    /*private void ChangeGroupName(final View view) {
-
-        final LinearLayout layoutUserName = new LinearLayout(G.fragmentActivity);
-        layoutUserName.setOrientation(LinearLayout.VERTICAL);
-
-        final View viewUserName = new View(G.fragmentActivity);
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        final TextInputLayout inputUserName = new TextInputLayout(G.fragmentActivity);
-        final EmojiEditTextE edtUserName = new EmojiEditTextE(G.fragmentActivity);
-        edtUserName.setHint(G.fragmentActivity.getResources().getString(R.string.st_username));
-        edtUserName.setTypeface(G.typeface_IRANSansMobile);
-        edtUserName.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        edtUserName.setText(callbackGroupName.get());
-        edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        edtUserName.setPadding(0, 8, 0, 8);
-        edtUserName.setSingleLine(true);
-        inputUserName.addView(edtUserName);
-        inputUserName.addView(viewUserName, viewParams);
-
-        viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtUserName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        layoutUserName.addView(inputUserName, layoutParams);
-
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_name)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
-
-        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        positive.setEnabled(false);
-
-        final String finalUserName = callbackGroupName.getValue();
-        edtUserName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (!edtUserName.getText().toString().equals(finalUserName)) {
-                    positive.setEnabled(true);
-                } else {
-                    positive.setEnabled(false);
-                }
-            }
-        });
-
-        *//*G.onGroupEdit = new OnGroupEdit() {
-            @Override
-            public void onGroupEdit(long roomId, String name, String description) {
-                hideProgressBar();
-                SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
-                if (ds != null) {
-                    callbackGroupDescription.set(ds);
-                } else {
-                    callbackGroupDescription.set(new SpannableStringBuilder(""));
-                }
-                callbackGroupName.setValue(name);
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-
-            @Override
-            public void onTimeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
-
-                    }
-                });
-            }
-        };*//*
-
-        positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                new RequestGroupEdit().groupEdit(roomId, edtUserName.getText().toString(), callbackGroupDescription.get().toString());
-                dialog.dismiss();
-            }
-        });
-
-        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                AndroidUtils.closeKeyboard(view);
-            }
-        });
-
-        dialog.show();
-    }*/
-
-    /*private void ChangeGroupDescription() {
-        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.group_description).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).alwaysCallInputCallback().widgetColor(Color.parseColor(G.appBarColor)).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                G.onGroupEdit = new OnGroupEdit() {
-                    @Override
-                    public void onGroupEdit(final long roomId, final String name, final String description) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
-                                if (ds != null) {
-                                    callbackGroupDescription.set(ds);
-                                } else {
-                                    callbackGroupDescription.set(new SpannableStringBuilder(""));
-                                }
-
-                                callbackGroupName.setValue(name);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
-
-                    }
-
-                    @Override
-                    public void onTimeOut() {
-
-                    }
-                };
-
-                new RequestGroupEdit().groupEdit(roomId, callbackGroupName.getValue(), tmp);
-            }
-        }).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.fragmentActivity.getResources().getString(R.string.please_enter_group_description), callbackGroupDescription.get().toString(), new MaterialDialog.InputCallback() {
-            @Override
-            public void onInput(MaterialDialog dialog, CharSequence input) {
-                // Do something
-
-                View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                tmp = input.toString();
-                if (!input.toString().equals(callbackGroupDescription.get().toString())) {
-
-                    positive.setClickable(true);
-                    positive.setAlpha(1.0f);
-                } else {
-                    positive.setClickable(false);
-                    positive.setAlpha(0.5f);
-                }
-            }
-        }).show();
-
-        final View v = dialog.getView();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                AndroidUtils.closeKeyboard(v);
-            }
-        });
-    }*/
-
-    /*class CreatePopUpMessage {
-
-        private void show(View view, final StructContactInfo info) {
-            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
-            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
-
-            if (role == GroupChatRole.OWNER) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == GroupChatRole.ADMIN) {
-
-                *//*
-     *  ----------- Admin ---------------
-     *  1- admin dose'nt access set another admin
-     *  2- admin can set moderator
-     *  3- can remove moderator
-     *  4- can kick moderator and Member
-     *//*
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == GroupChatRole.MODERATOR) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                }
-            } else {
-
-                return;
-            }
-
-            // Setup menu item selection
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.menu_setAdmin:
-                            setToAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_set_moderator:
-                            setToModerator(info.peerId);
-                            return true;
-                        case R.id.menu_remove_admin:
-                            (fragment).kickAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_remove_moderator:
-                            ((FragmentGroupProfile) fragment).kickModerator(info.peerId);
-                            return true;
-                        case R.id.menu_kick:
-                            ((FragmentGroupProfile) fragment).kickMember(info.peerId);
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-            // Handle dismissal with: popup.setOnDismissListener(...);
-            // Show the menu
-            popup.show();
-        }
-
-        private void setToAdmin(Long peerId) {
-            new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
-        }
-
-        private void setToModerator(Long peerId) {
-            new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
-        }
-    }*/
-
-    private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom) {
-        realm.executeTransaction(realm1 -> realmNotificationSetting = RealmNotificationSetting.put(realm1, null, realmGroupRoom, null));
     }
 }
