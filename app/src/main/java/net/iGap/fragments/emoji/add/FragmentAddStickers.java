@@ -177,13 +177,14 @@ public class FragmentAddStickers extends BaseFragment {
             if (!capitalCities.containsKey(item.getAvatarToken())) {
                 capitalCities.put(item.getAvatarToken(), item);
             }
-
-            RealmStickers realmStickers = RealmStickers.checkStickerExist(item.getId());
+            Realm realm = Realm.getDefaultInstance();
+            RealmStickers realmStickers = RealmStickers.checkStickerExist(item.getId(), realm);
             if (realmStickers == null) {
                 holder.txtRemove.setVisibility(View.VISIBLE);
             } else if (realmStickers.isFavorite()) {
                 holder.txtRemove.setVisibility(View.GONE);
             }
+            realm.close();
 
             String path = HelperDownloadSticker.createPathFile(item.getAvatarToken(), item.getAvatarName());
             if (!new File(path).exists()) {
@@ -278,20 +279,21 @@ public class FragmentAddStickers extends BaseFragment {
                                                     @Override
                                                     public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
                                                         if (response.body() != null && response.body().isSuccess()) {
-                                                            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
+                                                            Realm realm = Realm.getDefaultInstance();
+                                                            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
                                                             if (realmStickers == null) {
-                                                                Realm realm = Realm.getDefaultInstance();
                                                                 realm.executeTransaction(new Realm.Transaction() {
                                                                     @Override
                                                                     public void execute(Realm realm) {
                                                                         RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
                                                                     }
                                                                 });
-                                                                realm.close();
 
                                                             } else {
                                                                 RealmStickers.updateFavorite(item.getId(), true);
                                                             }
+
+                                                            realm.close();
                                                         }
 
                                                         if (getActivity() == null || getActivity().isFinishing() || !isAdded()) {

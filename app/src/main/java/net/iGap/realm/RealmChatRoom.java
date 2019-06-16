@@ -43,8 +43,11 @@ public class RealmChatRoom extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peer_id).findFirst();
         if (realmRegisteredInfo != null) {
-            return realmRegisteredInfo.isVerified();
+            boolean result = realmRegisteredInfo.isVerified();
+            realm.close();
+            return result;
         }
+        realm.close();
         return false;
     }
 

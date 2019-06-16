@@ -4348,11 +4348,12 @@ public class FragmentChat extends BaseFragment
             JSONObject jObject = new JSONObject(message.additionalData.additionalData);
             String groupId = jObject.getString("groupId");
             String token = jObject.getString("token");
-
-            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
+            Realm realm = Realm.getDefaultInstance();
+            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
             if (realmStickers == null || !realmStickers.isFavorite()) {
                 openFragmentAddStickerToFavorite(groupId, token);
             }
+            realm.close();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -7724,7 +7725,6 @@ public class FragmentChat extends BaseFragment
         if (isShowLayoutUnreadMessage) {
             removeLayoutUnreadMessage();
         }
-        Realm realm = Realm.getDefaultInstance();
         long messageId = AppUtils.makeRandomId();
         final long updateTime = TimeUtils.currentLocalTime();
         ProtoGlobal.RoomMessageType messageType = null;
@@ -7926,6 +7926,8 @@ public class FragmentChat extends BaseFragment
 
         final StructMessageInfo finalMessageInfo = messageInfo;
         final long finalMessageId = messageId;
+
+        Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -8043,6 +8045,7 @@ public class FragmentChat extends BaseFragment
                 RealmRoom.setLastMessageWithRoomMessage(realm, roomMessage.getRoomId(), roomMessage);
             }
         });
+        realm.close();
 
         if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
             if (finalMessageType != CONTACT) {
@@ -8084,8 +8087,6 @@ public class FragmentChat extends BaseFragment
                 }
             });
         }
-
-        realm.close();
 
         G.handler.postDelayed(new Runnable() {
             @Override

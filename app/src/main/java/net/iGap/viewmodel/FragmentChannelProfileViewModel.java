@@ -168,8 +168,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
         participantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
         members = realmChannelRoom.getMembers();
         subscribersCount.setValue(String.valueOf(participantsCountLabel));
-        administratorsCount.set(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
         //todo:move to edit channel fragment
         /*if (isNotJoin) {

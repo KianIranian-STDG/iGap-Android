@@ -120,8 +120,8 @@ public class EditGroupViewModel extends ViewModel {
         }*/
 
         //ToDo: add this code to repository
-        RealmResults<RealmMember> realmMembers = RealmMember.filterRole(roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        RealmResults<RealmMember> moderatorMembers = RealmMember.filterRole(roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        RealmResults<RealmMember> realmMembers = RealmMember.filterRole(realmGroupProfile, roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        RealmResults<RealmMember> moderatorMembers = RealmMember.filterRole(realmGroupProfile, roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
         administratorsCount.set(String.valueOf(realmMembers.size()));
         moderatorsCount.set(String.valueOf(moderatorMembers.size()));
         int t;

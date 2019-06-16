@@ -1116,7 +1116,7 @@ public class HelperUrl {
         if (realmRoom != null) {
             closeDialogWaiting();
             goToActivity(activity, realmRoom.getId(), id, user.getBot() ? ChatEntry.chat : chatEntery, messageId);
-            realm.close();
+
         } else {
             if (G.userLogin) {
                 addChatToDatabaseAndGoToChat(activity, user, -1, user.getBot() ? ChatEntry.chat : chatEntery);
@@ -1125,6 +1125,7 @@ public class HelperUrl {
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
             }
         }
+        realm.close();
     }
 
     public static void showIndeterminateProgressDialog(Activity activity) {
@@ -1209,10 +1210,11 @@ public class HelperUrl {
                 }
             }
 
-            realm.close();
         } else {
             addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
         }
+
+        realm.close();
     }
 
     private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity, final String username, final ProtoGlobal.Room room, long messageId) {

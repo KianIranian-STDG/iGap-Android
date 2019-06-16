@@ -122,6 +122,7 @@ public class ActivityEnterPassCodeViewModel {
     public ActivityEnterPassCodeViewModel(Context context, ActivityEnterPassCodeBinding binding) {
         this.binding = binding;
         this.context = context;
+        realm = Realm.getDefaultInstance();
         getInfo();
     }
 
@@ -208,7 +209,6 @@ public class ActivityEnterPassCodeViewModel {
             fingerprintManager = (FingerprintManager) G.context.getSystemService(FINGERPRINT_SERVICE);
             keyguardManager = (KeyguardManager) G.context.getSystemService(KEYGUARD_SERVICE);
         }
-        realm = Realm.getDefaultInstance();
 
         realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 

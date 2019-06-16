@@ -62,8 +62,8 @@ public class DialogAddSticker extends DialogFragment {
 
     private void getSticker(String groupID) {
 
-
-        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
+        Realm realm = Realm.getDefaultInstance();
+        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
         if (realmStickers == null) {
             mAPIService.getSticker(groupID).enqueue(new Callback<StructEachSticker>() {
                 @Override
@@ -74,14 +74,14 @@ public class DialogAddSticker extends DialogFragment {
                         if (response.body().getOk() && response.body().getData() != null) {
 
                             StructGroupSticker item = response.body().getData();
-                            Realm realm = Realm.getDefaultInstance();
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false);
-                                }
-                            });
-                            realm.close();
+                            try (Realm realm = Realm.getDefaultInstance()) {
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false);
+                                    }
+                                });
+                            }
                             mAdapterAddDialogSticker.updateAdapter(item.getStickers());
                         }
                     }
@@ -99,7 +99,7 @@ public class DialogAddSticker extends DialogFragment {
                 mAdapterAddDialogSticker.updateAdapter(eachSticker.getStickers());
             }
         }
-
+        realm.close();
 
     }
 

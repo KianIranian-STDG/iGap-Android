@@ -79,6 +79,14 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (realmBlockedUser != null && !realmBlockedUser.isClosed()) {
+            realmBlockedUser.close();
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -155,9 +163,6 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realmBlockedUser != null && !realmBlockedUser.isClosed()) {
-            realmBlockedUser.close();
-        }
         G.onBlockStateChanged = null;
     }
 

@@ -75,6 +75,23 @@ public class RealmRoom extends RealmObject {
     private int priority;
     private boolean isFromPromote;
     private long promoteId;
+
+    public long getPromoteId() {
+        return promoteId;
+    }
+
+    public void setPromoteId(long promoteId) {
+        this.promoteId = promoteId;
+    }
+
+    public boolean isFromPromote() {
+        return isFromPromote;
+    }
+
+    public void setFromPromote(boolean fromPromote) {
+        isFromPromote = fromPromote;
+    }
+
     /**
      * client need keepRoom info for show in forward message that forward
      * from a room that user don't have that room
@@ -898,17 +915,9 @@ public class RealmRoom extends RealmObject {
                     realmRoom.setLastScrollPositionOffset(offset);
                 }
             }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                realm.close();
-            }
         });
+
+        realm.close();
     }
 
     public static void clearAllScrollPositions() {
@@ -980,17 +989,8 @@ public class RealmRoom extends RealmObject {
                     }
                 }
             }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                realm.close();
-            }
         });
+        realm.close();
     }
 
     /**
@@ -1163,147 +1163,6 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public static boolean isPinedMessage(long roomId, long messageId) {
-        boolean result = false;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
-        if (room != null) {
-            if (room.getPinMessageId() == messageId) {
-                result = true;
-            }
-        }
-        realm.close();
-        return result;
-    }
-
-    public static void updatePinedMessage(long roomId, final long messageId) {
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
-        if (room != null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    room.setPinMessageId(messageId);
-                }
-            });
-
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (G.onPinedMessage != null) {
-                        G.onPinedMessage.onPinMessage();
-                    }
-                }
-            }, 200);
-
-        }
-        realm.close();
-    }
-
-    public static void updatePinedMessageDeleted(long roomId, final boolean reset) {
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
-        if (room != null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    room.setPinMessageIdDeleted(reset ? 0 : room.getPinMessageId());
-                }
-            });
-        }
-        realm.close();
-    }
-
-    public static long hasPinedMessage(long roomId) {
-        long result = 0;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
-        if (room != null) {
-            if (room.getPinMessageId() > 0) {
-                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                        equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).findFirst();
-                if (roomMessage == null) {
-                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
-                        @Override
-                        public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (G.onPinedMessage != null) {
-                                        G.onPinedMessage.onPinMessage();
-                                    }
-                                }
-                            }, 200);
-                        }
-
-                        @Override
-                        public void onError(int majorCode, int minorCode) {
-
-                        }
-                    });
-                } else {
-                    RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                            equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
-                            equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findFirst();
-                    if (roomMessage1 != null) {
-                        result = roomMessage1.getMessageId();
-                    }
-                }
-            }
-        }
-        realm.close();
-        return result;
-    }
-
-    public static boolean isBot(long userId) {
-        Realm realm = null;
-        try {
-            realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-            if (realmRegisteredInfo != null) {
-                if (realmRegisteredInfo.isBot()) {
-                    return true;
-                } else
-                    return false;
-            } else
-                return false;
-        } catch (Exception e) {
-        } finally {
-            realm.close();
-        }
-
-        realm.close();
-        return false;
-    }
-
-    public static String[] getUnreadCountPages() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
-        int all = 0, chat = 0, group = 0, channel = 0;
-        for (RealmRoom rm : results) {
-            switch (rm.getType()) {
-                case CHANNEL:
-                    channel += rm.getUnreadCount();
-                    break;
-                case CHAT:
-                    chat += rm.getUnreadCount();
-                    break;
-                case GROUP:
-                    group += rm.getUnreadCount();
-                    break;
-            }
-            all += rm.getUnreadCount();
-        }
-        String ar[];
-        if (HelperCalander.isPersianUnicode) {
-            ar = new String[]{"0", "0", all + ""};
-        } else {
-            ar = new String[]{all + "", "0", "0"};
-        }
-        realm.close();
-        return ar;
-    }
-
     public static int getAllUnreadCount() {
         Realm realm = Realm.getDefaultInstance();
         Number number = realm.where(RealmRoom.class)
@@ -1317,68 +1176,6 @@ public class RealmRoom extends RealmObject {
         Log.i("aabolfazl", "getAllUnreadCount: " + number.intValue());
 
         return number.intValue();
-    }
-
-    public static void setPromote(Long id, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type type) {
-
-        if (type == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
-
-                    if (realmRoom != null) {
-                        realmRoom.setFromPromote(true);
-                    }
-                }
-
-            });
-            realm.close();
-        } else {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.setFromPromote(true);
-                    } else {
-                        realmRoom.setFromPromote(false);
-                    }
-
-                }
-            });
-            realm.close();
-        }
-
-
-    }
-
-    public static boolean isPromote(Long id) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
-        if (realmRoom != null) {
-            return realmRoom.isFromPromote();
-        }
-        realm.close();
-        return false;
-    }
-
-    public long getPromoteId() {
-        return promoteId;
-    }
-
-    public void setPromoteId(long promoteId) {
-        this.promoteId = promoteId;
-    }
-
-    public boolean isFromPromote() {
-        return isFromPromote;
-    }
-
-    public void setFromPromote(boolean fromPromote) {
-        isFromPromote = fromPromote;
     }
 
     public long getId() {
@@ -1586,6 +1383,7 @@ public class RealmRoom extends RealmObject {
         this.pinId = pinId;
     }
 
+
     public long getPinMessageId() {
         return pinMessageId;
     }
@@ -1608,6 +1406,98 @@ public class RealmRoom extends RealmObject {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public static boolean isPinedMessage(long roomId, long messageId) {
+        boolean result = false;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            if (room.getPinMessageId() == messageId) {
+                result = true;
+            }
+        }
+        realm.close();
+        return result;
+    }
+
+    public static void updatePinedMessage(long roomId, final long messageId) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    room.setPinMessageId(messageId);
+                }
+            });
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (G.onPinedMessage != null) {
+                        G.onPinedMessage.onPinMessage();
+                    }
+                }
+            }, 200);
+
+        }
+        realm.close();
+    }
+
+    public static void updatePinedMessageDeleted(long roomId, final boolean reset) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    room.setPinMessageIdDeleted(reset ? 0 : room.getPinMessageId());
+                }
+            });
+        }
+        realm.close();
+    }
+
+    public static long hasPinedMessage(long roomId) {
+        long result = 0;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            if (room.getPinMessageId() > 0) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                        equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).findFirst();
+                if (roomMessage == null) {
+                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
+                        @Override
+                        public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (G.onPinedMessage != null) {
+                                        G.onPinedMessage.onPinMessage();
+                                    }
+                                }
+                            }, 200);
+                        }
+
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
+
+                        }
+                    });
+                } else {
+                    RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                            equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
+                            equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findFirst();
+                    if (roomMessage1 != null) {
+                        result = roomMessage1.getMessageId();
+                    }
+                }
+            }
+        }
+        realm.close();
+        return result;
     }
 
     public long getUpdatedTime() {
@@ -1702,5 +1592,102 @@ public class RealmRoom extends RealmObject {
             default:
                 return id;
         }
+    }
+
+    public static boolean isBot(long userId) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.isBot()) {
+                    return true;
+                } else
+                    return false;
+            } else
+                return false;
+        } catch (Exception e) {
+        } finally {
+            realm.close();
+        }
+
+        realm.close();
+        return false;
+    }
+
+    public static String[] getUnreadCountPages() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        int all = 0, chat = 0, group = 0, channel = 0;
+        for (RealmRoom rm : results) {
+            switch (rm.getType()) {
+                case CHANNEL:
+                    channel += rm.getUnreadCount();
+                    break;
+                case CHAT:
+                    chat += rm.getUnreadCount();
+                    break;
+                case GROUP:
+                    group += rm.getUnreadCount();
+                    break;
+            }
+            all += rm.getUnreadCount();
+        }
+        String ar[];
+        if (HelperCalander.isPersianUnicode) {
+            ar = new String[]{"0", "0", all + ""};
+        } else {
+            ar = new String[]{all + "", "0", "0"};
+        }
+        realm.close();
+        return ar;
+    }
+
+
+    public static void setPromote(Long id, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type type) {
+
+        if (type == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+
+                    if (realmRoom != null) {
+                        realmRoom.setFromPromote(true);
+                    }
+                }
+
+            });
+            realm.close();
+        } else {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.setFromPromote(true);
+                    } else {
+                        realmRoom.setFromPromote(false);
+                    }
+
+                }
+            });
+            realm.close();
+        }
+
+    }
+
+    public static boolean isPromote(Long id) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+        if (realmRoom != null) {
+            boolean isPromote = realmRoom.isFromPromote();
+            realm.close();
+            return isPromote;
+        }
+        realm.close();
+        return false;
     }
 }

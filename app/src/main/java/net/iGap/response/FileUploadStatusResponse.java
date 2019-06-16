@@ -79,7 +79,7 @@ public class FileUploadStatusResponse extends MessageHandler {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-
+                        G.refreshRealmUi();
                         final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                         if (message != null) {
                             G.handler.post(new Runnable() {

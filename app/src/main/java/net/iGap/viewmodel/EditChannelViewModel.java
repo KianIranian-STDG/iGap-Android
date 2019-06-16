@@ -183,8 +183,8 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             e.getStackTrace();
         }*/
         subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
-        administratorsCount.set(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterRole(roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
         if (role == ChannelChatRole.OWNER) {
             leaveChannelText.set(R.string.channel_delete);

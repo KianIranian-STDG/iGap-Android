@@ -49,116 +49,115 @@ public class ClientGetRoomResponse extends MessageHandler {
         super.handler();
 
         final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom = (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(final Realm realm) {
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(final Realm realm) {
+                    final RequestClientGetRoom.IdentityClientGetRoom identityClientGetRoom = ((RequestClientGetRoom.IdentityClientGetRoom) identity);
+                    final RequestClientGetRoom.CreateRoomMode roomMode = identityClientGetRoom.createRoomMode;
 
-                final RequestClientGetRoom.IdentityClientGetRoom identityClientGetRoom = ((RequestClientGetRoom.IdentityClientGetRoom) identity);
-                final RequestClientGetRoom.CreateRoomMode roomMode = identityClientGetRoom.createRoomMode;
+                    if (roomMode != null && roomMode == RequestClientGetRoom.CreateRoomMode.justInfo) {
+                        if (!RealmRoom.isMainRoom(clientGetRoom.getRoom().getId())) {
+                            RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom(), realm);
+                            realmRoom.setDeleted(true);
+                            realmRoom.setKeepRoom(true);
+                        }
 
-                if (roomMode != null && roomMode == RequestClientGetRoom.CreateRoomMode.justInfo) {
-                    if (!RealmRoom.isMainRoom(clientGetRoom.getRoom().getId())) {
-                        RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom(), realm);
-                        realmRoom.setDeleted(true);
-                        realmRoom.setKeepRoom(true);
+                        /**
+                         * update log message in realm room message after get room info
+                         */
+                        if (HelperLogMessage.logMessageUpdateList.containsKey(clientGetRoom.getRoom().getId())) {
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HelperLogMessage.updateLogMessageAfterGetUserInfo(clientGetRoom.getRoom().getId());
+                                }
+                            }, 500);
+                        }
+
+                        return;
                     }
 
-                    /**
-                     * update log message in realm room message after get room info
-                     */
-                    if (HelperLogMessage.logMessageUpdateList.containsKey(clientGetRoom.getRoom().getId())) {
+                    if (roomMode != null && roomMode == RequestClientGetRoom.CreateRoomMode.getPromote) {
+                        if (!RealmRoom.isMainRoom(clientGetRoom.getRoom().getId())) {
+                            RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom(), realm);
+                            realmRoom.setFromPromote(true);
+                            realmRoom.setPromoteId(clientGetRoom.getRoom().getId());
+                            realmRoom.setDeleted(true);
+                            realmRoom.setKeepRoom(false);
+                            if (clientGetRoom.getRoom().hasChannelRoomExtra()) {
+                                new RequestClientJoinByUsername().clientJoinByUsername(clientGetRoom.getRoom().getChannelRoomExtra().getPublicExtra().getUsername(), clientGetRoom.getRoom().getId());
+                            } else {
+                                new RequestClientJoinByUsername().clientJoinByUsername(clientGetRoom.getRoom().getGroupRoomExtra().getPublicExtra().getUsername(), clientGetRoom.getRoom().getId());
+                            }
+
+                            //
+                        }
+
+                        return;
+                    }
+
+                    if (clientGetRoom.getRoom().getType() == ProtoGlobal.Room.Type.CHAT) {
+
+                        new HelperGetUserInfo(new OnGetUserInfo() {
+                            @Override
+                            public void onGetUserInfo(ProtoGlobal.RegisteredUser registeredUser) {
+
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        final Realm realm = Realm.getDefaultInstance();
+
+                                        realm.executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                putOrUpdate(clientGetRoom.getRoom(), realm);
+                                            }
+                                        }, new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                                G.handler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (G.onClientGetRoomResponse != null) {
+                                                            G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
+                                                        }
+                                                        if (G.onClientGetRoomResponseRoomList != null) {
+                                                            G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }, new Realm.Transaction.OnError() {
+                                            @Override
+                                            public void onError(Throwable error) {
+                                            }
+                                        });
+
+                                        realm.close();
+                                    }
+                                });
+                            }
+                        }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
+                    } else {
+                        putOrUpdate(clientGetRoom.getRoom(), realm);
+
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                HelperLogMessage.updateLogMessageAfterGetUserInfo(clientGetRoom.getRoom().getId());
+                                if (G.onClientGetRoomResponse != null) {
+                                    G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
+                                }
+                                if (G.onClientGetRoomResponseRoomList != null) {
+                                    G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
+                                }
                             }
                         }, 500);
                     }
-
-                    return;
                 }
-
-                if (roomMode != null && roomMode == RequestClientGetRoom.CreateRoomMode.getPromote) {
-                    if (!RealmRoom.isMainRoom(clientGetRoom.getRoom().getId())) {
-                        RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom(), realm);
-                        realmRoom.setFromPromote(true);
-                        realmRoom.setPromoteId(clientGetRoom.getRoom().getId());
-                        realmRoom.setDeleted(true);
-                        realmRoom.setKeepRoom(false);
-                        if (clientGetRoom.getRoom().hasChannelRoomExtra()) {
-                            new RequestClientJoinByUsername().clientJoinByUsername(clientGetRoom.getRoom().getChannelRoomExtra().getPublicExtra().getUsername(), clientGetRoom.getRoom().getId());
-                        } else {
-                            new RequestClientJoinByUsername().clientJoinByUsername(clientGetRoom.getRoom().getGroupRoomExtra().getPublicExtra().getUsername(), clientGetRoom.getRoom().getId());
-                        }
-
-                        //
-                    }
-
-                    return;
-                }
-
-                if (clientGetRoom.getRoom().getType() == ProtoGlobal.Room.Type.CHAT) {
-
-                    new HelperGetUserInfo(new OnGetUserInfo() {
-                        @Override
-                        public void onGetUserInfo(ProtoGlobal.RegisteredUser registeredUser) {
-
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Realm realm = Realm.getDefaultInstance();
-
-                                    realm.executeTransactionAsync(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            putOrUpdate(clientGetRoom.getRoom(), realm);
-                                        }
-                                    }, new Realm.Transaction.OnSuccess() {
-                                        @Override
-                                        public void onSuccess() {
-                                            G.handler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (G.onClientGetRoomResponse != null) {
-                                                        G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
-                                                    }
-                                                    if (G.onClientGetRoomResponseRoomList != null) {
-                                                        G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
-                                                    }
-                                                }
-                                            });
-                                            realm.close();
-                                        }
-                                    }, new Realm.Transaction.OnError() {
-                                        @Override
-                                        public void onError(Throwable error) {
-                                            realm.close();
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
-                } else {
-                    putOrUpdate(clientGetRoom.getRoom(), realm);
-
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (G.onClientGetRoomResponse != null) {
-                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
-                            }
-                            if (G.onClientGetRoomResponseRoomList != null) {
-                                G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
-                            }
-                        }
-                    }, 500);
-                }
-            }
-        });
-        realm.close();
+            });
+        }
 
         // update chat message header forward after get user or room info
         if (AbstractMessage.updateForwardInfo != null) {

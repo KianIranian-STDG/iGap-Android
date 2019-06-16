@@ -42,8 +42,7 @@ public class ChannelAvatarAddResponse extends MessageHandler {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-
+                Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -62,14 +61,13 @@ public class ChannelAvatarAddResponse extends MessageHandler {
                             });
                         }
 
-                        realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override
                     public void onError(Throwable error) {
-                        realm.close();
                     }
                 });
+                realm.close();
             }
         });
     }
