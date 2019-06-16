@@ -795,7 +795,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO;
 
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.AUDIO);
-        adapter = new VoiceAdapter(fragmentActivity, mNewList);
+        adapter = new AudioAdapter(fragmentActivity, mNewList);
 
         recyclerView.setLayoutManager(new PreCachingLayoutManager(fragmentActivity, 5000));
         recyclerView.setAdapter(adapter);
@@ -1087,6 +1087,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         adapter = new ImageAdapter(fragmentActivity, mNewList);
                     } else if (adapter instanceof VideoAdapter) {
                         adapter = new VideoAdapter(fragmentActivity, mNewList);
+                    } else if (adapter instanceof AudioAdapter) {
+                        adapter = new AudioAdapter(fragmentActivity, mNewList);
                     } else if (adapter instanceof VoiceAdapter) {
                         adapter = new VoiceAdapter(fragmentActivity, mNewList);
                     } else if (adapter instanceof GifAdapter) {
@@ -1888,9 +1890,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
     //****************************************************
 
-    public class VoiceAdapter extends mAdapter {
+    public class AudioAdapter extends mAdapter {
 
-        public VoiceAdapter(Context context, ArrayList<StructShearedMedia> list) {
+        public AudioAdapter(Context context, ArrayList<StructShearedMedia> list) {
             super(context, list);
         }
 
@@ -1905,7 +1907,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
                 RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 view.setLayoutParams(lp);
-                viewHolder = new VoiceAdapter.ViewHolder(view);
+                viewHolder = new AudioAdapter.ViewHolder(view);
             }
 
             return viewHolder;
@@ -1917,7 +1919,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             if (holder.getItemViewType() == 1) {
 
-                VoiceAdapter.ViewHolder holder1 = (VoiceAdapter.ViewHolder) holder;
+                AudioAdapter.ViewHolder holder1 = (AudioAdapter.ViewHolder) holder;
 
                 holder1.imvPicFile.setImageResource(R.drawable.green_music_note);
                 holder1.imvPicFile.setTag(mList.get(position).messageId);
@@ -2001,6 +2003,120 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         public class ViewHolder extends mHolder {
             public RadiusImageView imvPicFile;
+            public TextView tvIconFile;
+            public TextView txtFileName;
+            public TextView txtFileSize;
+            public TextView txtFileInfo;
+            public String filePath;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                imvPicFile = itemView.findViewById(R.id.smslf_imv_image_file);
+                tvIconFile = itemView.findViewById(R.id.smslf_imv_icon_file);
+                tvIconFile.setVisibility(View.GONE);
+                imvPicFile.setVisibility(View.VISIBLE);
+
+                txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
+                txtFileSize = (TextView) itemView.findViewById(R.id.smslf_txt_file_size);
+                txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
+            }
+        }
+    }
+
+    //****************************************************
+
+    public class VoiceAdapter extends mAdapter {
+
+        public VoiceAdapter(Context context, ArrayList<StructShearedMedia> list) {
+            super(context, list);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+            RecyclerView.ViewHolder viewHolder = null;
+
+            if (position == 0) {
+                View view = setLayoutHeaderTime(viewGroup);
+                viewHolder = new ViewHolderTime(view);
+            } else {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
+                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                view.setLayoutParams(lp);
+                viewHolder = new VoiceAdapter.ViewHolder(view);
+            }
+
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            super.onBindViewHolder(holder, position);
+
+            if (holder.getItemViewType() == 1) {
+
+                VoiceAdapter.ViewHolder holder1 = (VoiceAdapter.ViewHolder) holder;
+
+                //holder1.imvPicFile.setTextColor(getContext().getResources().getColor(R.color.shared_media_music_list_icon_color));
+                holder1.imvPicFile.setTag(mList.get(position).messageId);
+
+                RealmAttachment at = mList.get(position).item.getAttachment();
+
+                String tempFilePath = getThumpnailPath(position);
+                holder1.filePath = getFilePath(position);
+
+                holder1.txtFileName.setGravity(Gravity.LEFT);
+                holder1.txtFileName.setText(at.getName());
+
+                holder1.txtFileSize.setText("" + AndroidUtils.humanReadableByteCount(at.getSize(), true));
+                holder1.txtFileInfo.setVisibility(View.GONE);
+                holder1.txtFileSize.setGravity(Gravity.LEFT);
+                File file = new File(holder1.filePath);
+
+                if (file.exists()) {
+                    holder1.messageProgress.setVisibility(View.GONE);
+                    holder1.imvPicFile.setText(getString(R.string.music_icon));
+
+                    try {
+
+                        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+                        Uri uri = Uri.fromFile(file);
+                        mediaMetadataRetriever.setDataSource(context, uri);
+                        String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+
+                        if (artist == null) {
+                            artist = context.getString(R.string.unknown_artist);
+                        }
+                        holder1.txtFileInfo.setText(artist);
+
+                    } catch (Exception e) {
+                        holder1.txtFileInfo.setVisibility(View.GONE);
+                    }
+                } else {
+                    needDownloadList.put(mList.get(position).messageId, true);
+                    holder1.messageProgress.setVisibility(View.VISIBLE);
+                    holder1.imvPicFile.setText("");
+
+                }
+            }
+        }
+
+        @Override
+        void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
+            playAudio(position, holder);
+        }
+
+        private void playAudio(int position, RecyclerView.ViewHolder holder) {
+
+            VoiceAdapter.ViewHolder vh = (VoiceAdapter.ViewHolder) holder;
+
+            String name = mList.get(position).item.getAttachment().getName();
+
+            MusicPlayer.startPlayer(name, vh.filePath, name, roomId, true, mList.get(position).messageId + "");
+        }
+
+        public class ViewHolder extends mHolder {
+            public TextView imvPicFile;
             public TextView txtFileName;
             public TextView txtFileSize;
             public TextView txtFileInfo;

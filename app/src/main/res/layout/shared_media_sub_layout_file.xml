@@ -33,7 +33,18 @@
             android:gravity="center"
             android:text="@string/attach_icon"
             android:layout_gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/shared_media_music_list_icon_color"
+          android:background="@drawable/background_multi_select_light" />
+
+        <net.iGap.module.RadiusImageView
+          android:id="@+id/smslf_imv_image_file"
+          android:layout_width="@dimen/dp52"
+          android:layout_height="@dimen/dp52"
+            android:gravity="center"
+            android:text="@string/attach_icon"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:layout_gravity="center"
           android:background="@drawable/background_multi_select_light" />
 
         <include

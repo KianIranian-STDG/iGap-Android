@@ -255,5 +255,6 @@
     <color name="send_message_text_light">#5F5F5F</color>
     <color name="receive_message_text_light">#5F5F5F</color>
 
+    <color name="shared_media_music_list_icon_color">#468DA7</color>
 
 </resources>
