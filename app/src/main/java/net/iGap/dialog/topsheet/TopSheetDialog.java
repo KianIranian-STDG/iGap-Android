@@ -96,6 +96,16 @@ public class TopSheetDialog extends AppCompatDialog {
         return this;
     }
 
+    public TopSheetDialog setListDataWithResourceId(List<Integer> listItem, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
+        for (int i = 0; i < listItem.size(); i++) {
+            this.itemList.add(getContext().getString(listItem.get(i)));
+        }
+        this.range = range;
+        this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
+        super.setContentView(wrapInTopSheet());
+        return this;
+    }
+
     private View wrapInTopSheet() {
         final CoordinatorLayout coordinator = (CoordinatorLayout) View.inflate(getContext(), R.layout.top_sheet_dialog, null);
         FrameLayout topSheet = coordinator.findViewById(R.id.design_top_sheet);
