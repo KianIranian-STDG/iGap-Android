@@ -921,17 +921,9 @@ public class RealmRoom extends RealmObject {
                     realmRoom.setLastScrollPositionOffset(offset);
                 }
             }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                realm.close();
-            }
         });
+
+        realm.close();
     }
 
     public static void clearAllScrollPositions() {
@@ -1003,17 +995,8 @@ public class RealmRoom extends RealmObject {
                     }
                 }
             }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                realm.close();
-            }
         });
+        realm.close();
     }
 
     /**
@@ -1696,7 +1679,9 @@ public class RealmRoom extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         if (realmRoom != null) {
-            return realmRoom.isFromPromote();
+            boolean isPromote = realmRoom.isFromPromote();
+            realm.close();
+            return isPromote;
         }
         realm.close();
         return false;

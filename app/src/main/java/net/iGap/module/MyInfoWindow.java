@@ -79,8 +79,8 @@ public class MyInfoWindow extends InfoWindow {
             return;
         }
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        Realm realm2 = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm2, userId);
         if (realmRegisteredInfo == null) {
             RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
                 @Override
@@ -93,8 +93,10 @@ public class MyInfoWindow extends InfoWindow {
                     });
                 }
             });
+            realm2.close();
             return;
         }
+        realm2.close();
 
      /*   RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
         if (callConfig != null) {
@@ -245,8 +247,6 @@ public class MyInfoWindow extends InfoWindow {
         //} else {
         //    txtComment.setText(G.fragmentActivity.getResources().getString(R.string.comment_no));
         //}
-
-        realm.close();
     }
 
     /*public void onOpen(Object arg0) {

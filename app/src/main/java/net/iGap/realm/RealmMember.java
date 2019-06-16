@@ -308,8 +308,7 @@ public class RealmMember extends RealmObject {
         });
     }
 
-    public static RealmResults<RealmMember> filterMember(long roomId, @Nullable String filter) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmResults<RealmMember> filterMember(Realm realm, long roomId, @Nullable String filter) {
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null) {
             return emptyResult(realm);
@@ -353,8 +352,7 @@ public class RealmMember extends RealmObject {
         return realm.where(RealmMember.class).equalTo(RealmMemberFields.ID, -1).findAll();
     }
 
-    public static RealmResults<RealmMember> filterRole(long roomId, ProtoGlobal.Room.Type roomType, String role) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmResults<RealmMember> filterRole(Realm realm, long roomId, ProtoGlobal.Room.Type roomType, String role) {
         RealmList<RealmMember> memberList = null;
         RealmResults<RealmMember> mList = emptyResult(realm);
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();

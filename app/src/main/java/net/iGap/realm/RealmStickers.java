@@ -173,8 +173,7 @@ public class RealmStickers extends RealmObject {
         return itemSticker;
     }
 
-    public static RealmStickers checkStickerExist(String groupId) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmStickers checkStickerExist(String groupId, Realm realm) {
         RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
 
         if (realmStickers == null) return realmStickers;

@@ -62,8 +62,8 @@ public class DialogAddSticker extends DialogFragment {
 
     private void getSticker(String groupID) {
 
-
-        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
+        Realm realm = Realm.getDefaultInstance();
+        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
         if (realmStickers == null) {
             mAPIService.getSticker(groupID).enqueue(new Callback<StructEachSticker>() {
                 @Override
@@ -99,7 +99,7 @@ public class DialogAddSticker extends DialogFragment {
                 mAdapterAddDialogSticker.updateAdapter(eachSticker.getStickers());
             }
         }
-
+        realm.close();
 
     }
 
