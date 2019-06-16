@@ -1,5 +1,7 @@
 package net.iGap.fragments;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
@@ -11,8 +13,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Selection;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -38,6 +43,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarAdd;
@@ -52,8 +58,11 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.DeviceUtils;
+import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MEditText;
+import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
@@ -73,6 +82,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
 
 /*
  * This is the source code of iGap for Android
@@ -87,16 +98,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
-    public static OnBackFragment onBackFragment;
-    /*NestedScrollView nestedScrollView;*/
-    AttachFile attachFile;
-    private CircleImageView imvGroupAvatar;
-    /*private AppBarLayout appBarLayout;*/
-    private String pathSaveImage;
-    /*private ProgressBar prgWait;*/
+
     private FragmentGroupProfileViewModel viewModel;
     private ActivityGroupProfileBinding binding;
 
+
+    AttachFile attachFile;
+    private CircleImageView imvGroupAvatar;
+    private String pathSaveImage;
 
     public static FragmentGroupProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
@@ -111,8 +120,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_group_profile, container, false);
-        viewModel = new FragmentGroupProfileViewModel(getArguments().getLong(ROOM_ID), getArguments().getBoolean(IS_NOT_JOIN));
-        binding.setFragmentGroupProfileViewModel(viewModel);
+        long roomId = 0;
+        boolean isNotJoin = true;
+        if (getArguments() != null) {
+            roomId = getArguments().getLong(ROOM_ID);
+            isNotJoin = getArguments().getBoolean(IS_NOT_JOIN);
+        }
+        viewModel = new FragmentGroupProfileViewModel(roomId, isNotJoin);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
     }
@@ -144,16 +159,36 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     }
                 });
         // because actionbar not in this view do that and not correct in viewModel
-        if (viewModel.isNotJoin) {
-            t.getSecondRightButton().setVisibility(View.GONE);
-        }
         binding.toolbar.addView(t.getView());
         imvGroupAvatar = t.getGroupAvatar();
         imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
 
-        viewModel.callbackGroupName.observe(this, s -> t.getGroupName().setText(s));
+        viewModel.groupName.observe(this, s -> t.getGroupName().setText(s));
 
-        viewModel.callbackMemberNumber.observe(this, s -> t.getGroupMemberCount().setText(String.format("%s %s", s, getString(R.string.member))));
+        viewModel.groupNumber.observe(this, s -> t.getGroupMemberCount().setText(String.format("%s %s", s, getString(R.string.member))));
+
+        viewModel.showMoreMenu.observe(this, isShow -> {
+            if (isShow != null) {
+                t.getRightButton().setVisibility(isShow ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        viewModel.showEditButton.observe(this, isShow -> {
+            if (isShow != null) {
+                t.getSecondRightButton().setVisibility(isShow ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        viewModel.showNotificationDialog.observe(this, isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new MaterialDialog.Builder(getActivity()).title(R.string.st_popupNotification).items(R.array.notifications_notification).negativeText(R.string.B_cancel).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        viewModel.setNotificationState(which);
+                    }
+                }).show();
+            }
+        });
 
         viewModel.goToShearedMediaPage.observe(this, roomId -> {
             if (getActivity() != null && roomId != null) {
@@ -169,7 +204,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         viewModel.showMenu.observe(this, menuList -> {
             if (getActivity() != null && menuList != null) {
-                new TopSheetDialog(getActivity()).setListData(menuList, -1, position -> {
+                new TopSheetDialog(getActivity()).setListDataWithResourceId(menuList, -1, position -> {
                     if (menuList.get(position).equals(getString(R.string.clear_history))) {
                         new MaterialDialog.Builder(getActivity()).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -239,15 +274,75 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        onBackFragment = new OnBackFragment() {
-            @Override
-            public void onBack() {
+        viewModel.goBack.observe(this, isGoBack -> {
+            if (isGoBack != null && isGoBack) {
                 popBackStackFragment();
             }
-        };
+        });
 
+        viewModel.groupDescription.observe(this, groupDescription -> {
+            if (getActivity() != null && groupDescription != null) {
+                binding.description.setText(HelperUrl.setUrlLink(getActivity(), groupDescription, true, false, null, true));
+            }
+        });
 
-        initComponent(view);
+        viewModel.goToRoomListPage.observe(this, isGo -> {
+            if (getActivity() != null && isGo != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(2);
+            }
+        });
+
+        viewModel.showDialogCopyLink.observe(this, link -> {
+            if (getActivity() != null && link != null) {
+
+                LinearLayout layoutGroupLink = new LinearLayout(getActivity());
+                layoutGroupLink.setOrientation(LinearLayout.VERTICAL);
+                View viewRevoke = new View(getActivity());
+                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+                TextInputLayout inputGroupLink = new TextInputLayout(getActivity());
+                MEditText edtLink = new MEditText(getActivity());
+                edtLink.setHint(getString(R.string.group_link_hint_revoke));
+                edtLink.setTypeface(G.typeface_IRANSansMobile);
+                edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
+                edtLink.setText(link);
+                edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
+                edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                edtLink.setPadding(0, 8, 0, 8);
+                edtLink.setEnabled(false);
+                edtLink.setSingleLine(true);
+                inputGroupLink.addView(edtLink);
+                inputGroupLink.addView(viewRevoke, viewParams);
+
+                TextView txtLink = new AppCompatTextView(getActivity());
+                txtLink.setText(Config.IGAP_LINK_PREFIX);
+                txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
+
+                viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
+                }
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                layoutGroupLink.addView(inputGroupLink, layoutParams);
+                layoutGroupLink.addView(txtLink, layoutParams);
+
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
+                        .positiveText(R.string.array_Copy)
+                        .customView(layoutGroupLink, true)
+                        .widgetColor(Color.parseColor(G.appBarColor))
+                        .negativeText(R.string.no)
+                        .onPositive((dialog1, which) -> {
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
+                            clipboard.setPrimaryClip(clip);
+                        })
+                        .build();
+
+                dialog.show();
+            }
+        });
+
+        initComponent();
 
         attachFile = new AttachFile(getActivity());
         G.onGroupAvatarResponse = this;
@@ -343,7 +438,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
      */
 
 
-    private void initComponent(final View view) {
+    private void initComponent() {
 
         AppUtils.setProgresColler(binding.loading);
 
@@ -801,10 +896,5 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }).show();
         }
     }
-
-    public interface OnBackFragment {
-        void onBack();
-    }
-
 }
 
