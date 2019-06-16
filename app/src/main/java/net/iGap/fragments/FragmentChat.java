@@ -2749,10 +2749,15 @@ public class FragmentChat extends BaseFragment
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
+
         if (G.isDarkTheme) {
             imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
+            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext_dark));
+            edtChat.setHintTextColor(ContextCompat.getColor(getContext(),R.color.white));
         } else {
             imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
+            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext));
+            edtChat.setHintTextColor(ContextCompat.getColor(getContext(),R.color.gray_4c));
         }
 
         imvAttachFileButton = rootView.findViewById(R.id.vtn_chatRoom_attach);
