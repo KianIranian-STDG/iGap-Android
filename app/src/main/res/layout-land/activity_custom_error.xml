@@ -71,10 +71,10 @@
           android:layout_marginBottom="@dimen/dp10"
           android:layout_marginTop="10dp"
           android:background="@color/green"
-          android:paddingBottom="@dimen/dp12"
+          android:paddingBottom="@dimen/dp6"
           android:paddingLeft="@dimen/dp36"
           android:paddingRight="@dimen/dp36"
-          android:paddingTop="@dimen/dp12"
+          android:paddingTop="@dimen/dp6"
           android:text="@string/iGap_has_crashed_reload"
           android:textColor="@color/white"
           android:textSize="@dimen/dp16" />
