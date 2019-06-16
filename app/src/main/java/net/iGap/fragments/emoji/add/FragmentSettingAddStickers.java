@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -70,6 +71,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         titleTextView.setText(R.string.add_sticker);
 
         tabLayout = view.findViewById(R.id.tab_layout);
+        tabLayout.setSelectedTabIndicatorColor(getContext().getResources().getColor(R.color.setting_items_value_color));
         ViewPager viewPager = view.findViewById(R.id.pager);
 
         adapter = new SectionPagerAdapter(getActivity().getSupportFragmentManager(), new StickerCategory[0]);
@@ -131,8 +133,15 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
 
             TextView tv = new TextView(getContext());
             tv.setText(tabLayout.getTabAt(i).getText());
+            tv.setGravity(Gravity.CENTER);
             tv.setTypeface(G.typeface_IRANSansMobile);
-            tv.setTextColor(G.context.getResources().getColor(R.color.black));
+
+            if (G.isDarkTheme){
+                tv.setTextColor(G.context.getResources().getColor(R.color.white));
+            }
+            else {
+                tv.setTextColor(G.context.getResources().getColor(R.color.black));
+            }
             tabLayout.getTabAt(i).setCustomView(tv);
         }
     }
