@@ -4,10 +4,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
-        <import type="net.iGap.G" />
-
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentChannelProfileViewModel" />
@@ -31,7 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -48,10 +43,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:padding="8dp"
-                    android:text="@{viewModel.callbackChannelDescription}"
                     android:visibility="@{viewModel.haveDescription}"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
@@ -73,10 +67,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/info"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider0"
-                    app:layout_constraintWidth_percent=".85" />
+                    android:visibility="@{viewModel.isVerifiedChannel}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/divider0" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/channelVerify"
@@ -84,7 +78,7 @@
                     android:layout_height="@dimen/dp24"
                     android:paddingLeft="@dimen/dp4"
                     android:paddingRight="@dimen/dp4"
-                    android:visibility="@{viewModel.isVerifiedChannel ? View.VISIBLE : View.GONE , default=visible}"
+                    android:visibility="@{viewModel.isVerifiedChannel}"
                     app:layout_constraintLeft_toLeftOf="@id/channelInfo"
                     app:layout_constraintTop_toBottomOf="@id/channelInfo"
                     app:srcCompat="@drawable/ic_verify" />
@@ -100,7 +94,7 @@
                     android:text="@string/verify_channel"
                     android:textColor="@color/verify_color"
                     android:textSize="@dimen/dp16"
-                    android:visibility="@{safeUnbox(viewModel.isVerifiedChannel ? View.VISIBLE : View.GONE)}"
+                    android:visibility="@{viewModel.isVerifiedChannel}"
                     app:layout_constraintBottom_toBottomOf="@id/channelVerify"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintLeft_toRightOf="@id/channelVerify"
@@ -115,9 +109,9 @@
                     android:onClick="@{()->viewModel.onClickChannelLink()}"
                     android:padding="4dp"
                     android:text="@{viewModel.channelLink}"
-                    android:visibility="@{viewModel.isShowLink ? View.VISIBLE : View.GONE , default = visible}"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    android:visibility="@{viewModel.isShowLink}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
                     app:layout_constraintTop_toBottomOf="@id/channelVerify" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -127,9 +121,9 @@
                     android:layout_height="wrap_content"
                     android:padding="4dp"
                     android:text="@{viewModel.channelLinkTitle}"
-                    android:visibility="@{safeUnbox(viewModel.isShowLink ? View.VISIBLE : View.GONE)}"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    android:visibility="@{viewModel.isShowLink}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
                     app:layout_constraintTop_toBottomOf="@id/channelLink" />
 
                 <View
@@ -138,50 +132,47 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:visibility="@{viewModel.isShowLink}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/channelLinkStatus"
                     app:layout_constraintWidth_percent=".95" />
 
-                <RelativeLayout
-                    android:id="@+id/enableNotificationLyt"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/notification"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:onClick="@{()-> viewModel.onNotificationClick()}"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
-                    app:layout_constraintTop_toBottomOf="@id/divider1" >
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?attr/selectableItemBackground"
+                    android:fontFamily="@font/main_font"
+                    android:onClick="@{()-> viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
+                    android:padding="8dp"
+                    android:text="@string/mute_notification"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider1"
+                    app:layout_constraintWidth_percent=".85" />
 
-                    <TextView
-                        android:fontFamily="@font/main_font"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/mute_notification" />
-
-                    <net.iGap.module.CustomToggleButton
-                        android:id="@+id/enableNotification"
-                        android:layout_width="@dimen/toggles_width"
-                        android:layout_height="@dimen/toggles_height"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:checked="@={viewModel.isMuteNotification}" />
-
-                </RelativeLayout>
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/enableNotification"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isMuteNotification}"
+                    android:onCheckedChanged="@{()->viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
+                    app:layout_constraintBottom_toBottomOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toTopOf="@id/notification" />
 
                 <View
                     android:id="@+id/divider2"
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
-                    app:layout_constraintTop_toBottomOf="@id/enableNotificationLyt" />
+                    app:layout_constraintTop_toBottomOf="@id/notification" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/members"
@@ -190,8 +181,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/member"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -199,9 +191,12 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onSubscribersClick()}"
                     android:padding="8dp"
                     android:text="@string/subscribers_title"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintLeft_toLeftOf="@id/members"
                     app:layout_constraintRight_toLeftOf="@id/subscribersCount"
                     app:layout_constraintTop_toBottomOf="@id/members" />
 
@@ -213,9 +208,10 @@
                     android:padding="8dp"
                     android:text="@{viewModel.subscribersCount}"
                     android:textColor="@color/green"
+                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/subscribers"
                     app:layout_constraintLeft_toRightOf="@id/subscribers"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    app:layout_constraintRight_toRightOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/subscribers" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -223,9 +219,12 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onAdministratorsClick()}"
                     android:padding="8dp"
                     android:text="@string/administrators_title"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintLeft_toLeftOf="@id/members"
                     app:layout_constraintRight_toLeftOf="@id/administratorsCount"
                     app:layout_constraintTop_toBottomOf="@id/subscribers" />
 
@@ -237,9 +236,10 @@
                     android:padding="8dp"
                     android:text="@{viewModel.administratorsCount}"
                     android:textColor="@color/green"
+                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
                     app:layout_constraintLeft_toRightOf="@id/administrators"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    app:layout_constraintRight_toRightOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -247,9 +247,12 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@string/moderators_title"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintLeft_toLeftOf="@id/members"
                     app:layout_constraintRight_toLeftOf="@id/moderatorsCount"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
@@ -261,10 +264,224 @@
                     android:padding="8dp"
                     android:text="@{viewModel.moderatorsCount}"
                     android:textColor="@color/green"
+                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
                     app:layout_constraintLeft_toRightOf="@id/moderator"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    app:layout_constraintRight_toRightOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
+
+                <View
+                    android:id="@+id/divider3"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintLeft_toLeftOf="@id/divider1"
+                    app:layout_constraintRight_toRightOf="@id/divider1"
+                    app:layout_constraintTop_toBottomOf="@id/moderator" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/sharedContentTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
+                    android:text="@string/chi_shared_Media"
+                    android:visibility="@{viewModel.noMediaVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/photo"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(0)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_image"
+                    android:visibility="@{viewModel.sharedPhotoVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toLeftOf="@id/photoCount"
+                    app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/photoCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
+                    android:textColor="@color/green"
+                    android:visibility="@{viewModel.sharedPhotoVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/photo"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/photo" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/video"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(1)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_video"
+                    android:visibility="@{viewModel.sharedVideoVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toLeftOf="@id/photoCount"
+                    app:layout_constraintTop_toBottomOf="@id/photo" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/videoCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedVideoCount)}"
+                    android:textColor="@color/green"
+                    android:visibility="@{viewModel.sharedVideoVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/video"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/video" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/audioFiles"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(2)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_audio"
+                    android:visibility="@{viewModel.sharedAudioVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toLeftOf="@id/audioFilesCount"
+                    app:layout_constraintTop_toBottomOf="@id/video" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/audioFilesCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedAudioCount)}"
+                    android:textColor="@color/green"
+                    android:visibility="@{viewModel.sharedAudioVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/audioFiles"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/audioFiles" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/voiceMessage"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(3)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_voice"
+                    android:visibility="@{viewModel.sharedVoiceVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toLeftOf="@id/voiceMessageCount"
+                    app:layout_constraintTop_toBottomOf="@id/audioFiles" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/voiceMessageCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
+                    android:textColor="@color/green"
+                    android:visibility="@{viewModel.sharedVoiceVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/voiceMessage" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/gif"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(4)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_gif"
+                    android:visibility="@{viewModel.sharedGifVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toLeftOf="@id/gifCount"
+                    app:layout_constraintTop_toBottomOf="@id/voiceMessage" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/gifCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedGifCount)}"
+                    android:textColor="@color/green"
+                    android:visibility="@{viewModel.sharedGifVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/gif"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/gif" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/files"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(5)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_files"
+                    android:visibility="@{viewModel.sharedFileVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toLeftOf="@id/filesCount"
+                    app:layout_constraintTop_toBottomOf="@id/gif" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/filesCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedFileCount)}"
+                    android:textColor="@color/green"
+                    android:visibility="@{viewModel.sharedFileVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/files"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/files" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/links"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(6)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_links"
+                    android:visibility="@{viewModel.sharedLinkVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
+                    app:layout_constraintRight_toLeftOf="@id/linksCount"
+                    app:layout_constraintTop_toBottomOf="@id/files" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/linksCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
+                    android:textColor="@color/green"
+                    android:visibility="@{viewModel.sharedLinkVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/links"
+                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/links" />
 
                 <ProgressBar
                     android:id="@+id/loading"
@@ -280,787 +497,4 @@
         </android.support.v4.widget.NestedScrollView>
 
     </android.support.constraint.ConstraintLayout>
-
-    <!--<android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinator"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/pch_appbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp140"
-            android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}">
-
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/acp_ll_collapsing_toolbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                app:contentScrim="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                app:expandedTitleMarginBottom="32dp"
-                app:expandedTitleMarginEnd="64dp"
-                app:expandedTitleMarginStart="48dp"
-                app:expandedTitleTextAppearance="@android:color/transparent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                <android.support.v7.widget.Toolbar
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
-                    android:layoutDirection="ltr"
-                    android:padding="0dp"
-                    app:contentInsetLeft="0dp"
-                    app:contentInsetStart="0dp"
-                    app:layout_collapseMode="pin">
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-
-                        <net.iGap.libs.rippleeffect.RippleView
-                            android:id="@+id/pch_ripple_back"
-                            rv_centered="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:onClick="@{fragmentChannelProfileViewModel::onClickRippleBack}"
-                            app:rv_alpha="200"
-                            app:rv_centered="true"
-                            app:rv_rippleDuration="0"
-                            app:rv_ripplePadding="5dp">
-
-                            <net.iGap.module.MaterialDesignTextView
-                                android:id="@+id/pch_txt_back"
-                                android:layout_width="@dimen/dp52"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="@string/md_back_arrow"
-                                android:textAppearance="@style/TextIconAppearance_toolbar"
-                                android:textColor="@color/whit_background" />
-                        </net.iGap.libs.rippleeffect.RippleView>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/pch_txt_titleToolbar"
-                                fontPath="fonts/IRANSansMobile_Bold.ttf"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="left|center"
-                                android:text="@{fragmentChannelProfileViewModel.callbackChannelName , default=name}"
-                                android:textColor="@color/whit_background"
-                                android:textSize="@dimen/dp18"
-                                android:textStyle="normal"
-                                android:visibility="gone" />
-
-                        </LinearLayout>
-
-
-                        <net.iGap.libs.rippleeffect.RippleView
-                            android:id="@+id/pch_ripple_menuPopup"
-                            rv_centered="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:onClick="@{fragmentChannelProfileViewModel::onClickRippleMenuPopup}"
-                            app:rv_alpha="200"
-                            app:rv_centered="true"
-                            app:rv_rippleDuration="100"
-                            app:rv_ripplePadding="5dp">
-
-                            <net.iGap.module.MaterialDesignTextView
-                                android:id="@+id/pch_img_menuPopup"
-                                android:layout_width="@dimen/dp52"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="@string/md_show_more_button"
-                                android:textAppearance="@style/TextIconAppearance_toolbar"
-                                android:textColor="@color/whit_background"
-                                android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.menuPopupVisibility)}" />
-                        </net.iGap.libs.rippleeffect.RippleView>
-                    </LinearLayout>
-                </android.support.v7.widget.Toolbar>
-
-                <LinearLayout
-                    android:id="@+id/pch_root_circleImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:onClick="@{fragmentChannelProfileViewModel::onClickCircleImage}"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/dp8"
-                    app:layout_collapseMode="parallax">
-
-                    <net.iGap.module.CircleImageView
-                        android:id="@+id/pch_img_circleImage"
-                        android:layout_width="@dimen/dp88"
-                        android:layout_height="@dimen/dp88"
-                        android:src="@mipmap/empty" />
-
-                    <net.iGap.module.EmojiTextViewE
-                        android:id="@+id/txt_channel_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/dp4"
-                        android:lineSpacingMultiplier=".8"
-                        android:maxLength="24"
-                        android:padding="@dimen/dp4"
-                        android:text="@{fragmentChannelProfileViewModel.callbackChannelName , default=name}"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/dp16"
-                        android:textStyle="normal"
-                        app:emojiSize="@dimen/dp14" />
-
-                </LinearLayout>
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.NestedScrollView
-            style="?backgroundColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
-                style="?backgroundColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-
-                    <net.iGap.module.HeaderTextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp16"
-                        android:paddingBottom="@dimen/dp16"
-                        android:text="@string/info"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/dp18"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:orientation="horizontal">
-
-
-                        <LinearLayout
-                            android:id="@+id/lyt_channel_name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:paddingLeft="@dimen/dp12"
-                            android:paddingRight="@dimen/dp12">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    style="?textTitleColorSettingTheme"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
-                                    android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
-                                    android:paddingStart="@dimen/dp4"
-                                    android:paddingEnd="@dimen/dp4"
-                                    android:singleLine="true"
-                                    android:text="@string/channel_name"
-                                    android:textSize="@dimen/dp15" />
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="1dp"
-                                    android:layout_weight="1"
-                                    android:orientation="horizontal" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:orientation="horizontal">
-
-                                    <android.support.v7.widget.AppCompatImageView
-                                        android:id="@+id/ac_txt_verify"
-                                        android:layout_width="@dimen/dp24"
-                                        android:layout_height="@dimen/dp24"
-                                        android:paddingLeft="@dimen/dp4"
-                                        android:paddingRight="@dimen/dp4"
-                                        android:visibility="@{fragmentChannelProfileViewModel.isVerified ? View.VISIBLE : View.GONE , default=visible}"
-                                        app:srcCompat="@drawable/ic_verify" />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:paddingStart="@dimen/dp4"
-                                        android:paddingEnd="@dimen/dp4"
-                                        android:singleLine="true"
-                                        android:text="@string/verify_channel"
-                                        android:textColor="@color/verify_color"
-                                        android:textSize="@dimen/dp16"
-                                        android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.verifyTextVisibility)}" />
-
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <net.iGap.module.EmojiTextViewE
-                                android:id="@+id/txt_channel_name_info"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
-                                android:lineSpacingMultiplier=".8"
-                                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
-                                android:padding="@dimen/dp4"
-                                android:paddingStart="@dimen/dp4"
-                                android:paddingTop="@dimen/dp4"
-                                android:paddingEnd="@dimen/dp4"
-                                android:paddingBottom="@dimen/dp12"
-                                android:singleLine="true"
-                                android:text="@{fragmentChannelProfileViewModel.callbackChannelName , default=name}"
-                                android:textColor="@color/gray_5c"
-                                android:textSize="@dimen/dp13"
-                                app:emojiSize="@dimen/dp14" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_channel_link"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelLink}"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
-                        android:visibility="@{(fragmentChannelProfileViewModel.isPrivate &amp;&amp; ((fragmentChannelProfileViewModel.role == ChannelChatRole.MEMBER) || (fragmentChannelProfileViewModel.role == ChannelChatRole.MODERATOR))) ?  View.GONE : View.VISIBLE  , default = visible }">
-
-                        <TextView
-                            android:id="@+id/txt_channel_link_title"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/dp4"
-                            android:paddingEnd="@dimen/dp4"
-                            android:singleLine="true"
-                            android:text="@{fragmentChannelProfileViewModel.callbackChannelLinkTitle , default=@string/channel_link}"
-                            android:textSize="@dimen/dp15" />
-
-                        <TextView
-                            android:id="@+id/txt_channel_link"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/dp4"
-                            android:paddingTop="@dimen/dp4"
-                            android:paddingEnd="@dimen/dp4"
-                            android:paddingBottom="@dimen/dp12"
-                            android:singleLine="true"
-                            android:text="@{fragmentChannelProfileViewModel.callbackChannelLink , default=Link}"
-                            android:textColor="@color/gray_5c"
-                            android:textSize="@dimen/dp13" />
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/lyt_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
-                        android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.descriptionVisibility)}">
-
-                        <TextView
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:enabled="@{fragmentChannelProfileViewModel.channelDescriptionEnable}"
-                            android:onClick="@{fragmentChannelProfileViewModel::onClickChannelDescription}"
-                            android:paddingStart="@dimen/dp4"
-                            android:paddingEnd="@dimen/dp4"
-                            android:singleLine="true"
-                            android:text="@string/channel_description"
-                            android:textSize="@dimen/dp15" />
-
-                        <net.iGap.module.EmojiTextViewE
-                            android:id="@+id/txt_description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/dp4"
-                            android:paddingStart="@dimen/dp4"
-                            android:paddingTop="@dimen/dp4"
-                            android:paddingEnd="@dimen/dp4"
-                            android:paddingBottom="@dimen/dp12"
-                            android:text="@{fragmentChannelProfileViewModel.callbackChannelDescription , default=Description}"
-                            android:textColor="@color/gray_5c"
-                            android:textSize="@dimen/dp13"
-                            app:emojiSize="@dimen/dp14"
-
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lyt_shared_media"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSharedMedia}"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12">
-
-                        <TextView
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/dp4"
-                            android:paddingEnd="@dimen/dp4"
-                            android:singleLine="true"
-                            android:text="@string/shared_media"
-                            android:textSize="@dimen/dp15" />
-
-                        <TextView
-                            android:id="@+id/txt_shared_media"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/dp4"
-                            android:paddingTop="@dimen/dp4"
-                            android:paddingEnd="@dimen/dp4"
-                            android:paddingBottom="@dimen/dp12"
-                            android:text="@{fragmentChannelProfileViewModel.callbackChannelSharedMedia , default=SharedMedia}"
-                            android:textColor="@color/gray_5c"
-                            android:textSize="@dimen/dp13" />
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/agp_root_layout_add_member"
-                    style="?backgroundColorSettingTheme_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:orientation="vertical"
-                    android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.addMemberVisibility)}">
-
-                    <net.iGap.module.HeaderTextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp16"
-                        android:paddingBottom="@dimen/dp16"
-                        android:text="@string/members"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/dp18"
-                        android:textStyle="bold" />
-
-                    &lt;!&ndash; member list start &ndash;&gt;
-                    <LinearLayout
-                        android:id="@+id/agp_layout_add_member"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left|center"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelAddMember}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp8"
-                        android:paddingLeft="@dimen/dp8"
-                        android:paddingEnd="@dimen/dp8"
-                        android:paddingRight="@dimen/dp8"
-                        android:paddingBottom="@dimen/dp8">
-
-                        <ImageView
-                            android:layout_width="@dimen/dp32"
-                            android:layout_height="@dimen/dp32"
-                            android:layout_marginStart="@dimen/dp4"
-                            android:layout_marginLeft="@dimen/dp4"
-                            android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/add_chat_background" />
-
-                        <TextView
-                            android:id="@+id/textView8"
-                            style="?textSubColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="@dimen/dp8"
-                            android:text="@string/add_new_member"
-                            android:textSize="@dimen/dp16" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/topLine"
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginBottom="@dimen/dp4"
-                        android:background="@color/gray" />
-
-                    <LinearLayout
-                        android:id="@+id/agp_layout_show_member"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left|center"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelShowMember}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp8"
-                        android:paddingLeft="@dimen/dp8"
-                        android:paddingEnd="@dimen/dp8"
-                        android:paddingRight="@dimen/dp8"
-                        android:paddingBottom="@dimen/dp8"
-
-                        >
-
-                        <ImageView
-                            android:layout_width="@dimen/dp32"
-                            android:layout_height="@dimen/dp32"
-                            android:layout_marginStart="@dimen/dp4"
-                            android:layout_marginLeft="@dimen/dp4"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerCrop"
-                            android:tint="@color/gray_5c"
-                            app:srcCompat="@drawable/account_multiple"
-
-                            />
-
-                        <TextView
-                            android:id="@+id/agp_txt_show_member"
-                            style="?textSubColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="@dimen/dp8"
-                            android:gravity=""
-                            android:text="@string/show_member"
-                            android:textSize="@dimen/dp16" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                &lt;!&ndash; member list end &ndash;&gt;
-
-                <LinearLayout
-                    android:id="@+id/agp_ll_seetting"
-                    style="?backgroundColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:orientation="vertical"
-                    android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.settingVisibility)}">
-
-                    <net.iGap.module.HeaderTextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="@dimen/dp12"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp16"
-                        android:paddingBottom="@dimen/dp16"
-                        android:text="@string/settings"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/dp18"
-                        android:textStyle="bold"
-
-                        />
-
-                    <LinearLayout
-                        android:id="@+id/lyt_list_admin"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelListAdmin}"
-                        android:orientation="vertical"
-                        android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.listAdminVisibility)}">
-
-                        <TextView
-                            android:id="@+id/txt_list_admin"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:paddingStart="@dimen/dp16"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingEnd="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
-                            android:singleLine="true"
-                            android:text="@string/list_admin"
-                            android:textSize="@dimen/dp15" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        style="?lineColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="1px" />
-
-                    <LinearLayout
-                        android:id="@+id/lyt_list_moderator"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelListModerator}"
-                        android:orientation="vertical"
-                        android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.moderatorVisibility)}">
-
-                        <TextView
-                            android:id="@+id/txt_list_moderator"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:paddingStart="@dimen/dp16"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingEnd="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
-                            android:singleLine="true"
-                            android:text="@string/list_modereator"
-                            android:textSize="@dimen/dp15" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        style="?lineColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="1px" />
-
-                    <LinearLayout
-                        android:id="@+id/agp_ll_member_can_add_member"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp48"
-                            android:paddingStart="@dimen/dp16"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingEnd="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16">
-
-                            <TextView
-                                style="?textTitleColorSettingTheme"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:singleLine="true"
-                                android:text="@string/member_can_add_new_member"
-                                android:textSize="@dimen/dp15" />
-
-                            <ToggleButton
-                                android:id="@+id/agp_toggle_member_can_add_member"
-                                android:layout_width="@dimen/dp44"
-                                android:layout_height="@dimen/dp40"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerInParent="true"
-                                android:background="@drawable/st_switch_button"
-                                android:textOff=""
-                                android:textOn="" />
-
-
-                        </RelativeLayout>
-
-                        <View
-                            style="?lineColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="1px" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lyt_notification"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelNotification}"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txt_notification"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:paddingStart="@dimen/dp16"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingEnd="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
-                            android:singleLine="true"
-                            android:text="@string/notificaion_and_sound"
-                            android:textSize="@dimen/dp15" />
-
-                    </LinearLayout>
-
-                    <View
-                        style="?lineColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="1px" />
-
-                    <LinearLayout
-                        android:id="@+id/lyt_delete_channel"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelDeleteChannel}"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txt_delete_channel"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:paddingStart="@dimen/dp16"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingEnd="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
-                            android:singleLine="true"
-                            android:text="@{fragmentChannelProfileViewModel.callBackDeleteLeaveChannel , default=@string/delete_and_leave_channel}"
-                            android:textSize="@dimen/dp15" />
-                    </LinearLayout>
-
-                    <View
-                        style="?lineColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="1px" />
-
-                    <LinearLayout
-                        android:id="@+id/agp_layout_signature"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSignature}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
-                        android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.signatureVisibility)}">
-
-                        <TextView
-                            android:id="@+id/agp_txt_signature"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_signature"
-                            android:textSize="@dimen/dp15"
-                            android:textStyle="normal" />
-
-                        <ToggleButton
-                            android:id="@+id/agp_toggle_signature"
-                            android:layout_width="@dimen/dp44"
-                            android:layout_height="@dimen/dp40"
-                            android:background="@drawable/st_switch_button"
-                            android:checked="@{fragmentChannelProfileViewModel.isCheckedSignature}"
-                            android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSignature}"
-                            android:textOff=""
-                            android:textOn="" />
-
-                    </LinearLayout>
-
-                    <View
-                        style="?lineColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="1px" />
-
-                    <LinearLayout
-                        android:id="@+id/agp_layout_reaction_status"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{fragmentChannelProfileViewModel::onClickChannelReactionStatus}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
-                        android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.showLayoutReactStatus)}">
-
-                        <TextView
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/show_channel_vote"
-                            android:textSize="@dimen/dp15"
-                            android:textStyle="normal" />
-
-                        <ToggleButton
-                            android:id="@+id/agp_toggle_reaction_status"
-                            android:layout_width="@dimen/dp44"
-                            android:layout_height="@dimen/dp40"
-                            android:background="@drawable/st_switch_button"
-                            android:checked="@{fragmentChannelProfileViewModel.isReactionStatus}"
-                            android:onClick="@{fragmentChannelProfileViewModel::onClickChannelReactionStatus}"
-                            android:textOff=""
-                            android:textOn="" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-
-        <ProgressBar
-            android:id="@+id/agp_prgWaiting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.prgWaitingVisibility)}" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/pch_fab_addToChannel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp20"
-            android:background="@android:color/white"
-            android:clickable="true"
-            android:src="@mipmap/pu_camera"
-            android:visibility="@{safeUnbox(fragmentChannelProfileViewModel.fabVisibility)}"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="normal"
-            app:layout_anchor="@+id/pch_appbar"
-            app:layout_anchorGravity="bottom|right|end"
-            app:tint="@color/gray"
-
-            />
-
-    </android.support.design.widget.CoordinatorLayout>-->
 </layout>
