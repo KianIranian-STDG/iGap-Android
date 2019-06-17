@@ -84,7 +84,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     //private CallAdapterA mAdapter;
     private ProtoSignalingGetLog.SignalingGetLog.Filter mSelectedStatus = ProtoSignalingGetLog.SignalingGetLog.Filter.ALL;
 
-    private TextView mBtnAllCalls, mBtnMissedCalls;
+    private TextView mBtnAllCalls, mBtnMissedCalls , mBtnIncomingCalls , mBtnOutgoingCalls , mBtnCanceledCalls;
     private HelperToolbar mHelperToolbar;
     private RealmResults<RealmCallLog> realmResults ;
     private CallAdapter callAdapter;
@@ -161,6 +161,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         if (view == null) {
             return;
         }
+
+        mBtnAllCalls = view.findViewById(R.id.fc_btn_all_calls);
+        mBtnMissedCalls = view.findViewById(R.id.fc_btn_missed_calls);
+        mBtnCanceledCalls = view.findViewById(R.id.fc_btn_canceled_calls);
+        mBtnIncomingCalls = view.findViewById(R.id.fc_btn_incoming_calls);
+        mBtnOutgoingCalls = view.findViewById(R.id.fc_btn_outgoing_calls);
+
+        setEnableButton(mBtnAllCalls , mBtnMissedCalls , mBtnIncomingCalls , mBtnOutgoingCalls , mBtnCanceledCalls);
+
 
         fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
         fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
@@ -368,25 +377,48 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         }
 
 
-        mBtnAllCalls = view.findViewById(R.id.fc_btn_all_calls);
-        mBtnMissedCalls = view.findViewById(R.id.fc_btn_missed_calls);
-
-        //todo : update recycler list when clicked on buttons
         mBtnAllCalls.setOnClickListener(v -> {
 
-            mBtnMissedCalls.setEnabled(true);
-            setEnableButton(mBtnAllCalls , mBtnMissedCalls);
-            getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
-            mBtnAllCalls.setEnabled(false);
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.ALL) {
+                setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
+            }
 
         });
 
         mBtnMissedCalls.setOnClickListener(v -> {
 
-            mBtnAllCalls.setEnabled(true);
-            setEnableButton(mBtnMissedCalls , mBtnAllCalls);
-            getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
-            mBtnMissedCalls.setEnabled(false);
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED) {
+                setEnableButton(mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
+            }
+
+        });
+
+        mBtnOutgoingCalls.setOnClickListener(v -> {
+
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING) {
+                setEnableButton(mBtnOutgoingCalls , mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING);
+            }
+
+        });
+
+        mBtnIncomingCalls.setOnClickListener(v -> {
+
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING) {
+                setEnableButton(mBtnIncomingCalls , mBtnMissedCalls, mBtnAllCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING);
+            }
+
+        });
+
+        mBtnCanceledCalls.setOnClickListener(v -> {
+
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED) {
+                setEnableButton(mBtnCanceledCalls , mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED);
+            }
 
         });
     }
@@ -415,11 +447,22 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         checkListIsEmpty();
     }
 
-    private void setEnableButton(View enable, View disable) {
+    private void setEnableButton(View enable, View disable , View disable2 , View disable3 , View disable4) {
 
-        enable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
-        disable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
-
+        //use revert for dark theme : disable drawable is light and enable drawable is dark
+        if (G.isDarkTheme){
+            enable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable2.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable3.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable4.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+        }else {
+            enable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable2.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable3.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable4.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+        }
     }
 
     private RealmResults<RealmCallLog> getRealmResult(ProtoSignalingGetLog.SignalingGetLog.Filter status , Realm realm) {
@@ -428,7 +471,10 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             case ALL:
                 return realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
 
-            case MISSED:
+            case MISSED :
+            case OUTGOING:
+            case CANCELED:
+            case INCOMING:
                 return realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.STATUS , status.name()).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
 
             default:

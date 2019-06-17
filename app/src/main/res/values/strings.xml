@@ -1471,7 +1471,6 @@
     <string name="your_rate">Your rate :</string>
     <string name="increase_score">Increase Score</string>
     <string name="bots_and_channels">Bots and Channels</string>
-    <string name="all">All</string>
     <string name="permanent_link">Permanent Link</string>
     <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length as 5 characters.</string>
     <string name="chat_history_for_new_member_title">Chat history for new members</string>
@@ -1883,4 +1882,9 @@
     <string name="location_dialog_message">Do you want to use your location?</string>
     <string name="forward_slash">/</string>
     <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
+    <string name="all">All</string>
+    <string name="missed">Missed</string>
+    <string name="incoming">Incoming</string>
+    <string name="canceled">Canceled</string>
+    <string name="outgoing">Outgoing</string>
 </resources>

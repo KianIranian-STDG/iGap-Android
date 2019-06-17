@@ -118,6 +118,7 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShearedMedia extends BaseFragment implements ToolbarListener {
 
+    public static String SELECTED_TAB_ID = "selected_tab";
     private static final String ROOM_ID = "RoomId";
     private static final String USERNAME = "USERNAME";
     public static ArrayList<Long> list = new ArrayList<>();
@@ -138,7 +139,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private RecyclerView recyclerView;
     private RecyclerView.OnScrollListener onScrollListener;
     private mAdapter adapter;
-    private AppBarLayout appBarLayout;
     private OnComplete complete;
     private ProgressBar progressBar;
     private Realm realmShearedMedia;
@@ -293,7 +293,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         progressBar = (ProgressBar) view.findViewById(R.id.asm_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
 
-        appBarLayout = (AppBarLayout) view.findViewById(R.id.asm_appbar_shared_media);
         mediaTypesLayout = view.findViewById(R.id.asm_ll_media_types_buttons);
 
         view.findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
@@ -366,11 +365,28 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             checkMusicPlayerView();
         });
 
-        openLayout();
+        checkSelectedDefaultTab();
         initAppbarSelected(view);
         makeSharedTypesViews();
         checkSharedButtonsBackgrounds();
         checkMusicPlayerView();
+    }
+
+    private void checkSelectedDefaultTab() {
+
+        if (getArguments() != null && getArguments().getInt(SELECTED_TAB_ID , 0) != 0){
+
+            mCurrentSharedMediaType = 0 ;
+            int tab = getArguments().getInt(SELECTED_TAB_ID);
+            mediaTypesClickHandler(tab);
+            mCurrentSharedMediaType = tab;
+
+        }else {
+            openLayout();
+        }
+    }
+
+    private void openSelectedTab(int mCurrentSharedMediaType) {
     }
 
     private void checkMusicPlayerView() {
@@ -1687,7 +1703,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 bundle.putLong("SelectedImage", selectedFileToken);
                 bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
                 fragment.setArguments(bundle);
-                fragment.appBarLayout = appBarLayout;
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         }

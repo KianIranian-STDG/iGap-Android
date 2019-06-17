@@ -2829,5 +2829,10 @@
     <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
     <string name="chat_history_for_new_member_title">سجل الدردشة للأعضاء الجدد</string>
     <string name="permissions_title">أذونات</string>
+    <string name="all">All</string>
+    <string name="missed">Missed</string>
+    <string name="incoming">Incoming</string>
+    <string name="canceled">Canceled</string>
+    <string name="outgoing">Outgoing</string>
 
 </resources>

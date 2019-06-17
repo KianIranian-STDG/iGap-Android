@@ -90,39 +90,108 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-      <LinearLayout
-          android:id="@+id/fc_layout_calls_filter"
+      <HorizontalScrollView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:gravity="center">
+          android:layoutDirection="locale"
+          android:scrollbars="none">
 
-        <TextView
-            android:id="@+id/fc_btn_all_calls"
-            android:layout_width="@dimen/dp130"
+        <LinearLayout
+            android:id="@+id/fc_layout_calls_filter"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/all"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:padding="3dp"
-            android:background="@drawable/round_button_enabled_bg"
-            android:textColor="@color/white"
-            android:layout_margin="@dimen/dp10"/>
+            android:orientation="horizontal"
+            android:layoutDirection="locale"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/fc_btn_missed_calls"
-            android:layout_width="@dimen/dp130"
-            android:layout_height="wrap_content"
-            android:text="Missed"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:padding="3dp"
-            android:background="@drawable/round_button_disabled_bg"
-            android:textColor="@color/white"
-            android:layout_margin="@dimen/dp10"/>
+          <TextView
+              android:id="@+id/fc_btn_all_calls"
+              android:minWidth="@dimen/dp88"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/all"
+              android:gravity="center"
+              android:textSize="16sp"
+              android:paddingBottom="3dp"
+              android:paddingTop="3dp"
+              android:paddingRight="10dp"
+              android:paddingLeft="10dp"
+              android:singleLine="true"
+              android:background="@drawable/round_button_enabled_bg"
+              android:textColor="@color/white"
+              android:layout_margin="@dimen/dp6"/>
 
-      </LinearLayout>
+          <TextView
+              android:id="@+id/fc_btn_missed_calls"
+              android:minWidth="@dimen/dp88"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/missed"
+              android:gravity="center"
+              android:textSize="16sp"
+              android:paddingBottom="3dp"
+              android:paddingTop="3dp"
+              android:paddingRight="10dp"
+              android:paddingLeft="10dp"
+              android:singleLine="true"
+              android:background="@drawable/round_button_disabled_bg"
+              android:textColor="@color/white"
+              android:layout_margin="@dimen/dp6"/>
+
+          <TextView
+              android:id="@+id/fc_btn_incoming_calls"
+              android:minWidth="@dimen/dp88"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/incoming"
+              android:gravity="center"
+              android:textSize="16sp"
+              android:paddingBottom="3dp"
+              android:paddingTop="3dp"
+              android:paddingRight="10dp"
+              android:paddingLeft="10dp"
+              android:singleLine="true"
+              android:background="@drawable/round_button_disabled_bg"
+              android:textColor="@color/white"
+              android:layout_margin="@dimen/dp6"/>
+
+          <TextView
+              android:id="@+id/fc_btn_canceled_calls"
+              android:minWidth="@dimen/dp88"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/canceled"
+              android:gravity="center"
+              android:textSize="16sp"
+              android:paddingBottom="3dp"
+              android:paddingTop="3dp"
+              android:paddingRight="10dp"
+              android:paddingLeft="10dp"
+              android:singleLine="true"
+              android:background="@drawable/round_button_disabled_bg"
+              android:textColor="@color/white"
+              android:layout_margin="@dimen/dp6"/>
+
+          <TextView
+              android:id="@+id/fc_btn_outgoing_calls"
+              android:minWidth="@dimen/dp88"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/outgoing"
+              android:gravity="center"
+              android:textSize="16sp"
+              android:paddingBottom="3dp"
+              android:paddingTop="3dp"
+              android:paddingRight="10dp"
+              android:paddingLeft="10dp"
+              android:singleLine="true"
+              android:background="@drawable/round_button_disabled_bg"
+              android:textColor="@color/white"
+              android:layout_margin="@dimen/dp6"/>
+
+        </LinearLayout>
+
+      </HorizontalScrollView>
 
       <android.support.v7.widget.RecyclerView
           android:id="@+id/fc_recycler_view_call"

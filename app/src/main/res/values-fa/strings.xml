@@ -1884,5 +1884,10 @@
     <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
     <string name="chat_history_for_new_member_title">تاریخچه گپ برای اعضای جدید</string>
     <string name="permissions_title">مجوزها</string>
+    <string name="all">همه</string>
+    <string name="missed">از دست رفته</string>
+    <string name="incoming">ورودی</string>
+    <string name="canceled">لغو شده</string>
+    <string name="outgoing">خروجی</string>
 
 </resources>
