@@ -113,15 +113,15 @@
             android:layout_height="@dimen/dp48"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
             android:paddingTop="@dimen/dp4"
             android:layout_marginTop="@dimen/dp16"
-            android:paddingBottom="@dimen/dp16"
+            android:paddingBottom="@dimen/dp12"
             android:singleLine="true"
             android:text="@string/disk_and_network_usage"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="normal"
             android:visibility="visible" />
 
@@ -145,7 +145,7 @@
               android:singleLine="true"
               android:text="@string/wifi_data_usage"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp15"
+              android:textSize="@dimen/standardTextSize"
               android:textStyle="normal"
               android:visibility="visible" />
 
@@ -171,7 +171,7 @@
               android:singleLine="true"
               android:text="@string/mobile_data_usage"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp15"
+              android:textSize="@dimen/standardTextSize"
               android:textStyle="normal"
               android:visibility="visible" />
 
@@ -201,7 +201,7 @@
             android:singleLine="true"
             android:text="@string/st_keepMedia"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp15"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal"
             android:visibility="visible" />
 
@@ -215,7 +215,7 @@
             android:paddingRight="@dimen/dp16"
             android:text="@{activityManageSpaceViewModel.callbackKeepMedia}"
             android:textColor="@color/setting_items_value_color"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/smallTextSize"
             android:textStyle="normal" />
         </LinearLayout>
 
@@ -255,13 +255,13 @@
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dp16"
+            android:paddingBottom="@dimen/dp12"
             android:paddingTop="@dimen/dp12"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
             android:text="@string/auto_download_media"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="normal" />
 
 
@@ -277,7 +277,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_auto_download_data"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
 
@@ -292,7 +292,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_auto_download_wifi"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
 
@@ -307,7 +307,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_auto_download_roaming"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
 
@@ -374,13 +374,13 @@
               fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:paddingBottom="@dimen/dp16"
+              android:paddingBottom="@dimen/dp12"
               android:paddingTop="@dimen/dp12"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
+              android:paddingLeft="@dimen/dp12"
+              android:paddingRight="@dimen/dp12"
               android:text="@string/auto_play_media"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp16"
+              android:textSize="@dimen/largeTextSize"
               android:textStyle="normal" />
 
         <LinearLayout
@@ -391,6 +391,7 @@
             android:orientation="horizontal"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
+            android:gravity="center_vertical"
             android:paddingRight="@dimen/dp16"
             android:paddingStart="@dimen/dp16">
 
@@ -404,7 +405,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_auto_gif"
-              android:textSize="@dimen/dp15"
+              android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
           <net.iGap.module.CustomToggleButton
@@ -431,14 +432,14 @@
             android:layout_height="@dimen/dp48"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
             android:paddingTop="@dimen/dp4"
-            android:paddingBottom="@dimen/dp16"
+            android:paddingBottom="@dimen/dp12"
             android:singleLine="true"
             android:text="@string/cache"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="normal"
             android:visibility="visible" />
 
@@ -463,7 +464,7 @@
             android:paddingTop="@dimen/dp8"
             android:text="@string/st_title_Clear_Cache"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp15"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
 
@@ -477,7 +478,7 @@
             android:paddingRight="@dimen/dp16"
             android:text="@{activityManageSpaceViewModel.callbackClearCache}"
             android:textColor="@color/setting_items_value_color"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/smallTextSize"
             android:textStyle="normal"
 
             />
@@ -520,7 +521,7 @@
             android:paddingTop="@dimen/dp8"
             android:text="@string/clean_up_chat_rooms"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp15"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
 
@@ -534,7 +535,7 @@
             android:paddingRight="@dimen/dp16"
             android:text="@{activityManageSpaceViewModel.callbackCleanUp}"
             android:textColor="@color/setting_items_value_color"
-            android:textSize="@dimen/dp15"
+            android:textSize="@dimen/smallTextSize"
             android:textStyle="normal" />
 
 
@@ -579,7 +580,7 @@
             android:paddingTop="@dimen/dp4"
             android:text="@string/save_data_in_sd_card"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp15"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal"
             fontPath="fonts/IRANSansMobile.ttf" />
 
@@ -587,6 +588,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
             android:id="@+id/stsp_toggle_use_sdk"
+              android:textSize="@dimen/smallTextSize"
             android:checked="@{safeUnbox(activityManageSpaceViewModel.isSdkEnable)}"
             android:onCheckedChanged="@{(switch, checked) -> activityManageSpaceViewModel.onCheckedSdkEnable(checked)}"
             android:clickable="false" />
