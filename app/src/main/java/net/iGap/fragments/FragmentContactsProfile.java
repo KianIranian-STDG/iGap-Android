@@ -37,6 +37,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -176,6 +177,12 @@ public class FragmentContactsProfile extends BaseFragment {
         viewModel.lastSeen.observe(this,lastSeen->{
             if (lastSeen!=null){
                 t.getGroupMemberCount().setText(HelperCalander.unicodeManage(lastSeen));
+            }
+        });
+
+        viewModel.goToChatPage.observe(this,userRoomId->{
+            if (getActivity() != null && userRoomId != null) {
+                new GoToChatActivity(userRoomId).startActivity(getActivity());
             }
         });
 
