@@ -227,13 +227,13 @@
             fontPath="fonts/IRANSansMobil.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
             android:paddingTop="@dimen/dp12"
             android:paddingBottom="@dimen/dp16"
             android:text="@string/privacy"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="normal" />
 
 
@@ -249,7 +249,7 @@
             android:paddingTop="@dimen/dp4"
             android:text="@string/Block_Users"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp14"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
           <LinearLayout
@@ -270,7 +270,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="@string/who_can_see_my_avatar"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -285,7 +285,7 @@
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeMyAvatar , default=@string/everybody}"
               style="?textSubColorSettingTheme"
               android:textColor="@color/setting_items_value_color"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/smallTextSize"
               android:textStyle="normal"
 
               />
@@ -312,7 +312,7 @@
               android:singleLine="true"
               android:text="@string/who_can_invite_you_to_channel_s"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -327,7 +327,7 @@
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteChannel , default=@string/everybody}"
               style="?textSubColorSettingTheme"
               android:textColor="@color/setting_items_value_color"
-              android:textSize="@dimen/dp14"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal"
 
               />
@@ -352,7 +352,7 @@
               android:singleLine="true"
               android:text="@string/who_can_invite_you_to_group_s"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -367,7 +367,7 @@
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteGroup , default=@string/everybody}"
               style="?textSubColorSettingTheme"
               android:textColor="@color/setting_items_value_color"
-              android:textSize="@dimen/dp14"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal"
 
               />
@@ -391,7 +391,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="@string/who_is_allowed_to_voice_call"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -406,7 +406,7 @@
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVoiceCall , default=@string/everybody}"
               style="?textSubColorSettingTheme"
               android:textColor="@color/setting_items_value_color"
-              android:textSize="@dimen/dp14"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal"
 
               />
@@ -430,7 +430,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="@string/who_is_allowed_to_video_call"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -445,7 +445,7 @@
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVideoCall , default=@string/everybody}"
               style="?textSubColorSettingTheme"
               android:textColor="@color/setting_items_value_color"
-              android:textSize="@dimen/dp14"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal"
 
               />
@@ -469,7 +469,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="@string/last_seen"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -484,7 +484,7 @@
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeLastSeen , default=@string/everybody}"
               style="?textSubColorSettingTheme"
               android:textColor="@color/setting_items_value_color"
-              android:textSize="@dimen/dp14"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal" />
           </LinearLayout>
 
@@ -525,11 +525,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dp8"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
             android:paddingTop="@dimen/dp12"
             android:text="@string/Security"
-            android:textSize="@dimen/dp16"
+            android:textSize="@dimen/largeTextSize"
             style="?textTitleColorSettingTheme"
             android:textStyle="normal" />
 
@@ -565,7 +565,7 @@
             android:paddingTop="@dimen/dp4"
             android:text="@string/two_step_pass_code"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp14"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
           <TextView
@@ -580,7 +580,7 @@
             android:paddingTop="@dimen/dp4"
             android:text="@string/two_step_verification"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp14"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
           <TextView
@@ -595,7 +595,7 @@
             android:paddingTop="@dimen/dp4"
             android:text="@string/Active_Sessions"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp14"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
           <!--<View-->
@@ -625,12 +625,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
             android:paddingTop="@dimen/dp16"
             android:text="@string/Account_Self_destruction"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="normal" />
 
           <LinearLayout
@@ -651,7 +651,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="@string/if_you_are_away_for"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp14"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -666,7 +666,7 @@
               android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSelfDestruction , default=@string/year_1}"
               style="?textSubColorSettingTheme"
               android:textColor="@color/setting_items_value_color"
-              android:textSize="@dimen/dp14"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal"
 
               />
@@ -680,7 +680,7 @@
             android:padding="@dimen/dp16"
             android:text="@string/desc_self_destroy"
             style="?textSubColorSettingTheme"
-            android:textSize="@dimen/dp12"
+            android:textSize="@dimen/smallTextSize"
             android:textStyle="normal" />
 
         </LinearLayout>
