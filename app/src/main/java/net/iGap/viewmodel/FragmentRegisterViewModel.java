@@ -18,6 +18,7 @@ import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.v4.text.HtmlCompat;
 import android.view.View;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
@@ -142,7 +143,10 @@ public class FragmentRegisterViewModel extends ViewModel /*implements OnSecurity
     }
 
     public void onClicksStart() {
-        phoneNumber = callBackEdtPhoneNumber.get() != null ? callBackEdtPhoneNumber.get() : "";
+        phoneNumber = callBackEdtPhoneNumber.get();
+        if (phoneNumber == null) {
+            phoneNumber = "";
+        }
         if (phoneNumber.length() > 0 && regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex))) {
             if (termsAndConditionIsChecked) {
                 showConfirmPhoneNumberDialog.setValue(true);
@@ -327,7 +331,7 @@ public class FragmentRegisterViewModel extends ViewModel /*implements OnSecurity
             userName = userNameR;
             userId = userIdR;
             authorHash = authorHashR;
-            G.handler.post(()->goToTwoStepVerificationPage.setValue(userIdR));
+            G.handler.post(() -> goToTwoStepVerificationPage.setValue(userIdR));
         };
 
         CountryReader countryReade = new CountryReader();
@@ -556,7 +560,6 @@ public class FragmentRegisterViewModel extends ViewModel /*implements OnSecurity
             requestRegister();
         }
     }*/
-
     private void userLogin(final String token) {
         G.onUserLogin = new OnUserLogin() {
             @Override

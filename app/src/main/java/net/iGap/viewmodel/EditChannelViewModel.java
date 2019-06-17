@@ -138,9 +138,9 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         realmChannelProfile = Realm.getDefaultInstance();
 
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        //todo:fixed it
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
-            if (EditChannelFragment.onBackFragment != null)
-                EditChannelFragment.onBackFragment.onBack();
+            goBack.setValue(true);
             return;
         }
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();

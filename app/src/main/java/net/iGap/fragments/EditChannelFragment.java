@@ -1,9 +1,7 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -29,26 +27,14 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.gson.Gson;
 import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
-import com.vanniktech.emoji.sticker.OnStickerListener;
-import com.vanniktech.emoji.sticker.OnUpdateStickerListener;
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
-import com.vanniktech.emoji.sticker.struct.StructItemSticker;
-
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
-import net.iGap.adapter.items.chat.StickerItem;
 import net.iGap.databinding.FragmentEditChannelBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
-import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
-import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
@@ -63,41 +49,22 @@ import net.iGap.interfaces.OnChannelUpdateUsername;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.MEditText;
 import net.iGap.module.SUID;
-import net.iGap.module.TimeUtils;
-import net.iGap.module.additionalData.AdditionalType;
-import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.module.enums.LocalFileType;
-import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.module.structs.StructSendSticker;
 import net.iGap.proto.ProtoChannelCheckUsername;
-import net.iGap.proto.ProtoFileDownload;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChannelCheckUsername;
 import net.iGap.request.RequestChannelDelete;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChannelRemoveUsername;
 import net.iGap.request.RequestChannelRevokeLink;
 import net.iGap.request.RequestChannelUpdateUsername;
-import net.iGap.request.RequestFileDownload;
 import net.iGap.viewmodel.EditChannelViewModel;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import io.realm.Realm;
-
-import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class EditChannelFragment extends BaseFragment {
 
@@ -105,7 +72,6 @@ public class EditChannelFragment extends BaseFragment {
 
     private FragmentEditChannelBinding binding;
     private EditChannelViewModel viewModel;
-    public static FragmentChannelProfile.OnBackFragment onBackFragment;
     private boolean isInitEmoji = false;
     private boolean isEmojiShow = false;
     private EmojiPopup emojiPopup;
@@ -216,7 +182,6 @@ public class EditChannelFragment extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);
             }
         });
-        onBackFragment = this::popBackStackFragment;
 
         viewModel.onSignClickListener.observe(this , isClicked -> {
             binding.signedMessage.setChecked(!binding.signedMessage.isChecked());
