@@ -48,6 +48,7 @@ public class TwoStepVerificationViewModel extends ViewModel {
     public long userId;
     public String userName;
     public String authorHash;
+    private boolean forgetPassword = false;
 
     public TwoStepVerificationViewModel(long userId) {
         this.userId = userId;
@@ -96,6 +97,7 @@ public class TwoStepVerificationViewModel extends ViewModel {
                 G.handler.post(() -> {
                     isShowLoading.set(View.GONE);
                     token = tokenR;
+                    forgetPassword = true;
                     userLogin(token);
                 });
             }
@@ -228,7 +230,7 @@ public class TwoStepVerificationViewModel extends ViewModel {
                     RealmUserInfo.putOrUpdate(realm1, user);
                     G.handler.post(() -> {
                         G.onUserInfoResponse = null;
-                        goToMainPage.setValue(true);
+                        goToMainPage.setValue(!forgetPassword);
                     });
                 });
                 realm.close();
