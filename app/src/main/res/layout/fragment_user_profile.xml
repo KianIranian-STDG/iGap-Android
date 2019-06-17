@@ -143,7 +143,7 @@
                 android:fontFamily="@font/main_font"
                 android:singleLine="true"
                 android:text="@{viewModel.bio}"
-                android:textSize="14sp"
+                android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/fup_user_image"
                 app:layout_constraintEnd_toEndOf="@id/userFullName"
@@ -654,7 +654,7 @@
                     android:afterTextChanged="@{(newName)->viewModel.nameTextChangeListener(newName.toString())}"
                     android:inputType="textPersonName"
                     android:text="@={viewModel.name}"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/standardTextSize" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -679,7 +679,7 @@
                     android:afterTextChanged="@{(newUsername)->viewModel.usernameTextChangeListener(newUsername.toString())}"
                     android:inputType="textPersonName"
                     android:text="@={viewModel.userName}"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/standardTextSize" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -707,7 +707,7 @@
                     android:inputType="text"
                     android:maxLength="70"
                     android:text="@={viewModel.bio}"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/standardTextSize" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -732,7 +732,7 @@
                     android:afterTextChanged="@{(newEmail)->viewModel.emailTextChangeListener(newEmail.toString())}"
                     android:inputType="textEmailAddress"
                     android:text="@={viewModel.email}"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/standardTextSize" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -754,7 +754,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="date"
                     android:text="@={viewModel.birthDate}"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/standardTextSize" />
 
             </android.support.design.widget.TextInputLayout>
 
