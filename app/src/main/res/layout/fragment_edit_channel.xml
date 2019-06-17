@@ -3,18 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <import type="android.view.View" />
-
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.EditChannelViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -78,7 +75,6 @@
                     android:paddingRight="@dimen/dp8"
                     android:paddingBottom="@dimen/dp8"
                     android:text="@string/md_emoticon_with_happy_face"
-                    android:textAppearance="@style/TextIconAppearance.all"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@id/channelNameEditText"
                     app:layout_constraintLeft_toRightOf="@id/channelNameEditText"
@@ -87,9 +83,9 @@
 
                 <View
                     android:id="@+id/line"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintBottom_toBottomOf="@id/channelAvatar"
                     app:layout_constraintLeft_toLeftOf="@id/channelNameEditText"
                     app:layout_constraintRight_toRightOf="@id/emojiButton" />
@@ -110,10 +106,10 @@
 
                 <View
                     android:id="@+id/line2"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
@@ -144,36 +140,29 @@
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/channelTypeTitle" />
 
-                <RelativeLayout
-                    android:id="@+id/signedMessageLyt"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/signedMessageTxt"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
+                    android:fontFamily="@font/main_font"
                     android:onClick="@{()-> viewModel.onSignMessageClick()}"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE,default = gone}"
+                    android:padding="8dp"
+                    android:text="@string/sign_message_title"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/channelType" >
+                    app:layout_constraintTop_toBottomOf="@id/channelType" />
 
-                    <TextView
-                        android:fontFamily="@font/main_font"
-                        android:id="@+id/signedMessageTxt"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sign_message_title" />
-
-                    <net.iGap.module.CustomToggleButton
-                        android:id="@+id/signedMessage"
-                        android:layout_width="@dimen/toggles_width"
-                        android:layout_height="@dimen/toggles_height"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="8dp"
-                        android:checked="@={viewModel.isSignedMessage}"
-                        android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}" />
-
-                </RelativeLayout>
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/signedMessage"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isSignedMessage}"
+                    android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}"
+                    app:layout_constraintBottom_toBottomOf="@id/signedMessageTxt"
+                    app:layout_constraintEnd_toEndOf="@id/signedMessageTxt"
+                    app:layout_constraintTop_toTopOf="@id/signedMessageTxt" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/signedMessageDescription"
@@ -182,46 +171,35 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@string/sign_channel_message_description"
-                    android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE,default = gone}"
-                    app:layout_constraintLeft_toLeftOf="@id/signedMessageLyt"
-                    app:layout_constraintTop_toBottomOf="@id/signedMessageLyt"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintStart_toStartOf="@id/signedMessageTxt"
+                    app:layout_constraintTop_toBottomOf="@id/signedMessageTxt"
                     app:layout_constraintVertical_bias="0"
                     app:layout_constraintWidth_percent=".6" />
 
-                <RelativeLayout
-                    android:id="@+id/rateMessageLyt"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/rateMessageTxt"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp8"
+                    android:layout_marginTop="8dp"
                     android:onClick="@{()-> viewModel.onReactionMessageClick()}"
-                    android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE,default = gone}"
+                    android:padding="8dp"
+                    android:text="@string/show_channel_vote"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/signedMessageDescription" >
+                    app:layout_constraintTop_toBottomOf="@id/signedMessageDescription" />
 
-                    <TextView
-                        android:id="@+id/rateMessageTxt"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:padding="8dp"
-                        android:text="@string/show_channel_vote"
-                        />
-
-                    <net.iGap.module.CustomToggleButton
-                        android:id="@+id/rateMessage"
-                        android:checked="@={viewModel.isReactionMessage}"
-                        android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
-                        android:layout_width="@dimen/toggles_width"
-                        android:layout_height="@dimen/toggles_height"
-                        android:layout_marginTop="8dp"
-                        android:enabled="false"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        />
-
-                </RelativeLayout>
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/rateMessage"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isReactionMessage}"
+                    android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
+                    app:layout_constraintBottom_toBottomOf="@id/rateMessageTxt"
+                    app:layout_constraintEnd_toEndOf="@id/rateMessageTxt"
+                    app:layout_constraintTop_toTopOf="@id/rateMessageTxt" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/rateMessageDescription"
@@ -229,19 +207,19 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="Add names of the admins to the messages they post."
-                    android:visibility="@{viewModel.showLayoutReactStatus ? View.VISIBLE : View.GONE,default = gone}"
-                    app:layout_constraintLeft_toLeftOf="@id/signedMessageLyt"
-                    app:layout_constraintTop_toBottomOf="@id/rateMessageLyt"
+                    android:text="@string/reaction_message_detail"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintStart_toStartOf="@id/rateMessageTxt"
+                    app:layout_constraintTop_toBottomOf="@id/rateMessageTxt"
                     app:layout_constraintVertical_bias="0"
                     app:layout_constraintWidth_percent=".6" />
 
                 <View
                     android:id="@+id/line3"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rateMessageDescription"
@@ -256,8 +234,8 @@
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@string/administrators_title"
-                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
-                    app:layout_constraintRight_toLeftOf="@id/administratorsCount"
+                    app:layout_constraintEnd_toStartOf="@id/administratorsCount"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/line3" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -270,8 +248,8 @@
                     android:text="@{viewModel.administratorsCount}"
                     android:textColor="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
-                    app:layout_constraintLeft_toRightOf="@id/administrators"
-                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
 
@@ -284,8 +262,8 @@
                     android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@string/moderators_title"
-                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
-                    app:layout_constraintRight_toLeftOf="@id/moderatorsCount"
+                    app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -298,8 +276,8 @@
                     android:text="@{viewModel.moderatorsCount}"
                     android:textColor="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
-                    app:layout_constraintLeft_toRightOf="@id/moderator"
-                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toEndOf="@id/moderator"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -311,8 +289,8 @@
                     android:onClick="@{()->viewModel.onMemberClick()}"
                     android:padding="8dp"
                     android:text="@string/subscribers_title"
-                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
-                    app:layout_constraintRight_toLeftOf="@id/membersCount"
+                    app:layout_constraintEnd_toStartOf="@id/membersCount"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -325,8 +303,8 @@
                     android:text="@{viewModel.subscribersCount}"
                     android:textColor="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/members"
-                    app:layout_constraintLeft_toRightOf="@id/members"
-                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/members" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -344,10 +322,10 @@
 
                 <View
                     android:id="@+id/line4"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recentAction"
@@ -375,7 +353,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:visibility="@{viewModel.isShowLoading ? View.VISIBLE : View.GONE,default = gone}"
+                    android:visibility="@{viewModel.isShowLoading}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

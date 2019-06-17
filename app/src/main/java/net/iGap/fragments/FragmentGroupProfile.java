@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -374,7 +375,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 });
             }
         };
-
     }
 
     @Override

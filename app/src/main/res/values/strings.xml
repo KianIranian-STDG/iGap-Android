@@ -1882,4 +1882,5 @@
     <string name="copy_link_title">Copy Link</string>
     <string name="location_dialog_message">Do you want to use your location?</string>
     <string name="forward_slash">/</string>
+    <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
 </resources>

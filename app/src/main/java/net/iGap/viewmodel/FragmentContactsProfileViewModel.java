@@ -16,6 +16,7 @@ import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.OnUserContactEdit;
 import net.iGap.interfaces.OnUserInfoResponse;
@@ -32,6 +33,7 @@ import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsDelete;
@@ -91,6 +93,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
     public MutableLiveData<String> contactName = new MutableLiveData<>();
     public MutableLiveData<String> lastSeen = new MutableLiveData<>();
+    public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
 
     public List<String> items;
     private Realm realm;
@@ -184,6 +187,32 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         } /*else if (items.get(position).equals(G.fragmentActivity.getString(R.string.report))) {
             showDialogReportContact.setValue(true);
         }*/
+    }
+
+    public void onClickGoToChat(){
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+        if (realmRoom != null) {
+            goToChatPage.setValue(realmRoom.getId());
+        } else {
+            G.onChatGetRoom = new OnChatGetRoom() {
+                @Override
+                public void onChatGetRoom(ProtoGlobal.Room room) {
+                    goToChatPage.setValue(room.getId());
+                    G.onChatGetRoom = null;
+                }
+
+                @Override
+                public void onChatGetRoomTimeOut() {
+
+                }
+
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                }
+            };
+            new RequestChatGetRoom().chatGetRoom(userId);
+        }
     }
 
     public void onClearChatClick() {

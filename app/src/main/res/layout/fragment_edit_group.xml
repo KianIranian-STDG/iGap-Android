@@ -12,9 +12,9 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -97,9 +97,9 @@
 
                 <View
                     android:id="@+id/line"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
                     app:layout_constraintLeft_toLeftOf="@id/groupNameEditText"
                     app:layout_constraintRight_toRightOf="@id/emojiButton" />
@@ -119,10 +119,10 @@
 
                 <View
                     android:id="@+id/line2"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
@@ -155,10 +155,10 @@
 
                 <View
                     android:id="@+id/line3"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
@@ -173,8 +173,8 @@
                     android:onClick="@{()->viewModel.onPermissionClick()}"
                     android:padding="8dp"
                     android:text="@string/permissions_title"
-                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                    app:layout_constraintRight_toLeftOf="@id/permissionItems"
+                    app:layout_constraintEnd_toStartOf="@id/permissionItems"
+                    app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/line3" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -187,8 +187,8 @@
                     android:text="@{viewModel.permissionCount}"
                     android:textColor="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/permission"
-                    app:layout_constraintLeft_toRightOf="@id/permission"
-                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
+                    app:layout_constraintStart_toEndOf="@id/permission"
                     app:layout_constraintTop_toTopOf="@id/permission" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -200,8 +200,8 @@
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@string/administrators_title"
-                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                    app:layout_constraintRight_toLeftOf="@id/administratorsCount"
+                    app:layout_constraintEnd_toStartOf="@id/administratorsCount"
+                    app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/permission" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -214,8 +214,8 @@
                     android:text="@{viewModel.administratorsCount}"
                     android:textColor="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
-                    app:layout_constraintLeft_toRightOf="@id/administrators"
-                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
+                    app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
 
@@ -228,8 +228,8 @@
                     android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@string/moderators_title"
-                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                    app:layout_constraintRight_toLeftOf="@id/moderatorsCount"
+                    app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
+                    app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -242,8 +242,8 @@
                     android:text="@{viewModel.moderatorsCount}"
                     android:textColor="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
-                    app:layout_constraintLeft_toRightOf="@id/moderator"
-                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
+                    app:layout_constraintStart_toEndOf="@id/moderator"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -255,8 +255,8 @@
                     android:onClick="@{()->viewModel.onMemberClick()}"
                     android:padding="8dp"
                     android:text="@string/members"
-                    app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
-                    app:layout_constraintRight_toLeftOf="@id/membersCount"
+                    app:layout_constraintEnd_toStartOf="@id/membersCount"
+                    app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -269,16 +269,16 @@
                     android:text="@{viewModel.membersCount}"
                     android:textColor="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/members"
-                    app:layout_constraintLeft_toRightOf="@id/members"
-                    app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
+                    app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
+                    app:layout_constraintStart_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/members" />
 
                 <View
                     android:id="@+id/line4"
+                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    style="?lineColorSettingTheme"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/members"
