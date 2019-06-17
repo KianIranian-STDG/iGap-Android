@@ -712,18 +712,18 @@ public class FragmentChat extends BaseFragment
         sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
 
         /**
-         * init chat box edit text and send item because we ned change this color in dark mode!
+         * init chat box edit text and send item because we need change this color in dark mode!
          * */
 
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
         if (G.isDarkTheme) {
-            imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
+            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));
             edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext_dark));
             edtChat.setHintTextColor(ContextCompat.getColor(getContext(),R.color.white));
         } else {
-            imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
+            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));
             edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext));
             edtChat.setHintTextColor(ContextCompat.getColor(getContext(),R.color.gray_4c));
         }
