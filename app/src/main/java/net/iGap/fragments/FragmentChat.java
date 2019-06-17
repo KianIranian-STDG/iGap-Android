@@ -720,12 +720,12 @@ public class FragmentChat extends BaseFragment
 
         if (G.isDarkTheme) {
             imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));
-            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext_dark));
-            edtChat.setHintTextColor(ContextCompat.getColor(getContext(),R.color.white));
+            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext_dark));
+            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(),R.color.white));
         } else {
             imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));
-            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext));
-            edtChat.setHintTextColor(ContextCompat.getColor(getContext(),R.color.gray_4c));
+            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
+            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(),R.color.gray_4c));
         }
 
         return attachToSwipeBack(rootView);
