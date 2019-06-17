@@ -1879,5 +1879,10 @@
     <string name="size">اندازه</string>
     <string name="copy_link_title">کپی لینک</string>
     <string name="location_dialog_message">آیا می خواهید از موقیعت مکانی شما استفاده شود؟</string>
+    <string name="all">همه</string>
+    <string name="missed">از دست رفته</string>
+    <string name="incoming">ورودی</string>
+    <string name="canceled">لغو شده</string>
+    <string name="outgoing">خروجی</string>
 
 </resources>
