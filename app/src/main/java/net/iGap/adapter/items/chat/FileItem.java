@@ -179,7 +179,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp180));
             cslf_txt_file_name.setText("file_name.ext");
             cslf_txt_file_name.setTextColor(Color.parseColor(G.textBubble));
-            setTextSize(cslf_txt_file_name, R.dimen.dp14);
+            setTextSize(cslf_txt_file_name, R.dimen.standardTextSize);
             cslf_txt_file_name.setTypeface(G.typeface_IRANSansMobile_Bold, BOLD);
             LinearLayout.LayoutParams layout_1000 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             cslf_txt_file_name.setLayoutParams(layout_1000);
@@ -195,7 +195,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_size.setText("3.2 mb");
             cslf_txt_file_size.setAllCaps(TRUE);
             cslf_txt_file_size.setTextColor(Color.parseColor(G.textBubble));
-            setTextSize(cslf_txt_file_size, R.dimen.dp10);
+            setTextSize(cslf_txt_file_size, R.dimen.verySmallTextSize);
             setTypeFace(cslf_txt_file_size);
             bottomView.addView(cslf_txt_file_size);
 //            LinearLayout.LayoutParams layout_958 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -211,7 +211,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             fileType.setText("3.2 mb");
             fileType.setAllCaps(TRUE);
             fileType.setTextColor(Color.parseColor(G.textBubble));
-            setTextSize(fileType, R.dimen.dp10);
+            setTextSize(fileType, R.dimen.verySmallTextSize);
             setTypeFace(fileType);
 
 

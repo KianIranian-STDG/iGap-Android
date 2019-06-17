@@ -19,6 +19,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
 
@@ -90,13 +91,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteUpTv = new AppCompatTextView(getContext());
         signatureTv = new AppCompatTextView(getContext());
         signatureTv.setId(R.id.tv_chatItem_signature);
-        signatureTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        setTextSize(signatureTv, R.dimen.verySmallTextSize);
 
         viewsLabelTv = new TextView(getContext());
         viewsLabelTv.setId(R.id.tv_chatItem_viewLabel);
         viewsLabelTv.setSingleLine(true);
         setTypeFace(viewsLabelTv);
-        viewsLabelTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        setTextSize(viewsLabelTv,R.dimen.verySmallTextSize);
 
         eyeIconTv = new FontIconTextView(getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
@@ -105,26 +106,27 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         editedIndicatorTv = new AppCompatTextView(getContext());
         editedIndicatorTv.setId(R.id.tv_chatItem_edited);
-        editedIndicatorTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        setTextSize(editedIndicatorTv,R.dimen.smallTextSize);
         editedIndicatorTv.setText(getResources().getString(R.string.edited));
         editedIndicatorTv.setGravity(LEFT);
 
         messageStatusTv = new FontIconTextView(getContext());
         messageStatusTv.setId(R.id.tv_chatItem_status);
-        messageStatusTv.setTextSize(16);
+        setTextSize(messageStatusTv,R.dimen.largeTextSize);
         cslm_view_left_dis = new View(getContext());
 
         messageTimeTv = new AppCompatTextView(getContext());
         messageTimeTv.setId(R.id.tv_chatItem_time);
-        messageTimeTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        setTextSize(messageTimeTv,R.dimen.verySmallTextSize);
 
         voteUpTv.setSingleLine(true);
+        setTextSize(voteUpTv, R.dimen.verySmallTextSize);
         setTypeFace(voteUpTv);
-        voteUpTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 
         voteDownTv.setSingleLine(true);
-        setTypeFace(voteUpTv);
-        voteDownTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        setTypeFace(voteDownTv);
+        setTextSize(voteDownTv, R.dimen.verySmallTextSize);
+
 
         itemContainer.setOrientation(LinearLayout.HORIZONTAL);
         itemContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -272,8 +274,8 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         return ViewMaker.i_Dp(dpSrc);
     }
 
-    protected void setTypeFace(TextView v) {
-        ViewMaker.setTypeFace(v);
+    protected void setTypeFace(TextView textView) {
+        textView.setTypeface(G.typeface_IRANSansMobile);
     }
 
     protected MessageProgress getProgressBar(int sizeSrc) {
@@ -283,6 +285,10 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     public Context getContext() {
         context = G.context;
         return context;
+    }
+
+    private void SetTextSize(TextView textView, int pxSize) {
+        Utils.setTextSize(textView, pxSize);
     }
 
     public LinearLayout getItemContainer() {

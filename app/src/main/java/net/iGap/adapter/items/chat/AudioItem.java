@@ -345,7 +345,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songSize.setSingleLine(true);
             songSize.setAllCaps(TRUE);
             songSize.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
-            setTextSize(songSize, R.dimen.dp10);
+            setTextSize(songSize, R.dimen.verySmallTextSize);
             setTypeFace(songSize);
 
             songFileName = new AppCompatTextView(G.context);
@@ -356,7 +356,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
             songFileName.setTextColor(getColor(R.color.white));
-            setTextSize(songFileName, R.dimen.dp12);
+            setTextSize(songFileName, R.dimen.smallTextSize);
             songFileName.setTypeface(G.typeface_IRANSansMobile);
 
             songArtist = new AppCompatTextView(G.context);
@@ -364,7 +364,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songArtist.setTextAppearance(context, android.R.style.TextAppearance_Small);
             songArtist.setSingleLine(true);
             songArtist.setText("Artist");
-            setTextSize(songArtist, R.dimen.dp10);
+            setTextSize(songArtist, R.dimen.verySmallTextSize);
             setTypeFace(songArtist);
             songArtist.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
 
@@ -375,7 +375,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             playBtn.setGravity(CENTER);
             playBtn.setTextColor(getColor(R.color.white));
             playBtn.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
-            setTextSize(playBtn, R.dimen.dp16);
+            setTextSize(playBtn, R.dimen.largeTextSize);
             playBtn.setBackground(getDrawable(R.drawable.background_audioitem_cover));
 
             seekBar = new SeekBar(G.context);
@@ -388,7 +388,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songTimeTv.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
             songTimeTv.setText("00:00");
             songTimeTv.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
-            setTextSize(songTimeTv, R.dimen.dp10);
+            setTextSize(songTimeTv, R.dimen.verySmallTextSize);
             setTypeFace(songTimeTv);
 
             LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it

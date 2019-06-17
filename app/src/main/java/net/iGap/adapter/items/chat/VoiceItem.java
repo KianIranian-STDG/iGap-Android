@@ -346,7 +346,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             author.setId(R.id.cslv_txt_author);
             author.setTextColor(Color.parseColor(G.textBubble));
             author.setSingleLine(true);
-            setTextSize(author, R.dimen.dp14);
+            setTextSize(author, R.dimen.standardTextSize);
             author.setMaxLines(2);
             setTypeFace(author);
 
@@ -362,7 +362,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             txt_Timer = new AppCompatTextView(G.context);
             txt_Timer.setId(R.id.csla_txt_timer);
             txt_Timer.setTextColor(getColor(R.color.gray));
-            setTextSize(txt_Timer, R.dimen.dp8);
+            setTextSize(txt_Timer, R.dimen.verySmallTextSize);
             setTypeFace(txt_Timer);
 
 
