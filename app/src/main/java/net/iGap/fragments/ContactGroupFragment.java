@@ -205,8 +205,17 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             public void onChipAdded(ChipInterface chip, int newSize) {
                 // chip added
                 // newSize is the size of the updated selected chip list
-                notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
-                isRemove = false;
+
+                try {
+
+                    if (chip != null) {
+                        notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
+                        isRemove = false;
+                    }
+
+                }catch (Exception e){
+
+                }
             }
 
             @Override
@@ -488,5 +497,19 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         }
     }
 
+    @Override
+    public void onPause() {
+
+        //this code added for close chips layout
+        if (chipsInput != null ) {
+            try {
+                chipsInput.addChip("" , "" );
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        super.onPause();
+    }
 
 }

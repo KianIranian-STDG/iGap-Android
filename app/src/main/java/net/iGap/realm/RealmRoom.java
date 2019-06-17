@@ -981,7 +981,7 @@ public class RealmRoom extends RealmObject {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
+                if (realmRoom != null && realmRoom.getLastMessage() != null) {
                     if (realmRoom.getLastMessage().getUpdateTime() == 0) {
                         realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
                     } else {

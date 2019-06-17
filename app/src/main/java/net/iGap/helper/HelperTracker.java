@@ -10,6 +10,8 @@
 
 package net.iGap.helper;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.iGap.G;
@@ -17,28 +19,36 @@ import net.iGap.module.SHP_SETTING;
 
 public class HelperTracker {
 
-    public static final String TRACKER_INSTALL_USER = "TRACKER_INSTALL_USER";
-    public static final String TRACKER_SUBMIT_NUMBER = "TRACKER_SUBMIT_NUMBER";
-    public static final String TRACKER_ACTIVATION_CODE = "TRACKER_ACTIVATION_CODE";
-    public static final String TRACKER_REGISTRATION_USER = "TRACKER_REGISTRATION_USER";
-    public static final String TRACKER_REGISTRATION_NEW_USER = "TRACKER_REGISTRATION_NEW_USER";
-    public static final String TRACKER_ROOM_PAGE = "TRACKER_ROOM_PAGE";
-    public static final String TRACKER_DISCOVERY_PAGE = "TRACKER_DISCOVERY_PAGE";
-    public static final String TRACKER_CALL_PAGE = "TRACKER_CALL_PAGE";
-    public static final String TRACKER_CHAT_VIEW = "TRACKER_CHAT_VIEW";
-    public static final String TRACKER_GROUP_VIEW = "TRACKER_GROUP_VIEW";
-    public static final String TRACKER_CHANNEL_VIEW = "TRACKER_CHANNEL_VIEW";
-    public static final String TRACKER_BOT_VIEW = "TRACKER_BOT_VIEW";
-    public static final String TRACKER_WALLET_PAGE = "TRACKER_WALLET_PAGE";
-    public static final String TRACKER_NEARBY_PAGE = "TRACKER_NEARBY_PAGE";
-    public static final String TRACKER_CHANGE_LANGUAGE = "TRACKER_CHANGE_LANGUAGE";
-    public static final String TRACKER_CREATE_CHANNEL = "TRACKER_CREATE_CHANNEL";
-    public static final String TRACKER_CREATE_GROUP = "TRACKER_CREATE_GROUP";
-    public static final String TRACKER_VOICE_CALL_CONNECTING = "TRACKER_VOICE_CALL_CONNECTING";
-    public static final String TRACKER_VOICE_CALL_CONNECTED = "TRACKER_VOICE_CALL_CONNECTED";
-    public static final String TRACKER_VIDEO_CALL_CONNECTING = "TRACKER_VIDEO_CALL_CONNECTING";
-    public static final String TRACKER_VIDEO_CALL_CONNECTED = "TRACKER_VIDEO_CALL_CONNECTED";
-    public static final String TRACKER_FINANCIAL_SERVICES = "TRACKER_FINANCIAL_SERVICES";
+    private static final String CATEGORY_SETTING = "Setting@";
+    private static final String CATEGORY_COMMUNICATION = "Communication@";
+    private static final String CATEGORY_REGISTRATION = "Registration@";
+    private static final String CATEGORY_DISCOVERY = "Discovery@";
+
+    public static final String TRACKER_CHANGE_LANGUAGE = CATEGORY_SETTING + "TRACKER_CHANGE_LANGUAGE";
+
+    public static final String TRACKER_CALL_PAGE = CATEGORY_COMMUNICATION + "TRACKER_CALL_PAGE";
+    public static final String TRACKER_VOICE_CALL_CONNECTING = CATEGORY_COMMUNICATION + "TRACKER_VOICE_CALL_CONNECTING";
+    public static final String TRACKER_VOICE_CALL_CONNECTED = CATEGORY_COMMUNICATION + "TRACKER_VOICE_CALL_CONNECTED";
+    public static final String TRACKER_VIDEO_CALL_CONNECTING = CATEGORY_COMMUNICATION + "TRACKER_VIDEO_CALL_CONNECTING";
+    public static final String TRACKER_VIDEO_CALL_CONNECTED = CATEGORY_COMMUNICATION + "TRACKER_VIDEO_CALL_CONNECTED";
+    public static final String TRACKER_CHAT_VIEW = CATEGORY_COMMUNICATION + "TRACKER_CHAT_VIEW";
+    public static final String TRACKER_GROUP_VIEW = CATEGORY_COMMUNICATION + "TRACKER_GROUP_VIEW";
+    public static final String TRACKER_CHANNEL_VIEW = CATEGORY_COMMUNICATION + "TRACKER_CHANNEL_VIEW";
+    public static final String TRACKER_BOT_VIEW = CATEGORY_COMMUNICATION + "TRACKER_BOT_VIEW";
+    public static final String TRACKER_ROOM_PAGE = CATEGORY_COMMUNICATION + "TRACKER_ROOM_PAGE";
+    public static final String TRACKER_CREATE_CHANNEL = CATEGORY_COMMUNICATION + "TRACKER_CREATE_CHANNEL";
+    public static final String TRACKER_CREATE_GROUP = CATEGORY_COMMUNICATION + "TRACKER_CREATE_GROUP";
+
+    public static final String TRACKER_INSTALL_USER = CATEGORY_REGISTRATION + "TRACKER_INSTALL_USER";
+    public static final String TRACKER_SUBMIT_NUMBER = CATEGORY_REGISTRATION + "TRACKER_SUBMIT_NUMBER";
+    public static final String TRACKER_ACTIVATION_CODE = CATEGORY_REGISTRATION + "TRACKER_ACTIVATION_CODE";
+    public static final String TRACKER_REGISTRATION_USER = CATEGORY_REGISTRATION + "TRACKER_REGISTRATION_USER";
+    public static final String TRACKER_REGISTRATION_NEW_USER = CATEGORY_REGISTRATION + "TRACKER_REGISTRATION_NEW_USER";
+
+    public static final String TRACKER_DISCOVERY_PAGE = CATEGORY_DISCOVERY + "TRACKER_DISCOVERY_PAGE";
+    public static final String TRACKER_WALLET_PAGE = CATEGORY_DISCOVERY + "TRACKER_WALLET_PAGE";
+    public static final String TRACKER_NEARBY_PAGE = CATEGORY_DISCOVERY + "TRACKER_NEARBY_PAGE";
+    public static final String TRACKER_FINANCIAL_SERVICES = CATEGORY_DISCOVERY + "TRACKER_FINANCIAL_SERVICES";
 
     public static void sendTracker(String trackerTag) {
 
@@ -49,7 +59,14 @@ public class HelperTracker {
         }
 
         if (allowSendTracker) {
-            FirebaseAnalytics.getInstance(G.context).logEvent(trackerTag, null);
+            String[] tracker = trackerTag.split("@");
+            String category = tracker[0];
+            String action = tracker[1];
+
+            FirebaseAnalytics.getInstance(G.context).logEvent(action, null);
+
+            Tracker mTracker = ((G) G.currentActivity.getApplication()).getDefaultTracker();
+            mTracker.send(new HitBuilders.EventBuilder(category, action).build());
         }
     }
 }
