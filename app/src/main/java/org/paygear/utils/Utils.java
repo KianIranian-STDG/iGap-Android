@@ -69,7 +69,7 @@ public class Utils {
                 context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
+/*
     public static void changeLocale(Context context, String lan) {
         SettingHelper.putString(context, SettingHelper.APP_LANGUAGE, lan);
         setLocale(context, lan);
@@ -128,6 +128,7 @@ public class Utils {
 
         return baseContext;
     }
+*/
 
     public static void setShadow(View view, Drawable sd) {
         RoundRectShape rss = new RoundRectShape(new float[] { 12f, 12f, 12f,

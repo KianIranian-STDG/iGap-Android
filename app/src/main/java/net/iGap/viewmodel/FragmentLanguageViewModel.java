@@ -47,7 +47,7 @@ public class FragmentLanguageViewModel {
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "English");
             editor.apply();
             G.selectedLanguage = "en";
-            G.updateResources(G.currentActivity);
+            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = false;
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = false;
@@ -73,7 +73,7 @@ public class FragmentLanguageViewModel {
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
             editor.apply();
             G.selectedLanguage = "fa";
-            G.updateResources(G.currentActivity);
+            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = true;
             HelperCalander.isLanguageArabic = false;
@@ -100,7 +100,7 @@ public class FragmentLanguageViewModel {
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "العربی");
             editor.apply();
             G.selectedLanguage = "ar";
-            G.updateResources(G.currentActivity);
+            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = true;

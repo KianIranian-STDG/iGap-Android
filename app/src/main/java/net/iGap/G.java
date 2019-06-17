@@ -504,7 +504,6 @@ public class G extends MultiDexApplication {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         Raad.init(getApplicationContext());
-        Utils.setInstart(context, "fa");
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
 
         try {
@@ -531,7 +530,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateResources(this);
+        updateResources(getBaseContext());
     }
 
     synchronized public Tracker getDefaultTracker() {

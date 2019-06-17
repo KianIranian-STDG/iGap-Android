@@ -81,7 +81,6 @@ public final class HelperLogout {
         G.isFirstPassCode = false;
         G.isPassCode = false;
         G.isDarkTheme = false;
-        G.isAppRtl = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
     }

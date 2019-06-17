@@ -2,6 +2,7 @@ package org.paygear;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.fragment.CardsFragment;
@@ -21,11 +23,14 @@ import org.paygear.model.Payment;
 import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.web.WebBase;
 import retrofit2.Response;
+
+import static net.iGap.G.updateResources;
 
 public class WalletActivity extends NavigationBarActivity {
 
@@ -66,10 +71,24 @@ public class WalletActivity extends NavigationBarActivity {
     public static String RESET_PASSWORD = "RESET_PASSWORD";
     public static boolean setRefresh = false;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateResources(getBaseContext());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Raad.language = selectedLanguage;
+        Raad.isFA = G.isAppRtl;
+
         RelativeLayout navBarView = findViewById(R.id.nav_bar);
         navBarView.setVisibility(View.GONE);
 
@@ -128,9 +147,6 @@ public class WalletActivity extends NavigationBarActivity {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.parseColor(WalletActivity.darkPrimaryColor));
-        }
-        if (selectedLanguage != null) {
-            Utils.setLocale(this, selectedLanguage);
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

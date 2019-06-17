@@ -378,7 +378,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateResources(getApplicationContext());
+        updateResources(getBaseContext());
     }
 
 }
