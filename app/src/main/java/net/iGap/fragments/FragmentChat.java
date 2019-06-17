@@ -7160,7 +7160,10 @@ public class FragmentChat extends BaseFragment
         if (rootView.findViewById(R.id.replayLayoutAboveEditText) == null) {
             ViewStubCompat stubView = rootView.findViewById(R.id.replayLayoutStub);
             stubView.setInflatedId(R.id.replayLayoutAboveEditText);
-            stubView.setLayoutResource(R.layout.layout_chat_reply);
+            if (G.isDarkTheme)
+                stubView.setLayoutResource(R.layout.layout_chat_reply_dark);
+            else
+                stubView.setLayoutResource(R.layout.layout_chat_reply);
             stubView.inflate();
 
             inflateReplayLayoutIntoStub(chatItem);
@@ -7168,13 +7171,13 @@ public class FragmentChat extends BaseFragment
             mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
+            Utils.darkModeHandler(replayTo);
             replayTo.setTypeface(G.typeface_IRANSansMobile);
             TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
             replayFrom.setTypeface(G.typeface_IRANSansMobile);
-            replayFrom.setTextColor(Color.parseColor(G.appBarColor));
 
-            ImageView imvReplayIcon = rootView.findViewById(R.id.lcr_imv_replay);
-            imvReplayIcon.setColorFilter(Color.parseColor(G.appBarColor));
+            FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
+            Utils.darkModeHandler(replayIcon);
 
             ImageView thumbnail = mReplayLayout.findViewById(R.id.thumbnail);
             TextView closeReplay = mReplayLayout.findViewById(R.id.cancelIcon);
