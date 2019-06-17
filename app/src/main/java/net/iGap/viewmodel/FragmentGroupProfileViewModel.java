@@ -5,15 +5,14 @@ import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupRemoveUsername;
@@ -39,8 +38,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmList;
+
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentGroupProfileViewModel extends ViewModel {
@@ -131,16 +132,18 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         groupNumber.setValue(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(realmGroupRoom.getParticipantsCountLabel()) : realmGroupRoom.getParticipantsCountLabel());
         role = realmGroupRoom.getRole();
         isPrivate = realmGroupRoom.isPrivate();
-        switch (realmRoom.getGroupRoom().getRealmNotificationSetting().getNotification()) {
-            case DEFAULT:
-                notificationState.set(R.string.array_Default);
-                break;
-            case ENABLE:
-                notificationState.set(R.string.array_enable);
-                break;
-            case DISABLE:
-                notificationState.set(R.string.array_Disable);
-                break;
+        if (realmGroupRoom.getRealmNotificationSetting() != null) {
+            switch (realmGroupRoom.getRealmNotificationSetting().getNotification()) {
+                case DEFAULT:
+                    notificationState.set(R.string.array_Default);
+                    break;
+                case ENABLE:
+                    notificationState.set(R.string.array_enable);
+                    break;
+                case DISABLE:
+                    notificationState.set(R.string.array_Disable);
+                    break;
+            }
         }
 
         initials = realmRoom.getInitials();
@@ -201,12 +204,14 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     public void onNotificationCheckChange(boolean isUmMute) {
-        if (isUmMute) {
-            notificationState.set(R.string.array_enable);
-            RealmNotificationSetting.popupNotification(roomId, GROUP, ENABLE);
-        } else {
-            notificationState.set(R.string.array_Disable);
-            RealmNotificationSetting.popupNotification(roomId, GROUP, DISABLE);
+        if (isUmMute != isUnMuteNotification.get()) {
+            if (isUmMute) {
+                notificationState.set(R.string.array_enable);
+                RealmNotificationSetting.popupNotification(roomId, GROUP, ENABLE);
+            } else {
+                notificationState.set(R.string.array_Disable);
+                RealmNotificationSetting.popupNotification(roomId, GROUP, DISABLE);
+            }
         }
     }
 
