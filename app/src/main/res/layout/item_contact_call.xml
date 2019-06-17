@@ -73,6 +73,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/main_font"
         android:text="contact name"
+        android:textSize="@dimen/standardTextSize"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactCall_userPhoneNumber"
@@ -82,6 +83,7 @@
     <TextView
         android:id="@+id/tv_itemContactCall_userPhoneNumber"
         android:layout_width="0dp"
+        android:textSize="@dimen/smallTextSize"
         android:layout_height="@dimen/dp20"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginLeft="@dimen/dp16"
