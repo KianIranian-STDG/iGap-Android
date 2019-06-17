@@ -46,13 +46,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp10"
-                        android:paddingLeft="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp12"
                         android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp16"
-                        android:paddingBottom="@dimen/dp16"
+                        android:paddingRight="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp12"
                         android:text="@string/st_title_message"
                         style="?textTitleColorSettingTheme"
-                        android:textSize="@dimen/dp16"
+                        android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
                     <!--
@@ -76,7 +76,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/st_title_message_textSize"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <LinearLayout
@@ -104,7 +104,7 @@
                                 android:gravity="center"
                                 android:text="@{chatSettingsVM.callbackTextSize , default=16}"
                                 android:textColor="@color/setting_items_value_color"
-                                android:textSize="@dimen/dp15"
+                                android:textSize="@dimen/smallTextSize"
                                 android:textStyle="normal" />
 
                         </LinearLayout>
@@ -119,11 +119,11 @@
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical"
                         android:onClick="@{chatSettingsVM::onClickChatBackground}"
-                        android:paddingLeft="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp12"
                         android:paddingTop="@dimen/dp4"
-                        android:paddingRight="@dimen/dp16"
+                        android:paddingRight="@dimen/dp12"
                         android:text="@string/st_chatBackground"
-                        android:textSize="@dimen/dp15"
+                        android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
                     <LinearLayout
@@ -132,6 +132,7 @@
                         android:onClick="@{chatSettingsVM::onClickShowVote}"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/dp16"
+                        android:gravity="center_vertical"
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
@@ -142,7 +143,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:text="@string/show_vote_layout_in_channel"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
@@ -165,6 +166,7 @@
                         android:onClick="@{chatSettingsVM::onClickSenderNameGroup}"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/dp16"
+                        android:gravity="center_vertical"
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
@@ -175,7 +177,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:text="@string/show_sender_name_in_group"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
@@ -198,6 +200,7 @@
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
+                        android:gravity="center_vertical"
                         android:paddingEnd="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:visibility="visible">
@@ -213,7 +216,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_send_by_enter"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
@@ -244,6 +247,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
+                            android:gravity="center_vertical"
                             android:layout_alignParentRight="true"
                             android:layout_centerInParent="true">
 
@@ -268,7 +272,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_inApp_Browser"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                     </RelativeLayout>
@@ -299,11 +303,11 @@
                         android:layout_marginTop="@dimen/dp10"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp16"
-                        android:paddingBottom="@dimen/dp16"
+                        android:paddingRight="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp12"
                         android:text="@string/st_title_Media"
                         style="?textTitleColorSettingTheme"
-                        android:textSize="@dimen/dp16"
+                        android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
                     <!--this part is Gone-->
@@ -355,6 +359,7 @@
                         android:onClick="@{chatSettingsVM::onClickCompress}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
+                        android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingEnd="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
@@ -369,7 +374,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_compress"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
 
@@ -391,6 +396,7 @@
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
+                        android:gravity="center_vertical"
                         android:paddingEnd="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
@@ -404,7 +410,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_trim"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
 
@@ -426,6 +432,7 @@
                         android:onClick="@{chatSettingsVM::onClickDefaultVideo}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
+                        android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingEnd="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
@@ -440,7 +447,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/open_default_player"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
@@ -459,6 +466,7 @@
                         android:onClick="@{chatSettingsVM::onClickCrop}"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/dp16"
+                        android:gravity="center_vertical"
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
@@ -469,7 +477,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:text="@string/st_crop"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
@@ -489,6 +497,7 @@
                         android:layout_height="@dimen/dp52"
                         android:onClick="@{chatSettingsVM::onClickCameraButtonSheet}"
                         android:orientation="horizontal"
+                        android:layout_gravity="center_vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
@@ -500,7 +509,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:text="@string/st_cameraBottomSheet"
-                            android:textSize="@dimen/dp15"
+                            android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
