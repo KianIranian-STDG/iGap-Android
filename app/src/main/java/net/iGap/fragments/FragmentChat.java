@@ -231,6 +231,7 @@ import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.IntentRequests;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
@@ -8143,6 +8144,7 @@ public class FragmentChat extends BaseFragment
     private void manageForwardedMessage() {
         if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
             final LinearLayout ll_Forward = rootView.findViewById(R.id.ac_ll_forward);
+            Utils.darkModeHandlerGray(ll_Forward);
             int multiForwardSize = multiForwardList.size();
             if (hasForward || multiForwardSize > 0) {
 
@@ -8186,12 +8188,10 @@ public class FragmentChat extends BaseFragment
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = rootView.findViewById(R.id.cslhf_txt_message);
+                Utils.darkModeHandler(emMessage);
 
-                TextView txtForwardMessage = rootView.findViewById(R.id.cslhf_txt_forward_from);
-                txtForwardMessage.setTextColor(Color.parseColor(G.appBarColor));
-
-                ImageView imvForwardIcon = rootView.findViewById(R.id.cslhs_imv_forward);
-                imvForwardIcon.setColorFilter(Color.parseColor(G.appBarColor));
+                FontIconTextView forwardIcon = rootView.findViewById(R.id.cslhs_imv_forward);
+                Utils.darkModeHandler(forwardIcon);
 
                 if (HelperCalander.isPersianUnicode) {
 

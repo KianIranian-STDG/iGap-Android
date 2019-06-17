@@ -26,6 +26,14 @@ public class Utils {
         }
     }
 
+    public static void darkModeHandlerGray(View view) {
+        if (G.isDarkTheme) {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_4c));
+        } else {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.bottomSheetHeaderLine));
+        }
+    }
+
     public static void darkModeHandler(TextView textView) {
         if (G.isDarkTheme) {
             textView.setTextColor(textView.getContext().getResources().getColor(R.color.white));
