@@ -1268,22 +1268,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             } else {
                 mAdapter.ViewHolderTime holder1 = (mAdapter.ViewHolderTime) holder;
 
-                //check and show just first block with header
-                if (position == 0 && mCurrentSharedMediaType == 1) {
-                    holder1.txtHeader.setText(context.getString(R.string.images));
-                    holder1.txtHeader.setVisibility(View.GONE);
-                    holder1.vSplitter.setVisibility(View.VISIBLE);
-
-                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder1.txtHeader.getLayoutParams();
-                    lp.setMargins(getDimen(R.dimen.dp4) , getDimen(R.dimen.dp20) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp4) );
-                    holder1.txtHeader.setLayoutParams(lp);
-                }else if (position == 0 && mCurrentSharedMediaType != 1){
-
-                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder1.txtTime.getLayoutParams();
-                    lp.setMargins(getDimen(R.dimen.dp4) , getDimen(R.dimen.dp24) , getDimen(R.dimen.dp4) , getDimen(R.dimen.dp4) );
-                    holder1.txtTime.setLayoutParams(lp);
-                }
-
                 //convert numbers to persian if language was
                 String date;
                 if (G.selectedLanguage.equals("fa")) {

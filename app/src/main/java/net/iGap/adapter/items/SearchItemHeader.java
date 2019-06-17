@@ -45,11 +45,6 @@ public class SearchItemHeader extends AbstractItem<SearchItemHeader, SearchItemH
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-        if (holder.getAdapterPosition() == 0 ){
-            holder.root.setPadding(0 , 22 , 0 , 0 );
-        }else {
-            holder.root.setPadding(0 , 8 , 0 , 0 );
-        }
 
         if (G.isDarkTheme){
             holder.txtHeader.setTextColor(G.context.getResources().getColor(R.color.white));

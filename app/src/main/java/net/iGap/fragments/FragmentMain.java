@@ -220,12 +220,15 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     private void notifyChatRoomsList() {
-        try {
-            roomsAdapter.notifyItemChanged(0);
-            roomsAdapter.notifyItemChanged(1);
-        }catch (Exception e){
 
+        if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()){
+            mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
+        }else if (G.isInCall){
+            mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68 ), 0, 0);
+        }else {
+            mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
         }
+
     }
 
     private void initMultiSelectActions() {
@@ -524,7 +527,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         if (!isPinned) {
             goToTop();
         }
-        notifyChatRoomsList();
     }
 
     private void goToTop() {
@@ -1119,27 +1121,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             final RealmRoom mInfo = holder.mInfo = getItem(i);
             if (mInfo == null) {
                 return;
-            }
-
-            if (holder.getAdapterPosition() == 0) {
-
-                if (/*MusicPlayer.playerStateChangeListener.getValue() != null && MusicPlayer.playerStateChangeListener.getValue() &&*/ MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()){
-                    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
-                    lp.setMargins(0, i_Dp(R.dimen.dp80), 0, 0);
-                    holder.root.setLayoutParams(lp);
-                }else if (G.isInCall){
-                    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
-                    lp.setMargins(0, i_Dp(R.dimen.dp68 ), 0, 0);
-                    holder.root.setLayoutParams(lp);
-                } else {
-                    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
-                    lp.setMargins(0, i_Dp(R.dimen.dp24), 0, 0);
-                    holder.root.setLayoutParams(lp);
-                }
-            } else {
-                ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80));
-                lp.setMargins(0, 0, 0, 0);
-                holder.root.setLayoutParams(lp);
             }
 
             if (isChatMultiSelectEnable) {
