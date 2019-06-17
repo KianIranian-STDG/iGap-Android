@@ -40,6 +40,7 @@
           android:id="@+id/frg_shared_media_ll_toolbar_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layoutDirection="locale"
           android:orientation="horizontal">
 
         <!--view added at runtime with toolbar helper-->
@@ -133,6 +134,7 @@
         android:minHeight="@dimen/dp36"
         style="?backgroundSubChatTheme"
         android:scrollbars="none"
+        android:layoutDirection="locale"
         app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
       <LinearLayout
@@ -140,6 +142,7 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:orientation="horizontal"
+          android:layoutDirection="locale"
           android:layout_gravity="center_vertical">
 
       </LinearLayout>
