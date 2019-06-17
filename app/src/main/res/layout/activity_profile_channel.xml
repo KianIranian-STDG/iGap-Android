@@ -79,7 +79,7 @@
                     android:paddingLeft="@dimen/dp4"
                     android:paddingRight="@dimen/dp4"
                     android:visibility="@{viewModel.isVerifiedChannel}"
-                    app:layout_constraintLeft_toLeftOf="@id/channelInfo"
+                    app:layout_constraintStart_toStartOf="@id/channelInfo"
                     app:layout_constraintTop_toBottomOf="@id/channelInfo"
                     app:srcCompat="@drawable/ic_verify" />
 
@@ -97,8 +97,8 @@
                     android:visibility="@{viewModel.isVerifiedChannel}"
                     app:layout_constraintBottom_toBottomOf="@id/channelVerify"
                     app:layout_constraintHorizontal_bias="0"
-                    app:layout_constraintLeft_toRightOf="@id/channelVerify"
-                    app:layout_constraintRight_toRightOf="@id/channelInfo"
+                    app:layout_constraintStart_toEndOf="@id/channelVerify"
+                    app:layout_constraintEnd_toEndOf="@id/channelInfo"
                     app:layout_constraintTop_toTopOf="@id/channelVerify" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -161,7 +161,7 @@
                     android:checked="@={viewModel.isMuteNotification}"
                     android:onCheckedChanged="@{()->viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
                     app:layout_constraintBottom_toBottomOf="@id/notification"
-                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintEnd_toEndOf="@id/notification"
                     app:layout_constraintTop_toTopOf="@id/notification" />
 
                 <View
@@ -196,8 +196,8 @@
                     android:padding="8dp"
                     android:text="@string/subscribers_title"
                     android:visibility="@{viewModel.showMemberList}"
-                    app:layout_constraintLeft_toLeftOf="@id/members"
-                    app:layout_constraintRight_toLeftOf="@id/subscribersCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
+                    app:layout_constraintEnd_toStartOf="@id/subscribersCount"
                     app:layout_constraintTop_toBottomOf="@id/members" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -210,8 +210,8 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/subscribers"
-                    app:layout_constraintLeft_toRightOf="@id/subscribers"
-                    app:layout_constraintRight_toRightOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/subscribers"
+                    app:layout_constraintEnd_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/subscribers" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -224,8 +224,8 @@
                     android:padding="8dp"
                     android:text="@string/administrators_title"
                     android:visibility="@{viewModel.showMemberList}"
-                    app:layout_constraintLeft_toLeftOf="@id/members"
-                    app:layout_constraintRight_toLeftOf="@id/administratorsCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
+                    app:layout_constraintEnd_toStartOf="@id/administratorsCount"
                     app:layout_constraintTop_toBottomOf="@id/subscribers" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -238,8 +238,8 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
-                    app:layout_constraintLeft_toRightOf="@id/administrators"
-                    app:layout_constraintRight_toRightOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/administrators"
+                    app:layout_constraintEnd_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -252,8 +252,8 @@
                     android:padding="8dp"
                     android:text="@string/moderators_title"
                     android:visibility="@{viewModel.showMemberList}"
-                    app:layout_constraintLeft_toLeftOf="@id/members"
-                    app:layout_constraintRight_toLeftOf="@id/moderatorsCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
+                    app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -266,8 +266,8 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
-                    app:layout_constraintLeft_toRightOf="@id/moderator"
-                    app:layout_constraintRight_toRightOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/moderator"
+                    app:layout_constraintEnd_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
 
                 <View
@@ -305,8 +305,8 @@
                     android:padding="8dp"
                     android:text="@string/shared_image"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toLeftOf="@id/photoCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toStartOf="@id/photoCount"
                     app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -319,7 +319,7 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/photo" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -332,8 +332,8 @@
                     android:padding="8dp"
                     android:text="@string/shared_video"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toLeftOf="@id/photoCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toStartOf="@id/photoCount"
                     app:layout_constraintTop_toBottomOf="@id/photo" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -346,7 +346,7 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/video"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/video" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -359,8 +359,8 @@
                     android:padding="8dp"
                     android:text="@string/shared_audio"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toLeftOf="@id/audioFilesCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
                     app:layout_constraintTop_toBottomOf="@id/video" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -373,7 +373,7 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/audioFiles"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/audioFiles" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -386,8 +386,8 @@
                     android:padding="8dp"
                     android:text="@string/shared_voice"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toLeftOf="@id/voiceMessageCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
                     app:layout_constraintTop_toBottomOf="@id/audioFiles" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -400,7 +400,7 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/voiceMessage" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -413,8 +413,8 @@
                     android:padding="8dp"
                     android:text="@string/shared_gif"
                     android:visibility="@{viewModel.sharedGifVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toLeftOf="@id/gifCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toStartOf="@id/gifCount"
                     app:layout_constraintTop_toBottomOf="@id/voiceMessage" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -427,7 +427,7 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/gif"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/gif" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -440,8 +440,8 @@
                     android:padding="8dp"
                     android:text="@string/shared_files"
                     android:visibility="@{viewModel.sharedFileVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toLeftOf="@id/filesCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toStartOf="@id/filesCount"
                     app:layout_constraintTop_toBottomOf="@id/gif" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -454,7 +454,7 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/files"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/files" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -467,8 +467,8 @@
                     android:padding="8dp"
                     android:text="@string/shared_links"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toLeftOf="@id/linksCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toStartOf="@id/linksCount"
                     app:layout_constraintTop_toBottomOf="@id/files" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -480,7 +480,7 @@
                     android:textColor="@color/green"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/links"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/links" />
 
                 <ProgressBar
