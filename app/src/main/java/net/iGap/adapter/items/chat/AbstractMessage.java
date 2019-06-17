@@ -205,14 +205,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.forwardedFrom.getMessageId() < 0) {
                 messageId = messageId * (-1);
             }
-            realmRoomForwardedFrom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-            realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+
+            RealmRoom realmRoomForwardedFrom22 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+            if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
+                this.realmRoomForwardedFrom = getRealmChat().copyFromRealm(realmRoomForwardedFrom22);
+
+            RealmChannelExtra realmChannelExtra22 = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+            if (realmChannelExtra22 != null && realmChannelExtra22.isValid())
+                this.realmChannelExtra = getRealmChat().copyFromRealm(realmChannelExtra22);
+
         } else {
             realmRoomForwardedFrom = null;
             realmChannelExtra = null;
         }
 
-        realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+        RealmRoom realmRoom22 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+        if (realmRoom22 != null && realmRoom22.isValid())
+            this.realmRoom = getRealmChat().copyFromRealm(realmRoom22);
+
         RealmRoomMessage f = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
                 equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
         if (f != null) {
@@ -476,7 +486,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             /**
              * check failed state ,because if is failed we want show to user even is in channel
              */
-            if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status)) {
+            if (realmRoom != null && realmRoom.isValid() && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status)) {
                 mHolder.cslr_txt_tic.setVisibility(View.GONE);
             } else {
                 mHolder.cslr_txt_tic.setVisibility(View.VISIBLE);
