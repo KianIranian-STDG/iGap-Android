@@ -45,18 +45,17 @@
 
         </LinearLayout>
 
-        <net.iGap.module.CustomTextViewMedium
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
             android:id="@+id/txtRemoveSticker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Remove"
             android:layout_gravity="center"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:textColor="@android:color/white"
-            android:background="@drawable/oval_green_sticker"
             android:gravity="center"/>
 
     </LinearLayout>

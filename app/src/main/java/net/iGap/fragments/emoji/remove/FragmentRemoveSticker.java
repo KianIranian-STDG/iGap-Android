@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -165,7 +166,7 @@ public class FragmentRemoveSticker extends BaseFragment {
         // stores and recycles views as they are scrolled off screen
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView imgSticker;
-            TextView txtRemove;
+            Button txtRemove;
             TextView txtName;
             TextView txtCount;
 
@@ -176,8 +177,8 @@ public class FragmentRemoveSticker extends BaseFragment {
                 txtName = itemView.findViewById(R.id.txtName);
                 txtCount = itemView.findViewById(R.id.txtCount);
 
-                GradientDrawable backgroundGradient = (GradientDrawable) txtRemove.getBackground();
-                backgroundGradient.setColor(Color.parseColor(G.appBarColor));
+                //GradientDrawable backgroundGradient = (GradientDrawable) txtRemove.getBackground();
+                //backgroundGradient.setColor(Color.parseColor(G.appBarColor));
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

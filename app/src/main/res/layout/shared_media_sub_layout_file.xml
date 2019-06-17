@@ -21,12 +21,29 @@
       <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+          android:layout_marginRight="@dimen/dp4"
+          android:layout_marginLeft="@dimen/dp4"
           android:padding="@dimen/dp4">
 
-        <net.iGap.module.RadiusImageView
+        <TextView
+            style="@style/myIconTextViewStyle"
           android:id="@+id/smslf_imv_icon_file"
           android:layout_width="@dimen/dp52"
           android:layout_height="@dimen/dp52"
+            android:gravity="center"
+            android:text="@string/attach_icon"
+            android:layout_gravity="center"
+            android:textColor="@color/shared_media_music_list_icon_color"
+          android:background="@drawable/background_multi_select_light" />
+
+        <net.iGap.module.RadiusImageView
+          android:id="@+id/smslf_imv_image_file"
+          android:layout_width="@dimen/dp52"
+          android:layout_height="@dimen/dp52"
+            android:gravity="center"
+            android:text="@string/attach_icon"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
             android:layout_gravity="center"
           android:background="@drawable/background_multi_select_light" />
 

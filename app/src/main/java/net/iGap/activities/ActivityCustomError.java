@@ -24,7 +24,6 @@ public class ActivityCustomError extends ActivityEnhanced {
         //errorDetailsText.setText(CustomActivityOnCrash.getStackTraceFromIntent(getIntent()));
 
         Button restartButton = (Button) findViewById(R.id.restart_button);
-        restartButton.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         final Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

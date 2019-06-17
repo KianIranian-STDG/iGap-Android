@@ -222,4 +222,7 @@
     <string name="pause_icon">\?</string>
     <string name="igap_en_icon">«</string>
     <string name="igap_fa_icon">»</string>
+    <string name="attach_icon">o</string>
+    <string name="voice_not_downloaded_icon">å</string>
+    <string name="music_icon">J</string>
 </resources>

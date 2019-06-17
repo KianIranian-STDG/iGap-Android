@@ -99,7 +99,7 @@
           android:gravity="center">
 
         <TextView
-            android:id="@+id/fc_btn_missed_calls"
+            android:id="@+id/fc_btn_all_calls"
             android:layout_width="@dimen/dp130"
             android:layout_height="wrap_content"
             android:text="@string/all"
@@ -111,7 +111,7 @@
             android:layout_margin="@dimen/dp10"/>
 
         <TextView
-            android:id="@+id/fc_btn_all_calls"
+            android:id="@+id/fc_btn_missed_calls"
             android:layout_width="@dimen/dp130"
             android:layout_height="wrap_content"
             android:text="Missed"

@@ -59,7 +59,6 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.btnScanBarCode).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
 
         iVandActivityAdapter = new IVandActivityAdapter(new ArrayList<>());
         titleTextView.setText(getString(R.string.ivand_activities_title));

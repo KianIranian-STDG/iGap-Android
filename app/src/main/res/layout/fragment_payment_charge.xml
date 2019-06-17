@@ -304,19 +304,18 @@
           android:indeterminate="true"
           android:visibility="@{fragmentPaymentChargeViewModel.observeEnabledPayment ? View.GONE :View.VISIBLE}" />
 
-        <Button
+        <android.support.design.button.MaterialButton
+            style="@style/IGapButtonStyle"
           android:layout_width="@dimen/dp180"
           android:layout_height="@dimen/dp40"
           android:layout_gravity="center"
           android:layout_marginBottom="@dimen/dp40"
           android:layout_marginTop="@dimen/dp20"
-          android:background="@{fragmentPaymentChargeViewModel.observeBackGround}"
           android:enabled="@{fragmentPaymentChargeViewModel.observeEnabledPayment}"
           android:onClick="@{fragmentPaymentChargeViewModel::onBuyClick}"
           android:text="@string/buy"
           android:textAllCaps="false"
-          android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp18" />
+          android:textColor="@color/whit_background" />
 
 
       </LinearLayout>
