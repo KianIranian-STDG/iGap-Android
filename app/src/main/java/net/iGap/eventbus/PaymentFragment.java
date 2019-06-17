@@ -208,8 +208,12 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                         return;
                                     if (response.body() != null) {
                                         selectedCard = null;
-                                        if (response.body().size() > 0)
-                                            selectedCard = response.body().get(0);
+                                        for (Card card : response.body()) {
+                                            if (card.isRaadCard()) {
+                                                selectedCard = card;
+                                                break;
+                                            }
+                                        }
                                         if (selectedCard != null) {
                                             if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
                                                 if (!selectedCard.isProtected) {
