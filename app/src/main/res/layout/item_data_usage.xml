@@ -22,7 +22,7 @@
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp8"
                 android:text="photo"
-                android:textSize="@dimen/dp16"
+                android:textSize="@dimen/largeTextSize"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -43,7 +43,7 @@
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
                     android:text="@string/sent"
-                    android:textSize="@dimen/dp14" />
+                    android:textSize="@dimen/standardTextSize" />
 
 
                 <net.iGap.module.HeaderTextView
@@ -52,6 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
+                    android:textSize="@dimen/smallTextSize"
                     android:layout_marginRight="@dimen/dp20"
                     android:text="22" />
 
@@ -84,7 +85,7 @@
                     android:layout_weight="1"
 
                     android:text="@string/received"
-                    android:textSize="@dimen/dp14" />
+                    android:textSize="@dimen/standardTextSize" />
 
 
                 <net.iGap.module.HeaderTextView
@@ -93,6 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
+                    android:textSize="@dimen/smallTextSize"
                     android:layout_marginRight="@dimen/dp20"
                     android:text="2489" />
             </LinearLayout>
@@ -122,7 +124,7 @@
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
                     android:text="@string/bytes_sent"
-                    android:textSize="@dimen/dp14" />
+                    android:textSize="@dimen/standardTextSize" />
 
 
                 <net.iGap.module.HeaderTextView
@@ -132,7 +134,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
-
+                    android:textSize="@dimen/smallTextSize"
                     android:text="2.0 MB" />
 
             </LinearLayout>
@@ -163,15 +165,14 @@
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
                     android:text="@string/bytes_received"
-                    android:textSize="@dimen/dp14" />
+                    android:textSize="@dimen/standardTextSize" />
 
                 <net.iGap.module.HeaderTextView
                     android:id="@+id/txtByteReceivedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-
-
+                    android:textSize="@dimen/smallTextSize"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
 
