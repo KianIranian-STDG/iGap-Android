@@ -2,9 +2,8 @@ package net.iGap.libs.bottomNavigation;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,10 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     private BottomNavigation bottomNavigation;
     private OnItemSelected onTabItemSelected;
 
-    private Drawable selectedIcon;
-    private Drawable unSelectedIcon;
-    private Drawable darkSelectedIcon;
-    private Drawable darkUnSelectedIcon;
+    private int selectedIcon;
+    private int unSelectedIcon;
+    private int darkSelectedIcon;
+    private int darkUnSelectedIcon;
     private ImageView imageView;
     private BadgeView badgeView;
     private int position;
@@ -55,7 +54,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
         parseAttr(attributeSet);
 
         if (imageView == null)
-            imageView = new ImageView(getContext());
+            imageView = new AppCompatImageView(getContext());
         if (badgeView == null)
             badgeView = new BadgeView(getContext());
 
@@ -97,9 +96,9 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
     private void setupViews() {
         if (isDarkTheme)
-            imageView.setImageDrawable(darkSelectedIcon);
+            imageView.setImageResource(darkSelectedIcon);
         else
-            imageView.setImageDrawable(selectedIcon);
+            imageView.setImageResource(selectedIcon);
 
 
         if (position == bottomNavigation.getDefaultItem())
@@ -112,15 +111,10 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.TabItem);
 
             try {
-                int selectedIv = typedArray.getResourceId(R.styleable.TabItem_selected_icon, -1);
-                int unSelectedIv = typedArray.getResourceId(R.styleable.TabItem_unselected_icon, -1);
-                int darkSelectedIv = typedArray.getResourceId(R.styleable.TabItem_dark_selected_icon, -1);
-                int darkUnSelectedIv = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
-
-                selectedIcon = AppCompatResources.getDrawable(getContext(), selectedIv);
-                unSelectedIcon = AppCompatResources.getDrawable(getContext(), unSelectedIv);
-                darkSelectedIcon = AppCompatResources.getDrawable(getContext(), darkSelectedIv);
-                darkUnSelectedIcon = AppCompatResources.getDrawable(getContext(), darkUnSelectedIv);
+                selectedIcon = typedArray.getResourceId(R.styleable.TabItem_selected_icon, -1);
+                unSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_unselected_icon, -1);
+                darkSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_selected_icon, -1);
+                darkUnSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
 
             } finally {
                 typedArray.recycle();
@@ -149,15 +143,15 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
         if (isDarkTheme) {
             if (active) {
-                imageView.setImageDrawable(darkSelectedIcon);
+                imageView.setImageResource(darkSelectedIcon);
             } else {
-                imageView.setImageDrawable(darkUnSelectedIcon);
+                imageView.setImageResource(darkUnSelectedIcon);
             }
         } else {
             if (active) {
-                imageView.setImageDrawable(selectedIcon);
+                imageView.setImageResource(selectedIcon);
             } else {
-                imageView.setImageDrawable(unSelectedIcon);
+                imageView.setImageResource(unSelectedIcon);
             }
         }
 

@@ -27,7 +27,7 @@
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp18"
                 android:text="@string/total"
-                android:textSize="@dimen/dp16"
+                android:textSize="@dimen/largeTextSize"
                 android:textStyle="bold" />
 
 
@@ -48,7 +48,7 @@
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
-                    android:textSize="@dimen/dp14"
+                    android:textSize="@dimen/standardTextSize"
                     android:text="@string/total_sent" />
 
 
@@ -57,6 +57,7 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/smallTextSize"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/dp20"
@@ -87,7 +88,7 @@
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
-                    android:textSize="@dimen/dp14"
+                    android:textSize="@dimen/standardTextSize"
                     android:text="@string/total_received" />
 
 
@@ -97,6 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textSize="@dimen/smallTextSize"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:text="2489" />

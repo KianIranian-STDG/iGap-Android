@@ -2,14 +2,11 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -19,6 +16,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
@@ -79,6 +77,7 @@ public class ChatCell extends ConstraintLayout {
         FontIconTextView chatIcon = new FontIconTextView(G.context);
         chatIcon.setId(R.id.tv_chatCell_chatIcon);
         chatIcon.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : Color.parseColor("#333333"));
+        setTextSize(chatIcon,R.dimen.standardTextSize);
         addView(chatIcon);
 
 
@@ -89,6 +88,7 @@ public class ChatCell extends ConstraintLayout {
         roomName.setId(R.id.tv_chatCell_roomName);
         setTypeFace(roomName);
         roomName.setEllipsize(TextUtils.TruncateAt.END);
+        setTextSize(roomName, R.dimen.standardTextSize);
         roomName.setSingleLine(true);
         roomName.setEmojiSize(i_Dp(R.dimen.dp16));
         roomName.setTextColor(isDarkTheme ? getResources().getColor(R.color.white) : G.context.getResources().getColor(R.color.black90));
@@ -102,6 +102,7 @@ public class ChatCell extends ConstraintLayout {
         verify.setId(R.id.tv_chatCell_verify);
         verify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
         verify.setText("a");
+        setTextSize(verify, R.dimen.standardTextSize);
         addView(verify);
 
 
@@ -173,6 +174,7 @@ public class ChatCell extends ConstraintLayout {
         FontIconTextView messageStatus = new FontIconTextView(G.context);
         messageStatus.setId(R.id.iv_chatCell_messageStatus);
         messageStatus.setTextSize(20);
+        setTextSize(messageStatus,R.dimen.standardTextSize);
         addView(messageStatus);
 
 
@@ -204,7 +206,6 @@ public class ChatCell extends ConstraintLayout {
         bottomView.setId(R.id.v_chatCell_bottomView);
         bottomView.setBackgroundColor(isDarkTheme ? getResources().getColor(R.color.gray_6c) : getResources().getColor(R.color.gray_300));
         addView(bottomView);
-
 
 
         /**
@@ -252,7 +253,6 @@ public class ChatCell extends ConstraintLayout {
 
         set.connect(messageData.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
         set.connect(messageData.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
-
 
 
         set.constrainHeight(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
@@ -303,7 +303,7 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(mute.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
-            set.connect(mute.getId(),ConstraintSet.LEFT,messageData.getId(),ConstraintSet.RIGHT, LayoutCreator.dp(4));
+            set.connect(mute.getId(), ConstraintSet.LEFT, messageData.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(4));
 
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
@@ -334,7 +334,7 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(mute.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
-            set.connect(mute.getId(),ConstraintSet.RIGHT,messageData.getId(),ConstraintSet.LEFT, LayoutCreator.dp(4));
+            set.connect(mute.getId(), ConstraintSet.RIGHT, messageData.getId(), ConstraintSet.LEFT, LayoutCreator.dp(4));
 
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
@@ -353,13 +353,11 @@ public class ChatCell extends ConstraintLayout {
         set.applyTo(this);
     }
 
-    private void setTextSize(TextView v, int sizeSrc) {
-        int mSize = i_Dp(sizeSrc);
-        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSize);
+    private void setTextSize(TextView textView, int pxSize) {
+        Utils.setTextSize(textView, pxSize);
     }
 
     private void setTypeFace(TextView v) {
         v.setTypeface(G.typeface_IRANSansMobile);
     }
-
 }

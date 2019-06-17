@@ -135,7 +135,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration.setText("3:48 (4.5 MB)");
             duration.setAllCaps(TRUE);
             duration.setTextColor(G.context.getResources().getColor(R.color.gray10));
-            setTextSize(duration, R.dimen.dp10);
+            setTextSize(duration, R.dimen.verySmallTextSize);
             setTypeFace(duration);
             FrameLayout.LayoutParams layout_49 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_49.gravity = Gravity.LEFT | Gravity.TOP;

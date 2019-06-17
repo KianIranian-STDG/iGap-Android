@@ -231,6 +231,7 @@ import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.IntentRequests;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
@@ -709,6 +710,24 @@ public class FragmentChat extends BaseFragment
         else
             chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
         sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
+
+        /**
+         * init chat box edit text and send item because we need change this color in dark mode!
+         * */
+
+        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
+        imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
+
+        if (G.isDarkTheme) {
+            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));
+            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext_dark));
+            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(),R.color.white));
+        } else {
+            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));
+            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
+            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(),R.color.gray_4c));
+        }
+
         return attachToSwipeBack(rootView);
     }
 
@@ -2732,7 +2751,6 @@ public class FragmentChat extends BaseFragment
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
 
-        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         edtChat.requestFocus();
 
         edtChat.setOnClickListener(new View.OnClickListener() {
@@ -2747,13 +2765,6 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
-
-        if (G.isDarkTheme) {
-            imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
-        } else {
-            imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
-        }
 
         imvAttachFileButton = rootView.findViewById(R.id.vtn_chatRoom_attach);
         layoutAttachBottom = rootView.findViewById(R.id.ll_chatRoom_send);
@@ -7154,7 +7165,10 @@ public class FragmentChat extends BaseFragment
         if (rootView.findViewById(R.id.replayLayoutAboveEditText) == null) {
             ViewStubCompat stubView = rootView.findViewById(R.id.replayLayoutStub);
             stubView.setInflatedId(R.id.replayLayoutAboveEditText);
-            stubView.setLayoutResource(R.layout.layout_chat_reply);
+            if (G.isDarkTheme)
+                stubView.setLayoutResource(R.layout.layout_chat_reply_dark);
+            else
+                stubView.setLayoutResource(R.layout.layout_chat_reply);
             stubView.inflate();
 
             inflateReplayLayoutIntoStub(chatItem);
@@ -7162,13 +7176,13 @@ public class FragmentChat extends BaseFragment
             mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
+            Utils.darkModeHandler(replayTo);
             replayTo.setTypeface(G.typeface_IRANSansMobile);
             TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
             replayFrom.setTypeface(G.typeface_IRANSansMobile);
-            replayFrom.setTextColor(Color.parseColor(G.appBarColor));
 
-            ImageView imvReplayIcon = rootView.findViewById(R.id.lcr_imv_replay);
-            imvReplayIcon.setColorFilter(Color.parseColor(G.appBarColor));
+            FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
+            Utils.darkModeHandler(replayIcon);
 
             ImageView thumbnail = mReplayLayout.findViewById(R.id.thumbnail);
             TextView closeReplay = mReplayLayout.findViewById(R.id.cancelIcon);
@@ -8138,6 +8152,7 @@ public class FragmentChat extends BaseFragment
     private void manageForwardedMessage() {
         if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
             final LinearLayout ll_Forward = rootView.findViewById(R.id.ac_ll_forward);
+            Utils.darkModeHandlerGray(ll_Forward);
             int multiForwardSize = multiForwardList.size();
             if (hasForward || multiForwardSize > 0) {
 
@@ -8181,12 +8196,10 @@ public class FragmentChat extends BaseFragment
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = rootView.findViewById(R.id.cslhf_txt_message);
+                Utils.darkModeHandler(emMessage);
 
-                TextView txtForwardMessage = rootView.findViewById(R.id.cslhf_txt_forward_from);
-                txtForwardMessage.setTextColor(Color.parseColor(G.appBarColor));
-
-                ImageView imvForwardIcon = rootView.findViewById(R.id.cslhs_imv_forward);
-                imvForwardIcon.setColorFilter(Color.parseColor(G.appBarColor));
+                FontIconTextView forwardIcon = rootView.findViewById(R.id.cslhs_imv_forward);
+                Utils.darkModeHandler(forwardIcon);
 
                 if (HelperCalander.isPersianUnicode) {
 

@@ -40,7 +40,6 @@
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp4"
         android:textColor="@color/black"
-        android:textColorHint="@color/gray_4c"
         android:textSize="@dimen/dp16"
         app:emojiSize="@dimen/dp22"
         android:layout_margin="@dimen/dp8"
@@ -69,15 +68,15 @@
         style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="bottom|end|right"
+        android:gravity="center"
         android:padding="@dimen/dp8"
         android:text="@string/md_send_button"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textSize="@dimen/dp20"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ll_chatRoom_send" />
+        app:layout_constraintEnd_toStartOf="@+id/ll_chatRoom_send"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <LinearLayout

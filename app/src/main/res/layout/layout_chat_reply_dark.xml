@@ -3,7 +3,7 @@
     android:id="@+id/replayLayoutAboveEditText"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp52"
-    android:background="@color/bottomSheetHeaderLine"
+    android:background="@color/gray_4c"
     android:clickable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal">

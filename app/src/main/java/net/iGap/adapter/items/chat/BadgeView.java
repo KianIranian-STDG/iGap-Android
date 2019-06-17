@@ -13,6 +13,8 @@ import android.widget.TextView;
 import net.iGap.R;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
+import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;
+
 public class BadgeView extends FrameLayout {
     private TextView textView;
     private int badgeColor;
@@ -30,7 +32,7 @@ public class BadgeView extends FrameLayout {
         params.setMargins(Utils.dpToPx(4), 0, Utils.dpToPx(4), 0);
         textView.setLayoutParams(params);
         textView.setTextColor(getContext().getResources().getColor(R.color.white));
-        textView.setTextSize(10);
+        setTextSize(textView, R.dimen.dp10);
         addView(textView);
     }
 

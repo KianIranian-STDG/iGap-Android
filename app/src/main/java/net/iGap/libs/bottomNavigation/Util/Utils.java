@@ -2,11 +2,14 @@ package net.iGap.libs.bottomNavigation.Util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+
+import static net.iGap.G.context;
 
 public class Utils {
 
@@ -23,6 +26,14 @@ public class Utils {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.background_setting_dark));
         } else {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.white));
+        }
+    }
+
+    public static void darkModeHandlerGray(View view) {
+        if (G.isDarkTheme) {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_4c));
+        } else {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.bottomSheetHeaderLine));
         }
     }
 
@@ -45,5 +56,14 @@ public class Utils {
 
     public static int getScreenHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    public static void setTextSize(TextView textView, int sizeSrc) {
+        int mSize = getDimens(sizeSrc);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSize);
+    }
+
+    public static int getDimens(int dpSrc) {
+        return (int) context.getResources().getDimension(dpSrc);
     }
 }
