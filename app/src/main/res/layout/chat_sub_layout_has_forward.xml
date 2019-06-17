@@ -8,18 +8,18 @@
 
     <net.iGap.module.FontIconTextView
         android:id="@+id/cslhs_imv_forward"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="@dimen/dp8"
-        android:text="@string/reply_icon" />
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:textSize="@dimen/dp18"
+        android:text="@string/reply_icon"/>
 
   <ImageView
-    android:id="@+id/cslhf_imv_thumbnail"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:layout_marginRight="@dimen/dp4"
-      android:visibility="gone"
-    android:contentDescription="@null" />
+      android:id="@+id/cslhf_imv_thumbnail"
+      android:layout_width="35dp"
+      android:layout_height="35dp"
+      android:layout_marginRight="@dimen/dp4"
+      android:contentDescription="@null"
+      android:visibility="gone" />
 
   <LinearLayout
     android:layout_width="0dp"
@@ -35,9 +35,10 @@
       android:ellipsize="end"
       android:maxLines="1"
       android:singleLine="true"
+      android:layout_marginTop="@dimen/dp4"
       android:text="@string/forward_message"
       android:textColor="@color/green"
-      android:textSize="@dimen/dp14"
+      android:textSize="@dimen/dp12"
       android:textStyle="bold" />
 
     <net.iGap.module.EmojiTextViewE
@@ -45,21 +46,24 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:ellipsize="end"
+      android:layout_marginBottom="@dimen/dp4"
       android:maxLines="1"
       android:singleLine="true"
       android:text="message"
-      android:textSize="@dimen/dp12" />
+      android:textSize="@dimen/dp10" />
   </LinearLayout>
 
   <net.iGap.module.MaterialDesignTextView
     android:id="@+id/cslhf_imv_cansel"
-    android:layout_width="@dimen/dp40"
-    android:layout_height="match_parent"
-    android:background="@null"
-    android:gravity="center"
-    android:text="@string/md_close_button"
-    android:textAppearance="@style/TextIconAppearance.all"
-    android:textColor="@color/gray_3c" />
+      android:layout_width="@dimen/dp40"
+      android:layout_height="match_parent"
+      android:layout_marginLeft="@dimen/dp2"
+      android:layout_marginRight="@dimen/dp2"
+      android:gravity="center"
+      android:textSize="@dimen/dp18"
+      android:text="@string/md_close_button"
+      android:textColor="@color/gray_3c"
+      android:textAppearance="@style/TextIconAppearance.all"  />
 
 
 </LinearLayout>
