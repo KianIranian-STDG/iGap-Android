@@ -1,12 +1,12 @@
 package net.iGap.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,14 +92,14 @@ public class TwoStepVerificationFragment extends BaseFragment {
         //ToDo:
         if (getActivity() != null) {
             viewModel.goToMainPage.observe(getActivity(), go -> {
-                if (getActivity() != null && go != null && go) {
-                    new DefaultRoundDialog(getActivity()).setTitle(R.string.warning).setMessage(R.string.two_step_verification_disable).setPositiveButton(R.string.dialog_ok, (dialog, which) -> {
-                        Intent intent = new Intent(getActivity(), ActivityMain.class);
-                        intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, viewModel.userId);
-                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
-                        getActivity().finish();
-                    }).show();
+                if (getActivity() != null && go != null) {
+                    if (go) {
+                        goMainPage(getActivity());
+                    } else {
+                        new DefaultRoundDialog(getActivity()).setTitle(R.string.warning).setMessage(R.string.two_step_verification_disable).setPositiveButton(R.string.dialog_ok, (dialog, which) -> {
+                            goMainPage(getActivity());
+                        }).show();
+                    }
                 }
             });
         }
@@ -157,5 +157,13 @@ public class TwoStepVerificationFragment extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragmentSecurityRecovery).setResourceContainer(R.id.ar_layout_root).setAddToBackStack(true).load(false);
             }
         });
+    }
+
+    private void goMainPage(FragmentActivity activity) {
+        Intent intent = new Intent(getActivity(), ActivityMain.class);
+        intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, viewModel.userId);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+        activity.finish();
     }
 }
