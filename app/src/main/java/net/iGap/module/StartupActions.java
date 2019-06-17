@@ -57,6 +57,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import ir.radsense.raadcore.Raad;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
@@ -521,16 +522,22 @@ public final class StartupActions {
                 selectedLanguage = "fa";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
                 break;
             case "English":
                 selectedLanguage = "en";
                 HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
+                Raad.language = selectedLanguage;
+                Raad.isFA = false;
                 break;
             case "العربی":
                 selectedLanguage = "ar";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
                 break;
         }
 
