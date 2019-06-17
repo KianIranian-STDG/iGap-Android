@@ -163,12 +163,14 @@ public class BaseFragment extends SwipeBackFragment {
 
     public void popBackStackFragment() {
         try {
-            if (!G.fragmentActivity.isFinishing()) {
-                G.fragmentActivity.getSupportFragmentManager().popBackStack();
-            }
+            if (getActivity()!=null) {
+                if (!getActivity().isFinishing()) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
 
-            if (G.iTowPanModDesinLayout != null) {
-                G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                }
             }
         } catch (Exception empty) {
             empty.printStackTrace();
