@@ -139,7 +139,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private RecyclerView recyclerView;
     private RecyclerView.OnScrollListener onScrollListener;
     private mAdapter adapter;
-    private AppBarLayout appBarLayout;
     private OnComplete complete;
     private ProgressBar progressBar;
     private Realm realmShearedMedia;
@@ -294,7 +293,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         progressBar = (ProgressBar) view.findViewById(R.id.asm_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
 
-        appBarLayout = (AppBarLayout) view.findViewById(R.id.asm_appbar_shared_media);
         mediaTypesLayout = view.findViewById(R.id.asm_ll_media_types_buttons);
 
         view.findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
@@ -1705,7 +1703,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 bundle.putLong("SelectedImage", selectedFileToken);
                 bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
                 fragment.setArguments(bundle);
-                fragment.appBarLayout = appBarLayout;
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         }
