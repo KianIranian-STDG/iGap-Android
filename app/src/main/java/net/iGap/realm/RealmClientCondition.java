@@ -229,7 +229,7 @@ public class RealmClientCondition extends RealmObject {
              */
             RealmQuery<RealmClientCondition> conditionQuery = realm.where(RealmClientCondition.class);
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
-                conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId()).or();
+                conditionQuery.or().equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId());
             }
             clientConditionList = conditionQuery.findAll();
         }
