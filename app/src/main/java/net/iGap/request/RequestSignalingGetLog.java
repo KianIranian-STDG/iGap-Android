@@ -30,4 +30,21 @@ public class RequestSignalingGetLog {
             e.printStackTrace();
         }
     }
+
+    public void signalingGetLog(int offset, int limit , ProtoSignalingGetLog.SignalingGetLog.Filter status) {
+
+        ProtoSignalingGetLog.SignalingGetLog.Builder builder = ProtoSignalingGetLog.SignalingGetLog.newBuilder();
+        ProtoGlobal.Pagination.Builder pagination = ProtoGlobal.Pagination.newBuilder();
+        pagination.setOffset(offset);
+        pagination.setLimit(limit);
+        builder.setPagination(pagination);
+        builder.setFilter(status);
+
+        RequestWrapper requestWrapper = new RequestWrapper(907, builder);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 }
