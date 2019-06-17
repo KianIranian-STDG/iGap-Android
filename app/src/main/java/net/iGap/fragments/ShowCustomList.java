@@ -223,9 +223,16 @@ public class ShowCustomList extends BaseFragment {
                 // chip added
                 // newSize is the size of the updated selected chip list
 
-                notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
-                isRemove = false;
+                try {
 
+                    if (chip != null) {
+                        notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
+                        isRemove = false;
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -384,5 +391,19 @@ public class ShowCustomList extends BaseFragment {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+
+        //this code added for close chips layout
+        if (chipsInput != null ) {
+            try {
+                chipsInput.addChip("" , "" );
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        super.onPause();
     }
 }
