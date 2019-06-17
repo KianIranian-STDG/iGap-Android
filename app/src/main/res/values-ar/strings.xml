@@ -2826,5 +2826,6 @@
     <string name="size">Size</string>
     <string name="copy_link_title">انسخ الرابط</string>
     <string name="location_dialog_message">هل تريد استخدام موقعك؟</string>
+    <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
 
 </resources>

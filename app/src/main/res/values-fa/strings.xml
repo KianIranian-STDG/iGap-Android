@@ -1879,5 +1879,8 @@
     <string name="size">اندازه</string>
     <string name="copy_link_title">کپی لینک</string>
     <string name="location_dialog_message">آیا می خواهید از موقیعت مکانی شما استفاده شود؟</string>
+    <string name="recent_action">اقدامات اخیر</string>
+    <string name="sign_channel_message_description">اسامی مدیران را به پیامهایی که ارسال کرده اید اضافه کنید.</string>
+    <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
 
 </resources>
