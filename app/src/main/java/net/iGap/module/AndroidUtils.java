@@ -33,6 +33,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperLog;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -598,6 +599,7 @@ public final class AndroidUtils {
             activityClass = G.currentActivity.getClass();
             context = G.currentActivity.getBaseContext();
         } else {
+            HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning1"));
             return false;
         }
 
@@ -608,6 +610,7 @@ public final class AndroidUtils {
                 return true;
             }
         }
+        HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning2"));
         return false;
     }
 
