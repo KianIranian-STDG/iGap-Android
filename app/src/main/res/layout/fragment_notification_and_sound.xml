@@ -113,13 +113,13 @@
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dp16"
+            android:paddingBottom="@dimen/dp12"
             android:paddingTop="@dimen/dp12"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp12"
+            android:paddingRight="@dimen/dp12"
             android:text="@string/st_title_messageNotification"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="normal" />
 
 
@@ -143,7 +143,7 @@
               android:gravity="center_vertical|start"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_alert"
-              android:textSize="@dimen/dp16"
+              android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -183,7 +183,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_messagePreview"
-              android:textSize="@dimen/dp16"
+              android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -218,14 +218,14 @@
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_led_color"
-              android:textSize="@dimen/dp16"
+              android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
 
             <ImageView
               android:id="@+id/stns_img_ledColorMessage"
-              android:layout_width="@dimen/dp24"
-              android:layout_height="@dimen/dp24"
+              android:layout_width="@dimen/dp16"
+              android:layout_height="@dimen/dp16"
               android:layout_gravity="center_vertical"
               android:layout_marginLeft="@dimen/dp16"
               android:layout_marginRight="@dimen/dp16"
@@ -249,7 +249,7 @@
               android:layout_height="wrap_content"
               android:layout_centerVertical="true"
               android:text="@string/st_vibrate"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -262,7 +262,7 @@
               android:layout_alignParentEnd="true"
               android:layout_alignParentRight="true"
               android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateMessage , default=@string/array_Default}"
-              android:textSize="@dimen/dp13"
+                android:textSize="@dimen/smallTextSize"
               android:textColor="@color/setting_items_value_color"
               android:textStyle="normal" />
 
@@ -283,7 +283,7 @@
               android:layout_height="wrap_content"
               android:gravity="center_vertical"
               android:text="@string/st_popupNotification"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:layout_centerVertical="true"
               android:textStyle="normal" />
 
@@ -297,7 +297,7 @@
               android:layout_alignParentRight="true"
               android:layout_alignParentEnd="true"
               android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationMessage , default=@string/st_sound}"
-              android:textSize="@dimen/dp13"
+              android:textSize="@dimen/smallTextSize"
               android:textColor="@color/setting_items_value_color"
               android:textStyle="normal" />
 
@@ -318,7 +318,7 @@
               android:layout_height="wrap_content"
               android:layout_centerVertical="true"
               android:text="@string/st_sound"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -331,7 +331,7 @@
               android:layout_alignParentRight="true"
               android:layout_centerVertical="true"
               android:text="@{FragmentNotificationAndSoundViewModel.callbackSoundMessage , default = @string/st_sound}"
-              android:textSize="@dimen/dp13"
+              android:textSize="@dimen/smallTextSize"
               android:textColor="@color/setting_items_value_color"
               android:textStyle="normal" />
 
@@ -360,13 +360,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginRight="@dimen/dp16"
-            android:paddingBottom="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp12"
+            android:paddingBottom="@dimen/dp12"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_groupNotification"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+              android:textSize="@dimen/largeTextSize"
             android:textStyle="normal" />
 
           <LinearLayout
@@ -390,7 +390,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_alert"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -426,7 +426,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_messagePreview"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -459,13 +459,13 @@
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_led_color"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <ImageView
               android:id="@+id/stns_img_ledColor_group"
-              android:layout_width="@dimen/dp24"
-              android:layout_height="@dimen/dp24"
+              android:layout_width="@dimen/dp16"
+              android:layout_height="@dimen/dp16"
               android:layout_gravity="center_vertical"
               android:layout_marginLeft="@dimen/dp16"
               android:layout_marginRight="@dimen/dp16"
@@ -490,7 +490,7 @@
               android:layout_height="wrap_content"
               android:layout_centerVertical="true"
               android:text="@string/st_vibrate"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -503,7 +503,7 @@
               android:layout_alignParentRight="true"
               android:layout_alignParentEnd="true"
               android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateGroup , default=@string/array_Default}"
-              android:textSize="@dimen/dp13"
+              android:textSize="@dimen/smallTextSize"
               android:textColor="@color/setting_items_value_color"
               android:textStyle="normal" />
 
@@ -524,7 +524,7 @@
               android:layout_height="wrap_content"
               android:layout_centerVertical="true"
               android:text="@string/st_popupNotification"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -538,7 +538,7 @@
               android:layout_alignParentRight="true"
               android:textColor="@color/setting_items_value_color"
               android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationGroup,default = @string/st_sound}"
-              android:textSize="@dimen/dp13"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal" />
 
           </RelativeLayout>
@@ -558,7 +558,7 @@
               android:layout_height="wrap_content"
               android:layout_centerVertical="true"
               android:text="@string/st_sound"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -569,6 +569,7 @@
               android:layout_height="wrap_content"
               android:layout_alignParentRight="true"
               android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
               android:textColor="@color/setting_items_value_color"
               android:text="@{FragmentNotificationAndSoundViewModel.callBackSoundGroup , default =@string/st_sound}"
               android:textSize="@dimen/dp13"
@@ -600,13 +601,13 @@
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginRight="@dimen/dp16"
-            android:paddingBottom="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp12"
+            android:paddingBottom="@dimen/dp12"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_in_app_notification"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+              android:textSize="@dimen/largeTextSize"
             android:textStyle="normal" />
 
 
@@ -631,7 +632,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_in_app_sound"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -671,7 +672,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_in_app_vibrate"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -711,7 +712,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_in_app_preview"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -749,7 +750,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_in_chat_sound"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -890,13 +891,13 @@
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp12"
+            android:paddingLeft="@dimen/dp12"
             android:paddingTop="@dimen/dp12"
-            android:paddingBottom="@dimen/dp16"
+            android:paddingBottom="@dimen/dp12"
             android:text="@string/st_title_other"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+              android:textSize="@dimen/largeTextSize"
             android:textStyle="normal" />
 
           <LinearLayout
@@ -920,7 +921,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/separate_notifications"
-              android:textSize="@dimen/dp16"
+              android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -946,7 +947,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingStart="@dimen/dp16"
             android:text="@string/st_keep_alive_service"
-            android:textSize="@dimen/dp16"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
 
@@ -974,7 +975,7 @@
                 android:paddingEnd="@dimen/dp10"
               android:paddingTop="@dimen/dp1"
               android:text="@string/st_text_keep_alive_service"
-              android:textSize="@dimen/dp13"
+                android:textSize="@dimen/smallTextSize"
               android:textStyle="normal" />
 
             <net.iGap.module.CustomToggleButton
@@ -1148,7 +1149,7 @@
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_reset"
             style="?textTitleColorSettingTheme"
-            android:textSize="@dimen/dp16"
+              android:textSize="@dimen/standardTextSize"
             android:textStyle="normal" />
 
           <LinearLayout
@@ -1166,7 +1167,7 @@
               android:layout_height="wrap_content"
               android:gravity="center_vertical"
               android:text="@string/st_reset_all_notification"
-              android:textSize="@dimen/dp16"
+                android:textSize="@dimen/standardTextSize"
               android:textStyle="normal" />
 
             <TextView
@@ -1176,7 +1177,7 @@
               android:layout_height="wrap_content"
               android:gravity="center_vertical|top"
               android:text="@string/st_text_reset_all_notification"
-              android:textSize="@dimen/dp13"
+              android:textSize="@dimen/smallTextSize"
               android:textStyle="normal" />
 
           </LinearLayout>
