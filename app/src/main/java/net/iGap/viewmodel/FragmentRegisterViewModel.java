@@ -1278,6 +1278,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         BotInit.setCheckDrIgap(true);
 
                         if (newUser) {
+                            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {

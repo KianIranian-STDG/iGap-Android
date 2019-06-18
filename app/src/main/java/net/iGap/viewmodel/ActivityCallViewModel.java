@@ -160,10 +160,12 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
         getInfo();
 
-        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTING);
-        } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTING);
+        if (G.userLogin) {
+            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTING);
+            } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTING);
+            }
         }
     }
 

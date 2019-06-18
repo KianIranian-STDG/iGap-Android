@@ -326,7 +326,6 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
         }
 
         if (isNeedCloseActivity) {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
             Intent intent = new Intent(getContext(), ActivityMain.class);
             intent.putExtra(ARG_USER_ID, userId);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
