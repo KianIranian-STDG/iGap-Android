@@ -47,6 +47,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -682,6 +683,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         btnAddNewContact.setOnClickListener(this::onRightIconClickListener);
 
         mBtnDeleteSelected.setOnClickListener(v -> {
+
+            if (selectedList.size() == 0 ){
+                Toast.makeText(context, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
