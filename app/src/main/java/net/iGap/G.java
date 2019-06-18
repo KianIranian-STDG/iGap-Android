@@ -532,14 +532,6 @@ public class G extends MultiDexApplication {
         updateResources(getBaseContext());
     }
 
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_track);
-        }
-        return mTracker;
-    }
-
     public static void showToast(String message){
         G.handler.post(() -> Toast.makeText(G.context, message, Toast.LENGTH_SHORT).show());
     }
