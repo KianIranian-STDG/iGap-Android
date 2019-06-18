@@ -33,7 +33,7 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/dp10"
                 android:visibility="visible"
-                app:layout_scrollFlags="scroll|snap">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
                 <LinearLayout

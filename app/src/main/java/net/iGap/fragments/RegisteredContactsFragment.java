@@ -720,7 +720,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         //that was multi select remove it and show at top in selected mode
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) layoutAppBarContainer.getLayoutParams();
         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+                | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
         layoutAppBarContainer.setLayoutParams(params);
 
         if (mode == 0 || mode == 1) { //contact mode
