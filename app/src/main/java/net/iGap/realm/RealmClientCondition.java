@@ -228,8 +228,15 @@ public class RealmClientCondition extends RealmObject {
              * it is better that client just create RealmClientCondition for rooms that need really.
              */
             RealmQuery<RealmClientCondition> conditionQuery = realm.where(RealmClientCondition.class);
-            for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
-                conditionQuery.or().equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId());
+            // Important Note : checking size 1 is very important
+            if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll().size() > 1) {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
+                    conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId()).or();
+                }
+            } else {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
+                    conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId());
+                }
             }
             clientConditionList = conditionQuery.findAll();
         }
