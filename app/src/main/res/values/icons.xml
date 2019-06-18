@@ -225,4 +225,5 @@
     <string name="attach_icon">o</string>
     <string name="voice_not_downloaded_icon">å</string>
     <string name="music_icon">J</string>
+    <string name="retry_icon">^</string>
 </resources>
