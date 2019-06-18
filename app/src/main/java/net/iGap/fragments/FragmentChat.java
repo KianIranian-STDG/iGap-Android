@@ -1059,7 +1059,7 @@ public class FragmentChat extends BaseFragment
 
         if (isCloudRoom) {
             mHelperToolbar.getCloudChatIcon().setVisibility(View.VISIBLE);
-            mHelperToolbar.getCloudChatIcon().setImageDrawable(G.context.getResources().getDrawable(R.drawable.ic_cloud_space_blue));
+            mHelperToolbar.getCloudChatIcon().setImageResource(R.drawable.ic_cloud_space_blue);
 
             mHelperToolbar.getUserAvatarChat().setVisibility(View.GONE);
         } else {
