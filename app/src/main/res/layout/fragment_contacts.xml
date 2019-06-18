@@ -373,6 +373,8 @@
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp8"
+                    android:paddingRight="@dimen/dp8"
                     android:paddingBottom="@dimen/dp6"
                     android:visibility="gone" />
 
