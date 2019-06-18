@@ -71,6 +71,10 @@ public class RaadApp {
 //            Tapstream.create(this, config);
 //        }
 //        Fabric.with(this, new Crashlytics());
+
+        //don't remove two line below this value are temporarily
+        Raad.language = "fa";
+        Raad.isFA = true;
         WebBase.apiKey = Web.API_KEY;
         WebBase.isDebug = false;
         WebBase.onResponseListener = new OnWebResponseListener() {
