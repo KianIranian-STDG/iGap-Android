@@ -574,6 +574,7 @@
                         android:layout_marginTop="@dimen/dp12"
                         android:background="@drawable/circle_mic"
                         android:gravity="center"
+                        style="@style/myIconTextViewStyle"
                         android:text="@string/md_downwards_arrow"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:textColor="@color/white" />
