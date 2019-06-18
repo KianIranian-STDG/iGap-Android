@@ -401,7 +401,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             coverIv = new CircleImageView(getContext());
             coverIv.setId(R.id.iv_musicItem_cover);
             coverIv.setBorderColor(0);
-            coverIv.setImageDrawable(getDrawable(R.drawable.ic_music_cover_blue));
+            coverIv.setImageResource(R.drawable.ic_music_cover_blue);
 
             set.constrainWidth(coverIv.getId(), dpToPx(45));
             set.constrainHeight(coverIv.getId(), dpToPx(45));
