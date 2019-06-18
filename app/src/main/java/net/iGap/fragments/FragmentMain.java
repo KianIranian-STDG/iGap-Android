@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -1146,7 +1147,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
                 if (isMyCloud) {
 
-                    holder.avatarIv.setImageDrawable(G.context.getResources().getDrawable(R.drawable.ic_cloud_space_blue));
+                    holder.avatarIv.setImageResource(R.drawable.ic_cloud_space_blue);
 
                 } else {
                     if (holder.avatarIv.getVisibility() == View.GONE) {
