@@ -18,6 +18,8 @@
     android:layout_height="match_parent"
     style="?backgroundSubChatTheme"
       android:scrollbars="none"
+      android:paddingTop="@dimen/dp20"
+      android:clipToPadding="true"
       android:paddingRight="@dimen/dp16"
       android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_shared_media"
     android:paddingLeft="@dimen/dp16" />
