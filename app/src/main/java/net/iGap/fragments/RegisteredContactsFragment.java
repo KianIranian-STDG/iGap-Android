@@ -23,6 +23,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
@@ -57,6 +58,7 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.decoration.DashDivider;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
@@ -110,7 +112,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public boolean isLongClick = false;
     public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
     protected ArrayMap<Long, Boolean> selectedList = new ArrayMap<>();
-    StickyRecyclerHeadersDecoration decoration;
+    /*StickyRecyclerHeadersDecoration decoration;*/
     RealmResults<RealmContacts> results;
     boolean isMultiSelect = false;
     AdapterListContact adapterListContact;
@@ -146,7 +148,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private View view;
     private boolean isInit = false;
     private LinearLayout layoutAppBarContainer;
-    private boolean isContact ;
+    private boolean isContact;
 
     public static RegisteredContactsFragment newInstance(boolean isBackSwipable) {
         RegisteredContactsFragment registeredContactsFragment = new RegisteredContactsFragment();
@@ -239,7 +241,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         boolean isSwipe = false;
         if (getArguments() != null) {
-            isSwipe = getArguments().getBoolean("isBackSwipable" ,false) ;
+            isSwipe = getArguments().getBoolean("isBackSwipable", false);
         }
         if (isSwipe) {
             return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
@@ -266,17 +268,17 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 .setSearchBoxShown(true)
                 .setLogoShown(true);
 
-        Bundle bundle =getArguments();
+        Bundle bundle = getArguments();
 
         //in contact mode user dont set swipeable or is false
         //for replace back btn instead of edit in every mode except contact use it
         if (bundle != null) {
-            isContact = !bundle.getBoolean("isBackSwipable" , true);
-        }else {
-            isContact = true ;
+            isContact = !bundle.getBoolean("isBackSwipable", true);
+        } else {
+            isContact = true;
         }
 
-        if(!isContact){
+        if (!isContact) {
             mHelperToolbar.setLeftIcon(R.string.back_icon);
         }
 
@@ -321,7 +323,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         prgWaitingLoadContact = view.findViewById(R.id.prgWaitingLoadContact);
 
 
-        vgInviteFriend =  view.findViewById(R.id.menu_layout_inviteFriend);
+        vgInviteFriend = view.findViewById(R.id.menu_layout_inviteFriend);
      /*   LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
@@ -456,10 +458,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             }
         });
 
-        realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        realmRecyclerView = view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
-        realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
+        realmRecyclerView.setLayoutManager(new LinearLayoutManager(realmRecyclerView.getContext()));
         realmRecyclerView.setNestedScrollingEnabled(false);
 
         results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
@@ -510,9 +512,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         //    }
         //});
 
-        StickyHeader stickyHeader = new StickyHeader(results);
-        decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
-        realmRecyclerView.addItemDecoration(decoration);
+        realmRecyclerView.addItemDecoration(new DashDivider.Builder(getContext()).dashGap((int) getResources().getDimension(R.dimen.dp6))
+                .dashLength((int) getResources().getDimension(R.dimen.dp2))
+                .orientation(LinearLayoutManager.HORIZONTAL)
+                .dashThickness((int) getResources().getDimension(R.dimen.dp2))
+                .color(ContextCompat.getColor(getContext(), R.color.gray))
+                .textColor(ContextCompat.getColor(getContext(), R.color.light_gray))
+                .textSize(getResources().getDimension(R.dimen.dp16))
+                .build());
 
 //        realmRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(G.fragmentActivity, realmRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
 //            @Override
@@ -1086,10 +1093,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         }
 
         realmRecyclerView.setAdapter(new ContactListAdapter(results));
-
-        realmRecyclerView.removeItemDecoration(decoration);
-        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(results));
-        realmRecyclerView.addItemDecoration(decoration);
     }
 
     @Override //btn add
@@ -1147,8 +1150,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             usersList = realmResults;
         }
 
+        @NotNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
 
             View v;
             if (mPageMode == 2) {//call mode
@@ -1160,15 +1164,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
             if (getData() != null && count != getData().size()) {
                 count = getData().size();
-
-                realmRecyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        realmRecyclerView.removeItemDecoration(decoration);
-                        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(getData().sort(RealmContactsFields.DISPLAY_NAME)));
-                        realmRecyclerView.addItemDecoration(decoration);
-                    }
-                });
             }
 
             if (mPageMode == 2)
@@ -1178,7 +1173,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         }
 
         @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int i) {
+        public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int i) {
 
             if (holder instanceof ViewHolder) {
 
@@ -1275,6 +1270,18 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             } else if (viewHolder instanceof ViewHolderCall) {
                 ViewHolderCall holder = (ViewHolderCall) viewHolder;
                 avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
+            }
+        }
+
+        public String getItemCharacter(int position) {
+            return String.valueOf(usersList.get(position).getDisplay_name().toUpperCase().charAt(0));
+        }
+
+        public boolean showCharacter(int position) {
+            if (position > 0) {
+                return usersList.get(position).getDisplay_name().toUpperCase().charAt(0) != usersList.get(position - 1).getDisplay_name().toUpperCase().charAt(0);
+            } else {
+                return true;
             }
         }
 
