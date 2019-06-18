@@ -65,8 +65,13 @@ public class HelperTracker {
 
             FirebaseAnalytics.getInstance(G.context).logEvent(action, null);
 
-            Tracker mTracker = ((G) G.currentActivity.getApplication()).getDefaultTracker();
-            mTracker.send(new HitBuilders.EventBuilder(category, action).build());
+            if (G.currentActivity != null){
+                Tracker mTracker = ((G) G.currentActivity.getApplication()).getDefaultTracker();
+                mTracker.send(new HitBuilders.EventBuilder(category, action).build());
+            } else if (G.fragmentActivity != null) {
+                Tracker mTracker = ((G) G.fragmentActivity.getApplication()).getDefaultTracker();
+                mTracker.send(new HitBuilders.EventBuilder(category, action).build());
+            }
         }
     }
 }
