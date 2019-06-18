@@ -2831,5 +2831,6 @@
     <string name="incoming">Incoming</string>
     <string name="canceled">Canceled</string>
     <string name="outgoing">Outgoing</string>
+    <string name="no_item_selected">No item selected.</string>
 
 </resources>
