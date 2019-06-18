@@ -9,7 +9,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"
-        style="?emojiChat"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
@@ -50,7 +50,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_botAction"
-        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
@@ -65,7 +65,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/btn_chatRoom_send"
-        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -91,7 +91,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_wallet"
-            style="?emojiChat"
+            style="@style/myIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -102,7 +102,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
-            style="?emojiChat"
+            style="@style/myIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -113,7 +113,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_mic"
-            style="?emojiChat"
+            style="@style/myIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
