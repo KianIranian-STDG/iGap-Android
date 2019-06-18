@@ -10,14 +10,18 @@
 
 package net.iGap.helper;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 
 public class HelperTracker {
+
+    private static Tracker mTracker;
 
     private static final String CATEGORY_SETTING = "Setting@";
     private static final String CATEGORY_COMMUNICATION = "Communication@";
@@ -50,6 +54,15 @@ public class HelperTracker {
     public static final String TRACKER_NEARBY_PAGE = CATEGORY_DISCOVERY + "TRACKER_NEARBY_PAGE";
     public static final String TRACKER_FINANCIAL_SERVICES = CATEGORY_DISCOVERY + "TRACKER_FINANCIAL_SERVICES";
 
+
+    synchronized private static Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(G.context);
+            mTracker = analytics.newTracker(R.xml.global_track);
+        }
+        return mTracker;
+    }
+
     public static void sendTracker(String trackerTag) {
 
         boolean allowSendTracker = true;
@@ -64,14 +77,7 @@ public class HelperTracker {
             String action = tracker[1];
 
             FirebaseAnalytics.getInstance(G.context).logEvent(action, null);
-
-            if (G.currentActivity != null){
-                Tracker mTracker = ((G) G.currentActivity.getApplication()).getDefaultTracker();
-                mTracker.send(new HitBuilders.EventBuilder(category, action).build());
-            } else if (G.fragmentActivity != null) {
-                Tracker mTracker = ((G) G.fragmentActivity.getApplication()).getDefaultTracker();
-                mTracker.send(new HitBuilders.EventBuilder(category, action).build());
-            }
+            getDefaultTracker().send(new HitBuilders.EventBuilder(category, action).build());
         }
     }
 }

@@ -417,7 +417,6 @@ public class G extends MultiDexApplication {
 
     public static OnCountryCode onCountryCode;
     //public static LocationListenerResponse locationListenerResponse;
-    private Tracker mTracker;
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {
@@ -525,13 +524,5 @@ public class G extends MultiDexApplication {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateResources(getBaseContext());
-    }
-
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_track);
-        }
-        return mTracker;
     }
 }
