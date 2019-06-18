@@ -4,6 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical"
+    android:layoutDirection="ltr"
   style="?backgroundColorSettingTheme_2"
   >
 
@@ -24,9 +25,10 @@
         android:layout_height="56dp"
         android:background="@null"
         android:gravity="center"
-        android:text="@string/md_play_rounded_button"
+          style="@style/myIconTextViewStyle"
+        android:text="@string/play_icon"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/green"
+        android:textColor="@color/toolbar_player_base_color"
         android:textSize="@dimen/dp36"
         android:visibility="visible" />
 
@@ -65,6 +67,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:text="@string/place"
+          android:visibility="gone"
         style="?textSubColorSettingTheme"
         android:textSize="@dimen/dp14" />
 

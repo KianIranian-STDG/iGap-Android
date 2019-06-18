@@ -111,14 +111,14 @@ public class FragmentMediaPlayerViewModel {
             public void complete(boolean result, String messageOne, final String MessageTow) {
 
                 if (messageOne.equals("play")) {
-                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.md_play_rounded_button));
+                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.play_icon));
 
                     if (rippleVisualizerView != null) {
                         rippleVisualizerView.setEnabled(false);
                         rippleVisualizerView.pauseVisualizer();
                     }
                 } else if (messageOne.equals("pause")) {
-                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.md_round_pause_button));
+                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.pause_icon));
 
                     if (rippleVisualizerView != null) {
                         rippleVisualizerView.setEnabled(true);
@@ -238,9 +238,9 @@ public class FragmentMediaPlayerViewModel {
 
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
-                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.md_round_pause_button));
+                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.pause_icon));
             } else {
-                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.md_play_rounded_button));
+                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.play_icon));
             }
 
             if (MusicPlayer.mediaThumpnail != null) {
@@ -270,16 +270,24 @@ public class FragmentMediaPlayerViewModel {
 
     private void setReplayButton() {
         if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.noRepeat.toString())) {
-            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.md_synchronization_arrows));
+            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
             btnReplayMusicColor.set(Color.GRAY);
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.repeatAll.toString())) {
-            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.md_synchronization_arrows));
-            btnReplayMusicColor.set(Color.BLACK);
+            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
+            if (G.isDarkTheme){
+                btnReplayMusicColor.set(Color.WHITE);
+            }else {
+                btnReplayMusicColor.set(Color.BLACK);
+            }
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.oneRpeat.toString())) {
-            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.md_synchronization_arrows));
-            btnReplayMusicColor.set(Color.BLACK);
+            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
+            if (G.isDarkTheme){
+                btnReplayMusicColor.set(Color.WHITE);
+            }else {
+                btnReplayMusicColor.set(Color.BLACK);
+            }
             imgRepeadOneVisibility.set(View.VISIBLE);
         }
     }
@@ -287,7 +295,11 @@ public class FragmentMediaPlayerViewModel {
     private void setShuffleButton() {
 
         if (MusicPlayer.isShuffelOn) {
-            btnShuffelMusicColor.set(Color.BLACK);
+            if (G.isDarkTheme){
+                btnShuffelMusicColor.set(Color.WHITE);
+            }else {
+                btnShuffelMusicColor.set(Color.BLACK);
+            }
         } else {
             btnShuffelMusicColor.set(Color.GRAY);
         }
@@ -296,7 +308,7 @@ public class FragmentMediaPlayerViewModel {
     private void setMusicInfo() {
 
         if (MusicPlayer.musicInfo.trim().length() > 0) {
-            txtMusicInfoVisibility.set(View.VISIBLE);
+            txtMusicInfoVisibility.set(View.GONE);//before was visible
             callBackTxtMusicInfo.set(MusicPlayer.musicInfo);
             //txt_musicInfo.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             //txt_musicInfo.setSelected(true);
