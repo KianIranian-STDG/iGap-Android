@@ -1993,7 +1993,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         private void playAudio(int position, RecyclerView.ViewHolder holder) {
 
-            VoiceAdapter.ViewHolder vh = (VoiceAdapter.ViewHolder) holder;
+            AudioAdapter.ViewHolder vh = (AudioAdapter.ViewHolder) holder;
 
             String name = mList.get(position).item.getAttachment().getName();
 
