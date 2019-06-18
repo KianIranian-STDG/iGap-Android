@@ -99,7 +99,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
     public static final String SELECTEDROLE = "SELECTED_ROLE";
     public static final String ISNEEDGETMEMBERLIST = "IS_NEED_GET_MEMBER_LIST";
     public static List<StructMessageInfo> lists = new ArrayList<>();
-    public static OnComplete infoUpdateListenerCount;
+    private OnComplete infoUpdateListenerCount;
     private static Fragment fragment;
     List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> listMembers = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
     List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> listMembersChannal = new ArrayList<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member>();
@@ -290,7 +290,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                     listMembers.clear();
                     for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
                         listMembers.add(member);
-                        new RequestUserInfo().userInfo(member.getUserId(), "" + member.getUserId());
+                        new RequestUserInfo().userInfoWithCallBack(infoUpdateListenerCount, member.getUserId(), "" + member.getUserId());
                     }
                 } else {
                     G.handler.post(new Runnable() {
@@ -321,7 +321,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                     listMembersChannal.clear();
                     for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
                         listMembersChannal.add(member);
-                        new RequestUserInfo().userInfo(member.getUserId(), "" + member.getUserId());
+                        new RequestUserInfo().userInfoWithCallBack(infoUpdateListenerCount, member.getUserId(), "" + member.getUserId());
                     }
                 } else {
                     G.handler.post(new Runnable() {
