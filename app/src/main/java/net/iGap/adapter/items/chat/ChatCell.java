@@ -44,6 +44,7 @@ public class ChatCell extends ConstraintLayout {
 
         ImageView pinView = new AppCompatImageView(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
+        pinView.setScaleType(ImageView.ScaleType.FIT_XY);
         if (isRtl) {
             pinView.setImageResource(isDarkTheme ? R.drawable.shape_pin_rtl_dark : R.drawable.shape_pin_rtl);
         } else {
