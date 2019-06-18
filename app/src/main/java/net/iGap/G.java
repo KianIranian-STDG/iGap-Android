@@ -421,7 +421,6 @@ public class G extends MultiDexApplication {
 
     /*public static OnCountryCode onCountryCode;*/
     //public static LocationListenerResponse locationListenerResponse;
-    private Tracker mTracker;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
 
