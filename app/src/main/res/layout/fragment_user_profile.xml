@@ -42,7 +42,7 @@
                         android:id="@+id/fup_bg_avatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="17dp"
                         android:contentDescription="@null"
                         android:scaleType="centerCrop"
                         android:src="@drawable/test_bg" />
