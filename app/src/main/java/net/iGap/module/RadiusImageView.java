@@ -4,10 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class RadiusImageView extends ImageView {
+public class RadiusImageView extends AppCompatImageView {
 
     public static float radius = 20.0f;
 
