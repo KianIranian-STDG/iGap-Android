@@ -21,11 +21,11 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.FragmentIVandActivities;
-import net.iGap.fragments.FragmentIVandProfile;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.fragments.FragmentPaymentInquiry;
+import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
@@ -114,7 +114,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case IVAND:
-                new HelperFragment(activity.getSupportFragmentManager(),new FragmentIVandProfile()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(),new FragmentUserScore()).setReplace(false).load();
                 break;
             case IVANDQR:
                 scanBarCode(activity);
