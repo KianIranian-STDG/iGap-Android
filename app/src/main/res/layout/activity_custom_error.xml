@@ -32,7 +32,7 @@
         android:text="@string/iGap_has_crashed"
         style="?textTitleColorSettingTheme"
         android:textAlignment="center"
-        android:textSize="@dimen/dp18"
+        android:textSize="@dimen/dp16"
         android:textStyle="bold" />
 
       <TextView
