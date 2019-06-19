@@ -222,6 +222,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     private void notifyChatRoomsList() {
 
+        if (mRecyclerView == null)
+            return;
+
         if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()){
             mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
         }else if (G.isInCall){
