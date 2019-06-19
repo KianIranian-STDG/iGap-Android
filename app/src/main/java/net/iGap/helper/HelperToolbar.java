@@ -408,6 +408,12 @@ public class HelperToolbar {
 
     private void setMusicPlayer(View view , boolean isChat) {
 
+        //set dark theme to player
+        if (G.isDarkTheme){
+            View playersLyt = view.findViewById(R.id.view_toolbar_player_layout);
+            playersLyt.setBackgroundResource(R.drawable.shape_toolbar_player_dark);
+        }
+
         LinearLayout musicLayout = view.findViewById(R.id.view_toolbar_layout_player_music);
 
         LinearLayout stripCallLayout = view.findViewById(R.id.view_toolbar_layout_strip_call);
