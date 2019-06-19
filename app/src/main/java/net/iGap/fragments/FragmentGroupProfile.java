@@ -191,9 +191,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.goToShearedMediaPage.observe(this, roomId -> {
-            if (getActivity() != null && roomId != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(roomId)).setReplace(false).load();
+        viewModel.goToShearedMediaPage.observe(this, model -> {
+            if (getActivity() != null && model != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(model)).setReplace(false).load();
             }
         });
 

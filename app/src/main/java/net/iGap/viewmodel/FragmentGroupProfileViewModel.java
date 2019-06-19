@@ -18,6 +18,7 @@ import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupRemoveUsername;
 import net.iGap.interfaces.OnGroupRevokeLink;
 import net.iGap.interfaces.OnMenuClick;
+import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.Contacts;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
@@ -79,7 +80,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public MutableLiveData<String> groupNumber = new MutableLiveData<>();
     public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
     public MutableLiveData<List<Integer>> showMenu = new MutableLiveData<>();
-    public MutableLiveData<Long> goToShearedMediaPage = new MutableLiveData<>();
+    public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
     public MutableLiveData<String> goToShowMemberPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogConvertToPublic = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogConvertToPrivate = new MutableLiveData<>();
@@ -299,9 +300,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
-    //type: 0=image 1=video 2=audio 3=voice 4=gif 5=file 6=link
+    //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
     public void onClickGroupShearedMedia(int type) {
-        goToShearedMediaPage.setValue(roomId);
+        goToShearedMediaPage.setValue(new GoToSharedMediaModel(roomId, type));
     }
 
     public void addNewMember() {

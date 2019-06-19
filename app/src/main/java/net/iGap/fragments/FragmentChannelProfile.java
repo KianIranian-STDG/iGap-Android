@@ -208,7 +208,7 @@ public class FragmentChannelProfile extends BaseFragment {
 
         viewModel.goToSharedMediaPage.observe(this, typeModel -> {
             if (getActivity() != null && typeModel != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(typeModel.getRoomId())).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(typeModel)).setReplace(false).load();
             }
         });
 
