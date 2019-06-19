@@ -222,17 +222,15 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     private void notifyChatRoomsList() {
 
-        if (mRecyclerView == null)
-            return;
-
-        if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()){
-            mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
-        }else if (G.isInCall){
-            mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68 ), 0, 0);
-        }else {
-            mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
+        if (mRecyclerView != null) {
+            if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
+                mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
+            } else if (G.isInCall) {
+                mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+            } else {
+                mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
+            }
         }
-
     }
 
     private void initMultiSelectActions() {
