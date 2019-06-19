@@ -6595,7 +6595,7 @@ public class FragmentChat extends BaseFragment
         final AppCompatTextView textSend = viewBottomSheetForward.findViewById(R.id.txtSend);
         textSend.setVisibility(View.INVISIBLE);
         final RecyclerView rcvItem = viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
-        rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
+        rcvItem.setLayoutManager(new GridLayoutManager(rcvItem.getContext(), 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
         rcvItem.setAdapter(fastItemAdapterForward);
         bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity,G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
