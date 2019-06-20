@@ -412,6 +412,7 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/showMemberList"
                     android:layout_width="0dp"
+                    style="?textSubColorSettingTheme"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onShowMemberClick()}"

@@ -57,7 +57,7 @@
               android:layout_marginRight="@dimen/dp4"
               android:text="@string/md_rate_star"
               android:textAppearance="@style/TextIconAppearance.all"
-              android:textSize="@dimen/dp14" />
+              android:textSize="@dimen/standardTextSize" />
 
             <net.iGap.module.CustomTextViewMedium
               android:id="@+id/cigp_txt_contact_name"
@@ -68,7 +68,7 @@
               android:singleLine="true"
               android:text="Dominika Faniz"
               style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp16" />
+              android:textSize="@dimen/standardTextSize" />
           </LinearLayout>
 
 
@@ -85,7 +85,7 @@
           android:tag="menu"
           android:text="@string/last_seen_recently"
           style="?textSubColorSettingTheme"
-          android:textSize="@dimen/dp14" />
+          android:textSize="@dimen/smallTextSize" />
       </RelativeLayout>
 
       <net.iGap.module.MaterialDesignTextView

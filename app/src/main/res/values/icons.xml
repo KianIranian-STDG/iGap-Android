@@ -51,7 +51,7 @@
     <string name="md_expand_arrow">\uf143</string>  <!-- igap_chevron-up  -->
     <string name="md_downwards_arrow">È</string>  <!-- igap_chevron-down  -->
     <string name="md_check_box">\uf132</string>  <!-- igap_checkbox-marked  -->
-    <string name="md_rate_star">\uf4ce</string>  <!-- igap_star  -->
+    <string name="md_rate_star">u</string>  <!-- igap_star  -->
     <string name="md_muted">\uf581</string>  <!-- igap_volume-off  -->
     <string name="md_unMuted">\uf57e</string> <!--  igap_volume-high  -->
     <string name="md_Mute">\uf57f</string>  <!-- igap_volume-low  -->
