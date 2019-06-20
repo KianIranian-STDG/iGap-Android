@@ -61,11 +61,13 @@
                     android:layout_marginTop="16dp"
                     android:onClick="@{()->viewModel.onPhoneNumberClick()}"
                     android:text="@{viewModel.phone}"
+                    android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.phone.equals(`0`) || !viewModel.showNumber ? View.GONE : View.VISIBLE}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent=".9" />
+
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/status"
@@ -74,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@{viewModel.username}"
+                    android:textSize="@dimen/smallTextSize"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/phoneNumber"
