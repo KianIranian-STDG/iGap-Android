@@ -126,11 +126,20 @@ public class DashDivider extends RecyclerView.ItemDecoration {
             String s = adapter.getItemCharacter(parent.getChildLayoutPosition(child));
             mTextPain.getTextWidths("ب", t);
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-            final float rightX = child.getRight() + params.rightMargin - (t[0] / 2) - (mPaint.getStrokeWidth() / 2);
+            final float rightX;
+            if (G.selectedLanguage.equals("en")) {
+                rightX = child.getRight() + params.rightMargin - (t[0] / 2) - (mPaint.getStrokeWidth() / 2);
+            } else {
+                rightX = child.getLeft() - params.leftMargin + (t[0] / 2) + (mPaint.getStrokeWidth() / 2);
+            }
             final int startY = child.getTop() - params.topMargin;
             final int stopY = child.getBottom() + params.bottomMargin;
             if (adapter.showCharacter(parent.getChildLayoutPosition(child))) {
-                canvas.drawText(s, child.getRight() - t[0], child.getTop() + (mTextPain.getFontMetricsInt(null)*3/4f), mTextPain);
+                if (G.selectedLanguage.equals("en")) {
+                    canvas.drawText(s, child.getRight() - t[0], child.getTop() + (mTextPain.getFontMetricsInt(null) * 3 / 4f), mTextPain);
+                } else {
+                    canvas.drawText(s, child.getLeft() + t[0] / 2, child.getTop() + (mTextPain.getFontMetricsInt(null) * 3 / 4f), mTextPain);
+                }
                 canvas.drawLine(rightX, startY + mTextPain.getFontMetricsInt(null), rightX, stopY, mPaint);
             } else {
                 canvas.drawLine(rightX, startY, rightX, stopY, mPaint);
