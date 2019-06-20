@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -112,6 +113,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
     private ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
     private ObservableInt showLoading = new ObservableInt(View.GONE);
+    private ObservableField<Integer> textsGravity = new ObservableField<>(Gravity.LEFT);
+    
     //ui
     public MutableLiveData<Boolean> goToAddMemberPage = new MutableLiveData<>();
     public MutableLiveData<String> goToWalletAgreementPage = new MutableLiveData<>();
@@ -151,6 +154,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
         this.sharedPreferences = sharedPreferences;
         this.avatarHandler = avatarHandler;
+
+        //set user info text gravity
+        if (G.selectedLanguage.equals("en")){
+            textsGravity.set(Gravity.LEFT);
+        }else{
+            textsGravity.set(Gravity.RIGHT);
+        }
 
         isEditProfile.setValue(false);
         appVersion.set(BuildConfig.VERSION_NAME);
@@ -309,6 +319,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public ObservableField<String> getName() {
         return name;
+    }
+
+    public ObservableField<Integer> getTextsGravity() {
+        return textsGravity;
     }
 
     public ObservableField<String> getUserName() {

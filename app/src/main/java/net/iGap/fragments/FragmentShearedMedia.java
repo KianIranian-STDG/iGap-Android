@@ -283,7 +283,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.hamburger_menu_icon)
+                .setRightIcons(R.string.sort_icon)
                 .setPlayerEnable(true)
                 .setIsSharedMedia(true)
                 .setSearchBoxShown(true)
@@ -1617,7 +1617,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 vh.tempFilePath = getThumpnailPath(position);
                 vh.filePath = getFilePath(position);
 
-                vh.imvPicFile.setImageResource(R.mipmap.difaultimage);
+                vh.imvPicFile.setImageResource(R.drawable.shared_media_images_holder);
 
                 vh.imvPicFile.setTag(mList.get(position).messageId);
 
@@ -1744,7 +1744,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
 
-                holder1.imvPicFile.setImageResource(R.mipmap.difaultimage);
+                holder1.imvPicFile.setImageResource(R.drawable.shared_media_videos_holder);
                 holder1.imvPicFile.setTag(mList.get(position).messageId);
 
                 final String tempFilePath;
@@ -1765,7 +1765,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), holder1.imvPicFile);
                     }
                 } else {
-                    holder1.imvPicFile.setImageResource(R.mipmap.j_video);
+                    holder1.imvPicFile.setImageResource(R.drawable.shared_media_videos_holder);
 
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
@@ -1923,7 +1923,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 AudioAdapter.ViewHolder holder1 = (AudioAdapter.ViewHolder) holder;
 
-                holder1.imvPicFile.setImageResource(R.drawable.green_music_note);
+                holder1.imvPicFile.setImageResource(R.drawable.shared_media_audios_holder);
                 holder1.imvPicFile.setTag(mList.get(position).messageId);
                 holder1.imvPicFile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -2077,7 +2077,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 if (file.exists()) {
                     holder1.messageProgress.setVisibility(View.GONE);
-                    holder1.imvPicFile.setText(getString(R.string.music_icon));
+                    holder1.imvPicFile.setText(getString(R.string.voice_icon));
 
                     try {
 

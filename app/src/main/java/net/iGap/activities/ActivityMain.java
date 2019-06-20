@@ -1538,7 +1538,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initComponent() {
 
         HelperToolbar toolbar = HelperToolbar.create()
-                .setContext(getApplicationContext())
+                .setContext(this)
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
                 .setPlayerEnable(false)

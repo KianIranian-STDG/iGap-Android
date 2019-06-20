@@ -52,7 +52,6 @@
           android:gravity="center_vertical|left"
           android:layout_marginTop="@dimen/dp1"
           style="?textTitleColorSettingTheme"
-          android:textColor="@color/gray_4c"
           android:textSize="@dimen/dp10" />
 
 

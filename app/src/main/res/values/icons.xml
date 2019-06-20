@@ -229,4 +229,6 @@
     <string name="player_next_icon">Ó</string>
     <string name="player_previous_icon">Ô</string>
     <string name="player_shuffle_icon">õ</string>
+    <string name="sort_icon">î</string>
+    <string name="voice_icon">G</string>
 </resources>

@@ -39,7 +39,7 @@
         android:paddingTop="@dimen/dp4"
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp4"
-        android:textColor="@color/black"
+        style="?hintColorSettingTheme"
         android:textSize="@dimen/dp16"
         app:emojiSize="@dimen/dp22"
         android:layout_margin="@dimen/dp8"
