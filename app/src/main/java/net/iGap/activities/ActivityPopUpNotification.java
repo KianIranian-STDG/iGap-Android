@@ -380,8 +380,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         private void initViewPager() {
 
             viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
-            mAdapter = new AdapterViewPagerClass();
-            viewPager.setAdapter(mAdapter);
+            if (viewPager != null && mAdapter != null){
+                mAdapter.notifyDataSetChanged();
+            } else {
+                mAdapter = new AdapterViewPagerClass();
+                viewPager.setAdapter(mAdapter);
+            }
             listSize = mList.size();
 
             btnMessageCounter.setText(1 + "/" + listSize);

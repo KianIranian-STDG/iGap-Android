@@ -104,6 +104,7 @@ import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -1786,6 +1787,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
