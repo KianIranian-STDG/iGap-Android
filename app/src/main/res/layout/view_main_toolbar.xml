@@ -256,8 +256,8 @@
                 android:fontFamily="@font/main_font"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textSize="14sp"
-                app:emojiSize="14dp" />
+                android:textSize="@dimen/standardTextSize"
+                app:emojiSize="@dimen/standardTextSize" />
 
             <TextView
                 android:id="@+id/view_toolbar_chat_txt_verify"
@@ -269,7 +269,7 @@
                 android:text="@string/verify_icon"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@color/verify_color"
-                android:textSize="15sp"
+                android:textSize="@dimen/standardTextSize"
                 android:visibility="gone" />
 
             <TextView
@@ -282,7 +282,7 @@
                 android:text="@string/mute_icon"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
+                android:textSize="@dimen/standardTextSize"
                 android:visibility="gone" />
 
             <!--<android.support.v7.widget.AppCompatImageView
@@ -306,7 +306,7 @@
             android:fontFamily="@font/main_font"
             android:text="Last seen recently"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="@dimen/smallTextSize"
             android:visibility="visible"
             app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintTop_toBottomOf="@id/view_toolbar_chat_layout_userName"
@@ -335,6 +335,7 @@
             android:textColor="@color/white"
             android:visibility="gone"
             android:gravity="left"
+            android:textSize="@dimen/largeTextSize"
             app:layout_constraintBottom_toTopOf="@id/groupMemberCount"
             app:layout_constraintLeft_toRightOf="@id/groupAvatar"
             app:layout_constraintRight_toRightOf="parent"
@@ -348,6 +349,7 @@
             android:textColor="@color/white"
             android:visibility="gone"
             android:gravity="left"
+            android:textSize="@dimen/largeTextSize"
             app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
             app:layout_constraintLeft_toLeftOf="@id/groupName"
             app:layout_constraintRight_toRightOf="@id/groupName"
@@ -384,7 +386,7 @@
             android:hint="@string/search"
             android:singleLine="true"
             style="?hintColorSettingTheme"
-            android:textSize="14sp"
+            android:textSize="@dimen/standardTextSize"
             android:visibility="gone" />
 
         <TextView
@@ -397,7 +399,7 @@
             android:gravity="center"
             android:text="@string/search"
             style="?textSubColorSettingTheme"
-            android:textSize="14sp"
+            android:textSize="@dimen/standardTextSize"
             android:visibility="visible" />
 
         <TextView
@@ -412,7 +414,7 @@
             android:padding="3dp"
             android:text="@string/close_icon"
             style="@style/myIconTextViewStyle"
-            android:textSize="18sp"
+            android:textSize="@dimen/largeTextSize"
             android:visibility="gone" />
 
     </RelativeLayout>
@@ -437,7 +439,7 @@
         android:lines="1"
         android:text="@string/user_name"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/largeTextSize"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/view_toolbar_img_big_avatar"
         app:layout_constraintStart_toStartOf="@+id/view_toolbar_img_big_avatar"

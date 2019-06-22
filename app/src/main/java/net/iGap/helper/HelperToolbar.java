@@ -92,7 +92,7 @@ public class HelperToolbar {
 
     public HelperToolbar setContext(Context context) {
         this.mContext = context;
-        this.mInflater = LayoutInflater.from(context);
+        if (context != null) this.mInflater = LayoutInflater.from(context);
         return this;
     }
 
@@ -599,16 +599,16 @@ public class HelperToolbar {
     private void checkIGapFont() {
 
         if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.waiting_for_network))) {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp16) / mContext.getResources().getDisplayMetrics().density));
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.smallTextSize) / mContext.getResources().getDisplayMetrics().density));
 
         } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.connecting))) {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.standardTextSize) / mContext.getResources().getDisplayMetrics().density));
 
         } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.updating))) {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp18) / mContext.getResources().getDisplayMetrics().density));
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.standardTextSize) / mContext.getResources().getDisplayMetrics().density));
 
         } else {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.dp20) / mContext.getResources().getDisplayMetrics().density));
+            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.standardTextSize) / mContext.getResources().getDisplayMetrics().density));
             mTxtLogo.setText(defaultTitleText);
         }
 
