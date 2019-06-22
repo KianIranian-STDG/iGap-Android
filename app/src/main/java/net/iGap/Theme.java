@@ -57,7 +57,7 @@ public class Theme extends Application {
     public static final int GREY_COMPLETE = 26;
 
 
-    public static String default_appBarColor = "#9dc756";
+    public static String default_appBarColor = "#45B321";
     public static String default_notificationColor = "#e05353";
     public static String default_toggleButtonColor = "#00B0BF";
     public static String default_attachmentColor = default_appBarColor;
@@ -81,7 +81,7 @@ public class Theme extends Application {
     public static String default_roomSenderTextColor = default_textSubTheme;
     public static String default_SeenTickColor = default_appBarColor;
 
-    public static String default_dark_appBarColor = "#2a3d3d";
+    public static String default_dark_appBarColor = "#383838";
     public static String default_dark_notificationColor = "#c4d838";
     public static String default_dark_toggleButtonColor = "#000000";//
     public static String default_dark_attachmentColor = "#cccccc";
