@@ -123,7 +123,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
                 } else {
-                    new HelperFragment(FragmentWebView.newInstance(discoveryField.value)).setReplace(false).load();
+                    new HelperFragment(FragmentWebView.newInstance(discoveryField.value, !discoveryField.value.contains("igref=false"))).setReplace(false).load();
                 }
                 break;
             case USERNAME_LINK:/** tested **/

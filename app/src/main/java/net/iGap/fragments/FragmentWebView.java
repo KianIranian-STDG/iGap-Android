@@ -19,7 +19,6 @@ import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -40,6 +39,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
     private String url;
     private boolean forceCloseFragment;
+    public boolean igRef;
     private WebView webView;
     private TextView webViewError;
     private SwipeRefreshLayout pullToRefresh;
@@ -50,12 +50,17 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     private View customView;
     private WebChromeClient.CustomViewCallback callback;
 
-    public static FragmentWebView newInstance(String url) {
+    public static FragmentWebView newInstance(String url, boolean igRef) {
         FragmentWebView discoveryFragment = new FragmentWebView();
         Bundle bundle = new Bundle();
         bundle.putString("url", url);
+        bundle.putBoolean("igRef", igRef);
         discoveryFragment.setArguments(bundle);
         return discoveryFragment;
+    }
+
+    public static FragmentWebView newInstance(String url) {
+        return newInstance(url, true);
     }
 
     @Override
@@ -68,6 +73,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         super.onViewCreated(view, savedInstanceState);
         forceCloseFragment = false;
         url = getArguments().getString("url");
+        igRef = getArguments().getBoolean("igRef");
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             url = "http://" + url;
         }
@@ -86,6 +92,12 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 setWebViewVisibleWithDelay();
             }
         });
+
+        if (igRef) {
+            pullToRefresh.setEnabled(true);
+        } else {
+            pullToRefresh.setEnabled(false);
+        }
 
         webViewError.setOnClickListener(new View.OnClickListener() {
             @Override
