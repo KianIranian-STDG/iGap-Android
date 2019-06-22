@@ -31,6 +31,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
@@ -599,26 +600,26 @@ public class HelperToolbar {
     private void checkIGapFont() {
 
         if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.waiting_for_network))) {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.smallTextSize) / mContext.getResources().getDisplayMetrics().density));
+            Utils.setTextSize(mTxtLogo , R.dimen.standardTextSize );
 
         } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.connecting))) {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.standardTextSize) / mContext.getResources().getDisplayMetrics().density));
+            Utils.setTextSize(mTxtLogo , R.dimen.largeTextSize );
 
         } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.updating))) {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.standardTextSize) / mContext.getResources().getDisplayMetrics().density));
+            Utils.setTextSize(mTxtLogo , R.dimen.largeTextSize );
 
         } else {
-            mTxtLogo.setTextSize((int) (mContext.getResources().getDimension(R.dimen.standardTextSize) / mContext.getResources().getDisplayMetrics().density));
+            Utils.setTextSize(mTxtLogo , R.dimen.largeTextSize );
             mTxtLogo.setText(defaultTitleText);
         }
 
         if (mTxtLogo.getText().toString().toLowerCase().equals("igap")){
-            mTxtLogo.setTextSize((int) mContext.getResources().getDimension(R.dimen.toolbar_igap_icon_textSize));
+            Utils.setTextSize(mTxtLogo , R.dimen.toolbar_igap_icon_textSize );
             mTxtLogo.setTypeface(G.typeface_FonticonNew);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
         }else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
             mTxtLogo.setTypeface(G.typeface_FonticonNew);
-            mTxtLogo.setTextSize((int) mContext.getResources().getDimension(R.dimen.toolbar_igap_icon_textSize));
+            Utils.setTextSize(mTxtLogo , R.dimen.toolbar_igap_icon_textSize );
             mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
 
         }else {
