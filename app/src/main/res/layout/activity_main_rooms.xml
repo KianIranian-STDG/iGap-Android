@@ -41,7 +41,7 @@
             <LinearLayout
                 android:id="@+id/amr_layout_selected_actions"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/dp40"
                 android:orientation="horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
@@ -60,6 +60,7 @@
                     android:paddingRight="@dimen/main_rooms_selected_action_padding"
                     android:singleLine="true"
                     android:text="@string/read_all"
+                    android:textSize="@dimen/standardTextSize"
                     android:textColor="@color/black" />
 
 
@@ -75,6 +76,7 @@
                     android:paddingLeft="@dimen/main_rooms_selected_action_padding"
                     android:paddingRight="@dimen/main_rooms_selected_action_padding"
                     android:singleLine="true"
+                    android:textSize="@dimen/standardTextSize"
                     android:text="@string/make_as_read"
                     android:textColor="@color/black" />
 
@@ -90,6 +92,7 @@
                     android:gravity="center"
                     android:paddingLeft="@dimen/main_rooms_selected_action_padding"
                     android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:textSize="@dimen/standardTextSize"
                     android:singleLine="true"
                     android:text="@string/delete"
                     android:textColor="@color/black" />
@@ -108,6 +111,7 @@
                     android:gravity="center"
                     android:paddingLeft="@dimen/main_rooms_selected_action_padding"
                     android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:textSize="@dimen/standardTextSize"
                     android:singleLine="true"
                     android:text="@string/clear_history"
                     android:textColor="@color/black" />
