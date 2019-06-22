@@ -75,7 +75,7 @@
                             android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
                             android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
                             android:fontFamily="@font/main_font"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/standardTextSize" />
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/fc_selected_mode_btn_delete"
@@ -137,7 +137,7 @@
                         android:singleLine="true"
                         android:text="@string/Invite_Friends"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textSize="@dimen/dp16" />
+                        android:textSize="@dimen/largeTextSize" />
 
                 </LinearLayout>
 
@@ -172,7 +172,7 @@
                         android:singleLine="true"
                         android:text="@string/new_channel"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textSize="@dimen/dp16" />
+                        android:textSize="@dimen/standardTextSize" />
 
                 </LinearLayout>
 
@@ -207,7 +207,7 @@
                         android:singleLine="true"
                         android:text="@string/new_group"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textSize="@dimen/dp16" />
+                        android:textSize="@dimen/standardTextSize" />
 
                 </LinearLayout>
 
@@ -243,7 +243,7 @@
                         android:singleLine="true"
                         android:text="@string/secret_chat"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textSize="@dimen/dp16" />
+                        android:textSize="@dimen/standardTextSize" />
 
                 </LinearLayout>
 
@@ -278,7 +278,7 @@
                         android:singleLine="true"
                         android:text="@string/new_group_call"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textSize="@dimen/dp16" />
+                        android:textSize="@dimen/standardTextSize" />
 
                 </LinearLayout>
 
@@ -313,7 +313,7 @@
                         android:singleLine="true"
                         android:text="@string/menu_add_contact"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textSize="@dimen/dp16" />
+                        android:textSize="@dimen/standardTextSize" />
 
                 </LinearLayout>
 
@@ -348,7 +348,7 @@
                         android:singleLine="true"
                         android:text="@string/dial_number"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textSize="@dimen/dp16" />
+                        android:textSize="@dimen/standardTextSize" />
 
                 </LinearLayout>
 
