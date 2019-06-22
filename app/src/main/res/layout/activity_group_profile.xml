@@ -363,6 +363,7 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(7)}"
                     android:padding="8dp"
                     android:text="@string/shared_links"
+                    android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/linksCount"

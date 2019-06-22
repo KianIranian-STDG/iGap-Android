@@ -1353,41 +1353,34 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mViewPager.setOffscreenPageLimit(5);
 
         if (HelperCalander.isPersianUnicode) {
-            G.handler.postDelayed(() -> {
+            G.handler.post(() -> {
                 pages.add(new FragmentUserProfile());
                 pages.add(DiscoveryFragment.newInstance(0));
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(RegisteredContactsFragment.newInstance(false));
-
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
                 mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
-            }, 200);
-
+                bottomNavigation.setVisibility(View.VISIBLE);
+            });
         } else {
-
-            G.handler.postDelayed(() -> {
-
+            G.handler.post(() -> {
                 pages.add(RegisteredContactsFragment.newInstance(false));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 pages.add(DiscoveryFragment.newInstance(0));
-                //  pages.add(new FragmentSetting());
                 pages.add(new FragmentUserProfile());
-
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 mViewPager.getAdapter().notifyDataSetChanged();
                 mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-
-            }, 200);
-
+                bottomNavigation.setVisibility(View.VISIBLE);
+            });
         }
 
         MaterialDesignTextView txtMenu = findViewById(R.id.am_btn_menu);

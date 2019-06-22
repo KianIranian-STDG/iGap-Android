@@ -232,6 +232,7 @@
                 android:layout_height="54dp"
                 android:layout_alignParentBottom="true"
                 app:background_color="#EEEEEE"
+                android:visibility="invisible"
                 app:corner_radius="35">
 
                 <net.iGap.libs.bottomNavigation.TabItem
