@@ -217,19 +217,25 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
            notifyChatRoomsList();
         });
 
+        //just check at first time page loaded
+        notifyChatRoomsList();
 
     }
 
     private void notifyChatRoomsList() {
 
-        if (mRecyclerView != null) {
-            if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
-                mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
-            } else if (G.isInCall) {
-                mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-            } else {
-                mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
+        try{
+            if (mRecyclerView != null) {
+                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
+                } else if (G.isInCall) {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+                } else {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
+                }
             }
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 

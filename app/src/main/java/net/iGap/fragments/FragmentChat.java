@@ -1140,7 +1140,7 @@ public class FragmentChat extends BaseFragment
             MusicPlayer.chatLayout = null;
             MusicPlayer.shearedMediaLayout = null;
 
-            if (MusicPlayer.mp != null && MusicPlayer.mainLayout != null) {
+            if (!G.isInCall && MusicPlayer.mp != null && MusicPlayer.mainLayout != null) {
                 MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
                 MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
                 MusicPlayer.playerStateChangeListener.postValue(false);
