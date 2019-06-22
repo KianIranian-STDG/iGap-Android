@@ -595,7 +595,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         TextView textView = new TextView(getContext());
         textView.setText(mSharedTypesList.get(pos));
-        //textView.setTextSize(getDimen(R.dimen.dp8));
+        textView.setTextSize(getDimen(R.dimen.standardTextSize));
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setSingleLine(true);
 
