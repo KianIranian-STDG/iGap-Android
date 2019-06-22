@@ -305,11 +305,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             return;
         }
         isInit = true;
-        G.onPhoneContact = this;
-        Contacts.localPhoneContactId = 0;
-        Contacts.getContact = true;
 
-        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        if (isContact){
+            G.onPhoneContact = this;
+            Contacts.localPhoneContactId = 0;
+            Contacts.getContact = true;
+
+        }
+        //sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         /**
          * not import contact in every enter to this page
@@ -324,17 +327,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
 
         vgInviteFriend = view.findViewById(R.id.menu_layout_inviteFriend);
-     /*   LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLeftIcon(R.string.edit_icon)
-                .setRightIcons(R.string.add_icon)
-                .setSearchBoxShown(true)
-                .setLogoShown(true)
-                .setListener(this);
-
-        toolbarLayout.addView(mHelperToolbar.getView());*/
 
         btnAddNewGroupCall = view.findViewById(R.id.menu_layout_new_group_call);
         btnAddNewContact = view.findViewById(R.id.menu_layout_add_new_contact);
@@ -574,7 +566,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         fastItemAdapter = new FastItemAdapter();
 
         try {
-            if (getPermission) {
+            if (getPermission && isContact) {
                 getPermission = false;
                 HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
@@ -613,28 +605,40 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     new RequestUserContactsGetList().userContactGetList();
                 }
 
-                if (HelperPermission.grantedContactPermission()) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            prgWaitingLiadList.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                } else {
+                if (isContact){
+                    if (HelperPermission.grantedContactPermission()) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                prgWaitingLiadList.setVisibility(View.VISIBLE);
+                            }
+                        });
+                        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    } else {
+                        prgWaitingLiadList.setVisibility(View.GONE);
+                    }
+                }else {
                     prgWaitingLiadList.setVisibility(View.GONE);
+
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        rcvListContact.setLayoutManager(new LinearLayoutManager(getContext()));
-        rcvListContact.setItemAnimator(new DefaultItemAnimator());
-        adapterListContact = new AdapterListContact(phoneContactsList);
-        rcvListContact.setAdapter(adapterListContact);
-        rcvListContact.setNestedScrollingEnabled(false);
+        if (isContact){
 
+            rcvListContact.setLayoutManager(new LinearLayoutManager(getContext()));
+            rcvListContact.setItemAnimator(new DefaultItemAnimator());
+            adapterListContact = new AdapterListContact(phoneContactsList);
+            rcvListContact.setAdapter(adapterListContact);
+            rcvListContact.setNestedScrollingEnabled(false);
+
+        }else {
+            rcvListContact.setVisibility(View.GONE);
+            prgWaitingLiadList.setVisibility(View.GONE);
+            txtNonUser.setVisibility(View.GONE);
+        }
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
