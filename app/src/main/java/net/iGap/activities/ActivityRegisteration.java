@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegistrationNickname;
 import net.iGap.fragments.WelcomeFragment;
@@ -59,13 +60,17 @@ public class ActivityRegisteration extends ActivityEnhanced {
             e.printStackTrace();
         }
 
-        repository.goToMainPage.observe(this, userId -> {
-            if (userId != null) {
-                Intent intent = new Intent(this, ActivityMain.class);
-                intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+        repository.goToMainPage.observe(this, data -> {
+            if (data != null) {
+                if (data.isShowDialogDisableTwoStepVerification()) {
+                    new DefaultRoundDialog(this)
+                            .setTitle(R.string.warning)
+                            .setMessage(R.string.two_step_verification_disable)
+                            .setPositiveButton(R.string.dialog_ok, (dialog, which) -> goToMainPage(data.getUserId()))
+                            .show();
+                } else {
+                    goToMainPage(data.getUserId());
+                }
             }
         });
 
@@ -198,5 +203,13 @@ public class ActivityRegisteration extends ActivityEnhanced {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+
+    private void goToMainPage(long userId) {
+        Intent intent = new Intent(this, ActivityMain.class);
+        intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

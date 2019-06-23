@@ -15,11 +15,14 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityRegisteration;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnRecoveryEmailToken;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByAnswersCallback;
+import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByToken;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
@@ -90,7 +93,28 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
                         if (rootRecoveryEmail.getVisibility() == View.VISIBLE) {
                             if (edtSetRecoveryEmail.length() > 0) {
-                                new RequestUserTwoStepVerificationRecoverPasswordByToken().recoveryPasswordByToken(edtSetRecoveryEmail.getText().toString());
+                                new RequestUserTwoStepVerificationRecoverPasswordByToken().recoveryPasswordByToken(edtSetRecoveryEmail.getText().toString(), new TwoStepVerificationRecoverPasswordByToken() {
+                                    @Override
+                                    public void recoveryByEmail(String tokenR) {
+                                        if (page == Security.SETTING) {
+                                            pageSetting();
+                                        } else {
+                                            pageRegister();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void errorRecoveryByEmail(int major, int minor) {
+                                        if (major == 10129) {
+                                            G.handler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    closeKeyboard(view);
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                                 closeKeyboard(v);
                                 edtSetRecoveryEmail.setText("");
                             } else {
@@ -98,7 +122,24 @@ public class FragmentSecurityRecovery extends BaseFragment {
                             }
                         } else {
                             if (edtSetRecoveryAnswerPassOne.length() > 0 && edtSetRecoveryAnswerPassTwo.length() > 0) {
-                                new RequestUserTwoStepVerificationRecoverPasswordByAnswers().RecoveryPasswordByAnswer(edtSetRecoveryAnswerPassOne.getText().toString(), edtSetRecoveryAnswerPassTwo.getText().toString());
+                                new RequestUserTwoStepVerificationRecoverPasswordByAnswers().RecoveryPasswordByAnswer(edtSetRecoveryAnswerPassOne.getText().toString(), edtSetRecoveryAnswerPassTwo.getText().toString(), new TwoStepVerificationRecoverPasswordByAnswersCallback() {
+                                    @Override
+                                    public void recoveryByQuestion(String tokenR) {
+                                        //Todo:fixed it and move to repository
+                                        if (getActivity() instanceof ActivityRegisteration){
+                                            ((ActivityRegisteration) getActivity()).repository.setForgetTwoStepVerification(true);
+                                            ((ActivityRegisteration) getActivity()).repository.setToken(tokenR);
+                                            ((ActivityRegisteration) getActivity()).repository.userLogin(tokenR);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void errorRecoveryByQuestion(int major, int minor) {
+                                        if (major == 10134) {
+
+                                        }
+                                    }
+                                });
                                 edtSetRecoveryAnswerPassOne.setText("");
                                 edtSetRecoveryAnswerPassTwo.setText("");
                                 closeKeyboard(v);
@@ -205,19 +246,9 @@ public class FragmentSecurityRecovery extends BaseFragment {
             }
         });
 
+
         if (page == Security.SETTING) {
             G.onRecoverySecurityPassword = new OnRecoverySecurityPassword() {
-                @Override
-                public void recoveryByEmail(String token) {
-
-
-                    if (page == Security.SETTING) {
-                        pageSetting();
-                    } else {
-                        pageRegister();
-                    }
-
-                }
 
                 @Override
                 public void getEmailPatern(final String patern) {
@@ -225,36 +256,6 @@ public class FragmentSecurityRecovery extends BaseFragment {
                         @Override
                         public void run() {
                             edtSetRecoveryEmail.setHint(patern);
-                        }
-                    });
-                }
-
-                @Override
-                public void errorRecoveryByEmail() {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            closeKeyboard(view);
-                        }
-                    });
-                }
-
-                @Override
-                public void recoveryByQuestion(String token) {
-                    if (page == Security.SETTING) {
-                        pageSetting();
-                    } else {
-                        pageRegister();
-                    }
-                }
-
-                @Override
-                public void errorRecoveryByQuestion() {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            closeKeyboard(view);
-
                         }
                     });
                 }

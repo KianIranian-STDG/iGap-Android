@@ -16,6 +16,7 @@ import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.interfaces.TwoStepVerificationGetPasswordDetail;
 import net.iGap.interfaces.TwoStepVerificationVerifyPassword;
+import net.iGap.model.GoToMainFromRegister;
 import net.iGap.model.LocationModel;
 import net.iGap.model.UserPasswordDetail;
 import net.iGap.module.BotInit;
@@ -52,8 +53,9 @@ public class RegisterRepository {
     private String countryName = "";
     private String pattern = "";
     private String regexFetchCodeVerification;
+    private boolean forgetTwoStepVerification = false;
 
-    public MutableLiveData<Long> goToMainPage = new MutableLiveData<>();
+    public MutableLiveData<GoToMainFromRegister> goToMainPage = new MutableLiveData<>();
     public MutableLiveData<Long> goToWelcomePage = new MutableLiveData<>();
 
     //if need sharePreference pass it in constructor
@@ -85,12 +87,20 @@ public class RegisterRepository {
         return regexFetchCodeVerification;
     }
 
+    public long getUserId() {
+        return userId;
+    }
+
     public void setRegex(String regex) {
         this.regex = regex;
     }
 
-    public long getUserId() {
-        return userId;
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setForgetTwoStepVerification(boolean forgetTwoStepVerification) {
+        this.forgetTwoStepVerification = forgetTwoStepVerification;
     }
 
     public void saveInstance(int callingCode, String pattern, String phoneNumber, String countryName, String regex) {
@@ -224,7 +234,7 @@ public class RegisterRepository {
         }
     }
 
-    private void userLogin(String token) {
+    public void userLogin(String token) {
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
@@ -311,7 +321,7 @@ public class RegisterRepository {
                     G.displayName = user.getDisplayName();
                     RealmUserInfo.putOrUpdate(realm1, user);
                     G.onUserInfoResponse = null;
-                    goToMainPage.postValue(userId);
+                    goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
                 });
                 realm.close();
             }
