@@ -167,7 +167,7 @@ dependencies {
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta2'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
@@ -179,7 +179,7 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation 'com.github.KianIranian-STDG.sticker:emoji-ios:1.1'
+    implementation 'com.github.KianIranian-STDG.ig_sticker:emoji-ios:V2.0.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation project(':paygearcore')

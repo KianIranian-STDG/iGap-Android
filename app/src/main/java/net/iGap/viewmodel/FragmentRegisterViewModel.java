@@ -568,11 +568,13 @@ public class FragmentRegisterViewModel extends ViewModel /*implements OnSecurity
                 realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
                 BotInit.setCheckDrIgap(true);
                 if (newUser) {
+                    HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
                     G.handler.post(() -> goToWelcomePage.setValue(userId));
                 } else {
                     // get user info for set nick name and after from that go to ActivityMain
                     getUserInfo();
                     requestUserInfo();
+                    HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);
                 }
                 realm.close();
             }

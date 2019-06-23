@@ -108,9 +108,9 @@ public class RealmClientCondition extends RealmObject {
         realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, messageId, roomType, bothDelete));
     }
 
-    public static void addOfflineSeen(final long roomId, final long messageId) {
+    public static void addOfflineSeenAsync(final long roomId, final long messageId) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
@@ -123,6 +123,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void addOfflineSeen(Realm realm, RealmClientCondition realmClientCondition, long messageId) {
+        // call it from async transaction or non ui thread
         realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, messageId));
     }
 

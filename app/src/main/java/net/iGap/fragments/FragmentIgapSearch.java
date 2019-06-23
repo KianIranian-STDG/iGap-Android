@@ -288,6 +288,7 @@ public class FragmentIgapSearch extends BaseFragment {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        G.refreshRealmUi();
 
                         loadingProgressBar.setVisibility(View.GONE);
 
@@ -302,40 +303,11 @@ public class FragmentIgapSearch extends BaseFragment {
 
                         List<IItem> items = new ArrayList<>();
 
-                        Realm realm = Realm.getDefaultInstance();
-
                         for (final ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item : builderList.getResultList()) {
-
-                            if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
-
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
-                                    }
-                                });
-                            } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
-
-                                final RealmRoom[] realmRoom = {realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getRoom().getId()).findFirst()};
-
-                                if (realmRoom[0] == null) {
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            realmRoom[0] = RealmRoom.putOrUpdate(item.getRoom(), realm);
-                                            realmRoom[0].setDeleted(true);
-                                        }
-                                    });
-                                }
-                            }
-
                             items.add(new SearchItamIGap(avatarHandler).setItem(item).withIdentifier(index++));
                         }
                         itemAdapter.clear();
                         itemAdapter.add(items);
-
-                        realm.close();
-
                     }
                 });
             }

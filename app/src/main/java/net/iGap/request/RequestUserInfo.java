@@ -13,6 +13,7 @@ package net.iGap.request;
 import android.text.format.DateUtils;
 
 import net.iGap.G;
+import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserInfo;
 
@@ -52,6 +53,28 @@ public class RequestUserInfo {
         builder.setUserId(userId);
 
         RequestWrapper requestWrapper = new RequestWrapper(117, builder, identity);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class UserInfoBody {
+        public String identity;
+        public OnComplete onComplete;
+
+        public UserInfoBody(String identity, OnComplete onComplete) {
+            this.identity = identity;
+            this.onComplete = onComplete;
+        }
+    }
+
+    public void userInfoWithCallBack(OnComplete onComplete, long userId, String identity) {
+        ProtoUserInfo.UserInfo.Builder builder = ProtoUserInfo.UserInfo.newBuilder();
+        builder.setUserId(userId);
+
+        RequestWrapper requestWrapper = new RequestWrapper(117, builder, new UserInfoBody(identity, onComplete));
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -152,12 +152,14 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
             endCallText.set(R.string.end_voice_call_icon);
             answerCallIcon.set(R.string.voice_call_icon);
         }
-        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTING);
-        } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTING);
-        }
 
+        if (G.userLogin) {
+            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_VIDEO_CALL_CONNECTING);
+            } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTING);
+            }
+        }
     }
 
     public void setBluetoothConnected(boolean bluetoothConnected) {

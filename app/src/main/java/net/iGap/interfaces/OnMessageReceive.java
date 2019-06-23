@@ -11,13 +11,16 @@
 package net.iGap.interfaces;
 
 import net.iGap.proto.ProtoClientGetRoomHistory;
+import net.iGap.realm.RealmRoomMessage;
+
+import java.util.List;
 
 public interface OnMessageReceive {
 
     /**
      * message that reached from server
      */
-    void onMessage(long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
+    void onMessage(long roomId, long startMessageId, long endMessageId, List<RealmRoomMessage> list, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
 
     void onError(int majorCode, int minorCode, long messageIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
 

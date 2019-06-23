@@ -94,6 +94,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
@@ -200,17 +201,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static FinishActivity finishActivity;
     public static boolean disableSwipe = false;
     public static OnBackPressedListener onBackPressedListener;
-    public static boolean isUseCamera = false;
-    public static boolean waitingForConfiguration = false;
     private static long oldTime;
     private static long currentTime;
     public TextView iconLock;
+    public static boolean isUseCamera = false;
     public ArcMenu arcMenu;
     FragmentCall fragmentCall;
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
+    public static boolean waitingForConfiguration = false;
     private LinearLayout mediaLayout;
     private FrameLayout frameChatContainer;
     private RelativeLayout frameMainContainer;
@@ -228,10 +229,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private String phoneNumber;
     private TextView itemCash;
     private ViewGroup itemNavWallet;
-    private int currentFabIcon = 0;
+    private int currentFabIcon =0;
     private RealmUserInfo userInfo;
     private int lastMarginTop = 0;
-    private int retryConnectToWallet = 0;
     private BottomNavigation bottomNavigation;
 
     public static void setWeight(View view, int value) {
@@ -311,41 +311,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (ActivityCall.stripLayoutChat != null) {
                 ActivityCall.stripLayoutChat.setVisibility(View.GONE);
             }
-        }
-    }
-
-    public static void doIvandScore(String content, Activity activity) {
-        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
-            @Override
-            public void onSetActivitiesReady(String message, boolean isOk) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
-                        dialog.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String message = G.context.getString(R.string.error_submit_qr_code);
-                        if (majorCode == 10183 && minorCode == 2) {
-                            message = G.context.getString(R.string.E_10183);
-                        }
-
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
-                        dialog.show();
-                    }
-                });
-            }
-        });
-
-        if (!isSend) {
-            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
         }
     }
 
@@ -564,7 +529,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setContentView(R.layout.activity_main);
 
             frameChatContainer = findViewById(R.id.am_frame_chat_container);
-        frameMainContainer = findViewById(R.id.am_frame_main_container);
+            frameMainContainer = findViewById(R.id.am_frame_main_container);
 
             if (G.twoPaneMode) {
                 G.isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -613,9 +578,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     @Override
                     public boolean getBackChatVisibility() {
 
-                        return frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE;
+                        if (frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE) {
+                            return true;
+                        }
 
-                }
+                        return false;
+                    }
 
                     @Override
                     public void setBackChatVisibility(boolean visibility) {
@@ -897,6 +865,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         new RequestInfoWallpaper().infoWallpaper();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -984,6 +953,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    public static void doIvandScore(String content, Activity activity) {
+        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
+            @Override
+            public void onSetActivitiesReady(String message, boolean isOk) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
+                        dialog.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = G.context.getString(R.string.error_submit_qr_code);
+                        if (majorCode == 10183 && minorCode == 2) {
+                            message = G.context.getString(R.string.E_10183);
+                        }
+
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
+                        dialog.show();
+                    }
+                });
+            }
+        });
+
+        if (!isSend) {
+            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
+        }
+    }
+
     private void checkKeepMedia() {
 
         final int keepMedia = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
@@ -1011,6 +1015,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }, 5000);
         }
     }
+
 
     private void getPaymentResultCode(int resultCode, Intent data) {
 
@@ -1127,6 +1132,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.rotationState = newConfig.orientation;
     }
 
+    //*******************************************************************************************************************************************
+
     private void initFloatingButtonCreateNew() {
         arcMenu = findViewById(R.id.ac_arc_button_add);
         arcMenu.setStateChangeListener(new StateChangeListener() {
@@ -1186,7 +1193,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        btnCreateNewChannel = findViewById(R.id.ac_fab_crate_new_channel);
+        btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1416,7 +1423,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
-
         if (G.ISOK) {
             if (!G.isFirstPassCode) {
                 openActivityPassCode();
@@ -1568,7 +1574,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
 
-        contentLoading = findViewById(R.id.loadingContent);
+        contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1633,7 +1639,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void connectionState() {
-        final TextView txtIgap = findViewById(R.id.cl_txt_igap);
+        final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
 
         Typeface typeface = G.typeface_IRANSansMobile;
 
@@ -1777,7 +1783,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-
         if (G.ISOK) {
             if (G.onBackPressedWebView != null) {
                 if (G.onBackPressedWebView.onBack()) {
@@ -1795,6 +1800,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
+
             if (onBackPressedListener != null) {
                 onBackPressedListener.doBack();
             }
@@ -1809,6 +1815,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -1956,6 +1963,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+
     @Override
     public void onChatClearMessage(final long roomId, long clearId) {
         //empty
@@ -2072,7 +2080,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         realm.close();
-        for (Fragment f : pages) {
+        for (Fragment f: pages) {
             if (f instanceof FragmentMain) {
                 FragmentMain mainFragment = (FragmentMain) f;
                 switch (mainFragment.mainType) {
@@ -2129,9 +2137,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void notifySubFragmentForCondition() {
-        for (Fragment f : pages) {
+        for (Fragment f: pages) {
             if (f instanceof FragmentMain) {
-                ((FragmentMain) f).onAction(MainAction.clinetCondition);
+                ((FragmentMain)f).onAction(MainAction.clinetCondition);
             }
         }
     }
@@ -2153,7 +2161,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             if (frameFragmentBack != null) {
                                 frameFragmentBack.setVisibility(View.GONE);
                             }
-                        } else disableSwipe = frameFragmentContainer.getChildCount() == 1;
+                        } else if (frameFragmentContainer.getChildCount() == 1) {
+                            disableSwipe = true;
+                        } else {
+                            disableSwipe = false;
+                        }
                     } else {
                         if (frameFragmentBack != null) {
                             frameFragmentBack.setVisibility(View.GONE);
@@ -2295,6 +2307,43 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } catch (Exception e) {
         }
     }
+
+
+    public enum MainAction {
+        downScrool, clinetCondition
+    }
+
+    public enum chatLayoutMode {
+        none, show, hide
+    }
+
+    public interface MainInterface {
+        void onAction(MainAction action);
+    }
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        SampleFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return pages.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return pages.size();
+        }
+    }
+
+
+    private int retryConnectToWallet = 0;
 
     public void getUserCredit() {
 
@@ -2444,40 +2493,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }).show();
 
-        }
-    }
-
-    public enum MainAction {
-        downScrool, clinetCondition
-    }
-
-
-    public enum chatLayoutMode {
-        none, show, hide
-    }
-
-    public interface MainInterface {
-        void onAction(MainAction action);
-    }
-
-    public interface OnBackPressedListener {
-        void doBack();
-    }
-
-    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        SampleFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            return pages.get(i);
-        }
-
-        @Override
-        public int getCount() {
-            return pages.size();
         }
     }
 
