@@ -4338,7 +4338,7 @@ public class FragmentChat extends BaseFragment
                                  */
 
                                 //Start ClientCondition OfflineSeen
-                                RealmClientCondition.addOfflineSeen(mRoomId, realmRoomMessage.getMessageId());
+                                RealmClientCondition.addOfflineSeenAsync(mRoomId, realmRoomMessage.getMessageId());
 
                                 getRealmChat().executeTransaction(new Realm.Transaction() {
                                     @Override
@@ -4672,8 +4672,8 @@ public class FragmentChat extends BaseFragment
              */
             messageInfo.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
 
-            RealmClientCondition.addOfflineSeen(mRoomId, Long.parseLong(messageInfo.messageID));
-            RealmRoomMessage.setStatusSeenInChat(parseLong(messageInfo.messageID));
+            RealmClientCondition.addOfflineSeenAsync(mRoomId, Long.parseLong(messageInfo.messageID));
+            RealmRoomMessage.setStatusSeenInChatAsync(parseLong(messageInfo.messageID));
             G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, parseLong(messageInfo.messageID), ProtoGlobal.RoomMessageStatus.SEEN);
         }
     }
@@ -9186,7 +9186,7 @@ public class FragmentChat extends BaseFragment
 
             MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
-                public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+                public void onMessage(final long roomId, long startMessageId, long endMessageId, List<RealmRoomMessage> realmRoomMessages, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
                     if (roomId != mRoomId) {
                         return;
                     }
@@ -9195,38 +9195,25 @@ public class FragmentChat extends BaseFragment
                      * hide progress received history
                      */
                     progressItem(HIDE, direction);
-
-                    //Realm realm = Realm.getDefaultInstance();
-                    RealmResults<RealmRoomMessage> realmRoomMessages;
-                    Sort sort;
                     if (direction == UP) {
                         firstUp = false;
                         startFutureMessageIdUp = startMessageId;
-                        sort = Sort.DESCENDING;
                         isWaitingForHistoryUp = false;
                     } else {
                         firstDown = false;
                         startFutureMessageIdDown = endMessageId;
-                        sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
                     if (FragmentChat.isLoadingMoreMessage) {
                         if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
-
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    FragmentChat.isLoadingMoreMessage = false;
-                                    hideProgress();
-                                    llScrollNavigate.performClick();
-                                }
-                            });
+                            FragmentChat.isLoadingMoreMessage = false;
+                            hideProgress();
+                            llScrollNavigate.performClick();
                         }
                         return;
                     }
 
-                    realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
-                    MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
+                    MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN);
 
                     //                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
                     //                        getOnlineMessage(oldMessageId, direction);
@@ -9366,9 +9353,9 @@ public class FragmentChat extends BaseFragment
      * (hint : if gapMessageId==0 means that gap not exist)
      * if gapMessageIdUp exist, not compute again
      */
-    private long gapDetection(RealmResults<RealmRoomMessage> results, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+    private long gapDetection(List<RealmRoomMessage> results, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         if (((direction == UP && gapMessageIdUp == 0) || (direction == DOWN && gapMessageIdDown == 0)) && results.size() > 0) {
-            Object[] objects = MessageLoader.gapExist(getRealmChat(), mRoomId, results.first().getMessageId(), direction);
+            Object[] objects = MessageLoader.gapExist(getRealmChat(), mRoomId, results.get(0).getMessageId(), direction);
             if (direction == UP) {
                 reachMessageIdUp = (long) objects[1];
                 return gapMessageIdUp = (long) objects[0];
@@ -9378,6 +9365,13 @@ public class FragmentChat extends BaseFragment
             }
         }
         return 0;
+    }
+
+    private long gapDetection(RealmResults<RealmRoomMessage> results, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        Realm realm = Realm.getDefaultInstance();
+        long res = gapDetection(realm.copyFromRealm(results), direction);
+        realm.close();
+        return res;
     }
 
     /**
