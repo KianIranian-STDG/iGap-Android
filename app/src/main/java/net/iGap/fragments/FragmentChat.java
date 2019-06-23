@@ -543,7 +543,6 @@ public class FragmentChat extends BaseFragment
     private boolean firsInitScrollPosition = false;
     private boolean initHash = false;
     private boolean initAttach = false;
-    private boolean initEmoji = false;
     private boolean hasDraft = false;
     private boolean hasForward = false;
     private boolean blockUser = false;
@@ -2887,6 +2886,8 @@ public class FragmentChat extends BaseFragment
         imvSmileButton = rootView.findViewById(R.id.chl_imv_smile_button);
 
         edtChat = rootView.findViewById(R.id.chl_edt_chat);
+        setUpEmojiPopup();
+
         edtChat.requestFocus();
 
         edtChat.setOnClickListener(new View.OnClickListener() {
@@ -3492,10 +3493,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onClick(View v) {
-                if (!initEmoji) {
-                    initEmoji = true;
-                    setUpEmojiPopup();
-                }
+
                 emojiPopup.toggle();
                 if (data != null && data.size() > 0) {
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
