@@ -702,29 +702,6 @@ public class FragmentChat extends BaseFragment
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
-        ConstraintLayout chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
-
-        if (G.isDarkTheme)
-            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
-        else
-            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
-        sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
-
-        /**
-         * init chat box edit text and send item because we need change this color in dark mode!
-         * */
-
-        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
-        imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
-
-        if (G.isDarkTheme) {
-            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));
-            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext_dark));
-        } else {
-            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));
-            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
-        }
-
         return attachToSwipeBack(rootView);
     }
 
@@ -803,6 +780,8 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
         cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
         txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
@@ -2748,8 +2727,28 @@ public class FragmentChat extends BaseFragment
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
 
-        edtChat = rootView.findViewById(R.id.chl_edt_chat);
+        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         setUpEmojiPopup();
+
+        ConstraintLayout chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
+
+        if (G.isDarkTheme)
+            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
+        else
+            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
+        sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
+
+        /**
+         * init chat box edit text and send item because we need change this color in dark mode!
+         * */
+
+        if (G.isDarkTheme) {
+            imvSendButton.setTextColor(getContext().getResources().getColor(R.color.green));
+            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext_dark));
+        } else {
+            imvSendButton.setTextColor(getContext().getResources().getColor(R.color.md_green_700));
+            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext));
+        }
 
         edtChat.requestFocus();
 
@@ -6093,7 +6092,7 @@ public class FragmentChat extends BaseFragment
 
                     ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
                     layoutAttachBottom = rootView.findViewById(R.id.ll_chatRoom_send);
-                    imvSendButton = rootView.findViewById(R.id.chl_imv_send_button);
+                    imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
                 }
 
                 txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
