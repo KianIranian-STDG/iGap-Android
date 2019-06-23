@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,9 +16,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.RecoveryEmailCallback;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.interfaces.TwoStepSecurityConfirmEmail;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
 import net.iGap.request.RequestUserTwoStepVerificationSetPassword;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
@@ -109,7 +107,7 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
             public void onClick(View v) {
                 new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
                 closeKeyboard(v);
-                error(G.fragmentActivity.getResources().getString(R.string.resend_verify_email_code));
+                error(getString(R.string.resend_verify_email_code));
             }
         });
 
@@ -141,37 +139,6 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                 onRightIconClickListener(v);
             }
         });
-
-
-        G.twoStepSecurityConfirmEmail = new TwoStepSecurityConfirmEmail() {
-            @Override
-            public void confirmEmail() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        //mActivity.getSupportFragmentManager().popBackStack();
-                        popBackStackFragment();
-
-                        edtSetRePassword.setText("");
-                        edtSetHintPassword.setText("");
-                        edtSetQuestionPassOne.setText("");
-                        edtSetQuestionPassTwo.setText("");
-                        edtSetAnswerPassOne.setText("");
-                        edtSetAnswerPassTwo.setText("");
-                        edtSetEmail.setText("");
-                    }
-                });
-
-            }
-
-            @Override
-            public void errorInvalidConfirmCode() {
-
-            }
-        };
-
 
         //
         edtSetPassword = (EditText) view.findViewById(R.id.setPassword_edtSetPassword);
@@ -236,7 +203,7 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                 edtSetRePassword.requestFocus();
             } else {
                 closeKeyboard(v);
-                error(G.fragmentActivity.getResources().getString(R.string.Password_has_to_mor_than_character));
+                error(getString(R.string.Password_has_to_mor_than_character));
             }
 
 
@@ -252,12 +219,12 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                     edtSetHintPassword.requestFocus();
                 } else {
                     closeKeyboard(v);
-                    error(G.fragmentActivity.getResources().getString(R.string.Password_dose_not_match));
+                    error(getString(R.string.Password_dose_not_match));
                 }
 
             } else {
                 closeKeyboard(v);
-                error(G.fragmentActivity.getResources().getString(R.string.Password_has_to_mor_than_character));
+                error(getString(R.string.Password_has_to_mor_than_character));
             }
 
         } else if (page == 3) {
@@ -274,11 +241,11 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
 
                 } else {
                     closeKeyboard(v);
-                    error(G.fragmentActivity.getResources().getString(R.string.Hint_cant_the_same_password));
+                    error(getString(R.string.Hint_cant_the_same_password));
                 }
             } else {
                 closeKeyboard(v);
-                error(G.fragmentActivity.getResources().getString(R.string.please_set_hint));
+                error(getString(R.string.please_set_hint));
             }
 
         } else if (page == 4) {
@@ -290,7 +257,7 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
 
             } else {
                 closeKeyboard(v);
-                error(G.fragmentActivity.getResources().getString(R.string.please_complete_all_item));
+                error(getString(R.string.please_complete_all_item));
             }
         } else if (page == 5) {
 
@@ -307,7 +274,7 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                     rootConfirmEmail.setVisibility(View.VISIBLE);
                 } else {
                     closeKeyboard(v);
-                    error(G.fragmentActivity.getResources().getString(R.string.invalid_email));
+                    error(getString(R.string.invalid_email));
                 }
             } else {
                 page = 0;
@@ -333,9 +300,34 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
         } else if (page == 6) {
 
             if (edtSetConfirmEmail.length() > 0) {
-                new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString());
+                new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString(), new RecoveryEmailCallback() {
+                    @Override
+                    public void confirmEmail() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //mActivity.getSupportFragmentManager().popBackStack();
+                                popBackStackFragment();
+
+                                edtSetRePassword.setText("");
+                                edtSetHintPassword.setText("");
+                                edtSetQuestionPassOne.setText("");
+                                edtSetQuestionPassTwo.setText("");
+                                edtSetAnswerPassOne.setText("");
+                                edtSetAnswerPassTwo.setText("");
+                                edtSetEmail.setText("");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void errorEmail(int major, int minor) {
+
+                    }
+                });
             } else {
-                error(G.fragmentActivity.getResources().getString(R.string.enter_verify_email_code));
+                error(getString(R.string.enter_verify_email_code));
             }
             closeKeyboard(v);
         }

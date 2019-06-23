@@ -26,9 +26,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentSecurity;
-import net.iGap.fragments.FragmentSecurityRecovery;
 import net.iGap.helper.HelperError;
-import net.iGap.interfaces.OnTwoStepPassword;
+import net.iGap.interfaces.CheckPasswordCallback;
+import net.iGap.interfaces.RecoveryEmailCallback;
+import net.iGap.interfaces.TwoStepVerificationChangeHintCallback;
+import net.iGap.interfaces.TwoStepVerificationChangeRecoveryEmailCallback;
+import net.iGap.interfaces.TwoStepVerificationChangeRecoveryQuestionCallback;
+import net.iGap.interfaces.TwoStepVerificationGetPasswordDetail;
+import net.iGap.interfaces.UserTwoStepVerificationUnsetPasswordCallback;
 import net.iGap.model.SecurityRecoveryModel;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationChangeHint;
@@ -105,7 +110,33 @@ public class FragmentSecurityViewModel extends ViewModel {
         if (rootCheckPassword.get() == View.VISIBLE) {
             if (edtCheckPassword.get().length() > 1) {
                 password = edtCheckPassword.get();
-                new RequestUserTwoStepVerificationCheckPassword().checkPassword(password);
+                new RequestUserTwoStepVerificationCheckPassword().checkPassword(password, new CheckPasswordCallback() {
+                    @Override
+                    public void checkPassword() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                rootSetPassword.set(View.VISIBLE);
+                                rootCheckPassword.set(View.GONE);
+                                rippleOkVisibility.setValue(View.GONE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void errorCheckPassword(int major, int minor, int getWait) {
+                        if (major == 10106) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogWaitTime(getWait);
+                                }
+                            });
+                        } else if (major == 10105 && minor == 101) {
+                            //password invalid
+                        }
+                    }
+                });
                 closeKeyboard(v);
                 edtCheckPassword.set("");
             } else {
@@ -118,7 +149,22 @@ public class FragmentSecurityViewModel extends ViewModel {
         //change Question
         if (rootQuestionPassword.get() == View.VISIBLE) {
             if (edtSetQuestionPassOne.get().length() > 0 && edtSetAnswerPassOne.get().length() > 0 && edtSetQuestionPassTwo.get().length() > 0 && edtSetAnswerPassTwo.get().length() > 0) {
-                new RequestUserTwoStepVerificationChangeRecoveryQuestion().changeRecoveryQuestion(password, edtSetQuestionPassOne.get(), edtSetAnswerPassOne.get(), edtSetQuestionPassTwo.get(), edtSetAnswerPassTwo.get());
+                new RequestUserTwoStepVerificationChangeRecoveryQuestion().changeRecoveryQuestion(password, edtSetQuestionPassOne.get(), edtSetAnswerPassOne.get(), edtSetQuestionPassTwo.get(), edtSetAnswerPassTwo.get(), new TwoStepVerificationChangeRecoveryQuestionCallback() {
+                    @Override
+                    public void changeRecoveryQuestion() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewChangeRecoveryQuestion();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void errorChangeRecoveryQuestion(int major, int minor) {
+
+                    }
+                });
                 closeKeyboard(v);
                 edtSetQuestionPassOne.set("");
                 edtSetAnswerPassOne.set("");
@@ -137,7 +183,24 @@ public class FragmentSecurityViewModel extends ViewModel {
 
                 Pattern EMAIL_ADDRESS = patternEmail();
                 if (EMAIL_ADDRESS.matcher(edtSetEmailText.get()).matches()) {
-                    new RequestUserTwoStepVerificationChangeRecoveryEmail().changeRecoveryEmail(password, edtSetEmailText.get());
+                    new RequestUserTwoStepVerificationChangeRecoveryEmail().changeRecoveryEmail(password, edtSetEmailText.get(), new TwoStepVerificationChangeRecoveryEmailCallback() {
+                        @Override
+                        public void changeEmail(String unConfirmEmailPattern) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mUnconfirmedEmailPattern = unConfirmEmailPattern;
+                                    FragmentSecurity.isSetRecoveryEmail = true;
+                                    viewChangeEmail();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void errorChangeEmail(int major, int minor) {
+
+                        }
+                    });
                     closeKeyboard(v);
                     edtSetEmailText.set("");
                 } else {
@@ -157,7 +220,22 @@ public class FragmentSecurityViewModel extends ViewModel {
         if (rootChangeHint.get() == View.VISIBLE) {
             if (edtChangeHintText.get().length() > 0) {
                 if (!password.equals(edtChangeHintText.get())) {
-                    new RequestUserTwoStepVerificationChangeHint().changeHint(password, edtChangeHintText.get());
+                    new RequestUserTwoStepVerificationChangeHint().changeHint(password, edtChangeHintText.get(), new TwoStepVerificationChangeHintCallback() {
+                        @Override
+                        public void changeHint() {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    viewChangeHint();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void errorChangeHint(int major, int minor) {
+
+                        }
+                    });
                     closeKeyboard(v);
                     edtChangeHintText.set("");
                 } else {
@@ -175,7 +253,22 @@ public class FragmentSecurityViewModel extends ViewModel {
         //confirm
         if (rootConfirmedEmail.get() == View.VISIBLE) {
             if (edtConfirmedEmailText.get().length() > 0) {
-                new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtConfirmedEmailText.get());
+                new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtConfirmedEmailText.get(), new RecoveryEmailCallback() {
+                    @Override
+                    public void confirmEmail() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewConfirmEmail();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void errorEmail(int major, int minor) {
+
+                    }
+                });
                 txtPatternEmail = edtConfirmedEmailText.get();
                 edtConfirmedEmailText.set("");
                 closeKeyboard(v);
@@ -212,7 +305,27 @@ public class FragmentSecurityViewModel extends ViewModel {
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 isFirstSetPassword = true;
-                new RequestUserTwoStepVerificationUnsetPassword().unsetPassword(password);
+                new RequestUserTwoStepVerificationUnsetPassword().unsetPassword(password, new UserTwoStepVerificationUnsetPasswordCallback() {
+                    @Override
+                    public void unSetPassword() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                rootSetPassword.set(View.VISIBLE);
+                                rootSetAdditionPassword.set(View.VISIBLE);
+                                rootChangePassword.set(View.GONE);
+                                rootCheckPassword.set(View.GONE);
+                                rippleOkVisibility.setValue(View.GONE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onUnsetError(int major, int minor) {
+
+                    }
+                });
             }
         }).negativeText(G.fragmentActivity.getResources().getString(R.string.no)).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
@@ -284,7 +397,75 @@ public class FragmentSecurityViewModel extends ViewModel {
         if (isFirstArrive) {
 
             prgWaiting.set(View.VISIBLE);
-            new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
+            new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail(new TwoStepVerificationGetPasswordDetail() {
+                @Override
+                public void getDetailPassword(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern) {
+                    txtQuestionOne = questionOne;
+                    txtQuestionTwo = questionTwo;
+                    txtPatternEmail = unconfirmedEmailPattern;
+                    isConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
+                    mUnconfirmedEmailPattern = unconfirmedEmailPattern;
+
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            prgWaiting.set(View.GONE);
+                            if (questionOne.length() > 0 && questionTwo.length() > 0) {
+
+                                rootSetPassword.set(View.GONE);
+                                rootSetAdditionPassword.set(View.GONE);
+                                rootChangePassword.set(View.VISIBLE);
+                                rootCheckPassword.set(View.VISIBLE);
+                                rippleOkVisibility.setValue(View.VISIBLE);
+                                edtCheckPasswordHint.set(hint);
+                                isFirstSetPassword = false;
+
+                                if (unconfirmedEmailPattern.length() == 0) {
+
+                                    setRecoveryEmail.set(View.VISIBLE);
+                                    setConfirmedEmail.set(View.GONE);
+                                    lineConfirmView.set(View.GONE);
+                                    FragmentSecurity.isSetRecoveryEmail = false;
+                                } else {
+                                    setRecoveryEmail.set(View.VISIBLE);
+                                    viewRecoveryEmail.set(View.VISIBLE);
+                                    setConfirmedEmail.set(View.VISIBLE);
+                                    lineConfirmView.set(View.VISIBLE);
+                                    FragmentSecurity.isSetRecoveryEmail = true;
+
+                                }
+
+                            } else {//دوبار اجرا شده
+                                rootSetPassword.set(View.VISIBLE);
+                                rootSetAdditionPassword.set(View.VISIBLE);
+                                rootChangePassword.set(View.GONE);
+                                rootCheckPassword.set(View.GONE);
+                                rippleOkVisibility.setValue(View.GONE);
+                                isFirstSetPassword = true;
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void errorGetPasswordDetail(int majorCode, int minorCode) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
+                                setFirstView();
+                            } else { // CAN'T CONNECT TO SERVER
+                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
+                                if (FragmentSecurity.onPopBackStackFragment != null) {
+                                    FragmentSecurity.onPopBackStackFragment.onBack();
+                                }
+                            }
+                        }
+                    });
+                }
+            });
         } else {
             if (!isFirstSetPassword) {
                 setSecondView();
@@ -295,189 +476,6 @@ public class FragmentSecurityViewModel extends ViewModel {
 
         titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.two_step_verification_title));
         rippleOkVisibility.setValue(View.GONE);
-
-        G.onTwoStepPassword = new OnTwoStepPassword() {
-            @Override
-            public void getPasswordDetail(final String questionOne, final String questionTwo, final String hint, final boolean hasConfirmedRecoveryEmail, final String unconfirmedEmailPattern) {
-
-                txtQuestionOne = questionOne;
-                txtQuestionTwo = questionTwo;
-                txtPatternEmail = unconfirmedEmailPattern;
-                isConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
-                mUnconfirmedEmailPattern = unconfirmedEmailPattern;
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        prgWaiting.set(View.GONE);
-                        if (questionOne.length() > 0 && questionTwo.length() > 0) {
-
-                            rootSetPassword.set(View.GONE);
-                            rootSetAdditionPassword.set(View.GONE);
-                            rootChangePassword.set(View.VISIBLE);
-                            rootCheckPassword.set(View.VISIBLE);
-                            rippleOkVisibility.setValue(View.VISIBLE);
-                            edtCheckPasswordHint.set(hint);
-                            isFirstSetPassword = false;
-
-                            if (unconfirmedEmailPattern.length() == 0) {
-
-                                setRecoveryEmail.set(View.VISIBLE);
-                                setConfirmedEmail.set(View.GONE);
-                                lineConfirmView.set(View.GONE);
-                                FragmentSecurity.isSetRecoveryEmail = false;
-                            } else {
-                                setRecoveryEmail.set(View.VISIBLE);
-                                viewRecoveryEmail.set(View.VISIBLE);
-                                setConfirmedEmail.set(View.VISIBLE);
-                                lineConfirmView.set(View.VISIBLE);
-                                FragmentSecurity.isSetRecoveryEmail = true;
-
-                            }
-
-                        } else {//دوبار اجرا شده
-                            rootSetPassword.set(View.VISIBLE);
-                            rootSetAdditionPassword.set(View.VISIBLE);
-                            rootChangePassword.set(View.GONE);
-                            rootCheckPassword.set(View.GONE);
-                            rippleOkVisibility.setValue(View.GONE);
-                            isFirstSetPassword = true;
-                        }
-                    }
-                });
-            }
-
-
-            @Override
-            public void errorGetPasswordDetail(final int majorCode, final int minorCode) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
-                            setFirstView();
-                        } else { // CAN'T CONNECT TO SERVER
-                            //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
-                            if (FragmentSecurity.onPopBackStackFragment != null) {
-                                FragmentSecurity.onPopBackStackFragment.onBack();
-                            }
-
-                        }
-                    }
-                });
-
-            }
-
-            @Override
-            public void timeOutGetPasswordDetail() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // G.fragmentActivity.getSupportFragmentManager().popBackStack();
-                        if (FragmentSecurity.onPopBackStackFragment != null) {
-                            FragmentSecurity.onPopBackStackFragment.onBack();
-                        }
-
-                    }
-                });
-            }
-
-            @Override
-            public void checkPassword() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        rootSetPassword.set(View.VISIBLE);
-                        rootCheckPassword.set(View.GONE);
-                        rippleOkVisibility.setValue(View.GONE);
-                    }
-                });
-
-            }
-
-            @Override
-            public void errorCheckPassword(final int getWait) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialogWaitTime(getWait);
-                    }
-                });
-            }
-
-            @Override
-            public void unSetPassword() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        rootSetPassword.set(View.VISIBLE);
-                        rootSetAdditionPassword.set(View.VISIBLE);
-                        rootChangePassword.set(View.GONE);
-                        rootCheckPassword.set(View.GONE);
-                        rippleOkVisibility.setValue(View.GONE);
-                    }
-                });
-
-            }
-
-            @Override
-            public void changeRecoveryQuestion() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewChangeRecoveryQuestion();
-                    }
-                });
-            }
-
-            @Override
-            public void changeHint() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewChangeHint();
-                    }
-                });
-            }
-
-            @Override
-            public void changeEmail(final String unConfirmEmailPatern) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mUnconfirmedEmailPattern = unConfirmEmailPatern;
-                        FragmentSecurity.isSetRecoveryEmail = true;
-                        viewChangeEmail();
-                    }
-                });
-            }
-
-            @Override
-            public void confirmEmail() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewConfirmEmail();
-                    }
-                });
-            }
-
-            @Override
-            public void errorConfirmEmail() {
-
-            }
-
-            @Override
-            public void errorInvalidPassword() {
-
-            }
-        };
-
-
     }
 
     public void forgetPassword(boolean isRecoveryByEmail){

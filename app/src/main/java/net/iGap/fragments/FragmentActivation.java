@@ -28,7 +28,7 @@ import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
 
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
+import net.iGap.activities.ActivityRegisteration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperFragment;
@@ -37,8 +37,6 @@ import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
 
 import java.util.Locale;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class FragmentActivation extends BaseFragment {
 
@@ -52,17 +50,9 @@ public class FragmentActivation extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_activation, container, false);
-        viewModel = new FragmentActivationViewModel();
+        viewModel = new FragmentActivationViewModel(((ActivityRegisteration) getActivity()).repository);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
-        if (getArguments() != null) {
-            viewModel.setUserData(
-                    getArguments().getString("userName"),
-                    getArguments().getLong("userId"),
-                    getArguments().getString("authorHash"),
-                    getArguments().getString("phoneNumber")
-            );
-        }
         return binding.getRoot();
     }
 
@@ -87,7 +77,6 @@ public class FragmentActivation extends BaseFragment {
         viewModel.verifyCode.observe(this, s -> {
             if (s != null) {
                 setActivationCode(s);
-                binding.loginButton.performClick();
             }
         });
         viewModel.showEnteredCodeError.observe(this, aBoolean -> {
@@ -105,25 +94,6 @@ public class FragmentActivation extends BaseFragment {
                     set1.applyTo(binding.root);
                 } else {
                     set1.applyTo(binding.root);
-                }
-            }
-        });
-        viewModel.isNewUser.observe(this, aBoolean -> {
-            if (getActivity() != null && aBoolean != null) {
-                if (aBoolean) {
-                    WelcomeFragment fragment = new WelcomeFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("newUser", true);
-                    bundle.putLong("userId", viewModel.userId);
-                    fragment.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentActivation.this).commitAllowingStateLoss();
-                } else {
-                    Intent intent = new Intent(getActivity(), ActivityMain.class);
-                    intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, viewModel.userId);
-                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    getActivity().startActivity(intent);
-                    getActivity().finish();
                 }
             }
         });
@@ -151,6 +121,18 @@ public class FragmentActivation extends BaseFragment {
         viewModel.goToTwoStepVerificationPage.observe(this, userId -> {
             if (getActivity() != null && userId != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), TwoStepVerificationFragment.newInstant(userId)).setResourceContainer(R.id.ar_layout_root).load(false);
+            }
+        });
+
+        viewModel.showDialogUserBlocked.observe(this, isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+            }
+        });
+
+        viewModel.showDialogVerificationCodeExpired.observe(this, isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_EXPIRED).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
             }
         });
 
@@ -183,7 +165,7 @@ public class FragmentActivation extends BaseFragment {
 
                     try {
                         if (message != null && message.length() > 0) {
-                            viewModel.receiveVerifySms(message);
+                            viewModel.receiveVerifySms(message,true);
                         }
                     } catch (Exception e1) {
                         e1.getStackTrace();
@@ -366,7 +348,7 @@ public class FragmentActivation extends BaseFragment {
                             binding.activationCodeEditText3.getEditableText().toString() +
                             binding.activationCodeEditText4.getEditableText().toString() +
                             binding.activationCodeEditText5.getEditableText().toString();
-                    viewModel.receiveVerifySms(message);
+                    viewModel.receiveVerifySms(message,false);
                 } else {
                     binding.activationCodeEditText4.requestFocus();
                 }

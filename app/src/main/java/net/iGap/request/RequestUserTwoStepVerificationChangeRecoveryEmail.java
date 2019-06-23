@@ -10,18 +10,19 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.TwoStepVerificationChangeRecoveryEmailCallback;
 import net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail;
 
 public class RequestUserTwoStepVerificationChangeRecoveryEmail {
 
-    public void changeRecoveryEmail(String password, String email) {
+    public void changeRecoveryEmail(String password, String email, TwoStepVerificationChangeRecoveryEmailCallback callback) {
 
         ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.Builder builder =
                 ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.newBuilder();
         builder.setPassword(password);
         builder.setEmail(email);
 
-        RequestWrapper requestWrapper = new RequestWrapper(137, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(137, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

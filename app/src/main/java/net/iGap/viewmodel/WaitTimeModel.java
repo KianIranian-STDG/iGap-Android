@@ -1,9 +1,9 @@
 package net.iGap.viewmodel;
 
 public class WaitTimeModel {
-    int title;
-    long time;
-    int majorCod;
+    private int title;
+    private long time;
+    private int majorCod;
 
     public WaitTimeModel(int title, long time, int majorCod) {
         this.title = title;
