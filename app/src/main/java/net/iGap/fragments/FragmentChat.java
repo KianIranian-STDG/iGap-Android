@@ -96,9 +96,11 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
+import com.vanniktech.emoji.sticker.OnDownloadStickerListener;
 import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
+import com.vanniktech.emoji.sticker.OnStickerAvatarDownloaded;
+import com.vanniktech.emoji.sticker.OnStickerItemDownloaded;
 import com.vanniktech.emoji.sticker.OnStickerListener;
-import com.vanniktech.emoji.sticker.OnUpdateStickerListener;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
@@ -6258,21 +6260,21 @@ public class FragmentChat extends BaseFragment
 
                     }
                 })
-                .setOnUpdateSticker(new OnUpdateStickerListener() {
+                .setOnDownloadStickerListener(new OnDownloadStickerListener() {
                     @Override
-                    public void onUpdateSticker(String token, String extention, long avatarSize, int positionAdapter) {
-
-                        HashMap<String, Integer> updateList = new HashMap<>();
-                        updateList.put(token, positionAdapter);
+                    public void downloadStickerItem(String token, String extention, long avatarSize, OnStickerItemDownloaded onStickerItemDownloaded) {
                         HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
 
                             @Override
                             public void OnProgress(String path, String token, int progress) {
-
-                                if (updateList.get(token) != null) {
-                                    emojiPopup.onUpdateSticker(updateList.get(token));
-                                    updateList.remove(token);
-                                }
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (progress == 100) {
+                                            onStickerItemDownloaded.onStickerItemDownload(token);
+                                        }
+                                    }
+                                });
                             }
 
                             @Override
@@ -6280,27 +6282,24 @@ public class FragmentChat extends BaseFragment
 
                             }
                         });
-                    }
 
-                    @Override
-                    public void onUpdateRecentSticker() {
 
                     }
 
                     @Override
-                    public void onUpdateTabSticker(String token, String extention, long avatarSize, int positionAdapter) {
-                        HashMap<String, Integer> updateList = new HashMap<>();
-                        updateList.put(token, positionAdapter);
-
+                    public void downloadStickerAvatar(String token, String extention, long avatarSize, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
                         HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-
                             @Override
                             public void OnProgress(String path, String token, int progress) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (progress == 100) {
+                                            onStickerAvatarDownloaded.onStickerAvatarDownload(token);
+                                        }
+                                    }
+                                });
 
-                                if (updateList.get(token) != null && token != null) {
-                                    emojiPopup.onUpdateTabSticker(updateList.get(token));
-                                    updateList.remove(token);
-                                }
                             }
 
                             @Override
