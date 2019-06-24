@@ -32,6 +32,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.adapter.AdapterSolidChatBackground;
+import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -176,14 +177,19 @@ public class FragmentChatBackground extends BaseFragment {
 
         rippleSetDefault.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onComplete(RippleView rippleView) throws IOException {
-
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-                editor.apply();
-
-                popBackStackFragment();
+            public void onComplete(RippleView rippleView){
+                if (getActivity() != null) {
+                    HelperSaveFile.removeFromPrivateDirectory(getActivity());
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+                    editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
+                    editor.apply();
+                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
+                        G.onBackgroundChanged.onBackgroundChanged("");
+                    }
+                    popBackStackFragment();
+                }
             }
         });
 
@@ -191,14 +197,22 @@ public class FragmentChatBackground extends BaseFragment {
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                if (savePath != null && savePath.length() > 0) {
-                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
-                        G.onBackgroundChanged.onBackgroundChanged(savePath);
+                if (getActivity()!=null && savePath != null && savePath.length() > 0) {
+                    String finalPath = "";
+                    try {
+                        finalPath = HelperSaveFile.saveInPrivateDirectory(getActivity(), savePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, savePath);
+                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
+                    editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, false);
                     editor.apply();
+                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
+                        G.onBackgroundChanged.onBackgroundChanged(finalPath);
+                    }
+
                     popBackStackFragment();
                 }
             }

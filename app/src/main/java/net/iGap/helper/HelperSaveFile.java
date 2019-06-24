@@ -10,13 +10,18 @@
 
 package net.iGap.helper;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.yalantis.ucrop.util.FileUtils;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -263,6 +268,23 @@ public class HelperSaveFile {
                 Log.w("ExternalStorage", "Error writing " + file, e);
             }
         }
+    }
+
+    public static String saveInPrivateDirectory(Activity activity,String filePath) throws IOException{
+        File fileWithinMyDir = getPrivateDirectory(activity);
+        FileUtils.copyFile(filePath,fileWithinMyDir.getPath());
+        return fileWithinMyDir.getPath();
+    }
+
+    public static void removeFromPrivateDirectory(Activity activity){
+        File fileWithinMyDir = getPrivateDirectory(activity);
+        if (fileWithinMyDir.exists()) {
+            fileWithinMyDir.delete();
+        }
+    }
+
+    private static File getPrivateDirectory(Activity activity){
+        return new File(new ContextWrapper(activity).getDir("ChatBackground", Context.MODE_PRIVATE), "kb24");
     }
 
     public enum FolderType {

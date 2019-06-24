@@ -89,8 +89,8 @@ public class Theme extends Application {
     public static String default_dark_progressColor = "#ffffff";
     public static String default_dark_linkColor = "#00BCD4";
     public static String default_dark_bubbleChatMusicColor = "#313131";//
-    public static String default_dark_bubbleChatSendColor = "#33749e85";
-    public static String default_dark_bubbleChatReceiveColor = "#33ddd1c5";
+    public static String default_dark_bubbleChatSendColor = "#394b4b";
+    public static String default_dark_bubbleChatReceiveColor = "#4d5558";
     public static String default_dark_backgroundThemeMsg = "#2c363f";
     public static String default_dark_backgroundThemeMsgPined = "#3314191c";
     public static String default_dark_textTitleTheme = "#cccccc";
