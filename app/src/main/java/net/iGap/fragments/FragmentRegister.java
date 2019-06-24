@@ -45,13 +45,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
+import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.SHP_SETTING;
+import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.viewmodel.FragmentRegisterViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -60,18 +60,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-import static android.content.Context.MODE_PRIVATE;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
 public class FragmentRegister extends BaseFragment {
-
-    private static final String KEY_SAVE_CODE_NUMBER = "SAVE_CODE_NUMBER";
-    private static final String KEY_SAVE_PHONE_NUMBER_MASK = "SAVE_PHONE_NUMBER_MASK";
-    private static final String KEY_SAVE_PHONE_NUMBER_NUMBER = "SAVE_PHONE_NUMBER_NUMBER";
-    private static final String KEY_SAVE_NAME_COUNTRY = "SAVE_NAME_COUNTRY";
-    private static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
-    private static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
-    private static final String KEY_SAVE = "SAVE";
 
     public static int positionRadioButton = -1;
 
@@ -83,7 +72,7 @@ public class FragmentRegister extends BaseFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentRegisterBinding = DataBindingUtil.inflate(inflater, R.layout.activity_register, container, false);
-        fragmentRegisterViewModel = new FragmentRegisterViewModel(getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
+        fragmentRegisterViewModel = new FragmentRegisterViewModel(((ActivityRegisteration) getActivity()).repository, new CountryReader().readFromAssetsTextFile("country.txt", getContext()));
         fragmentRegisterBinding.setFragmentRegisterViewModel(fragmentRegisterViewModel);
         fragmentRegisterBinding.setLifecycleOwner(this);
         return fragmentRegisterBinding.getRoot();
@@ -113,19 +102,6 @@ public class FragmentRegister extends BaseFragment {
         fragmentRegisterBinding.conditionText.setMovementMethod(LinkMovementMethod.getInstance());
         fragmentRegisterBinding.conditionText.setHighlightColor(Color.TRANSPARENT);
 
-        if (savedInstanceState != null) {
-            fragmentRegisterViewModel.saveInstance(
-                    savedInstanceState.getString(KEY_SAVE_CODE_NUMBER),
-                    savedInstanceState.getString(KEY_SAVE_PHONE_NUMBER_MASK),
-                    savedInstanceState.getString(KEY_SAVE_PHONE_NUMBER_NUMBER),
-                    savedInstanceState.getString(KEY_SAVE_NAME_COUNTRY),
-                    savedInstanceState.getString(KEY_SAVE_AGREEMENT),
-                    savedInstanceState.getString(KEY_SAVE_REGEX),
-                    savedInstanceState.getInt(KEY_SAVE));
-        } else {
-            fragmentRegisterViewModel.getInfo();
-        }
-
         fragmentRegisterViewModel.showConditionErrorDialog.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDialogConditionError();
@@ -133,15 +109,9 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.goNextStep.observe(this, aBoolean -> {
-            if (getActivity()!=null&&aBoolean != null && aBoolean) {
+            if (getActivity() != null && aBoolean != null && aBoolean) {
                 FragmentActivation fragment = new FragmentActivation();
-                Bundle bundle = new Bundle();
-                bundle.putString("userName", fragmentRegisterViewModel.userName);
-                bundle.putLong("userId", fragmentRegisterViewModel.userId);
-                bundle.putString("authorHash", fragmentRegisterViewModel.authorHash);
-                bundle.putString("phoneNumber", fragmentRegisterViewModel.callBackEdtPhoneNumber.get());
-                fragment.setArguments(bundle);
-                new HelperFragment(getActivity().getSupportFragmentManager(),fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
             }
         });
 
@@ -164,7 +134,7 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(this, aBoolean -> {
-            if (getActivity()!=null&&aBoolean != null && aBoolean) {
+            if (getActivity() != null && aBoolean != null && aBoolean) {
                 new DefaultRoundDialog(getActivity()).setMessage(getString(R.string.Re_dialog_verify_number_part1) + "\n" +
                         fragmentRegisterViewModel.callbackEdtCodeNumber.get() + "" + fragmentRegisterViewModel.callBackEdtPhoneNumber.get() + "\n" +
                         getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, (dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber()).setNegativeButton(R.string.B_edit, null).show();
@@ -184,16 +154,6 @@ public class FragmentRegister extends BaseFragment {
         fragmentRegisterViewModel.showConnectionErrorDialog.observe(this, aBoolean -> {
             if (getContext() != null && aBoolean != null && aBoolean) {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.please_check_your_connenction).setPositiveButton(R.string.ok, null).show();
-            }
-        });
-
-        fragmentRegisterViewModel.goToMainPage.observe(this, aBoolean -> {
-            if (getActivity() != null && aBoolean != null && aBoolean) {
-                Intent intent = new Intent(getContext(), ActivityMain.class);
-                intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, fragmentRegisterViewModel.userId);
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                getActivity().startActivity(intent);
-                getActivity().finish();
             }
         });
 
@@ -231,17 +191,6 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.goToWelcomePage.observe(this, userId -> {
-            if (getActivity() != null && userId != null) {
-                WelcomeFragment fragment = new WelcomeFragment();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("newUser", true);
-                bundle.putLong("userId", userId);
-                fragment.setArguments(bundle);
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
-            }
-        });
-
         fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(this, userId -> {
             if (getActivity() != null && userId != null) {
                 if (dialogQrCode != null && dialogQrCode.isShowing()) {
@@ -250,10 +199,16 @@ public class FragmentRegister extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), TwoStepVerificationFragment.newInstant(userId)).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
             }
         });
+
+        fragmentRegisterViewModel.showDialogUserBlock.observe(this, isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+            }
+        });
     }
 
     private void showCountryDialog() {
-        if (getActivity()!=null){
+        if (getActivity() != null) {
             Dialog dialogChooseCountry = new Dialog(getActivity());
             dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogChooseCountry.setContentView(R.layout.rg_dialog);
@@ -340,7 +295,6 @@ public class FragmentRegister extends BaseFragment {
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-
                     adapterDialog.getFilter().filter(s);
                     return false;
                 }
@@ -463,20 +417,6 @@ public class FragmentRegister extends BaseFragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        savedInstanceState.putString(KEY_SAVE_CODE_NUMBER, fragmentRegisterBinding.countyCode.getEditableText().toString());
-        savedInstanceState.putString(KEY_SAVE_PHONE_NUMBER_MASK, fragmentRegisterViewModel.edtPhoneNumberMask.get());
-        savedInstanceState.putString(KEY_SAVE_PHONE_NUMBER_NUMBER, fragmentRegisterViewModel.callBackEdtPhoneNumber.get());
-        savedInstanceState.putString(KEY_SAVE_NAME_COUNTRY, fragmentRegisterBinding.country.getText().toString());
-        savedInstanceState.putString(KEY_SAVE_REGEX, fragmentRegisterViewModel.regex);
-        savedInstanceState.putString(KEY_SAVE_AGREEMENT, fragmentRegisterViewModel.getAgreementDescription());
-        savedInstanceState.putInt(KEY_SAVE, fragmentRegisterViewModel.ONETIME);
-
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

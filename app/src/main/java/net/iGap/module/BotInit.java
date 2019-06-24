@@ -125,7 +125,6 @@ public class BotInit implements View.OnClickListener {
                         }
                     }
                 });
-                realm.close();
 
                 for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
 
@@ -183,7 +182,7 @@ public class BotInit implements View.OnClickListener {
                         new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
                     }
                 }
-
+                realm.close();
             }
 
         };

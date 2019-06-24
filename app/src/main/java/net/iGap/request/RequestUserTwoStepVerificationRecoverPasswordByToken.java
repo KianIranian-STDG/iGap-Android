@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByToken;
 import net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByToken;
 
 public class RequestUserTwoStepVerificationRecoverPasswordByToken {
 
-    public void recoveryPasswordByToken(String token) {
+    public void recoveryPasswordByToken(String token, TwoStepVerificationRecoverPasswordByToken callback) {
         ProtoUserTwoStepVerificationRecoverPasswordByToken.UserTwoStepVerificationRecoverPasswordByToken.Builder builder = ProtoUserTwoStepVerificationRecoverPasswordByToken.UserTwoStepVerificationRecoverPasswordByToken.newBuilder();
         builder.setToken(token);
 
-        RequestWrapper requestWrapper = new RequestWrapper(139, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(139, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

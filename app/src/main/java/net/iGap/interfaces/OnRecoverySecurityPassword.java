@@ -11,14 +11,14 @@ package net.iGap.interfaces;
 
 public interface OnRecoverySecurityPassword {
 
-    void recoveryByEmail(String tokenR);
+    /*void recoveryByEmail(String tokenR);*/
 
     void getEmailPatern(String patern);
 
-    void errorRecoveryByEmail();
+    /*void errorRecoveryByEmail();*/
 
-    void recoveryByQuestion(String tokenR);
+    /*void recoveryByQuestion(String tokenR);
 
-    void errorRecoveryByQuestion();
+    void errorRecoveryByQuestion();*/
 
 }

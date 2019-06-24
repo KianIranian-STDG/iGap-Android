@@ -1,24 +1,39 @@
 package net.iGap.activities;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegistrationNickname;
+import net.iGap.fragments.WelcomeFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnRefreshActivity;
+import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.StartupActions;
 
 import java.io.IOException;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class ActivityRegisteration extends ActivityEnhanced {
 
     public static final String showProfile = "showProfile";
+
+    private static final String KEY_SAVE_CODE_NUMBER = "SAVE_CODE_NUMBER";
+    private static final String KEY_SAVE_PHONE_NUMBER_MASK = "SAVE_PHONE_NUMBER_MASK";
+    private static final String KEY_SAVE_PHONE_NUMBER_NUMBER = "SAVE_PHONE_NUMBER_NUMBER";
+    private static final String KEY_SAVE_NAME_COUNTRY = "SAVE_NAME_COUNTRY";
+    private static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
+    private static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
+
+    public final RegisterRepository repository = new RegisterRepository();
 
     // FrameLayout layoutRoot;
 
@@ -45,6 +60,31 @@ public class ActivityRegisteration extends ActivityEnhanced {
             e.printStackTrace();
         }
 
+        repository.goToMainPage.observe(this, data -> {
+            if (data != null) {
+                if (data.isShowDialogDisableTwoStepVerification()) {
+                    new DefaultRoundDialog(this)
+                            .setTitle(R.string.warning)
+                            .setMessage(R.string.two_step_verification_disable)
+                            .setPositiveButton(R.string.dialog_ok, (dialog, which) -> goToMainPage(data.getUserId()))
+                            .show();
+                } else {
+                    goToMainPage(data.getUserId());
+                }
+            }
+        });
+
+        repository.goToWelcomePage.observe(this, userId -> {
+            if (userId != null) {
+                WelcomeFragment fragment = new WelcomeFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("newUser", true);
+                bundle.putLong("userId", userId);
+                fragment.setArguments(bundle);
+                new HelperFragment(getSupportFragmentManager(), fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
+            }
+        });
+
         G.onRefreshActivity = new OnRefreshActivity() {
             @Override
             public void refresh(String changeLanguag) {
@@ -61,6 +101,28 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
             }
         };
+        if (savedInstanceState != null) {
+            repository.saveInstance(
+                    savedInstanceState.getInt(KEY_SAVE_CODE_NUMBER),
+                    savedInstanceState.getString(KEY_SAVE_PHONE_NUMBER_MASK),
+                    savedInstanceState.getString(KEY_SAVE_PHONE_NUMBER_NUMBER),
+                    savedInstanceState.getString(KEY_SAVE_NAME_COUNTRY),
+                    savedInstanceState.getString(KEY_SAVE_REGEX)
+            );
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putInt(KEY_SAVE_CODE_NUMBER, repository.getCallingCode());
+        savedInstanceState.putString(KEY_SAVE_PHONE_NUMBER_MASK, repository.getPattern());
+        savedInstanceState.putString(KEY_SAVE_PHONE_NUMBER_NUMBER, repository.getPhoneNumber());
+        savedInstanceState.putString(KEY_SAVE_NAME_COUNTRY, repository.getCountryName());
+        savedInstanceState.putString(KEY_SAVE_REGEX, repository.getRegex());
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     private void startApp() {
@@ -141,5 +203,13 @@ public class ActivityRegisteration extends ActivityEnhanced {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+
+    private void goToMainPage(long userId) {
+        Intent intent = new Intent(this, ActivityMain.class);
+        intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

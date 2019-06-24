@@ -323,9 +323,9 @@ public class G extends MultiDexApplication {
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
-    public static OnTwoStepPassword onTwoStepPassword;
-    public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;
-    public static OnSecurityCheckPassword onSecurityCheckPassword;
+    /*public static OnTwoStepPassword onTwoStepPassword;*/
+    /*public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;*/
+    /*public static OnSecurityCheckPassword onSecurityCheckPassword;*/
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static OnRecoveryEmailToken onRecoveryEmailToken;
     /*public static OnQrCodeNewDevice onQrCodeNewDevice;*/

@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.CheckPasswordCallback;
 import net.iGap.proto.ProtoUserTwoStepVerificationCheckPassword;
 
 public class RequestUserTwoStepVerificationCheckPassword {
 
-    public void checkPassword(String password) {
+    public void checkPassword(String password, CheckPasswordCallback callback) {
         ProtoUserTwoStepVerificationCheckPassword.UserTwoStepVerificationCheckPassword.Builder builder = ProtoUserTwoStepVerificationCheckPassword.UserTwoStepVerificationCheckPassword.newBuilder();
         builder.setPassword(password);
 
-        RequestWrapper requestWrapper = new RequestWrapper(135, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(135, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
