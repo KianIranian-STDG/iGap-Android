@@ -5,14 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +44,15 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.viewmodel.ActivityCallViewModel;
 
+import static android.support.constraint.ConstraintSet.BOTTOM;
+import static android.support.constraint.ConstraintSet.END;
+import static android.support.constraint.ConstraintSet.MATCH_CONSTRAINT;
+import static android.support.constraint.ConstraintSet.PARENT_ID;
+import static android.support.constraint.ConstraintSet.START;
+import static android.support.constraint.ConstraintSet.TOP;
+import static android.support.constraint.ConstraintSet.WRAP_CONTENT;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
+
 
 /**
  * SAMPLE OF USAGE ARE AT BOTTOM OF THIS FILE
@@ -51,30 +65,27 @@ public class HelperToolbar {
 
     private AppCompatTextView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
-    private EmojiTextViewE mTxtChatUserName ;
+    private EmojiTextViewE mTxtChatUserName;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch;
     private AppCompatTextView groupName, groupMemberCount;
     public EditText mEdtSearch;
-    private TextView mChatVerifyIcon ;
-    private TextView mChatMuteIcon ;
-    private CircleImageView mCloudChatIcon ;
+    private TextView mChatVerifyIcon;
+    private TextView mChatMuteIcon;
+    private CircleImageView mCloudChatIcon;
     private TextView mBtnClearSearch;
 
-    private LayoutInflater mInflater;
     private Context mContext;
     private ViewGroup mViewGroup = null;
     private ToolbarListener mToolbarListener;
 
-    private int mLeftIcon=0;
+    private int mLeftIcon = 0;
     private int[] mRightIcons = {0, 0, 0, 0};
     private boolean isAttachToRoot;
     private boolean isSearchBoxShown;
     private boolean isLogoShown;
-    private boolean isBigCenterAvatarShown;
     private boolean isRightSmallAvatarShown;
-    private boolean isCounterShown;
     private boolean isInChatRoom;
     private boolean isCallModeEnable;
     private boolean isGroupProfile;
@@ -93,7 +104,6 @@ public class HelperToolbar {
 
     public HelperToolbar setContext(Context context) {
         this.mContext = context;
-        if (context != null) this.mInflater = LayoutInflater.from(context);
         return this;
     }
 
@@ -107,11 +117,6 @@ public class HelperToolbar {
         return this;
     }
 
-    /*public HelperToolbar setRightIcons(Bitmap... bitmaps) {
-        this.mRightIcons = bitmaps;
-        return this;
-    }*/
-
     public HelperToolbar setRightIcons(@StringRes int... drawables) {
         System.arraycopy(drawables, 0, mRightIcons, 0, drawables.length);
         return this;
@@ -123,13 +128,13 @@ public class HelperToolbar {
         return this;
     }
 
-    public HelperToolbar setSearchBoxShown(boolean searchBoxShown , boolean isShowEditTextForSearch ) {
+    public HelperToolbar setSearchBoxShown(boolean searchBoxShown, boolean isShowEditTextForSearch) {
         this.isSearchBoxShown = searchBoxShown;
         this.isShowEditTextForSearch = isShowEditTextForSearch;
         return this;
     }
 
-    public HelperToolbar setSearchBoxShown(boolean searchBoxShown ) {
+    public HelperToolbar setSearchBoxShown(boolean searchBoxShown) {
         this.isSearchBoxShown = searchBoxShown;
         this.isShowEditTextForSearch = true;
         return this;
@@ -151,18 +156,8 @@ public class HelperToolbar {
     }
 
     public HelperToolbar setIsSharedMedia(boolean isSharedMedia) {
- 
+
         this.isSharedMedia = isSharedMedia;
-        return this;
-    }
-
-    public HelperToolbar setCallEnable(boolean isEnable) {
-        this.isCallModeEnable = isEnable;
-        return this;
-    }
-
-    public HelperToolbar setBigCenterAvatarShown(boolean avatarShown) {
-        this.isBigCenterAvatarShown = avatarShown;
         return this;
     }
 
@@ -176,17 +171,11 @@ public class HelperToolbar {
         return this;
     }
 
-    public HelperToolbar setCounterShown(boolean counterShown) {
-        //for show number of msg selected in chat room
-        this.isCounterShown = counterShown;
-        return this;
-    }
+    public HelperToolbar setDefaultTitle(String title) {
 
-    public HelperToolbar setDefaultTitle(String title){
+        this.defaultTitleText = title;
 
-        this.defaultTitleText = title ;
-
-        if (mTxtLogo != null){
+        if (mTxtLogo != null) {
             mTxtLogo.setText(title);
             checkIGapFont();
         }
@@ -209,120 +198,63 @@ public class HelperToolbar {
         if (mContext == null) throw new IllegalArgumentException("Context can not be null");
 
         //set default title name if user not set
-        if (defaultTitleText == null || defaultTitleText.trim().equals("")){
+        if (defaultTitleText == null || defaultTitleText.trim().equals("")) {
             defaultTitleText = mContext.getResources().getString(R.string.app_name);
         }
 
-        rootView = getInflater(R.layout.view_main_toolbar);
-        setNormalSizeToRootViews(rootView);
+        typeFaceGenerator();
 
-        initViews(rootView);
+        ViewMaker viewMaker = new ViewMaker(mContext);
+        rootView = viewMaker;
+        rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        //check and set custom shape for dark mode
-        if (G.isDarkTheme)
-            rootView.findViewById(R.id.view_toolbar_main_constraint)
-                    .setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
+        initViews(viewMaker);
+
 
         if (mLeftIcon != 0) {
-            mLeftBtn.setText(mLeftIcon);
-            mLeftBtn.setVisibility(View.VISIBLE);
             mLeftBtn.setOnClickListener(v -> mToolbarListener.onLeftIconClickListener(v));
 
-        } else {
-            mLeftBtn.setVisibility(View.GONE);
         }
-
         if (mRightIcons[0] != 0) {
-            mRightBtn.setText(mRightIcons[0]);
-            mRightBtn.setVisibility(View.VISIBLE);
             mRightBtn.setOnClickListener(v -> mToolbarListener.onRightIconClickListener(v));
 
-        } else {
-            mRightBtn.setVisibility(View.GONE);
         }
-
         if (mRightIcons[1] != 0) {
-            m2RightBtn.setText(mRightIcons[1]);
-            m2RightBtn.setVisibility(View.VISIBLE);
             m2RightBtn.setOnClickListener(v -> mToolbarListener.onSecondRightIconClickListener(v));
 
-        } else {
-            m2RightBtn.setVisibility(View.GONE);
         }
-
         if (mRightIcons[2] != 0) {
-            m3RightBtn.setText(mRightIcons[2]);
-            m3RightBtn.setVisibility(View.VISIBLE);
             m3RightBtn.setOnClickListener(v -> mToolbarListener.onThirdRightIconClickListener(v));
 
-        } else {
-            m3RightBtn.setVisibility(View.GONE);
         }
 
         if (mRightIcons[3] != 0) {
-            m4RightBtn.setText(mRightIcons[3]);
-            m4RightBtn.setVisibility(View.VISIBLE);
             m4RightBtn.setOnClickListener(v -> mToolbarListener.onFourthRightIconClickListener(v));
 
-        } else {
-            m4RightBtn.setVisibility(View.GONE);
         }
 
-        if (!isCounterShown)
-            mTxtCounter.setVisibility(View.GONE);
-        else
-            mTxtCounter.setVisibility(View.VISIBLE);
-
-        if (!isRightSmallAvatarShown) {
-            mAvatarSmall.setVisibility(View.GONE);
-
-        } else {
-            mAvatarSmall.setVisibility(View.VISIBLE);
-            mAvatarSmall.setOnClickListener(v -> mToolbarListener.onSmallAvatarClickListener(v));
-        }
 
         if (isInChatRoom) {
-            rootView.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.VISIBLE);
-            rootView.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.VISIBLE);
-            mTxtChatSeenStatus.setVisibility(View.VISIBLE);
             rootView.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
-
-        } else {
-            rootView.findViewById(R.id.view_toolbar_user_chat_avatar_layout).setVisibility(View.GONE);
-            rootView.findViewById(R.id.view_toolbar_chat_layout_userName).setVisibility(View.GONE);
-            mTxtChatSeenStatus.setVisibility(View.GONE);
-
         }
 
-        setBigAvatarVisibility(rootView, isBigCenterAvatarShown);
+        if (mSearchBox != null){
+            setSearchBoxVisibility( isSearchBoxShown);
+        }
 
-        setIGapLogoVisibility(rootView, isLogoShown);
 
-        setSearchBoxVisibility(rootView, isSearchBoxShown);
-
-        //setCallModeVisibility(result, isCallModeEnable);
-
-        setGroupProfileVisibility(rootView, isGroupProfile);
-
-        toolBarTitleHandler();
 
         if (isMediaPlayerEnabled){
-            setMusicPlayer(rootView , isInChatRoom);
+            setMusicPlayer(viewMaker , isInChatRoom);
         }
 
-        checkIGapFont();
 
+        if (mTxtLogo != null){
+            toolBarTitleHandler();
+            checkIGapFont();
+        }
         return rootView;
 
-    }
-
-
-    public TextView getTextViewCounter() {
-        return mTxtCounter;
-    }
-
-    public TextView getTextViewCallStatus() {
-        return mTxtCallStatus;
     }
 
     public EmojiTextViewE getTextViewChatUserName() {
@@ -361,7 +293,7 @@ public class HelperToolbar {
         return mRightBtn;
     }
 
-    public AppCompatTextView getSecondRightButton(){
+    public AppCompatTextView getSecondRightButton() {
         return m2RightBtn;
     }
 
@@ -381,7 +313,7 @@ public class HelperToolbar {
         return mCloudChatIcon;
     }
 
-    public AppCompatTextView getGroupName(){
+    public AppCompatTextView getGroupName() {
         return groupName;
     }
 
@@ -401,37 +333,28 @@ public class HelperToolbar {
         return mChatMuteIcon;
     }
 
-    public CircleImageView getAvatarSmall() {
-        return mAvatarSmall;
-    }
 
     /*************************************************************/
 
-    private void setMusicPlayer(View view , boolean isChat) {
+    private void setMusicPlayer(ViewMaker view, boolean isChat) {
 
-        //set dark theme to player
-        if (G.isDarkTheme){
-            View playersLyt = view.findViewById(R.id.view_toolbar_player_layout);
-            playersLyt.setBackgroundResource(R.drawable.shape_toolbar_player_dark);
-        }
+        LinearLayout musicLayout = (LinearLayout) view.getMusicLayout() ;
 
-        LinearLayout musicLayout = view.findViewById(R.id.view_toolbar_layout_player_music);
+        LinearLayout stripCallLayout = (LinearLayout) view.getCallLayout();
 
-        LinearLayout stripCallLayout = view.findViewById(R.id.view_toolbar_layout_strip_call);
-
-        if (!isSearchBoxShown){
+        if (!isSearchBoxShown) {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) musicLayout.getLayoutParams();
-            params.setMargins( 0 , (int) mContext.getResources().getDimension(R.dimen.dp14) , 0 , 0);
+            params.setMargins(0, (int) mContext.getResources().getDimension(R.dimen.dp14), 0, 0);
             musicLayout.setLayoutParams(params);
 
             LinearLayout.LayoutParams paramsCall = (LinearLayout.LayoutParams) stripCallLayout.getLayoutParams();
-            paramsCall.setMargins( 0 , (int) mContext.getResources().getDimension(R.dimen.dp14) , 0 , 0);
+            paramsCall.setMargins(0, (int) mContext.getResources().getDimension(R.dimen.dp14), 0, 0);
             stripCallLayout.setLayoutParams(paramsCall);
         }
 
-        if (isChat){
+        if (isChat) {
             MusicPlayer.chatLayout = musicLayout;
-            ActivityCall.stripLayoutChat = view.findViewById(R.id.view_toolbar_layout_strip_call);
+            ActivityCall.stripLayoutChat = view.getCallLayout() ;
 
             ActivityCallViewModel.txtTimeChat = rootView.findViewById(R.id.cslcs_txt_timer);
 
@@ -440,13 +363,13 @@ public class HelperToolbar {
 
             checkIsAvailableOnGoingCall();
 
-        }else if (isSharedMedia){
+        } else if (isSharedMedia) {
 
             MusicPlayer.shearedMediaLayout = musicLayout;
 
-        }else {
+        } else {
             MusicPlayer.mainLayout = musicLayout;
-            ActivityCall.stripLayoutMain = view.findViewById(R.id.view_toolbar_layout_strip_call);
+            ActivityCall.stripLayoutMain = view.getCallLayout();
 
 
             ActivityCallViewModel.txtTimerMain = rootView.findViewById(R.id.cslcs_txt_timer);
@@ -495,7 +418,7 @@ public class HelperToolbar {
                 }
 
             });
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -599,31 +522,34 @@ public class HelperToolbar {
 
     private void checkIGapFont() {
 
+        if (mTxtLogo == null)
+            return;
+
         if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.waiting_for_network))) {
-            Utils.setTextSize(mTxtLogo , R.dimen.standardTextSize );
+            Utils.setTextSize(mTxtLogo, R.dimen.standardTextSize);
 
         } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.connecting))) {
-            Utils.setTextSize(mTxtLogo , R.dimen.largeTextSize );
+            Utils.setTextSize(mTxtLogo, R.dimen.largeTextSize);
 
         } else if (mTxtLogo.getText().toString().equals(mContext.getString(R.string.updating))) {
-            Utils.setTextSize(mTxtLogo , R.dimen.largeTextSize );
+            Utils.setTextSize(mTxtLogo, R.dimen.largeTextSize);
 
         } else {
-            Utils.setTextSize(mTxtLogo , R.dimen.largeTextSize );
+            Utils.setTextSize(mTxtLogo, R.dimen.largeTextSize);
             mTxtLogo.setText(defaultTitleText);
         }
 
-        if (mTxtLogo.getText().toString().toLowerCase().equals("igap")){
-            Utils.setTextSize(mTxtLogo , R.dimen.toolbar_igap_icon_textSize );
-            mTxtLogo.setTypeface(G.typeface_FonticonNew);
+        if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+            mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-        }else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
-            mTxtLogo.setTypeface(G.typeface_FonticonNew);
-            Utils.setTextSize(mTxtLogo , R.dimen.toolbar_igap_icon_textSize );
+        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
+            mTxtLogo.setTypeface(tfFontIcon);
+            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
             mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
 
-        }else {
-            mTxtLogo.setTypeface(G.typeface_IRANSansMobile);
+        } else {
+            mTxtLogo.setTypeface(tfMain);
         }
     }
 
@@ -631,17 +557,17 @@ public class HelperToolbar {
 
         try {
             connectionStateChecker(G.fragmentActivity);
-        }catch (Exception e){
-            try{
+        } catch (Exception e) {
+            try {
                 connectionStateChecker(G.currentActivity);
-            }catch (Exception e2){
+            } catch (Exception e2) {
 
             }
         }
 
     }
 
-    private void connectionStateChecker(LifecycleOwner owner ) {
+    private void connectionStateChecker(LifecycleOwner owner) {
 
         G.connectionStateMutableLiveData.observe(owner, new android.arch.lifecycle.Observer<ConnectionState>() {
             @Override
@@ -673,24 +599,7 @@ public class HelperToolbar {
         });
     }
 
-    private void setNormalSizeToRootViews(View view) {
-
-        if (!isBigCenterAvatarShown && !isSearchBoxShown) {
-            view.findViewById(R.id.view_toolbar_main_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height)
-                    ));
-            view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT//mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height)
-                    ));
-        }
-
-    }
-
-    private void setIGapLogoVisibility(View view, boolean visible) {
+    private void setIGapLogoVisibility(boolean visible) {
 
         if (visible)
             mTxtLogo.setVisibility(View.VISIBLE);
@@ -699,28 +608,16 @@ public class HelperToolbar {
 
     }
 
-    private void setSearchBoxVisibility(View view, boolean visible) {
+    private void setSearchBoxVisibility( boolean visible) {
 
-        if (visible) {
-            mSearchBox.setVisibility(View.VISIBLE);
+        if (visible && mSearchBox != null) {
 
-            view.findViewById(R.id.view_toolbar_main_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_with_search)
-                    ));
-            view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT//mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_root_with_search)
-                    ));
-
-            mSearchBox.setOnClickListener(v ->{
+            mSearchBox.setOnClickListener(v -> {
                 if (isShowEditTextForSearch) setSearchEditableMode(mTxtSearch.isShown());
                 mToolbarListener.onSearchClickListener(v);
             });
 
-            mBtnClearSearch.setOnClickListener(v ->{
+            mBtnClearSearch.setOnClickListener(v -> {
 
                 if (!mEdtSearch.getText().toString().trim().equals(""))
                     mEdtSearch.setText("");
@@ -738,7 +635,7 @@ public class HelperToolbar {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mToolbarListener.onSearchTextChangeListener(mEdtSearch , s.toString());
+                    mToolbarListener.onSearchTextChangeListener(mEdtSearch, s.toString());
                 }
 
                 @Override
@@ -746,15 +643,6 @@ public class HelperToolbar {
 
                 }
             });
-
-            if (G.isDarkTheme){
-                mSearchBox.setBackground(mContext.getResources().getDrawable(R.drawable.shape_toolbar_search_box_dark));
-              //  mEdtSearch.setTextColor(mContext.getResources().getColor(R.color.white));
-             //   mEdtSearch.setHintTextColor(mContext.getResources().getColor(R.color.gray_f2));
-            //    mTxtSearch.setTextColor(mContext.getResources().getColor(R.color.gray_f2));
-            }
-        } else {
-            mSearchBox.setVisibility(View.GONE);
 
         }
     }
@@ -780,129 +668,35 @@ public class HelperToolbar {
 
     }
 
-    private void setCallModeVisibility(View view, boolean visible) {
+    private void initViews(ViewMaker view) {
 
-        if (visible) {
-            mTxtCallStatus.setVisibility(View.VISIBLE);
+        mLeftBtn = view.getLeftIcon() ;
+        mRightBtn = view.getRightIcon();
+        m2RightBtn = view.getRightIcon2();
+        m3RightBtn = view.getRightIcon3();
+        m4RightBtn = view.getRightIcon4();
 
-            view.findViewById(R.id.view_toolbar_main_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_call_state)
-                    ));
-            view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_call_state)
-                    ));
-        } else {
-            mTxtCallStatus.setVisibility(View.GONE);
+        mTxtChatUserName = view.getTvChatName();
+        mChatVerifyIcon = view.getIconChatVerify();
+        mChatMuteIcon = view.getMuteChatIcon();
+        mTxtChatSeenStatus = view.getTvChatStatus();
+        mTxtLogo = view.getLogo();
+        mCloudChatIcon = view.getCivCloud();
+        mAvatarChat = view.getCivAvatar();
 
-        }
-    }
+//        mAvatarSmall = view.findViewById(R.id.view_toolbar_user_small_avatar);
 
-    private void setGroupProfileVisibility(View view, boolean visible) {
-        if (visible) {
-            groupAvatar.setVisibility(View.VISIBLE);
-            groupName.setVisibility(View.VISIBLE);
-            groupMemberCount.setVisibility(View.VISIBLE);
-            view.findViewById(R.id.view_toolbar_main_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.dp160)
-                    ));
-            view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.dp160)
-                    ));
-        } else {
-            groupAvatar.setVisibility(View.GONE);
-            groupName.setVisibility(View.GONE);
-            groupMemberCount.setVisibility(View.GONE);
-        }
-    }
+        mSearchBox = view.getSearchLayout();
+        mTxtSearch = view.getTvSearch();
+        mEdtSearch = view.getEdtSearch();
+        mBtnClearSearch = view.getTvClearSearch();
 
-    private void setBigAvatarVisibility(View view, boolean isShown) {
+        groupAvatar = view.getCivProfileAvatar();
+        groupName = view.getTvProfileName();
+        groupMemberCount = view.getTvProfileMemberCount();
 
-        if (isShown) {
-
-            view.findViewById(R.id.view_toolbar_main_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_with_avatar)
-                    ));
-            view.findViewById(R.id.view_toolbar_root_constraint).setLayoutParams(
-                    new ConstraintLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height_root_with_avatar)
-                    ));
-            mAvatarBig.setVisibility(View.VISIBLE);
-            mTxtBigAvatarUserName.setVisibility(View.VISIBLE);
-            mAvatarBig.setOnClickListener(v -> mToolbarListener.onBigAvatarClickListener(v));
-
-        } else {
-            mAvatarBig.setVisibility(View.GONE);
-            mTxtBigAvatarUserName.setVisibility(View.GONE);
-
-        }
-    }
-
-    private AppCompatTextView getImageView(View v, int id) {
-        return v.findViewById(id);
-    }
-
-    private View getInflater(int resId) {
-        return mInflater.inflate(resId, mViewGroup, isAttachToRoot);
-    }
-
-    private Bitmap getConvertToBitmap(int id) {
-
-        Drawable drawable = mContext.getResources().getDrawable(id);
-
-        Bitmap bitmap;
-
-        bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
-
-    }
-
-    private void initViews(View view) {
-
-        mLeftBtn = getImageView(view, R.id.view_toolbar_btn_left);
-        mRightBtn = getImageView(view, R.id.view_toolbar_btn_right_1);
-        m2RightBtn = getImageView(view, R.id.view_toolbar_btn_right_2);
-        m3RightBtn = getImageView(view, R.id.view_toolbar_btn_right_3);
-        m4RightBtn = getImageView(view, R.id.view_toolbar_btn_right_4);
-
-        mTxtCounter = view.findViewById(R.id.view_toolbar_txt_counter);
-        mTxtChatUserName = view.findViewById(R.id.view_toolbar_chat_txt_userName);
-        mChatVerifyIcon = view.findViewById(R.id.view_toolbar_chat_txt_verify);
-        mChatMuteIcon = view.findViewById(R.id.view_toolbar_chat_txt_isMute);
-        mTxtChatSeenStatus = view.findViewById(R.id.view_toolbar_chat_txt_seen_status);
-        mTxtLogo = view.findViewById(R.id.view_toolbar_logo);
-        mTxtBigAvatarUserName = view.findViewById(R.id.view_toolbar_txt_below_big_avatar_user_name);
-        mTxtCallStatus = view.findViewById(R.id.view_toolbar_txt_call_status);
-        mCloudChatIcon = view.findViewById(R.id.view_toolbar_user_cloud_avatar);
-
-        mAvatarSmall = view.findViewById(R.id.view_toolbar_user_small_avatar);
-        mAvatarChat = view.findViewById(R.id.view_toolbar_user_chat_avatar);
-        mAvatarBig = view.findViewById(R.id.view_toolbar_img_big_avatar);
-
-        mSearchBox = view.findViewById(R.id.view_toolbar_search_layout);
-        mTxtSearch = view.findViewById(R.id.view_toolbar_search_layout_txt);
-        mEdtSearch = view.findViewById(R.id.view_toolbar_search_layout_edt_input);
-        mBtnClearSearch = view.findViewById(R.id.view_toolbar_search_layout_btn_clear);
-
-        groupAvatar = view.findViewById(R.id.groupAvatar);
-        groupName = view.findViewById(R.id.groupName);
-        groupMemberCount = view.findViewById(R.id.groupMemberCount);
-
-        mTxtLogo.setText(defaultTitleText);
+        if (mTxtLogo != null)
+            mTxtLogo.setText(defaultTitleText);
     }
 
     /**
@@ -974,5 +768,667 @@ public class HelperToolbar {
 
         */
     }
+
+    private void typeFaceGenerator() {
+
+        if (tfFontIcon == null)
+            tfFontIcon = Typeface.createFromAsset(mContext.getAssets(), "fonts/font_icon.ttf");
+
+        if (tfMain == null)
+            tfMain = Typeface.createFromAsset(mContext.getAssets(), "fonts/IRANSansMobile.ttf");
+
+
+    }
+
+
+    private Typeface tfFontIcon, tfMain;
+
+
+    private class ViewMaker extends ConstraintLayout {
+
+        private int VALUE_1DP;
+        private int VALUE_4DP;
+        private int VALUE_10DP;
+        private boolean isDark;
+
+        private View musicLayout ;
+        private View callLayout ;
+        private LinearLayout layoutMedia ;
+        private ConstraintLayout mainConstraint ;
+        private AppCompatTextView leftIcon = null;
+        private AppCompatTextView rightIcon4 = null ;
+        private AppCompatTextView rightIcon3 = null;
+        private AppCompatTextView rightIcon2 = null;
+        private AppCompatTextView rightIcon = null;
+        private TextView logo ;
+        private RelativeLayout searchLayout ;
+        private TextView tvSearch ;
+        private TextView tvClearSearch ;
+        private EditText edtSearch ;
+        private RelativeLayout rlChatAvatar ;
+        private CircleImageView civAvatar ;
+        private CircleImageView civCloud ;
+        private LinearLayout layoutChatName ;
+        private EmojiTextViewE tvChatName ;
+        private TextView tvChatStatus ;
+        private TextView iconChatVerify ;
+        private TextView muteChatIcon ;
+        private CircleImageView civProfileAvatar = null  ;
+        private AppCompatTextView tvProfileName ;
+        private AppCompatTextView tvProfileMemberCount ;
+
+        public ViewMaker(Context ctx) {
+            super(ctx);
+            setupDefaults();
+            init();
+        }
+
+        private void init() {
+
+            ConstraintSet setRoot = new ConstraintSet();
+            ConstraintSet set = new ConstraintSet();
+
+            //region media player and ongoing call
+            //check and add media player cause of ui and this must be the below of main toolbar view
+            if (isMediaPlayerEnabled){
+
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+
+                //music player layout
+                musicLayout = inflater.inflate(R.layout.music_layout_small , this , false);
+                musicLayout.setId(R.id.view_toolbar_layout_player_music);
+                setLayoutParams(musicLayout , LinearLayout.LayoutParams.MATCH_PARENT , LinearLayout.LayoutParams.WRAP_CONTENT , i_Dp(R.dimen.toolbar_search_box_size));
+                musicLayout.setVisibility(VISIBLE);
+
+                //online call view
+                callLayout = inflater.inflate(R.layout.chat_sub_layout_strip_call , this , false);
+                callLayout.setId(R.id.view_toolbar_layout_strip_call);
+                setLayoutParams(callLayout , LinearLayout.LayoutParams.MATCH_PARENT , LinearLayout.LayoutParams.WRAP_CONTENT , i_Dp(R.dimen.toolbar_search_box_size));
+                callLayout.setVisibility(GONE);
+
+                //player root view for add , handle two above views
+                layoutMedia = new LinearLayout(getContext());
+                layoutMedia.setId(R.id.view_toolbar_player_layout);
+                layoutMedia.setOrientation(LinearLayout.VERTICAL);
+                addView(layoutMedia);
+
+                if (isDark){
+                    layoutMedia.setBackgroundResource(R.drawable.shape_toolbar_player_dark);
+                }else{
+                    layoutMedia.setBackgroundResource(R.drawable.shape_toolbar_player);
+                }
+
+                layoutMedia.addView(musicLayout);
+                layoutMedia.addView(callLayout);
+
+                setRoot.constrainHeight(layoutMedia.getId() , WRAP_CONTENT);
+                setRoot.constrainWidth(layoutMedia.getId() , MATCH_CONSTRAINT);
+
+                setRoot.connect(layoutMedia.getId() , START , PARENT_ID , START);
+                setRoot.connect(layoutMedia.getId() , END , PARENT_ID , END);
+                setRoot.connect(layoutMedia.getId() , TOP , PARENT_ID , TOP , i_Dp(R.dimen.margin_for_below_layouts_of_toolbar));
+            }
+
+            //endregion media player and ongoing call
+
+            //region main constraint
+            //contain : buttons , logo
+            mainConstraint = new ConstraintLayout(getContext());
+            mainConstraint.setId(R.id.view_toolbar_main_constraint);
+            if (isDark)
+                mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
+            else
+                mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
+
+            setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));
+            setRoot.constrainWidth(mainConstraint.getId(), MATCH_CONSTRAINT);
+            setRoot.connect(mainConstraint.getId(), START, PARENT_ID, START);
+            setRoot.connect(mainConstraint.getId(), END, PARENT_ID, END);
+            setRoot.connect(mainConstraint.getId(), TOP, PARENT_ID, TOP);
+            addView(mainConstraint);
+
+            //endregion main constraint
+
+            //region left button
+            if (mLeftIcon != 0) {
+                leftIcon = makeIcon(R.id.view_toolbar_btn_left, mLeftIcon);
+                mainConstraint.addView(leftIcon);
+                setIconViewSize(leftIcon, set);
+
+                set.setMargin(leftIcon.getId(), START, VALUE_4DP);
+                set.setMargin(leftIcon.getId(), TOP, VALUE_4DP);
+                set.setMargin(leftIcon.getId(), BOTTOM, VALUE_10DP);
+
+                set.connect(leftIcon.getId(), START, PARENT_ID, START);
+                set.connect(leftIcon.getId(), TOP, PARENT_ID, TOP);
+                set.connect(leftIcon.getId(), BOTTOM, PARENT_ID, BOTTOM);
+
+            }
+
+            //endregion left button
+
+            //region right icons
+            if (mRightIcons[0] != 0) {
+                //region first right
+                rightIcon = makeIcon(R.id.view_toolbar_btn_right_1, mRightIcons[0]);
+                mainConstraint.addView(rightIcon);
+                setIconViewSize(rightIcon, set);
+
+                set.setMargin(rightIcon.getId(), END, VALUE_4DP);
+                set.setMargin(rightIcon.getId(), TOP, VALUE_4DP);
+                set.setMargin(rightIcon.getId(), BOTTOM, VALUE_10DP);
+
+                set.connect(rightIcon.getId(), END, PARENT_ID, END);
+                set.connect(rightIcon.getId(), TOP, PARENT_ID, TOP);
+                set.connect(rightIcon.getId(), BOTTOM, PARENT_ID, BOTTOM);
+                //endregion first right
+
+                if (mRightIcons[1] != 0) {
+
+                    //region 2nd right
+                    rightIcon2 = makeIcon(R.id.view_toolbar_btn_right_2, mRightIcons[1]);
+                    mainConstraint.addView(rightIcon2);
+                    setIconViewSize(rightIcon2, set);
+
+                    set.setMargin(rightIcon2.getId(), END, VALUE_1DP);
+
+                    set.connect(rightIcon2.getId(), END, rightIcon.getId(), START);
+                    set.connect(rightIcon2.getId(), TOP, rightIcon.getId(), TOP);
+                    set.connect(rightIcon2.getId(), BOTTOM, rightIcon.getId(), BOTTOM);
+                    //endregion 2nd right
+
+                    if (mRightIcons[2] != 0) {
+                        //region 3nd right
+                        rightIcon3 = makeIcon(R.id.view_toolbar_btn_right_3, mRightIcons[2]);
+                        mainConstraint.addView(rightIcon3);
+                        setIconViewSize(rightIcon3, set);
+
+                        set.setMargin(rightIcon3.getId(), END, VALUE_1DP);
+
+                        set.connect(rightIcon3.getId(), END, rightIcon2.getId(), START);
+                        set.connect(rightIcon3.getId(), TOP, rightIcon.getId(), TOP);
+                        set.connect(rightIcon3.getId(), BOTTOM, rightIcon.getId(), BOTTOM);
+                        //endregion 3nd right
+
+                        if (mRightIcons[3] != 0) {
+                            //region 4nd right
+                            rightIcon4 = makeIcon(R.id.view_toolbar_btn_right_4, mRightIcons[3]);
+                            mainConstraint.addView(rightIcon4);
+                            setIconViewSize(rightIcon4, set);
+
+                            set.setMargin(rightIcon4.getId(), END, VALUE_1DP);
+
+                            set.connect(rightIcon4.getId(), END, rightIcon3.getId(), START);
+                            set.connect(rightIcon4.getId(), TOP, rightIcon.getId(), TOP);
+                            set.connect(rightIcon4.getId(), BOTTOM, rightIcon.getId(), BOTTOM);
+                            //endregion 3nd right
+                        }
+                    }
+
+
+                }
+
+            }
+            //endregion right icons
+
+            //region logo
+            if (isLogoShown) {
+
+                logo = new TextView(getContext());
+
+                logo.setId(R.id.view_toolbar_logo);
+                logo.setText(R.string.app_name);
+                logo.setGravity(Gravity.CENTER);
+                Utils.setTextSize(logo, R.dimen.standardTextSize);
+                logo.setTextColor(getContext().getResources().getColor(R.color.white));
+                logo.setTypeface(tfMain);
+                InputFilter[] fArray = new InputFilter[1];
+                fArray[0] = new InputFilter.LengthFilter(28);
+                logo.setFilters(fArray);
+                logo.setSingleLine(true);
+
+                mainConstraint.addView(logo);
+
+                set.constrainHeight(logo.getId(), WRAP_CONTENT);
+                set.constrainWidth(logo.getId(), WRAP_CONTENT);
+                set.connect(logo.getId(), START, PARENT_ID, START);
+                set.connect(logo.getId(), END, PARENT_ID, END);
+                set.connect(logo.getId(), TOP, PARENT_ID, TOP);
+                set.connect(logo.getId(), BOTTOM, PARENT_ID, BOTTOM);
+
+            }
+            //endregion logo
+
+            //region search box
+
+            if (isSearchBoxShown) {
+                searchLayout = new RelativeLayout(getContext());
+                searchLayout.setGravity(Gravity.CENTER_VERTICAL);
+                searchLayout.setId(R.id.view_toolbar_search_layout);
+
+                setRoot.constrainHeight(searchLayout.getId(), i_Dp(R.dimen.toolbar_search_box_size));
+                setRoot.constrainWidth(searchLayout.getId(), MATCH_CONSTRAINT);
+
+                setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp40));
+                setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp40));
+
+                setRoot.connect(searchLayout.getId(), START, mainConstraint.getId(), START);
+                setRoot.connect(searchLayout.getId(), END, mainConstraint.getId(), END);
+                setRoot.connect(searchLayout.getId(), TOP, mainConstraint.getId(), BOTTOM);
+                setRoot.connect(searchLayout.getId(), BOTTOM, mainConstraint.getId(), BOTTOM);
+                addView(searchLayout);
+
+                tvSearch = new TextView(getContext());
+                tvSearch.setId(R.id.view_toolbar_search_layout_txt);
+                tvSearch.setText(R.string.search);
+                tvSearch.setGravity(Gravity.CENTER);
+                tvSearch.setVisibility(VISIBLE);
+                tvSearch.setTextColor(Utils.darkModeHandler(getContext()));
+                Utils.setTextSize(tvSearch, R.dimen.standardTextSize);
+                setLayoutParams(tvSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), 0, 0);
+                searchLayout.addView(tvSearch);
+
+                edtSearch = new EditText(getContext());
+                edtSearch.setId(R.id.view_toolbar_search_layout_edt_input);
+                edtSearch.setBackgroundResource(android.R.color.transparent);
+                edtSearch.setGravity(Gravity.CENTER);
+                edtSearch.setVisibility(GONE);
+                edtSearch.setHint(R.string.search);
+                edtSearch.setSingleLine();
+                Utils.setTextSize(edtSearch, R.dimen.standardTextSize);
+                setLayoutParams(edtSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32));
+                searchLayout.addView(edtSearch);
+
+                tvClearSearch = new TextView(getContext());
+                tvClearSearch.setTypeface(tfFontIcon);
+                tvClearSearch.setGravity(Gravity.CENTER);
+                tvClearSearch.setText(R.string.close_icon);
+                tvClearSearch.setVisibility(GONE);
+                Utils.setTextSize(tvClearSearch, R.dimen.largeTextSize);
+                RelativeLayout.LayoutParams lp = setLayoutParams(tvClearSearch, i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp2));
+                lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, searchLayout.getId());
+                tvClearSearch.setLayoutParams(lp);
+                searchLayout.addView(tvClearSearch);
+
+                if (isDark) {
+                    searchLayout.setBackgroundResource(R.drawable.shape_toolbar_search_box_dark);
+                    tvClearSearch.setTextColor(getContext().getResources().getColor(R.color.white));
+                    edtSearch.setTextColor(getContext().getResources().getColor(R.color.white));
+                    edtSearch.setHintTextColor(getContext().getResources().getColor(R.color.gray_f2));
+                    tvSearch.setTextColor(getContext().getResources().getColor(R.color.gray_f2));
+                } else {
+                    searchLayout.setBackgroundResource(R.drawable.shape_toolbar_search_box);
+                    tvClearSearch.setTextColor(getContext().getResources().getColor(R.color.black));
+                    edtSearch.setTextColor(getContext().getResources().getColor(R.color.black));
+                    edtSearch.setHintTextColor(getContext().getResources().getColor(R.color.gray_9d));
+                    tvSearch.setTextColor(getContext().getResources().getColor(R.color.gray_9d));
+                }
+            }
+            //endregion search box
+
+            //region chat
+
+            if (isInChatRoom){
+
+                //region avatar
+                rlChatAvatar = new RelativeLayout(getContext());
+                rlChatAvatar.setId(R.id.view_toolbar_user_chat_avatar_layout);
+
+                set.constrainWidth(rlChatAvatar.getId() , i_Dp(R.dimen.toolbar_chat_avatar_size) );
+                set.constrainHeight(rlChatAvatar.getId() , i_Dp(R.dimen.toolbar_chat_avatar_size) );
+                set.connect(rlChatAvatar.getId() , TOP , PARENT_ID , TOP);
+                set.connect(rlChatAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM);
+                set.setMargin(rlChatAvatar.getId() , END , i_Dp(R.dimen.dp8));
+                if (leftIcon != null) {
+                    set.connect(rlChatAvatar.getId(), START , leftIcon.getId() , END , i_Dp(R.dimen.dp8));
+                }else {
+                    set.connect(rlChatAvatar.getId(), START , PARENT_ID , END , i_Dp(R.dimen.dp8));
+                }
+
+                civAvatar = new CircleImageView(getContext());
+                civCloud  = new CircleImageView(getContext());
+
+                civAvatar.setId(R.id.view_toolbar_user_chat_avatar);
+                civCloud.setId(R.id.view_toolbar_user_cloud_avatar);
+
+                civCloud.setImageResource(R.drawable.ic_cloud_space_blue);
+
+                setLayoutParams(civAvatar ,RelativeLayout.LayoutParams.MATCH_PARENT , RelativeLayout.LayoutParams.MATCH_PARENT , 0 , 0 , 0);
+                setLayoutParams(civCloud ,RelativeLayout.LayoutParams.MATCH_PARENT , RelativeLayout.LayoutParams.MATCH_PARENT , 0 , 0 , 0);
+
+                civAvatar.setVisibility(GONE);
+                civCloud.setVisibility(GONE);
+
+                rlChatAvatar.addView(civAvatar);
+                rlChatAvatar.addView(civCloud);
+
+                mainConstraint.addView(rlChatAvatar);
+                //endregion avatar
+
+                //region chat titles
+                layoutChatName = new LinearLayout(getContext());
+                layoutChatName.setGravity(Gravity.CENTER_VERTICAL);
+                layoutChatName.setId(R.id.view_toolbar_chat_layout_userName);
+                layoutChatName.setOrientation(LinearLayout.HORIZONTAL);
+                layoutChatName.setGravity(Gravity.LEFT);
+                mainConstraint.addView(layoutChatName);
+
+                set.constrainWidth(layoutChatName.getId() , MATCH_CONSTRAINT);
+                set.constrainHeight(layoutChatName.getId() , WRAP_CONTENT);
+
+                set.connect(layoutChatName.getId() , START , rlChatAvatar.getId() , END , i_Dp(R.dimen.dp4));
+                set.connect(layoutChatName.getId() , TOP , rlChatAvatar.getId() , TOP);
+                if (rightIcon4 != null) {
+                    set.connect(layoutChatName.getId() , END , rightIcon4.getId() , START , i_Dp(R.dimen.dp8));
+                }else if (rightIcon3 != null){
+                    set.connect(layoutChatName.getId() , END , rightIcon3.getId() , START , i_Dp(R.dimen.dp8));
+
+                }else if (rightIcon2 != null){
+                    set.connect(layoutChatName.getId() , END , rightIcon2.getId() , START , i_Dp(R.dimen.dp8));
+
+                }else if (rightIcon != null){
+                    set.connect(layoutChatName.getId() , END , rightIcon.getId() , START , i_Dp(R.dimen.dp8));
+
+                } else {
+                    set.connect(layoutChatName.getId() , END , PARENT_ID , END , i_Dp(R.dimen.dp8));
+                }
+
+                //chat name
+                tvChatName = new EmojiTextViewE(getContext());
+                tvChatName.setId(R.id.view_toolbar_chat_txt_userName);
+                tvChatName.setTypeface(tfMain);
+                tvChatName.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) getContext().getResources().getDimension(R.dimen.standardTextSize));
+                tvChatName.setEmojiSize( (int) getContext().getResources().getDimension(R.dimen.standardTextSize));
+                tvChatName.setSingleLine();
+                tvChatName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                tvChatName.setGravity(Gravity.LEFT);
+                tvChatName.setTextColor(getContext().getResources().getColor(R.color.white));
+                setLayoutParams(tvChatName , LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+                tvChatName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width));
+                layoutChatName.addView(tvChatName);
+
+                //verify icon
+                iconChatVerify = makeIcon(R.id.view_toolbar_chat_txt_verify , R.string.verify_icon);
+                iconChatVerify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+                Utils.setTextSize(iconChatVerify , R.dimen.smallTextSize);
+                iconChatVerify.setVisibility(GONE);
+                iconChatVerify.setPadding(i_Dp(R.dimen.dp4) , 0 , 0 , 0);
+                setLayoutParams(iconChatVerify , LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutChatName.addView(iconChatVerify);
+
+                //mute icon
+                muteChatIcon = makeIcon(R.id.view_toolbar_chat_txt_isMute, R.string.mute_icon);
+                Utils.setTextSize(muteChatIcon , R.dimen.smallTextSize);
+                muteChatIcon.setVisibility(GONE);
+                muteChatIcon.setPadding(i_Dp(R.dimen.dp4) , 0 , 0 , 0);
+                setLayoutParams(muteChatIcon , LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutChatName.addView(muteChatIcon);
+
+                //status or member count
+                tvChatStatus = new TextView(getContext());
+                tvChatStatus.setId(R.id.view_toolbar_chat_txt_seen_status);
+                tvChatStatus.setTypeface(tfMain);
+                tvChatStatus.setTextColor(getContext().getResources().getColor(R.color.white));
+                tvChatStatus.setSingleLine();
+                tvChatStatus.setGravity(Gravity.LEFT);
+                Utils.setTextSize(tvChatStatus , R.dimen.verySmallTextSize);
+                mainConstraint.addView(tvChatStatus);
+
+                set.constrainWidth(tvChatStatus.getId() , MATCH_CONSTRAINT);
+                set.constrainHeight(tvChatStatus.getId() , WRAP_CONTENT);
+                set.setMargin(tvChatStatus.getId() , TOP , i_Dp(R.dimen.dp6));
+
+                set.connect(tvChatStatus.getId() , START , layoutChatName.getId() , START);
+                set.connect(tvChatStatus.getId() , BOTTOM , rlChatAvatar.getId() , BOTTOM);
+                set.connect(tvChatStatus.getId() , END , layoutChatName.getId() , END);
+
+                //endregion chat titles
+
+            }
+
+            //endregion chat
+
+            //region profile
+            if (isGroupProfile){
+
+                //extend root for adding avatar and titles
+                setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.dp160));
+
+                //profile big avatar
+                civProfileAvatar = new CircleImageView(getContext());
+                civProfileAvatar.setId(R.id.groupAvatar);
+                //civProfileAvatar.setImageResource(R.drawable.ic_cloud_space_blue);
+                mainConstraint.addView(civProfileAvatar);
+
+                set.constrainHeight(civProfileAvatar.getId() , i_Dp(R.dimen.dp68));
+                set.constrainWidth(civProfileAvatar.getId() , i_Dp(R.dimen.dp68));
+                set.connect(civProfileAvatar.getId() , START , PARENT_ID , START , i_Dp(R.dimen.dp14));
+                set.connect(civProfileAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM , i_Dp(R.dimen.dp14));
+                if (leftIcon != null) {
+                    set.connect(civProfileAvatar.getId() , TOP , leftIcon.getId() , BOTTOM );
+                }else {
+                    set.connect(civProfileAvatar.getId() , TOP , PARENT_ID , TOP , i_Dp(R.dimen.dp52) );
+                }
+
+                //titles
+                tvProfileName  = new AppCompatTextView(getContext());
+                tvProfileName.setId(R.id.groupName);
+                tvProfileName.setTypeface(tfMain);
+                tvProfileName.setGravity(Gravity.LEFT);
+                tvProfileName.setSingleLine();
+                Utils.setTextSize(tvProfileName , R.dimen.largeTextSize);
+                tvProfileName.setTextColor(getContext().getResources().getColor(R.color.white));
+                mainConstraint.addView(tvProfileName);
+
+                set.constrainWidth(tvProfileName.getId() , MATCH_CONSTRAINT);
+                set.constrainHeight(tvProfileName.getId() , WRAP_CONTENT);
+
+                set.connect(tvProfileName.getId() , TOP , civProfileAvatar.getId() , TOP);
+                set.connect(tvProfileName.getId() , START , civProfileAvatar.getId() , END , i_Dp(R.dimen.dp16));
+                set.connect(tvProfileName.getId() , END , PARENT_ID , END , i_Dp(R.dimen.dp16));
+
+                tvProfileMemberCount  = new AppCompatTextView(getContext());
+                tvProfileMemberCount.setId(R.id.groupMemberCount);
+                tvProfileMemberCount.setTypeface(tfMain);
+                tvProfileMemberCount.setGravity(Gravity.LEFT);
+                tvProfileMemberCount.setSingleLine();
+                Utils.setTextSize(tvProfileMemberCount , R.dimen.largeTextSize);
+                tvProfileMemberCount.setTextColor(getContext().getResources().getColor(R.color.white));
+                mainConstraint.addView(tvProfileMemberCount);
+
+                set.constrainWidth(tvProfileMemberCount.getId() , MATCH_CONSTRAINT);
+                set.constrainHeight(tvProfileMemberCount.getId() , WRAP_CONTENT);
+
+                set.connect(tvProfileMemberCount.getId() , TOP , tvProfileName.getId() , BOTTOM );
+                set.connect(tvProfileMemberCount.getId() , START , tvProfileName.getId() , START );
+                set.connect(tvProfileMemberCount.getId() , BOTTOM , civProfileAvatar.getId() , BOTTOM );
+                set.connect(tvProfileMemberCount.getId() , END , tvProfileName.getId() , END );
+
+                if (leftIcon != null){
+                    set.connect(leftIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                }
+                if (rightIcon != null){
+                    set.connect(rightIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                }
+                if (logo != null){
+                    set.connect(logo.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                }
+            }
+            //endregion profile
+
+            setRoot.applyTo(this);
+            set.applyTo(mainConstraint);
+        }
+
+        private void setIconViewSize(View v, ConstraintSet set) {
+            set.constrainWidth(v.getId(), i_Dp(R.dimen.toolbar_icon_size));
+            set.constrainHeight(v.getId(), i_Dp(R.dimen.toolbar_icon_size));
+        }
+
+        private AppCompatTextView makeIcon(int id, int icon) {
+
+            AppCompatTextView vIcon = new AppCompatTextView(getContext());
+            vIcon.setText(icon);
+            vIcon.setGravity(Gravity.CENTER);
+            vIcon.setId(id);
+            setIconStyle(vIcon);
+
+            return vIcon;
+
+        }
+
+        private void setIconStyle(AppCompatTextView view) {
+
+            view.setTypeface(tfFontIcon);
+            view.setTextColor(getContext().getResources().getColor(R.color.white));
+            Utils.setTextSize(view, R.dimen.dp22);
+
+        }
+
+        private void setLayoutParams(View view, int mlef, int mtop, int mbottom, int mright, int lpadding, int rpadding) {
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            lp.setMargins(mlef, mtop, mright, mbottom);
+            view.setLayoutParams(lp);
+            view.setPadding(lpadding, 0, rpadding, 0);
+
+        }
+
+        private RelativeLayout.LayoutParams setLayoutParams(View view, int width, int height, int mlef, int mright, int padding) {
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
+            lp.setMargins(mlef, 0, mright, 0);
+            view.setPadding(padding, padding, padding, padding);
+            return lp;
+        }
+
+        private void setLayoutParams(View view, int width, int height) {
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
+            view.setLayoutParams(lp);
+        }
+
+        private void setLayoutParams(View view, int width, int height , int marginTop) {
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
+            lp.setMargins(0 , marginTop , 0 , 0);
+            view.setLayoutParams(lp);
+        }
+
+        private void setupDefaults() {
+
+            isDark = G.isDarkTheme;
+
+            VALUE_1DP = i_Dp(R.dimen.dp1);
+            VALUE_4DP = i_Dp(R.dimen.dp4);
+            VALUE_10DP = i_Dp(R.dimen.dp10);
+
+        }
+
+        //region getters
+
+        public View getMusicLayout() {
+            return musicLayout;
+        }
+
+        public View getCallLayout() {
+            return callLayout;
+        }
+
+        public LinearLayout getLayoutMedia() {
+            return layoutMedia;
+        }
+
+        public ConstraintLayout getMainConstraint() {
+            return mainConstraint;
+        }
+
+        public AppCompatTextView getLeftIcon() {
+            return leftIcon;
+        }
+
+        public AppCompatTextView getRightIcon4() {
+            return rightIcon4;
+        }
+
+        public AppCompatTextView getRightIcon3() {
+            return rightIcon3;
+        }
+
+        public AppCompatTextView getRightIcon2() {
+            return rightIcon2;
+        }
+
+        public AppCompatTextView getRightIcon() {
+            return rightIcon;
+        }
+
+        public TextView getLogo() {
+            return logo;
+        }
+
+        public RelativeLayout getSearchLayout() {
+            return searchLayout;
+        }
+
+        public TextView getTvSearch() {
+            return tvSearch;
+        }
+
+        public TextView getTvClearSearch() {
+            return tvClearSearch;
+        }
+
+        public EditText getEdtSearch() {
+            return edtSearch;
+        }
+
+        public RelativeLayout getRlChatAvatar() {
+            return rlChatAvatar;
+        }
+
+        public CircleImageView getCivAvatar() {
+            return civAvatar;
+        }
+
+        public CircleImageView getCivCloud() {
+            return civCloud;
+        }
+
+        public LinearLayout getLayoutChatName() {
+            return layoutChatName;
+        }
+
+        public EmojiTextViewE getTvChatName() {
+            return tvChatName;
+        }
+
+        public TextView getTvChatStatus() {
+            return tvChatStatus;
+        }
+
+        public TextView getIconChatVerify() {
+            return iconChatVerify;
+        }
+
+        public TextView getMuteChatIcon() {
+            return muteChatIcon;
+        }
+
+        public CircleImageView getCivProfileAvatar() {
+            return civProfileAvatar;
+        }
+
+        public AppCompatTextView getTvProfileName() {
+            return tvProfileName;
+        }
+
+        public AppCompatTextView getTvProfileMemberCount() {
+            return tvProfileMemberCount;
+        }
+
+        //endregion getters
+    }
+
 
 }

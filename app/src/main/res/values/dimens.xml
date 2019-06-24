@@ -131,6 +131,8 @@
   <dimen name="verySmallTextSize">@dimen/dp10</dimen>
   <dimen name="largeTextSize">@dimen/dp16</dimen>
   <dimen name="xlargeTextSize">@dimen/dp20</dimen>
+  <dimen name="toolbar_chat_avatar_size">40dp</dimen>
+    <dimen name="toolbar_txt_name_max_width">130dp</dimen>
 
 
 </resources>
