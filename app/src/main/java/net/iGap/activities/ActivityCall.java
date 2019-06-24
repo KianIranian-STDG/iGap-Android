@@ -81,6 +81,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private static final int SENSOR_SENSITIVITY = 4;
 
     //public static TextView txtTimeChat, txtTimerMain;
+    public static boolean allowOpenCall = true;
     public static boolean isGoingfromApp = false;
     public static View stripLayoutChat;
     public static View stripLayoutMain;
@@ -256,6 +257,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         callTYpe = (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE);
 
 
+        ActivityCall.allowOpenCall = true;
         try {
             HelperPermission.getMicroPhonePermission(this, new OnGetPermission() {
                 @Override
@@ -329,6 +331,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     }
 
     private void init() {
+        if (!ActivityCall.allowOpenCall) {
+            G.isInCall = false;
+            finish();
+            if (isIncomingCall) {
+                WebRTC.getInstance().leaveCall();
+            }
+        }
         WebRTC.getInstance().setCallType(callTYpe);
         //setContentView(R.layout.activity_call);
         activityCallBinding = DataBindingUtil.setContentView(ActivityCall.this, R.layout.activity_call);
