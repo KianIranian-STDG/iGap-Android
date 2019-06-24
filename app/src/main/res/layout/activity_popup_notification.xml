@@ -9,21 +9,18 @@
   android:layoutDirection="ltr"
   android:orientation="vertical">
 
-  <LinearLayout
+  <RelativeLayout
     android:layout_width="@dimen/dp300"
     android:layout_height="@dimen/dp200"
     android:background="@color/gray_f2"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
       <LinearLayout
         android:id="@+id/apn_ll_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:background="@color/green"
+          android:layout_alignParentTop="true"
+        android:background="@drawable/shape_toolbar_background"
         android:orientation="horizontal">
 
 
@@ -45,9 +42,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:gravity="center"
-            android:text="@string/md_back_arrow"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:textColor="@color/whit_background" />
+            android:text="@string/down_arrow_icon"
+              android:rotation="90"
+            style="@style/myIconToolbarStyle" />
 
         </net.iGap.libs.rippleeffect.RippleView>
 
@@ -111,29 +108,27 @@
 
       </LinearLayout>
 
-
-    </android.support.design.widget.AppBarLayout>
-
-
     <android.support.v4.view.ViewPager
-      android:id="@+id/apn_view_pager"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1"></android.support.v4.view.ViewPager>
+        android:id="@+id/apn_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/apn_layout_attach_file"
+        android:layout_below="@id/apn_ll_toolbar"/>
 
     <include
       android:id="@+id/apn_layout_mic_recorde"
       layout="@layout/layout_mic_record"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="bottom"
+      android:layout_alignParentBottom="true"
       android:visibility="gone" />
 
     <LinearLayout
       android:id="@+id/apn_layout_attach_file"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp48"
-      android:background="@android:color/white"
+      android:background="@drawable/backround_chatroom_root"
+        android:layout_alignParentBottom="true"
       android:gravity="center"
       android:orientation="horizontal">
 
@@ -145,7 +140,7 @@
         android:padding="@dimen/dp8"
         android:text="@string/md_emoticon_with_happy_face"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/gray" />
+        android:textColor="@color/black" />
 
       <net.iGap.module.EmojiEditTextE
         android:id="@+id/apn_edt_chat"
@@ -156,8 +151,9 @@
         android:hint="@string/type_message"
         android:maxLines="4"
         android:paddingRight="@dimen/dp4"
-        android:textColor="@color/gray"
-        android:textColorHint="@color/light_gray"
+          style="?hintColorSettingTheme"
+          android:textColor="@color/black"
+          android:textColorHint="@color/gray_4c"
         app:emojiSize="26sp" />
 
       <net.iGap.module.MaterialDesignTextView
@@ -166,6 +162,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
+          android:textColor="@color/black"
         android:text="@string/md_send_button"
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:visibility="gone" />
@@ -179,13 +176,13 @@
         android:padding="@dimen/dp8"
         android:text="@string/md_voice_message_microphone_button"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/gray" />
+        android:textColor="@color/black" />
 
 
     </LinearLayout>
 
 
-  </LinearLayout>
+  </RelativeLayout>
 
 
 </LinearLayout>

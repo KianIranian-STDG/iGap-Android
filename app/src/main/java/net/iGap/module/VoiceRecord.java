@@ -322,7 +322,7 @@ public class VoiceRecord {
         txt_slide_to_cancel.setAlpha(1);
         txt_slide_to_cancel.setText(R.string.cancel);
         txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.red));
-        txt_slide_to_cancel.setTypeface(Typeface.DEFAULT_BOLD);
+        //txt_slide_to_cancel.setTypeface(Typeface.DEFAULT_BOLD);
         btnMicLayout.setText(R.string.md_send_button);
         btnMicLayout.setTextColor(G.context.getResources().getColor(R.color.white));
         btnMicLayout.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp16));
@@ -336,8 +336,12 @@ public class VoiceRecord {
         txt_slide_to_cancel.setPadding(0, 0, 0, 0);
         txt_slide_to_cancel.setText(R.string.slide_to_cancel_en);
         txt_slide_to_cancel.setAlpha(1);
-        txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.gray));
-        txt_slide_to_cancel.setTypeface(Typeface.DEFAULT);
+        if (G.isDarkTheme){
+            txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.white));
+        }else{
+            txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.black));
+        }
+        //txt_slide_to_cancel.setTypeface(Typeface.DEFAULT);
         btnMicLayout.setText(R.string.md_voice_message_microphone_button);
         btnMicLayout.setTextColor(G.context.getResources().getColor(R.color.black_register));
         btnMicLayout.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp26));
