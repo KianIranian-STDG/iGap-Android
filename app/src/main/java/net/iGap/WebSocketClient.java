@@ -64,7 +64,7 @@ public class WebSocketClient {
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     latestConnectionOpenTime = System.currentTimeMillis();
                     waitingForReconnecting = false;
-                    if (G.isSecure) {
+                    if (G.socketConnection) {
                         allowForReconnecting = true;
                         if (webSocketClient != null) {
                             webSocketClient.disconnect();
@@ -89,8 +89,8 @@ public class WebSocketClient {
 
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-                    resetMainInfo();
-                    reconnect(true);
+                    /*resetMainInfo();
+                    reconnect(true);*/
                     super.onError(websocket, cause);
                 }
 
@@ -321,6 +321,7 @@ public class WebSocketClient {
      */
     private static void resetMainInfo() {
         RealmRoom.clearAllActions();
+        resetWebsocketInfo();
     }
 
     /**
