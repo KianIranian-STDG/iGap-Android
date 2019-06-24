@@ -828,6 +828,8 @@ public class HelperToolbar {
             ConstraintSet setRoot = new ConstraintSet();
             ConstraintSet set = new ConstraintSet();
 
+            setLayoutDirection(LAYOUT_DIRECTION_LTR);
+
             //region media player and ongoing call
             //check and add media player cause of ui and this must be the below of main toolbar view
             if (isMediaPlayerEnabled){
@@ -981,7 +983,7 @@ public class HelperToolbar {
                 logo.setGravity(Gravity.CENTER);
                 Utils.setTextSize(logo, R.dimen.standardTextSize);
                 logo.setTextColor(getContext().getResources().getColor(R.color.white));
-                logo.setTypeface(tfMain);
+                logo.setTypeface(tfFontIcon);
                 InputFilter[] fArray = new InputFilter[1];
                 fArray[0] = new InputFilter.LengthFilter(28);
                 logo.setFilters(fArray);
@@ -1023,6 +1025,7 @@ public class HelperToolbar {
                 tvSearch.setText(R.string.search);
                 tvSearch.setGravity(Gravity.CENTER);
                 tvSearch.setVisibility(VISIBLE);
+                tvSearch.setTypeface(tfMain);
                 tvSearch.setTextColor(Utils.darkModeHandler(getContext()));
                 Utils.setTextSize(tvSearch, R.dimen.standardTextSize);
                 setLayoutParams(tvSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), 0, 0);
@@ -1033,6 +1036,7 @@ public class HelperToolbar {
                 edtSearch.setBackgroundResource(android.R.color.transparent);
                 edtSearch.setGravity(Gravity.CENTER);
                 edtSearch.setVisibility(GONE);
+                edtSearch.setTypeface(tfMain);
                 edtSearch.setHint(R.string.search);
                 edtSearch.setSingleLine();
                 Utils.setTextSize(edtSearch, R.dimen.standardTextSize);
