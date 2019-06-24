@@ -188,7 +188,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private static long currentTime;
     public TextView iconLock;
     public static boolean isUseCamera = false;
-    public ArcMenu arcMenu;
     FragmentCall fragmentCall;
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
     public static boolean waitingForConfiguration = false;
@@ -211,6 +210,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private int currentFabIcon = 0;
     private RealmUserInfo userInfo;
     private int lastMarginTop = 0;
+    private int retryConnectToWallet = 0;
     private BottomNavigation bottomNavigation;
 
     public static void setWeight(View view, int value) {
@@ -2084,5 +2084,38 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onRightIconClickListener(View view) {
 
+    }
+
+    public enum MainAction {
+        downScrool, clinetCondition
+    }
+
+    public enum chatLayoutMode {
+        none, show, hide
+    }
+
+    public interface MainInterface {
+        void onAction(MainAction action);
+    }
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        SampleFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return pages.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return pages.size();
+        }
     }
 }
