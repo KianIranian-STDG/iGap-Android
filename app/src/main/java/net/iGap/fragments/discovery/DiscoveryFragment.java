@@ -98,7 +98,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
 
         if (page != 0){
             mHelperToolbar.setLeftIcon(R.string.back_icon);
-            mHelperToolbar.setRightSmallAvatarShown(false);
+           // mHelperToolbar.setRightSmallAvatarShown(false);
         }else {
             //mHelperToolbar.setLeftIcon(R.string.flag_icon);
             //mHelperToolbar.setRightSmallAvatarShown(true);
@@ -152,7 +152,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         });
 
         //load user avatar in toolbar
-        avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        //avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
