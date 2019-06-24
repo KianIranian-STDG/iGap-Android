@@ -266,15 +266,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                         HelperPermission.getCameraPermission(ActivityCall.this, new OnGetPermission() {
                             @Override
                             public void Allow() throws IOException {
-                                if (G.isVideoCallRinging) {
-                                    init();
-                                }else {
-                                    G.isInCall = false;
-                                    finish();
-                                    if (isIncomingCall) {
-                                        WebRTC.getInstance().leaveCall();
-                                    }
-                                }
+                                init();
                          /*       G.onRejectCallStatus = new OnRejectCallStatus() {
                                     @Override
                                     public void setReject(boolean state) {
@@ -295,15 +287,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                         });
 
                     } else {
-                        if (G.isVoiceCallRinging) {
-                            init();
-                        }else {
-                            G.isInCall = false;
-                            finish();
-                            if (isIncomingCall) {
-                                WebRTC.getInstance().leaveCall();
-                            }
-                        }
+                        init();
 
 
                     }
@@ -568,7 +552,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                     // activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
                     activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
                     G.isVideoCallRinging = false;
-                    G.isVoiceCallRinging = false;
                     setUpSwap(layoutAnswer);
 
                     return false;

@@ -89,7 +89,6 @@ public class G extends MultiDexApplication {
     public static Handler handler;
     public static boolean isCalling = false;
     public static boolean isVideoCallRinging = false;
-    public static boolean isVoiceCallRinging = false;
     //public static OnRejectCallStatus onRejectCallStatus;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
     public static LayoutInflater inflater;

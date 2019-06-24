@@ -401,7 +401,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         playSound(R.raw.igap_ringing);
                         txtAviVisibility.set(View.VISIBLE);
                         G.isVideoCallRinging = true;
-                        G.isVoiceCallRinging = true;
                         break;
                     case INCAMING_CALL:
                         txtAviVisibility.set(View.VISIBLE);

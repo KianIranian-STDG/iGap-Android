@@ -14,7 +14,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -66,8 +65,6 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         WebRTC.getInstance().setCallType(type);
         if (type == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             G.isVideoCallRinging = true;
-        }else if (type == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
-            G.isVoiceCallRinging = true;
         }
 
         new RequestSignalingRinging().signalingRinging();
@@ -120,7 +117,6 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                     public void onSetSuccess() {
 
                         G.isVideoCallRinging = false;
-                        G.isVoiceCallRinging = false;
                         try {
                             AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                             G.mainRingerMode = am.getRingerMode();
@@ -178,10 +174,9 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                     } catch (Exception e) {
                     }
 
-                    G.isVideoCallRinging = false;
-                    G.isVoiceCallRinging = false;
-                    if (G.iSignalingCallBack != null) {
 
+                    if (G.iSignalingCallBack != null) {
+                        G.isVideoCallRinging = false;
                         switch (type) {
 
                             case REJECTED:
