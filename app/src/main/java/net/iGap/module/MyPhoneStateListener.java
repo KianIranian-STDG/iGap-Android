@@ -43,6 +43,8 @@ public class MyPhoneStateListener extends PhoneStateListener {
             }
             G.isCalling = true;
             G.isVideoCallRinging = false;
+            G.isVoiceCallRinging = false;
+
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
             WebRTC.getInstance().unMuteSound();
             WebRTC.getInstance().startVideoCapture();
