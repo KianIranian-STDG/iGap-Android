@@ -702,6 +702,32 @@ public class FragmentChat extends BaseFragment
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
+        ConstraintLayout chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
+
+        if (G.isDarkTheme)
+            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
+        else
+            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
+        sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
+
+        /**
+         * init chat box edit text and send item because we need change this color in dark mode!
+         * */
+
+        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
+        imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
+
+        if (G.isDarkTheme) {
+            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));
+            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext_dark));
+            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(),R.color.white));
+            edtChat.setTextColor(inflater.getContext().getResources().getColor(R.color.white));
+        } else {
+            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));
+            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
+            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(),R.color.gray_4c));
+        }
+
         return attachToSwipeBack(rootView);
     }
 
@@ -2727,29 +2753,6 @@ public class FragmentChat extends BaseFragment
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
 
-        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
-        setUpEmojiPopup();
-
-        ConstraintLayout chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
-
-        if (G.isDarkTheme)
-            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
-        else
-            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
-        sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
-
-        /**
-         * init chat box edit text and send item because we need change this color in dark mode!
-         * */
-
-        if (G.isDarkTheme) {
-            imvSendButton.setTextColor(getContext().getResources().getColor(R.color.green));
-            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext_dark));
-        } else {
-            imvSendButton.setTextColor(getContext().getResources().getColor(R.color.md_green_700));
-            edtChat.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.backround_chatroom_edittext));
-        }
-
         edtChat.requestFocus();
 
         edtChat.setOnClickListener(new View.OnClickListener() {
@@ -3275,7 +3278,7 @@ public class FragmentChat extends BaseFragment
                     initAttach();
                 }
 
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
@@ -7471,7 +7474,7 @@ public class FragmentChat extends BaseFragment
 
                     btnHashLayoutClose.performClick();
 
-                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 } else {
                     // deSelectMessage(selectedPosition);

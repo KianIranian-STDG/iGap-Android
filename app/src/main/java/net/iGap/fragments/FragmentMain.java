@@ -12,11 +12,9 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
-import net.iGap.helper.HelperTracker;
 import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -44,6 +41,7 @@ import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
@@ -62,7 +60,6 @@ import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.libs.Tuple;
-import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
@@ -367,35 +364,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             getChatLists();
         }
 
-        if (mView != null) {
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    try {
-                        ArcMenu arcMenu = ((ActivityMain) G.fragmentActivity).arcMenu;
-                        if (arcMenu.isMenuOpened()) {
-                            arcMenu.toggleMenu();
-                        }
-
-                        if (dy > 0) {
-                            // Scroll Down
-                            if (arcMenu.fabMenu.isShown()) {
-                                arcMenu.fabMenu.hide();
-                            }
-                        } else if (dy < 0) {
-                            // Scroll Up
-                            if (!arcMenu.fabMenu.isShown()) {
-                                arcMenu.fabMenu.show();
-                            }
-                        }
-                    } catch (ClassCastException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
 
         G.onNotifyTime = new OnNotifyTime() {
             @Override
@@ -729,9 +697,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void complete(boolean result, String messageOne, String MessageTow) {
-        if (messageOne.equals("closeMenuButton")) {
-            ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
-        }
+
     }
 
     private Realm getRealmFragmentMain() {
@@ -1578,9 +1544,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                                 if (openChat) {
                                     new GoToChatActivity(mInfo.getId()).startActivity(getActivity());
 
-                                    if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
-                                    }
                                 }
                             }
                         }

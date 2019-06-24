@@ -155,7 +155,7 @@
         android:layout_marginRight="24dp"
         android:text="@string/add_new_member"
         style="?textTitleColorSettingTheme"
-        android:textSize="18sp" />
+        android:textSize="@dimen/standardTextSize" />
 
     <View
         android:id="@+id/fcm_splitter_add"

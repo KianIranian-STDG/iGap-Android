@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -28,15 +27,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -49,7 +45,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,7 +73,6 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentUserProfile;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
-import net.iGap.fragments.SearchFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
@@ -105,7 +99,6 @@ import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
-import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGetWallpaper;
@@ -115,7 +108,6 @@ import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnPayment;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnUnreadChange;
-import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnVerifyNewDevice;
 import net.iGap.interfaces.OneFragmentIsOpen;
@@ -124,21 +116,14 @@ import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
-import net.iGap.libs.floatingAddButton.ArcMenu;
-import net.iGap.libs.floatingAddButton.StateChangeListener;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
-import net.iGap.module.FixAppBarLayoutBehavior;
 import net.iGap.module.LoginActions;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.NotSwipeableViewPager;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -178,10 +163,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
-import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
@@ -207,17 +190,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isUseCamera = false;
     public ArcMenu arcMenu;
     FragmentCall fragmentCall;
-    FloatingActionButton btnStartNewChat;
-    FloatingActionButton btnCreateNewGroup;
-    FloatingActionButton btnCreateNewChannel;
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
     public static boolean waitingForConfiguration = false;
     private LinearLayout mediaLayout;
     private FrameLayout frameChatContainer;
-    private RelativeLayout frameMainContainer;
+    private ConstraintLayout frameMainContainer;
     private FrameLayout frameFragmentBack;
     private FrameLayout frameFragmentContainer;
-    private MyAppBarLayout appBarLayout;
     private Typeface titleTypeface;
     private SharedPreferences sharedPreferences;
     private ImageView imgNavImage;
@@ -229,7 +208,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private String phoneNumber;
     private TextView itemCash;
     private ViewGroup itemNavWallet;
-    private int currentFabIcon =0;
+    private int currentFabIcon = 0;
     private RealmUserInfo userInfo;
     private int lastMarginTop = 0;
     private BottomNavigation bottomNavigation;
@@ -311,6 +290,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (ActivityCall.stripLayoutChat != null) {
                 ActivityCall.stripLayoutChat.setVisibility(View.GONE);
             }
+        }
+    }
+
+    public static void doIvandScore(String content, Activity activity) {
+        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
+            @Override
+            public void onSetActivitiesReady(String message, boolean isOk) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
+                        dialog.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = G.context.getString(R.string.error_submit_qr_code);
+                        if (majorCode == 10183 && minorCode == 2) {
+                            message = G.context.getString(R.string.E_10183);
+                        }
+
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
+                        dialog.show();
+                    }
+                });
+            }
+        });
+
+        if (!isSend) {
+            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
         }
     }
 
@@ -607,50 +621,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             initTabStrip();
 
-            initFloatingButtonCreateNew();
-
-            arcMenu.setBackgroundTintColor();
-
-            btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-            btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-            btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
-            mediaLayout = findViewById(R.id.amr_ll_music_layout);
-
-            //MusicPlayer.setMusicPlayer(mediaLayout);
-            //MusicPlayer.mainLayout = mediaLayout;
-
-            //ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
-
-
-            appBarLayout = findViewById(R.id.appBarLayout);
-            ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).setBehavior(new FixAppBarLayoutBehavior());
-
-            final ViewGroup toolbar = findViewById(R.id.rootToolbar);
-
-            appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
-                @Override
-                public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
-                    int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 10f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
-                    if (lastMarginTop != marginTop) {
-                        lastMarginTop = marginTop;
-    //                    LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
-    //                    param.setMargins(0, marginTop, 0, 0);
-    //                    navigationTabStrip.setLayoutParams(param);
-                    }
-                    toolbar.clearAnimation();
-                    if (moveUp) {
-                        if (toolbar.getAlpha() != 0F) {
-                            toolbar.animate().setDuration(150).alpha(0F).start();
-                        }
-                    } else {
-                        if (toolbar.getAlpha() != 1F) {
-                            toolbar.animate().setDuration(150).alpha(1F).start();
-                        }
-                    }
-                }
-            });
-
             initComponent();
 
             G.onPayment = this;
@@ -719,9 +689,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
             G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-
-
-            connectionState();
 
             initDrawerMenu();
 
@@ -865,7 +832,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         new RequestInfoWallpaper().infoWallpaper();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -953,41 +919,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public static void doIvandScore(String content, Activity activity) {
-        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
-            @Override
-            public void onSetActivitiesReady(String message, boolean isOk) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
-                        dialog.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String message = G.context.getString(R.string.error_submit_qr_code);
-                        if (majorCode == 10183 && minorCode == 2) {
-                            message = G.context.getString(R.string.E_10183);
-                        }
-
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
-                        dialog.show();
-                    }
-                });
-            }
-        });
-
-        if (!isSend) {
-            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
-        }
-    }
-
     private void checkKeepMedia() {
 
         final int keepMedia = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
@@ -1015,7 +946,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }, 5000);
         }
     }
-
 
     private void getPaymentResultCode(int resultCode, Intent data) {
 
@@ -1132,168 +1062,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.rotationState = newConfig.orientation;
     }
 
-    //*******************************************************************************************************************************************
-
-    private void initFloatingButtonCreateNew() {
-        arcMenu = findViewById(R.id.ac_arc_button_add);
-        arcMenu.setStateChangeListener(new StateChangeListener() {
-            @Override
-            public void onMenuOpened() {
-
-            }
-
-            @Override
-            public void onMenuClosed() {
-                isMenuButtonAddShown = false;
-            }
-        });
-
-        btnStartNewChat = findViewById(R.id.ac_fab_start_new_chat);
-        btnStartNewChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                //bundle.putString("TITLE", "New Chat");
-                bundle.putBoolean("isBackSwipable", true);
-                bundle.putString("TITLE", "ADD");
-                fragment.setArguments(bundle);
-
-                try {
-                    //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                    //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
-
-                    new HelperFragment(getSupportFragmentManager(),fragment).load();
-
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-            }
-        });
-
-        btnCreateNewGroup = findViewById(R.id.ac_fab_crate_new_group);
-        btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewGroup");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(getSupportFragmentManager(),fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-            }
-        });
-
-        btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
-        btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewChanel");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(getSupportFragmentManager(),fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-            }
-        });
-
-        arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (mViewPager == null || mViewPager.getAdapter() == null) {
-                    return;
-                }
-
-                try {
-
-                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
-
-                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                        switch (fm.mainType) {
-
-                            case all:
-                                btnStartNewChat.performClick();
-                                break;
-                            case chat:
-                                btnStartNewChat.performClick();
-                                break;
-                            case group:
-                                btnCreateNewGroup.performClick();
-                                break;
-                            case channel:
-                                btnCreateNewChannel.performClick();
-                                break;
-                        }
-                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
-
-                        ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
-                    }
-                } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
-                }
-            }
-        });
-    }
-
-    private void onSelectItem(int position) {
-        FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-
-        if (adapter.getItem(position) instanceof FragmentMain) {
-
-            findViewById(R.id.amr_btn_search).setVisibility(View.VISIBLE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            setFabIcon(R.mipmap.plus);
-            arcMenu.fabMenu.hide();
-            arcMenu.setVisibility(View.VISIBLE);
-        } else if (adapter.getItem(position) instanceof FragmentCall) {
-
-            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
-            setFabIcon(R.drawable.ic_call_black_24dp);
-            arcMenu.fabMenu.hide();
-            arcMenu.setVisibility(View.VISIBLE);
-        } else if (adapter.getItem(position) instanceof DiscoveryFragment) {
-            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            arcMenu.setVisibility(View.GONE);
-        }
-
-        if (arcMenu.isMenuOpened()) {
-            arcMenu.toggleMenu();
-        }
-
-        arcMenu.fabMenu.show();
-    }
-
     private void setFabIcon(int res) {
 
         if (res == currentFabIcon) {
             return;
-        }
-        currentFabIcon = res;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res, context.getTheme()));
-        } else {
-            arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res));
         }
     }
 
@@ -1360,55 +1132,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mViewPager.setOffscreenPageLimit(5);
 
         if (HelperCalander.isPersianUnicode) {
-            G.handler.postDelayed(() -> {
+            G.handler.post(() -> {
                 pages.add(new FragmentUserProfile());
                 pages.add(DiscoveryFragment.newInstance(0));
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(RegisteredContactsFragment.newInstance(false));
-
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
                 mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
-            }, 200);
-
+                bottomNavigation.setVisibility(View.VISIBLE);
+            });
         } else {
-
-            G.handler.postDelayed(() -> {
-
+            G.handler.post(() -> {
                 pages.add(RegisteredContactsFragment.newInstance(false));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 pages.add(DiscoveryFragment.newInstance(0));
-                //  pages.add(new FragmentSetting());
                 pages.add(new FragmentUserProfile());
-
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
                 findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 mViewPager.getAdapter().notifyDataSetChanged();
                 mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-
-            }, 200);
-
+                bottomNavigation.setVisibility(View.VISIBLE);
+            });
         }
-
-        MaterialDesignTextView txtMenu = findViewById(R.id.am_btn_menu);
-
-        txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    fragmentCall.openDialogMenu();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
@@ -1423,6 +1175,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
+
         if (G.ISOK) {
             if (!G.isFirstPassCode) {
                 openActivityPassCode();
@@ -1464,11 +1217,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      */
 
     private void initDrawerMenu() {
-        Toolbar mainToolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(mainToolbar);
         setDrawerInfo(true);
-
-        // gone or visible view call
         RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
         if (callConfig == null)
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
@@ -1556,25 +1305,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup layoutToolbar =findViewById(R.id.mainActivityFakeToolbar);
         layoutToolbar.addView(toolbar.getView());
 
-        iconLock = findViewById(R.id.am_btn_lock);
 
-        iconLock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (isLock) {
-                    iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
-                    isLock = false;
-                } else {
-                    iconLock.setText(getResources().getString(R.string.md_igap_lock));
-                    isLock = true;
-                }
-
-            }
-        });
-
-
-        contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
+        contentLoading = findViewById(R.id.loadingContent);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1606,23 +1338,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        View amr_btn_search = findViewById(R.id.amr_btn_search);
-        amr_btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = SearchFragment.newInstance();
-
-                try {
-                    //  getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
-                    new HelperFragment(getSupportFragmentManager(),fragment).load();
-
-
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
-        });
-
         if (!HelperCalander.isPersianUnicode) {
             titleTypeface = G.typeface_neuropolitical;
         } else {
@@ -1636,95 +1351,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void startAnimationLocation() {
         //
-    }
-
-    private void connectionState() {
-        final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
-
-        Typeface typeface = G.typeface_IRANSansMobile;
-
-        if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-            txtIgap.setText(R.string.waiting_for_network);
-            txtIgap.setTypeface(typeface, Typeface.BOLD);
-        } else if (G.connectionState == ConnectionState.CONNECTING) {
-            txtIgap.setText(R.string.connecting);
-            txtIgap.setTypeface(typeface, Typeface.BOLD);
-        } else if (G.connectionState == ConnectionState.UPDATING) {
-            txtIgap.setText(updating);
-            txtIgap.setTypeface(typeface, Typeface.BOLD);
-        } else {
-            txtIgap.setText(R.string.app_name);
-            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
-        }
-
-        G.onConnectionChangeState = new OnConnectionChangeState() {
-            @Override
-            public void onChangeState(final ConnectionState connectionStateR) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Typeface typeface = null;
-                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
-                            typeface = titleTypeface;
-                        }
-                        G.connectionState = connectionStateR;
-
-                        G.connectionStateMutableLiveData.postValue(connectionStateR);
-
-
-                        if (connectionStateR == ConnectionState.WAITING_FOR_NETWORK) {
-                            txtIgap.setText(R.string.waiting_for_network);
-                            txtIgap.setTypeface(typeface, Typeface.BOLD);
-                        } else if (connectionStateR == ConnectionState.CONNECTING) {
-                            txtIgap.setText(R.string.connecting);
-                            txtIgap.setTypeface(typeface, Typeface.BOLD);
-                        } else if (connectionStateR == ConnectionState.UPDATING) {
-                            txtIgap.setText(R.string.updating);
-                            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
-                        } else if (connectionStateR == ConnectionState.IGAP) {
-                            txtIgap.setText(R.string.app_name);
-                            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
-                        } else {
-                            txtIgap.setTypeface(typeface, Typeface.BOLD);
-                        }
-                    }
-                });
-            }
-        };
-
-        G.onUpdating = new OnUpdating() {
-            @Override
-            public void onUpdating() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Typeface typeface = null;
-                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
-                            typeface = titleTypeface;
-                        }
-                        G.connectionState = ConnectionState.UPDATING;
-                        G.connectionStateMutableLiveData.postValue(ConnectionState.UPDATING);
-
-                        txtIgap.setText(R.string.updating);
-                        txtIgap.setTypeface(typeface, Typeface.BOLD);
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelUpdating() {
-                /**
-                 * if yet still G.connectionState is in update state
-                 * show latestState that was in previous state
-                 */
-                if (G.connectionState == ConnectionState.UPDATING) {
-                    G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
-                    G.connectionStateMutableLiveData.postValue(ConnectionState.IGAP);
-
-
-                }
-            }
-        };
     }
 
     @Override
@@ -1783,6 +1409,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
+
         if (G.ISOK) {
             if (G.onBackPressedWebView != null) {
                 if (G.onBackPressedWebView.onBack()) {
@@ -1800,7 +1427,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-
             if (onBackPressedListener != null) {
                 onBackPressedListener.doBack();
             }
@@ -1815,7 +1441,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
             super.onBackPressed();
         }
-
     }
 
     @Override
@@ -1856,7 +1481,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
@@ -1904,17 +1528,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         //ActivityMain.setMediaLayout();
 
-        if (G.isPassCode) {
-            iconLock.setVisibility(View.VISIBLE);
-
-            if (isLock) {
-                iconLock.setText(getResources().getString(R.string.md_igap_lock));
-            } else {
-                iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
-            }
-        } else {
-            iconLock.setVisibility(View.GONE);
-        }
 
         onFinance(G.isMplActive, G.isWalletActive);
 
@@ -1962,7 +1575,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         }
     }
-
 
     @Override
     public void onChatClearMessage(final long roomId, long clearId) {
@@ -2080,7 +1692,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         realm.close();
-        for (Fragment f: pages) {
+        for (Fragment f : pages) {
             if (f instanceof FragmentMain) {
                 FragmentMain mainFragment = (FragmentMain) f;
                 switch (mainFragment.mainType) {
@@ -2137,9 +1749,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void notifySubFragmentForCondition() {
-        for (Fragment f: pages) {
+        for (Fragment f : pages) {
             if (f instanceof FragmentMain) {
-                ((FragmentMain)f).onAction(MainAction.clinetCondition);
+                ((FragmentMain) f).onAction(MainAction.clinetCondition);
             }
         }
     }
@@ -2307,43 +1919,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } catch (Exception e) {
         }
     }
-
-
-    public enum MainAction {
-        downScrool, clinetCondition
-    }
-
-    public enum chatLayoutMode {
-        none, show, hide
-    }
-
-    public interface MainInterface {
-        void onAction(MainAction action);
-    }
-
-    public interface OnBackPressedListener {
-        void doBack();
-    }
-
-    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        SampleFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            return pages.get(i);
-        }
-
-        @Override
-        public int getCount() {
-            return pages.size();
-        }
-    }
-
-
-    private int retryConnectToWallet = 0;
 
     public void getUserCredit() {
 

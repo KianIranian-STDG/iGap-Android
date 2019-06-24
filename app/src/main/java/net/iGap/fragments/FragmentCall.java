@@ -26,7 +26,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
@@ -350,29 +349,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             fabContactList.hide();
 
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
-
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) throws ClassCastException {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
-                    }
-
-                    if (dy > 0) {
-                        // Scroll Down
-                        if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
-                        }
-                    } else if (dy < 0) {
-                        // Scroll Up
-                        if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
-                        }
-                    }
-                }
-            });
 
         }
 
