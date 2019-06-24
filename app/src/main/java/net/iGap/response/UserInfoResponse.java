@@ -85,20 +85,22 @@ public class UserInfoResponse extends MessageHandler {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (identity != null) {
-                    if (identity instanceof String) {
-                        if (G.onUserInfoResponse != null) {
-                            G.onUserInfoResponse.onUserInfo(builder.getUser(), (String) identity);
-                        }
+                if (identity instanceof String) {
+                    if (G.onUserInfoResponse != null) {
+                        G.onUserInfoResponse.onUserInfo(builder.getUser(), (String) identity);
+                    }
 
-                    } else if (identity instanceof RequestUserInfo.UserInfoBody){
-                        if (((RequestUserInfo.UserInfoBody) identity).onComplete != null) {
-                            ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "" + builder.getUser().getId(), "OK");
-                        }
+                } else if (identity instanceof RequestUserInfo.UserInfoBody){
+                    if (((RequestUserInfo.UserInfoBody) identity).onComplete != null) {
+                        ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "" + builder.getUser().getId(), "OK");
+                    }
 
-                        if (G.onUserInfoResponse != null) {
-                            G.onUserInfoResponse.onUserInfo(builder.getUser(), ((RequestUserInfo.UserInfoBody) identity).identity);
-                        }
+                    if (G.onUserInfoResponse != null) {
+                        G.onUserInfoResponse.onUserInfo(builder.getUser(), ((RequestUserInfo.UserInfoBody) identity).identity);
+                    }
+                } else if (identity == null) {
+                    if (G.onUserInfoResponse != null) {
+                        G.onUserInfoResponse.onUserInfo(builder.getUser(), null);
                     }
                 }
 
