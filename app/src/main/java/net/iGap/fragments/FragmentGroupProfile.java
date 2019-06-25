@@ -224,7 +224,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         viewModel.goToShowMemberPage.observe(this, type -> {
             if (getActivity() != null && type != null) {
-                FragmentShowMember fragment = FragmentShowMember.newInstance1(this, viewModel.roomId, viewModel.role.toString(), G.userId, type, viewModel.isNeedgetContactlist);
+                FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, type, viewModel.isNeedgetContactlist , true);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });

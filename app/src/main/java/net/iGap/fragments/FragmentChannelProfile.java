@@ -148,7 +148,7 @@ public class FragmentChannelProfile extends BaseFragment {
             if (getActivity() != null && data != null) {
                 new HelperFragment(
                         getActivity().getSupportFragmentManager(),
-                        FragmentShowMember.newInstance1(this, data.getRoomId(), data.getRole(), data.getUserId(), data.getSelectedRole(), data.isNeedGetMemberList())
+                        FragmentShowMember.newInstance2(this, data.getRoomId(), data.getRole(), data.getUserId(), data.getSelectedRole(), data.isNeedGetMemberList() , false)
                 ).setReplace(false).load();
             }
         });

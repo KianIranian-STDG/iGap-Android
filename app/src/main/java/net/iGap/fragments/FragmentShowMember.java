@@ -465,11 +465,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
-            mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
 
             if (isGroup) {
+                mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_member));
             } else {
+                mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.subscriber));
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_subscriber));
             }
 
