@@ -127,7 +127,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             roomId = getArguments().getLong(ROOM_ID);
             isNotJoin = getArguments().getBoolean(IS_NOT_JOIN);
         }
-        viewModel = new FragmentGroupProfileViewModel(roomId, isNotJoin);
+        viewModel = new FragmentGroupProfileViewModel(this ,roomId, isNotJoin);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
