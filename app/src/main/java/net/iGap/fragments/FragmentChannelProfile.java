@@ -73,7 +73,7 @@ public class FragmentChannelProfile extends BaseFragment {
             roomId = getArguments().getLong(ROOM_ID);
             v = getArguments().getBoolean(IS_NOT_JOIN);
         }
-        viewModel = new FragmentChannelProfileViewModel(roomId, v);
+        viewModel = new FragmentChannelProfileViewModel(this , roomId, v);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
