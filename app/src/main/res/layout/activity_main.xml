@@ -1,133 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootFrame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        style="?backgroundColorSettingTheme"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layoutDirection="ltr"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/bn_main_bottomNavigation"
+        app:layout_constraintEnd_toStartOf="@id/am_frame_chat_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/am_frame_main_container"
-            style="?backgroundColorSettingTheme"
+    <net.iGap.libs.bottomNavigation.BottomNavigation
+        android:id="@+id/bn_main_bottomNavigation"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:visibility="invisible"
+        app:background_color="#EEEEEE"
+        app:corner_radius="35"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/viewpager"
+        app:layout_constraintStart_toStartOf="@id/viewpager">
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_contact"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:overScrollMode="never">
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
 
-            <LinearLayout
-                android:id="@+id/mainActivityFakeToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:visibility="gone"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <net.iGap.module.NotSwipeableViewPager
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layoutDirection="ltr"
-                app:layout_constraintBottom_toTopOf="@+id/bn_main_bottomNavigation"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mainActivityFakeToolbar" />
-
-            <net.iGap.libs.bottomNavigation.BottomNavigation
-                android:id="@+id/bn_main_bottomNavigation"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:visibility="invisible"
-
-                app:background_color="#EEEEEE"
-                app:corner_radius="35"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <net.iGap.libs.bottomNavigation.TabItem
-                    android:id="@+id/ti_main_contact"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
-                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
-                    app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
-                    app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
-
-                <net.iGap.libs.bottomNavigation.TabItem
-                    android:id="@+id/ti_main_call"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
-                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
-                    app:selected_icon="@drawable/ic_bottomnavigation_call_on"
-                    app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
-
-                <net.iGap.libs.bottomNavigation.TabItem
-                    android:id="@+id/ti_main_chat"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
-                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
-                    app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
-                    app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
-
-                <net.iGap.libs.bottomNavigation.TabItem
-                    android:id="@+id/ti_main_dashboard"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
-                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
-                    app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
-                    app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
-
-                <net.iGap.libs.bottomNavigation.TabItem
-                    android:id="@+id/ti_main_setting"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:dark_selected_icon="@drawable/ic_bottomnavigation_setting_on_darkmode"
-                    app:dark_unselected_icon="@drawable/ic_bottomnavigation_setting_off_darkmode"
-                    app:selected_icon="@drawable/ic_bottomnavigation_setting_on"
-                    app:unselected_icon="@drawable/ic_bottomnavigation_setting_off" />
-
-            </net.iGap.libs.bottomNavigation.BottomNavigation>
-
-            <ProgressBar
-                android:id="@+id/loadingContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:indeterminate="true"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.50" />
-
-        </android.support.constraint.ConstraintLayout>
-
-        <FrameLayout
-            android:id="@+id/am_frame_chat_container"
-            android:layout_width="1px"
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_call"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/back_main_room"
-            android:visibility="gone"/>
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_call_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
 
-    </LinearLayout>
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_chat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_dashboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_setting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_setting_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_setting_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_setting_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_setting_off" />
+
+    </net.iGap.libs.bottomNavigation.BottomNavigation>
+
+    <ProgressBar
+        android:id="@+id/loadingContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/viewpager"
+        app:layout_constraintStart_toStartOf="@id/viewpager"
+        app:layout_constraintTop_toTopOf="@id/viewpager" />
+
+    <FrameLayout
+        android:id="@+id/am_frame_chat_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/back_main_room"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@id/viewpager"
+        android:visibility="visible"/>
 
     <FrameLayout
         android:id="@+id/am_frame_fragment_back"
@@ -148,4 +123,4 @@
 
     </FrameLayout>
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>
