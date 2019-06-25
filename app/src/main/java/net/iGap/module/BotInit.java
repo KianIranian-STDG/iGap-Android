@@ -111,7 +111,7 @@ public class BotInit implements View.OnClickListener {
                 for (int i = 0; i < builder.getPromoteList().size(); i++)
                     promoteIds.add(builder.getPromoteList().get(i).getId());
 
-                final Realm realm = Realm.getDefaultInstance();
+                Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -125,7 +125,6 @@ public class BotInit implements View.OnClickListener {
                         }
                     }
                 });
-                realm.close();
 
                 for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
 
@@ -183,6 +182,8 @@ public class BotInit implements View.OnClickListener {
                         new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
                     }
                 }
+
+                realm.close();
 
             }
 
