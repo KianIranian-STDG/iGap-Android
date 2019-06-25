@@ -516,37 +516,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         });
 
-        final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.member_txt_titleToolbar);
         final EditText edtSearch = mHelperToolbar.getEditTextSearch();
-        final RippleView txtClose = (RippleView) view.findViewById(R.id.menu_ripple_search);
-        final RippleView txtSearch = (RippleView) view.findViewById(R.id.member_edtSearch);
-
-        txtSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                txtClose.setVisibility(View.VISIBLE);
-                edtSearch.setVisibility(View.VISIBLE);
-                edtSearch.setFocusable(true);
-                menu_txt_titleToolbar.setVisibility(View.GONE);
-                txtSearch.setVisibility(View.GONE);
-            }
-        });
-
-        txtClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (edtSearch.getText().length() > 0) {
-                    edtSearch.setText("");
-                } else {
-                    txtClose.setVisibility(View.GONE);
-                    edtSearch.setVisibility(View.GONE);
-                    menu_txt_titleToolbar.setVisibility(View.VISIBLE);
-                    txtSearch.setVisibility(View.VISIBLE);
-                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        });
 
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -578,18 +548,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
         AppUtils.setProgresColler(progressBar);
 
-        view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                // G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-                popBackStackFragment();
-
-            }
-        });
 
         //TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
 
