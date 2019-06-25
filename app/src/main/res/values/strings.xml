@@ -1260,6 +1260,11 @@
     <string name="wimax_charging">WiMAX charge</string>
     <string name="permanently_charge">Charge permanent SIM cards</string>
 
+    <string name="get_gifts">Get Gift</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="unsuccessful">Failed</string>
+    <string name="disabled_qr_voucher">This voucher is disabled or used before. </string>
+
     <string name="charge_1"> 10,000 Rials</string>
     <string name="charge_2"> 20,000 Rials</string>
     <string name="charge_5"> 50,000 Rials</string>
