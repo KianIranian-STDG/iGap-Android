@@ -318,6 +318,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     }
 
     private void init() {
+        if (!ActivityCall.allowOpenCall) {
+            G.isInCall = false;
+            finish();
+        }
+
         G.onCallLeaveView = ActivityCall.this;
         G.onHoldBackgroundChanegeListener = isHold -> runOnUiThread(() -> {
             if (isHold) {
