@@ -65,8 +65,8 @@ public class Theme extends Application {
     public static String default_progressColor = "#00B0BF";
     public static String default_linkColor = "#303F9F";
     public static String default_bubbleChatMusicColor = "#bfefef";
-    public static String default_bubbleChatSendColor = "#809dc756";
-    public static String default_bubbleChatReceiveColor = "#cce5e1dc";
+    public static String default_bubbleChatSendColor = "#ccdba1";
+    public static String default_bubbleChatReceiveColor = "#e7e4dd";
     public static String default_backgroundThemeMsg = "#00f4f0e8";
     public static String default_backgroundThemeMsgPined = "#1a9dc756";
     public static String default_textTitleTheme = "#2c363f";
