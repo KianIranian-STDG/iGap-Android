@@ -380,15 +380,14 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         private void initViewPager() {
 
             viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
+            /** Hint : always read count of view pager with "listSize", for avoid from view pager get count error */
+            listSize = mList.size();
             if (viewPager != null && mAdapter != null){
                 mAdapter.notifyDataSetChanged();
             } else {
                 mAdapter = new AdapterViewPagerClass();
                 viewPager.setAdapter(mAdapter);
             }
-            listSize = mList.size();
-
-            btnMessageCounter.setText(1 + "/" + listSize);
 
             setImageAndTextAppBar(viewPager.getCurrentItem());
 
@@ -528,7 +527,10 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mList.size();
+            /**
+             * Hint : always read count of view pager with "listSize", for avoid from view pager get count error
+             */
+            return listSize;
         }
 
         @Override
@@ -537,8 +539,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
 
         @Override
-        public Object instantiateItem(View container, final int position) {
-
+        public Object instantiateItem(ViewGroup container, final int position) {
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 
