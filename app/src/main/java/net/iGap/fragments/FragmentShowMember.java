@@ -55,6 +55,7 @@ import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupKickModerator;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -1239,12 +1240,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
 
             holder.title.setText(mContact.displayName);
-            holder.title.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.subtitle.setTextColor(Color.parseColor(G.textSubTheme));
-            holder.btnMenu.setTextColor(Color.parseColor(G.textSubTheme));
-            holder.txtNumberOfSharedMedia.setTextColor(Color.parseColor(G.textSubTheme));
-            holder.topLine.setBackgroundColor(Color.parseColor(G.textSubTheme));
 
+            checkTheme(holder);
             setRoleStarColor(holder.roleStar, mContact);
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
@@ -1284,6 +1281,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             if (mContact.peerId == mContact.userID) {
                 holder.btnMenu.setVisibility(View.INVISIBLE);
             }
+        }
+
+        private void checkTheme(ViewHolder holder) {
+
+            Utils.darkModeHandler(holder.btnMenu);
+            Utils.darkModeHandler(holder.title);
+            Utils.darkModeHandlerGray(holder.subtitle);
+            Utils.darkModeHandlerGray(holder.topLine);
+
         }
 
         private void showPopup(ViewHolder holder, final StructContactInfo mContact) {
