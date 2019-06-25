@@ -110,6 +110,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     public static final String SELECTEDROLE = "SELECTED_ROLE";
     public static final String ISNEEDGETMEMBERLIST = "IS_NEED_GET_MEMBER_LIST";
     public static final String ISGROUP = "IS_GROUP";
+    public static final String ISSHOWADDMEMBER = "IS_SHOW_ADD_MEMBER";
     public static List<StructMessageInfo> lists = new ArrayList<>();
     private OnComplete infoUpdateListenerCount;
     private static Fragment fragment;
@@ -140,22 +141,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private HelperToolbar mHelperToolbar;
     private TextView mBtnAdd;
     private boolean isGroup;
+    private boolean isShowAddButton = true;
 
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
-        Bundle bundle = new Bundle();
-        bundle.putLong(ROOMIDARGUMENT, roomId);
-        bundle.putString(MAINROOL, mainrool);
-        bundle.putLong(USERID, userid);
-        bundle.putString(SELECTEDROLE, selectedRole);
-        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
-        FragmentShowMember fragmentShowMember = new FragmentShowMember();
-        fragmentShowMember.setArguments(bundle);
-        return fragmentShowMember;
-    }
-
-    public static FragmentShowMember newInstance1(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
-        fragment = frg;
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
         bundle.putString(MAINROOL, mainrool);
@@ -176,6 +165,21 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         bundle.putString(SELECTEDROLE, selectedRole);
         bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
         bundle.putBoolean(ISGROUP, isGroup);
+        FragmentShowMember fragmentShowMember = new FragmentShowMember();
+        fragmentShowMember.setArguments(bundle);
+        return fragmentShowMember;
+    }
+
+    public static FragmentShowMember newInstance3(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton) {
+        fragment = frg;
+        Bundle bundle = new Bundle();
+        bundle.putLong(ROOMIDARGUMENT, roomId);
+        bundle.putString(MAINROOL, mainrool);
+        bundle.putLong(USERID, userid);
+        bundle.putString(SELECTEDROLE, selectedRole);
+        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
+        bundle.putBoolean(ISGROUP, isGroup);
+        bundle.putBoolean(ISSHOWADDMEMBER, isShowAddMemberButton);
         FragmentShowMember fragmentShowMember = new FragmentShowMember();
         fragmentShowMember.setArguments(bundle);
         return fragmentShowMember;
@@ -229,6 +233,11 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             try {
                 isGroup = getArguments().getBoolean(ISGROUP);
+            } catch (Exception e) {
+
+            }
+            try {
+                isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER , true);
             } catch (Exception e) {
 
             }
@@ -473,6 +482,11 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             } else {
                 mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.subscriber));
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_subscriber));
+            }
+
+            if (!isShowAddButton){
+                mBtnAdd.setVisibility(View.GONE);
+                view.findViewById(R.id.fcm_splitter_add).setVisibility(View.GONE);
             }
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
@@ -770,7 +784,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void openFragmentForAdd(String SelectedRole) {
         if (getActivity() != null) {
-            FragmentShowMember fragment1 = FragmentShowMember.newInstance1(fragment, mRoomID, role, G.userId, SelectedRole, true);
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance3(fragment, mRoomID, role, G.userId, SelectedRole, true , isGroup , false);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
         }
     }
