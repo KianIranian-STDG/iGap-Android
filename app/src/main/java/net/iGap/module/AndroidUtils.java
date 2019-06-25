@@ -589,29 +589,14 @@ public final class AndroidUtils {
      * Hint: usage of this method is for related action to open activity. for example: open alert dialog,...
      **/
     public static Boolean isActivityRunning() {
-
-        Class activityClass;
-        Context context;
-        if (G.fragmentActivity != null) {
-            activityClass = G.fragmentActivity.getClass();
-            context = G.fragmentActivity.getBaseContext();
-        } else if (G.currentActivity != null) {
-            activityClass = G.currentActivity.getClass();
-            context = G.currentActivity.getBaseContext();
+        if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {
+            return true;
+        } else if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
+            return true;
         } else {
-            HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning1"));
+            HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
             return false;
         }
-
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
-        for (ActivityManager.RunningTaskInfo task : tasks) {
-            if (activityClass.getCanonicalName() != null && activityClass.getCanonicalName().equalsIgnoreCase(task.baseActivity.getClassName())) {
-                return true;
-            }
-        }
-        HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning2"));
-        return false;
     }
 
     public static boolean canOpenDialog(){
