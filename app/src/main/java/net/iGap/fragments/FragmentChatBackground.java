@@ -71,6 +71,7 @@ public class FragmentChatBackground extends BaseFragment {
     private Realm realmChatBackground;
     private Fragment fragment;
     private RippleView chB_ripple_menu_button;
+    private boolean isSolidColor = false;
 
     ArrayList<String> solidList = new ArrayList<>();
 
@@ -197,13 +198,19 @@ public class FragmentChatBackground extends BaseFragment {
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                if (getActivity()!=null && savePath != null && savePath.length() > 0) {
+                if (getActivity() != null && savePath != null && savePath.length() > 0) {
                     String finalPath = "";
-                    try {
-                        finalPath = HelperSaveFile.saveInPrivateDirectory(getActivity(), savePath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (isSolidColor){
+                        finalPath = savePath;
+                        HelperSaveFile.removeFromPrivateDirectory(getActivity());
+                    } else {
+                        try {
+                            finalPath = HelperSaveFile.saveInPrivateDirectory(getActivity(), savePath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
@@ -236,6 +243,7 @@ public class FragmentChatBackground extends BaseFragment {
 
                 rippleSet.setVisibility(View.VISIBLE);
                 rippleSetDefault.setVisibility(View.GONE);
+                isSolidColor = false;
             }
         });
 
@@ -252,6 +260,7 @@ public class FragmentChatBackground extends BaseFragment {
 
                 rippleSet.setVisibility(View.VISIBLE);
                 rippleSetDefault.setVisibility(View.GONE);
+                isSolidColor = true;
             }
         });
 
