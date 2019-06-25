@@ -146,9 +146,15 @@ public class SearchFragment extends BaseFragment {
                 fillList(editable.toString());
             }
         });
-       /* edtSearch.requestFocus();
-        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);*/
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                edtSearch.requestFocus();
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 250);
 
 
         btnClose = view.findViewById(R.id.sfl_btn_close);
