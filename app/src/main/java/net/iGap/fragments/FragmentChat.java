@@ -95,9 +95,11 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
+import com.vanniktech.emoji.sticker.OnDownloadStickerListener;
 import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
+import com.vanniktech.emoji.sticker.OnStickerAvatarDownloaded;
+import com.vanniktech.emoji.sticker.OnStickerItemDownloaded;
 import com.vanniktech.emoji.sticker.OnStickerListener;
-import com.vanniktech.emoji.sticker.OnUpdateStickerListener;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
@@ -2294,29 +2296,32 @@ public class FragmentChat extends BaseFragment
         recyclerView = rootView.findViewById(R.id.chl_recycler_view_chat);
 
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        imgBackGround = rootView.findViewById(R.id.chl_img_view_chat);
         if (backGroundPath.length() > 0) {
-            imgBackGround = rootView.findViewById(R.id.chl_img_view_chat);
+            File f = new File(backGroundPath);
+            if (f.exists()) {
+                try {
+                    Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                    imgBackGround.setImageDrawable(d);
+                } catch (OutOfMemoryError e) {
+                    ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
+                    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+                    activityManager.getMemoryInfo(memoryInfo);
+                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
+                }
+            } else {
+                try {
+                    imgBackGround.setBackgroundColor(Color.parseColor(backGroundPath));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else{
             if (G.themeColor == Theme.DARK) {
                 imgBackGround.setBackgroundColor(Color.parseColor(Theme.default_dark_background));
-            } else {
-                File f = new File(backGroundPath);
-                if (f.exists()) {
-                    try {
-                        Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                        imgBackGround.setImageDrawable(d);
-                    } catch (OutOfMemoryError e) {
-                        ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
-                        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-                        activityManager.getMemoryInfo(memoryInfo);
-                        Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
-                    }
-                } else {
-                    try {
-                        imgBackGround.setBackgroundColor(Color.parseColor(backGroundPath));
-                    } catch (Exception e) {
-                    }
-
-                }
+            }
+            else{
+                //todo: fixed load default background in light mode
             }
         }
 
@@ -5923,21 +5928,21 @@ public class FragmentChat extends BaseFragment
 
                     }
                 })
-                .setOnUpdateSticker(new OnUpdateStickerListener() {
+                .setOnDownloadStickerListener(new OnDownloadStickerListener() {
                     @Override
-                    public void onUpdateSticker(String token, String extention, long avatarSize, int positionAdapter) {
-
-                        HashMap<String, Integer> updateList = new HashMap<>();
-                        updateList.put(token, positionAdapter);
+                    public void downloadStickerItem(String token, String extention, long avatarSize, OnStickerItemDownloaded onStickerItemDownloaded) {
                         HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
 
                             @Override
                             public void OnProgress(String path, String token, int progress) {
-
-                                if (updateList.get(token) != null) {
-                                    emojiPopup.onUpdateSticker(updateList.get(token));
-                                    updateList.remove(token);
-                                }
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (progress == 100) {
+                                            onStickerItemDownloaded.onStickerItemDownload(token);
+                                        }
+                                    }
+                                });
                             }
 
                             @Override
@@ -5945,27 +5950,24 @@ public class FragmentChat extends BaseFragment
 
                             }
                         });
-                    }
 
-                    @Override
-                    public void onUpdateRecentSticker() {
 
                     }
 
                     @Override
-                    public void onUpdateTabSticker(String token, String extention, long avatarSize, int positionAdapter) {
-                        HashMap<String, Integer> updateList = new HashMap<>();
-                        updateList.put(token, positionAdapter);
-
+                    public void downloadStickerAvatar(String token, String extention, long avatarSize, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
                         HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-
                             @Override
                             public void OnProgress(String path, String token, int progress) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (progress == 100) {
+                                            onStickerAvatarDownloaded.onStickerAvatarDownload(token);
+                                        }
+                                    }
+                                });
 
-                                if (updateList.get(token) != null && token != null) {
-                                    emojiPopup.onUpdateTabSticker(updateList.get(token));
-                                    updateList.remove(token);
-                                }
                             }
 
                             @Override

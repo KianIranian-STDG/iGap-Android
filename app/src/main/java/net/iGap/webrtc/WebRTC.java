@@ -16,6 +16,7 @@ import android.os.Build;
 import android.util.Log;
 
 import net.iGap.G;
+import net.iGap.activities.ActivityCall;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmIceServer;
@@ -404,6 +405,7 @@ public class WebRTC {
 
     public void close() {
 
+        ActivityCall.allowOpenCall = false;
         try {
 
             if (videoCapturer != null) {

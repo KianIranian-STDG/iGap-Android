@@ -88,6 +88,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
@@ -724,10 +725,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-
-            String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-            if (backGroundPath.isEmpty()) {
-                getWallpaperAsDefault();
+            boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
+            if (isDefaultBg){
+                if (G.isDarkTheme){
+                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
+                }else{
+                    getWallpaperAsDefault();
+                }
             }
 
             ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
@@ -809,9 +813,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void setDefaultBackground(String bigImagePath) {
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        Log.wtf(this.getClass().getName(),"setDefaultBackground");
+        String finalPath = "";
+        try {
+            finalPath = HelperSaveFile.saveInPrivateDirectory(this, bigImagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, bigImagePath);
+        editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
+        editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
         editor.apply();
     }
 

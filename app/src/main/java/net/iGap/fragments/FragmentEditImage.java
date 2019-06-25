@@ -83,7 +83,6 @@ public class FragmentEditImage extends BaseFragment {
     private ViewGroup rootSend;
     private MaterialDesignTextView imvSmileButton;
     private boolean isEmojiSHow = false;
-    private boolean initEmoji = false;
     private EmojiPopup emojiPopup;
     private String SAMPLE_CROPPED_IMAGE_NAME;
     private boolean isChatPage = true;
@@ -361,11 +360,6 @@ public class FragmentEditImage extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                if (!initEmoji) {
-                    initEmoji = true;
-                    setUpEmojiPopup(view);
-                }
-
                 emojiPopup.toggle();
             }
         });
@@ -653,6 +647,7 @@ public class FragmentEditImage extends BaseFragment {
         viewPager = view.findViewById(R.id.viewPagerEditText);
         checkBox = (AnimateCheckBox) view.findViewById(R.id.checkBox_editImage);
         imvSmileButton = (MaterialDesignTextView) view.findViewById(R.id.chl_imv_smile_button);
+        setUpEmojiPopup(view);
     }
 
     private void goToCropPage(View v) {

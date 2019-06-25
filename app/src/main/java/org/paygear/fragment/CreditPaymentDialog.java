@@ -79,7 +79,8 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
     long clubAvailableAmount= 0L;
 
 
-    public static CreditPaymentDialog newInstance(Account account, Order order, Transport transport, Product product, String orderId, boolean isServices, boolean isCashOutToWallet, String orderToken, String pubKey, String xAccessToken, long amount, QRResponse qrResponse, boolean isCredit, Card selectedCard, long discount, String invoiceNumber, Boolean clubHasMaximium, Boolean clubIsPercentage, Long avaialableAmount) {
+    public static CreditPaymentDialog newInstance(Account account, Order order, Transport transport, Product product, String orderId, boolean isServices, boolean isCashOutToWallet, String orderToken, String pubKey, String xAccessToken, long amount, QRResponse qrResponse, boolean isCredit, Card selectedCard, long discount, String invoiceNumber
+            , Boolean clubHasMaximium, Boolean clubIsPercentage, Long avaialableAmount) {
         CreditPaymentDialog fragment = new CreditPaymentDialog();
         Bundle args = new Bundle();
         args.putSerializable("Account", account);
@@ -98,9 +99,9 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
         args.putSerializable("SelectedCard", selectedCard);
         args.putLong("Discount", discount);
         args.putString("InvoiceNumber", invoiceNumber);
-        args.putBoolean("HasMaximum", isServices);
-        args.putBoolean("IsPercentage", isCashOutToWallet);
-        args.putLong("AvailableClubAmount", discount);
+        args.putBoolean("HasMaximum", clubHasMaximium);
+        args.putBoolean("IsPercentage", clubIsPercentage);
+        args.putLong("AvailableClubAmount", avaialableAmount);
 
         fragment.setArguments(args);
         return fragment;
