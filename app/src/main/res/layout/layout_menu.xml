@@ -480,7 +480,7 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginBottom="@dimen/dp6"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <net.iGap.module.MaterialDesignTextView
                     style="?iconColorMenuTheme"
