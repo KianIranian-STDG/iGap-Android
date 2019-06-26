@@ -173,7 +173,7 @@
     <color name="setting_items_value_color">#41B120</color>
     <color name="colorToolbarBackgroundEnd">#41B120</color>
     <color name="colorToolbarBackgroundStart">#B9E244</color>
-    <color name="toolbar_search_box_bg">#D8D8D8</color>
+    <color name="toolbar_search_box_bg">#F6F6F9</color>
     <color name="toolbar_search_box_txt_color">#7E7E7E</color>
     <color name="notification_badge">#5ebc45</color>
     <color name="chat_cell_pin">#f1f1f1</color>
@@ -257,5 +257,6 @@
 
     <color name="shared_media_music_list_icon_color">#468DA7</color>
     <color name="players_dark_background">#242424</color>
+    <color name="toolbar_search_box_dark_bg">#7D7D80</color>
 
 </resources>

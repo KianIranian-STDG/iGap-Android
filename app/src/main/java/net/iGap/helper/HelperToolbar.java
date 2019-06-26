@@ -1014,8 +1014,8 @@ public class HelperToolbar {
                 setRoot.constrainHeight(searchLayout.getId(), i_Dp(R.dimen.toolbar_search_box_size));
                 setRoot.constrainWidth(searchLayout.getId(), MATCH_CONSTRAINT);
 
-                setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp40));
-                setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp40));
+                setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp52));
+                setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp52));
 
                 setRoot.connect(searchLayout.getId(), START, mainConstraint.getId(), START);
                 setRoot.connect(searchLayout.getId(), END, mainConstraint.getId(), END);
@@ -1030,7 +1030,7 @@ public class HelperToolbar {
                 tvSearch.setVisibility(VISIBLE);
                 tvSearch.setTypeface(tfMain);
                 tvSearch.setTextColor(Utils.darkModeHandler(getContext()));
-                Utils.setTextSize(tvSearch, R.dimen.standardTextSize);
+                Utils.setTextSize(tvSearch, R.dimen.smallTextSize);
                 setLayoutParams(tvSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), 0, 0);
                 searchLayout.addView(tvSearch);
 
@@ -1042,7 +1042,7 @@ public class HelperToolbar {
                 edtSearch.setTypeface(tfMain);
                 edtSearch.setHint(R.string.search);
                 edtSearch.setSingleLine();
-                Utils.setTextSize(edtSearch, R.dimen.standardTextSize);
+                Utils.setTextSize(edtSearch, R.dimen.smallTextSize);
                 setLayoutParams(edtSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32));
                 searchLayout.addView(edtSearch);
 
