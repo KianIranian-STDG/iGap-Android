@@ -872,6 +872,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
+            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             setVisiblityForSelectedActionsInEverySelection();
@@ -882,6 +883,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }
