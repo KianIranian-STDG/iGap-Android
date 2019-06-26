@@ -25,14 +25,12 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import net.iGap.activities.ActivityCustomError;
@@ -419,9 +417,6 @@ public class G extends MultiDexApplication {
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
 
-    /*public static OnCountryCode onCountryCode;*/
-    //public static LocationListenerResponse locationListenerResponse;
-
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
 
     private static int makeColorTransparent100(String color) {
@@ -487,7 +482,8 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        RaadApp.onCreate(getApplicationContext());
+        Log.wtf(this.getClass().getName(),"onCreate");
+
         LooperThreadHelper.getInstance();
 
         new Thread(new Runnable() {
@@ -502,13 +498,20 @@ public class G extends MultiDexApplication {
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        Raad.init(getApplicationContext());
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Raad.init(getApplicationContext());
+                RaadApp.onCreate(getApplicationContext());
+                WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
+            }
+        }).start();
 
         try {
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mainRingerMode = am.getRingerMode();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         new StartupActions();
      /*   try {
@@ -517,7 +520,7 @@ public class G extends MultiDexApplication {
             WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
         } catch (Exception e) {
         }*/
-
+        Log.wtf(this.getClass().getName(),"onCreate");
     }
 
     @Override
@@ -535,4 +538,6 @@ public class G extends MultiDexApplication {
     public static void showToast(String message){
         G.handler.post(() -> Toast.makeText(G.context, message, Toast.LENGTH_SHORT).show());
     }
+
+
 }

@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,6 +88,8 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -127,7 +130,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private long tagId;
     private Realm realmFragmentMain;
     private RecyclerView.OnScrollListener onScrollListener;
-    private View mView = null;
     private String switcher;
     private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
@@ -150,7 +152,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
         return inflater.inflate(R.layout.activity_main_rooms, container, false);
     }
@@ -163,10 +165,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.wtf(this.getClass().getName(),"onViewCreated");
+
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
-        this.mView = view;
         tagId = System.currentTimeMillis();
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
@@ -176,8 +179,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
         viewById.setVisibility(View.GONE);
-
-        G.handler.postDelayed(this::initRecycleView, 10);
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -191,57 +192,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
 
-        initMultiSelectActions();
-
-        onChatCellClickedInEditMode = (v, item, position, status) -> {
-
-            if (!status) {
-                mSelectedRoomList.add(item);
-            } else {
-                mSelectedRoomList.remove(item);
-            }
-            refreshChatList(position, false);
-            setVisiblityForSelectedActionsInEverySelection();
-        };
-
-        if(MusicPlayer.playerStateChangeListener != null){
-            MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
-                notifyChatRoomsList();
-            });
-        }
-
-        G.callStripLayoutVisiblityListener.observe(this , isVisible -> {
-           notifyChatRoomsList();
-        });
-
-        //just check at first time page loaded
-        notifyChatRoomsList();
-
-    }
-
-    private void notifyChatRoomsList() {
-
-        try{
-            if (mRecyclerView != null) {
-                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
-                } else if (G.isInCall) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-                } else {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
-                }
-            }
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
-    }
-
-    private void initMultiSelectActions() {
-
-        mBtnRemoveSelected = mView.findViewById(R.id.amr_btn_delete_selected);
-        TextView mBtnClearCacheSelected = mView.findViewById(R.id.amr_btn_clear_cache_selected);
-        TextView mBtnMakeAsReadSelected = mView.findViewById(R.id.amr_btn_make_as_read_selected);
-        TextView mBtnReadAllSelected = mView.findViewById(R.id.amr_btn_read_all_selected);
+        mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
+        TextView mBtnClearCacheSelected = view.findViewById(R.id.amr_btn_clear_cache_selected);
+        TextView mBtnMakeAsReadSelected = view.findViewById(R.id.amr_btn_make_as_read_selected);
+        TextView mBtnReadAllSelected = view.findViewById(R.id.amr_btn_read_all_selected);
 
 
         mBtnRemoveSelected.setOnClickListener(v -> {
@@ -277,16 +231,66 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             setColorToLightMode(mBtnReadAllSelected);
         }
 
+        onChatCellClickedInEditMode = (v, item, position, status) -> {
+
+            if (!status) {
+                mSelectedRoomList.add(item);
+            } else {
+                mSelectedRoomList.remove(item);
+            }
+            refreshChatList(position, false);
+            setVisiblityForSelectedActionsInEverySelection();
+        };
+
+        if(MusicPlayer.playerStateChangeListener != null){
+            MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
+                notifyChatRoomsList();
+            });
+        }
+
+        G.callStripLayoutVisiblityListener.observe(this , isVisible -> {
+           notifyChatRoomsList();
+        });
+
+        mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
+        mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setItemViewCacheSize(0);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+        initRecycleView();
+
+        //just check at first time page loaded
+        notifyChatRoomsList();
+
+        Log.wtf(this.getClass().getName(),"onViewCreated");
+    }
+
+    private void notifyChatRoomsList() {
+
+        try{
+            if (mRecyclerView != null) {
+                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
+                } else if (G.isInCall) {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+                } else {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
+                }
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     private void setColorToDarkMode(TextView textView) {
-        textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
-        textView.setTextColor(getContext().getResources().getColor(R.color.gray10));
+        textView.setBackground(getResources().getDrawable(R.drawable.background_multi_select_dark));
+        textView.setTextColor(getResources().getColor(R.color.gray10));
     }
 
     private void setColorToLightMode(TextView textView) {
-        textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
-        textView.setTextColor(getContext().getResources().getColor(R.color.black));
+        textView.setBackground(getResources().getDrawable(R.drawable.background_multi_select_light));
+        textView.setTextColor(getResources().getColor(R.color.black));
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {
@@ -300,15 +304,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     private void initRecycleView() {
-
-        if (mView != null) {
-            mRecyclerView = mView.findViewById(R.id.cl_recycler_view_contact);
-            mRecyclerView.setItemAnimator(null);
-            mRecyclerView.setItemViewCacheSize(0);
-            final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            mRecyclerView.setLayoutManager(layoutManager);
-        }
 
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
@@ -740,7 +735,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
         try{
             mHelperToolbar.checkIsAvailableOnGoingCall();
-        }catch (Exception e){}
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         boolean canUpdate = false;
 

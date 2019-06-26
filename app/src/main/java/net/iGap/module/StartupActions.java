@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -100,9 +101,8 @@ public final class StartupActions {
         //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
 
-        boolean ISOK = realmConfiguration();
-        if (ISOK) {
-            Realm realm = Realm.getDefaultInstance();
+        Realm realm = realmConfiguration();
+        if (realm != null) {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -131,33 +131,38 @@ public final class StartupActions {
                     }
                 }
             });
-            realm.close();
-
-            mainUserInfo();
+            /*realm.close();*/
+            Log.wtf(this.getClass().getName(),"mainUserInfo");
+            mainUserInfo(realm);
+            Log.wtf(this.getClass().getName(),"mainUserInfo");
+            Log.wtf(this.getClass().getName(),"connectToServer");
             connectToServer();
+            Log.wtf(this.getClass().getName(),"connectToServer");
+            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
             manageSettingPreferences();
-            makeFolder();
-            ConnectionManager.manageConnection();
-            configDownloadManager();
-            manageTime();
-            getiGapAccountInstance();
-
+            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
+            new Thread(StartupActions::makeFolder).start();
+            new Thread(ConnectionManager::manageConnection).start();
+            new Thread(this::configDownloadManager).start();
+            new Thread(this::manageTime).start();
+            new Thread(StartupActions::getiGapAccountInstance).start();
             new CallObserver();
             /**
              * initialize download and upload listeners
              */
             new HelperUploadFile();
-            checkDataUsage();
+            checkDataUsage(realm);
+            realm.close();
         }
 
     }
 
-    private void checkDataUsage() {
-        Realm realm = Realm.getDefaultInstance();
+    private void checkDataUsage(Realm realm) {
+        /*Realm realm = Realm.getDefaultInstance();*/
         RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
         if (realmDataUsage.size() == 0)
             HelperDataUsage.initializeRealmDataUsage();
-        realm.close();
+        /*realm.close();*/
     }
 
     private void manageTime() {
@@ -568,9 +573,9 @@ public final class StartupActions {
     /**
      * fill main user info in global variables
      */
-    private void mainUserInfo() {
+    private void mainUserInfo(Realm realm) {
 
-        Realm realm = Realm.getDefaultInstance();
+        /*Realm realm = Realm.getDefaultInstance();*/
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
@@ -589,13 +594,13 @@ public final class StartupActions {
 
         }
 
-        realm.close();
+        /*realm.close();*/
     }
 
     /**
      * initialize realm and manage migration
      */
-    private boolean realmConfiguration() {
+    private Realm realmConfiguration() {
         /**
          * before call RealmConfiguration client need to Realm.init(context);
          */
@@ -604,10 +609,10 @@ public final class StartupActions {
             Realm.init(context);
         } catch (Exception e) {
             G.ISOK = false;
-            return G.ISOK;
+            return null;
         } catch (Error e) {
             G.ISOK = false;
-            return G.ISOK;
+            return null;
         }
 
         //  new SecureRandom().nextBytes(key);
@@ -628,8 +633,8 @@ public final class StartupActions {
             Realm.deleteRealm(configuration);*/
 
         Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-        configuredRealm.close();
-        return G.ISOK;
+        /*configuredRealm.close();*/
+        return configuredRealm;
     }
 
     public Realm getPlainInstance() {
@@ -694,9 +699,11 @@ public final class StartupActions {
                 Realm.deleteRealm(oldConfig);
                 return Realm.getInstance(newConfig);
             } catch (OutOfMemoryError oom) {
+                //TODO : what is that, exception in catch, realm may be null and close it
                 realm.close();
                 return getPlainInstance();
             } catch (Exception e) {
+                //TODO : what is that, exception in catch, realm may be null and close it
                 realm.close();
                 return getPlainInstance();
             }

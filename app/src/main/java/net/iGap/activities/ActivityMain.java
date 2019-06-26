@@ -26,21 +26,19 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,8 +84,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -142,7 +138,6 @@ import org.paygear.RaadApp;
 import org.paygear.fragment.PaymentHistoryFragment;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -173,7 +168,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean disableSwipe = false;
     public static OnBackPressedListener onBackPressedListener;
     private static long oldTime;
-    private static long currentTime;
     public static boolean isUseCamera = false;
     public static boolean waitingForConfiguration = false;
     private FrameLayout frameChatContainer;
@@ -184,15 +178,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private Realm mRealm;
     private boolean isNeedToRegister = false;
     private ViewPager mViewPager;
-    private ArrayList<Fragment> pages = new ArrayList<>();
-    private RealmUserInfo userInfo;
     private int retryConnectToWallet = 0;
     private BottomNavigation bottomNavigation;
 
     public void setWeight(View view, int value) {
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-        params.weight = value;
-        view.setLayoutParams(params);
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone((ConstraintLayout) findViewById(R.id.rootFrame));
+        set.setHorizontalWeight(view.getId(),value);
+        set.applyTo(findViewById(R.id.rootFrame));
 
         if (value > 0) {
             view.setVisibility(View.VISIBLE);
@@ -291,6 +285,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.wtf(this.getClass().getName(),"onDestroy");
         if (G.ISOK) {
             if (mRealm != null && !mRealm.isClosed()) {
                 mRealm.close();
@@ -314,6 +309,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 e.printStackTrace();
             }
         }
+        Log.wtf(this.getClass().getName(),"onDestroy");
     }
 
     /**
@@ -330,6 +326,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         isOpenChatBeforeSheare = true;
         checkIntent(intent);
     }
+
+
 
     private void checkIntent(Intent intent) {
 
@@ -369,6 +367,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.wtf(this.getClass().getName(),"onCreate");
         if (G.ISOK) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
@@ -444,7 +443,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
 
-            userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+            RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
                 isNeedToRegister = true;
@@ -607,7 +606,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
-            initDrawerMenu();
+            /*initDrawerMenu();*/
 
             checkKeepMedia();
 
@@ -670,6 +669,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
            setContentView(textView);
            showToast(textView);
         }
+        Log.wtf(this.getClass().getName(),"onCreate");
     }
 
     private void showToast(View view) {
@@ -1041,23 +1041,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
-        if (HelperCalander.isPersianUnicode) {
-            pages.add(new FragmentUserProfile());
-            pages.add(DiscoveryFragment.newInstance(0));
-            pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-            pages.add(FragmentCall.newInstance(true));
-            pages.add(RegisteredContactsFragment.newInstance(false));
-        } else {
-            pages.add(RegisteredContactsFragment.newInstance(false));
-            pages.add(FragmentCall.newInstance(true));
-            pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-            pages.add(DiscoveryFragment.newInstance(0));
-            pages.add(new FragmentUserProfile());
-        }
-
         mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
         mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setOffscreenPageLimit(0);
         findViewById(R.id.loadingContent).setVisibility(View.GONE);
         bottomNavigation.setVisibility(View.VISIBLE);
 
@@ -1074,6 +1060,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
+        Log.wtf(this.getClass().getName(),"onStart");
 
         if (G.ISOK) {
             if (!G.isFirstPassCode) {
@@ -1081,6 +1068,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             G.isFirstPassCode = false;
         }
+        Log.wtf(this.getClass().getName(),"onStart");
     }
 
     @SuppressLint("MissingSuperCall")
@@ -1093,7 +1081,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
             enterPassword();
         } else if (!isActivityEnterPassCode && !G.isRestartActivity) {
-            currentTime = System.currentTimeMillis();
+            long currentTime = System.currentTimeMillis();
             SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
             long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
             long calculatorTimeLock = currentTime - oldTime;
@@ -1116,14 +1104,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      */
 
     private void initDrawerMenu() {
-        setDrawerInfo(true);
         RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
         if (callConfig == null)
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
-    }
-
-    private void closeDrawer() {
-
     }
 
     private void openMapFragment() {
@@ -1186,7 +1169,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } catch (IOException e) {
             e.printStackTrace();
         }
-        closeDrawer();
     }
 
     private void initComponent() {
@@ -1251,22 +1233,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //mLeftDrawerLayout.toggle();
-        return false;
-    }
-
-    /**
-     * set drawer info
-     *
-     * @param updateFromServer if is set true send request to sever for get own info
-     */
-    private void setDrawerInfo(boolean updateFromServer) {
-
-    }
-
-
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
         if (!isDisable) {
             ActivityMain.onBackPressedListener = onBackPressedListener;
@@ -1324,10 +1290,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
+        Log.wtf(this.getClass().getName(),"onResume");
         if (G.ISOK) {
             resume();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
+        Log.wtf(this.getClass().getName(),"onResume");
     }
 
     public void resume() {
@@ -1402,7 +1370,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
         getIntent().setData(null);
-        setDrawerInfo(false);
 
         //ActivityMain.setMediaLayout();
 
@@ -1413,7 +1380,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void enterPassword() {
 
-        closeDrawer();
         Intent intent = new Intent(ActivityMain.this, ActivityEnterPassCode.class);
         startActivity(intent);
     }
@@ -1421,7 +1387,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onPause() {
         super.onPause();
-        if (G.ISOK) {
+
+        Log.wtf(this.getClass().getName(),"onPause");
+        /*if (G.ISOK) {
             if (isNeedToRegister) {
                 return;
             }
@@ -1451,7 +1419,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
+        Log.wtf(this.getClass().getName(),"onPause");
     }
 
     @Override
@@ -1538,28 +1507,31 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         realm.close();
-        for (Fragment f : pages) {
-            if (f instanceof FragmentMain) {
-                FragmentMain mainFragment = (FragmentMain) f;
-                switch (mainFragment.mainType) {
-                    case all:
-                        mainFragment.onAction(MainAction.downScrool);
-                        break;
-                    case chat:
-                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+        if (mViewPager.getAdapter()!=null) {
+            for (int i = 0; i < 5; i++) {
+                Object f = mViewPager.getAdapter().instantiateItem(mViewPager,i);
+                if (f instanceof FragmentMain) {
+                    FragmentMain mainFragment = (FragmentMain) f;
+                    switch (mainFragment.mainType) {
+                        case all:
                             mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case group:
-                        if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case channel:
-                        if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
+                            break;
+                        case chat:
+                            if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                                mainFragment.onAction(MainAction.downScrool);
+                            }
+                            break;
+                        case group:
+                            if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                                mainFragment.onAction(MainAction.downScrool);
+                            }
+                            break;
+                        case channel:
+                            if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                                mainFragment.onAction(MainAction.downScrool);
+                            }
+                            break;
+                    }
                 }
             }
         }
@@ -1595,9 +1567,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void notifySubFragmentForCondition() {
-        for (Fragment f : pages) {
-            if (f instanceof FragmentMain) {
-                ((FragmentMain) f).onAction(MainAction.clinetCondition);
+        if (mViewPager.getAdapter()!=null){
+            for (int i = 0;i<5;i++){
+                Object f = mViewPager.getAdapter().instantiateItem(mViewPager,i);
+                if (f instanceof FragmentMain) {
+                    ((FragmentMain) f).onAction(MainAction.clinetCondition);
+                }
             }
         }
     }
@@ -1609,14 +1584,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             public void run() {
                 if (G.twoPaneMode) {
                     if (frameFragmentContainer != null) {
-                        Log.wtf(this.getClass().getName(),"frameFragmentContainer not null");
                         if (frameFragmentContainer.getChildCount() == 0) {
-                            Log.wtf(this.getClass().getName(),"frameFragmentContainer child is zero");
                             if (frameFragmentBack != null) {
                                 frameFragmentBack.setVisibility(View.GONE);
                             }
                         } else if (frameFragmentContainer.getChildCount() == 1) {
-                            Log.wtf(this.getClass().getName(),"frameFragmentContainer child is one");
                             disableSwipe = true;
                         } else {
                             disableSwipe = false;
@@ -1656,8 +1628,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStop() {
         super.onStop();
+        Log.wtf(this.getClass().getName(),"onStop");
         oldTime = System.currentTimeMillis();
         G.onPayment = null;
+
+        Log.wtf(this.getClass().getName(),"onStop");
     }
 
     /**
@@ -1951,12 +1926,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         @Override
         public Fragment getItem(int i) {
-            return pages.get(i);
+            int position = HelperCalander.isPersianUnicode ? i : 4 - i;
+            switch (position){
+                case 0:
+                    return new FragmentUserProfile();
+                case 1:
+                    return DiscoveryFragment.newInstance(0);
+                case 2:
+                    return FragmentMain.newInstance(FragmentMain.MainType.all);
+                case 3:
+                    return FragmentCall.newInstance(true);
+                default:
+                    return RegisteredContactsFragment.newInstance(false);
+
+            }
         }
 
         @Override
         public int getCount() {
-            return pages.size();
+            return 5;
         }
     }
 }
