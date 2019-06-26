@@ -357,7 +357,7 @@ public class StructMessageInfo implements Parcelable {
 
         if (roomMessage.getRoomMessageWallet() != null) {
             Realm realm = Realm.getDefaultInstance();
-            messageInfo.structWallet = roomMessage.getRoomMessageWallet();
+            messageInfo.structWallet = realm.copyFromRealm(roomMessage.getRoomMessageWallet());
             realm.close();
         }
 
