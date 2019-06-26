@@ -45,8 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:visibility="invisible"
-
-                app:background_color="#EEEEEE"
+                app:background_color="@color/bottom_navigation_color"
                 app:corner_radius="35"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

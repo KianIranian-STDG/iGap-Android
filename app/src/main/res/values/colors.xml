@@ -227,7 +227,7 @@
     <color name="sefid">#FFFFFF</color>
 
     <color name="voice_round">#468da7</color>
-    <color name="navigation_dark_mode_bg">#565656</color>
+    <color name="navigation_dark_mode_bg">#555857</color>
 
     <color name="read_status">#5ebc45</color>
     <color name="unread_status">#424242</color>
@@ -258,5 +258,6 @@
     <color name="shared_media_music_list_icon_color">#468DA7</color>
     <color name="players_dark_background">#242424</color>
     <color name="toolbar_search_box_dark_bg">#7D7D80</color>
+    <color name="bottom_navigation_color">#F6F6F9</color>
 
 </resources>
