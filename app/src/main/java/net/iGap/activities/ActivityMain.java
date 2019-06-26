@@ -1666,7 +1666,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        Log.i("aabolfazl", "onChange: " + RealmRoom.getAllUnreadCount());
+        /*Log.i("aabolfazl", "onChange: " + RealmRoom.getAllUnreadCount());*/
     }
 
     @Override

@@ -132,15 +132,15 @@ public final class StartupActions {
                 }
             });
             /*realm.close();*/
+            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
+            new Thread(this::manageSettingPreferences).start();
+            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
             Log.wtf(this.getClass().getName(),"mainUserInfo");
-            mainUserInfo(realm);
+            new Thread(() -> mainUserInfo()).start();
             Log.wtf(this.getClass().getName(),"mainUserInfo");
             Log.wtf(this.getClass().getName(),"connectToServer");
-            connectToServer();
+            new Thread(this::connectToServer).start();
             Log.wtf(this.getClass().getName(),"connectToServer");
-            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
-            manageSettingPreferences();
-            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
             new Thread(StartupActions::makeFolder).start();
             new Thread(ConnectionManager::manageConnection).start();
             new Thread(this::configDownloadManager).start();
@@ -573,9 +573,9 @@ public final class StartupActions {
     /**
      * fill main user info in global variables
      */
-    private void mainUserInfo(Realm realm) {
+    private void mainUserInfo() {
 
-        /*Realm realm = Realm.getDefaultInstance();*/
+        Realm realm = Realm.getDefaultInstance();
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
@@ -594,7 +594,7 @@ public final class StartupActions {
 
         }
 
-        /*realm.close();*/
+        realm.close();
     }
 
     /**
