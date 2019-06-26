@@ -259,5 +259,7 @@
     <color name="players_dark_background">#242424</color>
     <color name="toolbar_search_box_dark_bg">#7D7D80</color>
     <color name="bottom_navigation_color">#F6F6F9</color>
+    <color name="round_buttons_enabled_bg">#7B7B7B</color>
+    <color name="round_buttons_disabled_bg">#F3F3F3</color>
 
 </resources>

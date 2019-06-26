@@ -133,6 +133,10 @@
   <dimen name="xlargeTextSize">@dimen/dp20</dimen>
   <dimen name="toolbar_chat_avatar_size">40dp</dimen>
     <dimen name="toolbar_txt_name_max_width">130dp</dimen>
+    <dimen name="round_button_max_width">@dimen/dp88</dimen>
+  <dimen name="round_buttons_margin">@dimen/dp6</dimen>
+  <dimen name="round_buttons_large_padding">10dp</dimen>
+  <dimen name="round_buttons_small_padding">3dp</dimen>
 
 
 </resources>

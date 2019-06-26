@@ -53,15 +53,15 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/background_multi_select_light"
+                    android:background="@drawable/round_button_disabled_bg"
                     android:fontFamily="@font/main_font"
                     android:gravity="center"
-                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
                     android:singleLine="true"
                     android:text="@string/read_all"
-                    android:textSize="@dimen/standardTextSize"
-                    android:textColor="@color/black" />
+                    android:textSize="@dimen/smallTextSize"
+                    android:textColor="@color/gray_4c" />
 
 
                 <TextView
@@ -70,15 +70,15 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
-                    android:background="@drawable/background_multi_select_light"
+                    android:background="@drawable/round_button_disabled_bg"
                     android:fontFamily="@font/main_font"
                     android:gravity="center"
-                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
                     android:singleLine="true"
-                    android:textSize="@dimen/standardTextSize"
+                    android:textSize="@dimen/smallTextSize"
                     android:text="@string/make_as_read"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/gray_4c" />
 
 
                 <TextView
@@ -87,15 +87,15 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
-                    android:background="@drawable/background_multi_select_light"
+                    android:background="@drawable/round_button_disabled_bg"
                     android:fontFamily="@font/main_font"
                     android:gravity="center"
-                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
-                    android:textSize="@dimen/standardTextSize"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
+                    android:textSize="@dimen/smallTextSize"
                     android:singleLine="true"
                     android:text="@string/delete"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/gray_4c" />
 
 
                 <TextView
@@ -106,15 +106,15 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/background_multi_select_light"
+                    android:background="@drawable/round_button_disabled_bg"
                     android:fontFamily="@font/main_font"
                     android:gravity="center"
-                    android:paddingLeft="@dimen/main_rooms_selected_action_padding"
-                    android:paddingRight="@dimen/main_rooms_selected_action_padding"
-                    android:textSize="@dimen/standardTextSize"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
+                    android:textSize="@dimen/smallTextSize"
                     android:singleLine="true"
                     android:text="@string/clear_history"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/gray_4c" />
 
 
             </LinearLayout>
