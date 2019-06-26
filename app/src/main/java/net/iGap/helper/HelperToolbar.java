@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
@@ -828,7 +829,9 @@ public class HelperToolbar {
             ConstraintSet setRoot = new ConstraintSet();
             ConstraintSet set = new ConstraintSet();
 
-            setLayoutDirection(LAYOUT_DIRECTION_LTR);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                setLayoutDirection(LAYOUT_DIRECTION_LTR);
+            }
 
             //region media player and ongoing call
             //check and add media player cause of ui and this must be the below of main toolbar view
