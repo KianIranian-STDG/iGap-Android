@@ -62,17 +62,30 @@
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginTop="@dimen/dp32">
 
-      <net.iGap.module.CircleImageView
-          android:id="@+id/ng_profile_circle_image"
-          android:layout_width="@dimen/dp105"
-          android:layout_height="@dimen/dp105"
-          android:layout_gravity="center"
-          android:background="@drawable/circle_color_notificatin_setting"
-          android:gravity="center"
-          android:padding="@dimen/dp24"
-          app:srcCompat="@drawable/ic_camera"
-          app:civ_border_width="0dp" />
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
 
+        <net.iGap.module.CircleImageView
+            android:id="@+id/ng_profile_circle_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center"
+            android:padding="@dimen/dp24"
+            app:civ_border_width="0dp" />
+
+        <ImageView
+            android:id="@+id/ng_profile_circle_image_holder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_camera_holder"
+            android:padding="@dimen/dp32"
+            android:scaleType="fitCenter"/>
+
+
+      </RelativeLayout>
 
     </net.iGap.libs.rippleeffect.RippleView>
 
@@ -100,7 +113,7 @@
           android:singleLine="true"
           style="?hintColorSettingTheme"
           android:text="@={fragmentNewGroupVieModel.edtSetNewGroup}"
-          android:textSize="@dimen/dp15" />
+          android:textSize="@dimen/standardTextSize" />
 
       <View
           android:id="@+id/ng_view_newGroup"
@@ -146,7 +159,7 @@
         style="?hintColorSettingTheme"
         android:text="@={fragmentNewGroupVieModel.edtDescription}"
         android:textCursorDrawable="@drawable/editext_cursor"
-        android:textSize="@dimen/dp15" />
+        android:textSize="@dimen/standardTextSize" />
 
 
     <View
@@ -170,7 +183,7 @@
         style="?hintColorSettingTheme"
         android:fontFamily="@font/main_font"
         android:hint="@{fragmentNewGroupVieModel.txtDescriptionHint}"
-        android:textSize="@dimen/dp15"
+        android:textSize="@dimen/verySmallTextSize"
         android:layout_marginLeft="@dimen/dp20"
         android:layout_marginRight="@dimen/dp20"/>
 

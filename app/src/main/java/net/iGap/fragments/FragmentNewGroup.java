@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +104,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     FragmentNewGroupViewModel fragmentNewGroupViewModel;
     ActivityNewGroupBinding fragmentNewGroupBinding;
     private CircleImageView imgCircleImageView;
+    private ImageView imgProfileHelper ;
     private long groomId = 0;
     private EditText edtGroupName;
     private AppCompatEditText edtDescription;
@@ -390,7 +392,8 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         //=======================set image for group
         imgCircleImageView = fragmentNewGroupBinding.ngProfileCircleImage;
-        AndroidUtils.setBackgroundShapeColor(imgCircleImageView, Color.parseColor(G.appBarColor));
+        imgProfileHelper = fragmentNewGroupBinding.ngProfileCircleImageHolder ;
+        //AndroidUtils.setBackgroundShapeColor(imgCircleImageView, Color.parseColor(G.appBarColor));
 
         RippleView rippleCircleImage = fragmentNewGroupBinding.ngRippleCircleImage;
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -461,8 +464,8 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     private void showInitials() {
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        imgProfileHelper.setVisibility(View.GONE);
         imgCircleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
-
         realm.close();
     }
 
@@ -472,6 +475,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             public void run() {
                 if (imagePath != null && new File(imagePath).exists()) {
                     imgCircleImageView.setPadding(0, 0, 0, 0);
+                    imgProfileHelper.setVisibility(View.GONE);
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
                 } else {
                     showInitials();
