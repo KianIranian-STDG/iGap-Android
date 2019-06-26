@@ -748,11 +748,11 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             public void bindData(final StructContactInfo data) {
 
                 if (G.isDarkTheme) {
-                    txtName.setTextColor(context.getResources().getColor(R.color.white));
+                    txtName.setTextColor(context.getResources().getColor(R.color.gray_300));
                     txtPhone.setTextColor(context.getResources().getColor(R.color.white));
                 } else {
-                    txtName.setTextColor(context.getResources().getColor(R.color.white));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.white));
+                    txtName.setTextColor(context.getResources().getColor(R.color.black));
+                    txtPhone.setTextColor(context.getResources().getColor(R.color.gray_4c));
                 }
 
                 txtPhone.setVisibility(View.INVISIBLE);
