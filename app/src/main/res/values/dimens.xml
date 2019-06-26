@@ -122,8 +122,8 @@
     <dimen name="discovery_margin">@dimen/dp4</dimen>
     <dimen name="discovery_margin_top_nested">@dimen/dp8</dimen>
 
-  <dimen name="toggles_height">@dimen/dp20</dimen>
-  <dimen name="toggles_width">@dimen/dp32</dimen>
+  <dimen name="toggles_height">@dimen/dp18</dimen>
+  <dimen name="toggles_width">@dimen/dp28</dimen>
     <dimen name="toolbar_search_box_size">30dp</dimen>
 
   <dimen name="standardTextSize">@dimen/dp14</dimen>

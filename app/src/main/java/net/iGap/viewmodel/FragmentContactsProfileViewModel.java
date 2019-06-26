@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -57,6 +58,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public ObservableField<String> phone = new ObservableField<>("0");
     public ObservableField<String> bio = new ObservableField<>();
     public ObservableField<Integer> verifyTextVisibility = new ObservableField<>(View.VISIBLE);
+    public ObservableField<Integer> textsGravity = new ObservableField<>(Gravity.LEFT);
 
     public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoCount = new ObservableInt(0);
@@ -401,6 +403,12 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber.set(false);
             disableDeleteContact = true;
+        }
+
+        if (G.selectedLanguage.equals("en")){
+            textsGravity.set(Gravity.LEFT);
+        }else {
+            textsGravity.set(Gravity.RIGHT);
         }
 
         setUserStatus(userStatus, lastSeenValue);
