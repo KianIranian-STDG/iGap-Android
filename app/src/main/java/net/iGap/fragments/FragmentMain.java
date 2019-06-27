@@ -41,7 +41,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
@@ -114,7 +113,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
@@ -333,47 +332,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     }
 
     //***************************************************************************************************************************
-
-    @Override
-    public void onAction(ActivityMain.MainAction action) {
-
-        if (mRecyclerView == null) {return;}
-
-        switch (action) {
-
-            case downScrool:
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (canGoToTop()) {
-                            int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                            if (firstVisibleItem < 2) {
-                                mRecyclerView.scrollToPosition(0);
-                            }
-                        }
-                    }
-                });
-
-                break;
-            case clinetCondition:
-
-                break;
-        }
-    }
-
-    /**
-     * use from this method for avoid from multiple call scrollToPosition after
-     * receive message or receive message after send client condition after each login
-     */
-    private boolean canGoToTop() {
-        if (HelperTimeOut.timeoutChecking(0, latestScrollToTop, Config.SCROLL_TO_TOP_DELAY)) {
-            latestScrollToTop = System.currentTimeMillis();
-            return true;
-        }
-        return false;
-    }
-
 
     private boolean heartBeatTimeOut() {
 
