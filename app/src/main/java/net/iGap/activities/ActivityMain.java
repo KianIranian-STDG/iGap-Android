@@ -2927,21 +2927,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     case all:
                         mainFragment.onAction(MainAction.downScrool);
                         break;
-                    case chat:
-                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case group:
-                        if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case channel:
-                        if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
                 }
             }
         }

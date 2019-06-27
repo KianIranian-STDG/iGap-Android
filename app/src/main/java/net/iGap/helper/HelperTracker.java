@@ -75,12 +75,17 @@ public class HelperTracker {
         }
 
         if (allowSendTracker) {
-            String[] tracker = trackerTag.split("@");
-            String category = tracker[0];
-            String action = tracker[1];
+            String[] trackerType = trackerTag.split("@");
+            String category = trackerType[0];
+            String action = trackerType[1];
 
             FirebaseAnalytics.getInstance(G.context).logEvent(action, null);
-            getDefaultTracker().send(new HitBuilders.EventBuilder(category, action).build());
+
+            Tracker tracker = getDefaultTracker();
+            tracker.send(new HitBuilders.EventBuilder(category, action).build());
+
+            tracker.setScreenName(action);
+            tracker.send(new HitBuilders.ScreenViewBuilder().build());
         }
     }
 }

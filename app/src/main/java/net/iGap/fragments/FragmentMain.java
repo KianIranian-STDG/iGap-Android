@@ -15,7 +15,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,13 +36,13 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.helper.HelperTracker;
-import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperTimeOut;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
@@ -132,6 +131,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     private String switcher;
     private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
+    private long latestScrollToTop;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -346,9 +346,11 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (firstVisibleItem < 5) {
-                            mRecyclerView.scrollToPosition(0);
+                        if (canGoToTop()) {
+                            int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                            if (firstVisibleItem < 2) {
+                                mRecyclerView.scrollToPosition(0);
+                            }
                         }
                     }
                 });
@@ -358,6 +360,18 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
                 break;
         }
+    }
+
+    /**
+     * use from this method for avoid from multiple call scrollToPosition after
+     * receive message or receive message after send client condition after each login
+     */
+    private boolean canGoToTop() {
+        if (HelperTimeOut.timeoutChecking(0, latestScrollToTop, Config.SCROLL_TO_TOP_DELAY)) {
+            latestScrollToTop = System.currentTimeMillis();
+            return true;
+        }
+        return false;
     }
 
 
