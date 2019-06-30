@@ -8,7 +8,8 @@
     <color name="light_gray">#adadadad</color>
     <color name="red">#f23131</color>
     <color name="red_swipe">#ac3328</color>
-    <color name="green">#C4D838</color>
+    <color name="green">@color/setting_items_value_color</color>
+    <!--<color name="green">#C4D838</color>-->
     <color name="green_20">#2000B0BF</color>
     <color name="verify_color">#1da1f2</color>
     <color name="sky_blue">#7f9fff</color>
