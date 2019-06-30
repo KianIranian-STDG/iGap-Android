@@ -30,7 +30,7 @@ public class UserIVandGetScoreResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder builder = (ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder) message;
-        ((OnUserIVandGetScore) identity).getScore(builder.getScore());
+        ((OnUserIVandGetScore) identity).getScore(builder);
     }
 
     @Override
