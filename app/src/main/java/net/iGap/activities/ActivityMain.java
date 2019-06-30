@@ -1760,28 +1760,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         // gone or visible view call
         RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
-        if (callConfig != null) {
-            if (callConfig.isVoice_calling()) {
-                itemNavCall.setVisibility(View.VISIBLE);
-
-                itemNavCall.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Fragment fragment = FragmentCall.newInstance(false);
-                        try {
-                            new HelperFragment(fragment).load();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                        lockNavigation();
-                        closeDrawer();
-                    }
-                });
-            } else {
-                itemNavCall.setVisibility(View.GONE);
-            }
-        } else {
+        if (callConfig == null) {
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
 

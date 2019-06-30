@@ -1338,6 +1338,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     @Override
                     public void execute(Realm realm) {
                         G.displayName = user.getDisplayName();
+                        G.userId = user.getId();
 
                         RealmUserInfo.putOrUpdate(realm, user);
 
