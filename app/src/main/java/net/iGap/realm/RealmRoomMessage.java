@@ -589,10 +589,10 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public void removeFromRealm(Realm realm) {
-        if (realmAdditional != null)
+        if (realmAdditional != null && realmAdditional.isValid())
             realmAdditional.deleteFromRealm();
 
-        if (attachment != null) {
+        if (attachment != null && attachment.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.ATTACHMENT.ID, attachment.getId())
                     .count();
@@ -601,16 +601,16 @@ public class RealmRoomMessage extends RealmObject {
                 attachment.deleteFromRealm();
         }
 
-        if (location != null)
+        if (location != null && location.isValid())
             location.deleteFromRealm();
 
-        if (roomMessageContact != null)
+        if (roomMessageContact != null && roomMessageContact.isValid())
             roomMessageContact.deleteFromRealm();
 
-        if (roomMessageWallet != null)
+        if (roomMessageWallet != null && roomMessageWallet.isValid())
             roomMessageWallet.deleteFromRealm();
 
-        if (forwardMessage != null) {
+        if (forwardMessage != null && forwardMessage.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, forwardMessage.getMessageId())
                     .or()
@@ -620,7 +620,7 @@ public class RealmRoomMessage extends RealmObject {
                 forwardMessage.deleteFromRealm();
         }
 
-        if (replyTo != null) {
+        if (replyTo != null && replyTo.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, replyTo.getMessageId())
                     .or()
