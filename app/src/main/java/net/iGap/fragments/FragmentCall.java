@@ -423,7 +423,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         checkListIsEmpty();
     }
 
-    private void setEnableButton(View enable, View disable , View disable2 , View disable3 , View disable4) {
+    private void setEnableButton(TextView enable, TextView disable , TextView disable2 , TextView disable3 , TextView disable4) {
 
         //use revert for dark theme : disable drawable is light and enable drawable is dark
         if (G.isDarkTheme){
@@ -432,12 +432,27 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             disable2.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
             disable3.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
             disable4.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+
+            enable.setTextColor(getContext().getResources().getColor(R.color.black));
+            disable.setTextColor(getContext().getResources().getColor(R.color.white));
+            disable2.setTextColor(getContext().getResources().getColor(R.color.white));
+            disable3.setTextColor(getContext().getResources().getColor(R.color.white));
+            disable4.setTextColor(getContext().getResources().getColor(R.color.white));
+
         }else {
             enable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
             disable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
             disable2.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
             disable3.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
             disable4.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+
+
+            enable.setTextColor(getContext().getResources().getColor(R.color.white));
+            disable.setTextColor(getContext().getResources().getColor(R.color.black));
+            disable2.setTextColor(getContext().getResources().getColor(R.color.black));
+            disable3.setTextColor(getContext().getResources().getColor(R.color.black));
+            disable4.setTextColor(getContext().getResources().getColor(R.color.black));
+
         }
     }
 

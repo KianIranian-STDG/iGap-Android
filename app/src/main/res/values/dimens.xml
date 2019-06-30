@@ -18,7 +18,7 @@
   <dimen name="toolbar_icon_size">40dp</dimen>
   <dimen name="toolbar_icon_padding">10dp</dimen>
   <dimen name="toolbar_icon_margin">4dp</dimen>
-  <dimen name="toolbar_igap_icon_textSize">@dimen/xlargeTextSize</dimen>
+  <dimen name="toolbar_igap_icon_textSize">@dimen/dp36</dimen>
 
   <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>
   <dimen name="ivand_profile_toolbar_txt_textSize">14sp</dimen>
@@ -122,9 +122,9 @@
     <dimen name="discovery_margin">@dimen/dp4</dimen>
     <dimen name="discovery_margin_top_nested">@dimen/dp8</dimen>
 
-  <dimen name="toggles_height">@dimen/dp20</dimen>
-  <dimen name="toggles_width">@dimen/dp32</dimen>
-    <dimen name="toolbar_search_box_size">30dp</dimen>
+  <dimen name="toggles_height">@dimen/dp18</dimen>
+  <dimen name="toggles_width">@dimen/dp28</dimen>
+    <dimen name="toolbar_search_box_size">24dp</dimen>
 
   <dimen name="standardTextSize">@dimen/dp14</dimen>
   <dimen name="smallTextSize">@dimen/dp12</dimen>
@@ -133,6 +133,11 @@
   <dimen name="xlargeTextSize">@dimen/dp20</dimen>
   <dimen name="toolbar_chat_avatar_size">40dp</dimen>
     <dimen name="toolbar_txt_name_max_width">130dp</dimen>
+    <dimen name="round_button_max_width">@dimen/dp88</dimen>
+  <dimen name="round_buttons_margin">@dimen/dp6</dimen>
+  <dimen name="round_buttons_large_padding">10dp</dimen>
+  <dimen name="round_buttons_small_padding">3dp</dimen>
+    <dimen name="public_check_box_size">@dimen/dp18</dimen>
 
 
 </resources>

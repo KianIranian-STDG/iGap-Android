@@ -280,13 +280,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     private void setColorToDarkMode(TextView textView) {
-        textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
-        textView.setTextColor(getContext().getResources().getColor(R.color.gray10));
+        textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
+        textView.setTextColor(getContext().getResources().getColor(R.color.white));
     }
 
     private void setColorToLightMode(TextView textView) {
-        textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
-        textView.setTextColor(getContext().getResources().getColor(R.color.black));
+        textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
+        textView.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {
@@ -872,6 +872,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
+            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             setVisiblityForSelectedActionsInEverySelection();
@@ -882,6 +883,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }

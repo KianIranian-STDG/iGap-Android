@@ -14,8 +14,11 @@ import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.support.v7.widget.PopupMenu;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 
 import net.iGap.G;
@@ -33,6 +36,8 @@ import net.iGap.model.GoToShowMemberModel;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MEditText;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.structs.StructContactInfo;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
@@ -104,12 +109,15 @@ public class FragmentChannelProfileViewModel extends ViewModel
     private boolean isNotJoin;
     private Realm realmChannelProfile;
     private RealmRoom mRoom;
+    private FragmentChannelProfile fragment;
 
     public static OnMenuClick onMenuClick;
     private boolean isNeedGetMemberList = true;
     private RealmChangeListener<RealmModel> changeListener;
 
-    public FragmentChannelProfileViewModel(long roomId, boolean isNotJoin) {
+    public FragmentChannelProfileViewModel( FragmentChannelProfile fragmentChannelProfile , long roomId, boolean isNotJoin) {
+
+        this.fragment = fragmentChannelProfile;
 
         this.roomId = roomId;
         this.isNotJoin = isNotJoin;
@@ -166,6 +174,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
             showMemberList.set(View.GONE);
             editButtonVisibility.setValue(View.GONE);
         }
+        initRecycleView();
 
         FragmentShearedMedia.getCountOfSharedMedia(roomId);
     }
@@ -317,4 +326,112 @@ public class FragmentChannelProfileViewModel extends ViewModel
         }
         return realmChannelProfile;
     }
+
+    //****** show admin or moderator list
+
+    private void initRecycleView() {
+
+        onMenuClick = new OnMenuClick() {
+            @Override
+            public void clicked(View view, StructContactInfo info) {
+                new CreatePopUpMessage().show(view, info);
+            }
+        };
+    }
+
+
+    private void setToAdmin(Long peerId) {
+        new RequestChannelAddAdmin().channelAddAdmin(roomId, peerId);
+    }
+
+    //********** set roles
+
+    private void setToModerator(Long peerId) {
+        new RequestChannelAddModerator().channelAddModerator(roomId, peerId);
+    }
+
+    private class CreatePopUpMessage {
+
+        private void show(View view, final StructContactInfo info) {
+            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
+            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
+
+            if (role == ChannelChatRole.OWNER) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == ChannelChatRole.ADMIN) {
+
+                /**
+                 *  ----------- Admin ---------------
+                 *  1- admin dose'nt access set another admin
+                 *  2- admin can set moderator
+                 *  3- can remove moderator
+                 *  4- can kick moderator and Member
+                 */
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == ChannelChatRole.MODERATOR) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                }
+            } else {
+
+                return;
+            }
+
+            // Setup menu item selection
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_setAdmin:
+                            setToAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_set_moderator:
+                            setToModerator(info.peerId);
+                            return true;
+                        case R.id.menu_remove_admin:
+                            ((FragmentChannelProfile) fragment).kickAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_remove_moderator:
+                            ((FragmentChannelProfile) fragment).kickModerator(info.peerId);
+                            return true;
+                        case R.id.menu_kick:
+                            ((FragmentChannelProfile) fragment).kickMember(info.peerId);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            // Handle dismissal with: popup.setOnDismissListener(...);
+            // Show the menu
+            popup.show();
+        }
+    }
+
 }

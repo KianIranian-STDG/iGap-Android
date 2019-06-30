@@ -73,7 +73,7 @@ public class FragmentChannelProfile extends BaseFragment {
             roomId = getArguments().getLong(ROOM_ID);
             v = getArguments().getBoolean(IS_NOT_JOIN);
         }
-        viewModel = new FragmentChannelProfileViewModel(roomId, v);
+        viewModel = new FragmentChannelProfileViewModel(this , roomId, v);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
@@ -148,7 +148,7 @@ public class FragmentChannelProfile extends BaseFragment {
             if (getActivity() != null && data != null) {
                 new HelperFragment(
                         getActivity().getSupportFragmentManager(),
-                        FragmentShowMember.newInstance1(this, data.getRoomId(), data.getRole(), data.getUserId(), data.getSelectedRole(), data.isNeedGetMemberList())
+                        FragmentShowMember.newInstance2(this, data.getRoomId(), data.getRole(), data.getUserId(), data.getSelectedRole(), data.isNeedGetMemberList() , false)
                 ).setReplace(false).load();
             }
         });

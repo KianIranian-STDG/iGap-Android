@@ -1686,7 +1686,7 @@
     <string name="language">Language</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="security_privacy_policy">Security and Privacy Policy</string>
-    <string name="app_version">App Version</string>
+    <string name="app_version">Version</string>
     <string name="about_app">About App</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
     <string name="terms_condition">Terms and Conditions</string>
@@ -1893,4 +1893,5 @@
     <string name="canceled">Canceled</string>
     <string name="outgoing">Outgoing</string>
     <string name="no_item_selected">No item selected.</string>
+    <string name="subscriber" >Subscribers</string>
 </resources>

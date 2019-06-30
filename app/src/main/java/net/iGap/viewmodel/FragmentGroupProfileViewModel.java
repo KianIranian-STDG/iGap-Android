@@ -5,12 +5,16 @@ import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnGroupAddMember;
@@ -22,6 +26,7 @@ import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.Contacts;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
@@ -31,6 +36,8 @@ import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.request.RequestGroupAddAdmin;
+import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestUserInfo;
@@ -110,11 +117,13 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private long startMessageId = 0;
     public boolean isNeedgetContactlist = true;
     private Realm realmGroupProfile;
+    private FragmentGroupProfile fragment;
     private String memberCount;
 
 
-    public FragmentGroupProfileViewModel(long roomId, boolean isNotJoin) {
+    public FragmentGroupProfileViewModel(FragmentGroupProfile fragmentGroupProfile , long roomId, boolean isNotJoin) {
 
+        this.fragment = fragmentGroupProfile ;
         this.roomId = roomId;
         this.isNotJoin = isNotJoin;
 
@@ -170,7 +179,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
         FragmentShearedMedia.getCountOfSharedMedia(roomId);
 
-        /*initRecycleView();*/
+        initRecycleView();
         onGroupAddMemberCallback();
         onGroupKickMemberCallback();
 
@@ -522,4 +531,110 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         });
 
     }
+
+
+    private void initRecycleView() {
+
+        onMenuClick = new OnMenuClick() {
+            @Override
+            public void clicked(View view, StructContactInfo info) {
+                new CreatePopUpMessage().show(view, info);
+            }
+        };
+    }
+
+
+
+    class CreatePopUpMessage {
+
+        private void show(View view, final StructContactInfo info) {
+            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
+            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
+
+            if (role == GroupChatRole.OWNER) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == GroupChatRole.ADMIN) {
+
+                /**
+                 *  ----------- Admin ---------------
+                 *  1- admin dose'nt access set another admin
+                 *  2- admin can set moderator
+                 *  3- can remove moderator
+                 *  4- can kick moderator and Member
+                 */
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == GroupChatRole.MODERATOR) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                }
+            } else {
+
+                return;
+            }
+
+            // Setup menu item selection
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_setAdmin:
+                            setToAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_set_moderator:
+                            setToModerator(info.peerId);
+                            return true;
+                        case R.id.menu_remove_admin:
+                            ((FragmentGroupProfile) fragment).kickAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_remove_moderator:
+                            ((FragmentGroupProfile) fragment).kickModerator(info.peerId);
+                            return true;
+                        case R.id.menu_kick:
+                            ((FragmentGroupProfile) fragment).kickMember(info.peerId);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            // Handle dismissal with: popup.setOnDismissListener(...);
+            // Show the menu
+            popup.show();
+        }
+
+        private void setToAdmin(Long peerId) {
+            new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
+        }
+
+        private void setToModerator(Long peerId) {
+            new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
+        }
+    }
+
+
 }

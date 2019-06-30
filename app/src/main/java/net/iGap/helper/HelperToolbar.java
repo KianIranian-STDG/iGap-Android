@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
@@ -828,7 +829,9 @@ public class HelperToolbar {
             ConstraintSet setRoot = new ConstraintSet();
             ConstraintSet set = new ConstraintSet();
 
-            setLayoutDirection(LAYOUT_DIRECTION_LTR);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                setLayoutDirection(LAYOUT_DIRECTION_LTR);
+            }
 
             //region media player and ongoing call
             //check and add media player cause of ui and this must be the below of main toolbar view
@@ -1011,8 +1014,8 @@ public class HelperToolbar {
                 setRoot.constrainHeight(searchLayout.getId(), i_Dp(R.dimen.toolbar_search_box_size));
                 setRoot.constrainWidth(searchLayout.getId(), MATCH_CONSTRAINT);
 
-                setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp40));
-                setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp40));
+                setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp52));
+                setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp52));
 
                 setRoot.connect(searchLayout.getId(), START, mainConstraint.getId(), START);
                 setRoot.connect(searchLayout.getId(), END, mainConstraint.getId(), END);
@@ -1027,7 +1030,7 @@ public class HelperToolbar {
                 tvSearch.setVisibility(VISIBLE);
                 tvSearch.setTypeface(tfMain);
                 tvSearch.setTextColor(Utils.darkModeHandler(getContext()));
-                Utils.setTextSize(tvSearch, R.dimen.standardTextSize);
+                Utils.setTextSize(tvSearch, R.dimen.smallTextSize);
                 setLayoutParams(tvSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), 0, 0);
                 searchLayout.addView(tvSearch);
 
@@ -1039,7 +1042,7 @@ public class HelperToolbar {
                 edtSearch.setTypeface(tfMain);
                 edtSearch.setHint(R.string.search);
                 edtSearch.setSingleLine();
-                Utils.setTextSize(edtSearch, R.dimen.standardTextSize);
+                Utils.setTextSize(edtSearch, R.dimen.smallTextSize);
                 setLayoutParams(edtSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32));
                 searchLayout.addView(edtSearch);
 

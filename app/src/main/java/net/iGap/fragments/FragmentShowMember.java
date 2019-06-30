@@ -55,6 +55,7 @@ import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnGroupKickModerator;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -109,6 +110,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     public static final String SELECTEDROLE = "SELECTED_ROLE";
     public static final String ISNEEDGETMEMBERLIST = "IS_NEED_GET_MEMBER_LIST";
     public static final String ISGROUP = "IS_GROUP";
+    public static final String ISSHOWADDMEMBER = "IS_SHOW_ADD_MEMBER";
     public static List<StructMessageInfo> lists = new ArrayList<>();
     private OnComplete infoUpdateListenerCount;
     private static Fragment fragment;
@@ -139,22 +141,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private HelperToolbar mHelperToolbar;
     private TextView mBtnAdd;
     private boolean isGroup;
+    private boolean isShowAddButton = true;
 
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
-        Bundle bundle = new Bundle();
-        bundle.putLong(ROOMIDARGUMENT, roomId);
-        bundle.putString(MAINROOL, mainrool);
-        bundle.putLong(USERID, userid);
-        bundle.putString(SELECTEDROLE, selectedRole);
-        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
-        FragmentShowMember fragmentShowMember = new FragmentShowMember();
-        fragmentShowMember.setArguments(bundle);
-        return fragmentShowMember;
-    }
-
-    public static FragmentShowMember newInstance1(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
-        fragment = frg;
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
         bundle.putString(MAINROOL, mainrool);
@@ -175,6 +165,21 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         bundle.putString(SELECTEDROLE, selectedRole);
         bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
         bundle.putBoolean(ISGROUP, isGroup);
+        FragmentShowMember fragmentShowMember = new FragmentShowMember();
+        fragmentShowMember.setArguments(bundle);
+        return fragmentShowMember;
+    }
+
+    public static FragmentShowMember newInstance3(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton) {
+        fragment = frg;
+        Bundle bundle = new Bundle();
+        bundle.putLong(ROOMIDARGUMENT, roomId);
+        bundle.putString(MAINROOL, mainrool);
+        bundle.putLong(USERID, userid);
+        bundle.putString(SELECTEDROLE, selectedRole);
+        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
+        bundle.putBoolean(ISGROUP, isGroup);
+        bundle.putBoolean(ISSHOWADDMEMBER, isShowAddMemberButton);
         FragmentShowMember fragmentShowMember = new FragmentShowMember();
         fragmentShowMember.setArguments(bundle);
         return fragmentShowMember;
@@ -228,6 +233,11 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             try {
                 isGroup = getArguments().getBoolean(ISGROUP);
+            } catch (Exception e) {
+
+            }
+            try {
+                isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER , true);
             } catch (Exception e) {
 
             }
@@ -465,12 +475,18 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
-            mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
 
             if (isGroup) {
+                mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_member));
             } else {
+                mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.subscriber));
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_subscriber));
+            }
+
+            if (!isShowAddButton){
+                mBtnAdd.setVisibility(View.GONE);
+                view.findViewById(R.id.fcm_splitter_add).setVisibility(View.GONE);
             }
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
@@ -500,37 +516,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         });
 
-        final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.member_txt_titleToolbar);
         final EditText edtSearch = mHelperToolbar.getEditTextSearch();
-        final RippleView txtClose = (RippleView) view.findViewById(R.id.menu_ripple_search);
-        final RippleView txtSearch = (RippleView) view.findViewById(R.id.member_edtSearch);
-
-        txtSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                txtClose.setVisibility(View.VISIBLE);
-                edtSearch.setVisibility(View.VISIBLE);
-                edtSearch.setFocusable(true);
-                menu_txt_titleToolbar.setVisibility(View.GONE);
-                txtSearch.setVisibility(View.GONE);
-            }
-        });
-
-        txtClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (edtSearch.getText().length() > 0) {
-                    edtSearch.setText("");
-                } else {
-                    txtClose.setVisibility(View.GONE);
-                    edtSearch.setVisibility(View.GONE);
-                    menu_txt_titleToolbar.setVisibility(View.VISIBLE);
-                    txtSearch.setVisibility(View.VISIBLE);
-                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        });
 
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -562,18 +548,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
         AppUtils.setProgresColler(progressBar);
 
-        view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                // G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-                popBackStackFragment();
-
-            }
-        });
 
         //TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
 
@@ -768,7 +742,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void openFragmentForAdd(String SelectedRole) {
         if (getActivity() != null) {
-            FragmentShowMember fragment1 = FragmentShowMember.newInstance1(fragment, mRoomID, role, G.userId, SelectedRole, true);
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance3(fragment, mRoomID, role, G.userId, SelectedRole, true , isGroup , false);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
         }
     }
@@ -1238,12 +1212,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
 
             holder.title.setText(mContact.displayName);
-            holder.title.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.subtitle.setTextColor(Color.parseColor(G.textSubTheme));
-            holder.btnMenu.setTextColor(Color.parseColor(G.textSubTheme));
-            holder.txtNumberOfSharedMedia.setTextColor(Color.parseColor(G.textSubTheme));
-            holder.topLine.setBackgroundColor(Color.parseColor(G.textSubTheme));
 
+            checkTheme(holder);
             setRoleStarColor(holder.roleStar, mContact);
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
@@ -1283,6 +1253,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             if (mContact.peerId == mContact.userID) {
                 holder.btnMenu.setVisibility(View.INVISIBLE);
             }
+        }
+
+        private void checkTheme(ViewHolder holder) {
+
+            Utils.darkModeHandler(holder.btnMenu);
+            Utils.darkModeHandler(holder.title);
+            Utils.darkModeHandlerGray(holder.subtitle);
+            Utils.darkModeHandlerGray(holder.topLine);
+
         }
 
         private void showPopup(ViewHolder holder, final StructContactInfo mContact) {

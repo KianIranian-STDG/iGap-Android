@@ -41,7 +41,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
-        setMinimumHeight(Utils.dpToPx(60));
+        setMinimumHeight(Utils.dpToPx(50));
         setOrientation(HORIZONTAL);
         setWeightSum(5);
     }
