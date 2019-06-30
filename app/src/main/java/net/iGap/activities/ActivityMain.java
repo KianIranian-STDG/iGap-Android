@@ -2409,7 +2409,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      * @param updateFromServer if is set true send request to sever for get own info
      */
     private void setDrawerInfo(boolean updateFromServer) {
-        if (userInfo != null) {
+        if (userInfo != null && userInfo.isValid()) {
             String username = userInfo.getUserInfo().getDisplayName();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
