@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
 
@@ -119,7 +118,7 @@
           android:id="@+id/ng_view_newGroup"
           android:layout_width="match_parent"
           android:layout_height="0.5dp"
-          android:background="@{Color.parseColor(G.lineBorder),default=@color/toolbar_background}" />
+          style="?lineColorSettingTheme" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -168,7 +167,7 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="@dimen/dp20"
         android:layout_marginRight="@dimen/dp20"
-        android:background="@{Color.parseColor(G.lineBorder),default=@color/toolbar_background}" />
+        style="?lineColorSettingTheme" />
 
   </android.support.design.widget.TextInputLayout>
 
