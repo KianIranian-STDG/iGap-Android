@@ -6,19 +6,26 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentUserScoreBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class FragmentUserScore extends BaseFragment {
 
@@ -85,5 +92,81 @@ public class FragmentUserScore extends BaseFragment {
                 TransitionManager.beginDelayedTransition(binding.root);
             }
         });
+
+        viewModel.userRankPointer.observe(this, integer -> {
+            if (integer != null) {
+                ConstraintSet set = new ConstraintSet();
+                set.clone(binding.root);
+                set.constrainCircle(binding.rankPointer.getId(), binding.rankView.getId(), binding.rankView.getWidth() / 2, integer);
+                set.applyTo(binding.root);
+                TransitionManager.beginDelayedTransition(binding.root);
+            }
+        });
+
+        viewModel.ivandScore.observe(this , iVandScores -> {
+
+            if (iVandScores != null && iVandScores.size() != 0 ){
+
+                binding.rvScoreList.setLayoutManager(new LinearLayoutManager(getContext()));
+                IvandScoreAdapter adapter = new IvandScoreAdapter();
+                adapter.setItems(iVandScores);
+                binding.rvScoreList.setAdapter(adapter);
+
+            }
+        });
+    }
+
+
+    private class IvandScoreAdapter extends RecyclerView.Adapter<IvandScoreAdapter.ViewHolder>{
+
+        private List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore> items ;
+        private LayoutInflater inflater ;
+
+        public IvandScoreAdapter() {
+            inflater = LayoutInflater.from(getContext());
+        }
+
+        public void setItems(List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore> items) {
+            this.items = items;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            return new ViewHolder(inflater.inflate(R.layout.row_score_items , viewGroup , false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+            viewHolder.bindView(items.get(viewHolder.getAdapterPosition()));
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        private class ViewHolder extends RecyclerView.ViewHolder{
+
+            AppCompatTextView title , count ;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+
+                title = itemView.findViewById(R.id.row_score_txt_title);
+                count = itemView.findViewById(R.id.row_score_txt_score_count);
+            }
+
+            private void bindView(ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore iVandScore) {
+
+                if (G.selectedLanguage.equals("fa")){
+                    title.setText(iVandScore.getFaName());
+                }else {
+                    title.setText(iVandScore.getEnName());
+                }
+
+                count.setText(iVandScore.getScore() + getString(R.string.point));
+            }
+        }
     }
 }

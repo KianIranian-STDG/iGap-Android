@@ -139,164 +139,28 @@
                     app:layout_constraintRight_toRightOf="@id/scoreView"
                     app:layout_constraintTop_toBottomOf="@id/scoreView" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/inviteItemTitle"
-                    style="?textTitleColorSettingTheme"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvScoreList"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginLeft="@dimen/dp16"
-                    android:padding="8dp"
-                    android:text="Invite Friends"
-                    app:layout_constraintBottom_toTopOf="@id/paymentItemTitle"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/inviteItem"
-                    app:layout_constraintTop_toBottomOf="@id/scoreTitle" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/inviteItem"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableEnd="@drawable/ic_add_toolbar"
-                    android:drawableRight="@drawable/ic_add_toolbar"
-                    android:drawablePadding="@dimen/dp8"
-                    android:drawableTint="@color/buttonColor"
-                    android:gravity="center"
-                    android:onClick="@{()->viewModel.onInviteClick()}"
-                    android:padding="8dp"
-                    android:text="@{viewModel.getInviteFriendsScore}"
-                    android:textColor="@color/buttonColor"
-                    app:iconTint="@color/buttonColor"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/inviteItemTitle" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/paymentItemTitle"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginLeft="@dimen/dp16"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:padding="8dp"
-                    android:text="Payments"
-                    app:layout_constraintBottom_toTopOf="@id/qrCodeItemTitle"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/paymentItem"
-                    app:layout_constraintTop_toBottomOf="@id/inviteItemTitle" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/paymentItem"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableEnd="@drawable/ic_add_toolbar"
-                    android:drawableRight="@drawable/ic_add_toolbar"
-                    android:drawablePadding="@dimen/dp8"
-                    android:drawableTint="@color/buttonColor"
-                    android:gravity="center"
-                    android:onClick="@{()->viewModel.onPaymentClick()}"
-                    android:padding="8dp"
-                    android:text="@{viewModel.paymentScore}"
-                    android:textColor="@color/buttonColor"
-                    app:iconTint="@color/buttonColor"
-                    app:layout_constraintBottom_toBottomOf="@id/paymentItemTitle"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/paymentItemTitle" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/qrCodeItemTitle"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginLeft="@dimen/dp16"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:padding="8dp"
-                    android:text="Scan QRcode"
-                    app:layout_constraintBottom_toTopOf="@id/botsItemTitle"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/qrCodeItem"
-                    app:layout_constraintTop_toBottomOf="@id/paymentItemTitle" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/qrCodeItem"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableEnd="@drawable/ic_add_toolbar"
-                    android:drawableRight="@drawable/ic_add_toolbar"
-                    android:drawablePadding="@dimen/dp8"
-                    android:drawableTint="@color/buttonColor"
-                    android:gravity="center"
-                    android:onClick="@{()->viewModel.onQrCodeClick()}"
-                    android:padding="8dp"
-                    android:text="@{viewModel.qrCodeScore}"
-                    android:textColor="@color/buttonColor"
-                    app:iconTint="@color/buttonColor"
-                    app:layout_constraintBottom_toBottomOf="@id/qrCodeItemTitle"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/qrCodeItemTitle" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/botsItemTitle"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginLeft="@dimen/dp16"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:padding="8dp"
-                    android:text="Bot &amp; Channels"
-                    app:layout_constraintBottom_toTopOf="@id/giftsButton"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/botsItem"
-                    app:layout_constraintTop_toBottomOf="@id/qrCodeItemTitle" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/botsItem"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableEnd="@drawable/ic_add_toolbar"
-                    android:drawableRight="@drawable/ic_add_toolbar"
-                    android:drawablePadding="@dimen/dp8"
-                    android:drawableTint="@color/buttonColor"
-                    android:gravity="center"
-                    android:onClick="@{()->viewModel.onBotsAndChannelClick()}"
-                    android:padding="8dp"
-                    android:text="@{viewModel.botsScore}"
-                    android:textColor="@color/buttonColor"
-                    app:iconTint="@color/buttonColor"
-                    app:layout_constraintBottom_toBottomOf="@id/botsItemTitle"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/botsItemTitle" />
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp10"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scoreTitle"
+                    app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton"/>
 
                 <android.support.design.button.MaterialButton
-                    android:id="@+id/giftsButton"
+                    android:id="@+id/scanBarcodeButton"
                     style="@style/IGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->viewModel.onGiftsButtonClick()}"
-                    android:text="@string/gift"
+                    android:onClick="@{()->viewModel.onScanBarcodeButtonClick()}"
+                    android:text="@string/scan_barcode"
+                    android:layout_marginBottom="@dimen/dp10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/botsItemTitle"
-                    app:layout_constraintWidth_percent=".5" />
+                    app:layout_constraintWidth_percent=".7" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v4.widget.NestedScrollView>
