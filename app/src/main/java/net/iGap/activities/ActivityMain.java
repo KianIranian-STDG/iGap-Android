@@ -88,7 +88,6 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
@@ -108,6 +107,7 @@ import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnPayment;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnUnreadChange;
+import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnVerifyNewDevice;
 import net.iGap.interfaces.OneFragmentIsOpen;
@@ -124,6 +124,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.NotSwipeableViewPager;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -690,6 +691,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
+            connectionState();
+
             initDrawerMenu();
 
             checkKeepMedia();
@@ -765,6 +768,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }, 2000);
     }
 
+    private void connectionState() {
+
+        G.onConnectionChangeState = connectionStateR -> runOnUiThread(() -> {
+            G.connectionState = connectionStateR;
+            G.connectionStateMutableLiveData.postValue(connectionStateR);
+        });
+
+        G.onUpdating = new OnUpdating() {
+            @Override
+            public void onUpdating() {
+                runOnUiThread(() -> {
+                    G.connectionState = ConnectionState.UPDATING;
+                    G.connectionStateMutableLiveData.postValue(ConnectionState.UPDATING);
+                });
+            }
+
+            @Override
+            public void onCancelUpdating() {
+                /**
+                 * if yet still G.connectionState is in update state
+                 * show latestState that was in previous state
+                 */
+                if (G.connectionState == ConnectionState.UPDATING) {
+                    G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
+                    G.connectionStateMutableLiveData.postValue(ConnectionState.IGAP);
+                }
+            }
+        };
+    }
     private void getWallpaperAsDefault() {
         try {
             RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
