@@ -10,8 +10,8 @@
             android:shape="rectangle">
 
             <size
-                android:width="@dimen/dp20"
-                android:height="@dimen/dp20"/>
+                android:width="@dimen/public_check_box_size"
+                android:height="@dimen/public_check_box_size"/>
 
             <stroke
                 android:color="@color/gray_6c"

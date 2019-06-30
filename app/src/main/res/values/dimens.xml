@@ -137,6 +137,7 @@
   <dimen name="round_buttons_margin">@dimen/dp6</dimen>
   <dimen name="round_buttons_large_padding">10dp</dimen>
   <dimen name="round_buttons_small_padding">3dp</dimen>
+    <dimen name="public_check_box_size">@dimen/dp18</dimen>
 
 
 </resources>
