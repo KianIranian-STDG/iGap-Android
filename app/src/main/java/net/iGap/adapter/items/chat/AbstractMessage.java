@@ -575,6 +575,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
                 if (mMessage.forwardedFrom != null) {
                     if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
+                        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                         if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                             showVote(holder, getRealmChat());
 
