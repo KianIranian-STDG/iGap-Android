@@ -26,10 +26,8 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.helper.HelperTracker;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
@@ -94,8 +92,10 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
+                .setSearchBoxShown(true , false)
                 .setListener(this);
 
+        //uncomment this lines after added small avatar and discovery setting
         if (page != 0){
             mHelperToolbar.setLeftIcon(R.string.back_icon);
            // mHelperToolbar.setRightSmallAvatarShown(false);
@@ -156,6 +156,8 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
         rcDiscovery.setLayoutManager(layoutManager);
         rcDiscovery.setAdapter(adapterDiscovery);
         tryToUpdateOrFetchRecycleViewData(0);
@@ -265,6 +267,11 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
 
     @Override
     public void onSmallAvatarClickListener(View view) {
+
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
 
     }
 }
