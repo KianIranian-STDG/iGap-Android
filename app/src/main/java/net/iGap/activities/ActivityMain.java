@@ -67,6 +67,7 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentUserProfile;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
+import net.iGap.fragments.TestFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
@@ -150,7 +151,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -170,20 +171,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private static long oldTime;
     public static boolean isUseCamera = false;
     public static boolean waitingForConfiguration = false;
-    private FrameLayout frameChatContainer;
-    private FrameLayout frameFragmentBack;
-    private FrameLayout frameFragmentContainer;
+    /*private FrameLayout frameChatContainer;*/
+    /*private FrameLayout frameFragmentBack;*/
+    /*private FrameLayout frameFragmentContainer;*/
     private SharedPreferences sharedPreferences;
     private ProgressBar contentLoading;
     private Realm mRealm;
     private boolean isNeedToRegister = false;
-    private ViewPager mViewPager;
+    /*private ViewPager mViewPager;*/
     private int retryConnectToWallet = 0;
-    private BottomNavigation bottomNavigation;
+    /*private BottomNavigation bottomNavigation;*/
 
     public void setWeight(View view, int value) {
 
-        ConstraintSet set = new ConstraintSet();
+        /*ConstraintSet set = new ConstraintSet();
         set.clone((ConstraintLayout) findViewById(R.id.rootFrame));
         set.setHorizontalWeight(view.getId(),value);
         set.applyTo(findViewById(R.id.rootFrame));
@@ -192,7 +193,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     public static void setMediaLayout() {
@@ -367,21 +368,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.wtf(this.getClass().getName(),"onCreate");
+        /*Log.wtf(this.getClass().getName(),"onCreate");
+        Log.wtf(this.getClass().getName(),"super.onCreate");*/
+        super.onCreate(savedInstanceState);
+        /*Log.wtf(this.getClass().getName(),"super.onCreate");
+        Log.wtf(this.getClass().getName(),"setContentView");*/
+        setContentView(R.layout.activity_main);
+        /*Log.wtf(this.getClass().getName(),"setContentView");*/
         if (G.ISOK) {
+            /*Log.wtf(this.getClass().getName(),"PHONE_STATE");*/
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
 
             registerReceiver(myPhonStateService, intentFilter);
+            /*Log.wtf(this.getClass().getName(),"PHONE_STATE");*/
             G.refreshWalletBalance = this;
 
+            /*Log.wtf(this.getClass().getName(),"RINGER_MODE_CHANGED_ACTION");*/
             BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //code...
                     if (!G.appChangeRinggerMode) {
-                        AudioManager mainAudioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                        AudioManager mainAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                         G.mainRingerMode = mainAudioManager.getRingerMode();
                     }
 
@@ -389,6 +399,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
             registerReceiver(audioManagerReciver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
+            /*Log.wtf(this.getClass().getName(),"RINGER_MODE_CHANGED_ACTION");*/
 
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -396,15 +407,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     isChinesPhone();
             }
 //        setTheme(R.style.AppThemeTranslucent);
-
+            /*Log.wtf(this.getClass().getName(),"isFirstPassCode");*/
             if (G.isFirstPassCode) {
                 openActivityPassCode();
             }
-            //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            //isNeedToRegister = true; // continue app even don't have storage permission
-            //isOnGetPermission = true;
-            //}
-            super.onCreate(savedInstanceState);
+            /*Log.wtf(this.getClass().getName(),"isFirstPassCode");*/
 
             RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
                 @Override
@@ -414,9 +421,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
+            /*Log.wtf(this.getClass().getName(),"addEventListener");*/
             EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+            /*Log.wtf(this.getClass().getName(),"addEventListener");*/
 
-            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             finishActivity = new FinishActivity() {
                 @Override
                 public void finishActivity() {
@@ -435,14 +444,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
         //checkAppAccount();
-
+            /*Log.wtf(this.getClass().getName(),"getPhonePermision");*/
             try {
                 HelperPermission.getPhonePermision(this, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            /*Log.wtf(this.getClass().getName(),"getPhonePermision");*/
 
 
+            /*Log.wtf(this.getClass().getName(),"get user info");*/
             RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
@@ -457,6 +468,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 finish();
                 return;
             }
+            /*Log.wtf(this.getClass().getName(),"get user info");*/
 
 
             if (!G.userLogin) {
@@ -465,7 +477,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                  */
 
                 //licenceChecker();
-
+                /*Log.wtf(this.getClass().getName(),"DELETE_FOLDER_BACKGROUND");*/
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
                 boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
@@ -476,22 +488,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
                     editor.apply();
                 }
+                /*Log.wtf(this.getClass().getName(),"DELETE_FOLDER_BACKGROUND");*/
             }
-            setContentView(R.layout.activity_main);
 
-            frameChatContainer = findViewById(R.id.am_frame_chat_container);
+            /*frameChatContainer = findViewById(R.id.am_frame_chat_container);*/
 
+            /*Log.wtf(this.getClass().getName(),"two panel mode");*/
             if (G.twoPaneMode) {
                 G.isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-                frameFragmentBack = findViewById(R.id.am_frame_fragment_back);
-                frameFragmentContainer = findViewById(R.id.am_frame_fragment_container);
+                /*frameFragmentBack = findViewById(R.id.am_frame_fragment_back);*/
+                /*frameFragmentContainer = findViewById(R.id.am_frame_fragment_container);*/
 
                 G.oneFragmentIsOpen = new OneFragmentIsOpen() {
                     @Override
                     public void justOne() {
 
-                        disableSwipe = frameFragmentContainer.getChildCount() == 0;
+                        /*disableSwipe = frameFragmentContainer.getChildCount() == 0;*/
 
 
                     }
@@ -499,13 +512,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 designLayout(chatLayoutMode.none);
 
-                frameFragmentBack.setOnClickListener(new View.OnClickListener() {
+                /*frameFragmentBack.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         onBackPressed();
                     }
-                });
+                });*/
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
                     @Override
@@ -515,32 +528,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     @Override
                     public boolean getBackChatVisibility() {
-                        return frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE;
+                        return true/*frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE*/;
                     }
 
                     @Override
                     public void setBackChatVisibility(boolean visibility) {
-                            if (frameFragmentBack != null) {
+                            /*if (frameFragmentBack != null) {
                                 frameFragmentBack.setVisibility(View.VISIBLE);
-                            }
+                            }*/
                     }
                 };
-
-
+                /*Log.wtf(this.getClass().getName(),"two panel mode");*/
             } else {
-                frameChatContainer.setVisibility(View.GONE);
+                /*Log.wtf(this.getClass().getName(),"one panel mode");*/
+                /*frameChatContainer.setVisibility(View.GONE);*/
+                /*Log.wtf(this.getClass().getName(),"one panel mode");*/
             }
 
             isOpenChatBeforeSheare = false;
+            /*Log.wtf(this.getClass().getName(),"checkIntent");*/
             checkIntent(getIntent());
+            /*Log.wtf(this.getClass().getName(),"checkIntent");*/
 
+            /*Log.wtf(this.getClass().getName(),"initTabStrip");*/
+            /*initTabStrip();*/
+            Fragment f = new TestFragment();
+            getSupportFragmentManager().beginTransaction().addToBackStack(f.getClass().getName()).replace(R.id.rootFrame,f,f.getClass().getName()).commit();
+            /*Log.wtf(this.getClass().getName(),"initTabStrip");*/
 
-            initTabStrip();
-
+            /*Log.wtf(this.getClass().getName(),"initComponent");*/
             initComponent();
+            /*Log.wtf(this.getClass().getName(),"initComponent");*/
 
             G.onPayment = this;
 
+            /*Log.wtf(this.getClass().getName(),"KEY_GET_CONTACT");*/
             sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
             boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
             /**
@@ -577,9 +599,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                /*Log.wtf(this.getClass().getName(),"KEY_GET_CONTACT");*/
             }
 
+            /*Log.wtf(this.getClass().getName(),"cancelNotification");*/
             HelperNotification.getInstance().cancelNotification();
+            /*Log.wtf(this.getClass().getName(),"cancelNotification");*/
             G.onGroupAvatarResponse = this;
 
             G.onConvertToGroup = new OpenFragment() {
@@ -608,7 +633,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             /*initDrawerMenu();*/
 
+            /*Log.wtf(this.getClass().getName(),"checkKeepMedia");*/
             checkKeepMedia();
+            /*Log.wtf(this.getClass().getName(),"checkKeepMedia");*/
 
 
             G.onVerifyNewDevice = new OnVerifyNewDevice() {
@@ -641,35 +668,37 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
 
+            /*Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");*/
             String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
             if (backGroundPath.isEmpty()) {
                 getWallpaperAsDefault();
             }
+            /*Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");*/
 
+            /*Log.wtf(this.getClass().getName(),"getFavoritSticker");*/
             ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
                 @Override
                 public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
-
-                if (response.body() != null) {
-                    if (response.body().getOk()) {
-                        RealmStickers.updateStickers(response.body().getData());
+                    if (response.body() != null) {
+                        if (response.body().getOk()) {
+                            RealmStickers.updateStickers(response.body().getData());
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<StructSticker> call, Throwable t) {
-            }
-        });
+                @Override
+                public void onFailure(Call<StructSticker> call, Throwable t) {
 
+                }
+            });
+            /*Log.wtf(this.getClass().getName(),"getFavoritSticker");*/
 
         } else {
-           super.onCreate(savedInstanceState);
            TextView textView = new TextView(this);
            setContentView(textView);
            showToast(textView);
         }
-        Log.wtf(this.getClass().getName(),"onCreate");
+        /*Log.wtf(this.getClass().getName(),"onCreate");*/
     }
 
     private void showToast(View view) {
@@ -982,16 +1011,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //******************************************************************************************************************************
 
-    private void initTabStrip() {
+    /*private void initTabStrip() {
 
         mViewPager = findViewById(R.id.viewpager);
 
         boolean isRtl = HelperCalander.isPersianUnicode;
 
-        bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
-        bottomNavigation.setDefaultItem(2);
+        *//*bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
+        bottomNavigation.setDefaultItem(2);*//*
 
-        bottomNavigation.setOnItemChangeListener(i -> {
+        *//*bottomNavigation.setOnItemChangeListener(i -> {
             if (isRtl) {
                 if (i == 4)
                     mViewPager.setCurrentItem(0 , false);
@@ -1006,7 +1035,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } else {
                 mViewPager.setCurrentItem(i , false);
             }
-        });
+        });*//*
 
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1017,7 +1046,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             @Override
             public void onPageSelected(int i) {
-                if (isRtl) {
+                *//*if (isRtl) {
                     if (i == 4)
                         bottomNavigation.setCurrentItem(0);
                     if (i == 3)
@@ -1029,7 +1058,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     if (i == 0)
                         bottomNavigation.setCurrentItem(4);
                 } else
-                    bottomNavigation.setCurrentItem(i);
+                    bottomNavigation.setCurrentItem(i);*//*
             }
 
             @Override
@@ -1042,15 +1071,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
         mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
-        mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
+        *//*mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());*//*
         mViewPager.setOffscreenPageLimit(0);
         findViewById(R.id.loadingContent).setVisibility(View.GONE);
-        bottomNavigation.setVisibility(View.VISIBLE);
+        *//*bottomNavigation.setVisibility(View.VISIBLE);*//*
 
         if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
-    }
+    }*/
 
 
     /**
@@ -1177,13 +1206,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        boolean isRegisterStatus = sharedPreferences.getBoolean(SHP_SETTING.REGISTER_STATUS, false);
-        if (isRegisterStatus) {
-            startAnimationLocation();
-        } else {
-            stopAnimationLocation();
-        }
-
         G.onMapRegisterState = new OnMapRegisterState() {
             @Override
             public void onState(final boolean state) {
@@ -1191,11 +1213,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     @Override
                     public void run() {
                         if (state) {
-                            startAnimationLocation();
                             editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                             editor.apply();
                         } else {
-                            stopAnimationLocation();
                             editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
                             editor.apply();
                         }
@@ -1203,14 +1223,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 });
             }
         };
-    }
-
-    public void stopAnimationLocation() {
-        //
-    }
-
-    public void startAnimationLocation() {
-        //
     }
 
     @Override
@@ -1334,7 +1346,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onClientCondition = this;
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
-        G.onUnreadChange = this;
         G.onPayment = this;
 
 
@@ -1440,11 +1451,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onStateMain(boolean state) {
-        if (state) {
-            startAnimationLocation();
-        } else {
-            stopAnimationLocation();
-        }
     }
 
     @Override
@@ -1507,7 +1513,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         realm.close();
-        if (mViewPager.getAdapter()!=null) {
+        /*if (mViewPager.getAdapter()!=null) {
             for (int i = 0; i < 5; i++) {
                 Object f = mViewPager.getAdapter().instantiateItem(mViewPager,i);
                 if (f instanceof FragmentMain) {
@@ -1534,7 +1540,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             }
-        }
+        }*/
 
         /**
          * don't send update status for own message
@@ -1567,14 +1573,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void notifySubFragmentForCondition() {
-        if (mViewPager.getAdapter()!=null){
+        /*if (mViewPager.getAdapter()!=null){
             for (int i = 0;i<5;i++){
                 Object f = mViewPager.getAdapter().instantiateItem(mViewPager,i);
                 if (f instanceof FragmentMain) {
                     ((FragmentMain) f).onAction(MainAction.clinetCondition);
                 }
             }
-        }
+        }*/
     }
 
     public void designLayout(final chatLayoutMode mode) {
@@ -1583,41 +1589,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
                 if (G.twoPaneMode) {
-                    if (frameFragmentContainer != null) {
+                    /*if (frameFragmentContainer != null) {
                         if (frameFragmentContainer.getChildCount() == 0) {
-                            if (frameFragmentBack != null) {
+                            *//*if (frameFragmentBack != null) {
                                 frameFragmentBack.setVisibility(View.GONE);
-                            }
+                            }*//*
                         } else if (frameFragmentContainer.getChildCount() == 1) {
                             disableSwipe = true;
                         } else {
                             disableSwipe = false;
                         }
-                    } else {
-                        if (frameFragmentBack != null) {
+                    } else {*/
+                        /*if (frameFragmentBack != null) {
                             frameFragmentBack.setVisibility(View.GONE);
-                        }
-                    }
+                        }*/
+                    /*}*/
 
                     if (G.isLandscape) {
-                        setWeight(frameChatContainer, 2);
-                        setWeight(frameFragmentContainer, 1);
+                        /*setWeight(frameChatContainer, 2);*/
+                        /*setWeight(frameFragmentContainer, 1);*/
                     } else {
 
                         if (mode == chatLayoutMode.show) {
-                            setWeight(frameChatContainer, 1);
-                            setWeight(frameFragmentContainer, 0);
+                            /*setWeight(frameChatContainer, 1);*/
+                            /*setWeight(frameFragmentContainer, 0);*/
                         } else if (mode == chatLayoutMode.hide) {
-                            setWeight(frameChatContainer, 0);
-                            setWeight(frameFragmentContainer, 1);
+                            /*setWeight(frameChatContainer, 0);*/
+                            /*setWeight(frameFragmentContainer, 1);*/
                         } else {
-                            if (frameChatContainer.getChildCount() > 0) {
+                            /*if (frameChatContainer.getChildCount() > 0) {
                                 setWeight(frameChatContainer, 1);
-                                setWeight(frameFragmentContainer, 0);
+                                *//*setWeight(frameFragmentContainer, 0);*//*
                             } else {
                                 setWeight(frameChatContainer, 0);
-                                setWeight(frameFragmentContainer, 1);
-                            }
+                                *//*setWeight(frameFragmentContainer, 1);*//*
+                            }*/
                         }
                     }
                 }
@@ -1643,31 +1649,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      * badge counter for other bottom navigation item should add listener to OnBottomNavigationBadge
      *
      * */
-
-    @Override
-    public void onChange() {
-
-        int unReadCount = RealmRoom.getAllUnreadCount();
-
-        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
-            @Override
-            public int callCount() {
-                return 0;
-            }
-
-            @Override
-            public int messageCount() {
-                return unReadCount;
-            }
-
-            @Override
-            public int badgeColor() {
-                return G.context.getResources().getColor(R.color.red);
-            }
-        });
-
-        /*Log.i("aabolfazl", "onChange: " + RealmRoom.getAllUnreadCount());*/
-    }
 
     @Override
     public void onChargeToken(int status, String token, int expireTime, String message) {
@@ -1918,7 +1899,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         void doBack();
     }
 
-    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+    /*class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
         SampleFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -1946,5 +1927,5 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         public int getCount() {
             return 5;
         }
-    }
+    }*/
 }

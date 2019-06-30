@@ -299,7 +299,7 @@ public class HelperFragment {
 
             if (isChatFragment(fragmentClassName)) {
 
-                resId = R.id.am_frame_chat_container;
+                resId = 0/*R.id.am_frame_chat_container*/;
 
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.show);
@@ -307,7 +307,7 @@ public class HelperFragment {
 
             } else {
 
-                resId = R.id.am_frame_fragment_container;
+                resId = 0/*R.id.am_frame_fragment_container*/;
 
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.setBackChatVisibility(true);

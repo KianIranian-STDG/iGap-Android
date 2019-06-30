@@ -96,16 +96,43 @@ public final class StartupActions {
 
     public StartupActions() {
 
-        detectDeviceType();
-
-        //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+        /*Log.wtf(this.getClass().getName(),"manageSettingPreferences");*/
+        new Thread(this::manageSettingPreferences).start();
+/*        Log.wtf(this.getClass().getName(),"manageSettingPreferences");
+        Log.wtf(this.getClass().getName(),"detectDeviceType");*/
+        new Thread(this::detectDeviceType);
+        /*Log.wtf(this.getClass().getName(),"detectDeviceType");
+        Log.wtf(this.getClass().getName(),"makeFolder");*/
+        new Thread(StartupActions::makeFolder).start();
+        /*Log.wtf(this.getClass().getName(),"makeFolder");
+        Log.wtf(this.getClass().getName(),"initializeGlobalVariables");*/
         initializeGlobalVariables();
+        /*Log.wtf(this.getClass().getName(),"initializeGlobalVariables");
+        Log.wtf(this.getClass().getName(),"manageConnection");*/
+        new Thread(ConnectionManager::manageConnection).start();
+        /*Log.wtf(this.getClass().getName(),"manageConnection");
+        Log.wtf(this.getClass().getName(),"configDownloadManager");*/
+        new Thread(this::configDownloadManager).start();
+        /*Log.wtf(this.getClass().getName(),"configDownloadManager");
+        Log.wtf(this.getClass().getName(),"manageTime");*/
+        new Thread(this::manageTime).start();
+        /*Log.wtf(this.getClass().getName(),"manageTime");
+        Log.wtf(this.getClass().getName(),"getiGapAccountInstance");*/
+        new Thread(StartupActions::getiGapAccountInstance).start();
+        /*Log.wtf(this.getClass().getName(),"getiGapAccountInstance");
+        Log.wtf(this.getClass().getName(),"CallObserver");*/
+        new Thread(CallObserver::new);
+        /*Log.wtf(this.getClass().getName(),"CallObserver");
+        Log.wtf(this.getClass().getName(),"HelperUploadFile");*/
+        new Thread(HelperUploadFile::new);
+        /*Log.wtf(this.getClass().getName(),"HelperUploadFile");*/
 
-        Realm realm = realmConfiguration();
-        if (realm != null) {
-            realm.executeTransactionAsync(new Realm.Transaction() {
+        if (realmConfiguration()) {
+            /*Log.wtf(this.getClass().getName(),"executeTransactionAsync");*/
+            Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+                    /*Log.wtf(this.getClass().getName(),"execute");*/
                     try {
                         long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
                         RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
@@ -129,40 +156,30 @@ public final class StartupActions {
                         e.printStackTrace();
                         HelperLog.setErrorLog(e);
                     }
+                    /*Log.wtf(this.getClass().getName(),"execute");*/
                 }
             });
-            /*realm.close();*/
-            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
-            new Thread(this::manageSettingPreferences).start();
-            Log.wtf(this.getClass().getName(),"manageSettingPreferences");
-            Log.wtf(this.getClass().getName(),"mainUserInfo");
+            /*Log.wtf(this.getClass().getName(),"executeTransactionAsync");*/
+
+            /*Log.wtf(this.getClass().getName(),"checkDataUsage");*/
+            new Thread(() -> checkDataUsage()).start();
+            /*Log.wtf(this.getClass().getName(),"checkDataUsage");
+            Log.wtf(this.getClass().getName(),"mainUserInfo");*/
             new Thread(() -> mainUserInfo()).start();
-            Log.wtf(this.getClass().getName(),"mainUserInfo");
-            Log.wtf(this.getClass().getName(),"connectToServer");
+            /*Log.wtf(this.getClass().getName(),"mainUserInfo");
+            Log.wtf(this.getClass().getName(),"connectToServer");*/
             new Thread(this::connectToServer).start();
-            Log.wtf(this.getClass().getName(),"connectToServer");
-            new Thread(StartupActions::makeFolder).start();
-            new Thread(ConnectionManager::manageConnection).start();
-            new Thread(this::configDownloadManager).start();
-            new Thread(this::manageTime).start();
-            new Thread(StartupActions::getiGapAccountInstance).start();
-            new CallObserver();
-            /**
-             * initialize download and upload listeners
-             */
-            new HelperUploadFile();
-            checkDataUsage(realm);
-            realm.close();
+            /*Log.wtf(this.getClass().getName(),"connectToServer");*/
         }
 
     }
 
-    private void checkDataUsage(Realm realm) {
-        /*Realm realm = Realm.getDefaultInstance();*/
+    private void checkDataUsage() {
+        Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
         if (realmDataUsage.size() == 0)
             HelperDataUsage.initializeRealmDataUsage();
-        /*realm.close();*/
+        realm.close();
     }
 
     private void manageTime() {
@@ -600,19 +617,21 @@ public final class StartupActions {
     /**
      * initialize realm and manage migration
      */
-    private Realm realmConfiguration() {
+    private boolean realmConfiguration() {
         /**
          * before call RealmConfiguration client need to Realm.init(context);
          */
-
+        Log.wtf(this.getClass().getName(),"realmConfiguration");
         try {
+            Log.wtf(this.getClass().getName(),"realmConfiguration try");
             Realm.init(context);
+            Log.wtf(this.getClass().getName(),"realmConfiguration try");
         } catch (Exception e) {
             G.ISOK = false;
-            return null;
+            return false;
         } catch (Error e) {
             G.ISOK = false;
-            return null;
+            return false;
         }
 
         //  new SecureRandom().nextBytes(key);
@@ -626,15 +645,18 @@ public final class StartupActions {
      /*   RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
                 .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
-
+        Log.wtf(this.getClass().getName(),"getInstance");
         Realm configuredRealm = getInstance();
+        Log.wtf(this.getClass().getName(),"getInstance");
 
         /*if (configuration!=null)
             Realm.deleteRealm(configuration);*/
-
+        Log.wtf(this.getClass().getName(),"setDefaultConfiguration");
         Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
+        Log.wtf(this.getClass().getName(),"setDefaultConfiguration");
         /*configuredRealm.close();*/
-        return configuredRealm;
+        Log.wtf(this.getClass().getName(),"realmConfiguration");
+        return true;
     }
 
     public Realm getPlainInstance() {

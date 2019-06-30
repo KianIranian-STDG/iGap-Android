@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.WindowManager;
 
 import net.iGap.G;
@@ -48,7 +49,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import static net.iGap.G.updateResources;
 
 
-public class ActivityEnhanced extends AppCompatActivity {
+public abstract class ActivityEnhanced extends AppCompatActivity {
 
     public AvatarHandler avatarHandler;
     public boolean isOnGetPermission = false;
@@ -76,17 +77,30 @@ public class ActivityEnhanced extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        /*Log.wtf("ActivityEnhanced","onCreate start");
+        Log.wtf("ActivityEnhanced","setThemeSetting start");*/
+        setThemeSetting();
+        /*Log.wtf("ActivityEnhanced","setThemeSetting end");
+        Log.wtf("ActivityEnhanced","super.onCreate start");*/
+        super.onCreate(savedInstanceState);
+        /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
         if (G.ISOK) {
+            /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
-            setThemeSetting();
+            /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
 
-            checkFont();
+            /*Log.wtf("ActivityEnhanced","checkFont start");*/
+            new Thread(this::checkFont);
+            /*Log.wtf("ActivityEnhanced","checkFont end");*/
 
+            /*Log.wtf("ActivityEnhanced","screenStateFilter start");*/
             IntentFilter screenStateFilter = new IntentFilter();
             screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
             screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
             registerReceiver(myBroadcast, screenStateFilter);
+            /*Log.wtf("ActivityEnhanced","screenStateFilter end");*/
 
+            /*Log.wtf("ActivityEnhanced","lock start");*/
             SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
             boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
@@ -104,26 +118,26 @@ public class ActivityEnhanced extends AppCompatActivity {
                     HelperLog.setErrorLog(e);
                 }
             }
+            /*Log.wtf("ActivityEnhanced","lock end");*/
 
-            super.onCreate(savedInstanceState);
-
+            /*Log.wtf("ActivityEnhanced","status bar start");*/
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
             }
+            /*Log.wtf("ActivityEnhanced","status bar start");*/
 
-            makeDirectoriesIfNotExist();
+            /*makeDirectoriesIfNotExist();*/
 
-            boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+            /*boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
             if (!checkedEnableDataShams) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
-            }
+            }*/
 
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        } else {
-            super.onCreate(savedInstanceState);
         }
+
+        /*Log.wtf("ActivityEnhanced","onCreate end");*/
 
     }
 

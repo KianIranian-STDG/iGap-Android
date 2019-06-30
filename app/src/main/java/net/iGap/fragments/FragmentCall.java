@@ -130,7 +130,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
     private View view;
 
-    @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -179,7 +178,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         isInit = true;
         view.findViewById(R.id.pb_load).setVisibility(View.GONE);
-        view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);
+        /*view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);*/
         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
 
         //G.onCallLogClear = this;

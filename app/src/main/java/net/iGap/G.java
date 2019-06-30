@@ -11,6 +11,7 @@
 package net.iGap;
 
 import android.accounts.Account;
+import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -23,8 +24,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
@@ -70,7 +73,7 @@ import ir.radsense.raadcore.web.WebBase;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
-public class G extends MultiDexApplication {
+public class G extends Application {
 
     public static final String IGAP = "/iGap";
     public static final String IMAGES = "/iGap Images";
@@ -482,7 +485,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.wtf(this.getClass().getName(),"onCreate");
+        Log.wtf(this.getClass().getName(),"onCreate start");
 
         LooperThreadHelper.getInstance();
 
@@ -514,19 +517,22 @@ public class G extends MultiDexApplication {
             e.printStackTrace();
         }
         new StartupActions();
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
      /*   try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
             WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
             WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
         } catch (Exception e) {
         }*/
-        Log.wtf(this.getClass().getName(),"onCreate");
+        Log.wtf(this.getClass().getName(),"onCreate end");
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(updateResources(base));
-        new MultiDexUtils().getLoadedExternalDexClasses(this);
+        MultiDex.install(this);
+        /*new MultiDexUtils().getLoadedExternalDexClasses(this);*/
     }
 
     @Override

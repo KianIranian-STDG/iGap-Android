@@ -1173,7 +1173,7 @@ public class RealmRoom extends RealmObject {
 
         realm.close();
 
-        Log.i("aabolfazl", "getAllUnreadCount: " + number.intValue());
+        /*Log.i("aabolfazl", "getAllUnreadCount: " + number.intValue());*/
 
         return number.intValue();
     }
