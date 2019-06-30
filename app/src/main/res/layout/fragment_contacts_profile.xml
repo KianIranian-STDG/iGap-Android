@@ -27,20 +27,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/chi_fab_setPic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp20"
-            android:src="@mipmap/comment"
-            app:fabSize="mini"
-            app:backgroundTint="@color/setting_items_value_color"
-            app:tint="@color/white"
-            android:onClick="@{()->viewModel.onClickGoToChat()}"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar"/>
-
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -53,48 +39,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layoutDirection="locale">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/phoneNumber"
-                    style="?textSubColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp32"
-                    android:onClick="@{()->viewModel.onPhoneNumberClick()}"
-                    android:text="@{viewModel.phone}"
-                    android:textSize="@dimen/standardTextSize"
-                    android:gravity="@{viewModel.textsGravity}"
-                    android:visibility="@{viewModel.phone.equals(`0`) || !viewModel.showNumber ? View.GONE : View.VISIBLE}"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent=".9" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/status"
-                    style="?textSubColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@{viewModel.username}"
-                    android:gravity="@{viewModel.textsGravity}"
-                    android:textSize="@dimen/smallTextSize"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/phoneNumber"
-                    app:layout_constraintWidth_percent=".9" />
-
-                <View
-                    android:id="@+id/line1"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/status"
-                    app:layout_constraintWidth_percent=".95" />
 
                 <RelativeLayout
                     android:id="@+id/enableNotificationLyt"
@@ -109,7 +53,7 @@
                     android:paddingBottom="6dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line1"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent=".9">
 
 
@@ -156,8 +100,9 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintLeft_toLeftOf="@id/line1"
-                    app:layout_constraintRight_toRightOf="@id/line1"
+                    app:layout_constraintWidth_percent=".95"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/customNotification" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -383,8 +328,8 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintLeft_toLeftOf="@id/line1"
-                    app:layout_constraintRight_toRightOf="@id/line1"
+                    app:layout_constraintLeft_toLeftOf="@id/line2"
+                    app:layout_constraintRight_toRightOf="@id/line2"
                     app:layout_constraintTop_toBottomOf="@id/emptySharedMedia" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -428,8 +373,8 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintLeft_toLeftOf="@id/line1"
-                    app:layout_constraintRight_toRightOf="@id/line1"
+                    app:layout_constraintLeft_toLeftOf="@id/line2"
+                    app:layout_constraintRight_toRightOf="@id/line2"
                     app:layout_constraintTop_toBottomOf="@id/commonGroupList" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -450,8 +395,8 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintLeft_toLeftOf="@id/line1"
-                    app:layout_constraintRight_toRightOf="@id/line1"
+                    app:layout_constraintLeft_toLeftOf="@id/line2"
+                    app:layout_constraintRight_toRightOf="@id/line2"
                     app:layout_constraintTop_toBottomOf="@id/background" />
 
                 <android.support.v7.widget.AppCompatTextView

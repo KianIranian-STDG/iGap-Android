@@ -3,21 +3,20 @@ package net.iGap.helper;
 import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,15 +31,10 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.activities.ActivityEnhanced;
-import net.iGap.activities.ActivityMain;
-import net.iGap.interfaces.ICallFinish;
-import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.viewmodel.ActivityCallViewModel;
@@ -70,7 +64,8 @@ public class HelperToolbar {
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch;
-    private AppCompatTextView groupName, groupMemberCount;
+    private AppCompatTextView groupName, groupMemberCount , profileStatus , profileTell;
+    private FloatingActionButton profileFabChat ;
     public EditText mEdtSearch;
     private TextView mChatVerifyIcon;
     private TextView mChatMuteIcon;
@@ -95,6 +90,7 @@ public class HelperToolbar {
     private boolean isShowEditTextForSearch;
     private View rootView;
     private boolean isSharedMedia;
+    private boolean isContactProfile;
 
     private HelperToolbar() {
     }
@@ -191,6 +187,11 @@ public class HelperToolbar {
 
     public HelperToolbar setGroupProfile(boolean groupProfile) {
         this.isGroupProfile = groupProfile;
+        return this;
+    }
+
+    public HelperToolbar setContactProfile(boolean contactProfile) {
+        this.isContactProfile = contactProfile;
         return this;
     }
 
@@ -318,8 +319,20 @@ public class HelperToolbar {
         return groupName;
     }
 
+    public AppCompatTextView getProfileStatus() {
+        return profileStatus;
+    }
+
+    public AppCompatTextView getProfileTell() {
+        return profileTell;
+    }
+
     public AppCompatTextView getGroupMemberCount() {
         return groupMemberCount;
+    }
+
+    public FloatingActionButton getProfileFabChat() {
+        return profileFabChat;
     }
 
     public CircleImageView getGroupAvatar() {
@@ -695,6 +708,9 @@ public class HelperToolbar {
         groupAvatar = view.getCivProfileAvatar();
         groupName = view.getTvProfileName();
         groupMemberCount = view.getTvProfileMemberCount();
+        profileStatus = view.getTvProfileStatus();
+        profileTell = view.getTvProfileTell() ;
+        profileFabChat = view.getFabChat() ;
 
         if (mTxtLogo != null)
             mTxtLogo.setText(defaultTitleText);
@@ -817,6 +833,9 @@ public class HelperToolbar {
         private CircleImageView civProfileAvatar = null  ;
         private AppCompatTextView tvProfileName ;
         private AppCompatTextView tvProfileMemberCount ;
+        private AppCompatTextView tvProfileTell ;
+        private AppCompatTextView tvProfileStatus ;
+        private FloatingActionButton fabChat ;
 
         public ViewMaker(Context ctx) {
             super(ctx);
@@ -1199,7 +1218,7 @@ public class HelperToolbar {
             if (isGroupProfile){
 
                 //extend root for adding avatar and titles
-                setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.dp160));
+                setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height_root_with_profile));
 
                 //profile big avatar
                 civProfileAvatar = new CircleImageView(getContext());
@@ -1261,6 +1280,126 @@ public class HelperToolbar {
                     set.connect(logo.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
                 }
             }
+
+            if (isContactProfile){
+
+                //extend root for adding avatar and titles
+                setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height_root_with_profile));
+
+                //profile big avatar
+                civProfileAvatar = new CircleImageView(getContext());
+                civProfileAvatar.setId(R.id.groupAvatar);
+                //civProfileAvatar.setImageResource(R.drawable.ic_cloud_space_blue);
+                addView(civProfileAvatar);
+
+                setRoot.constrainHeight(civProfileAvatar.getId() , i_Dp(R.dimen.dp120));
+                setRoot.constrainWidth(civProfileAvatar.getId() , i_Dp(R.dimen.dp120));
+                setRoot.connect(civProfileAvatar.getId() , START , PARENT_ID , START , i_Dp(R.dimen.dp14));
+                setRoot.connect(civProfileAvatar.getId() , BOTTOM , mainConstraint.getId() , BOTTOM );
+                setRoot.connect(civProfileAvatar.getId() , TOP , mainConstraint.getId() , BOTTOM );
+
+                //button to go on chat room
+                fabChat = new FloatingActionButton(getContext());
+                fabChat.setId(R.id.chi_fab_setPic);
+                fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
+                fabChat.setImageResource(R.mipmap.comment);
+                DrawableCompat.setTint(fabChat.getDrawable() , getContext().getResources().getColor(R.color.white));
+                addView(fabChat);
+
+                setRoot.constrainHeight(fabChat.getId() , WRAP_CONTENT);
+                setRoot.constrainWidth(fabChat.getId() , WRAP_CONTENT);
+
+                setRoot.connect(fabChat.getId() , END , PARENT_ID , END , i_Dp(R.dimen.dp16));
+                setRoot.connect(fabChat.getId() , TOP , mainConstraint.getId() , BOTTOM);
+                setRoot.connect(fabChat.getId() , BOTTOM , mainConstraint.getId() , BOTTOM);
+
+
+                //titles
+                tvProfileMemberCount  = new AppCompatTextView(getContext());
+                tvProfileMemberCount.setId(R.id.groupMemberCount);
+                tvProfileMemberCount.setTypeface(tfMain);
+                tvProfileMemberCount.setGravity(Gravity.LEFT);
+                tvProfileMemberCount.setSingleLine();
+                Utils.setTextSize(tvProfileMemberCount , R.dimen.smallTextSize);
+                tvProfileMemberCount.setTextColor(getContext().getResources().getColor(R.color.white));
+                addView(tvProfileMemberCount);
+
+                setRoot.constrainWidth(tvProfileMemberCount.getId() , MATCH_CONSTRAINT);
+                setRoot.constrainHeight(tvProfileMemberCount.getId() , WRAP_CONTENT);
+
+                setRoot.connect(tvProfileMemberCount.getId() , START , civProfileAvatar.getId() , END , i_Dp(R.dimen.dp8) );
+                setRoot.connect(tvProfileMemberCount.getId() , BOTTOM , mainConstraint.getId() , BOTTOM , i_Dp(R.dimen.dp1) );
+                setRoot.connect(tvProfileMemberCount.getId() , END , fabChat.getId() , START , i_Dp(R.dimen.dp4) );
+
+                tvProfileName  = new AppCompatTextView(getContext());
+                tvProfileName.setId(R.id.groupName);
+                tvProfileName.setTypeface(tfMain);
+                tvProfileName.setGravity(Gravity.LEFT);
+                tvProfileName.setSingleLine();
+                Utils.setTextSize(tvProfileName , R.dimen.standardTextSize);
+                tvProfileName.setTextColor(getContext().getResources().getColor(R.color.white));
+                addView(tvProfileName);
+
+                setRoot.constrainWidth(tvProfileName.getId() , MATCH_CONSTRAINT);
+                setRoot.constrainHeight(tvProfileName.getId() , WRAP_CONTENT);
+
+                setRoot.connect(tvProfileName.getId() , BOTTOM , tvProfileMemberCount.getId() , TOP );
+                setRoot.connect(tvProfileName.getId() , START , tvProfileMemberCount.getId() , START);
+                setRoot.connect(tvProfileName.getId() , END , tvProfileMemberCount.getId() , END);
+
+                tvProfileTell  = new AppCompatTextView(getContext());
+                tvProfileTell.setId(R.id.phoneNumber);
+                tvProfileTell.setTypeface(tfMain);
+                tvProfileTell.setGravity(Gravity.LEFT);
+                tvProfileTell.setSingleLine();
+                Utils.setTextSize(tvProfileTell , R.dimen.smallTextSize);
+                if (G.isDarkTheme)
+                    tvProfileTell.setTextColor(getContext().getResources().getColor(R.color.gray_300));
+                else
+                    tvProfileTell.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
+
+                addView(tvProfileTell);
+
+                setRoot.constrainWidth(tvProfileTell.getId() , MATCH_CONSTRAINT);
+                setRoot.constrainHeight(tvProfileTell.getId() , WRAP_CONTENT);
+
+                setRoot.connect(tvProfileTell.getId() , TOP , mainConstraint.getId() , BOTTOM , i_Dp(R.dimen.dp2) );
+                setRoot.connect(tvProfileTell.getId() , START , tvProfileMemberCount.getId() , START);
+                setRoot.connect(tvProfileTell.getId() , END , tvProfileMemberCount.getId() , END);
+
+                tvProfileStatus  = new AppCompatTextView(getContext());
+                tvProfileStatus.setId(R.id.status);
+                tvProfileStatus.setTypeface(tfMain);
+                tvProfileStatus.setGravity(Gravity.LEFT);
+                tvProfileStatus.setSingleLine();
+                Utils.setTextSize(tvProfileStatus , R.dimen.smallTextSize);
+                if (G.isDarkTheme)
+                    tvProfileStatus.setTextColor(getContext().getResources().getColor(R.color.gray_300));
+                else
+                    tvProfileStatus.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
+
+                addView(tvProfileStatus);
+
+
+                setRoot.constrainWidth(tvProfileStatus.getId() , MATCH_CONSTRAINT);
+                setRoot.constrainHeight(tvProfileStatus.getId() , WRAP_CONTENT);
+
+                setRoot.connect(tvProfileStatus.getId() , TOP , tvProfileTell.getId() , BOTTOM , i_Dp(R.dimen.dp2) );
+                setRoot.connect(tvProfileStatus.getId() , START , tvProfileMemberCount.getId() , START);
+                setRoot.connect(tvProfileStatus.getId() , END , tvProfileMemberCount.getId() , END);
+
+                if (leftIcon != null){
+                    set.connect(leftIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                }
+                if (rightIcon != null){
+                    set.connect(rightIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                }
+                if (logo != null){
+                    set.connect(logo.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                }
+            }
+
+
             //endregion profile
 
             setRoot.applyTo(this);
@@ -1432,6 +1571,18 @@ public class HelperToolbar {
 
         public AppCompatTextView getTvProfileMemberCount() {
             return tvProfileMemberCount;
+        }
+
+        public AppCompatTextView getTvProfileTell() {
+            return tvProfileTell;
+        }
+
+        public AppCompatTextView getTvProfileStatus() {
+            return tvProfileStatus;
+        }
+
+        public FloatingActionButton getFabChat() {
+            return fabChat;
         }
 
         //endregion getters
