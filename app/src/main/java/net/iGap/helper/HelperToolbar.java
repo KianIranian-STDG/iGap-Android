@@ -1303,6 +1303,7 @@ public class HelperToolbar {
                 fabChat.setId(R.id.chi_fab_setPic);
                 fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
                 fabChat.setImageResource(R.mipmap.comment);
+                fabChat.setSize(android.support.design.widget.FloatingActionButton.SIZE_MINI);
                 DrawableCompat.setTint(fabChat.getDrawable() , getContext().getResources().getColor(R.color.white));
                 addView(fabChat);
 
