@@ -294,7 +294,7 @@ public class FragmentAddStickers extends BaseFragment {
                                                             realm.close();
                                                         }
 
-                                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded()) {
+                                                        if (getAdapterPosition() == -1 || getActivity() == null || getActivity().isFinishing() || !isAdded()) {
                                                             return;
                                                         }
 
