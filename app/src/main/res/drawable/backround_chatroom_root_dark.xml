@@ -4,5 +4,5 @@
     <corners
         android:topLeftRadius="@dimen/dp8"
         android:topRightRadius="@dimen/dp8" />
-    <solid android:color="@color/gray_4c" />
+    <solid android:color="@color/navigation_dark_mode_bg" />
 </shape>
