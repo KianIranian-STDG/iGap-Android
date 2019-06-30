@@ -221,8 +221,8 @@ public class ChatCell extends ConstraintLayout {
         set.connect(cellCheckbox.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
                 ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT, 16);
 
-        set.constrainHeight(avatarImageView.getId(), i_Dp(R.dimen.dp68));
-        set.constrainWidth(avatarImageView.getId(), i_Dp(R.dimen.dp68));
+        set.constrainHeight(avatarImageView.getId(), i_Dp(R.dimen.dp60));
+        set.constrainWidth(avatarImageView.getId(), i_Dp(R.dimen.dp60));
 
         set.connect(avatarImageView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
         set.connect(avatarImageView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);

@@ -1046,7 +1046,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             rootView = new ChatCell(getContext());
-            rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80)));
+            rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp70)));
             return new ViewHolder(rootView);
         }
 
