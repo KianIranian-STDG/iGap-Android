@@ -15,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +55,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.module.AndroidUtils.closeKeyboard;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 /**
@@ -299,7 +297,7 @@ public class FragmentEditImage extends BaseFragment {
 
                 itemGalleryList.get(viewPager.getCurrentItem()).setSelected(false);
                 checkBox.setChecked(true);
-                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
 
                 StructBottomSheet item = new StructBottomSheet();
                 item.setPath(path);
@@ -386,7 +384,7 @@ public class FragmentEditImage extends BaseFragment {
             checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
         } else {
             checkBox.setChecked(true);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
         }
 
     }
@@ -413,7 +411,7 @@ public class FragmentEditImage extends BaseFragment {
                     checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
                 } else {
                     checkBox.setChecked(true);
-                    checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+                    checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
                 }
 
                 if (textImageList.containsKey(itemGalleryList.get(position).path)) {
@@ -614,7 +612,7 @@ public class FragmentEditImage extends BaseFragment {
             item.setPath(itemGalleryList.get(position).path);
             item.setId(itemGalleryList.get(position).getId());
             textImageList.put(itemGalleryList.get(position).path, item);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
             itemGalleryList.get(position).setSelected(false);
         }
         if (textImageList.size() > 0 && isChatPage) {
