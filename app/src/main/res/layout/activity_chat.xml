@@ -809,7 +809,7 @@
                 android:paddingTop="10dp"
                 android:visibility="gone"
                 android:layout_below="@id/ac_toolbars_container"
-                android:layoutDirection="locale"
+                android:layoutDirection="ltr"
                 android:background="@drawable/shape_multi_select_bg">
 
                 <TextView
