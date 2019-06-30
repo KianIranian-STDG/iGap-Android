@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -137,9 +138,17 @@ public class HelperSaveFile {
                 }
 
                 if (shouldCopy) {
-                    File file = new File(destinationPath);
-                    AndroidUtils.copyFile(src, file);
-                    MediaScannerConnection.scanFile(G.context, new String[]{file.getAbsolutePath()}, null, null);
+                    if (R.string.picture_save_to_galary == successMessage) {
+                        File file = new File(destinationPath);
+                        AndroidUtils.copyFile(src, file);
+                        MediaScannerConnection.scanFile(G.context, new String[]{file.getAbsolutePath()}, null, null);
+                    } else {
+                        File file = new File(destinationPath);
+                        Uri contentUri = Uri.fromFile(file);
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        mediaScanIntent.setData(contentUri);
+                        G.context.sendBroadcast(mediaScanIntent);
+                    }
                     Toast.makeText(G.currentActivity, successMessage, Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
