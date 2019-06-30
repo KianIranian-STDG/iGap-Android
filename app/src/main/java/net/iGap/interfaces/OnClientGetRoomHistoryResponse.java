@@ -13,7 +13,7 @@ package net.iGap.interfaces;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 
 public interface OnClientGetRoomHistoryResponse {
-    void onGetRoomHistory(long roomId, long startMessageId, long endMessageId, long reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
+    void onGetRoomHistory(long roomId, long startMessageId, long endMessageId, long reachMessageId, long messageIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
 
     void onGetRoomHistoryError(int majorCode, int minorCode, long messageIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
 }

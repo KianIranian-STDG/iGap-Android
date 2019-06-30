@@ -45,6 +45,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             RequestClientGetRoomHistory.IdentityClientGetRoomHistory identityParams = ((RequestClientGetRoomHistory.IdentityClientGetRoomHistory) identity);
             final long roomId = identityParams.roomId;
             final long reachMessageId = identityParams.reachMessageId;
+            final long messageIdGetHistory = identityParams.messageIdGetHistory;
             final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction = identityParams.direction;
 
             final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
@@ -62,7 +63,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                 }
             });
             realm.close();
-            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, direction);
+            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory,  direction);
 
         } else {
             RequestClientGetRoomHistory.RequestData requestData = (RequestClientGetRoomHistory.RequestData) identity;
