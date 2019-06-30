@@ -3,7 +3,7 @@
     android:id="@+id/replayLayoutAboveEditText"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp52"
-    android:background="@color/gray_4c"
+    android:background="@color/navigation_dark_mode_bg"
     android:clickable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal">
@@ -38,6 +38,7 @@
         android:layout_marginTop="@dimen/dp4"
       android:singleLine="true"
       android:text="SAMPLE TEXT"
+        android:gravity="left"
       android:textColor="@color/green"
       android:textSize="@dimen/dp12"
       android:textStyle="bold" />
@@ -48,6 +49,7 @@
       android:layout_height="wrap_content"
       android:ellipsize="end"
       android:maxLines="1"
+        android:gravity="left"
         android:layout_marginBottom="@dimen/dp4"
       android:singleLine="true"
       android:text="SAMPLE TEXT"
@@ -64,7 +66,7 @@
       android:gravity="center"
       android:textSize="@dimen/dp18"
       android:text="@string/md_close_button"
-      android:textColor="@color/gray_3c"
+      android:textColor="@color/gray_300"
       android:textAppearance="@style/TextIconAppearance.all" />
 
 </LinearLayout>

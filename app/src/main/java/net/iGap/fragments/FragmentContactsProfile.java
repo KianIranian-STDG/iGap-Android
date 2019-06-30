@@ -115,7 +115,7 @@ public class FragmentContactsProfile extends BaseFragment {
         HelperToolbar t = HelperToolbar.create().setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.video_call_icon, R.string.voice_call_icon)
-                .setGroupProfile(true)
+                .setContactProfile(true)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -184,6 +184,19 @@ public class FragmentContactsProfile extends BaseFragment {
             if (getActivity() != null && userRoomId != null) {
                 new GoToChatActivity(userRoomId).startActivity(getActivity());
             }
+        });
+
+        if (viewModel.phone != null && (!viewModel.phone.get().equals("0")|| viewModel.showNumber.get())){
+            t.getProfileTell().setText(viewModel.phone.get());
+            t.getProfileTell().setOnClickListener(v -> viewModel.onPhoneNumberClick());
+        }else {
+            t.getProfileTell().setVisibility(View.GONE);
+        }
+
+        t.getProfileStatus().setText(viewModel.username.get());
+
+        t.getProfileFabChat().setOnClickListener(v -> {
+            viewModel.onClickGoToChat();
         });
 
         /*binding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
@@ -440,7 +453,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
-                                showPopupPhoneNumber(binding.phoneNumber, viewModel.phone.get());
+                                showPopupPhoneNumber(t.getProfileTell(), viewModel.phone.get());
                             }
 
                             @Override

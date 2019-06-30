@@ -10,6 +10,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnUserIVandGetScore;
+import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
 
@@ -72,11 +73,11 @@ public class FragmentIVandProfileViewModel {
         initData();
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
-            public void getScore(int score) {
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        pointsTv.set(String.valueOf(score));
+                        pointsTv.set(String.valueOf(score.getScore()));
                     }
                 });
             }

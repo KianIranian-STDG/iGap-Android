@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.interfaces.OnUserIVandGetScore;
+import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.request.RequestUserIVandGetScore;
 
 public class UserScoreViewModel extends ViewModel {
@@ -30,10 +31,10 @@ public class UserScoreViewModel extends ViewModel {
         //Todo:move to repository
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
-            public void getScore(int score) {
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
                 G.handler.post(() -> {
-                    userScorePointer.setValue((score % 1000) / 360);
-                    userScore.setValue(String.valueOf(score));
+                    userScorePointer.setValue((score.getScore() % 1000) / 360);
+                    userScore.setValue(String.valueOf(score.getScore()));
                 });
             }
 

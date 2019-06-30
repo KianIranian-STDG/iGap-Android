@@ -35,6 +35,7 @@
       android:layout_height="wrap_content"
       android:ellipsize="end"
       android:maxLines="1"
+        android:gravity="left"
         android:layout_marginTop="@dimen/dp4"
       android:singleLine="true"
       android:text="SAMPLE TEXT"
@@ -50,6 +51,7 @@
       android:maxLines="1"
         android:layout_marginBottom="@dimen/dp4"
       android:singleLine="true"
+        android:gravity="left"
       android:text="SAMPLE TEXT"
       android:textColor="@color/black90"
       android:textSize="@dimen/dp10" />
@@ -64,7 +66,7 @@
       android:gravity="center"
       android:textSize="@dimen/dp18"
       android:text="@string/md_close_button"
-      android:textColor="@color/gray_3c"
+      android:textColor="@color/gray_4c"
       android:textAppearance="@style/TextIconAppearance.all" />
 
 </LinearLayout>

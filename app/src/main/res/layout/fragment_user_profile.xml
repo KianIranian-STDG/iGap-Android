@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -825,7 +826,9 @@
                 android:id="@+id/profileViewGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:constraint_referenced_ids="fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName" />
+                app:constraint_referenced_ids="fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <android.support.constraint.Group
                 android:id="@+id/editProfileView"
