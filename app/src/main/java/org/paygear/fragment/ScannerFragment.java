@@ -231,8 +231,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
     @Override
     public void onFragmentResult(Fragment fragment, Bundle bundle) {
-        if (fragment instanceof AccountPaymentDialog ||
-                fragment instanceof MyQRFragment) {
+        if (fragment instanceof AccountPaymentDialog || fragment instanceof FactorPaymentDialog || fragment instanceof CreditPaymentDialog || fragment instanceof NewAccountPaymentDialog
+                ||fragment instanceof MyQRFragment) {
             if (bundle != null) {
                 isVisible = bundle.getBoolean("Visible");
             } else {
