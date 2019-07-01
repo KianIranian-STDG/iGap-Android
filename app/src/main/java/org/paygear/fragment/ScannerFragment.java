@@ -328,18 +328,18 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                                     Intent intent = new Intent(Intent.ACTION_VIEW);
                                     intent.setData(Uri.parse(content));
                                     startActivity(intent);
+                                }else if(content.contains("hyperme.ir")){
+                                    try {
+                                        Uri uri = Uri.parse(content);
+                                        List<String> pathSegments = uri.getPathSegments();
+                                        loadHyperMeQrData(uri.getLastPathSegment(),Long.parseLong(pathSegments.get(0)),pathSegments.get(1));
+                                    }catch (Exception e){
+                                        Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
+                                    }
                                 } else {
                                     Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
                                 }
 
-                            } else if(content.contains("hyperme.ir")){
-                                try {
-                                    Uri uri = Uri.parse(content);
-                                    List<String> pathSegments = uri.getPathSegments();
-                                    loadHyperMeQrData(uri.getLastPathSegment(),Long.parseLong(pathSegments.get(0)),pathSegments.get(1));
-                                }catch (Exception e){
-                                    Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
-                                }
                             } else {
                                 String value = content.substring(content.lastIndexOf("/"));
                                 Matcher matcher = Pattern.compile("\\d+").matcher(value);
