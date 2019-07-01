@@ -100,6 +100,7 @@ import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
+import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGetWallpaper;
@@ -170,7 +171,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -1529,7 +1530,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
-        G.onClientCondition = this;
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onUnreadChange = this;
@@ -1736,31 +1736,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         realm.close();
-        for (Fragment f : pages) {
-            if (f instanceof FragmentMain) {
-                FragmentMain mainFragment = (FragmentMain) f;
-                switch (mainFragment.mainType) {
-                    case all:
-                        mainFragment.onAction(MainAction.downScrool);
-                        break;
-                    case chat:
-                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case group:
-                        if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case channel:
-                        if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                }
-            }
-        }
 
         /**
          * don't send update status for own message
@@ -1778,26 +1753,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onMessageFailed(final long roomId, RealmRoomMessage roomMessage) {
         //empty
-    }
-
-    //************************
-    @Override
-    public void onClientCondition() {
-
-        notifySubFragmentForCondition();
-    }
-
-    @Override
-    public void onClientConditionError() {
-        notifySubFragmentForCondition();
-    }
-
-    private void notifySubFragmentForCondition() {
-        for (Fragment f : pages) {
-            if (f instanceof FragmentMain) {
-                ((FragmentMain) f).onAction(MainAction.clinetCondition);
-            }
-        }
     }
 
     //*************************************************************

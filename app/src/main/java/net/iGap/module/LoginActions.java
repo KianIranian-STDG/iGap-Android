@@ -51,6 +51,9 @@ public class LoginActions {
      * try login to server and do common actions
      */
     public static void login() {
+        if (!G.ISOK) {
+            return;
+        }
 
         G.onUserLogin = new OnUserLogin() {
             @Override

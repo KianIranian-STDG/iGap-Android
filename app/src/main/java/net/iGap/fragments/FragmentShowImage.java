@@ -390,7 +390,7 @@ public class FragmentShowImage extends BaseFragment {
         }
         RealmRoomMessage realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(realmRoomMessage);
 
-        if (realmRoomMessageFinal.getMessage() != null && !realmRoomMessageFinal.getMessage().isEmpty()) {
+        if (realmRoomMessageFinal != null && realmRoomMessageFinal.isValid() && realmRoomMessageFinal.getMessage() != null && !realmRoomMessageFinal.getMessage().isEmpty()) {
             txtImageDesc.setText(realmRoomMessageFinal.getMessage());
             txtImageDesc.setVisibility(View.VISIBLE);
         } else {
@@ -852,7 +852,7 @@ public class FragmentShowImage extends BaseFragment {
                         public void run() {
                             progress.withProgress(0);
                             progress.setVisibility(View.GONE);
-                            if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
+                            if (rm.isValid() && rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
                                 imgPlay.setVisibility(View.VISIBLE);
                                 //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
                             }

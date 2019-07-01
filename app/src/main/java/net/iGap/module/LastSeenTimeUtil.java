@@ -208,14 +208,14 @@ public class LastSeenTimeUtil {
         }*/
         String str;
         if (HelperCalander.isPersianUnicode) {
-            str = TimeUnit.MILLISECONDS.toMinutes(difference) + " " + "\u200F" + G.fragmentActivity.getResources().getString(R.string.minute_ago);
+            str = TimeUnit.MILLISECONDS.toMinutes(difference) + " " + "\u200F" + G.context.getResources().getString(R.string.minute_ago);
         } else {
 
             long minute = TimeUnit.MILLISECONDS.toMinutes(difference);
-            String minuteAgo = G.fragmentActivity.getResources().getString(R.string.minute_ago);
+            String minuteAgo = G.context.getResources().getString(R.string.minute_ago);
 
             if (minute >= 2) {
-                minuteAgo = G.fragmentActivity.getResources().getString(R.string.minutes_ago);
+                minuteAgo = G.context.getResources().getString(R.string.minutes_ago);
             }
 
             str = minute + " " + minuteAgo;

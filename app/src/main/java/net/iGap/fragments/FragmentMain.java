@@ -15,6 +15,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,7 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -114,7 +118,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements ToolbarListener, ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
@@ -131,6 +135,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private String switcher;
     private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
+    private long latestScrollToTop;
 
     private HelperToolbar mHelperToolbar;
     private boolean isChatMultiSelectEnable = false;
@@ -379,34 +384,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     //***************************************************************************************************************************
-
-    @Override
-    public void onAction(ActivityMain.MainAction action) {
-
-        if (mRecyclerView == null) {
-            return;
-        }
-
-        switch (action) {
-
-            case downScrool:
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (firstVisibleItem < 5) {
-                            mRecyclerView.scrollToPosition(0);
-                        }
-                    }
-                });
-
-                break;
-            case clinetCondition:
-
-                break;
-        }
-    }
 
 
     //***************************************************************************************************************************
