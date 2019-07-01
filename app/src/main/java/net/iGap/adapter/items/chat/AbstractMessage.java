@@ -226,10 +226,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         RealmRoomMessage f = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
                 equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
         if (f != null) {
-            if (f.getAttachment() != null && f.getAttachment().isValid())
-                realmAttachment = getRealmChat().copyFromRealm(f.getAttachment());
-            else
-                realmAttachment = null;
+            realmAttachment = f.getAttachment();
         }
         if (mMessage.forwardedFrom != null) {
             myText = new SpannableString(mMessage.forwardedFrom.getMessage());
