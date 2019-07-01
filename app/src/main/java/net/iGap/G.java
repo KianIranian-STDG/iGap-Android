@@ -25,14 +25,11 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import net.iGap.activities.ActivityCustomError;
@@ -52,7 +49,6 @@ import net.iGap.request.RequestWrapper;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
-import org.paygear.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -378,6 +374,7 @@ public class G extends MultiDexApplication {
     public static OnPayment onPayment;
     public static OnMplResult onMplResult;
     public static OnVersionCallBack onVersionCallBack;
+    public static OnContactImport onContactImport;
     /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;

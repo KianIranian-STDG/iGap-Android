@@ -20,8 +20,10 @@ import net.iGap.helper.LooperThreadHelper;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
+import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
 
 import io.realm.Realm;
@@ -30,6 +32,7 @@ import static net.iGap.G.userId;
 
 public class UserInfoResponse extends MessageHandler {
 
+    private static final String TAG = "aabolfazlContact";
     public int actionId;
     public Object message;
     public Object identity;
@@ -50,6 +53,11 @@ public class UserInfoResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
+                if (identity != null && identity instanceof String) {
+                    if (identity.equals(RequestUserContactImport.KEY))
+                        RealmContacts.putOrUpdate(realm, builder.getUser());
+                }
+
                 RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
                 RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
             }
@@ -90,6 +98,9 @@ public class UserInfoResponse extends MessageHandler {
                         if (G.onUserInfoResponse != null) {
                             G.onUserInfoResponse.onUserInfo(builder.getUser(), (String) identity);
                         }
+                        if (identity.equals(RequestUserContactImport.KEY) && G.onContactImport != null) {
+                            G.onContactImport.onContactInfo(builder.getUser());
+                        }
 
                     } else if (identity instanceof RequestUserInfo.UserInfoBody){
                         if (((RequestUserInfo.UserInfoBody) identity).onComplete != null) {
@@ -129,6 +140,8 @@ public class UserInfoResponse extends MessageHandler {
     public void timeOut() {
         super.timeOut();
         G.onUserInfoResponse.onUserInfoTimeOut();
+        if (G.onContactImport!=null)
+            G.onContactImport.onTimeOut();
     }
 
     @Override
@@ -153,6 +166,8 @@ public class UserInfoResponse extends MessageHandler {
             ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "", "ERROR");
             ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "", "");
         }
+        if (G.onContactImport != null)
+            G.onContactImport.onError(majorCode,minorCode);
     }
 }
 

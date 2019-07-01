@@ -13,11 +13,15 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.module.Contacts;
 import net.iGap.proto.ProtoError;
+import net.iGap.proto.ProtoUserContactsImport;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
+import net.iGap.request.RequestUserInfo;
 
 public class UserContactsImportResponse extends MessageHandler {
 
+    private static final String TAG = "aabolfazlContact";
     public int actionId;
     public Object message;
     public Object identity;
@@ -34,10 +38,17 @@ public class UserContactsImportResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
+        final ProtoUserContactsImport.UserContactsImportResponse.Builder builder = (ProtoUserContactsImport.UserContactsImportResponse.Builder) message;
+
         boolean getContactList = true;
-        if (identity != null) {
-            getContactList = (Boolean) identity;
-        }
+        if (identity != null)
+            if (identity instanceof Boolean) {
+                getContactList = (Boolean) identity;
+            } else if (identity instanceof String) {
+                if (identity.equals(RequestUserContactImport.KEY)) {
+                    new RequestUserInfo().contactImportWithCallBack(builder.getRegisteredContacts(0).getUserId());
+                }
+            }
 
 
         if (G.onQueueSendContact != null) {

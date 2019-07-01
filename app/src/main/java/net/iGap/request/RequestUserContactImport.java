@@ -17,8 +17,19 @@ import java.util.List;
 
 public class RequestUserContactImport {
 
+    public static final String KEY = "AddContact";
+
     public void contactImport(List<StructListOfContact> itemContactList, boolean force, boolean getContactList) {
         RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force), getContactList);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void contactImport(List<StructListOfContact> itemContactList, boolean force, String key) {
+        RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force), key);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
