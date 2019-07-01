@@ -58,6 +58,7 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
  */
 public class HelperToolbar {
 
+    private ConstraintLayout mRootConstraint ;
     private AppCompatTextView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
     private EmojiTextViewE mTxtChatUserName;
@@ -91,6 +92,7 @@ public class HelperToolbar {
     private View rootView;
     private boolean isSharedMedia;
     private boolean isContactProfile;
+    private boolean isBigSearchBox;
 
     private HelperToolbar() {
     }
@@ -134,6 +136,13 @@ public class HelperToolbar {
     public HelperToolbar setSearchBoxShown(boolean searchBoxShown) {
         this.isSearchBoxShown = searchBoxShown;
         this.isShowEditTextForSearch = true;
+        return this;
+    }
+
+    public HelperToolbar setSearchBoxShown(boolean searchBoxShown ,boolean isShowEditTextForSearch , boolean isBigSearchBox) {
+        this.isSearchBoxShown = searchBoxShown;
+        this.isShowEditTextForSearch = isShowEditTextForSearch;
+        this.isBigSearchBox = isBigSearchBox ;
         return this;
     }
 
@@ -273,6 +282,14 @@ public class HelperToolbar {
 
     public EditText getEditTextSearch() {
         return mEdtSearch;
+    }
+
+    public RelativeLayout getmSearchBox() {
+        return mSearchBox;
+    }
+
+    public TextView getmBtnClearSearch() {
+        return mBtnClearSearch;
     }
 
     public View getRootView() {
@@ -554,12 +571,16 @@ public class HelperToolbar {
         }
 
         if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+
             Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+
             mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
         } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
-            mTxtLogo.setTypeface(tfFontIcon);
+
             Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+
+            mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
 
         } else {
@@ -661,7 +682,7 @@ public class HelperToolbar {
         }
     }
 
-    private void setSearchEditableMode(boolean state) {
+    public void setSearchEditableMode(boolean state) {
 
         if (state) {
 
@@ -683,6 +704,8 @@ public class HelperToolbar {
     }
 
     private void initViews(ViewMaker view) {
+
+        mRootConstraint = view.getMainConstraint() ;
 
         mLeftBtn = view.getLeftIcon() ;
         mRightBtn = view.getRightIcon();
@@ -1030,11 +1053,20 @@ public class HelperToolbar {
                 searchLayout.setGravity(Gravity.CENTER_VERTICAL);
                 searchLayout.setId(R.id.view_toolbar_search_layout);
 
-                setRoot.constrainHeight(searchLayout.getId(), i_Dp(R.dimen.toolbar_search_box_size));
+                if (isBigSearchBox)
+                    setRoot.constrainHeight(searchLayout.getId(), i_Dp(R.dimen.toolbar_search_box_big_size));
+                else
+                    setRoot.constrainHeight(searchLayout.getId(), i_Dp(R.dimen.toolbar_search_box_size));
+
                 setRoot.constrainWidth(searchLayout.getId(), MATCH_CONSTRAINT);
 
-                setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp52));
-                setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp52));
+                if (isBigSearchBox){
+                    setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp40));
+                    setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp40));
+                }else{
+                    setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp52));
+                    setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp52));
+                }
 
                 setRoot.connect(searchLayout.getId(), START, mainConstraint.getId(), START);
                 setRoot.connect(searchLayout.getId(), END, mainConstraint.getId(), END);
@@ -1073,6 +1105,7 @@ public class HelperToolbar {
                 Utils.setTextSize(tvClearSearch, R.dimen.largeTextSize);
                 RelativeLayout.LayoutParams lp = setLayoutParams(tvClearSearch, i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp2));
                 lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, searchLayout.getId());
+                lp.addRule(RelativeLayout.CENTER_VERTICAL, searchLayout.getId());
                 tvClearSearch.setLayoutParams(lp);
                 searchLayout.addView(tvClearSearch);
 
@@ -1088,6 +1121,12 @@ public class HelperToolbar {
                     edtSearch.setTextColor(getContext().getResources().getColor(R.color.black));
                     edtSearch.setHintTextColor(getContext().getResources().getColor(R.color.gray_9d));
                     tvSearch.setTextColor(getContext().getResources().getColor(R.color.gray_9d));
+                }
+
+                if (isBigSearchBox){
+                    Utils.setTextSize(tvSearch , R.dimen.standardTextSize);
+                    Utils.setTextSize(edtSearch , R.dimen.standardTextSize);
+                    Utils.setTextSize(tvClearSearch , R.dimen.xlargeTextSize);
                 }
             }
             //endregion search box
@@ -1303,7 +1342,7 @@ public class HelperToolbar {
                 fabChat.setId(R.id.chi_fab_setPic);
                 fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
                 fabChat.setImageResource(R.mipmap.comment);
-                fabChat.setSize(android.support.design.widget.FloatingActionButton.SIZE_MINI);
+                fabChat.setSize(FloatingActionButton.SIZE_MINI);
                 DrawableCompat.setTint(fabChat.getDrawable() , getContext().getResources().getColor(R.color.white));
                 addView(fabChat);
 

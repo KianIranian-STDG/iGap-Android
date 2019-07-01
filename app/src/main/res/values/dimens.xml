@@ -4,21 +4,21 @@
   <!--Toolbar helper -->
 
   <dimen name="toolbar_radius">10dp</dimen>
-  <dimen name="toolbar_height">58dp</dimen>
-  <dimen name="margin_for_below_layouts_of_toolbar">48dp</dimen>
-  <dimen name="margin_for_below_layouts_of_toolbar_with_search">52dp</dimen>
-  <dimen name="margin_for_below_layouts_of_toolbar_with_room_selected_mode">88dp</dimen>
-  <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media">96dp</dimen>
-  <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media_with_player">146dp</dimen>
+  <dimen name="toolbar_height">@dimen/dp60</dimen>
+  <dimen name="margin_for_below_layouts_of_toolbar">@dimen/dp48</dimen>
+  <dimen name="margin_for_below_layouts_of_toolbar_with_search">@dimen/dp52</dimen>
+  <dimen name="margin_for_below_layouts_of_toolbar_with_room_selected_mode">@dimen/dp88</dimen>
+  <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media">@dimen/dp95</dimen>
+  <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media_with_player">@dimen/dp140</dimen>
   <dimen name="toolbar_height_call_state">60dp</dimen>
-  <dimen name="toolbar_height_with_search">58dp</dimen>
-  <dimen name="toolbar_height_root_with_search">78dp</dimen>
-  <dimen name="toolbar_height_with_avatar">78dp</dimen>
-  <dimen name="toolbar_height_root_with_avatar">164dp</dimen>
-  <dimen name="toolbar_icon_size">40dp</dimen>
-  <dimen name="toolbar_icon_padding">10dp</dimen>
-  <dimen name="toolbar_icon_margin">4dp</dimen>
-  <dimen name="toolbar_igap_icon_textSize">@dimen/dp36</dimen>
+  <dimen name="toolbar_height_with_search">@dimen/dp60</dimen>
+  <dimen name="toolbar_height_root_with_search">@dimen/dp80</dimen>
+  <dimen name="toolbar_height_with_avatar">@dimen/dp80</dimen>
+  <dimen name="toolbar_height_root_with_avatar">@dimen/dp160</dimen>
+  <dimen name="toolbar_icon_size">@dimen/dp40</dimen>
+  <dimen name="toolbar_icon_padding">@dimen/dp10</dimen>
+  <dimen name="toolbar_icon_margin">@dimen/dp4</dimen>
+  <dimen name="toolbar_igap_icon_textSize">@dimen/dp28</dimen>
 
   <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>
   <dimen name="ivand_profile_toolbar_txt_textSize">14sp</dimen>
@@ -124,15 +124,16 @@
 
   <dimen name="toggles_height">@dimen/dp18</dimen>
   <dimen name="toggles_width">@dimen/dp28</dimen>
-    <dimen name="toolbar_search_box_size">24dp</dimen>
+    <dimen name="toolbar_search_box_size">@dimen/dp24</dimen>
+    <dimen name="toolbar_search_box_big_size">@dimen/dp32</dimen>
 
   <dimen name="standardTextSize">@dimen/dp14</dimen>
   <dimen name="smallTextSize">@dimen/dp12</dimen>
   <dimen name="verySmallTextSize">@dimen/dp10</dimen>
   <dimen name="largeTextSize">@dimen/dp16</dimen>
   <dimen name="xlargeTextSize">@dimen/dp20</dimen>
-  <dimen name="toolbar_chat_avatar_size">40dp</dimen>
-    <dimen name="toolbar_txt_name_max_width">130dp</dimen>
+  <dimen name="toolbar_chat_avatar_size">@dimen/dp40</dimen>
+    <dimen name="toolbar_txt_name_max_width">@dimen/dp130</dimen>
     <dimen name="round_button_max_width">@dimen/dp88</dimen>
   <dimen name="round_buttons_margin">@dimen/dp6</dimen>
   <dimen name="round_buttons_large_padding">10dp</dimen>

@@ -16,8 +16,8 @@
             android:id="@+id/sfl_recycleview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="true"
-            android:paddingTop="@dimen/dp10"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/dp24"
             android:scrollbars="vertical" />
 
         <LinearLayout
@@ -80,8 +80,10 @@
 
 
     <LinearLayout
+        android:layout_below="@id/sfl_layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <LinearLayout
@@ -146,6 +148,12 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/sfl_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:minHeight="@dimen/toolbar_height"/>
 
 </RelativeLayout>
 
