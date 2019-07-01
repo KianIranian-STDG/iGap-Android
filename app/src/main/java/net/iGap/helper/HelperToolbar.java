@@ -58,6 +58,7 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
  */
 public class HelperToolbar {
 
+    private ConstraintLayout mRootConstraint ;
     private AppCompatTextView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
     private EmojiTextViewE mTxtChatUserName;
@@ -281,6 +282,14 @@ public class HelperToolbar {
 
     public EditText getEditTextSearch() {
         return mEdtSearch;
+    }
+
+    public RelativeLayout getmSearchBox() {
+        return mSearchBox;
+    }
+
+    public TextView getmBtnClearSearch() {
+        return mBtnClearSearch;
     }
 
     public View getRootView() {
@@ -563,19 +572,13 @@ public class HelperToolbar {
 
         if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
 
-            if (isBigSearchBox)
-                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize_smaller);
-            else
-                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
 
             mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
         } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
 
-            if (isBigSearchBox)
-                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize_smaller);
-            else
-                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
 
             mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
@@ -701,6 +704,8 @@ public class HelperToolbar {
     }
 
     private void initViews(ViewMaker view) {
+
+        mRootConstraint = view.getMainConstraint() ;
 
         mLeftBtn = view.getLeftIcon() ;
         mRightBtn = view.getRightIcon();

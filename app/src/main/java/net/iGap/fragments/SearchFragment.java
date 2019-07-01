@@ -20,6 +20,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -79,6 +81,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     private long index = 500;
     private String preventRepeatSearch = "";
     private ContentLoadingProgressBar loadingProgressBar;
+    private HelperToolbar toolbar ;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -105,7 +108,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         if (G.isDarkTheme)
             view.findViewById(R.id.sfl_ll_toolbar).setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
 
-        HelperToolbar toolbar = HelperToolbar.create()
+        toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
@@ -116,6 +119,8 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         layoutToolbar.addView(toolbar.getView());
 
         edtSearch = toolbar.getEditTextSearch();
+
+        setAnimation();
 
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
@@ -132,20 +137,43 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
         txtEmptyListComment.setText(R.string.empty_message3);
 
-        G.handler.postDelayed(new Runnable() {
+        recyclerView = view.findViewById(R.id.sfl_recycleview);
+    }
+
+    private void setAnimation() {
+
+
+        Animation animation = new ScaleAnimation(
+                0.91f , 1f ,
+                0.85f, 1f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+        );
+
+        animation.setDuration(500);
+        animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void run() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                toolbar.getmSearchBox().clearAnimation();
 
                 toolbar.setSearchEditableMode(true);
-
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(toolbar.getEditTextSearch(), InputMethodManager.SHOW_IMPLICIT);
+
             }
-        }, 390);
 
+            @Override
+            public void onAnimationRepeat(Animation animation) {
 
+            }
+        });
 
-        recyclerView = view.findViewById(R.id.sfl_recycleview);
+        toolbar.getmSearchBox().startAnimation(animation);
     }
 
     private void initRecycleView() {
