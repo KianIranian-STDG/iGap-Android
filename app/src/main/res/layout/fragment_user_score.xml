@@ -119,7 +119,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/rankTitle"
-                    style="?textTitleColorSettingTheme"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -131,7 +131,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/scoreTitle"
-                    style="?textTitleColorSettingTheme"
+                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
