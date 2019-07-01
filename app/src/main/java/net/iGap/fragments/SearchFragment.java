@@ -11,15 +11,12 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,12 +37,11 @@ import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.CircleImageView;
-import net.iGap.module.MaterialDesignTextView;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -63,7 +59,6 @@ import net.iGap.request.RequestClientSearchUsername;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Case;
@@ -72,10 +67,8 @@ import io.realm.RealmResults;
 
 import static net.iGap.fragments.FragmentChat.messageId;
 
-public class SearchFragment extends BaseFragment {
+public class SearchFragment extends BaseFragment implements ToolbarListener {
 
-    MaterialDesignTextView btnClose;
-    RippleView rippleDown;
     private FastAdapter fastAdapter;
     private EditText edtSearch;
     private ArrayList<StructSearch> list = new ArrayList<>();
@@ -112,6 +105,17 @@ public class SearchFragment extends BaseFragment {
         if (G.isDarkTheme)
             view.findViewById(R.id.sfl_ll_toolbar).setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
 
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setSearchBoxShown(true , true , true)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.sfl_layout_toolbar);
+        layoutToolbar.addView(toolbar.getView());
+
+        edtSearch = toolbar.getEditTextSearch();
 
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
@@ -128,49 +132,18 @@ public class SearchFragment extends BaseFragment {
 
         txtEmptyListComment.setText(R.string.empty_message3);
 
-        edtSearch = view.findViewById(R.id.sfl_edt_search);
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                fillList(editable.toString());
-            }
-        });
-
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                edtSearch.requestFocus();
+
+                toolbar.setSearchEditableMode(true);
+
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(toolbar.getEditTextSearch(), InputMethodManager.SHOW_IMPLICIT);
             }
-        }, 250);
+        }, 390);
 
 
-        btnClose = view.findViewById(R.id.sfl_btn_close);
-        rippleDown = view.findViewById(R.id.sfl_ripple_done);
-        rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                if (edtSearch.getText().toString().length() == 0) {
-                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(rippleDown.getWindowToken(), 0);
-                    G.fragmentActivity.onBackPressed();
-                } else {
-                    edtSearch.setText("");
-                }
-            }
-        });
 
         recyclerView = view.findViewById(R.id.sfl_recycleview);
     }
@@ -768,5 +741,28 @@ public class SearchFragment extends BaseFragment {
         public RealmAvatar avatar;
         public ProtoGlobal.Room.Type roomType;
         public SearchType type = SearchType.header;
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        G.fragmentActivity.onBackPressed();
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+
+    }
+
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+        InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+        fillList(text);
     }
 }

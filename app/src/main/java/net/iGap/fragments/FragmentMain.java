@@ -894,7 +894,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         if (getActivity() != null) {
             Fragment fragment = SearchFragment.newInstance();
             try {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
+                        .setAnimated(true)
+                        .setAnimation(R.anim.fade_in , R.anim.fade_out , R.anim.fade_in , R.anim.fade_out)
+                        .load();
             } catch (Exception e) {
                 e.getStackTrace();
             }

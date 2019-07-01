@@ -18,7 +18,8 @@
   <dimen name="toolbar_icon_size">@dimen/dp40</dimen>
   <dimen name="toolbar_icon_padding">@dimen/dp10</dimen>
   <dimen name="toolbar_icon_margin">@dimen/dp4</dimen>
-  <dimen name="toolbar_igap_icon_textSize">@dimen/dp36</dimen>
+  <dimen name="toolbar_igap_icon_textSize">@dimen/dp32</dimen>
+  <dimen name="toolbar_igap_icon_textSize_smaller">@dimen/dp28</dimen>
 
   <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>
   <dimen name="ivand_profile_toolbar_txt_textSize">14sp</dimen>
@@ -124,7 +125,8 @@
 
   <dimen name="toggles_height">@dimen/dp18</dimen>
   <dimen name="toggles_width">@dimen/dp28</dimen>
-    <dimen name="toolbar_search_box_size">24dp</dimen>
+    <dimen name="toolbar_search_box_size">@dimen/dp24</dimen>
+    <dimen name="toolbar_search_box_big_size">@dimen/dp32</dimen>
 
   <dimen name="standardTextSize">@dimen/dp14</dimen>
   <dimen name="smallTextSize">@dimen/dp12</dimen>
