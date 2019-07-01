@@ -39,6 +39,7 @@ android {
         }
     }
 
+
     compileOptions {
         targetCompatibility 1.8 // never don't decrease it
         sourceCompatibility 1.8
@@ -67,6 +68,12 @@ android {
     }
 
     flavorDimensions "default"
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 
     productFlavors {
         GooglePlay { // 32 and 64 bit ndk compile
