@@ -46,7 +46,7 @@ public class TestFragment extends Fragment implements OnUnreadChange {
         loadinView = view.findViewById(R.id.loadingContent);
 
         Log.wtf(this.getClass().getName(), "initTabStrip");
-        new Handler().postDelayed(() -> initTabStrip(),1000);
+        /*new Handler().postDelayed(() -> */initTabStrip()/*,1000)*/;
         Log.wtf(this.getClass().getName(), "initTabStrip");
 
         loadinView.setVisibility(View.GONE);

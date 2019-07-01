@@ -151,7 +151,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -406,7 +406,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
                     isChinesPhone();
             }
-//        setTheme(R.style.AppThemeTranslucent);
             /*Log.wtf(this.getClass().getName(),"isFirstPassCode");*/
             if (G.isFirstPassCode) {
                 openActivityPassCode();
@@ -443,7 +442,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 return;
             }
 
-        //checkAppAccount();
             /*Log.wtf(this.getClass().getName(),"getPhonePermision");*/
             try {
                 HelperPermission.getPhonePermision(this, null);
@@ -1225,26 +1223,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
     }
 
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
-    }
-
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
         if (!isDisable) {
             ActivityMain.onBackPressedListener = onBackPressedListener;
@@ -1352,6 +1330,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         try {
             startService(new Intent(this, ServiceContact.class));
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
