@@ -2796,16 +2796,21 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        RealmRoomMessage.ClearAllMessage(getRealmChat(), false, mRoomId);
                         resetMessagingValue();
                         setDownBtnGone();
-                        recyclerView.addOnScrollListener(scrollListener);
-                        saveMessageIdPositionState(0);
-                        /**
-                         * get history from server
-                         */
-                        topMore = true;
-                        getOnlineMessage(0, UP);
+                        RealmRoomMessage.ClearAllMessageRoomAsync(getRealmChat(), mRoomId, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                recyclerView.addOnScrollListener(scrollListener);
+                                saveMessageIdPositionState(0);
+                                /**
+                                 * get history from server
+                                 */
+                                topMore = true;
+                                getOnlineMessage(0, UP);
+                            }
+                        });
+
                     }
                 });
 

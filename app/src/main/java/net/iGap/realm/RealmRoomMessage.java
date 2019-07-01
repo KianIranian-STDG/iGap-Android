@@ -464,44 +464,41 @@ public class RealmRoomMessage extends RealmObject {
         return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
     }
 
-    public static void ClearAllMessage(Realm realm, boolean deleteAllMessage, final long roomId) {
-
-        //+Realm realm = Realm.getDefaultInstance();
-        if (deleteAllMessage) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmQuery<RealmRoomMessage> roomRealmQuery = realm.where(RealmRoomMessage.class);
-                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                        if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
-                            roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId());
-                        }
-
-                        if (realmRoom.getFirstUnreadMessage() != null && realmRoom.getFirstUnreadMessage().getForwardMessage() == null && realmRoom.getFirstUnreadMessage().getReplyTo() == null) {
-                            roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getFirstUnreadMessage().getMessageId());
-                        }
+    public static void ClearAllMessage(Realm realm) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<RealmRoomMessage> roomRealmQuery = realm.where(RealmRoomMessage.class);
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
+                        roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId());
                     }
-                    roomRealmQuery.findAll().deleteAllFromRealm();
-                }
-            });
-        } else {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
 
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId()).findAll().deleteAllFromRealm();
-                        } else {
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
-                        }
+                    if (realmRoom.getFirstUnreadMessage() != null && realmRoom.getFirstUnreadMessage().getForwardMessage() == null && realmRoom.getFirstUnreadMessage().getReplyTo() == null) {
+                        roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getFirstUnreadMessage().getMessageId());
                     }
                 }
-            });
-        }
+                roomRealmQuery.findAll().deleteAllFromRealm();
+            }
+        });
+    }
 
-        //realm.close();
+    public static void ClearAllMessageRoomAsync(Realm realm, final long roomId, Realm.Transaction.OnSuccess onSuccess) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId()).findAll().deleteAllFromRealm();
+                    } else {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+                    }
+                }
+            }
+        } , onSuccess);
     }
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
