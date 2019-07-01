@@ -18,6 +18,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -139,6 +141,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private List<RealmRoom> mSelectedRoomList = new ArrayList<>();
     private ViewGroup mLayoutMultiSelectedActions;
     private TextView mBtnRemoveSelected;
+    private boolean isToolbarSearchAnimationInProccess ;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -346,8 +349,35 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                                 progressBar.setVisibility(View.VISIBLE);
                         }
                     }
-                } else {
+                } /*else {
                     mRecyclerView.removeOnScrollListener(onScrollListener);
+                }*/
+
+                //check if music player was enable disable scroll detecting for search box
+                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
+
+                    if (!mHelperToolbar.getmSearchBox().isShown()){
+                        visibleToolbarSearchWithAnimation();
+                    }
+
+                    return;
+                }
+
+                //check recycler scroll for search box animation
+                if (dy <= 0) {
+
+                    // Scrolling up
+                    if (!isToolbarSearchAnimationInProccess && !mHelperToolbar.getmSearchBox().isShown()){
+                        visibleToolbarSearchWithAnimation();
+                    }
+
+                } else  {
+
+                    // Scrolling down
+                    if (!isToolbarSearchAnimationInProccess && mHelperToolbar.getmSearchBox().isShown()){
+                        goneToolbarSearchWithAnimation();
+                    }
+
                 }
             }
         };
@@ -375,6 +405,72 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                 }
             }
         };
+
+    }
+
+    private void visibleToolbarSearchWithAnimation() {
+
+        mHelperToolbar.getmSearchBox().setVisibility(View.VISIBLE);
+
+        Animation animation = new ScaleAnimation(
+                0f , 1f ,
+                0f, 1f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+        );
+
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isToolbarSearchAnimationInProccess = true ;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isToolbarSearchAnimationInProccess = false ;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        mHelperToolbar.getmSearchBox().startAnimation(animation);
+
+    }
+
+    private void goneToolbarSearchWithAnimation() {
+
+        Animation animation = new ScaleAnimation(
+                1f , 0f ,
+                1f, 0f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+        );
+
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isToolbarSearchAnimationInProccess = true ;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isToolbarSearchAnimationInProccess = false ;
+                mHelperToolbar.getmSearchBox().setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        mHelperToolbar.getmSearchBox().startAnimation(animation);
 
     }
 

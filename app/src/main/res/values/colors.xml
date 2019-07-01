@@ -244,7 +244,7 @@
     <color name="not_now_button_normal">#f44336</color>
     <color name="not_now_button_selected">#a12c23</color>
     <color name="toolbar_player_base_color">#468DA7</color>
-    <color name="toolbar_player_background">#EFEFEF</color>
+    <color name="toolbar_player_background">#E6E6E6</color>
 
     <color name="send_message_time_dark">#777777</color>
     <color name="receive_message_time_dark">#848484</color>

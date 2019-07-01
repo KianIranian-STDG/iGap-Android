@@ -90,7 +90,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.search_fragment_layout, container, false));
+        return inflater.inflate(R.layout.search_fragment_layout, container, false);
     }
 
     @Override
