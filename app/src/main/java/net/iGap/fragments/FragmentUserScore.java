@@ -165,7 +165,7 @@ public class FragmentUserScore extends BaseFragment {
                     title.setText(iVandScore.getEnName());
                 }
 
-                count.setText(iVandScore.getScore() + getString(R.string.point));
+                count.setText(iVandScore.getScore() + " " + getString(R.string.point));
             }
         }
     }

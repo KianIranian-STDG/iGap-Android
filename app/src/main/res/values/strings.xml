@@ -1895,4 +1895,5 @@
     <string name="no_item_selected">No item selected.</string>
     <string name="subscriber" >Subscribers</string>
     <string name="point"> points</string>
+    <string name="rank">Rank</string>
 </resources>

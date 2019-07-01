@@ -24,11 +24,16 @@ public class UserScoreViewModel extends ViewModel {
     //ui
     public MutableLiveData<Integer> userScorePointer = new MutableLiveData<>();
     public MutableLiveData<Integer> userRankPointer = new MutableLiveData<>();
+    private String of ;
 
     public UserScoreViewModel() {
 
+        of = "of ";
+        if (G.selectedLanguage.equals("fa"))
+            of ="از " ;
+
         userRank.setValue("0");
-        totalRank.setValue("of 0");
+        totalRank.setValue(of + "0");
         //Todo:move to repository
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
@@ -37,7 +42,7 @@ public class UserScoreViewModel extends ViewModel {
                     userScorePointer.setValue((score.getScore() % 1000) / 360);
                     userRankPointer.setValue((score.getUserRank() * 360) / score.getTotalRank());
                     userScore.setValue(String.valueOf(score.getScore()));
-                    totalRank.setValue("of " + score.getTotalRank());
+                    totalRank.setValue(of + score.getTotalRank());
                     userRank.setValue(String.valueOf(score.getUserRank()));
                     ivandScore.setValue(score.getScoresList());
                 });

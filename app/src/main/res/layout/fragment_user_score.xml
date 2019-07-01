@@ -123,7 +123,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
-                    android:text="Rank"
+                    android:text="@string/rank"
+                    android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/rankView"
                     app:layout_constraintRight_toRightOf="@id/rankView"
                     app:layout_constraintTop_toBottomOf="@id/rankView" />
@@ -134,7 +135,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
-                    android:text="Score"
+                    android:textSize="@dimen/standardTextSize"
+                    android:text="@string/score"
                     app:layout_constraintLeft_toLeftOf="@id/scoreView"
                     app:layout_constraintRight_toRightOf="@id/scoreView"
                     app:layout_constraintTop_toBottomOf="@id/scoreView" />
