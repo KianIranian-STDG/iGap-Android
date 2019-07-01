@@ -61,6 +61,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup,supportsRtl">
 
+
         <receiver
             android:name=".module.CustomButtonListener"
             android:exported="false" />
@@ -119,7 +120,6 @@
             -->
 
         </activity>
-
         <activity
             android:name="org.paygear.WalletActivity"
             android:screenOrientation="portrait"

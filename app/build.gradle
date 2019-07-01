@@ -18,7 +18,7 @@ repositories {
 
 apply plugin: 'realm-android'
 
-apply plugin : 'kotlin-android'
+apply plugin: 'kotlin-android'
 
 
 android {
@@ -205,3 +205,4 @@ configurations.all {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android-extensions'

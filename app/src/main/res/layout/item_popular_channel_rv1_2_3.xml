@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_margin="2dp"
+    app:cardCornerRadius="@dimen/dp4"
+    app:cardElevation="@dimen/dp2"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="@dimen/dp8"
+        android:padding="@dimen/dp4">
+
+        <net.iGap.module.CircleImageView
+            android:id="@+id/circle_item_popular_rv"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/image_sample" />
+
+
+        <TextView
+            android:id="@+id/tv_item_popular_rv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:minLines="2"
+            android:textColor="@color/black"
+            android:text="باشگاه خبرنگاران جوان"
+            android:textSize="8sp" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
