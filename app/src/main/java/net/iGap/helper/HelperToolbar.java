@@ -22,6 +22,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -99,6 +101,7 @@ public class HelperToolbar {
     private boolean isContactProfile;
     private boolean isBigSearchBox;
     private boolean isTabletMode ;
+    public boolean isToolbarSearchAnimationInProccess;
 
     private HelperToolbar() {
     }
@@ -288,6 +291,54 @@ public class HelperToolbar {
         }
 
         return rootView;
+
+    }
+
+    public void animateSearchBox(boolean isGone){
+
+        if (!isGone)
+            mSearchBox.setVisibility(View.VISIBLE);
+
+        Animation animation;
+
+        if (isGone){
+            animation = new ScaleAnimation(
+                    1f , 0f ,
+                    1f, 0f,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f
+            );
+        }else {
+            animation = new ScaleAnimation(
+                    0f, 1f,
+                    0f, 1f,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f
+            );
+        }
+
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isToolbarSearchAnimationInProccess = true ;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isToolbarSearchAnimationInProccess = false ;
+
+                if (isGone)
+                    mSearchBox.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        mSearchBox.startAnimation(animation);
 
     }
 
