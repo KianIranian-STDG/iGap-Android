@@ -118,6 +118,22 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
 
+        rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                //check recycler scroll for search box animation
+                if (dy <= 0) {
+                    // Scrolling up
+                    mHelperToolbar.animateSearchBox(false);
+                } else  {
+                    // Scrolling down
+                    mHelperToolbar.animateSearchBox(true);
+                }
+            }
+        });
+
         if (!getUserVisibleHint()) {
             if (!isInit) {
                 setRefreshing(true);
