@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -13,6 +14,7 @@ import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentShowImage;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 
 import static net.iGap.fragments.FragmentCall.OPEN_IN_FRAGMENT_MAIN;
@@ -152,6 +154,9 @@ public class HelperFragment {
             fragmentTransaction.addToBackStack(tag);
         }
 
+        Log.wtf(this.getClass().getName(), "fragment name: " + fragment.getClass().getName());
+        Log.wtf(this.getClass().getName(), "resource id is roomListFrame: " + (R.id.roomListFrame == resourceContainer));
+
         if (replace) {
             fragmentTransaction.replace(resourceContainer, fragment, tag);
         } else {
@@ -275,7 +280,7 @@ public class HelperFragment {
             return 0;
         }
 
-        if (G.twoPaneMode) {
+        if (G.twoPaneMode && G.isLandscape) {
             if (fragmentClassName.equals(FragmentMain.class.getName())) {
                 return R.id.roomListFrame;
             } else if (fragmentClassName.equals(FragmentShowImage.class.getName())) {
@@ -289,6 +294,8 @@ public class HelperFragment {
                 }
                 //TODO: fixed it in tablet mode load fragment Chat
                 return 0/*R.id.am_frame_chat_container*/;
+            } else if (fragmentClassName.equals(BottomNavigationFragment.class.getName())){
+                return R.id.mainFrame;
             } else {
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.setBackChatVisibility(true);

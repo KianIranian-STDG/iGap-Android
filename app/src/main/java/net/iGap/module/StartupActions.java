@@ -18,6 +18,8 @@ import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -39,6 +41,8 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,42 +100,46 @@ public final class StartupActions {
 
     public StartupActions() {
 
-        /*Log.wtf(this.getClass().getName(),"manageSettingPreferences");*/
+        Log.wtf(this.getClass().getName(),"manageSettingPreferences");
         new Thread(this::manageSettingPreferences).start();
-/*        Log.wtf(this.getClass().getName(),"manageSettingPreferences");
-        Log.wtf(this.getClass().getName(),"detectDeviceType");*/
-        new Thread(this::detectDeviceType);
-        /*Log.wtf(this.getClass().getName(),"detectDeviceType");
-        Log.wtf(this.getClass().getName(),"makeFolder");*/
+        Log.wtf(this.getClass().getName(),"manageSettingPreferences");
+        Log.wtf(this.getClass().getName(),"EmojiManager");
+        EmojiManager.install(new IosEmojiProvider());
+        Log.wtf(this.getClass().getName(),"EmojiManager");
+        Log.wtf(this.getClass().getName(),"detectDeviceType");
+        new Thread(this::detectDeviceType).start();
+        Log.wtf(this.getClass().getName(),"detectDeviceType");
+        Log.wtf(this.getClass().getName(),"makeFolder");
         new Thread(StartupActions::makeFolder).start();
-        /*Log.wtf(this.getClass().getName(),"makeFolder");
-        Log.wtf(this.getClass().getName(),"initializeGlobalVariables");*/
-        initializeGlobalVariables();
-        /*Log.wtf(this.getClass().getName(),"initializeGlobalVariables");
-        Log.wtf(this.getClass().getName(),"manageConnection");*/
+        Log.wtf(this.getClass().getName(),"makeFolder");
+        Log.wtf(this.getClass().getName(),"initializeGlobalVariables");
+        new Thread(this::initializeGlobalVariables).start();
+        Log.wtf(this.getClass().getName(),"initializeGlobalVariables");
+        Log.wtf(this.getClass().getName(),"manageConnection");
         new Thread(ConnectionManager::manageConnection).start();
-        /*Log.wtf(this.getClass().getName(),"manageConnection");
-        Log.wtf(this.getClass().getName(),"configDownloadManager");*/
+        Log.wtf(this.getClass().getName(),"manageConnection");
+        Log.wtf(this.getClass().getName(),"configDownloadManager");
         new Thread(this::configDownloadManager).start();
-        /*Log.wtf(this.getClass().getName(),"configDownloadManager");
-        Log.wtf(this.getClass().getName(),"manageTime");*/
+        Log.wtf(this.getClass().getName(),"configDownloadManager");
+        Log.wtf(this.getClass().getName(),"manageTime");
         new Thread(this::manageTime).start();
-        /*Log.wtf(this.getClass().getName(),"manageTime");
-        Log.wtf(this.getClass().getName(),"getiGapAccountInstance");*/
+        Log.wtf(this.getClass().getName(),"manageTime");
+        Log.wtf(this.getClass().getName(),"getiGapAccountInstance");
         new Thread(StartupActions::getiGapAccountInstance).start();
-        /*Log.wtf(this.getClass().getName(),"getiGapAccountInstance");
-        Log.wtf(this.getClass().getName(),"CallObserver");*/
-        new Thread(CallObserver::new);
+        Log.wtf(this.getClass().getName(),"getiGapAccountInstance");
+        Log.wtf(this.getClass().getName(),"CallObserver");
+        new Thread(CallObserver::new).start();
         Log.wtf(this.getClass().getName(),"CallObserver");
         Log.wtf(this.getClass().getName(),"HelperUploadFile");
-        new Thread(HelperUploadFile::new);
+        new Thread(HelperUploadFile::new).start();
         Log.wtf(this.getClass().getName(),"HelperUploadFile");
 
         if (realmConfiguration()) {
             Log.wtf(this.getClass().getName(),"executeTransactionAsync");
-            Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm) {
+                public void execute(@NotNull Realm realm) {
                     /*Log.wtf(this.getClass().getName(),"execute");*/
                     try {
                         long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
@@ -159,6 +167,7 @@ public final class StartupActions {
                     Log.wtf(this.getClass().getName(),"execute");
                 }
             });
+            realm.close();
             Log.wtf(this.getClass().getName(),"executeTransactionAsync");
 
             Log.wtf(this.getClass().getName(),"checkDataUsage");
@@ -573,18 +582,11 @@ public final class StartupActions {
     }
 
     private void initializeGlobalVariables() {
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
+        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
+        imageLoader = ImageLoader.getInstance();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
-                ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
-                imageLoader = ImageLoader.getInstance();
-
-                HelperFillLookUpClass.fillArrays();
-            }
-        }).start();
-
+        HelperFillLookUpClass.fillArrays();
     }
 
     /**

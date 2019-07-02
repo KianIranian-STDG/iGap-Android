@@ -1,12 +1,9 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,26 +12,25 @@ import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
+import net.iGap.adapter.ViewPagerAdapter;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.realm.RealmRoom;
 
-public class TestFragment extends Fragment implements OnUnreadChange {
+public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
 
+    //Todo: create viewModel for this it was test class and become main class :D
     private ViewPager mViewPager;
     private BottomNavigation bottomNavigation;
-    private View loadinView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         G.onUnreadChange = this;
-        return inflater.inflate(R.layout.fragment_test, container, false);
+        return inflater.inflate(R.layout.fragment_bottom_navigation, container, false);
     }
 
     @Override
@@ -43,13 +39,10 @@ public class TestFragment extends Fragment implements OnUnreadChange {
 
         mViewPager = view.findViewById(R.id.viewpager);
         bottomNavigation = view.findViewById(R.id.bn_main_bottomNavigation);
-        loadinView = view.findViewById(R.id.loadingContent);
 
         Log.wtf(this.getClass().getName(), "initTabStrip");
-        /*new Handler().postDelayed(() -> */initTabStrip()/*,1000)*/;
+        initTabStrip();
         Log.wtf(this.getClass().getName(), "initTabStrip");
-
-        loadinView.setVisibility(View.GONE);
     }
 
     @Override
@@ -111,14 +104,17 @@ public class TestFragment extends Fragment implements OnUnreadChange {
             }
         });
 
-        mViewPager.setAdapter(new SampleFragmentPagerAdapter(getFragmentManager()));
+        mViewPager.setAdapter(new ViewPagerAdapter(getFragmentManager()));
         mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
         /*mViewPager.setOffscreenPageLimit(1);*/
-        bottomNavigation.setVisibility(View.VISIBLE);
 
         if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
+    }
+
+    public void goToUserProfile(){
+        mViewPager.setCurrentItem(HelperCalander.isPersianUnicode ? 0 : 4);
     }
 
     @Override
@@ -143,36 +139,5 @@ public class TestFragment extends Fragment implements OnUnreadChange {
             }
         });
 
-        /*Log.i("aabolfazl", "onChange: " + RealmRoom.getAllUnreadCount());*/
-    }
-
-    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        SampleFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            int position = HelperCalander.isPersianUnicode ? i : 4 - i;
-            switch (position) {
-                case 0:
-                    return new FragmentUserProfile();
-                case 1:
-                    return DiscoveryFragment.newInstance(0);
-                case 2:
-                    return FragmentMain.newInstance(FragmentMain.MainType.all);
-                case 3:
-                    return FragmentCall.newInstance(true);
-                default:
-                    return RegisteredContactsFragment.newInstance(false);
-
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
     }
 }

@@ -134,14 +134,6 @@ public class Theme {
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
-        /*if (G.themeColor == DARK) {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-        }*/
-        EmojiManager.install(new IosEmojiProvider());
-
-
         switch (G.themeColor) {
             case CUSTOM:
                 setColor(false,

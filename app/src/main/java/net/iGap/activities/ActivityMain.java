@@ -26,12 +26,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +55,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.fragments.TestFragment;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -71,15 +71,12 @@ import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnClientCondition;
-import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGetWallpaper;
@@ -95,7 +92,7 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.module.AppUtils;
+import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
@@ -162,30 +159,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private static long oldTime;
     public static boolean isUseCamera = false;
     public static boolean waitingForConfiguration = false;
-    /*private FrameLayout frameChatContainer;*/
-    /*private FrameLayout frameFragmentBack;*/
-    /*private FrameLayout frameFragmentContainer;*/
     private SharedPreferences sharedPreferences;
-    private ProgressBar contentLoading;
     private Realm mRealm;
     private boolean isNeedToRegister = false;
-    /*private ViewPager mViewPager;*/
     private int retryConnectToWallet = 0;
-    /*private BottomNavigation bottomNavigation;*/
-
-    public void setWeight(View view, int value) {
-
-        /*ConstraintSet set = new ConstraintSet();
-        set.clone((ConstraintLayout) findViewById(R.id.rootFrame));
-        set.setHorizontalWeight(view.getId(),value);
-        set.applyTo(findViewById(R.id.rootFrame));
-
-        if (value > 0) {
-            view.setVisibility(View.VISIBLE);
-        } else {
-            view.setVisibility(View.GONE);
-        }*/
-    }
 
     public static void setMediaLayout() {
         try {
@@ -358,24 +335,27 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.wtf(this.getClass().getName(),"onCreate");
-        Log.wtf(this.getClass().getName(),"super.onCreate");
+        Log.wtf(this.getClass().getName(), "onCreate");
+        Log.wtf(this.getClass().getName(), "super.onCreate");
         super.onCreate(savedInstanceState);
-        Log.wtf(this.getClass().getName(),"super.onCreate");
-        Log.wtf(this.getClass().getName(),"setContentView");
+        Log.wtf(this.getClass().getName(), "super.onCreate");
+        Log.wtf(this.getClass().getName(), "setContentView");
         setContentView(R.layout.activity_main);
-        Log.wtf(this.getClass().getName(),"setContentView");
+        Log.wtf(this.getClass().getName(), "setContentView");
+        Log.wtf(this.getClass().getName(), "getSharedPreferences");
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        Log.wtf(this.getClass().getName(), "getSharedPreferences");
         if (G.ISOK) {
-            Log.wtf(this.getClass().getName(),"PHONE_STATE");
+            Log.wtf(this.getClass().getName(), "PHONE_STATE");
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
 
             registerReceiver(myPhonStateService, intentFilter);
-            Log.wtf(this.getClass().getName(),"PHONE_STATE");
+            Log.wtf(this.getClass().getName(), "PHONE_STATE");
             G.refreshWalletBalance = this;
 
-            Log.wtf(this.getClass().getName(),"RINGER_MODE_CHANGED_ACTION");
+            Log.wtf(this.getClass().getName(), "RINGER_MODE_CHANGED_ACTION");
             BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -389,18 +369,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
             registerReceiver(audioManagerReciver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
-            Log.wtf(this.getClass().getName(),"RINGER_MODE_CHANGED_ACTION");
+            Log.wtf(this.getClass().getName(), "RINGER_MODE_CHANGED_ACTION");
 
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
                     isChinesPhone();
             }
-            Log.wtf(this.getClass().getName(),"isFirstPassCode");
+            Log.wtf(this.getClass().getName(), "isFirstPassCode");
             if (G.isFirstPassCode) {
                 openActivityPassCode();
             }
-            Log.wtf(this.getClass().getName(),"isFirstPassCode");
+            Log.wtf(this.getClass().getName(), "isFirstPassCode");
 
             RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
                 @Override
@@ -410,9 +390,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            Log.wtf(this.getClass().getName(),"addEventListener");
+            Log.wtf(this.getClass().getName(), "addEventListener");
             EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
-            Log.wtf(this.getClass().getName(),"addEventListener");
+            Log.wtf(this.getClass().getName(), "addEventListener");
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             finishActivity = new FinishActivity() {
@@ -432,16 +412,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 return;
             }
 
-            Log.wtf(this.getClass().getName(),"getPhonePermision");
+            Log.wtf(this.getClass().getName(), "getPhonePermision");
             try {
                 HelperPermission.getPhonePermision(this, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.wtf(this.getClass().getName(),"getPhonePermision");
+            Log.wtf(this.getClass().getName(), "getPhonePermision");
 
 
-            Log.wtf(this.getClass().getName(),"get user info");
+            Log.wtf(this.getClass().getName(), "get user info");
             RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
@@ -456,28 +436,27 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 finish();
                 return;
             }
-            Log.wtf(this.getClass().getName(),"get user info");
+            Log.wtf(this.getClass().getName(), "get user info");
 
 
             if (!G.userLogin) {
                 /**
                  * set true mFirstRun for get room history after logout and login again
                  */
-                Log.wtf(this.getClass().getName(),"DELETE_FOLDER_BACKGROUND");
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-                boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
-
-                if (deleteFolderBackground) {
-                    deleteContentFolderChatBackground();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                    editor.apply();
-                }
-                Log.wtf(this.getClass().getName(),"DELETE_FOLDER_BACKGROUND");
+                Log.wtf(this.getClass().getName(), "DELETE_FOLDER_BACKGROUND");
+                new Thread(() -> {
+                    boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+                    if (deleteFolderBackground) {
+                        deleteContentFolderChatBackground();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+                        editor.apply();
+                    }
+                }).start();
+                Log.wtf(this.getClass().getName(), "DELETE_FOLDER_BACKGROUND");
             }
 
-            Log.wtf(this.getClass().getName(),"two panel mode");
+            Log.wtf(this.getClass().getName(), "two panel mode");
             if (G.twoPaneMode) {
                 G.isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
@@ -522,17 +501,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 };
-                Log.wtf(this.getClass().getName(),"two panel mode");
-            }/* else {
-                Log.wtf(this.getClass().getName(),"one panel mode");
-                frameChatContainer.setVisibility(View.GONE);
-                Log.wtf(this.getClass().getName(),"one panel mode");
-            }*/
+                Log.wtf(this.getClass().getName(), "two panel mode");
+            }
+            Log.wtf(this.getClass().getName(), "one panel mode");
 
             isOpenChatBeforeSheare = false;
-            Log.wtf(this.getClass().getName(),"checkIntent");
+            Log.wtf(this.getClass().getName(), "checkIntent");
             checkIntent(getIntent());
-            Log.wtf(this.getClass().getName(),"checkIntent");
+            Log.wtf(this.getClass().getName(), "checkIntent");
 
             Log.wtf(this.getClass().getName(), "initTabStrip");
             initTabStrip();
@@ -544,7 +520,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             G.onPayment = this;
 
-            Log.wtf(this.getClass().getName(),"KEY_GET_CONTACT");
+            Log.wtf(this.getClass().getName(), "KEY_GET_CONTACT");
             sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
             boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
             /**
@@ -581,12 +557,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.wtf(this.getClass().getName(),"KEY_GET_CONTACT");
             }
+            Log.wtf(this.getClass().getName(), "KEY_GET_CONTACT");
 
-            Log.wtf(this.getClass().getName(),"cancelNotification");
+            Log.wtf(this.getClass().getName(), "cancelNotification");
             HelperNotification.getInstance().cancelNotification();
-            Log.wtf(this.getClass().getName(),"cancelNotification");
+            Log.wtf(this.getClass().getName(), "cancelNotification");
             G.onGroupAvatarResponse = this;
 
             G.onConvertToGroup = new OpenFragment() {
@@ -612,12 +588,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
             G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-            Log.wtf(this.getClass().getName(),"connectionState");
+            Log.wtf(this.getClass().getName(), "connectionState");
             connectionState();
-            Log.wtf(this.getClass().getName(),"connectionState");
-            Log.wtf(this.getClass().getName(),"checkKeepMedia");
-            checkKeepMedia();
-            Log.wtf(this.getClass().getName(),"checkKeepMedia");
+            Log.wtf(this.getClass().getName(), "connectionState");
+            Log.wtf(this.getClass().getName(), "checkKeepMedia");
+            new Thread(this::checkKeepMedia).start();
+            Log.wtf(this.getClass().getName(), "checkKeepMedia");
 
 
             G.onVerifyNewDevice = new OnVerifyNewDevice() {
@@ -650,20 +626,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
 
-            Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");
-            new Thread(() -> {
-                boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
-                if (isDefaultBg){
-                    if (G.isDarkTheme){
-                        sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
-                    }else{
-                        getWallpaperAsDefault();
-                    }
+            Log.wtf(this.getClass().getName(), "KEY_PATH_CHAT_BACKGROUND");
+            boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
+            if (isDefaultBg) {
+                if (G.isDarkTheme) {
+                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
+                } else {
+                    getWallpaperAsDefault();
                 }
-            }).start();
-            Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");
+            }
+            Log.wtf(this.getClass().getName(), "KEY_PATH_CHAT_BACKGROUND");
 
-            Log.wtf(this.getClass().getName(),"getFavoritSticker");
+            Log.wtf(this.getClass().getName(), "getFavoritSticker");
             ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
                 @Override
                 public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
@@ -679,14 +653,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 }
             });
-            Log.wtf(this.getClass().getName(),"getFavoritSticker");
+            Log.wtf(this.getClass().getName(), "getFavoritSticker");
 
         } else {
             TextView textView = new TextView(this);
             setContentView(textView);
             showToast(textView);
         }
-        Log.wtf(this.getClass().getName(),"onCreate");
+        Log.wtf(this.getClass().getName(), "onCreate");
     }
 
     private void showToast(View view) {
@@ -728,6 +702,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
     }
+
     private void getWallpaperAsDefault() {
         try {
             RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
@@ -762,11 +737,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 getImageListFromServer();
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            e.printStackTrace();
         } catch (NullPointerException e2) {
-
+            e2.printStackTrace();
         } catch (Exception e3) {
-
+            e3.printStackTrace();
         }
 
     }
@@ -778,7 +753,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
         editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
@@ -1036,10 +1010,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //******************************************************************************************************************************
 
     private void initTabStrip() {
-        new HelperFragment(getSupportFragmentManager(), new TestFragment()).load(true);
-        if (G.twoPaneMode) {
-            new HelperFragment(getSupportFragmentManager(), new FragmentMain()).load(true);
-        }
+        new HelperFragment(getSupportFragmentManager(), new BottomNavigationFragment()).load(true);
     }
 
 
@@ -1072,7 +1043,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             enterPassword();
         } else if (!isActivityEnterPassCode && !G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();
-            SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
             long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
             long calculatorTimeLock = currentTime - oldTime;
 
@@ -1162,9 +1132,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void initComponent() {
-        contentLoading = findViewById(R.id.loadingContent);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         G.onMapRegisterState = new OnMapRegisterState() {
@@ -1278,12 +1246,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
 
         designLayout(chatLayoutMode.none);
-
-
-        if (contentLoading != null) {
-            AppUtils.setProgresColler(contentLoading);
-        }
-
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
@@ -1478,16 +1440,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //*************************************************************
 
-    public void openNavigation() {
-
-    }
-
     public void designLayout(final chatLayoutMode mode) {
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (G.twoPaneMode) {
+        if (G.twoPaneMode) {
+            findViewById(R.id.roomListFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);
+            if (G.isLandscape) {
+                new HelperFragment(getSupportFragmentManager(), FragmentMain.newInstance(FragmentMain.MainType.all)).load(true);
+            } else {
+                //todo: check if exist fragment remove it
+                /*new HelperFragment(getSupportFragmentManager(),new FragmentMain()).remove();*/
+            }
                     /*if (frameFragmentContainer != null) {
                         if (frameFragmentContainer.getChildCount() == 0) {
                             *//*if (frameFragmentBack != null) {
@@ -1502,20 +1463,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         /*if (frameFragmentBack != null) {
                             frameFragmentBack.setVisibility(View.GONE);
                         }*/
-                    /*}*/
+            /*}*/
 
-                    if (G.isLandscape) {
-                        /*setWeight(frameChatContainer, 2);*/
-                        /*setWeight(frameFragmentContainer, 1);*/
-                    } else {
+            if (G.isLandscape) {
+                /*setWeight(frameChatContainer, 2);*/
+                /*setWeight(frameFragmentContainer, 1);*/
+            } else {
 
-                        if (mode == chatLayoutMode.show) {
-                            /*setWeight(frameChatContainer, 1);*/
-                            /*setWeight(frameFragmentContainer, 0);*/
-                        } else if (mode == chatLayoutMode.hide) {
-                            /*setWeight(frameChatContainer, 0);*/
-                            /*setWeight(frameFragmentContainer, 1);*/
-                        } else {
+                if (mode == chatLayoutMode.show) {
+                    /*setWeight(frameChatContainer, 1);*/
+                    /*setWeight(frameFragmentContainer, 0);*/
+                } else if (mode == chatLayoutMode.hide) {
+                    /*setWeight(frameChatContainer, 0);*/
+                    /*setWeight(frameFragmentContainer, 1);*/
+                } else {
                             /*if (frameChatContainer.getChildCount() > 0) {
                                 setWeight(frameChatContainer, 1);
                                 *//*setWeight(frameFragmentContainer, 0);*//*
@@ -1523,11 +1484,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 setWeight(frameChatContainer, 0);
                                 *//*setWeight(frameFragmentContainer, 1);*//*
                             }*/
-                        }
-                    }
                 }
             }
-        });
+        }
     }
 
     @Override
@@ -1580,29 +1539,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onFinance(final boolean mplActive, final boolean walletActive) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                if (mplActive) {
-//                    findViewById(R.id.lm_ll_payment).setVisibility(View.VISIBLE);
-//                } else {
-//                    findViewById(R.id.lm_ll_payment).setVisibility(View.GONE);
-//                }
-//
-//                if (walletActive) {
-//                    findViewById(R.id.lm_ll_wallet).setVisibility(View.VISIBLE);
-//                } else {
-//                    findViewById(R.id.lm_ll_wallet).setVisibility(View.GONE);
-//                }
-
-//                if (!G.isMplActive && !G.isWalletActive) {
-//                    findViewById(R.id.lm_view_Line).setVisibility(View.GONE);
-//                } else {
-//                    findViewById(R.id.lm_view_Line).setVisibility(View.VISIBLE);
-//                }
-
-            }
-        });
     }
 
     @Override
@@ -1794,5 +1730,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public interface OnBackPressedListener {
         void doBack();
+    }
+
+    public void goToUserProfile(){
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof BottomNavigationFragment){
+            ((BottomNavigationFragment) fragment).goToUserProfile();
+        }
     }
 }

@@ -1896,4 +1896,5 @@
     <string name="subscriber" >Subscribers</string>
     <string name="point"> points</string>
     <string name="rank">Rank</string>
+    <string name="tablet_empty_chat_description">Get Started \nWelcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
 </resources>

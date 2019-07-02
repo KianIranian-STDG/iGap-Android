@@ -83,7 +83,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private ProtoSignalingGetLog.SignalingGetLog.Filter mSelectedStatus = ProtoSignalingGetLog.SignalingGetLog.Filter.ALL;
 
     private TextView mBtnAllCalls, mBtnMissedCalls , mBtnIncomingCalls , mBtnOutgoingCalls , mBtnCanceledCalls;
-    private HelperToolbar mHelperToolbar;
     private RealmResults<RealmCallLog> realmResults ;
     private CallAdapter callAdapter;
 
@@ -143,7 +142,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
     private void addToolbar() {
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
@@ -178,13 +177,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         isInit = true;
         view.findViewById(R.id.pb_load).setVisibility(View.GONE);
-        /*view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);*/
         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
-
-        //G.onCallLogClear = this;
-        //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
-
-        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
 
         imgCallEmpty = (AppCompatImageView) view.findViewById(R.id.img_icCall);
@@ -217,7 +210,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 if (realmResults.size() > 0) {
                     imgCallEmpty.setVisibility(View.GONE);
                     empty_call.setVisibility(View.GONE);
-
                 } else {
                     imgCallEmpty.setVisibility(View.VISIBLE);
                     empty_call.setVisibility(View.VISIBLE);
