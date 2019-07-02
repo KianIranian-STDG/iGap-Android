@@ -296,10 +296,13 @@ public class HelperToolbar {
 
     public void animateSearchBox(boolean isGone){
 
+        //dont animate when anim is in process
         if (isToolbarSearchAnimationInProccess) return;
 
+        //ban to animate show when view is show
         if ( mSearchBox.isShown() && !isGone) return;
 
+        //ban to animate gone when view is gone
         if ( !mSearchBox.isShown() && isGone) return;
 
         if (!isGone) mSearchBox.setVisibility(View.VISIBLE);
