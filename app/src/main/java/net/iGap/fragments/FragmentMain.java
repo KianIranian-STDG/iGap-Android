@@ -211,11 +211,20 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         if(MusicPlayer.playerStateChangeListener != null){
             MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
                 notifyChatRoomsList();
+
+                if (!mHelperToolbar.getmSearchBox().isShown()){
+                    visibleToolbarSearchWithAnimation();
+                }
             });
         }
 
         G.callStripLayoutVisiblityListener.observe(this , isVisible -> {
            notifyChatRoomsList();
+
+            if (!mHelperToolbar.getmSearchBox().isShown()){
+                visibleToolbarSearchWithAnimation();
+            }
+
         });
 
         //just check at first time page loaded
@@ -954,6 +963,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
+
+            if (!mHelperToolbar.getmSearchBox().isShown()){
+                visibleToolbarSearchWithAnimation();
+            }
 
         }
     }
