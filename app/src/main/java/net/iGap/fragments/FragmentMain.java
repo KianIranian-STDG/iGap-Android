@@ -373,20 +373,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
                 //check recycler scroll for search box animation
                 if (dy <= 0) {
-
                     // Scrolling up
-                    if (!mHelperToolbar.isToolbarSearchAnimationInProccess && !mHelperToolbar.getmSearchBox().isShown()){
-                        mHelperToolbar.animateSearchBox(false);
-
-                    }
-
+                    mHelperToolbar.animateSearchBox(false);
                 } else  {
-
                     // Scrolling down
-                    if (!mHelperToolbar.isToolbarSearchAnimationInProccess && mHelperToolbar.getmSearchBox().isShown()){
-                        mHelperToolbar.animateSearchBox(true);
-                    }
-
+                    mHelperToolbar.animateSearchBox(true);
                 }
             }
         };
