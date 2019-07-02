@@ -84,7 +84,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private ProtoSignalingGetLog.SignalingGetLog.Filter mSelectedStatus = ProtoSignalingGetLog.SignalingGetLog.Filter.ALL;
 
     private TextView mBtnAllCalls, mBtnMissedCalls , mBtnIncomingCalls , mBtnOutgoingCalls , mBtnCanceledCalls;
-    private HelperToolbar mHelperToolbar;
     private RealmResults<RealmCallLog> realmResults ;
     private CallAdapter callAdapter;
 
@@ -144,15 +143,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private void addToolbar() {
 
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.edit_icon)
+                .setLeftIcon(R.string.more_icon)
                 .setRightIcons(R.string.add_icon)
                 .setLogoShown(true)
                 .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
+        layoutToolbar.addView(toolbar.getView());
 
     }
 
