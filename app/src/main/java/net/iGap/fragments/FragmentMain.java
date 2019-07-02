@@ -15,9 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +36,6 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -359,7 +355,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 }*/
 
                 //check if music player was enable disable scroll detecting for search box
-                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
+                if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
 
                     if (!mHelperToolbar.getmSearchBox().isShown()){
                         visibleToolbarSearchWithAnimation();
