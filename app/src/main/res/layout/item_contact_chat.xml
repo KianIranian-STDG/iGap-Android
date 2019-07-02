@@ -52,7 +52,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="?textTitleColorSettingTheme"
+        style="?textSubColorSettingTheme"
         android:id="@+id/tv_itemContactChat_userPhoneNumber"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp20"

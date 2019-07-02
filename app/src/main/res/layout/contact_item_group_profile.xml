@@ -93,9 +93,9 @@
         android:layout_width="@dimen/dp48"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/md_show_more_button"
+        android:text="@string/more_icon"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/border_editText"
+        style="@style/myIconTextViewStyle"
         android:textSize="@dimen/dp18" />
 
     </LinearLayout>
@@ -112,6 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
+          style="?textSubColorSettingTheme"
         android:textSize="@dimen/dp16" />
     </LinearLayout>
 

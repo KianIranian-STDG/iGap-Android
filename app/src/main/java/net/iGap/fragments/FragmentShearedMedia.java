@@ -26,7 +26,6 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -40,7 +39,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,7 +52,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -71,7 +68,6 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
@@ -112,7 +108,6 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import yogesh.firzen.mukkiasevaigal.M;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
@@ -600,11 +595,11 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         textView.setSingleLine(true);
 
         if (G.isDarkTheme) {
-            textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
-            textView.setTextColor(getContext().getResources().getColor(R.color.white));
+            textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            textView.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
         } else {
-            textView.setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
-            textView.setTextColor(getContext().getResources().getColor(R.color.black));
+            textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            textView.setTextColor(getContext().getResources().getColor(R.color.white));
         }
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -614,7 +609,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             lp.setMargins(getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp4), getDimen(R.dimen.dp2));
         }
         textView.setLayoutParams(lp);
-        textView.setPadding(getDimen(R.dimen.dp14), getDimen(R.dimen.dp4), getDimen(R.dimen.dp14), getDimen(R.dimen.dp4));
+        textView.setPadding(getDimen(R.dimen.round_buttons_large_padding), getDimen(R.dimen.round_buttons_small_padding), getDimen(R.dimen.round_buttons_large_padding), getDimen(R.dimen.round_buttons_small_padding));
 
         mSharedTypeButtonsList.add(new SharedButtons(textView, pos));
 
@@ -631,18 +626,18 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         for (int i = 0; i < mSharedTypeButtonsList.size(); i++) {
             if (G.isDarkTheme) {
                 if (mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId()) {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
-                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.black));
-                } else {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
                     mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
+                } else {
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.gray_4c));
                 }
             } else {
                 if (mCurrentSharedMediaType != mSharedTypeButtonsList.get(i).getId()) {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_light));
-                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.black));
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
+                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.gray_4c));
                 } else {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.background_multi_select_dark));
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
                     mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
                 }
             }

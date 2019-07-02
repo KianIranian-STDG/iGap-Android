@@ -37,6 +37,14 @@ public class Utils {
         }
     }
 
+    public static void darkModeHandlerGray(TextView textView) {
+        if (G.isDarkTheme) {
+            textView.setTextColor(textView.getContext().getResources().getColor(R.color.bottomSheetHeaderLine));
+        } else {
+            textView.setTextColor(textView.getContext().getResources().getColor(R.color.gray_4c));
+        }
+    }
+
     public static void darkModeHandler(TextView textView) {
         if (G.isDarkTheme) {
             textView.setTextColor(textView.getContext().getResources().getColor(R.color.white));

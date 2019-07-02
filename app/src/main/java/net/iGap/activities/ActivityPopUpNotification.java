@@ -311,6 +311,25 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewAttachFile = findViewById(R.id.apn_layout_attach_file);
 
             viewMicRecorder = findViewById(R.id.apn_layout_mic_recorde);
+            View layoutMicBottom = findViewById(R.id.lmr_layout_bottom);
+            TextView micMainText = findViewById(R.id.txt_slideto_cancel);
+            TextView micTime1 = findViewById(R.id.txt_time_mili_secend);
+            TextView micTime2 = findViewById(R.id.txt_time_record);
+
+            if (G.isDarkTheme) {
+                findViewById(R.id.apn_ll_toolbar).setBackgroundResource(R.drawable.shape_toolbar_background_dark);
+                viewAttachFile.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
+                layoutMicBottom.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
+                micMainText.setTextColor(getResources().getColor(R.color.white));
+                micTime1.setTextColor(getResources().getColor(R.color.white));
+                micTime2.setTextColor(getResources().getColor(R.color.white));
+            }else {
+                viewAttachFile.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
+                layoutMicBottom.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
+                micMainText.setTextColor(getResources().getColor(R.color.black));
+                micTime1.setTextColor(getResources().getColor(R.color.black));
+                micTime2.setTextColor(getResources().getColor(R.color.black));
+            }
 
             voiceRecord = new VoiceRecord(ActivityPopUpNotification.this, viewMicRecorder, viewAttachFile, new OnVoiceRecord() {
                 @Override
@@ -348,7 +367,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            findViewById(R.id.apn_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
             txtName = (TextView) findViewById(R.id.apn_txt_name);
             txtName.setOnClickListener(new View.OnClickListener() {
@@ -380,15 +398,14 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         private void initViewPager() {
 
             viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
+            /** Hint : always read count of view pager with "listSize", for avoid from view pager get count error */
+            listSize = mList.size();
             if (viewPager != null && mAdapter != null){
                 mAdapter.notifyDataSetChanged();
             } else {
                 mAdapter = new AdapterViewPagerClass();
                 viewPager.setAdapter(mAdapter);
             }
-            listSize = mList.size();
-
-            btnMessageCounter.setText(1 + "/" + listSize);
 
             setImageAndTextAppBar(viewPager.getCurrentItem());
 
@@ -490,7 +507,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 public boolean onLongClick(View view) {
 
                     voiceRecord.setItemTag("ivVoice");
-                    viewAttachFile.setVisibility(View.GONE);
+                    viewAttachFile.setVisibility(View.INVISIBLE);
                     viewMicRecorder.setVisibility(View.VISIBLE);
 
 
@@ -521,6 +538,15 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     finish();
                 }
             });
+
+            if (G.isDarkTheme){
+                btnSend.setTextColor(getResources().getColor(R.color.white));
+                btnMic.setTextColor(getResources().getColor(R.color.white));
+                btnSmileButton.setTextColor(getResources().getColor(R.color.white));
+                edtChat.setTextColor(getResources().getColor(R.color.white));
+                edtChat.setHintTextColor(getResources().getColor(R.color.gray_9d));
+            }
+
         }
     }
 
@@ -528,7 +554,10 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mList.size();
+            /**
+             * Hint : always read count of view pager with "listSize", for avoid from view pager get count error
+             */
+            return listSize;
         }
 
         @Override
@@ -537,8 +566,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
 
         @Override
-        public Object instantiateItem(View container, final int position) {
-
+        public Object instantiateItem(ViewGroup container, final int position) {
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 

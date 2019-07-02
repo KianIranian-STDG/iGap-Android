@@ -1234,6 +1234,11 @@
     <string name="wimax_charging">شارژ وایمکس</string>
     <string name="permanently_charge">شارژ سیم کارت دائمی</string>
 
+    <string name="get_gifts">دریافت هدیه</string>
+    <string name="congratulations">تبریک</string>
+    <string name="unsuccessful">موفقیت آمیز نبود</string>
+    <string name="disabled_qr_voucher">متاسفانه این Qr قابل استفاده نیست یا قبلا استفاده شده است</string>
+
     <string name="charge_1"> 10.000 ریالی</string>
     <string name="charge_2"> 20.000 ریالی</string>
     <string name="charge_5"> 50.000 ریالی</string>
@@ -1890,5 +1895,9 @@
     <string name="canceled">لغو شده</string>
     <string name="outgoing">خروجی</string>
     <string name="no_item_selected">موردی انتخاب نشده است.</string>
+    <string name="subscriber" >دنبال کنندگان</string>
+    <string name="point"> امتیاز</string>
+    <string name="rank">رتبه</string>
+
 
 </resources>

@@ -73,6 +73,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private static final int SENSOR_SENSITIVITY = 4;
 
     //public static TextView txtTimeChat, txtTimerMain;
+    public static boolean allowOpenCall = true;
     public static boolean isGoingfromApp = false;
     public static View stripLayoutChat;
     public static View stripLayoutMain;
@@ -222,6 +223,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
         G.isInCall = true;
         G.callStripLayoutVisiblityListener.setValue(true);
+        ActivityCall.allowOpenCall = true;
 
         if (viewModel.isVideoCall()) {
             if (grantCameraAndVoicePermission()) {
@@ -316,6 +318,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     }
 
     private void init() {
+        if (!ActivityCall.allowOpenCall) {
+            G.isInCall = false;
+            finish();
+        }
+
         G.onCallLeaveView = ActivityCall.this;
         G.onHoldBackgroundChanegeListener = isHold -> runOnUiThread(() -> {
             if (isHold) {

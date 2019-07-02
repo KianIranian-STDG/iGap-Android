@@ -1196,11 +1196,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
 
                 if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.gray_300));
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
                 } else {
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.gray_4c));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
@@ -1236,15 +1236,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 lastHeader = header;
 
                 if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.white));
-                    viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.white));
-                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.white));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.gray_300));
+                    viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.gray_300));
+                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.gray_300));
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
                 } else {
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.black));
-                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.black));
-                    viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.black));
+                    viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.gray_4c));
+                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.gray_4c));
+                    viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.gray_4c));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());

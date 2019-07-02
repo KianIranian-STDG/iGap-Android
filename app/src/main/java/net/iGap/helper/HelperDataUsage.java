@@ -68,7 +68,7 @@ public class HelperDataUsage {
         Realm realm = Realm.getDefaultInstance();
 
 
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 

@@ -34,6 +34,7 @@
       android:layout_height="wrap_content"
       android:ellipsize="end"
       android:maxLines="1"
+        android:gravity="left"
       android:singleLine="true"
       android:layout_marginTop="@dimen/dp4"
       android:text="@string/forward_message"
@@ -49,6 +50,7 @@
       android:layout_marginBottom="@dimen/dp4"
       android:maxLines="1"
       android:singleLine="true"
+        android:gravity="left"
       android:text="message"
       android:textSize="@dimen/dp10" />
   </LinearLayout>

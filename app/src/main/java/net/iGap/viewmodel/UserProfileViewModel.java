@@ -28,11 +28,8 @@ import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.FragmentEditImage;
-import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.fragments.FragmentUserScore;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -53,6 +50,7 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -201,8 +199,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetBio().getBio();
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
-            public void getScore(int score) {
-                G.handler.post(() -> currentScore.set(String.valueOf(score)));
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
+                G.handler.post(() -> currentScore.set(String.valueOf(score.getScore())));
             }
 
             @Override

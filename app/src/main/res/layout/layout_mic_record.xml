@@ -11,9 +11,11 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/lmr_layout_bottom"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp48"
       android:layout_gravity="bottom"
+        android:orientation="vertical"
       style="?backgroundColorSettingTheme" />
 
     <LinearLayout
@@ -42,7 +44,8 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="5dp"
           android:text="00:00"
-          style="?textSubColorSettingTheme"
+            android:fontFamily="@font/main_font"
+          style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14" />
 
         <TextView
@@ -51,8 +54,9 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:gravity="left"
+            android:fontFamily="@font/main_font"
           android:text="99"
-          style="?textSubColorSettingTheme"
+          style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14" />
       </LinearLayout>
 
@@ -69,8 +73,9 @@
           android:layout_marginRight="@dimen/dp8"
           android:layout_weight="1"
           android:gravity="right|center"
+            android:fontFamily="@font/main_font"
           android:text="@string/slide_to_cancel_en"
-          style="?textSubColorSettingTheme"
+          style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14" />
 
         <LinearLayout

@@ -107,6 +107,8 @@ public class PaymentResultDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 saveReceipt();
+                if (WalletActivity.refreshLayout != null)
+                    WalletActivity.refreshLayout.setRefreshLayout(true);
             }
         });
 
@@ -119,6 +121,10 @@ public class PaymentResultDialog extends DialogFragment {
                 if (listener != null)
                     listener.onClick(v);
                 dismiss();
+
+                if (WalletActivity.refreshLayout != null)
+                    WalletActivity.refreshLayout.setRefreshLayout(true);
+
                 if (WalletActivity.intent != null)
                     if (WalletActivity.intent.getBooleanExtra("IsP2P", false)) {
                         Intent returnIntent = WalletActivity.intent;

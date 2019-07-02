@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -156,10 +157,10 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/cloudIcon"
-                style="@style/myIconTextViewStyle"
+                style="@style/myIconTextViewStyleGray"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
-                android:layout_marginTop="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp14"
                 android:text="@string/cloud_icon"
                 android:textSize="@dimen/dp32"
                 app:layout_constraintEnd_toStartOf="@id/settingIcon"
@@ -169,11 +170,12 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/cloudTitle"
-                style="?textTitleColorSettingTheme"
+                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cloud"
                 android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/cloudIcon"
                 app:layout_constraintStart_toStartOf="@id/cloudIcon"
                 app:layout_constraintTop_toBottomOf="@id/cloudIcon" />
@@ -191,7 +193,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/settingIcon"
-                style="@style/myIconTextViewStyle"
+                style="@style/myIconTextViewStyleGray"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:text="@string/setting_icon"
@@ -203,9 +205,10 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/settingTitle"
-                style="?textTitleColorSettingTheme"
+                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="@string/settings"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintEnd_toEndOf="@id/settingIcon"
@@ -225,7 +228,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/addIcon"
-                style="@style/myIconTextViewStyle"
+                style="@style/myIconTextViewStyleGray"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:padding="@dimen/fup_items_icon_padding"
@@ -238,10 +241,11 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/addTitle"
-                style="?textTitleColorSettingTheme"
+                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Add"
+                android:textStyle="bold"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintEnd_toEndOf="@id/addIcon"
                 app:layout_constraintStart_toStartOf="@id/addIcon"
@@ -410,7 +414,7 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="@dimen/dp32"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:text="@string/invite_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_splitter_3" />
@@ -449,7 +453,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp32"
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center_vertical"
@@ -483,7 +487,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp32"
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center_vertical"
@@ -517,7 +521,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp32"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -548,8 +552,8 @@
 
                 <net.iGap.module.CustomToggleButton
                     android:id="@+id/darkTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -563,7 +567,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp32"
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{()->viewModel.onFAQClick()}"
@@ -597,9 +601,9 @@
                 style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginLeft="@dimen/dp12"
                 android:layout_marginTop="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp12"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_faq" />
@@ -614,6 +618,7 @@
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginBottom="@dimen/dp16"
+                android:paddingBottom="@dimen/dp10"
                 android:fontFamily="@font/main_font"
                 android:text="@string/app_version"
                 android:textSize="@dimen/standardTextSize"
@@ -632,6 +637,7 @@
                 android:layout_marginRight="@dimen/dp32"
                 android:text="@{viewModel.appVersion}"
                 android:textSize="@dimen/smallTextSize"
+                android:paddingBottom="@dimen/dp10"
                 app:layout_constraintBottom_toBottomOf="@id/versionTitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1"
@@ -820,7 +826,9 @@
                 android:id="@+id/profileViewGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:constraint_referenced_ids="fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName" />
+                app:constraint_referenced_ids="fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <android.support.constraint.Group
                 android:id="@+id/editProfileView"

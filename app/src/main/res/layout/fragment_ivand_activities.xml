@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnScanBarCode"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -60,23 +60,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.design.button.MaterialButton
-        style="@style/IGapButtonStyle"
-        android:id="@+id/btnScanBarCode"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dp32"
-        android:paddingEnd="@dimen/dp32"
-        android:textAllCaps="false"
-        android:text="@string/scan_barcode"
-        android:textColor="@color/white"
-        android:layout_marginLeft="@dimen/dp16"
-        android:layout_marginTop="@dimen/dp8"
-        android:layout_marginRight="@dimen/dp16"
-        android:layout_marginBottom="@dimen/dp32"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

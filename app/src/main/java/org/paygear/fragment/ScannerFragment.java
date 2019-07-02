@@ -2,12 +2,15 @@ package org.paygear.fragment;
 
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +29,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -43,11 +48,15 @@ import com.journeyapps.barcodescanner.BarcodeView;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
+import net.iGap.databinding.CongratulationsDialogBinding;
+import net.iGap.databinding.QrVoucherDialogBinding;
+import net.iGap.databinding.UnsuccessfulDialogBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
+import org.paygear.model.ConfirmVoucherQr_Result;
 import org.paygear.model.QRResponse;
 import org.paygear.utils.QRUtils;
 import org.paygear.utils.SettingHelper;
@@ -100,6 +109,12 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
     private Handler mHandler;
     private boolean isVisible = true;
+    private Dialog qrVoucherDialog;
+    QrVoucherDialogBinding qrVoucherDialogBinding;
+    private Dialog unsuccessfulDialog;
+    private Dialog successfulDialog;
+    CongratulationsDialogBinding successfulDialogBinding;
+    UnsuccessfulDialogBinding unsuccessfulDialogBinding;
 
     public ScannerFragment() {
     }
@@ -226,8 +241,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
     @Override
     public void onFragmentResult(Fragment fragment, Bundle bundle) {
-        if (fragment instanceof AccountPaymentDialog ||
-                fragment instanceof MyQRFragment) {
+        if (fragment instanceof AccountPaymentDialog || fragment instanceof FactorPaymentDialog || fragment instanceof CreditPaymentDialog || fragment instanceof NewAccountPaymentDialog
+                ||fragment instanceof MyQRFragment) {
             if (bundle != null) {
                 isVisible = bundle.getBoolean("Visible");
             } else {
@@ -323,6 +338,14 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                                     Intent intent = new Intent(Intent.ACTION_VIEW);
                                     intent.setData(Uri.parse(content));
                                     startActivity(intent);
+                                }else if(content.contains("hyperme.ir")){
+                                    try {
+                                        Uri uri = Uri.parse(content);
+                                        List<String> pathSegments = uri.getPathSegments();
+                                        loadHyperMeQrData(uri.getLastPathSegment(),Long.parseLong(pathSegments.get(0)),pathSegments.get(1));
+                                    }catch (Exception e){
+                                        Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
+                                    }
                                 } else {
                                     Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
                                 }
@@ -482,12 +505,59 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 if (success) {
                     QRResponse qrData = response.body();
 
-                    if (!TextUtils.isEmpty(qrData.accountId)) {
-                        NewAccountPaymentDialog.newInstance(qrData).show(
-                                getActivity().getSupportFragmentManager(), "NewAccountPaymentDialog");
+                    if (qrData.type != 10) {
+
+                        if (!TextUtils.isEmpty(qrData.accountId)) {
+                            NewAccountPaymentDialog.newInstance(qrData).show(
+                                    getActivity().getSupportFragmentManager(), "NewAccountPaymentDialog");
+                        } else {
+                            Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
+                            isVisible = true;
+                        }
                     } else {
-                        Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
-                        isVisible = true;
+                        showVoucherQrDialog(qrData);
+                    }
+                } else {
+                    isVisible = true;
+                }
+
+                progressLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<QRResponse> call, Throwable t) {
+                if (Web.checkFailureResponse(ScannerFragment.this, call, t)) {
+                    isVisible = true;
+                    progressLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+    private void loadHyperMeQrData(String data, final long amount, final String invoiceNumber) {
+        isVisible = false;
+        progressLayout.setVisibility(View.VISIBLE);
+
+        Web.getInstance().getWebService().getQRData(data).enqueue(new Callback<QRResponse>() {
+            @Override
+            public void onResponse(Call<QRResponse> call, Response<QRResponse> response) {
+                Boolean success = Web.checkResponse(ScannerFragment.this, call, response);
+                if (success == null)
+                    return;
+
+                if (success) {
+                    QRResponse qrData = response.body();
+
+                    if (qrData.type != 10) {
+
+                        if (!TextUtils.isEmpty(qrData.accountId)) {
+                            NewAccountPaymentDialog.newInstance(qrData,amount,invoiceNumber).show(
+                                    getActivity().getSupportFragmentManager(), "NewAccountPaymentDialog");
+                        } else {
+                            Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
+                            isVisible = true;
+                        }
+                    } else {
+                        showVoucherQrDialog(qrData);
                     }
                 } else {
                     isVisible = true;
@@ -501,6 +571,160 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                     isVisible = true;
                     progressLayout.setVisibility(View.GONE);
                 }
+            }
+        });
+    }
+
+    private void showVoucherQrDialog(final QRResponse qrData) {
+        qrVoucherDialog = new Dialog(getContext());
+        WindowManager.LayoutParams params = qrVoucherDialog.getWindow().getAttributes();
+        qrVoucherDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        qrVoucherDialog.getWindow().setAttributes(params);
+        qrVoucherDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        qrVoucherDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        qrVoucherDialogBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.qr_voucher_dialog, null, false);
+        qrVoucherDialog.setContentView(qrVoucherDialogBinding.getRoot());
+        qrVoucherDialog.setCanceledOnTouchOutside(false);
+        String message = "اعتبار هدیه پیگیر به مبلغ *.\nمایل به دریافت آن هستید؟";
+        try {
+            message = message.replace("*", RaadCommonUtils.formatPrice(Long.parseLong(qrData.value), true));
+        } catch (Exception e) {
+
+        }
+        qrVoucherDialogBinding.message.setText(message);
+
+
+        qrVoucherDialogBinding.message.setTypeface(Typefaces.get(getContext(), "IRANYekanRegularMobile(FaNum)"));
+        qrVoucherDialogBinding.confirmQr.setTypeface(Typefaces.get(getContext(), "IRANYekanRegularMobile(FaNum)"));
+        qrVoucherDialogBinding.ignore.setTypeface(Typefaces.get(getContext(), "IRANYekanRegularMobile(FaNum)"));
+        qrVoucherDialogBinding.title.setTypeface(Typefaces.get(getContext(), "IRANYekanRegularMobile(FaNum)"));
+
+        WindowManager.LayoutParams wmlp = qrVoucherDialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        qrVoucherDialog.show();
+        qrVoucherDialogBinding.ignore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qrVoucherDialog.dismiss();
+            }
+        });
+        qrVoucherDialogBinding.confirmQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qrVoucherDialog.dismiss();
+                if (qrData.isDisabled) {
+                    showUnsuccessfulDialog(getString(R.string.disabled_qr_voucher));
+                } else {
+                    isVisible = false;
+                    progressLayout.setVisibility(View.VISIBLE);
+                    Web.getInstance().getWebService().confirmVoucherQr(qrData.sequenceNumber).enqueue(new Callback<ConfirmVoucherQr_Result>() {
+                        @Override
+                        public void onResponse(Call<ConfirmVoucherQr_Result> call, Response<ConfirmVoucherQr_Result> response) {
+                            Boolean success = Web.checkResponse(ScannerFragment.this, call, response);
+                            if (success == null)
+                                return;
+
+                            if (success) {
+                                try {
+                                    showSuccessfulDialog(response.body().message);
+                                    if (getActivity() instanceof NavigationBarActivity) {
+                                        ((NavigationBarActivity) getActivity()).broadcastMessage(
+                                                ScannerFragment.this, null, CardsFragment.class);
+                                    }
+                                } catch (Exception e) {
+
+                                }
+
+                            }else {
+                                showUnsuccessfulDialog(getString(R.string.disabled_qr_voucher));
+                            }
+
+                            progressLayout.setVisibility(View.GONE);
+                            isVisible = true;
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ConfirmVoucherQr_Result> call, Throwable t) {
+                            if (Web.checkFailureResponse(ScannerFragment.this, call, t)) {
+                                isVisible = true;
+                                progressLayout.setVisibility(View.GONE);
+                                showUnsuccessfulDialog(getString(R.string.disabled_qr_voucher));
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
+
+    }
+
+    private void showSuccessfulDialog(String message) {
+        final Context context = getContext();
+        if (context == null)
+            return;
+        successfulDialog = new Dialog(context);
+        WindowManager.LayoutParams params = successfulDialog.getWindow().getAttributes();
+        successfulDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        successfulDialog.getWindow().setAttributes(params);
+        successfulDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        successfulDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        successfulDialogBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.congratulations_dialog, null, false);
+        successfulDialog.setContentView(successfulDialogBinding.getRoot());
+        successfulDialog.setCanceledOnTouchOutside(false);
+
+        successfulDialogBinding.message.setText(message);
+        successfulDialogBinding.message.setTypeface(Typefaces.get(context, "IRANYekanRegularMobile(FaNum)"));
+        successfulDialogBinding.confirm.setTypeface(Typefaces.get(context, "IRANYekanRegularMobile(FaNum)"));
+        successfulDialogBinding.title.setTypeface(Typefaces.get(context, "IRANYekanRegularMobile(FaNum)"));
+        WindowManager.LayoutParams wmlp = successfulDialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        successfulDialog.show();
+        successfulDialogBinding.confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "برای اعمال اعتبار هدیه چند لحظه صبر کنید.", Toast.LENGTH_LONG).show();
+                if (getActivity() instanceof NavigationBarActivity) {
+                    ((NavigationBarActivity) getActivity()).broadcastMessage(
+                            ScannerFragment.this, null, CardsFragment.class);
+                }
+                successfulDialog.dismiss();
+            }
+        });
+    }
+
+    private void showUnsuccessfulDialog(String message) {
+        Context context = getContext();
+        if (context == null)
+            return;
+        unsuccessfulDialog = new Dialog(context);
+        WindowManager.LayoutParams params = unsuccessfulDialog.getWindow().getAttributes();
+        unsuccessfulDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        unsuccessfulDialog.getWindow().setAttributes(params);
+        unsuccessfulDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        unsuccessfulDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        unsuccessfulDialogBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.unsuccessful_dialog, null, false);
+        unsuccessfulDialog.setContentView(unsuccessfulDialogBinding.getRoot());
+        unsuccessfulDialog.setCanceledOnTouchOutside(false);
+
+        unsuccessfulDialogBinding.message.setText(message);
+        unsuccessfulDialogBinding.message.setTypeface(Typefaces.get(context, "IRANYekanRegularMobile(FaNum)"));
+        unsuccessfulDialogBinding.confirm.setTypeface(Typefaces.get(context, "IRANYekanRegularMobile(FaNum)"));
+        unsuccessfulDialogBinding.title.setTypeface(Typefaces.get(context, "IRANYekanRegularMobile(FaNum)"));
+        WindowManager.LayoutParams wmlp = unsuccessfulDialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        wmlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        unsuccessfulDialog.show();
+        unsuccessfulDialogBinding.confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                unsuccessfulDialog.dismiss();
             }
         });
     }

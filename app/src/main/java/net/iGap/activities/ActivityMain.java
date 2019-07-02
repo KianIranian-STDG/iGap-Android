@@ -70,6 +70,8 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperSaveFile;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
@@ -77,6 +79,7 @@ import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
+import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGetWallpaper;
@@ -85,6 +88,7 @@ import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnPayment;
 import net.iGap.interfaces.OnRefreshActivity;
+import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnVerifyNewDevice;
 import net.iGap.interfaces.OneFragmentIsOpen;
@@ -98,6 +102,7 @@ import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -458,8 +463,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 /**
                  * set true mFirstRun for get room history after logout and login again
                  */
-
-                //licenceChecker();
                 Log.wtf(this.getClass().getName(),"DELETE_FOLDER_BACKGROUND");
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
@@ -609,7 +612,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
             G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-
+            Log.wtf(this.getClass().getName(),"connectionState");
+            connectionState();
+            Log.wtf(this.getClass().getName(),"connectionState");
             Log.wtf(this.getClass().getName(),"checkKeepMedia");
             checkKeepMedia();
             Log.wtf(this.getClass().getName(),"checkKeepMedia");
@@ -646,9 +651,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
             Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");
-            String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-            if (backGroundPath.isEmpty()) {
-                getWallpaperAsDefault();
+            boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
+            if (isDefaultBg){
+                if (G.isDarkTheme){
+                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
+                }else{
+                    getWallpaperAsDefault();
+                }
             }
             Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");
 
@@ -688,6 +697,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }, 2000);
     }
 
+    private void connectionState() {
+
+        G.onConnectionChangeState = connectionStateR -> runOnUiThread(() -> {
+            G.connectionState = connectionStateR;
+            G.connectionStateMutableLiveData.postValue(connectionStateR);
+        });
+
+        G.onUpdating = new OnUpdating() {
+            @Override
+            public void onUpdating() {
+                runOnUiThread(() -> {
+                    G.connectionState = ConnectionState.UPDATING;
+                    G.connectionStateMutableLiveData.postValue(ConnectionState.UPDATING);
+                });
+            }
+
+            @Override
+            public void onCancelUpdating() {
+                /**
+                 * if yet still G.connectionState is in update state
+                 * show latestState that was in previous state
+                 */
+                if (G.connectionState == ConnectionState.UPDATING) {
+                    G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
+                    G.connectionStateMutableLiveData.postValue(ConnectionState.IGAP);
+                }
+            }
+        };
+    }
     private void getWallpaperAsDefault() {
         try {
             RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
@@ -732,9 +770,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void setDefaultBackground(String bigImagePath) {
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        String finalPath = "";
+        try {
+            finalPath = HelperSaveFile.saveInPrivateDirectory(this, bigImagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, bigImagePath);
+        editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
+        editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
         editor.apply();
     }
 
@@ -1240,7 +1285,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
-        G.onClientCondition = this;
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onPayment = this;
@@ -1411,34 +1455,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         realm.close();
-        /*if (mViewPager.getAdapter()!=null) {
-            for (int i = 0; i < 5; i++) {
-                Object f = mViewPager.getAdapter().instantiateItem(mViewPager,i);
-                if (f instanceof FragmentMain) {
-                    FragmentMain mainFragment = (FragmentMain) f;
-                    switch (mainFragment.mainType) {
-                        case all:
-                            mainFragment.onAction(MainAction.downScrool);
-                            break;
-                        case chat:
-                            if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                                mainFragment.onAction(MainAction.downScrool);
-                            }
-                            break;
-                        case group:
-                            if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                                mainFragment.onAction(MainAction.downScrool);
-                            }
-                            break;
-                        case channel:
-                            if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                                mainFragment.onAction(MainAction.downScrool);
-                            }
-                            break;
-                    }
-                }
-            }
-        }*/
 
         /**
          * don't send update status for own message
@@ -1458,27 +1474,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //empty
     }
 
-    //************************
-    @Override
-    public void onClientCondition() {
+    //*************************************************************
 
-        notifySubFragmentForCondition();
-    }
+    public void openNavigation() {
 
-    @Override
-    public void onClientConditionError() {
-        notifySubFragmentForCondition();
-    }
-
-    private void notifySubFragmentForCondition() {
-        /*if (mViewPager.getAdapter()!=null){
-            for (int i = 0;i<5;i++){
-                Object f = mViewPager.getAdapter().instantiateItem(mViewPager,i);
-                if (f instanceof FragmentMain) {
-                    ((FragmentMain) f).onAction(MainAction.clinetCondition);
-                }
-            }
-        }*/
     }
 
     public void designLayout(final chatLayoutMode mode) {
@@ -1794,34 +1793,4 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public interface OnBackPressedListener {
         void doBack();
     }
-
-    /*class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        SampleFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            int position = HelperCalander.isPersianUnicode ? i : 4 - i;
-            switch (position){
-                case 0:
-                    return new FragmentUserProfile();
-                case 1:
-                    return DiscoveryFragment.newInstance(0);
-                case 2:
-                    return FragmentMain.newInstance(FragmentMain.MainType.all);
-                case 3:
-                    return FragmentCall.newInstance(true);
-                default:
-                    return RegisteredContactsFragment.newInstance(false);
-
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
-    }*/
 }

@@ -130,13 +130,13 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static void getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistory, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
-        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistory, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId, messageIdGetHistory, reachMessageId, direction));
+    public static void getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistoryNotSafe, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistoryNotSafe, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId, messageIdGetHistoryNotSafe, reachMessageId, direction));
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
             @Override
 
-            public void onGetRoomHistory(final long roomId, final long startMessageId, final long endMessageId, final long reachMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction historyDirection) {
+            public void onGetRoomHistory(final long roomId, final long startMessageId, final long endMessageId, final long reachMessageId, long messageIdGetHistorySafe, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction historyDirection) {
                 /**
                  * convert message from RealmRoomMessage to StructMessageInfo for send to view
                  */
@@ -183,7 +183,7 @@ public final class MessageLoader {
                         /**
                          * clear before state gap for avoid compute this message for gap state again
                          */
-                        clearGap(roomId, messageIdGetHistory, finalMessageId, historyDirection, realm);
+                        clearGap(roomId, messageIdGetHistorySafe, finalMessageId, historyDirection, realm);
 
                         /**
                          * if not reached to gap yet and exist reachMessageId
@@ -196,7 +196,7 @@ public final class MessageLoader {
                 });
 
                 Sort sort;
-                if (direction == UP) {
+                if (historyDirection == UP) {
                     sort = Sort.DESCENDING;
                 } else {
                     sort = Sort.ASCENDING;

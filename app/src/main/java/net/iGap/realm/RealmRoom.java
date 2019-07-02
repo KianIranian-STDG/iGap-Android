@@ -998,7 +998,7 @@ public class RealmRoom extends RealmObject {
      */
     public static void clearAllActions() {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {

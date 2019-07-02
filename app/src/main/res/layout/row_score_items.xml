@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="locale"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/row_score_txt_title"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:padding="8dp"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/row_score_txt_score_count"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/row_score_txt_score_count"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:background="?attr/selectableItemBackground"
+        android:drawableEnd="@drawable/ic_add_toolbar"
+        android:drawableRight="@drawable/ic_add_toolbar"
+        android:drawablePadding="@dimen/dp8"
+        android:drawableTint="@color/buttonColor"
+        android:textSize="@dimen/standardTextSize"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="@color/buttonColor"
+        app:iconTint="@color/buttonColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/row_score_txt_title" />
+
+</android.support.constraint.ConstraintLayout>

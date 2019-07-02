@@ -319,6 +319,7 @@ public class RegisterRepository {
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(realm1 -> {
                     G.displayName = user.getDisplayName();
+                    G.userId = user.getId();
                     RealmUserInfo.putOrUpdate(realm1, user);
                     G.onUserInfoResponse = null;
                     goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));

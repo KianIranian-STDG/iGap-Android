@@ -4,42 +4,54 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import net.iGap.G;
 import net.iGap.interfaces.OnUserIVandGetScore;
+import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.request.RequestUserIVandGetScore;
+
+import java.util.List;
 
 public class UserScoreViewModel extends ViewModel {
 
-    private MutableLiveData<String> inviteFriendsScore = new MutableLiveData<>();
-    private MutableLiveData<String> paymentScore = new MutableLiveData<>();
-    private MutableLiveData<String> qrCodeScore = new MutableLiveData<>();
-    private MutableLiveData<String> botsScore = new MutableLiveData<>();
+    public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
+
     private MutableLiveData<String> userScore = new MutableLiveData<>();
     private MutableLiveData<String> userRank = new MutableLiveData<>();
     private MutableLiveData<String> totalRank = new MutableLiveData<>();
+    public MutableLiveData<List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore>> ivandScore = new MutableLiveData<>();
     //ui
     public MutableLiveData<Integer> userScorePointer = new MutableLiveData<>();
+    public MutableLiveData<Integer> userRankPointer = new MutableLiveData<>();
+    private String of ;
 
     public UserScoreViewModel() {
-        inviteFriendsScore.setValue("20 points");
-        paymentScore.setValue("10 points");
-        qrCodeScore.setValue("20 points");
-        botsScore.setValue("10 points");
+
+        of = "of ";
+        if (G.selectedLanguage.equals("fa"))
+            of ="از " ;
+
         userRank.setValue("0");
-        totalRank.setValue("of 20.000.000");
+        totalRank.setValue(of + "0");
         //Todo:move to repository
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
-            public void getScore(int score) {
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
                 G.handler.post(() -> {
-                    userScorePointer.setValue((score % 1000) / 360);
-                    userScore.setValue(String.valueOf(score));
+                    userScorePointer.setValue((score.getScore() % 1000) / 360);
+                    userRankPointer.setValue((score.getUserRank() * 360) / score.getTotalRank());
+                    userScore.setValue(String.valueOf(score.getScore()));
+                    totalRank.setValue(of + score.getTotalRank());
+                    userRank.setValue(String.valueOf(score.getUserRank()));
+                    ivandScore.setValue(score.getScoresList());
                 });
             }
 
             @Override
             public void onError() {
                 userScorePointer.setValue(0);
+                userRankPointer.setValue(0);
                 userScore.setValue(String.valueOf(-1));
             }
         });
@@ -57,24 +69,13 @@ public class UserScoreViewModel extends ViewModel {
         return userScore;
     }
 
-    public LiveData<String> getBotsScore() {
-        return botsScore;
-    }
-
-    public LiveData<String> getQrCodeScore() {
-        return qrCodeScore;
-    }
-
-    public LiveData<String> getPaymentScore() {
-        return paymentScore;
-    }
-
-    public LiveData<String> getInviteFriendsScore() {
-        return inviteFriendsScore;
-    }
-
-    public void onGiftsButtonClick() {
-
+    public void onScanBarcodeButtonClick() {
+        IntentIntegrator integrator = new IntentIntegrator(G.fragmentActivity);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        integrator.setRequestCode(REQUEST_CODE_QR_IVAND_CODE);
+        integrator.setBeepEnabled(false);
+        integrator.setPrompt("");
+        integrator.initiateScan();
     }
 
     public void onBotsAndChannelClick() {

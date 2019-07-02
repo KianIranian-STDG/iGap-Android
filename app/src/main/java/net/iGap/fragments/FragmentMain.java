@@ -16,9 +16,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,6 +39,7 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -117,7 +122,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements ToolbarListener, ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
@@ -133,6 +138,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private String switcher;
     private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
+    private long latestScrollToTop;
 
     private HelperToolbar mHelperToolbar;
     private boolean isChatMultiSelectEnable = false;
@@ -141,6 +147,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     private List<RealmRoom> mSelectedRoomList = new ArrayList<>();
     private ViewGroup mLayoutMultiSelectedActions;
     private TextView mBtnRemoveSelected;
+    private boolean isToolbarSearchAnimationInProccess ;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -284,13 +291,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     }
 
     private void setColorToDarkMode(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.background_multi_select_dark));
-        textView.setTextColor(getResources().getColor(R.color.gray10));
+        textView.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
+        textView.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void setColorToLightMode(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.background_multi_select_light));
-        textView.setTextColor(getResources().getColor(R.color.black));
+        textView.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
+        textView.setTextColor(getResources().getColor(R.color.gray_4c));
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {
@@ -341,8 +348,35 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
                                 progressBar.setVisibility(View.VISIBLE);
                         }
                     }
-                } else {
+                } /*else {
                     mRecyclerView.removeOnScrollListener(onScrollListener);
+                }*/
+
+                //check if music player was enable disable scroll detecting for search box
+                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
+
+                    if (!mHelperToolbar.getmSearchBox().isShown()){
+                        visibleToolbarSearchWithAnimation();
+                    }
+
+                    return;
+                }
+
+                //check recycler scroll for search box animation
+                if (dy <= 0) {
+
+                    // Scrolling up
+                    if (!isToolbarSearchAnimationInProccess && !mHelperToolbar.getmSearchBox().isShown()){
+                        visibleToolbarSearchWithAnimation();
+                    }
+
+                } else  {
+
+                    // Scrolling down
+                    if (!isToolbarSearchAnimationInProccess && mHelperToolbar.getmSearchBox().isShown()){
+                        goneToolbarSearchWithAnimation();
+                    }
+
                 }
             }
         };
@@ -373,35 +407,73 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     }
 
-    //***************************************************************************************************************************
+    private void visibleToolbarSearchWithAnimation() {
 
-    @Override
-    public void onAction(ActivityMain.MainAction action) {
+        mHelperToolbar.getmSearchBox().setVisibility(View.VISIBLE);
 
-        if (mRecyclerView == null) {
-            return;
-        }
+        Animation animation = new ScaleAnimation(
+                0f , 1f ,
+                0f, 1f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+        );
 
-        switch (action) {
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isToolbarSearchAnimationInProccess = true ;
+            }
 
-            case downScrool:
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isToolbarSearchAnimationInProccess = false ;
+            }
 
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (firstVisibleItem < 5) {
-                            mRecyclerView.scrollToPosition(0);
-                        }
-                    }
-                });
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
 
-                break;
-            case clinetCondition:
+        mHelperToolbar.getmSearchBox().startAnimation(animation);
 
-                break;
-        }
     }
+
+    private void goneToolbarSearchWithAnimation() {
+
+        Animation animation = new ScaleAnimation(
+                1f , 0f ,
+                1f, 0f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+        );
+
+        animation.setDuration(300);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isToolbarSearchAnimationInProccess = true ;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isToolbarSearchAnimationInProccess = false ;
+                mHelperToolbar.getmSearchBox().setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        mHelperToolbar.getmSearchBox().startAnimation(animation);
+
+    }
+
+    //***************************************************************************************************************************
 
 
     //***************************************************************************************************************************
@@ -869,6 +941,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
+            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             setVisiblityForSelectedActionsInEverySelection();
@@ -879,6 +952,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }
@@ -889,7 +963,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         if (getActivity() != null) {
             Fragment fragment = SearchFragment.newInstance();
             try {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
+                        .setAnimated(true)
+                        .setAnimation(R.anim.fade_in , R.anim.fade_out , R.anim.fade_in , R.anim.fade_out)
+                        .load();
             } catch (Exception e) {
                 e.getStackTrace();
             }
@@ -1041,7 +1118,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             rootView = new ChatCell(getContext());
-            rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80)));
+            rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp70)));
             return new ViewHolder(rootView);
         }
 
