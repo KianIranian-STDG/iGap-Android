@@ -16,7 +16,7 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.popular.FragmentPopularChannelOne;
+import net.iGap.popular.FragmentPopularChannelParent;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 
 
@@ -52,7 +52,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
 
-        new HelperFragment(activity.getSupportFragmentManager(),new FragmentPopularChannelOne()).setReplace(false).load();
+        new HelperFragment(activity.getSupportFragmentManager(),new FragmentPopularChannelParent()).setReplace(false).load();
 //        switch (discoveryField.actionType) {
 //            case PAGE:/** tested **/
 //                actionPage(discoveryField.value);

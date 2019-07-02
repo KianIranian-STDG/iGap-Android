@@ -15,12 +15,13 @@ import net.iGap.popular.model.Slider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> {
+public class AdapterTopSlider extends RecyclerView.Adapter<AdapterTopSlider.SliderViewHolder> {
     private List<Slider> sliderList = new ArrayList<>();
     private Context context;
 
 
-    public SliderAdapter(Context context) {
+    public AdapterTopSlider(Context context) {
+
         this.context = context;
         Slider sliderTop = new Slider();
         sliderTop.setSliderImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
@@ -35,16 +36,18 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
     }
 
+
+
     @NonNull
     @Override
     public SliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_slider, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_slider_top, parent, false);
         return new SliderViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
-        holder.bindImage(sliderList.get(position));
+    public void onBindViewHolder(@NonNull SliderViewHolder holder, int i) {
+        holder.bindImage(sliderList.get(i));
     }
 
     @Override
@@ -52,17 +55,24 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         return sliderList.size();
     }
 
+
     public class SliderViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
 
-        public SliderViewHolder(@NonNull View itemView) {
+        public SliderViewHolder(@NonNull final View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.iv_item_popular_slider);
+            imageView = itemView.findViewById(R.id.iv_item_popular_slider_top);
+
         }
 
-        public void bindImage(Slider slider) {
+        public void bindImage(final Slider slider) {
             imageView.setImageDrawable(slider.getSliderImage());
+
         }
     }
+
+
+
+
 
 }

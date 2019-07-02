@@ -3,6 +3,8 @@ package net.iGap.popular.model;
 import android.graphics.drawable.Drawable;
 
 public class Channel {
+    private Drawable channelImage;
+    private String channelTitle;
     public Drawable getChannelImage() {
         return channelImage;
     }
@@ -19,6 +21,5 @@ public class Channel {
         this.channelTitle = channelTitle;
     }
 
-    private Drawable channelImage;
-    private String channelTitle;
+
 }
