@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +55,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnContactImport;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -82,7 +81,7 @@ import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnPhoneContact, OnContactImport, OnUserContactDelete {
+public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnContactImport, OnUserContactDelete {
 
     private static final String TAG = "aabolfazlContact";
     private static boolean getPermission = true;
@@ -214,7 +213,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         isInit = true;
 
         if (isContact) {
-            G.onPhoneContact = this;
+//            G.onPhoneContact = this;
             Contacts.localPhoneContactId = 0;
             Contacts.getContact = true;
 
@@ -291,12 +290,26 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         vgInviteFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
-                sendIntent.setType("text/plain");
-                Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
-                getActivity().startActivity(openInChooser);
+                    try {
+                        Log.i(TAG, "onClick: try");
+                        HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
+                            @Override
+                            public void Allow() throws IOException {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).load();
+                                Log.i(TAG, "Allow: ");
+                            }
+
+                            @Override
+                            public void deny() {
+                                Log.i(TAG, "Permission deny");
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+//                }
+
+
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -616,10 +629,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     }
 
-    @Override
-    public void onPhoneContact(final ArrayList<StructListOfContact> contacts, final boolean isEnd) {
-        new AddAsync(contacts, isEnd).execute();
-    }
+//    @Override
+//    public void onPhoneContact(final ArrayList<StructListOfContact> contacts, final boolean isEnd) {
+//        new AddAsync(contacts, isEnd).execute();
+//    }
 
     public void multi_select(int position) {
         if (mLayoutMultiSelected.isShown()) {
