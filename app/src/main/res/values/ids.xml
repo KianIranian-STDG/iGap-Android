@@ -141,5 +141,14 @@
     <item name="status" type="id"/>
     <item name="phoneNumber" type="id"/>
     <item name="chi_fab_setPic" type="id"/>
+    <item name="toolbar_tablet_user_avatar" type="id" />
+    <item name="toolbar_tablet_user_name" type="id" />
+    <item name="toolbar_tablet_user_phone" type="id" />
+    <item name="toolbar_tablet_splitter1" type="id" />
+    <item name="toolbar_tablet_btn_add" type="id" />
+    <item name="toolbar_tablet_btn_edit" type="id" />
+    <item name="toolbar_tablet_splitter2" type="id" />
+    <item name="toolbar_tablet_btn_search" type="id" />
+    <item name="toolbar_tablet_splitter3" type="id" />
 
 </resources>

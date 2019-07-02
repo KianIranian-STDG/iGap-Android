@@ -29,6 +29,22 @@ public class Utils {
         }
     }
 
+    public static void setBackgroundColor(View view) {
+        if (G.isDarkTheme) {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.white));
+        } else {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.black));
+        }
+    }
+
+    public static void setBackgroundColorGray(View view) {
+        if (G.isDarkTheme) {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_300));
+        } else {
+            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_3c));
+        }
+    }
+
     public static void darkModeHandlerGray(View view) {
         if (G.isDarkTheme) {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_4c));
