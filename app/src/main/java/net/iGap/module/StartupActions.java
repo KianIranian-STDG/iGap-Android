@@ -122,13 +122,13 @@ public final class StartupActions {
         /*Log.wtf(this.getClass().getName(),"getiGapAccountInstance");
         Log.wtf(this.getClass().getName(),"CallObserver");*/
         new Thread(CallObserver::new);
-        /*Log.wtf(this.getClass().getName(),"CallObserver");
-        Log.wtf(this.getClass().getName(),"HelperUploadFile");*/
+        Log.wtf(this.getClass().getName(),"CallObserver");
+        Log.wtf(this.getClass().getName(),"HelperUploadFile");
         new Thread(HelperUploadFile::new);
-        /*Log.wtf(this.getClass().getName(),"HelperUploadFile");*/
+        Log.wtf(this.getClass().getName(),"HelperUploadFile");
 
         if (realmConfiguration()) {
-            /*Log.wtf(this.getClass().getName(),"executeTransactionAsync");*/
+            Log.wtf(this.getClass().getName(),"executeTransactionAsync");
             Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -156,12 +156,12 @@ public final class StartupActions {
                         e.printStackTrace();
                         HelperLog.setErrorLog(e);
                     }
-                    /*Log.wtf(this.getClass().getName(),"execute");*/
+                    Log.wtf(this.getClass().getName(),"execute");
                 }
             });
-            /*Log.wtf(this.getClass().getName(),"executeTransactionAsync");*/
+            Log.wtf(this.getClass().getName(),"executeTransactionAsync");
 
-            /*Log.wtf(this.getClass().getName(),"checkDataUsage");*/
+            Log.wtf(this.getClass().getName(),"checkDataUsage");
             new Thread(() -> checkDataUsage()).start();
             /*Log.wtf(this.getClass().getName(),"checkDataUsage");
             Log.wtf(this.getClass().getName(),"mainUserInfo");*/
@@ -646,13 +646,13 @@ public final class StartupActions {
                 .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
         Log.wtf(this.getClass().getName(),"getInstance");
-        Realm configuredRealm = getInstance();
+        RealmConfiguration configuredRealm = getInstance();
         Log.wtf(this.getClass().getName(),"getInstance");
 
         /*if (configuration!=null)
             Realm.deleteRealm(configuration);*/
         Log.wtf(this.getClass().getName(),"setDefaultConfiguration");
-        Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
+        Realm.setDefaultConfiguration(configuredRealm);
         Log.wtf(this.getClass().getName(),"setDefaultConfiguration");
         /*configuredRealm.close();*/
         Log.wtf(this.getClass().getName(),"realmConfiguration");
@@ -675,7 +675,7 @@ public final class StartupActions {
         return Realm.getInstance(configuration);
     }
 
-    public Realm getInstance() {
+    public RealmConfiguration getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
         String stringArray = sharedPreferences.getString("myByteArray", null);
         if (stringArray == null) {
@@ -711,7 +711,7 @@ public final class StartupActions {
         File oldRealmFile = new File(oldConfig.getPath());
         File newRealmFile = new File(newConfig.getPath());
         if (!oldRealmFile.exists()) {
-            return Realm.getInstance(newConfig);// ohhhhh
+            return newConfig;
         } else {
             Realm realm = null;
             try {
@@ -719,15 +719,15 @@ public final class StartupActions {
                 realm.writeEncryptedCopyTo(newRealmFile, mKey);
                 realm.close();
                 Realm.deleteRealm(oldConfig);
-                return Realm.getInstance(newConfig);
+                return newConfig;
             } catch (OutOfMemoryError oom) {
                 //TODO : what is that, exception in catch, realm may be null and close it
                 realm.close();
-                return getPlainInstance();
+                return null;
             } catch (Exception e) {
                 //TODO : what is that, exception in catch, realm may be null and close it
                 realm.close();
-                return getPlainInstance();
+                return null;
             }
         }
     }

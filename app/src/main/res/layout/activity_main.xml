@@ -1,38 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootFrame"
+    android:id="@+id/mainFrame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!--<FrameLayout
-        android:id="@+id/am_frame_chat_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/back_main_room"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toEndOf="@id/viewpager"
-        android:visibility="visible"/>-->
-
-    <!--<FrameLayout
-        android:id="@+id/am_frame_fragment_back"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#90000000"
-        android:clickable="true"
-        android:visibility="gone">
-
-        <FrameLayout
-            android:id="@+id/am_frame_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:clickable="true">
-
-        </FrameLayout>
-
-    </FrameLayout>-->
-
-</FrameLayout>
+    android:layout_height="match_parent"/>
