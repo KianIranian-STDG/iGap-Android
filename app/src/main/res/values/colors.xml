@@ -181,7 +181,7 @@
     <color name="chat_cell_pin_dark">#4a4d4c</color>
 
     <!--bottom navigation-->
-    <color name="background_color">#1565C0</color>
+    <color name="background_color">#EEEEEE</color>
     <color name="selected_color">#ffffff</color>
     <color name="unSelected_color">@color/gray_300</color>
 

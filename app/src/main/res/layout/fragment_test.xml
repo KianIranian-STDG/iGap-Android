@@ -20,8 +20,6 @@
         android:id="@+id/bn_main_bottomNavigation"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:visibility="invisible"
-        app:background_color="@color/accent"
         app:corner_radius="35"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/viewpager"

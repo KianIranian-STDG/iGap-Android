@@ -142,7 +142,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -651,14 +651,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
             Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");
-            boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
-            if (isDefaultBg){
-                if (G.isDarkTheme){
-                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
-                }else{
-                    getWallpaperAsDefault();
+            new Thread(() -> {
+                boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
+                if (isDefaultBg){
+                    if (G.isDarkTheme){
+                        sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
+                    }else{
+                        getWallpaperAsDefault();
+                    }
                 }
-            }
+            }).start();
             Log.wtf(this.getClass().getName(),"KEY_PATH_CHAT_BACKGROUND");
 
             Log.wtf(this.getClass().getName(),"getFavoritSticker");
