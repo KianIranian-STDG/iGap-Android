@@ -128,6 +128,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private boolean isContact;
     private boolean isSwipe = false;
 
+    private boolean endPage = false;
+
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
     }
@@ -418,7 +420,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        contactListAdapter.addUserList(ContactManager.getContactList(ContactManager.OVER_LOAD));
+                        if (!endPage)
+                            contactListAdapter.addUserList(ContactManager.getContactList(ContactManager.OVER_LOAD));
                     }
                 }
             }
@@ -755,16 +758,18 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         private LayoutInflater inflater;
 
 
-        ContactListAdapter(List<RealmContacts> realmResults) {
+        ContactListAdapter(List<RealmContacts> contacts) {
             inflater = LayoutInflater.from(G.context);
-            count = realmResults.size();
-            usersList = realmResults;
+            count = contacts.size();
+            usersList = contacts;
         }
 
         void addUserList(List<RealmContacts> usersList) {
             this.usersList.addAll(count, usersList);
             notifyItemChanged(count, count + ContactManager.LOAD_AVG);
             count = count + ContactManager.LOAD_AVG;
+            if (count > this.usersList.size())
+                endPage = true;
         }
 
         public void remove(long num) {
