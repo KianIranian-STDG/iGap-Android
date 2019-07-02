@@ -94,7 +94,6 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
@@ -1358,6 +1357,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
         mViewPager.setOffscreenPageLimit(5);
+        RegisteredContactsFragment contactsFragment =  RegisteredContactsFragment.newInstance();
 
         if (HelperCalander.isPersianUnicode) {
             G.handler.postDelayed(() -> {
@@ -1366,7 +1366,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
-                pages.add(RegisteredContactsFragment.newInstance(false));
+                pages.add(contactsFragment);
 
                 sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                 mViewPager.setAdapter(sampleFragmentPagerAdapter);
@@ -1379,7 +1379,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             G.handler.postDelayed(() -> {
 
-                pages.add(RegisteredContactsFragment.newInstance(false));
+                pages.add(contactsFragment);
                 fragmentCall = FragmentCall.newInstance(true);
                 pages.add(fragmentCall);
                 pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));

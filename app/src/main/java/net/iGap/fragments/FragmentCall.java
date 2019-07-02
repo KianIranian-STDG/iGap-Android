@@ -88,6 +88,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private HelperToolbar mHelperToolbar;
     private RealmResults<RealmCallLog> realmResults ;
     private CallAdapter callAdapter;
+    private Realm mRealm;
+
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
 
@@ -463,6 +465,16 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             disable3.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
             disable4.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
         }
+    }
+
+
+    private Realm getRealm() {
+        if (mRealm == null || mRealm.isClosed()) {
+
+            mRealm = Realm.getDefaultInstance();
+        }
+
+        return mRealm;
     }
 
     private RealmResults<RealmCallLog> getRealmResult(ProtoSignalingGetLog.SignalingGetLog.Filter status , Realm realm) {
