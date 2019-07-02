@@ -25,7 +25,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -226,7 +225,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
          */
 
         if (results == null)
-            results = ContactManager.getContactList();
+            results = ContactManager.getContactList(ContactManager.FIRST);
 
         nestedScrollView = view.findViewById(R.id.nestedScrollContact);
 
@@ -419,7 +418,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        contactListAdapter.addUserList(ContactManager.getContactList());
+                        contactListAdapter.addUserList(ContactManager.getContactList(ContactManager.OVER_LOAD));
                     }
                 }
             }
@@ -587,13 +586,16 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     @Override
     public void onContactInfo(ProtoGlobal.RegisteredUser user) {
-        Log.i(TAG, "PROTO CALL: " + user.getPhone());
         RealmContacts newContact = getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.ID, user.getId()).findFirst();
-        RealmResults<RealmContacts> contacts = getRealm().where(RealmContacts.class).sort(RealmContactsFields.DISPLAY_NAME).findAll();
-        for (int i = 0; i < contacts.size(); i++) {
-            if (newContact.getId() == contacts.get(i).getId())
-                contactListAdapter.insertContact(newContact, i);
-        }
+
+        RealmResults<RealmContacts> contacts = getRealm()
+                .where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT)
+                .sort(RealmContactsFields.DISPLAY_NAME).findAll();
+        if (newContact != null)
+            for (int i = 0; i < contacts.size(); i++) {
+                if (newContact.getId() == contacts.get(i).getId())
+                    contactListAdapter.insertContact(newContact, i);
+            }
     }
 
     @Override

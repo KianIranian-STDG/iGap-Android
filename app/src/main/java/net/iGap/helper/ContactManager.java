@@ -5,17 +5,18 @@ import android.util.Log;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class ContactManager {
-    public static final int LOAD_AVG = 30;
-    public static final int CONTACT_LIMIT=5000;
+    public static final int LOAD_AVG = 10;
+    public static final int CONTACT_LIMIT = 5000;
+    public static final String FIRST = "FIRST";
+    public static final String OVER_LOAD = "OVERLOAD";
     private static final String TAG = "aabolfazlContact";
     private static RealmResults<RealmContacts> results;
+
     private static int first = 0;
     private static int loadMore = LOAD_AVG;
 
@@ -23,20 +24,30 @@ public class ContactManager {
 
     }
 
-    public static List<RealmContacts> getContactList() {
+    public static RealmList<RealmContacts> getContactList(String mode) {
+        if (mode.equals(FIRST)) {
+            first = 0;
+            loadMore = LOAD_AVG;
+            return overLoadContact();
+        } else if (mode.equals(OVER_LOAD))
+            return overLoadContact();
+        else
+            return new RealmList<>();
+    }
+
+    private static RealmList<RealmContacts> overLoadContact() {
+        RealmList<RealmContacts> contacts = new RealmList<>();
+
         if (results == null)
             getIgapContact();
 
-        List<RealmContacts> firstLoading = new ArrayList<>();
-
-        firstLoading.addAll(results.subList(first, loadMore));
-
+        contacts.addAll(results.subList(first, loadMore));
         first = loadMore;
         loadMore = loadMore + LOAD_AVG;
 
-        Log.i(TAG, "getContactList: " + firstLoading.size());
+        Log.i(TAG, "getContactList: " + contacts.size());
 
-        return firstLoading;
+        return contacts;
     }
 
     private static void getIgapContact() {
