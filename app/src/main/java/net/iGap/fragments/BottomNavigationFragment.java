@@ -134,9 +134,9 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
             }
         });
 
+        mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(new ViewPagerAdapter(getFragmentManager()));
         mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-        /*mViewPager.setOffscreenPageLimit(1);*/
 
         if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);

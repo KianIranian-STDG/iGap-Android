@@ -129,7 +129,6 @@
         android:layout_height="@dimen/dp160"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +136,7 @@
         app:layout_constraintVertical_bias=".45"
         app:srcCompat="@drawable/ic_call" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textEmptyCal"
         style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
@@ -145,7 +144,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp20"
         android:layout_marginBottom="@dimen/dp52"
-        android:visibility="gone"
         android:text="@string/empty_call"
         android:textSize="@dimen/dp18"
         app:layout_constraintEnd_toEndOf="parent"
@@ -160,12 +158,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/v" />
-
-    <android.support.constraint.Group
-        android:id="@+id/empty_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:constraint_referenced_ids="textEmptyCal,img_icCall" />
 
     <ProgressBar
         android:id="@+id/pb_load"

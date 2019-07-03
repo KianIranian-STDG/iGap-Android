@@ -1,16 +1,11 @@
 package net.iGap.fragments;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -18,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,7 +31,6 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnCallLogClear;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
@@ -74,8 +67,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private int mOffset = 0;
     private int mLimit = 50;
     private RecyclerView.OnScrollListener onScrollListener;
-    private ImageView imgCallEmpty;
-    private TextView empty_call;
+    private AppCompatImageView imgCallEmpty;
+    private AppCompatTextView empty_call;
     private int attampOnError = 0;
     private RecyclerView mRecyclerView;
     //private CallAdapterA mAdapter;
@@ -163,12 +156,17 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         mBtnCanceledCalls = view.findViewById(R.id.fc_btn_canceled_calls);
         mBtnIncomingCalls = view.findViewById(R.id.fc_btn_incoming_calls);
         mBtnOutgoingCalls = view.findViewById(R.id.fc_btn_outgoing_calls);
+        imgCallEmpty = view.findViewById(R.id.img_icCall);
+        empty_call = view.findViewById(R.id.textEmptyCal);
+        progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
+        mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
 
         setEnableButton(mBtnAllCalls , mBtnMissedCalls , mBtnIncomingCalls , mBtnOutgoingCalls , mBtnCanceledCalls);
 
         if (!getUserVisibleHint()) {
             if (!isInit) {
-                view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
+                imgCallEmpty.setVisibility(View.VISIBLE);
+                empty_call.setVisibility(View.VISIBLE);
                 view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
             }
             return;
@@ -176,15 +174,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         isInit = true;
         view.findViewById(R.id.pb_load).setVisibility(View.GONE);
-        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+        imgCallEmpty.setVisibility(View.GONE);
+        empty_call.setVisibility(View.GONE);
 
-
-        imgCallEmpty = (AppCompatImageView) view.findViewById(R.id.img_icCall);
-        empty_call = view.findViewById(R.id.textEmptyCal);
-        progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
-
-
-        mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
         LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearVertical);
@@ -350,7 +342,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         if (realmResults.size() > 0) {
             imgCallEmpty.setVisibility(View.GONE);
             empty_call.setVisibility(View.GONE);
-
         } else {
             imgCallEmpty.setVisibility(View.VISIBLE);
             empty_call.setVisibility(View.VISIBLE);
@@ -622,8 +613,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             public ViewHolder(View view) {
                 super(view);
 
+                /*Log.wtf(this.getClass().getName(),"ViewHolder gone");
                 imgCallEmpty.setVisibility(View.GONE);
-                empty_call.setVisibility(View.GONE);
+                empty_call.setVisibility(View.GONE);*/
 
                 timeDuration = itemView.findViewById(R.id.fcsl_txt_dureation_time);
                 image = itemView.findViewById(R.id.fcsl_imv_picture);
