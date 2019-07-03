@@ -4322,21 +4322,25 @@ public class FragmentChat extends BaseFragment
                             // I'm in the room
                             if (roomId == mRoomId) {
                                 // I'm in the room, so unread messages count is 0. it means, I read all messages
-                                getRealmChat().executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                        if (room != null) {
-                                            /**
-                                             * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                                             */
-                                            if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
-                                                firstUnreadMessage = realmRoomMessage;
-                                            }
-                                            room.setUnreadCount(0);
-                                        }
+
+                                RealmRoom room = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                if (room != null) {
+                                    /**
+                                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                                     */
+                                    if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
+                                        firstUnreadMessage = realmRoomMessage;
                                     }
-                                });
+
+                                    getRealmChat().executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmRoom.setCountWithCallBack(realm, mRoomId,0);
+                                        }
+                                    });
+
+                                }
+
 
                                 /**
                                  * when user receive message, I send update status as SENT to the message sender
@@ -4347,66 +4351,75 @@ public class FragmentChat extends BaseFragment
 
                                 //Start ClientCondition OfflineSeen
                                 RealmClientCondition.addOfflineSeenAsync(mRoomId, realmRoomMessage.getMessageId());
+                                /**
+                                 * I'm in the room, so unread messages count is 0. it means, I read all messages
+                                 */
 
-                                getRealmChat().executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        if (!isNotJoin) {
-                                            // make update status to message sender that i've read his message
+                                RealmRoomMessage messageCopy = getRealmChat().copyFromRealm(realmRoomMessage);
 
-                                            StructBackGroundSeen _BackGroundSeen = null;
+                                if (!isNotJoin) {
+                                    // make update status to message sender that i've read his message
 
-                                            ProtoGlobal.RoomMessageStatus roomMessageStatus;
-                                            if (G.isAppInFg && isEnd()) {
+                                    StructBackGroundSeen _BackGroundSeen = null;
 
+                                    ProtoGlobal.RoomMessageStatus roomMessageStatus;
+                                    if (G.isAppInFg && isEnd()) {
+
+
+                                        if (messageCopy.isValid() && !messageCopy.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                            messageCopy.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                        }
+
+                                        getRealmChat().executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
                                                 /**
                                                  * I'm in the room, so unread messages count is 0. it means, I read all messages
                                                  */
-                                                RealmRoom room = RealmRoom.setCount(realm, mRoomId, 0);
-
-                                                if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                                                    realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-                                                }
-
-                                                roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
-                                            } else {
-
-                                                roomMessageStatus = ProtoGlobal.RoomMessageStatus.DELIVERED;
-
-                                                _BackGroundSeen = new StructBackGroundSeen();
-                                                _BackGroundSeen.messageID = roomMessage.getMessageId();
-                                                _BackGroundSeen.roomType = roomType;
+                                                RealmRoom.setCount(realm, mRoomId, 0);
+                                                realm.copyToRealmOrUpdate(messageCopy);
                                             }
+                                        });
+                                        roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
+                                    } else {
 
-                                            if (chatType == CHAT) {
-                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+                                        roomMessageStatus = ProtoGlobal.RoomMessageStatus.DELIVERED;
 
-                                                if (_BackGroundSeen != null) {
-                                                    backGroundSeenList.add(_BackGroundSeen);
-                                                }
-                                            } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
-                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+                                        _BackGroundSeen = new StructBackGroundSeen();
+                                        _BackGroundSeen.messageID = roomMessage.getMessageId();
+                                        _BackGroundSeen.roomType = roomType;
+                                    }
 
-                                                if (_BackGroundSeen != null) {
-                                                    backGroundSeenList.add(_BackGroundSeen);
-                                                }
-                                            }
+                                    if (chatType == CHAT) {
+                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+
+                                        if (_BackGroundSeen != null) {
+                                            backGroundSeenList.add(_BackGroundSeen);
+                                        }
+                                    } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
+                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+
+                                        if (_BackGroundSeen != null) {
+                                            backGroundSeenList.add(_BackGroundSeen);
                                         }
                                     }
-                                });
+                                }
 
-                                /**
-                                 * when client load item from unread and don't come down let's not add the message
-                                 * to the list and after insuring that not any more message in DOWN can add message
-                                 */
+
                                 if (addToView) {
-                                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), realmRoomMessage))), false);
+                                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), messageCopy))), false);
                                     if (isShowLayoutUnreadMessage) {
                                         removeLayoutUnreadMessage();
                                     }
                                 }
 
                                 setBtnDownVisible(realmRoomMessage);
+
+                                /**
+                                 * when client load item from unread and don't come down let's not add the message
+                                 * to the list and after insuring that not any more message in DOWN can add message
+                                 */
+
                             } else {
                                 if (!isNotJoin) {
                                     // user has received the message, so I make a new delivered update status request

@@ -894,6 +894,23 @@ public class RealmRoom extends RealmObject {
         return room;
     }
 
+    public static RealmRoom setCountWithCallBack(Realm realm, final long roomId, final int count) {
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            room.setUnreadCount(count);
+        }
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.onUnreadChange != null) {
+                    G.onUnreadChange.onChange();
+                }
+            }
+        }, 100);
+
+        return room;
+    }
+
     public static void setAction(final long roomId, final long userId, final String action) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
