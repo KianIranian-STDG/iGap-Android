@@ -84,6 +84,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private TextView mBtnAllCalls, mBtnMissedCalls , mBtnIncomingCalls , mBtnOutgoingCalls , mBtnCanceledCalls;
     private RealmResults<RealmCallLog> realmResults ;
     private CallAdapter callAdapter;
+    private Realm mRealm;
+
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
 
@@ -399,6 +401,16 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         }
     }
 
+
+    private Realm getRealm() {
+        if (mRealm == null || mRealm.isClosed()) {
+
+            mRealm = Realm.getDefaultInstance();
+        }
+
+        return mRealm;
+    }
+
     private RealmResults<RealmCallLog> getRealmResult(ProtoSignalingGetLog.SignalingGetLog.Filter status , Realm realm) {
 
         switch (status){
@@ -420,12 +432,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     public void showContactListForCall() {
         try {
             if (getActivity() != null) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "call");
-                bundle.putBoolean("isBackSwipable", true);
-                bundle.putBoolean("ACTION", true);
-                fragment.setArguments(bundle);
+                final Fragment fragment = RegisteredContactsFragment.newInstance(true,true,RegisteredContactsFragment.CALL);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {

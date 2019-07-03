@@ -19,7 +19,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -296,7 +295,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
 
         contacts.add(contact);
 
-        new RequestUserContactImport().contactImport(contacts, true);
+        new RequestUserContactImport().contactImport(contacts, true, RequestUserContactImport.KEY);
     }
 
     private void addToContactList(View view) {

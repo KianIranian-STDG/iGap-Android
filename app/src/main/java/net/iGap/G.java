@@ -28,7 +28,6 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
@@ -53,7 +52,6 @@ import net.iGap.request.RequestWrapper;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
-import org.paygear.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -379,6 +377,7 @@ public class G extends Application {
     public static OnPayment onPayment;
     public static OnMplResult onMplResult;
     public static OnVersionCallBack onVersionCallBack;
+    public static OnContactImport onContactImport;
     /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
@@ -485,8 +484,7 @@ public class G extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.wtf(this.getClass().getName(),"onCreate start");
-
+        RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
 
         new Thread(new Runnable() {
@@ -504,8 +502,8 @@ public class G extends Application {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Raad.init(getApplicationContext());
                 RaadApp.onCreate(getApplicationContext());
+                Raad.init(getApplicationContext());
                 WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
             }
         }).start();
@@ -525,7 +523,7 @@ public class G extends Application {
             WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
         } catch (Exception e) {
         }*/
-        Log.wtf(this.getClass().getName(),"onCreate end");
+
     }
 
     @Override
@@ -544,6 +542,4 @@ public class G extends Application {
     public static void showToast(String message){
         G.handler.post(() -> Toast.makeText(G.context, message, Toast.LENGTH_SHORT).show());
     }
-
-
 }

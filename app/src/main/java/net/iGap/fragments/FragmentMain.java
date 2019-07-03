@@ -910,11 +910,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
     @Override
     public void onRightIconClickListener(View view) {
-        final Fragment fragment = RegisteredContactsFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("isBackSwipable", true);
-        bundle.putString("TITLE", "ADD");
-        fragment.setArguments(bundle);
+        final Fragment fragment = RegisteredContactsFragment.newInstance(true,false,RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();

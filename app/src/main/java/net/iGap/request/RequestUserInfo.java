@@ -82,6 +82,20 @@ public class RequestUserInfo {
         }
     }
 
+    public void contactImportWithCallBack(long userId) {
+        ProtoUserInfo.UserInfo.Builder builder = ProtoUserInfo.UserInfo.newBuilder();
+        builder.setUserId(userId);
+
+        RequestWrapper requestWrapper = new RequestWrapper(117, builder,RequestUserContactImport.KEY);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     /**
      * send userInfo request to server and avoid from resend request
      * at lower than {@link RequestUserInfo#CLEAR_ARRAY_TIME} again

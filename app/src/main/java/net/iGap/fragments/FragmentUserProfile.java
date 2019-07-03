@@ -47,6 +47,8 @@ import org.paygear.WalletActivity;
 import java.io.File;
 import java.io.IOException;
 
+import io.realm.Realm;
+
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
@@ -72,15 +74,14 @@ public class FragmentUserProfile extends BaseFragment {
 
         viewModel.goToAddMemberPage.observe(this, aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
-                Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isBackSwipable", true);
-                bundle.putString("TITLE", "ADD");
-                fragment.setArguments(bundle);
+                Realm realm = Realm.getDefaultInstance();
+                Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
                 try {
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
+                } finally {
+                    realm.close();
                 }
             }
         });
