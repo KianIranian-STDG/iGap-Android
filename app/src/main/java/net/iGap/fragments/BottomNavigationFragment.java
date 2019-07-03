@@ -40,16 +40,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         mViewPager = view.findViewById(R.id.viewpager);
         bottomNavigation = view.findViewById(R.id.bn_main_bottomNavigation);
 
-        Log.wtf(this.getClass().getName(), "initTabStrip");
         initTabStrip();
-        Log.wtf(this.getClass().getName(), "initTabStrip");
-    }
-
-    @Override
-    public void onResume() {
-        Log.wtf(this.getClass().getName(), "onResume");
-        super.onResume();
-        Log.wtf(this.getClass().getName(), "onResume");
     }
 
     @Override

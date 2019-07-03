@@ -81,7 +81,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     private long index = 500;
     private String preventRepeatSearch = "";
     private ContentLoadingProgressBar loadingProgressBar;
-    private HelperToolbar toolbar ;
+    private HelperToolbar toolbar;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -112,7 +112,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
-                .setSearchBoxShown(true , true , true)
+                .setSearchBoxShown(true, true, true)
                 .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.sfl_layout_toolbar);
@@ -144,7 +144,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
 
         Animation animation = new ScaleAnimation(
-                0.91f , 1f ,
+                0.91f, 1f,
                 0.85f, 1f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f
@@ -246,7 +246,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             } else {
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
             }
-        }else {
+        } else {
             preventRepeatSearch = "";
         }
 
@@ -279,7 +279,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     }
 
-    private void fillAfterResponse(){
+    private void fillAfterResponse() {
         String text = edtSearch.getText().toString();
         if (text.startsWith("@")) {
             fillListItemAtsign(text.substring(1));
@@ -553,7 +553,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, false).findAll();
 
         } else {
-            results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text,Case.INSENSITIVE).endGroup().findAll();
+            results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text, Case.INSENSITIVE).endGroup().findAll();
         }
 
         if (results != null && results.size() > 0) {
@@ -696,7 +696,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             goToRoomWithRealm(realmRoom, type, id);
         } else if (type == SearchType.room) {
 
-            HelperUrl.checkUsernameAndGoToRoom(getActivity(),userName, HelperUrl.ChatEntry.profile);
+            HelperUrl.checkUsernameAndGoToRoom(getActivity(), userName, HelperUrl.ChatEntry.profile);
             popBackStackFragment();
 
         }
@@ -773,7 +773,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onLeftIconClickListener(View view) {
-        G.fragmentActivity.onBackPressed();
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+        }
     }
 
     @Override

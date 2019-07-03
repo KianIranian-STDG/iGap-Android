@@ -67,15 +67,12 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     @Override
     protected void onFinishInflate() {
-        Log.wtf(this.getClass().getName(), "onFinishInflate");
         super.onFinishInflate();
         setupChildren();
     }
 
     private void setupChildren() {
-        Log.wtf(this.getClass().getName(), "setupChildren");
         for (int i = 0; i < getChildCount(); i++) {
-            Log.wtf(this.getClass().getName(), "setupChildren: " + i);
             final TabItem tabItem = (TabItem) getChildAt(i);
             tabItem.setPosition(i);
             tabItems.add(tabItem);

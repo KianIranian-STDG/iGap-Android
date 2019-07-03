@@ -149,13 +149,11 @@ public class HelperFragment {
         if (resourceContainer == 0) {
             resourceContainer = getResContainer(tag);
         }
-
+        Log.wtf(this.getClass().getName(), "resourceContainer: " + (resourceContainer == R.id.mainFrame));
+        Log.wtf(this.getClass().getName(), "addToBackStack: " + addToBackStack);
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(tag);
         }
-
-        Log.wtf(this.getClass().getName(), "fragment name: " + fragment.getClass().getName());
-        Log.wtf(this.getClass().getName(), "resource id is roomListFrame: " + (R.id.roomListFrame == resourceContainer));
 
         if (replace) {
             fragmentTransaction.replace(resourceContainer, fragment, tag);
@@ -294,7 +292,7 @@ public class HelperFragment {
                 }
                 //TODO: fixed it in tablet mode load fragment Chat
                 return 0/*R.id.am_frame_chat_container*/;
-            } else if (fragmentClassName.equals(BottomNavigationFragment.class.getName())){
+            } else if (fragmentClassName.equals(BottomNavigationFragment.class.getName())) {
                 return R.id.mainFrame;
             } else {
                 if (G.iTowPanModDesinLayout != null) {
