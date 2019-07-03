@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -40,6 +41,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -52,6 +54,7 @@ import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
@@ -87,6 +90,7 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
+import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -167,8 +171,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.wtf(this.getClass().getName(),"onViewCreated");
-
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
         tagId = System.currentTimeMillis();
 
@@ -183,7 +185,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
-                .setRightIcons(R.string.add_icon)
+                .setRightIcons(R.string.add_icon , R.string.scan_qr_code_icon)
                 .setLogoShown(true)
                 .setPlayerEnable(true)
                 .setSearchBoxShown(true, false)
@@ -272,7 +274,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         //just check at first time page loaded
         notifyChatRoomsList();
 
-        Log.wtf(this.getClass().getName(),"onViewCreated");
     }
 
     private void notifyChatRoomsList() {
@@ -920,6 +921,29 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
         } catch (Exception e) {
             e.getStackTrace();
+        }
+    }
+
+    @Override
+    public void onSecondRightIconClickListener(View view) {
+        try {
+            HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
+                @Override
+                public void Allow() throws IllegalStateException {
+                    IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                    integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                    integrator.setRequestCode(ActivityMain.requestCodeQrCode);
+                    integrator.setBeepEnabled(false);
+                    integrator.setPrompt("");
+                    integrator.initiateScan();
+                }
+
+                @Override
+                public void deny() {
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

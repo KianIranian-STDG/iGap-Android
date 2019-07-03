@@ -11,19 +11,16 @@ package net.iGap.viewmodel;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
-import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroupOverlay;
 import android.view.WindowManager;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -31,7 +28,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
-import com.andrognito.patternlockview.utils.ResourceUtils;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -49,7 +45,6 @@ import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
-import static net.iGap.G.themeColor;
 
 public class FragmentPassCodeViewModel {
 
@@ -81,7 +76,7 @@ public class FragmentPassCodeViewModel {
     public ObservableField<Integer> rootPatternPassword = new ObservableField<>(View.GONE);
     public ObservableField<Integer> titlePassCodeVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> edtSetPasswordMaxLength = new ObservableField<>(20);
-    public ObservableField<Integer> rippleOkVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> rippleOkVisibility = new MutableLiveData<>();
     public ObservableField<Integer> layoutModePassCode = new ObservableField<>(View.GONE);
     public ObservableField<Integer> vgToggleFingerPrintVisibility = new ObservableField<>(View.GONE);
     private Realm realm;
@@ -204,7 +199,7 @@ public class FragmentPassCodeViewModel {
             vgTogglePassCodeVisibility.set(View.GONE);
             rootEnterPassword.set(View.VISIBLE);
             rootSettingPassword.set(View.GONE);
-            rippleOkVisibility.set(View.VISIBLE);
+            rippleOkVisibility.setValue(View.VISIBLE);
             //txtSetPassword.setText(G.fragmentActivity.getResources().getString(R.string.enter_a_password));
             //titlePassCode.set("PIN");
             txtSetPassword.set(G.fragmentActivity.getResources().getString(R.string.enter_a_password));
@@ -231,7 +226,7 @@ public class FragmentPassCodeViewModel {
         visibilityChangePass.set(View.GONE);
         rootEnterPassword.set(View.GONE);
         rootSettingPassword.set(View.GONE);
-        rippleOkVisibility.set(View.GONE);
+        rippleOkVisibility.setValue(View.GONE);
         layoutModePassCode.set(View.GONE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
@@ -309,7 +304,7 @@ public class FragmentPassCodeViewModel {
                 vgTogglePassCodeVisibility.set(View.GONE);
                 rootEnterPassword.set(View.VISIBLE);
                 rootSettingPassword.set(View.GONE);
-                rippleOkVisibility.set(View.VISIBLE);
+                rippleOkVisibility.setValue(View.VISIBLE);
                 //titlePassCode.setText("PIN");
                 titlePassCodeVisibility.set(View.GONE);
                 layoutModePassCode.set(View.VISIBLE);
@@ -381,7 +376,7 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);
@@ -422,7 +417,7 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);
@@ -638,7 +633,7 @@ public class FragmentPassCodeViewModel {
                 visibilityDescription.set(View.GONE);
                 rootEnterPassword.set(View.VISIBLE);
                 rootSettingPassword.set(View.GONE);
-                rippleOkVisibility.set(View.VISIBLE);
+                rippleOkVisibility.setValue(View.VISIBLE);
                 txtSetPassword.set(G.fragmentActivity.getResources().getString(R.string.enter_pass_code));
                 isTogglePassCode.set(true);
             }
@@ -732,7 +727,7 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);
@@ -768,7 +763,7 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);
