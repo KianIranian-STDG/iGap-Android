@@ -151,7 +151,14 @@ public class FragmentIntroduce extends BaseFragment {
         @NotNull
         @Override
         public Object instantiateItem(@NotNull ViewGroup container, int position) {
-            View view = G.inflater.inflate(R.layout.view_pager_introduce_1, container, false);
+
+            int layout ;
+            if (G.isLandscape)
+                layout = R.layout.view_pager_introduce_land ;
+            else
+                layout = R.layout.view_pager_introduce_1 ;
+
+            View view = G.inflater.inflate(layout, container, false);
             AppCompatImageView introImage = view.findViewById(R.id.introImage);
             introImage.setImageResource(getIntroImage(position));
             AppCompatTextView title = view.findViewById(R.id.introTitle);
