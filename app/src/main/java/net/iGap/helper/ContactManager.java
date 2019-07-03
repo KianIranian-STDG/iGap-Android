@@ -13,7 +13,6 @@ public class ContactManager {
 
     public static final String FIRST = "FIRST";
     public static final String OVER_LOAD = "OVERLOAD";
-    private static final String TAG = "aabolfazlContact";
     private static RealmResults<RealmContacts> results;
 
     private static int first = 0;

@@ -118,7 +118,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private boolean isMultiSelect = false;
     private boolean isLongClick = false;
     private boolean endPage = false;
-    private boolean isToolbarInEditMode = false;
 
     public static RegisteredContactsFragment newInstance(boolean isSwipe, boolean isCallAction, int pageMode) {
         RegisteredContactsFragment contactsFragment = new RegisteredContactsFragment();
@@ -615,7 +614,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         if (edtSearch.getText().length() > 0) {
             edtSearch.setText("");
         } else {
-            isToolbarInEditMode = false;
             closeKeyboard(getView());
         }
     }

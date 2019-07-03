@@ -35,7 +35,6 @@ import io.realm.RealmResults;
 
 public class LocalContactFragment extends BaseFragment implements ToolbarListener, OnPhoneContact {
 
-    private static final String TAG = "aabolfazlContact";
     public List<StructListOfContact> phoneContactsList = new ArrayList<>();
     private View rootView;
     private HelperToolbar mHelperToolbar;
