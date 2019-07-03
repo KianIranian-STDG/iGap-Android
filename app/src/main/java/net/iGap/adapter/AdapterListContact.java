@@ -15,7 +15,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.structs.StructListOfContact;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.ViewHolder> {
@@ -25,7 +24,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
     private List<StructListOfContact> mPhoneContactList;
     private Context context;
 
-    public AdapterListContact(ArrayList<StructListOfContact> mPhoneContactList, Context context) {
+    public AdapterListContact(List<StructListOfContact> mPhoneContactList, Context context) {
         this.mPhoneContactList = mPhoneContactList;
         this.context = context;
     }

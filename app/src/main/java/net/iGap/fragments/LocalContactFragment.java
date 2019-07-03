@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterListContact;
@@ -26,6 +28,7 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -33,12 +36,16 @@ import io.realm.RealmResults;
 public class LocalContactFragment extends BaseFragment implements ToolbarListener, OnPhoneContact {
 
     private static final String TAG = "aabolfazlContact";
-    public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
+    public List<StructListOfContact> phoneContactsList = new ArrayList<>();
     private View rootView;
     private HelperToolbar mHelperToolbar;
     private AdapterListContact adapterListContact;
     private LinearLayout toolbarLayout;
     private ProgressBar loadingPb;
+    private FastItemAdapter fastItemAdapter;
+    private RecyclerView recyclerView;
+    private boolean inSearchMode = false;
+
 
     @Nullable
     @Override
@@ -47,7 +54,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         G.onPhoneContact = this;
         Contacts.localPhoneContactId = 0;
         Contacts.getContact = true;
-
+        fastItemAdapter = new FastItemAdapter();
         return rootView;
     }
 
@@ -58,7 +65,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         loadingPb = rootView.findViewById(R.id.pb_localContact);
         toolbarInit();
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.rv_localContact);
+        recyclerView = rootView.findViewById(R.id.rv_localContact);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -99,9 +106,20 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
 
     @Override
     public void onSearchClickListener(View view) {
+        inSearchMode = true;
+        openKeyBoard();
 
     }
 
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+        recyclerView.setAdapter(adapterListContact);
+
+        if (!inSearchMode)
+            closeKeyboard(view);
+
+        inSearchMode = false;
+    }
 
     @Override
     public void onRightIconClickListener(View view) {
@@ -116,6 +134,21 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     @Override
     public void onLeftIconClickListener(View view) {
         getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+        inSearchMode = true;
+        List<StructListOfContact> searchContact = new ArrayList<>();
+
+        fastItemAdapter.filter(text.toLowerCase());
+
+        for (int i = 0; i < phoneContactsList.size(); i++) {
+            if (text.equals(phoneContactsList.get(i).displayName))
+                searchContact.add(phoneContactsList.get(i));
+        }
+        recyclerView.setAdapter(new AdapterListContact(searchContact, getContext()));
+
     }
 
     @Override
@@ -148,7 +181,6 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
             Realm realm = Realm.getDefaultInstance();
             RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
-
             ArrayList<StructListOfContact> slc = new ArrayList();
 
             for (int i = 0; i < contacts.size(); i++) {
@@ -164,14 +196,12 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                 }
             }
             realm.close();
-
             return slc;
         }
 
         @Override
         protected void onPostExecute(ArrayList<StructListOfContact> slc) {
             phoneContactsList.addAll(slc);
-
             adapterListContact.notifyDataSetChanged();
             loadingPb.setVisibility(View.GONE);
             super.onPostExecute(slc);

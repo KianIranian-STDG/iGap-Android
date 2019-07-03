@@ -579,12 +579,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     @Override
     public void onSearchClickListener(View view) {
-
-        if (!isToolbarInEditMode) {
-            isToolbarInEditMode = true;
-            openKeyBoard();
-        }
-
+        openKeyBoard();
     }
 
     @Override
@@ -907,7 +902,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 root.setOnClickListener(v -> {
 
                     if (!isMultiSelect) {
-//                        if (isCallAction) {
+                        if (isCallAction) {
                             long userId = realmContacts.getId();
                             if (userId != 134 && G.userId != userId) {
 
@@ -930,7 +925,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                                         dialog.dismiss();
                                     }
                                 }).show();
-//                            }
+                            }
 
                         } else {
                             showProgress();
