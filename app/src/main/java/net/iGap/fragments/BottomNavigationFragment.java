@@ -53,6 +53,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        G.onUnreadChange = null;
+    }
+
+    @Override
     public void onChange() {
 
         int unReadCount = RealmRoom.getAllUnreadCount();

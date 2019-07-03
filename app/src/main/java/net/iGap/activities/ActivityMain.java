@@ -97,6 +97,7 @@ import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
+import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
@@ -165,6 +166,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean waitingForConfiguration = false;
     private SharedPreferences sharedPreferences;
     private Realm mRealm;
+    private TextView iconLock;
     private boolean isNeedToRegister = false;
     private int retryConnectToWallet = 0;
 
@@ -305,10 +307,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
-        new HelperGetDataFromOtherApp(this,intent);
+        new HelperGetDataFromOtherApp(this, intent);
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
-            new HelperFragment(getSupportFragmentManager(),new FragmentSetting()).load();
+            new HelperFragment(getSupportFragmentManager(), new FragmentSetting()).load();
         }
 
         Bundle extras = intent.getExtras();
@@ -329,7 +331,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (openMediaPlayer) {
                 if (getSupportFragmentManager().findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
                     FragmentMediaPlayer fragment = new FragmentMediaPlayer();
-                    new HelperFragment(getSupportFragmentManager(),fragment).setReplace(false).load();
+                    new HelperFragment(getSupportFragmentManager(), fragment).setReplace(false).load();
                 }
             }
         }
@@ -1060,7 +1062,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                                         waitingForConfiguration = false;
                                                     }
                                                 }, 2000);
-                                                new HelperFragment(getSupportFragmentManager(),FragmentiGapMap.getInstance()).load();
+                                                new HelperFragment(getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
                                             }
                                         });
                                     }
@@ -1083,7 +1085,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         waitingForConfiguration = false;
                                     }
                                 }, 2000);
-                                new HelperFragment(getSupportFragmentManager(),FragmentiGapMap.getInstance()).load();
+                                new HelperFragment(getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
                             }
                         }
 
@@ -1269,7 +1271,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         //ActivityMain.setMediaLayout();
 
-        if (G.isPassCode) {
+        /*if (G.isPassCode) {
             iconLock.setVisibility(View.VISIBLE);
 
             if (isLock) {
@@ -1279,7 +1281,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         } else {
             iconLock.setVisibility(View.GONE);
-        }
+        }*/
 
         onFinance(G.isMplActive, G.isWalletActive);
 
@@ -1300,30 +1302,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             AppUtils.updateBadgeOnly(getRealm(), -1);
-
-            G.onUnreadChange = null;
-
-            if (mViewPager != null && mViewPager.getAdapter() != null) {
-
-                try {
-
-                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-
-                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
-
-                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                        G.selectedTabInMainActivity = fm.mainType.toString();
-                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
-
-                        G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
-                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof DiscoveryFragment) {
-
-                        G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

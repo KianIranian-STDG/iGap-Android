@@ -32,7 +32,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 return FragmentCall.newInstance(true);
             default:
-                return RegisteredContactsFragment.newInstance(false);
+                return RegisteredContactsFragment.newInstance(false,false,RegisteredContactsFragment.CONTACTS);
 
         }
     }

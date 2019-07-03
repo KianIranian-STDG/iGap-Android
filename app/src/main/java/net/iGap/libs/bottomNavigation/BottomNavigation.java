@@ -10,6 +10,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
@@ -51,9 +52,9 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.BottomNavigation);
 
             try {
-                if (G.isDarkTheme){
+                if (G.isDarkTheme) {
                     backgroundColor = getContext().getResources().getColor(R.color.navigation_dark_mode_bg);
-                }else{
+                } else {
                     backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
                 }
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
@@ -66,12 +67,15 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     @Override
     protected void onFinishInflate() {
+        Log.wtf(this.getClass().getName(), "onFinishInflate");
         super.onFinishInflate();
         setupChildren();
     }
 
     private void setupChildren() {
+        Log.wtf(this.getClass().getName(), "setupChildren");
         for (int i = 0; i < getChildCount(); i++) {
+            Log.wtf(this.getClass().getName(), "setupChildren: " + i);
             final TabItem tabItem = (TabItem) getChildAt(i);
             tabItem.setPosition(i);
             tabItems.add(tabItem);

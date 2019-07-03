@@ -1231,6 +1231,7 @@ public class RealmRoom extends RealmObject {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Log.wtf(this.getClass().getName(),"setUnreadCount onUnreadChange is null : "+ (G.onUnreadChange == null));
                 if (G.onUnreadChange != null) {
                     G.onUnreadChange.onChange();
                 }
