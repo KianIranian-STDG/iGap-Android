@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -41,7 +40,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
@@ -55,7 +53,6 @@ import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
-import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
@@ -92,7 +89,8 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
-import java.io.IOException;
+import org.paygear.fragment.ScannerFragment;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -912,6 +910,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+            if (G.isPassCode) mHelperToolbar.getSecondLeftButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             setVisiblityForSelectedActionsInEverySelection();
@@ -923,6 +923,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+            mHelperToolbar.getSecondLeftButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
             if (!mHelperToolbar.getmSearchBox().isShown()){
@@ -982,24 +984,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        try {
-            HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
-                @Override
-                public void Allow() throws IllegalStateException {
-                    IntentIntegrator integrator = new IntentIntegrator(getActivity());
-                    integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                    integrator.setRequestCode(ActivityMain.requestCodeQrCode);
-                    integrator.setBeepEnabled(false);
-                    integrator.setPrompt("");
-                    integrator.initiateScan();
-                }
-
-                @Override
-                public void deny() {
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (getActivity() != null){
+            new HelperFragment(getActivity().getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
         }
     }
 

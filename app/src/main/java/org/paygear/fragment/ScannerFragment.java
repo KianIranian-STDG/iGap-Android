@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -20,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -47,6 +44,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.CongratulationsDialogBinding;
 import net.iGap.databinding.QrVoucherDialogBinding;
@@ -69,7 +67,6 @@ import java.util.regex.Pattern;
 import ir.radsense.raadcore.OnFragmentInteraction;
 import ir.radsense.raadcore.app.AlertDialog;
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.QR;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
@@ -128,6 +125,9 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        setupTheme();
+
         View view = rootView = inflater.inflate(R.layout.fragment_scanner, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -197,6 +197,9 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         if (RaadApp.paygearCard != null) {
             balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
                     RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, true));
+        }else{
+            balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
+                    String.format(getString(R.string.wallet_Reial), G.cardamount));
         }
 
         flashImage.setOnClickListener(new View.OnClickListener() {
@@ -217,6 +220,22 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         });
 
         return view;
+    }
+
+    private void setupTheme() {
+
+        try{
+            WalletActivity.backgroundTheme = G.backgroundTheme;
+
+            if (WalletActivity.backgroundTheme.length() == 9) {
+                WalletActivity.backgroundTheme = "#FF" + WalletActivity.backgroundTheme.substring(3);
+            }
+
+            WalletActivity.primaryColor = G.appBarColor ;
+
+        }catch (Exception e){
+
+        }
     }
 
     @Override
