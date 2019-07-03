@@ -63,4 +63,8 @@ public class TabletMainFragment extends Fragment {
             }
         }
     }
+
+    public void loadChatFragment(FragmentChat fragmentChat){
+        getChildFragmentManager().beginTransaction().addToBackStack(fragmentChat.getClass().getName()).add(R.id.childMainContainer, fragmentChat, fragmentChat.getClass().getName()).commit();
+    }
 }

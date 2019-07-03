@@ -27,11 +27,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +52,7 @@ import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.CallSelectFragment;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
@@ -56,6 +60,7 @@ import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.fragments.TabletMainFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -474,6 +479,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 };
 
                 designLayout(chatLayoutMode.none);
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+
+                int size = Math.min(width, height) - 50;
+
+                FrameLayout frameFragmentContainer = findViewById(R.id.detailFrame);
+                ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
+                lp.width = size;
+                lp.height = size;
 
                 /*frameFragmentBack.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1195,19 +1212,31 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (onBackPressedListener != null) {
                 onBackPressedListener.doBack();
             }
-
-            if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                super.onBackPressed();
-            } else {
-                finish();
-            }
-
-            /*if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() < 1) {
-                if (!this.isFinishing()) {
-                    resume();
+            if (G.twoPaneMode) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                if (fragment instanceof BottomNavigationFragment) {
+                    Fragment f = ((BottomNavigationFragment) fragment).getViewPagerCurrentFragment();
+                    if (f != null && f.getChildFragmentManager().getBackStackEntryCount() > 1) {
+                        f.getChildFragmentManager().popBackStack();
+                    } else {
+                        finish();
+                    }
+                } else {
+                    finish();
                 }
+            } else {
+                if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                    super.onBackPressed();
+                } else {
+                    finish();
+                }
+                /*if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() < 1) {
+                    if (!this.isFinishing()) {
+                        resume();
+                    }
+                }
+                designLayout(chatLayoutMode.none);*/
             }
-            designLayout(chatLayoutMode.none);*/
         } else {
             super.onBackPressed();
         }
@@ -1626,7 +1655,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             final SharedPreferences.Editor editor = settings.edit();
 
 
-            new MaterialDialog.Builder(ActivityMain.this)
+            new MaterialDialog.Builder(this)
                     .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
                     .titleGravity(GravityEnum.CENTER)
                     .buttonsGravity(GravityEnum.CENTER)
@@ -1691,7 +1720,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         }
                     } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
                     } catch (Exception ee) {
+                        ee.printStackTrace();
                     }
 
 
@@ -1732,10 +1763,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         void doBack();
     }
 
-    public void goToUserProfile(){
+    public void goToUserProfile() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-        if (fragment instanceof BottomNavigationFragment){
+        if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).goToUserProfile();
+        }
+    }
+
+    public void goToChatPage(FragmentChat fragmentChat) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).setChatPage(fragmentChat);
         }
     }
 }

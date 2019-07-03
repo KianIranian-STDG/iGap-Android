@@ -52,6 +52,30 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         Log.wtf(this.getClass().getName(), "onResume");
     }
 
+    @Override
+    public void onChange() {
+
+        int unReadCount = RealmRoom.getAllUnreadCount();
+
+        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
+            @Override
+            public int callCount() {
+                return 0;
+            }
+
+            @Override
+            public int messageCount() {
+                return unReadCount;
+            }
+
+            @Override
+            public int badgeColor() {
+                return getResources().getColor(R.color.red);
+            }
+        });
+
+    }
+
     private void initTabStrip() {
 
         boolean isRtl = HelperCalander.isPersianUnicode;
@@ -113,31 +137,29 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public void goToUserProfile(){
+    public void goToUserProfile() {
         mViewPager.setCurrentItem(HelperCalander.isPersianUnicode ? 0 : 4);
     }
 
-    @Override
-    public void onChange() {
-
-        int unReadCount = RealmRoom.getAllUnreadCount();
-
-        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
-            @Override
-            public int callCount() {
-                return 0;
+    public void setChatPage(FragmentChat fragmentChat) {
+        if (getFragmentManager() != null) {
+            if (mViewPager.getCurrentItem() != 2) {
+                mViewPager.setCurrentItem(2);
             }
-
-            @Override
-            public int messageCount() {
-                return unReadCount;
+            Fragment page = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + mViewPager.getCurrentItem());
+            // based on the current position you can then cast the page to the correct
+            // class and call the method:
+            if (page instanceof TabletMainFragment) {
+                ((TabletMainFragment) page).loadChatFragment(fragmentChat);
             }
+        }
+    }
 
-            @Override
-            public int badgeColor() {
-                return getResources().getColor(R.color.red);
-            }
-        });
-
+    public Fragment getViewPagerCurrentFragment() {
+        if (getFragmentManager() != null) {
+            return getFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + mViewPager.getCurrentItem());
+        } else {
+            return null;
+        }
     }
 }
