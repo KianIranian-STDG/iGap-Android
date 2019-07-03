@@ -933,11 +933,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
 
     @Override
     public void onRightIconClickListener(View view) {
-        final Fragment fragment = RegisteredContactsFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(RegisteredContactsFragment.IS_BACK, true);
-        bundle.putString(RegisteredContactsFragment.TITLE, RegisteredContactsFragment.ADD);
-        fragment.setArguments(bundle);
+        final Fragment fragment = RegisteredContactsFragment.newInstance(true,false,RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();

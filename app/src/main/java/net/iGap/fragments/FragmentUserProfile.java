@@ -73,16 +73,12 @@ public class FragmentUserProfile extends BaseFragment {
         viewModel.goToAddMemberPage.observe(this, aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 Realm realm = Realm.getDefaultInstance();
-                Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(RegisteredContactsFragment.IS_BACK, true);
-                bundle.putString(RegisteredContactsFragment.TITLE, RegisteredContactsFragment.ADD);
-                fragment.setArguments(bundle);
+                Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
                 try {
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
-                }finally {
+                } finally {
                     realm.close();
                 }
             }

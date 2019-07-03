@@ -1,7 +1,5 @@
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 
@@ -12,9 +10,9 @@ import io.realm.RealmResults;
 public class ContactManager {
     public static final int LOAD_AVG = 30;
     public static final int CONTACT_LIMIT = 5000;
+
     public static final String FIRST = "FIRST";
     public static final String OVER_LOAD = "OVERLOAD";
-
     private static final String TAG = "aabolfazlContact";
     private static RealmResults<RealmContacts> results;
 
@@ -50,7 +48,6 @@ public class ContactManager {
 
         first = loadMore;
         loadMore = loadMore + LOAD_AVG;
-
         return contacts;
     }
 
@@ -61,9 +58,9 @@ public class ContactManager {
             Realm realm = Realm.getDefaultInstance();
 //            realm.executeTransaction(realm1 -> {
 //                RealmContacts contacts = realm1.where(RealmContacts.class).sort(RealmContactsFields.DISPLAY_NAME).findFirst();
-//                for (int i = 0; i < 45; i++) {
+//                for (int i = 0; i < 5000; i++) {
 //                    RealmContacts object = realm1.createObject(RealmContacts.class);
-//                    object.setDisplay_name(contacts.getDisplay_name() + " "+ i);
+//                    object.setDisplay_name(contacts.getDisplay_name());
 //                    object.setId(contacts.getId());
 //                    object.setPhone(contacts.getPhone());
 //                    object.setAvatar(contacts.getAvatar());
@@ -75,7 +72,6 @@ public class ContactManager {
                 contactSize = results.size();
             });
         }
-        Log.i(TAG, "getIgapContact: " + results.size());
     }
 
 }

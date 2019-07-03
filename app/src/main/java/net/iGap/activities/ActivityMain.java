@@ -1151,19 +1151,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         btnStartNewChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                //bundle.putString("TITLE", "New Chat");
-                bundle.putBoolean(RegisteredContactsFragment.IS_BACK, true);
-                bundle.putString(RegisteredContactsFragment.TITLE, RegisteredContactsFragment.ADD);
-                fragment.setArguments(bundle);
-
+                final Fragment fragment = RegisteredContactsFragment.newInstance(true,false,RegisteredContactsFragment.ADD);
                 try {
-                    //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                    //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
-
                     new HelperFragment(getSupportFragmentManager(),fragment).load();
-
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1357,7 +1347,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
         mViewPager.setOffscreenPageLimit(5);
-        RegisteredContactsFragment contactsFragment =  RegisteredContactsFragment.newInstance();
+        RegisteredContactsFragment contactsFragment =  RegisteredContactsFragment.newInstance(false,false,RegisteredContactsFragment.CONTACTS);
 
         if (HelperCalander.isPersianUnicode) {
             G.handler.postDelayed(() -> {

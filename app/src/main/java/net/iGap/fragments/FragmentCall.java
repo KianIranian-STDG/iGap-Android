@@ -498,12 +498,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     public void showContactListForCall() {
         try {
             if (getActivity() != null) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString(RegisteredContactsFragment.TITLE, RegisteredContactsFragment.CALL);
-                bundle.putBoolean(RegisteredContactsFragment.IS_BACK, true);
-                bundle.putBoolean("ACTION", true);
-                fragment.setArguments(bundle);
+                final Fragment fragment = RegisteredContactsFragment.newInstance(true,true,RegisteredContactsFragment.CALL);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
