@@ -6,32 +6,21 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.andrognito.patternlockview.PatternLockView;
-import com.andrognito.patternlockview.listener.PatternLockViewListener;
-import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.andrognito.patternlockview.utils.ResourceUtils;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPassCodeBinding;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
-import net.iGap.module.Contacts;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.structs.StructContactInfo;
-import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.viewmodel.FragmentPassCodeViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -71,10 +60,11 @@ public class FragmentPassCode extends BaseFragment {
         initDataBinding();
 
 
-        HelperToolbar toolbar = HelperToolbar.create()
+        final HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setDefaultTitle(G.context.getResources().getString(R.string.Passcode_Lock))
                 .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override
@@ -84,10 +74,27 @@ public class FragmentPassCode extends BaseFragment {
                         AppUtils.closeKeyboard(view);
 
                     }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        fragmentPassCodeViewModel.onClickRippleOk(view);
+                    }
                 });
 
         fragmentPassCodeBinding.fpcLayoutToolbar.addView(toolbar.getView());
+        toolbar.getRightButton().setVisibility(View.GONE);
 
+        //observe to show tick (ok) button or not
+        fragmentPassCodeViewModel.rippleOkVisibility.observe(this , visibility -> {
+
+            if (visibility != null){
+                if (visibility == View.VISIBLE){
+                    toolbar.getRightButton().setVisibility(View.VISIBLE);
+                }else {
+                    toolbar.getRightButton().setVisibility(View.GONE);
+                }
+            }
+        });
 
 
         boolean isLinePattern;
