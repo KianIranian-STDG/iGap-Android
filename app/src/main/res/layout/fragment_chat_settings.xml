@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         style="?backgroundColorSettingTheme"
+        android:layoutDirection="locale"
         tools:context=".fragments.FragmentChatSettings"
         tools:ignore="MissingPrefix">
 
