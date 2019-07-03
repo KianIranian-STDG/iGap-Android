@@ -22,6 +22,7 @@ public class SHP_SETTING {
 
     public static final String DELETE_FOLDER_BACKGROUND = "delete_folder_background";
 
+    public static String KEY_LOCK_STARTUP_STATE = "lock_startup_state";
     public static final String FILE_NAME = "setting";
     public static final String KEY_MESSAGE_TEXT_SIZE = "message_text_size";
     public static final String KEY_LANGUAGE = "language";

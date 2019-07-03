@@ -6,6 +6,8 @@ public interface ToolbarListener {
 
     default void onLeftIconClickListener(View view){}
 
+    default void onSecondLeftIconClickListener(View view){}
+
     default void onSearchClickListener(View view){}
 
     default void onBtnClearSearchClickListener(View view){}

@@ -36,10 +36,12 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.interfaces.FingerPrint;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FingerprintHandler;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 
@@ -159,6 +161,8 @@ public class ActivityEnterPassCodeViewModel {
 
             if (enterPassword.equals(password)) {
                 ActivityMain.isLock = false;
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+
                 G.currentActivity.finish();
 
                 //G.isPassCode = false;
@@ -287,6 +291,7 @@ public class ActivityEnterPassCodeViewModel {
                             }
 
                             ActivityMain.isLock = false;
+                            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
                             G.currentActivity.finish();
                             closeKeyboard(binding.getRoot());
                         }

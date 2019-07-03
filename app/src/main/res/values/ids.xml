@@ -150,5 +150,6 @@
     <item name="toolbar_tablet_splitter2" type="id" />
     <item name="toolbar_tablet_btn_search" type="id" />
     <item name="toolbar_tablet_splitter3" type="id" />
+    <item name="view_toolbar_btn_left2" type="id" />
 
 </resources>

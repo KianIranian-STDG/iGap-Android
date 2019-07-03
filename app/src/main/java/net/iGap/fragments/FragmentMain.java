@@ -42,6 +42,7 @@ import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -70,6 +71,7 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -186,7 +188,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.edit_icon)
+                .setLeftIcon(R.string.edit_icon , R.string.unlock_icon)
                 .setRightIcons(R.string.add_icon , R.string.scan_qr_code_icon)
                 .setLogoShown(true)
                 .setPlayerEnable(true)
@@ -195,6 +197,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
+
+        checkLockIconVisibility();
 
         initMultiSelectActions();
 
@@ -230,6 +234,23 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         //just check at first time page loaded
         notifyChatRoomsList();
+
+    }
+
+    private void checkLockIconVisibility() {
+
+        if (G.isPassCode) {
+            mHelperToolbar.getSecondLeftButton().setVisibility(View.VISIBLE);
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME , SHP_SETTING.KEY_LOCK_STARTUP_STATE );
+
+            if (ActivityMain.isLock) {
+                mHelperToolbar.getSecondLeftButton().setText(getString(R.string.lock_icon));
+            } else {
+                mHelperToolbar.getSecondLeftButton().setText(getString(R.string.unlock_icon));
+            }
+        } else {
+            mHelperToolbar.getSecondLeftButton().setVisibility(View.GONE);
+        }
 
     }
 
@@ -748,6 +769,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             mHelperToolbar.checkIsAvailableOnGoingCall();
         }catch (Exception e){}
 
+        try {
+            checkLockIconVisibility();
+        }catch (Exception e){
+
+        }
+
         boolean canUpdate = false;
 
         if (mainType != null) {
@@ -788,6 +815,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 }
             }
         }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
 
     }
 
@@ -898,6 +931,22 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
 
         }
+    }
+
+    @Override
+    public void onSecondLeftIconClickListener(View view) {
+
+        if (ActivityMain.isLock) {
+            mHelperToolbar.getSecondLeftButton().setText(getResources().getString(R.string.unlock_icon));
+            ActivityMain.isLock = false;
+            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+
+        } else {
+            mHelperToolbar.getSecondLeftButton().setText(getResources().getString(R.string.lock_icon));
+            ActivityMain.isLock = true;
+            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
+        }
+
     }
 
     @Override

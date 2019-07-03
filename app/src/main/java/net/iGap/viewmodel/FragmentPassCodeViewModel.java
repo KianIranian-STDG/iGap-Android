@@ -34,6 +34,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentPassCodeBinding;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
@@ -234,6 +235,7 @@ public class FragmentPassCodeViewModel {
         editor.apply();
 
         G.isPassCode = false;
+        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         edtSetPasswordText.set("");
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -279,6 +281,8 @@ public class FragmentPassCodeViewModel {
         visibilityChangePass.set(View.GONE);
         visibilityTactileFeedback.set(View.GONE);
         isPattern = false;
+        G.isPassCode = false;
+        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true);
         editor.apply();
@@ -383,6 +387,8 @@ public class FragmentPassCodeViewModel {
 
                 G.isPassCode = true;
                 ActivityMain.isLock = false;
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+
                 AppUtils.closeKeyboard(v);
 
                 realm.executeTransaction(new Realm.Transaction() {
@@ -734,6 +740,7 @@ public class FragmentPassCodeViewModel {
 
                 G.isPassCode = true;
                 ActivityMain.isLock = false;
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
