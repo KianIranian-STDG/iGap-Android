@@ -44,9 +44,6 @@ public abstract class FragmentToolBarBack extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         numberOfVisible--;
-        if (G.fragmentActivity instanceof ActivityMain) {
-            ((ActivityMain) G.fragmentActivity).openNavigation();
-        }
     }
 
     @Override

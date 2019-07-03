@@ -1167,7 +1167,7 @@ public class FragmentChat extends BaseFragment
 
         if (webViewChatPage != null) closeWebViewForSpecialUrlChat(true);
 
-        if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
+        if (G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).resume();
         }
    /*     if (G.locationListenerResponse != null)

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layoutDirection="ltr"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/bn_main_bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <net.iGap.libs.bottomNavigation.BottomNavigation
+        android:id="@+id/bn_main_bottomNavigation"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        app:corner_radius="35"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/viewpager"
+        app:layout_constraintStart_toStartOf="@id/viewpager">
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_contact"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_call"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_call_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_chat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_dashboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_setting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_setting_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_setting_off_darkmode"
+            app:selected_icon="@drawable/ic_bottomnavigation_setting_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_setting_off" />
+
+    </net.iGap.libs.bottomNavigation.BottomNavigation>
+
+</android.support.constraint.ConstraintLayout>

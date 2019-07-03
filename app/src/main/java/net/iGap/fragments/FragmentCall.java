@@ -62,12 +62,10 @@ import io.realm.Sort;
 
 import static net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class FragmentCall extends BaseFragment implements OnCallLogClear, ToolbarListener {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
-    public FloatingActionButton fabContactList;
-    boolean openInMain = false;
+
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
     ProgressBar progressBar;
@@ -121,16 +119,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         RealmCallLog.manageClearCallLog();
-        openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
-        if (openInMain) {
+        /*openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);*/
+        /*if (openInMain) {*/
             return inflater.inflate(R.layout.fragment_call, container, false);
-        }
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));
+        /*}
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));*/
     }
 
     private View view;
 
-    @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -142,8 +139,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
     private void addToolbar() {
 
-
-        HelperToolbar toolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.more_icon)
                 .setRightIcons(R.string.add_icon)
@@ -151,7 +147,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
-        layoutToolbar.addView(toolbar.getView());
+        layoutToolbar.addView(mHelperToolbar.getView());
 
     }
 
@@ -168,53 +164,22 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         setEnableButton(mBtnAllCalls , mBtnMissedCalls , mBtnIncomingCalls , mBtnOutgoingCalls , mBtnCanceledCalls);
 
-
-        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
-        fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
         if (!getUserVisibleHint()) {
             if (!isInit) {
-                view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
                 view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
                 view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
-                fabContactList.hide();
             }
             return;
         }
 
         isInit = true;
         view.findViewById(R.id.pb_load).setVisibility(View.GONE);
-        view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);
         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
-        fabContactList.show();
-
-        //G.onCallLogClear = this;
-        //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
-
-        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
 
         imgCallEmpty = (AppCompatImageView) view.findViewById(R.id.img_icCall);
-        empty_call = (TextView) view.findViewById(R.id.textEmptyCal);
-        progressBar = (ProgressBar) view.findViewById(R.id.fc_progress_bar_waiting);
-
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
-            }
-        });
-
-        MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.fc_btn_menu);
-
-        txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialogMenu();
-            }
-        });
+        empty_call = view.findViewById(R.id.textEmptyCal);
+        progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
 
 
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
@@ -242,7 +207,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 if (realmResults.size() > 0) {
                     imgCallEmpty.setVisibility(View.GONE);
                     empty_call.setVisibility(View.GONE);
-
                 } else {
                     imgCallEmpty.setVisibility(View.VISIBLE);
                     empty_call.setVisibility(View.VISIBLE);
@@ -334,24 +298,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             }
         };
 
-        fabContactList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showContactListForCall();
-            }
-        });
-
-
-        if (openInMain) {
-
-            fabContactList.hide();
-
-            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
-
-        }
-
-
         mBtnAllCalls.setOnClickListener(v -> {
 
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.ALL) {
@@ -426,32 +372,30 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         //use revert for dark theme : disable drawable is light and enable drawable is dark
         if (G.isDarkTheme){
-            enable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
-            disable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
-            disable2.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
-            disable3.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
-            disable4.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            enable.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable2.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable3.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable4.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
 
-            enable.setTextColor(getContext().getResources().getColor(R.color.black));
-            disable.setTextColor(getContext().getResources().getColor(R.color.white));
-            disable2.setTextColor(getContext().getResources().getColor(R.color.white));
-            disable3.setTextColor(getContext().getResources().getColor(R.color.white));
-            disable4.setTextColor(getContext().getResources().getColor(R.color.white));
-
+            enable.setTextColor(getResources().getColor(R.color.black));
+            disable.setTextColor(getResources().getColor(R.color.white));
+            disable2.setTextColor(getResources().getColor(R.color.white));
+            disable3.setTextColor(getResources().getColor(R.color.white));
+            disable4.setTextColor(getResources().getColor(R.color.white));
         }else {
-            enable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
-            disable.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
-            disable2.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
-            disable3.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
-            disable4.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            enable.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            disable.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable2.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable3.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
+            disable4.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
 
 
-            enable.setTextColor(getContext().getResources().getColor(R.color.white));
-            disable.setTextColor(getContext().getResources().getColor(R.color.black));
-            disable2.setTextColor(getContext().getResources().getColor(R.color.black));
-            disable3.setTextColor(getContext().getResources().getColor(R.color.black));
-            disable4.setTextColor(getContext().getResources().getColor(R.color.black));
-
+            enable.setTextColor(getResources().getColor(R.color.white));
+            disable.setTextColor(getResources().getColor(R.color.black));
+            disable2.setTextColor(getResources().getColor(R.color.black));
+            disable3.setTextColor(getResources().getColor(R.color.black));
+            disable4.setTextColor(getResources().getColor(R.color.black));
         }
     }
 
@@ -592,15 +536,16 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             super(realmResults, true);
         }
 
+        @NotNull
         @Override
-        public CallAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        public CallAdapter.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int i) {
             //  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
 
             return new ViewHolder(ViewMaker.getViewItemCall());
         }
 
         @Override
-        public void onBindViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(@NotNull final CallAdapter.ViewHolder viewHolder, int i) {
 
             final RealmCallLog item = viewHolder.callLog = getItem(i);
 
@@ -612,25 +557,25 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
                 case OUTGOING:
                     viewHolder.icon.setText(R.string.voice_call_made_icon);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
                     break;
                 case MISSED:
                     viewHolder.icon.setText(R.string.voice_call_missed_icon);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.red));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.red));
                     viewHolder.timeDuration.setText(R.string.miss);
                     break;
                 case CANCELED:
                     viewHolder.icon.setText(R.string.voice_call_made_icon);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setText(R.string.not_answer);
                     break;
                 case INCOMING:
                     viewHolder.icon.setText(R.string.voice_call_received_icon);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.colorPrimary));
                     break;
             }
 
@@ -673,11 +618,11 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 imgCallEmpty.setVisibility(View.GONE);
                 empty_call.setVisibility(View.GONE);
 
-                timeDuration = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
-                image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
-                name = (EmojiTextViewE) itemView.findViewById(R.id.fcsl_txt_name);
-                icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
-                timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
+                timeDuration = itemView.findViewById(R.id.fcsl_txt_dureation_time);
+                image = itemView.findViewById(R.id.fcsl_imv_picture);
+                name = itemView.findViewById(R.id.fcsl_txt_name);
+                icon = itemView.findViewById(R.id.fcsl_txt_icon);
+                timeAndInfo = itemView.findViewById(R.id.fcsl_txt_time_info);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

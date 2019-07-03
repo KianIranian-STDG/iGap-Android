@@ -1,15 +1,13 @@
 package net.iGap;
 
-import android.app.Application;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.util.Log;
 
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import net.iGap.module.SHP_SETTING;
 
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.appBarColor;
 import static net.iGap.G.attachmentColor;
 import static net.iGap.G.context;
@@ -26,7 +24,7 @@ import static net.iGap.G.toggleButtonColor;
  * The idea of the kianiranian Company - http://www.kianiranian.com/
  * All rights reserved.
  */
-public class Theme extends Application {
+public class Theme {
 
     public static final int CUSTOM = 0;
     public static final int DEFAULT = 1;
@@ -135,14 +133,6 @@ public class Theme extends Application {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-
-        /*if (G.themeColor == DARK) {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-        }*/
-        EmojiManager.install(new IosEmojiProvider());
-
 
         switch (G.themeColor) {
             case CUSTOM:

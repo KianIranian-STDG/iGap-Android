@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.wtf(this.getClass().getName(),"onViewCreated");
 
         viewModel.goToAddMemberPage.observe(this, aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
@@ -253,6 +255,8 @@ public class FragmentUserProfile extends BaseFragment {
             binding.darkTheme.setChecked(!G.isDarkTheme);
             viewModel.onThemeClick(G.isDarkTheme);
         });
+
+        Log.wtf(this.getClass().getName(),"onViewCreated");
     }
 
     @Override

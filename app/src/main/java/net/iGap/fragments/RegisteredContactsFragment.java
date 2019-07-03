@@ -32,6 +32,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -253,6 +254,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Override
     public void onViewCreated(@NotNull View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.wtf(this.getClass().getName(),"onViewCreated");
         this.view = view;
         prgWaiting = view.findViewById(R.id.prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
@@ -292,6 +294,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 init();
             }
         }, 100);
+        Log.wtf(this.getClass().getName(),"onViewCreated");
     }
 
     private void init() {

@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -12,9 +13,9 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.FragmentShowImage;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-
-import java.util.ArrayList;
 
 import static net.iGap.fragments.FragmentCall.OPEN_IN_FRAGMENT_MAIN;
 
@@ -51,20 +52,7 @@ public class HelperFragment {
 
     public boolean isFragmentVisible(String fragmentTag) {
         Fragment fragment = fragmentManager.findFragmentByTag(fragmentTag);
-        if (fragment != null) {
-            return fragment.isVisible();
-        }
-        return false;
-    }
-
-    public static Fragment isFragmentVisible(ArrayList<String> fragmentTags) {
-        for (String fragmentTag : fragmentTags) {
-            FragmentChat fragment = (FragmentChat) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag);
-            if (fragment != null && fragment.isVisible()) {
-                return fragment;
-            }
-        }
-        return null;
+        return fragment != null && fragment.isVisible();
     }
 
     public HelperFragment setFragment(Fragment fragment) {
@@ -129,11 +117,12 @@ public class HelperFragment {
                     } else {
                         return;
                     }
-                } else if ((fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))) {
-                    return;
+                } else if (fragmentManager.getBackStackEntryCount() > 1) {
+                    if ((fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))) {
+                        return;
+                    }
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -164,6 +153,9 @@ public class HelperFragment {
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(tag);
         }
+
+        Log.wtf(this.getClass().getName(), "fragment name: " + fragment.getClass().getName());
+        Log.wtf(this.getClass().getName(), "resource id is roomListFrame: " + (R.id.roomListFrame == resourceContainer));
 
         if (replace) {
             fragmentTransaction.replace(resourceContainer, fragment, tag);
@@ -279,12 +271,7 @@ public class HelperFragment {
     }
 
     private boolean isChatFragment(String fragmentClassName) {
-
-        if (fragmentClassName.equals(chatName)) {
-            return true;
-        } else {
-            return false;
-        }
+        return fragmentClassName.equals(chatName);
     }
 
     private int getResContainer(String fragmentClassName) {
@@ -293,30 +280,30 @@ public class HelperFragment {
             return 0;
         }
 
-        int resId = 0;
-
-        if (G.twoPaneMode && !fragmentClassName.equals("net.iGap.fragments.FragmentShowImage")) {
-
-            if (isChatFragment(fragmentClassName)) {
-
-                resId = R.id.am_frame_chat_container;
-
-                if (G.iTowPanModDesinLayout != null) {
-                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.show);
-                }
-
-            } else {
-
-                resId = R.id.am_frame_fragment_container;
-
+        if (G.twoPaneMode && G.isLandscape) {
+            if (fragmentClassName.equals(FragmentMain.class.getName())) {
+                return R.id.roomListFrame;
+            } else if (fragmentClassName.equals(FragmentShowImage.class.getName())) {
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.setBackChatVisibility(true);
                 }
+                return R.id.fullScreenFrame;
+            } else if (isChatFragment(fragmentClassName)) {
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.show);
+                }
+                //TODO: fixed it in tablet mode load fragment Chat
+                return 0/*R.id.am_frame_chat_container*/;
+            } else if (fragmentClassName.equals(BottomNavigationFragment.class.getName())){
+                return R.id.mainFrame;
+            } else {
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.setBackChatVisibility(true);
+                }
+                return R.id.detailFrame;
             }
         } else {
-            resId = R.id.rootFrame;
+            return R.id.mainFrame;
         }
-
-        return resId;
     }
 }

@@ -9,6 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
@@ -119,9 +120,7 @@ public class GoToChatActivity {
             MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    FragmentChat fragmentChat = new FragmentChat();
-                    fragmentChat.setArguments(getBundle());
-                    new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
+                    loadChatFragment(activity);
                 }
             }).onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
@@ -138,11 +137,21 @@ public class GoToChatActivity {
                 mDialog.show();
             }
         } else {
-            FragmentChat fragmentChat = new FragmentChat();
-            fragmentChat.setArguments(getBundle());
-            new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
+            loadChatFragment(activity);
         }
 
+    }
+
+    private void loadChatFragment(FragmentActivity activity){
+        FragmentChat fragmentChat = new FragmentChat();
+        fragmentChat.setArguments(getBundle());
+        if (G.twoPaneMode){
+            if (activity instanceof ActivityMain){
+                ((ActivityMain) activity).goToChatPage(fragmentChat);
+            }
+        }else{
+            new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
+        }
     }
 
     public Bundle getBundle() {
