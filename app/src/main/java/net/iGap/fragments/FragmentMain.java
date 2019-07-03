@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -41,7 +40,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -54,7 +53,6 @@ import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
-import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
@@ -70,6 +68,7 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -89,6 +88,8 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
+
+import org.paygear.fragment.ScannerFragment;
 
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
@@ -184,7 +185,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.edit_icon)
+                .setLeftIcon(R.string.edit_icon , R.string.unlock_icon)
                 .setRightIcons(R.string.add_icon , R.string.scan_qr_code_icon)
                 .setLogoShown(true)
                 .setPlayerEnable(true)
@@ -232,6 +233,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             setColorToLightMode(mBtnMakeAsReadSelected);
             setColorToLightMode(mBtnReadAllSelected);
         }
+        checkLockIconVisibility();
 
         onChatCellClickedInEditMode = (v, item, position, status) -> {
 
@@ -273,6 +275,23 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         //just check at first time page loaded
         notifyChatRoomsList();
+
+    }
+
+    private void checkLockIconVisibility() {
+
+        if (G.isPassCode) {
+            mHelperToolbar.getSecondLeftButton().setVisibility(View.VISIBLE);
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME , SHP_SETTING.KEY_LOCK_STARTUP_STATE );
+
+            if (ActivityMain.isLock) {
+                mHelperToolbar.getSecondLeftButton().setText(getString(R.string.lock_icon));
+            } else {
+                mHelperToolbar.getSecondLeftButton().setText(getString(R.string.unlock_icon));
+            }
+        } else {
+            mHelperToolbar.getSecondLeftButton().setVisibility(View.GONE);
+        }
 
     }
 
@@ -741,6 +760,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             e.printStackTrace();
         }
 
+        try {
+            checkLockIconVisibility();
+        }catch (Exception e){
+
+        }
+
         boolean canUpdate = false;
 
         if (mainType != null) {
@@ -781,6 +806,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 }
             }
         }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
 
     }
 
@@ -872,6 +903,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+            if (G.isPassCode) mHelperToolbar.getSecondLeftButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             setVisiblityForSelectedActionsInEverySelection();
@@ -883,6 +916,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+            mHelperToolbar.getSecondLeftButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
             if (!mHelperToolbar.getmSearchBox().isShown()){
@@ -891,6 +926,22 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
 
         }
+    }
+
+    @Override
+    public void onSecondLeftIconClickListener(View view) {
+
+        if (ActivityMain.isLock) {
+            mHelperToolbar.getSecondLeftButton().setText(getResources().getString(R.string.unlock_icon));
+            ActivityMain.isLock = false;
+            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+
+        } else {
+            mHelperToolbar.getSecondLeftButton().setText(getResources().getString(R.string.lock_icon));
+            ActivityMain.isLock = true;
+            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
+        }
+
     }
 
     @Override
@@ -922,24 +973,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        try {
-            HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
-                @Override
-                public void Allow() throws IllegalStateException {
-                    IntentIntegrator integrator = new IntentIntegrator(getActivity());
-                    integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                    integrator.setRequestCode(ActivityMain.requestCodeQrCode);
-                    integrator.setBeepEnabled(false);
-                    integrator.setPrompt("");
-                    integrator.initiateScan();
-                }
-
-                @Override
-                public void deny() {
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (getActivity() != null){
+            new HelperFragment(getActivity().getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
         }
     }
 

@@ -73,8 +73,10 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
@@ -156,7 +158,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
-    public static boolean isLock = true;
+    public static boolean isLock = false;
     public static boolean isActivityEnterPassCode = false;
     public static FinishActivity finishActivity;
     public static boolean disableSwipe = false;
@@ -1011,6 +1013,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void openActivityPassCode() {
+        if (G.isPassCode) {
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME , SHP_SETTING.KEY_LOCK_STARTUP_STATE );
+        }
+
         if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
             enterPassword();
         } else if (!isActivityEnterPassCode && !G.isRestartActivity) {
@@ -1203,6 +1209,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             resume();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
+
     }
 
     public void resume() {

@@ -61,7 +61,7 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 public class HelperToolbar {
 
     private ConstraintLayout mRootConstraint ;
-    private AppCompatTextView mLeftBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
+    private AppCompatTextView mLeftBtn, mLeftBtn2, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
     private EmojiTextViewE mTxtChatUserName;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
@@ -83,7 +83,7 @@ public class HelperToolbar {
     private ViewGroup mViewGroup = null;
     private ToolbarListener mToolbarListener;
 
-    private int mLeftIcon = 0;
+    private int[] mLeftIcon = {0 , 0};
     private int[] mRightIcons = {0, 0, 0, 0};
     private int[] mTabletIcons = {0 , 0 , 0};
     private boolean isAttachToRoot;
@@ -136,9 +136,10 @@ public class HelperToolbar {
         return this;
     }
 
-    public HelperToolbar setLeftIcon(@StringRes int icon) {
-        this.mLeftIcon = icon;
-        if (mLeftBtn != null) mLeftBtn.setText(mLeftIcon);
+    public HelperToolbar setLeftIcon(@StringRes int... icons) {
+        System.arraycopy(icons, 0, mLeftIcon, 0, icons.length);
+        if (mLeftBtn != null) mLeftBtn.setText(mLeftIcon[0]);
+        if (mLeftBtn2 != null) mLeftBtn2.setText(mLeftIcon[1]);
         return this;
     }
 
@@ -245,26 +246,28 @@ public class HelperToolbar {
         initViews(viewMaker);
 
 
-        if (mLeftIcon != 0) {
+        if (mLeftIcon[0] != 0) {
             mLeftBtn.setOnClickListener(v -> mToolbarListener.onLeftIconClickListener(v));
-
         }
+
+        if (mLeftIcon[1] != 0) {
+            mLeftBtn2.setOnClickListener(v -> mToolbarListener.onSecondLeftIconClickListener(v));
+        }
+
         if (mRightIcons[0] != 0) {
             mRightBtn.setOnClickListener(v -> mToolbarListener.onRightIconClickListener(v));
-
         }
+
         if (mRightIcons[1] != 0) {
             m2RightBtn.setOnClickListener(v -> mToolbarListener.onSecondRightIconClickListener(v));
-
         }
+
         if (mRightIcons[2] != 0) {
             m3RightBtn.setOnClickListener(v -> mToolbarListener.onThirdRightIconClickListener(v));
-
         }
 
         if (mRightIcons[3] != 0) {
             m4RightBtn.setOnClickListener(v -> mToolbarListener.onFourthRightIconClickListener(v));
-
         }
 
         if (isInChatRoom) {
@@ -388,6 +391,10 @@ public class HelperToolbar {
 
     public AppCompatTextView getLeftButton() {
         return mLeftBtn;
+    }
+
+    public AppCompatTextView getSecondLeftButton() {
+        return mLeftBtn2;
     }
 
     public AppCompatTextView getRightButton() {
@@ -801,6 +808,7 @@ public class HelperToolbar {
         mRootConstraint = view.getMainConstraint() ;
 
         mLeftBtn = view.getLeftIcon() ;
+        mLeftBtn2 = view.getLeftIcon2() ;
         mRightBtn = view.getRightIcon();
         m2RightBtn = view.getRightIcon2();
         m3RightBtn = view.getRightIcon3();
@@ -941,6 +949,7 @@ public class HelperToolbar {
         private LinearLayout layoutMedia ;
         private ConstraintLayout mainConstraint ;
         private AppCompatTextView leftIcon = null;
+        private AppCompatTextView leftIcon2 = null;
         private AppCompatTextView rightIcon4 = null ;
         private AppCompatTextView rightIcon3 = null;
         private AppCompatTextView rightIcon2 = null;
@@ -1049,9 +1058,9 @@ public class HelperToolbar {
 
                 //endregion main constraint
 
-                //region left button
-                if (mLeftIcon != 0) {
-                    leftIcon = makeIcon(R.id.view_toolbar_btn_left, mLeftIcon);
+                //region left buttons
+                if (mLeftIcon[0] != 0) {
+                    leftIcon = makeIcon(R.id.view_toolbar_btn_left, mLeftIcon[0]);
                     mainConstraint.addView(leftIcon);
                     setIconViewSize(leftIcon, set);
 
@@ -1065,7 +1074,18 @@ public class HelperToolbar {
 
                 }
 
-                //endregion left button
+                if (mLeftIcon[1] != 0) {
+                    leftIcon2 = makeIcon(R.id.view_toolbar_btn_left2, mLeftIcon[1]);
+                    mainConstraint.addView(leftIcon2);
+                    setIconViewSize(leftIcon2, set);
+
+                    set.connect(leftIcon2.getId(), START, leftIcon.getId(), END , VALUE_4DP);
+                    set.connect(leftIcon2.getId(), TOP, leftIcon.getId(), TOP);
+                    set.connect(leftIcon2.getId(), BOTTOM, leftIcon.getId(), BOTTOM);
+
+                }
+
+                //endregion left buttons
 
                 //region right icons
                 if (mRightIcons[0] != 0) {
@@ -1776,6 +1796,10 @@ public class HelperToolbar {
 
         public AppCompatTextView getLeftIcon() {
             return leftIcon;
+        }
+
+        public AppCompatTextView getLeftIcon2() {
+            return leftIcon2;
         }
 
         public AppCompatTextView getRightIcon4() {

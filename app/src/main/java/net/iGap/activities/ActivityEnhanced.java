@@ -58,9 +58,9 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         //When Event is published, onReceive method is called
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+          /*  if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 if (G.isPassCode) ActivityMain.isLock = true;
-            }
+            }*/
         }
     };
 

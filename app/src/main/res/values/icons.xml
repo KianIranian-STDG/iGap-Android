@@ -232,4 +232,6 @@
     <string name="sort_icon">î</string>
     <string name="voice_icon">G</string>
     <string name="down_arrow_icon">È</string>
+    <string name="unlock_icon">Å</string>
+    <string name="lock_icon">}</string>
 </resources>

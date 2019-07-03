@@ -78,7 +78,7 @@ public class ChatCell extends ConstraintLayout {
         FontIconTextView chatIcon = new FontIconTextView(G.context);
         chatIcon.setId(R.id.tv_chatCell_chatIcon);
         chatIcon.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : Color.parseColor("#333333"));
-        setTextSize(chatIcon,R.dimen.standardTextSize);
+        setTextSize(chatIcon, R.dimen.standardTextSize);
         addView(chatIcon);
 
 
@@ -175,7 +175,7 @@ public class ChatCell extends ConstraintLayout {
         FontIconTextView messageStatus = new FontIconTextView(G.context);
         messageStatus.setId(R.id.iv_chatCell_messageStatus);
         messageStatus.setTextSize(20);
-        setTextSize(messageStatus,R.dimen.standardTextSize);
+        setTextSize(messageStatus, R.dimen.standardTextSize);
         addView(messageStatus);
 
 
@@ -287,9 +287,10 @@ public class ChatCell extends ConstraintLayout {
             set.connect(verify.getId(), ConstraintSet.RIGHT, roomName.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
             set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp12));
 
-            set.connect(badgeView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT);
-            set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
-            set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp28), 225);
+            set.connect(badgeView.getId(), ConstraintSet.LEFT, messageStatus.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
+            set.connect(badgeView.getId(), ConstraintSet.RIGHT, thirdTextView.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
+            set.connect(badgeView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
+            set.connect(badgeView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
 
             set.connect(messageStatus.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp8));
 
@@ -318,9 +319,10 @@ public class ChatCell extends ConstraintLayout {
             set.connect(verify.getId(), ConstraintSet.LEFT, roomName.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
             set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp12));
 
-            set.connect(badgeView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT);
-            set.connect(badgeView.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
-            set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp32), 135);
+            set.connect(badgeView.getId(), ConstraintSet.LEFT, thirdTextView.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
+            set.connect(badgeView.getId(), ConstraintSet.RIGHT, messageStatus.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
+            set.connect(badgeView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
+            set.connect(badgeView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
 
             set.connect(messageStatus.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
 

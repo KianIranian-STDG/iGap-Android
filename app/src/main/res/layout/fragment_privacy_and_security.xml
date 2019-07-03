@@ -20,6 +20,7 @@
     android:layout_height="match_parent"
     style="?backgroundColorSettingTheme_2"
     android:clickable="true"
+      android:layoutDirection="locale"
     tools:context="net.iGap.fragments.FragmentPrivacyAndSecurity"
     tools:ignore="MissingPrefix">
 
