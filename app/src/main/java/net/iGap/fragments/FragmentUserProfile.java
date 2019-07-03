@@ -75,8 +75,8 @@ public class FragmentUserProfile extends BaseFragment {
                 Realm realm = Realm.getDefaultInstance();
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("isBackSwipable", true);
-                bundle.putString("TITLE", "ADD");
+                bundle.putBoolean(RegisteredContactsFragment.IS_BACK, true);
+                bundle.putString(RegisteredContactsFragment.TITLE, RegisteredContactsFragment.ADD);
                 fragment.setArguments(bundle);
                 try {
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();

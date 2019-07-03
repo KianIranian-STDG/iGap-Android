@@ -11,20 +11,15 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +38,6 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.AdapterListContact;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.ContactManager;
@@ -60,9 +54,9 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
+import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
@@ -84,27 +78,27 @@ import io.realm.RealmResults;
 public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnContactImport, OnUserContactDelete {
 
     private static final String TAG = "aabolfazlContact";
+    public static final String IS_BACK ="isBackSwipable";
+    public static final String TITLE ="TITLE";
+    public static final String NEW_CHAT ="New Chat";
+    public static final String CONTACTS ="Contacts";
+    public static final String CALL ="call";
+    public static final String ADD ="ADD";
+
     private static boolean getPermission = true;
-    public onClickRecyclerView onCliclRecyclerView;
+    public onClickRecyclerView onClickRecyclerView;
     public onLongClickRecyclerView onLongClickRecyclerView;
     public boolean isLongClick = false;
-    public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
     protected ArrayMap<Long, Boolean> selectedList = new ArrayMap<>();
     boolean isMultiSelect = false;
-    AdapterListContact adapterListContact;
-    /*StickyRecyclerHeadersDecoration decoration;*/
     private List<RealmContacts> results;
-    private TextView menu_txt_titleToolbar;
     private ViewGroup vgInviteFriend;
-    private RecyclerView realmRecyclerView, rcvListContact;
-    private SharedPreferences sharedPreferences;
+    private RecyclerView realmRecyclerView;
     private Realm realm;
-    private ProgressBar prgWaiting;
     private EditText edtSearch;
     private boolean isCallAction = false;
     private FastItemAdapter fastItemAdapter;
-    private ProgressBar prgWaitingLiadList;
-    private NestedScrollView nestedScrollView;
+    private ProgressBar prgWaitingLoadList;
     private ActionMode mActionMode;
     private ContactListAdapter contactListAdapter;
     private HelperToolbar mHelperToolbar;
@@ -112,18 +106,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private int mPageMode = 0; // 0 = new chat , 1 = contact , 2 = call , 3 = add new
     private LinearLayout btnAddNewChannel, btnAddNewGroup, btnAddSecretChat;
     private LinearLayout btnAddNewGroupCall, btnAddNewContact, btnDialNumber;
-
     private ViewGroup mLayoutMultiSelected;
     private TextView mTxtSelectedCount;
-    private AppCompatTextView mBtnDeleteSelected;
-    private MaterialDesignTextView mBtnCancelSelected;
-    private int mNumberOfSelectedCounter;
 
     private Context context = G.context;
 
     private View view;
     private boolean isInit = false;
-    private LinearLayout layoutAppBarContainer;
     private boolean isContact;
     private boolean isSwipe = false;
 
@@ -151,10 +140,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         if (getArguments() != null) {
-            isSwipe = getArguments().getBoolean("isBackSwipable", false);
+            isSwipe = getArguments().getBoolean(IS_BACK, false);
         }
         if (isSwipe) {
             return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
@@ -187,7 +174,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         //in contact mode user dont set swipeable or is false
         //for replace back btn instead of edit in every mode except contact use it
         if (bundle != null) {
-            isContact = !bundle.getBoolean("isBackSwipable", true);
+            isContact = !bundle.getBoolean(IS_BACK, true);
         } else {
             isContact = true;
         }
@@ -213,7 +200,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         isInit = true;
 
         if (isContact) {
-//            G.onPhoneContact = this;
             Contacts.localPhoneContactId = 0;
             Contacts.getContact = true;
 
@@ -228,10 +214,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         if (results == null)
             results = ContactManager.getContactList(ContactManager.FIRST);
 
-        nestedScrollView = view.findViewById(R.id.nestedScrollContact);
-
-        TextView txtNonUser = view.findViewById(R.id.txtNon_User);
-        prgWaitingLiadList = view.findViewById(R.id.prgWaiting_loadList);
+        prgWaitingLoadList = view.findViewById(R.id.prgWaiting_loadList);
         contactListAdapter = new ContactListAdapter(results);
         realmRecyclerView.setAdapter(contactListAdapter);
 
@@ -248,69 +231,60 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         mLayoutMultiSelected = view.findViewById(R.id.fc_layout_selected_mode);
         mTxtSelectedCount = view.findViewById(R.id.fc_selected_mode_txt_counter);
-        mBtnDeleteSelected = view.findViewById(R.id.fc_selected_mode_btn_delete);
-        mBtnCancelSelected = view.findViewById(R.id.fc_selected_mode_btn_cancel);
+        AppCompatTextView mBtnDeleteSelected = view.findViewById(R.id.fc_selected_mode_btn_delete);
+        MaterialDesignTextView mBtnCancelSelected = view.findViewById(R.id.fc_selected_mode_btn_cancel);
         mTxtSelectedCount.setText(0 + " " + G.context.getResources().getString(R.string.item_selected));
 
         Bundle bundle = this.getArguments();
         String title = null;
         if (bundle != null) {
-            title = bundle.getString("TITLE");
+            title = bundle.getString(TITLE);
             isCallAction = bundle.getBoolean("ACTION");
         }
 
         if (title != null) {
 
             switch (title) {
-                case "New Chat":
+                case NEW_CHAT:
                     mPageMode = 0;
                     break;
-                case "Contacts":
+                case CONTACTS:
                     mPageMode = 1;
                     break;
-                case "call":
+                case CALL:
                     mPageMode = 2;
-                    //visible add buttons
                     btnAddNewContact.setVisibility(View.VISIBLE);
                     btnDialNumber.setVisibility(View.VISIBLE);
                     vgInviteFriend.setVisibility(View.GONE);
                     mHelperToolbar.getRightButton().setVisibility(View.GONE);
                     break;
-                case "ADD":
+                case ADD:
                     mPageMode = 3;
-                    //visible add buttons
                     btnAddNewChannel.setVisibility(View.VISIBLE);
                     btnAddNewGroup.setVisibility(View.VISIBLE);
-                    //btnAddSecretChat.setVisibility(View.VISIBLE);
                     vgInviteFriend.setVisibility(View.GONE);
                     break;
             }
         }
 
-        vgInviteFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    try {
-                        Log.i(TAG, "onClick: try");
-                        HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
-                            @Override
-                            public void Allow() throws IOException {
-                                new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).load();
-                                Log.i(TAG, "Allow: ");
-                            }
-
-                            @Override
-                            public void deny() {
-                                Log.i(TAG, "Permission deny");
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        vgInviteFriend.setOnClickListener(view -> {
+            try {
+                HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).load();
                     }
-//                }
 
+                    @Override
+                    public void deny() {
 
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -318,33 +292,24 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         realmRecyclerView.setLayoutManager(layoutManager);
         realmRecyclerView.setNestedScrollingEnabled(false);
 
-        onCliclRecyclerView = new onClickRecyclerView() {
-            @Override
-            public void onClick(View view, int position) {
-                if (isMultiSelect) {
-                    multi_select(position);
-                }
-            }
-        };
-
-        onLongClickRecyclerView = new onLongClickRecyclerView() {
-            @Override
-            public void onClick(View view, int position) {
-                if (!isMultiSelect) {
-                    isMultiSelect = true;
-                    refreshAdapter(0, true);
-
-                    if (!mLayoutMultiSelected.isShown()) {
-                        setPageShowingMode(4);
-
-                    }
-
-                }
+        onClickRecyclerView = (view, position) -> {
+            if (isMultiSelect) {
                 multi_select(position);
             }
         };
 
-        rcvListContact = (RecyclerView) view.findViewById(R.id.rcv_friends_to_invite);
+        onLongClickRecyclerView = (view, position) -> {
+            if (!isMultiSelect) {
+                isMultiSelect = true;
+                refreshAdapter(0, true);
+
+                if (!mLayoutMultiSelected.isShown()) {
+                    setPageShowingMode(4);
+                }
+            }
+            multi_select(position);
+        };
+
         fastItemAdapter = new FastItemAdapter();
 
         try {
@@ -360,13 +325,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         if (results.size() == 0) {
                             LoginActions.importContact();
                         }
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                prgWaitingLiadList.setVisibility(View.VISIBLE);
-                            }
-                        });
-                        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
 
                     @Override
@@ -374,76 +332,24 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         if (results.size() == 0) {
                             new RequestUserContactsGetList().userContactGetList();
                         }
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                prgWaitingLiadList.setVisibility(View.GONE);
-                            }
-                        });
                     }
                 });
             } else {
                 if (results.size() == 0) {
                     new RequestUserContactsGetList().userContactGetList();
                 }
-
-                if (isContact) {
-                    if (HelperPermission.grantedContactPermission()) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                prgWaitingLiadList.setVisibility(View.VISIBLE);
-                            }
-                        });
-                        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    } else {
-                        prgWaitingLiadList.setVisibility(View.GONE);
-                    }
-                } else {
-                    prgWaitingLiadList.setVisibility(View.GONE);
-
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (isContact) {
-
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            rcvListContact.setLayoutManager(linearLayoutManager);
-            rcvListContact.setItemAnimator(new DefaultItemAnimator());
-            adapterListContact = new AdapterListContact(phoneContactsList, getContext());
-            rcvListContact.setAdapter(adapterListContact);
-            rcvListContact.setNestedScrollingEnabled(false);
-
-        } else {
-            rcvListContact.setVisibility(View.GONE);
-            prgWaitingLiadList.setVisibility(View.GONE);
-            txtNonUser.setVisibility(View.GONE);
-        }
-
-        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-
-            if (v.getChildAt(v.getChildCount() - 1) != null) {
-                if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
-                        scrollY > oldScrollY) {
-                    int visibleItemCount = layoutManager.getChildCount();
-                    int totalItemCount = layoutManager.getItemCount();
-                    int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        if (!endPage)
-                            contactListAdapter.addUserList(ContactManager.getContactList(ContactManager.OVER_LOAD));
-                    }
+        realmRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (!endPage) {
+                    contactListAdapter.addUserList(ContactManager.getContactList(ContactManager.OVER_LOAD));
+//                    prgWaitingLoadList.setVisibility(View.VISIBLE);
                 }
-            }
-
-            if (Contacts.isEndLocal) {
-                return;
-            }
-            if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
@@ -510,7 +416,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
-        layoutAppBarContainer = view.findViewById(R.id.fc_layout_appbar_container);
 
         mBtnCancelSelected.setOnClickListener(v -> {
             setPageShowingMode(mPageMode);
@@ -628,11 +533,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public void onError(int majorCode, int minorCode) {
 
     }
-
-//    @Override
-//    public void onPhoneContact(final ArrayList<StructListOfContact> contacts, final boolean isEnd) {
-//        new AddAsync(contacts, isEnd).execute();
-//    }
 
     public void multi_select(int position) {
         if (mLayoutMultiSelected.isShown()) {
@@ -775,10 +675,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             inflater = LayoutInflater.from(G.context);
             count = contacts.size();
             usersList = contacts;
+            prgWaitingLoadList.setVisibility(View.INVISIBLE);
         }
 
         void addUserList(List<RealmContacts> usersList) {
             this.usersList.addAll(count, usersList);
+            prgWaitingLoadList.setVisibility(View.INVISIBLE);
             notifyItemChanged(count, count + ContactManager.LOAD_AVG);
             count = count + ContactManager.LOAD_AVG;
             if (count > this.usersList.size())
@@ -1013,8 +915,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                                 });
                             }
                         } else {
-                            if (onCliclRecyclerView != null)
-                                onCliclRecyclerView.onClick(v, getAdapterPosition());
+                            if (onClickRecyclerView != null)
+                                onClickRecyclerView.onClick(v, getAdapterPosition());
                         }
                     }
                 });
@@ -1122,73 +1024,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                                 });
                             }
                         } else {
-                            if (onCliclRecyclerView != null)
-                                onCliclRecyclerView.onClick(v, getAdapterPosition());
+                            if (onClickRecyclerView != null)
+                                onClickRecyclerView.onClick(v, getAdapterPosition());
                         }
                     }
                 });
             }
-        }
-    }
-
-    /**
-     * ************************************* show all phone contact *************************************
-     */
-
-    private class AddAsync extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
-
-        private ArrayList<StructListOfContact> contacts;
-        private boolean isEnd;
-
-        public AddAsync(ArrayList<StructListOfContact> contacts, boolean isEnd) {
-            this.contacts = contacts;
-            this.isEnd = isEnd;
-        }
-
-        @Override
-        protected ArrayList<StructListOfContact> doInBackground(Void... params) {
-            for (int i = 0; i < contacts.size(); i++) {
-
-                String s = contacts.get(i).getPhone();
-                s = s.replaceAll("\\A0|\\+|\\-?", "");
-                if (s.contains(" "))
-                    s = s.replace(" ", "");
-                if (!s.startsWith("98"))
-                    s = "98" + s;
-                contacts.get(i).setPhone(s);
-            }
-            Realm realm = Realm.getDefaultInstance();
-            RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
-
-
-            ArrayList<StructListOfContact> slc = new ArrayList();
-
-            for (int i = 0; i < contacts.size(); i++) {
-                boolean helpIndex = false;
-                for (int j = 0; j < mList.size(); j++) {
-                    if (contacts.get(i).getPhone().equalsIgnoreCase(String.valueOf(mList.get(j).getPhone()))) {
-                        helpIndex = true;
-                        break;
-                    }
-                }
-                if (!helpIndex) {
-                    slc.add(contacts.get(i));
-                }
-            }
-            realm.close();
-
-            return slc;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<StructListOfContact> slc) {
-            phoneContactsList.addAll(slc);
-
-            adapterListContact.notifyDataSetChanged();
-            if (isEnd) {
-                prgWaitingLiadList.setVisibility(View.GONE);
-            }
-            super.onPostExecute(slc);
         }
     }
 }

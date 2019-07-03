@@ -12,11 +12,9 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
-import net.iGap.helper.HelperTracker;
 import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -44,6 +41,7 @@ import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
@@ -937,8 +935,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, Activ
     public void onRightIconClickListener(View view) {
         final Fragment fragment = RegisteredContactsFragment.newInstance();
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isBackSwipable", true);
-        bundle.putString("TITLE", "ADD");
+        bundle.putBoolean(RegisteredContactsFragment.IS_BACK, true);
+        bundle.putString(RegisteredContactsFragment.TITLE, RegisteredContactsFragment.ADD);
         fragment.setArguments(bundle);
         try {
             if (getActivity() != null) {

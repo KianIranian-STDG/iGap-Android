@@ -1154,8 +1154,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 //bundle.putString("TITLE", "New Chat");
-                bundle.putBoolean("isBackSwipable", true);
-                bundle.putString("TITLE", "ADD");
+                bundle.putBoolean(RegisteredContactsFragment.IS_BACK, true);
+                bundle.putString(RegisteredContactsFragment.TITLE, RegisteredContactsFragment.ADD);
                 fragment.setArguments(bundle);
 
                 try {
