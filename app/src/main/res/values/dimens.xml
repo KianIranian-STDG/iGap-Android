@@ -133,6 +133,8 @@
     <dimen name="verySmallTextSize">@dimen/dp10</dimen>
     <dimen name="largeTextSize">@dimen/dp16</dimen>
     <dimen name="xlargeTextSize">@dimen/dp20</dimen>
+    <dimen name="standardIconSize">@dimen/dp24</dimen>
+
     <dimen name="toolbar_chat_avatar_size">@dimen/dp40</dimen>
     <dimen name="toolbar_txt_name_max_width">@dimen/dp130</dimen>
     <dimen name="round_button_max_width">@dimen/dp88</dimen>
