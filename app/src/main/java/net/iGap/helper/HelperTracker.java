@@ -15,6 +15,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
@@ -66,6 +67,7 @@ public class HelperTracker {
     }
 
     public static void sendTracker(String trackerTag) {
+        if (BuildConfig.DEBUG) { return; }
 
         boolean allowSendTracker = true;
 
