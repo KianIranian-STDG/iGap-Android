@@ -492,13 +492,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 lp.width = size;
                 lp.height = size;
 
-                /*frameFragmentBack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        onBackPressed();
-                    }
-                });*/
+                findViewById(R.id.fullScreenFrame).setOnClickListener(view -> onBackPressed());
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
                     @Override
