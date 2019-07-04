@@ -752,7 +752,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
 
-        getRealmChat().executeTransaction(new Realm.Transaction() {
+        getRealmChat().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
@@ -778,12 +778,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             if (mMessage.forwardedFrom.getMessageId() < 0) {
                                 forwardMessageId = forwardMessageId * (-1);
                             }
-                            new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getAuthorRoomId(), Long.parseLong(mMessage.messageID), reaction, forwardMessageId);
+                            long finalForwardMessageId = forwardMessageId;
+                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getAuthorRoomId(), Long.parseLong(mMessage.messageID), reaction, finalForwardMessageId));
                         } else {
-                            new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
+                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
                         }
                     } else {
-                        new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
+                        G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
                     }
                 }
             }
