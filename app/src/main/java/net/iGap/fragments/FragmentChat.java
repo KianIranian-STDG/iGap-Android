@@ -2771,8 +2771,6 @@ public class FragmentChat extends BaseFragment
 
         });
 
-
-        edtChat = rootView.findViewById(R.id.chl_edt_chat);
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
         if (emojiPopup == null) {
             setUpEmojiPopup();
@@ -9507,16 +9505,21 @@ public class FragmentChat extends BaseFragment
                     }
                 }).show();
             } else if (items.get(position).equals(getString(R.string.clean_up))) {
-                RealmRoomMessage.ClearAllMessage(getRealmChat(), false, mRoomId);
                 resetMessagingValue();
                 setDownBtnGone();
-                recyclerView.addOnScrollListener(scrollListener);
-                saveMessageIdPositionState(0);
-                /**
-                 * get history from server
-                 */
-                topMore = true;
-                getOnlineMessage(0, UP);
+                RealmRoomMessage.ClearAllMessageRoomAsync(getRealmChat(), mRoomId, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        recyclerView.addOnScrollListener(scrollListener);
+                        saveMessageIdPositionState(0);
+                        /**
+                         * get history from server
+                         */
+                        topMore = true;
+                        getOnlineMessage(0, UP);
+                    }
+                });
+
             } else if (items.get(position).equals(getString(R.string.report))) {
                 dialogReport(false, 0);
             } else if (items.get(position).equals(getString(R.string.SendMoney))) {
