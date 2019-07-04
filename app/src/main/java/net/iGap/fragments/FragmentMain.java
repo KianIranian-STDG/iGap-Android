@@ -366,13 +366,18 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 }
 
                 //check recycler scroll for search box animation
-                if (dy <= 0) {
+                if (dy < 0) {
                     // Scrolling up
                     mHelperToolbar.animateSearchBox(false);
-                } else  {
+                } else if(dy > 0)  {
                     // Scrolling down
                     mHelperToolbar.animateSearchBox(true);
                 }
+            }
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
         };
         mRecyclerView.addOnScrollListener(onScrollListener);
@@ -881,7 +886,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
-            mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
@@ -894,7 +899,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
-            mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+            mHelperToolbar.getScannerButton().setVisibility(View.GONE);
             mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
