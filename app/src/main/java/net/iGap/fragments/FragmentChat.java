@@ -410,6 +410,7 @@ public class FragmentChat extends BaseFragment
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private EmojiPopup emojiPopup;
+    private boolean isPaused;
 
     /**
      * *************************** common method ***************************
@@ -868,6 +869,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onResume() {
+        isPaused = false;
         super.onResume();
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
@@ -1093,6 +1095,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onPause() {
+        isPaused = true;
         storingLastPosition();
         super.onPause();
 
@@ -4382,7 +4385,7 @@ public class FragmentChat extends BaseFragment
                             StructBackGroundSeen _BackGroundSeen = null;
 
                             ProtoGlobal.RoomMessageStatus roomMessageStatus;
-                            if (G.isAppInFg && isEnd()) {
+                            if (G.isAppInFg && isEnd() && !isPaused) {
 
 
                                 if (messageCopy.isValid() && !messageCopy.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
@@ -4721,7 +4724,8 @@ public class FragmentChat extends BaseFragment
 
             RealmClientCondition.addOfflineSeenAsync(mRoomId, Long.parseLong(messageInfo.messageID));
             RealmRoomMessage.setStatusSeenInChatAsync(parseLong(messageInfo.messageID));
-            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, parseLong(messageInfo.messageID), ProtoGlobal.RoomMessageStatus.SEEN);
+            if (!isPaused)
+                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, parseLong(messageInfo.messageID), ProtoGlobal.RoomMessageStatus.SEEN);
         }
     }
 
