@@ -409,7 +409,7 @@ public class FragmentChat extends BaseFragment
     private static List<StructBottomSheet> contacts;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
-    private static EmojiPopup emojiPopup;
+    private EmojiPopup emojiPopup;
 
     /**
      * *************************** common method ***************************
@@ -689,7 +689,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    public static void fillStickerList() {
+    public void fillStickerList() {
 
         data.clear();
         data = RealmStickers.getAllStickers(true);
@@ -1117,7 +1117,17 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        emojiPopup.releaseMemory();
+    }
+
+    @Override
     public void onStop() {
+        if (emojiPopup != null) {
+            emojiPopup.dismiss();
+        }
 
         canUpdateAfterDownload = false;
         if (G.onChatSendMessage != null)
@@ -2898,7 +2908,9 @@ public class FragmentChat extends BaseFragment
         imvSmileButton = rootView.findViewById(R.id.chl_imv_smile_button);
 
         edtChat = rootView.findViewById(R.id.chl_edt_chat);
-        setUpEmojiPopup();
+        if (emojiPopup == null) {
+            setUpEmojiPopup();
+        }
 
         edtChat.requestFocus();
 
