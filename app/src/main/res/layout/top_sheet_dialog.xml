@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="net.iGap.G" />
         <variable
             name="topSheetViewModel"
             type="net.iGap.dialog.topsheet.TopSheetViewModel" />
@@ -47,7 +47,7 @@
                     android:layout_width="0dp"
                     android:layout_height="4dp"
                     android:layout_margin="8dp"
-                    android:background="@drawable/bottom_sheet_dialog_line"
+                    android:background="@{G.isDarkTheme ? @drawable/bottom_sheet_dialog_line_dark : @drawable/bottom_sheet_dialog_line , default = @drawable/bottom_sheet_dialog_line}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
