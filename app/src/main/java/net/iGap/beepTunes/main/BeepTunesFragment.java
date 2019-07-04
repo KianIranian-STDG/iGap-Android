@@ -1,4 +1,4 @@
-package net.iGap.fragments.beepTunes.main;
+package net.iGap.beepTunes.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
