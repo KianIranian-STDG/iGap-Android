@@ -50,6 +50,7 @@ import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentLanguage;
@@ -58,8 +59,6 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.fragments.BottomNavigationFragment;
-import net.iGap.fragments.TabletMainFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -76,7 +75,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
@@ -98,7 +96,6 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -171,6 +168,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private TextView iconLock;
     private boolean isNeedToRegister = false;
     private int retryConnectToWallet = 0;
+    public static String userPhoneNumber;
 
     public static void setMediaLayout() {
         try {
@@ -435,6 +433,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 return;
             }
 
+            if (checkValidationForRealm(userInfo)){
+                userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
+            }
+
 
             if (!G.userLogin) {
                 /**
@@ -632,6 +634,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setContentView(textView);
             showToast(textView);
         }
+    }
+
+    private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
+        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
     }
 
     private void showToast(View view) {

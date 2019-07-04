@@ -27,6 +27,8 @@ import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
@@ -89,19 +91,28 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         page = getArguments().getInt("page");
         appBarLayout.setVisibility(View.GONE);
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLogoShown(true)
-                .setSearchBoxShown(true , false)
-                .setListener(this);
-
         //uncomment this lines after added small avatar and discovery setting
         if (page != 0){
-            mHelperToolbar.setLeftIcon(R.string.back_icon);
-           // mHelperToolbar.setRightSmallAvatarShown(false);
+
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setLogoShown(true)
+                    .setLeftIcon(R.string.back_icon)
+                    .setListener(this);
+
         }else {
-            //mHelperToolbar.setLeftIcon(R.string.flag_icon);
-            //mHelperToolbar.setRightSmallAvatarShown(true);
+
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setLeftIcon(R.string.flag_icon)
+                    .setRightSmallAvatarShown(true)
+                    .setLogoShown(true)
+                    .setFragmentActivity(getActivity())
+                    .setPassCodeVisibility(true , R.string.unlock_icon)
+                    .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
+                    .setSearchBoxShown(true , false)
+                    .setListener(this);
+
         }
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
@@ -118,21 +129,25 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
 
-        rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+        if (page == 0){
 
-                //check recycler scroll for search box animation
-                if (dy <= 0) {
-                    // Scrolling up
-                    mHelperToolbar.animateSearchBox(false);
-                } else  {
-                    // Scrolling down
-                    mHelperToolbar.animateSearchBox(true);
+            rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    //check recycler scroll for search box animation
+                    if (dy <= 0) {
+                        // Scrolling up
+                        mHelperToolbar.animateSearchBox(false);
+                    } else  {
+                        // Scrolling down
+                        mHelperToolbar.animateSearchBox(true);
+                    }
                 }
-            }
-        });
+            });
+
+        }
 
         if (!getUserVisibleHint()) {
             if (!isInit) {
@@ -168,7 +183,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         });
 
         //load user avatar in toolbar
-        //avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
