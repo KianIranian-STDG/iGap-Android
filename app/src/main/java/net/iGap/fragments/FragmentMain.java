@@ -962,7 +962,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         Fragment fragment = RegisteredContactsFragment.newInstance(true,false,RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
             e.getStackTrace();

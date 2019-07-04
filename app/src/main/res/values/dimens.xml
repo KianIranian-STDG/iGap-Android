@@ -142,6 +142,7 @@
     <dimen name="public_check_box_size">@dimen/dp18</dimen>
     <dimen name="chat_item_log_radius">10dp</dimen>
     <dimen name="toolbar_height_root_with_profile">@dimen/dp160</dimen>
+    <dimen name="contact_icon_size">@dimen/dp22</dimen>
 
 
 </resources>
