@@ -171,6 +171,7 @@
     <color name="incomingCallUserImageLayerStart">#50999999</color>
     <color name="incomingCallUserImageLayerEnd">#999999</color>
     <color name="bottomSheetHeaderLine">#EEEEEE</color>
+    <color name="bottomSheetHeaderLineDark">@color/toolbar_search_box_dark_bg</color>
     <color name="setting_items_value_color">#41B120</color>
     <color name="colorToolbarBackgroundEnd">#41B120</color>
     <color name="colorToolbarBackgroundStart">#B9E244</color>

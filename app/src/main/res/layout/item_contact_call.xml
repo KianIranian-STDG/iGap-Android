@@ -37,20 +37,6 @@
     </LinearLayout>
 
     <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/tv_itemContactCall_videoCall"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp16"
-        android:paddingLeft="@dimen/dp8"
-        android:paddingRight="@dimen/dp8"
-        android:text="@string/video_call_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_itemContactCall_voiceCall"
         style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
@@ -60,12 +46,9 @@
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
         android:text="@string/voice_call_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_itemContactCall_videoCall"
-        app:layout_constraintEnd_toStartOf="@+id/tv_itemContactCall_videoCall"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tv_itemContactCall_userName"
-        app:layout_constraintTop_toTopOf="@+id/tv_itemContactCall_videoCall"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_itemContactCall_userName"

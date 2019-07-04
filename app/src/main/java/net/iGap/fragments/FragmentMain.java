@@ -89,10 +89,8 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
-import org.paygear.fragment.ScannerFragment;
-
-import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
+import org.paygear.fragment.ScannerFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -243,7 +241,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 mSelectedRoomList.remove(item);
             }
             refreshChatList(position, false);
-            setVisiblityForSelectedActionsInEverySelection();
+            //setVisiblityForSelectedActionsInEverySelection();
         };
 
         if(MusicPlayer.playerStateChangeListener != null){
@@ -907,7 +905,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             if (G.isPassCode) mHelperToolbar.getSecondLeftButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
-            setVisiblityForSelectedActionsInEverySelection();
+            //setVisiblityForSelectedActionsInEverySelection();
         } else {
             mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
@@ -966,7 +964,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         try {
             if (getActivity() != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
-                        .setReplace(false).load();
+                        .setReplace(false).setReplace(false).load();
             }
         } catch (Exception e) {
             e.getStackTrace();

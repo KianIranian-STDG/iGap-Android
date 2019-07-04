@@ -107,6 +107,9 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
         Utils.darkModeHandler(voiceCallTv);
         Utils.darkModeHandler(videoCallTv);
         Utils.darkModeHandler(videoCallIv);
+
+        if (G.isDarkTheme)
+            rootView.findViewById(R.id.lineViewTop).setBackgroundResource(R.drawable.bottom_sheet_dialog_line_dark);
     }
 
     @Override

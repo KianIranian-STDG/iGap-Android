@@ -739,12 +739,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 if (G.isDarkTheme) {
                     viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.gray_300));
                     viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.gray_300));
-                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.gray_300));
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.white));
                 } else {
                     viewHolder.title.setTextColor(context.getResources().getColor(R.color.black));
                     viewHolder.subtitle.setTextColor(context.getResources().getColor(R.color.gray_4c));
-                    viewHolder.btnVideoCall.setTextColor(context.getResources().getColor(R.color.gray_4c));
                     viewHolder.btnVoiceCall.setTextColor(context.getResources().getColor(R.color.gray_4c));
                 }
 
@@ -865,7 +863,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             private CircleImageView image;
             private TextView title;
             private TextView subtitle;
-            private MaterialDesignTextView btnVoiceCall, btnVideoCall;
+            private MaterialDesignTextView btnVoiceCall;
             private RealmContacts realmContacts;
             private ConstraintLayout root;
             private CheckBox animateCheckBox;
@@ -879,20 +877,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 title = view.findViewById(R.id.tv_itemContactCall_userName);
                 subtitle = view.findViewById(R.id.tv_itemContactCall_userPhoneNumber);
                 btnVoiceCall = view.findViewById(R.id.tv_itemContactCall_voiceCall);
-                btnVideoCall = view.findViewById(R.id.tv_itemContactCall_videoCall);
 
                 btnVoiceCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
                     if (userId != 134 && G.userId != userId) {
                         CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                        popBackStackFragment();
-                    }
-                });
-
-                btnVideoCall.setOnClickListener(v -> {
-                    long userId = realmContacts.getId();
-                    if (userId != 134 && G.userId != userId) {
-                        CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
                         popBackStackFragment();
                     }
                 });
@@ -903,26 +892,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         if (isCallAction) {
                             long userId = realmContacts.getId();
                             if (userId != 134 && G.userId != userId) {
-
-
-                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
-                                    @Override
-                                    public void onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
-
-                                        switch (which) {
-                                            case 0:
-                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                                                popBackStackFragment();
-                                                break;
-                                            case 1:
-                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-                                                popBackStackFragment();
-                                                break;
-                                        }
-
-                                        dialog.dismiss();
-                                    }
-                                }).show();
+                                CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId,false,ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING );
+                                callSelectFragment.show(getFragmentManager(),null);
                             }
 
                         } else {

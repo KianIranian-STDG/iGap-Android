@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="net.iGap.G" />
         <variable
             name="viewModel"
             type="net.iGap.dialog.payment.buycharge.BuyChargeViewModel" />
@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:layout_marginTop="8dp"
-            android:background="@color/bottomSheetHeaderLine"
+            android:background="@{G.isDarkTheme ? @drawable/bottom_sheet_dialog_line_dark : @drawable/bottom_sheet_dialog_line , default = @drawable/bottom_sheet_dialog_line}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
