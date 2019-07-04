@@ -951,6 +951,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             try {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
                         .setAnimated(true)
+                        .setReplace(false)
                         .setAnimation(R.anim.fade_in , R.anim.fade_out , R.anim.fade_in , R.anim.fade_out)
                         .load();
             } catch (Exception e) {
@@ -964,7 +965,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         Fragment fragment = RegisteredContactsFragment.newInstance(true,false,RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
+                        .setReplace(false).load();
             }
         } catch (Exception e) {
             e.getStackTrace();

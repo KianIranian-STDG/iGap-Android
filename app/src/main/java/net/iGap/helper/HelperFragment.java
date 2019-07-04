@@ -156,8 +156,10 @@ public class HelperFragment {
         }
 
         if (replace) {
+            Log.wtf(this.getClass().getName(),"replace");
             fragmentTransaction.replace(resourceContainer, fragment, tag);
         } else {
+            Log.wtf(this.getClass().getName(),"add");
             fragmentTransaction.add(resourceContainer, fragment, tag);
         }
 

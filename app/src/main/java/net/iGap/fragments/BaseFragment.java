@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -108,8 +109,11 @@ public class BaseFragment extends SwipeBackFragment {
             if (getActivity() instanceof ActivityMain) {
                 for (int i = getActivity().getSupportFragmentManager().getFragments().size() - 1; i >= 0; i--) {
                     Fragment f = getActivity().getSupportFragmentManager().getFragments().get(i);
+                    Log.wtf(this.getClass().getName(), "onDetach fragment name: " + f.getClass().getName());
                     if (f instanceof BaseFragment && f != currentFragment) {
+                        Log.wtf(this.getClass().getName(), "in first if" );
                         if (((BaseFragment) f).isNeedResume) {
+                            Log.wtf(this.getClass().getName(), "call onResume" );
                             f.onResume();
                         }
                         break;
@@ -163,7 +167,7 @@ public class BaseFragment extends SwipeBackFragment {
 
     public void popBackStackFragment() {
         try {
-            if (getActivity()!=null) {
+            if (getActivity() != null) {
                 if (!getActivity().isFinishing()) {
                     getActivity().getSupportFragmentManager().popBackStack();
                 }

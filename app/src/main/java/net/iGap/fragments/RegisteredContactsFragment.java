@@ -849,7 +849,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
                             HelperPublicMethod.goToChatRoom(realmContacts.getId(), () -> {
                                 hideProgress();
-                                popBackStackFragment();
+                                /*popBackStackFragment();*/
                             }, () -> hideProgress());
                         }
                     } else {

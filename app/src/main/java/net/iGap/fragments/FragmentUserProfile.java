@@ -77,7 +77,7 @@ public class FragmentUserProfile extends BaseFragment {
                 Realm realm = Realm.getDefaultInstance();
                 Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
                 try {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 } finally {
@@ -180,7 +180,7 @@ public class FragmentUserProfile extends BaseFragment {
 
         viewModel.goToSettingPage.observe(this, go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
             }
         });
 

@@ -64,11 +64,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
             public int messageCount() {
                 return unReadCount;
             }
-
-            @Override
-            public int badgeColor() {
-                return getResources().getColor(R.color.red);
-            }
         });
 
     }
