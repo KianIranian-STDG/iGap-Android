@@ -475,13 +475,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 lp.width = size;
                 lp.height = size;
 
-                /*frameFragmentBack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        onBackPressed();
-                    }
-                });*/
+                findViewById(R.id.fullScreenFrame).setOnClickListener(view -> onBackPressed());
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
                     @Override
@@ -1173,16 +1167,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 onBackPressedListener.doBack();
             }
             if (G.twoPaneMode) {
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-                if (fragment instanceof BottomNavigationFragment) {
-                    Fragment f = ((BottomNavigationFragment) fragment).getViewPagerCurrentFragment();
-                    if (f != null && f.getChildFragmentManager().getBackStackEntryCount() > 1) {
-                        f.getChildFragmentManager().popBackStack();
+                if (findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE) {//handle back in fragment show like dialog
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                    if (fragment != null) {
+                        getSupportFragmentManager().popBackStackImmediate();
+                    }
+                    Fragment fragmentShowed = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                    if (fragmentShowed == null) {
+                        findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+                    }
+                } else {//handle back in viewPager
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    if (fragment instanceof BottomNavigationFragment) {
+                        Fragment f = ((BottomNavigationFragment) fragment).getViewPagerCurrentFragment();
+                        if (f != null && f.getChildFragmentManager().getBackStackEntryCount() > 1) {
+                            f.getChildFragmentManager().popBackStackImmediate();
+                            if (f instanceof TabletMainFragment) {
+                                ((TabletMainFragment) f).handleFirstFragment();
+                            }
+                        } else {
+                            finish();
+                        }
                     } else {
                         finish();
                     }
-                } else {
-                    finish();
                 }
             } else {
                 if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() > 1) {
