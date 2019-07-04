@@ -493,7 +493,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public void onResume() {
         super.onResume();
 
-        if (mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
+        if (isContact && mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
     }
 
     @Override

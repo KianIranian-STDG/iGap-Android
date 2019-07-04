@@ -1165,7 +1165,7 @@ public class HelperToolbar {
                     set.constrainWidth(smallAvatar.getId() , i_Dp(R.dimen.toolbar_icon_size));
                     set.constrainHeight(smallAvatar.getId() , i_Dp(R.dimen.toolbar_icon_size));
                     set.connect(smallAvatar.getId() , END , PARENT_ID , END , VALUE_4DP);
-                    set.connect(smallAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM , VALUE_4DP);
+                    set.connect(smallAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM , VALUE_10DP);
                     set.connect(smallAvatar.getId() , TOP , PARENT_ID , TOP , VALUE_4DP);
                 }
                 //endregion small avatar
