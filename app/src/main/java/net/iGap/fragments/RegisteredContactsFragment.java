@@ -169,11 +169,33 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
+                .setFragmentActivity(getActivity())
+                .setPassCodeVisibility(true , R.string.unlock_icon)
+                .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
                 .setSearchBoxShown(true)
                 .setLogoShown(true);
 
-        if (!isContact) {
-            mHelperToolbar.setLeftIcon(R.string.back_icon);
+        if (isContact) {
+
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setLeftIcon(R.string.edit_icon)
+                    .setRightIcons(R.string.add_icon)
+                    .setFragmentActivity(getActivity())
+                    .setPassCodeVisibility(true , R.string.unlock_icon)
+                    .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
+                    .setSearchBoxShown(true)
+                    .setLogoShown(true);
+
+        }else {
+
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setLeftIcon(R.string.back_icon)
+                    .setRightIcons(R.string.add_icon)
+                    .setSearchBoxShown(true)
+                    .setLogoShown(true);
+
         }
 
         toolbarLayout.addView(mHelperToolbar.getView());
@@ -465,6 +487,13 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         super.onDetach();
         Contacts.getContact = false;
         hideProgress();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
     }
 
     @Override

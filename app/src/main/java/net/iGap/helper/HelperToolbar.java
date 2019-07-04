@@ -11,6 +11,7 @@ import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
@@ -33,13 +34,18 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.activities.ActivityMain;
+import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.viewmodel.ActivityCallViewModel;
+
+import org.paygear.fragment.ScannerFragment;
 
 import static android.support.constraint.ConstraintSet.BOTTOM;
 import static android.support.constraint.ConstraintSet.END;
@@ -61,7 +67,7 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 public class HelperToolbar {
 
     private ConstraintLayout mRootConstraint ;
-    private AppCompatTextView mLeftBtn, mLeftBtn2, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
+    private AppCompatTextView mLeftBtn, passCodeBtn,scannerBtn , mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
     private EmojiTextViewE mTxtChatUserName;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
@@ -80,6 +86,7 @@ public class HelperToolbar {
     private TextView mTabletUserPhone;
 
     private Context mContext;
+    private FragmentActivity mFragmentActivity;
     private ViewGroup mViewGroup = null;
     private ToolbarListener mToolbarListener;
 
@@ -102,6 +109,10 @@ public class HelperToolbar {
     private boolean isBigSearchBox;
     private boolean isTabletMode ;
     public boolean isToolbarSearchAnimationInProccess;
+    private boolean isScannerEnable;
+    private boolean isPassCodeEnable;
+    private int mPassCodeIcon;
+    private int mScannerIcon;
 
     private HelperToolbar() {
     }
@@ -112,6 +123,11 @@ public class HelperToolbar {
 
     public HelperToolbar setContext(Context context) {
         this.mContext = context;
+        return this;
+    }
+
+    public HelperToolbar setFragmentActivity(FragmentActivity activity) {
+        this.mFragmentActivity = activity;
         return this;
     }
 
@@ -139,7 +155,6 @@ public class HelperToolbar {
     public HelperToolbar setLeftIcon(@StringRes int... icons) {
         System.arraycopy(icons, 0, mLeftIcon, 0, icons.length);
         if (mLeftBtn != null) mLeftBtn.setText(mLeftIcon[0]);
-        if (mLeftBtn2 != null) mLeftBtn2.setText(mLeftIcon[1]);
         return this;
     }
 
@@ -169,6 +184,20 @@ public class HelperToolbar {
 
     public HelperToolbar setPlayerEnable(boolean isEnable) {
         this.isMediaPlayerEnabled = isEnable;
+        return this;
+    }
+
+    public HelperToolbar setScannerVisibility(boolean isVisible , int icon) {
+        this.isScannerEnable = isVisible;
+        this.mScannerIcon = icon ;
+        return this;
+    }
+
+    public HelperToolbar setPassCodeVisibility(boolean isVisible , int icon) {
+        this.isPassCodeEnable = isVisible;
+        this.mPassCodeIcon = icon ;
+        if (passCodeBtn != null) passCodeBtn.setText(icon);
+
         return this;
     }
 
@@ -250,10 +279,6 @@ public class HelperToolbar {
             mLeftBtn.setOnClickListener(v -> mToolbarListener.onLeftIconClickListener(v));
         }
 
-        if (mLeftIcon[1] != 0) {
-            mLeftBtn2.setOnClickListener(v -> mToolbarListener.onSecondLeftIconClickListener(v));
-        }
-
         if (mRightIcons[0] != 0) {
             mRightBtn.setOnClickListener(v -> mToolbarListener.onRightIconClickListener(v));
         }
@@ -282,6 +307,15 @@ public class HelperToolbar {
             setMusicPlayer(viewMaker , isInChatRoom);
         }
 
+        if (isPassCodeEnable){
+            checkPassCodeVisibility();
+            passCodeBtn.setOnClickListener(v -> onPassCodeButtonClickListener());
+        }
+
+        if (isScannerEnable){
+            scannerBtn.setOnClickListener(v -> onScannerClickListener());
+        }
+
         if (isTabletMode){
             viewMaker.gettIconEdit().setOnClickListener(v -> mToolbarListener.onLeftIconClickListener(v));
             viewMaker.gettIconAdd().setOnClickListener(v -> mToolbarListener.onRightIconClickListener(v));
@@ -298,6 +332,8 @@ public class HelperToolbar {
     }
 
     public void animateSearchBox(boolean isGone){
+
+        if (mSearchBox == null ) return;
 
         //dont animate when anim is in process
         if (isToolbarSearchAnimationInProccess) return;
@@ -393,8 +429,12 @@ public class HelperToolbar {
         return mLeftBtn;
     }
 
-    public AppCompatTextView getSecondLeftButton() {
-        return mLeftBtn2;
+    public AppCompatTextView getPassCodeButton() {
+        return passCodeBtn;
+    }
+
+    public AppCompatTextView getScannerButton() {
+        return scannerBtn;
     }
 
     public AppCompatTextView getRightButton() {
@@ -463,6 +503,22 @@ public class HelperToolbar {
 
     public TextView getTabletUserPhone() {
         return mTabletUserPhone;
+    }
+
+    public void checkPassCodeVisibility(){
+
+        if (G.isPassCode) {
+            passCodeBtn.setVisibility(View.VISIBLE);
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME , SHP_SETTING.KEY_LOCK_STARTUP_STATE );
+
+            if (ActivityMain.isLock) {
+                passCodeBtn.setText(mContext.getString(R.string.lock_icon));
+            } else {
+                passCodeBtn.setText(mContext.getString(R.string.unlock_icon));
+            }
+        } else {
+            passCodeBtn.setVisibility(View.GONE);
+        }
     }
 
     /*************************************************************/
@@ -803,12 +859,43 @@ public class HelperToolbar {
 
     }
 
+    private void onPassCodeButtonClickListener() {
+
+        if (ActivityMain.isLock) {
+            passCodeBtn.setText(mContext.getResources().getString(R.string.unlock_icon));
+            ActivityMain.isLock = false;
+            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+
+        } else {
+            passCodeBtn.setText(mContext.getResources().getString(R.string.lock_icon));
+            ActivityMain.isLock = true;
+            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
+        }
+
+    }
+
+    private void onScannerClickListener() {
+
+
+        if (!G.isWalletRegister){
+            if (mFragmentActivity != null && ActivityMain.userPhoneNumber != null) {
+                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
+            }
+        }else {
+            if (mContext != null) {
+                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
+            }
+        }
+
+    }
+
     private void initViews(ViewMaker view) {
 
         mRootConstraint = view.getMainConstraint() ;
 
         mLeftBtn = view.getLeftIcon() ;
-        mLeftBtn2 = view.getLeftIcon2() ;
+        passCodeBtn = view.getpassCodeIcon() ;
+        scannerBtn = view.getScannerIcon() ;
         mRightBtn = view.getRightIcon();
         m2RightBtn = view.getRightIcon2();
         m3RightBtn = view.getRightIcon3();
@@ -949,7 +1036,7 @@ public class HelperToolbar {
         private LinearLayout layoutMedia ;
         private ConstraintLayout mainConstraint ;
         private AppCompatTextView leftIcon = null;
-        private AppCompatTextView leftIcon2 = null;
+        private AppCompatTextView passCodeIcon = null;
         private AppCompatTextView rightIcon4 = null ;
         private AppCompatTextView rightIcon3 = null;
         private AppCompatTextView rightIcon2 = null;
@@ -979,6 +1066,8 @@ public class HelperToolbar {
         private AppCompatTextView tIconAdd ;
         private AppCompatTextView tIconEdit ;
         private AppCompatTextView tIconSearch ;
+        private AppCompatTextView scannerIcon;
+        private CircleImageView smallAvatar;
 
         public ViewMaker(Context ctx) {
             super(ctx);
@@ -1064,27 +1153,11 @@ public class HelperToolbar {
                     mainConstraint.addView(leftIcon);
                     setIconViewSize(leftIcon, set);
 
-                    set.setMargin(leftIcon.getId(), START, VALUE_4DP);
-                    set.setMargin(leftIcon.getId(), TOP, VALUE_4DP);
-                    set.setMargin(leftIcon.getId(), BOTTOM, VALUE_10DP);
-
-                    set.connect(leftIcon.getId(), START, PARENT_ID, START);
-                    set.connect(leftIcon.getId(), TOP, PARENT_ID, TOP);
-                    set.connect(leftIcon.getId(), BOTTOM, PARENT_ID, BOTTOM);
+                    set.connect(leftIcon.getId(), START, PARENT_ID, START , VALUE_4DP);
+                    set.connect(leftIcon.getId(), TOP, PARENT_ID, TOP , VALUE_4DP);
+                    set.connect(leftIcon.getId(), BOTTOM, PARENT_ID, BOTTOM , VALUE_10DP);
 
                 }
-
-                if (mLeftIcon[1] != 0) {
-                    leftIcon2 = makeIcon(R.id.view_toolbar_btn_left2, mLeftIcon[1]);
-                    mainConstraint.addView(leftIcon2);
-                    setIconViewSize(leftIcon2, set);
-
-                    set.connect(leftIcon2.getId(), START, leftIcon.getId(), END , VALUE_4DP);
-                    set.connect(leftIcon2.getId(), TOP, leftIcon.getId(), TOP);
-                    set.connect(leftIcon2.getId(), BOTTOM, leftIcon.getId(), BOTTOM);
-
-                }
-
                 //endregion left buttons
 
                 //region right icons
@@ -1575,6 +1648,49 @@ public class HelperToolbar {
 
                 //endregion profile
 
+                //region PassCode
+
+                if (isPassCodeEnable) {
+                    passCodeIcon = makeIcon(R.id.view_toolbar_btn_passCode, mPassCodeIcon);
+                    mainConstraint.addView(passCodeIcon);
+                    setIconViewSize(passCodeIcon, set);
+
+                    if (leftIcon != null) {
+                        set.connect(passCodeIcon.getId(), START, leftIcon.getId(), END);
+                        set.connect(passCodeIcon.getId(), TOP, leftIcon.getId(), TOP);
+                        set.connect(passCodeIcon.getId(), BOTTOM, leftIcon.getId(), BOTTOM);
+                    }else {
+                        set.connect(passCodeIcon.getId(), START, PARENT_ID, START , VALUE_4DP);
+                        set.connect(passCodeIcon.getId(), TOP, PARENT_ID, TOP , VALUE_4DP);
+                        set.connect(passCodeIcon.getId(), BOTTOM, PARENT_ID, BOTTOM , VALUE_10DP);
+                    }
+                }
+
+                //endregion PassCode
+
+                //region scanner
+                if (isScannerEnable){
+
+                    scannerIcon = makeIcon(R.id.view_toolbar_btn_scanner, mScannerIcon);
+                    mainConstraint.addView(scannerIcon);
+                    setIconViewSize(scannerIcon, set);
+
+                    if (rightIcon != null) {
+                        set.connect(scannerIcon.getId(), END, rightIcon.getId(), START);
+                        set.connect(scannerIcon.getId(), TOP, rightIcon.getId(), TOP);
+                        set.connect(scannerIcon.getId(), BOTTOM, rightIcon.getId(), BOTTOM);
+                    }else if (smallAvatar != null) {
+                        set.connect(scannerIcon.getId(), END, smallAvatar.getId(), START);
+                        set.connect(scannerIcon.getId(), TOP, smallAvatar.getId(), TOP);
+                        set.connect(scannerIcon.getId(), BOTTOM, smallAvatar.getId(), BOTTOM);
+                    }else {
+                        set.connect(scannerIcon.getId(), END, PARENT_ID, END , VALUE_4DP);
+                        set.connect(scannerIcon.getId(), TOP, PARENT_ID, TOP , VALUE_4DP);
+                        set.connect(scannerIcon.getId(), BOTTOM, PARENT_ID, BOTTOM , VALUE_10DP);
+                    }
+                }
+                //endregion scanner
+
                 setRoot.applyTo(this);
                 set.applyTo(mainConstraint);
 
@@ -1798,8 +1914,12 @@ public class HelperToolbar {
             return leftIcon;
         }
 
-        public AppCompatTextView getLeftIcon2() {
-            return leftIcon2;
+        public AppCompatTextView getScannerIcon() {
+            return scannerIcon;
+        }
+
+        public AppCompatTextView getpassCodeIcon() {
+            return passCodeIcon;
         }
 
         public AppCompatTextView getRightIcon4() {

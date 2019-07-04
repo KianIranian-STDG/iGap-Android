@@ -40,7 +40,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -68,7 +67,6 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -90,7 +88,6 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.fragment.ScannerFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -183,8 +180,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.edit_icon , R.string.unlock_icon)
-                .setRightIcons(R.string.add_icon , R.string.scan_qr_code_icon)
+                .setLeftIcon(R.string.edit_icon )
+                .setRightIcons(R.string.add_icon)
+                .setFragmentActivity(getActivity())
+                .setPassCodeVisibility(true , R.string.unlock_icon)
+                .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
                 .setLogoShown(true)
                 .setPlayerEnable(true)
                 .setSearchBoxShown(true, false)
@@ -231,7 +231,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             setColorToLightMode(mBtnMakeAsReadSelected);
             setColorToLightMode(mBtnReadAllSelected);
         }
-        checkLockIconVisibility();
 
         onChatCellClickedInEditMode = (v, item, position, status) -> {
 
@@ -273,23 +272,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         //just check at first time page loaded
         notifyChatRoomsList();
-
-    }
-
-    private void checkLockIconVisibility() {
-
-        if (G.isPassCode) {
-            mHelperToolbar.getSecondLeftButton().setVisibility(View.VISIBLE);
-            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME , SHP_SETTING.KEY_LOCK_STARTUP_STATE );
-
-            if (ActivityMain.isLock) {
-                mHelperToolbar.getSecondLeftButton().setText(getString(R.string.lock_icon));
-            } else {
-                mHelperToolbar.getSecondLeftButton().setText(getString(R.string.unlock_icon));
-            }
-        } else {
-            mHelperToolbar.getSecondLeftButton().setVisibility(View.GONE);
-        }
 
     }
 
@@ -758,10 +740,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             e.printStackTrace();
         }
 
-        try {
-            checkLockIconVisibility();
-        }catch (Exception e){
-
+        if (mHelperToolbar != null ){
+            mHelperToolbar.checkPassCodeVisibility();
         }
 
         boolean canUpdate = false;
@@ -902,7 +882,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
-            if (G.isPassCode) mHelperToolbar.getSecondLeftButton().setVisibility(View.VISIBLE);
+            if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
             //setVisiblityForSelectedActionsInEverySelection();
@@ -915,7 +895,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             refreshChatList(0, true);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
             mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-            mHelperToolbar.getSecondLeftButton().setVisibility(View.GONE);
+            mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
             if (!mHelperToolbar.getmSearchBox().isShown()){
@@ -924,22 +904,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
 
         }
-    }
-
-    @Override
-    public void onSecondLeftIconClickListener(View view) {
-
-        if (ActivityMain.isLock) {
-            mHelperToolbar.getSecondLeftButton().setText(getResources().getString(R.string.unlock_icon));
-            ActivityMain.isLock = false;
-            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
-
-        } else {
-            mHelperToolbar.getSecondLeftButton().setText(getResources().getString(R.string.lock_icon));
-            ActivityMain.isLock = true;
-            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
-        }
-
     }
 
     @Override
@@ -966,19 +930,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
         } catch (Exception e) {
             e.getStackTrace();
-        }
-    }
-
-    @Override
-    public void onSecondRightIconClickListener(View view) {
-        if (!G.isWalletRegister){
-            if (getActivity() != null && ActivityMain.userPhoneNumber != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
-            }
-        }else {
-            if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
-            }
         }
     }
 
