@@ -118,19 +118,23 @@ public final class StartupActions {
                     try {
                         long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
                         RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
+
                         for (RealmRoom room : realmRooms)
                         {
-                            RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
                             if (room.getLastMessage() != null) {
                                 roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
                             }
-
-                            RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                                    .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
-                                    .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
-                            for (RealmRoomMessage var : realmRoomMessages)
-                                var.removeFromRealm(realm);
                         }
+
+                        RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
+                                .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                .limit(100).findAll();
+
+                        for (RealmRoomMessage var : realmRoomMessages)
+                            var.removeFromRealm(realm);
+
                     } catch (OutOfMemoryError error) {
                         error.printStackTrace();
                         HelperLog.setErrorLog(new Exception(error.getMessage()));
