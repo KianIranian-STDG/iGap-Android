@@ -27,6 +27,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -307,6 +308,10 @@ public class HelperToolbar {
             setMusicPlayer(viewMaker , isInChatRoom);
         }
 
+        if (isRightSmallAvatarShown){
+            mAvatarSmall.setOnClickListener(v -> mToolbarListener.onSmallAvatarClickListener(v));
+        }
+
         if (isPassCodeEnable){
             checkPassCodeVisibility();
             passCodeBtn.setOnClickListener(v -> onPassCodeButtonClickListener());
@@ -491,6 +496,10 @@ public class HelperToolbar {
 
     public TextView getChatMute() {
         return mChatMuteIcon;
+    }
+
+    public ImageView getAvatarSmall() {
+        return mAvatarSmall;
     }
 
     public CircleImageView getTabletUserAvatar() {
@@ -909,7 +918,7 @@ public class HelperToolbar {
         mCloudChatIcon = view.getCivCloud();
         mAvatarChat = view.getCivAvatar();
 
-//        mAvatarSmall = view.findViewById(R.id.view_toolbar_user_small_avatar);
+        mAvatarSmall = view.getSmallAvatar();
 
         mSearchBox = view.getSearchLayout();
         mTxtSearch = view.getTvSearch();
@@ -1022,7 +1031,6 @@ public class HelperToolbar {
 
 
     private Typeface tfFontIcon, tfMain;
-
 
     private class ViewMaker extends ConstraintLayout {
 
@@ -1146,6 +1154,21 @@ public class HelperToolbar {
                 addView(mainConstraint);
 
                 //endregion main constraint
+
+                //region small avatar
+                if (isRightSmallAvatarShown){
+                    smallAvatar = new CircleImageView(getContext());
+                    smallAvatar.setId(R.id.view_toolbar_user_small_avatar);
+                    smallAvatar.setPadding(VALUE_4DP , VALUE_4DP , VALUE_4DP , VALUE_4DP);
+                    mainConstraint.addView(smallAvatar);
+
+                    set.constrainWidth(smallAvatar.getId() , i_Dp(R.dimen.toolbar_icon_size));
+                    set.constrainHeight(smallAvatar.getId() , i_Dp(R.dimen.toolbar_icon_size));
+                    set.connect(smallAvatar.getId() , END , PARENT_ID , END , VALUE_4DP);
+                    set.connect(smallAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM , VALUE_4DP);
+                    set.connect(smallAvatar.getId() , TOP , PARENT_ID , TOP , VALUE_4DP);
+                }
+                //endregion small avatar
 
                 //region left buttons
                 if (mLeftIcon[0] != 0) {
@@ -2036,6 +2059,10 @@ public class HelperToolbar {
 
         public AppCompatTextView gettIconSearch() {
             return tIconSearch;
+        }
+
+        public CircleImageView getSmallAvatar() {
+            return smallAvatar;
         }
 
         //endregion getters
