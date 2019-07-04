@@ -45,6 +45,14 @@ public class TabletMainFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         Log.wtf(this.getClass().getName(), "onConfigurationChanged");
         super.onConfigurationChanged(newConfig);
+        handleFirstFragment();
+    }
+
+    public void loadChatFragment(FragmentChat fragmentChat) {
+        getChildFragmentManager().beginTransaction().addToBackStack(fragmentChat.getClass().getName()).add(R.id.childMainContainer, fragmentChat, fragmentChat.getClass().getName()).commit();
+    }
+
+    public void handleFirstFragment() {
         int count = getChildFragmentManager().getBackStackEntryCount();
         if (count == 1) {
             Fragment fragment = getChildFragmentManager().findFragmentById(R.id.childMainContainer);
@@ -62,9 +70,5 @@ public class TabletMainFragment extends Fragment {
                 }
             }
         }
-    }
-
-    public void loadChatFragment(FragmentChat fragmentChat){
-        getChildFragmentManager().beginTransaction().addToBackStack(fragmentChat.getClass().getName()).add(R.id.childMainContainer, fragmentChat, fragmentChat.getClass().getName()).commit();
     }
 }

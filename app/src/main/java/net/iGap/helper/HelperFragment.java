@@ -279,21 +279,29 @@ public class HelperFragment {
             return 0;
         }
 
-        if (G.twoPaneMode && G.isLandscape) {
+        if (G.twoPaneMode) {
             if (fragmentClassName.equals(FragmentMain.class.getName())) {
-                return R.id.roomListFrame;
-            } else if (fragmentClassName.equals(FragmentShowImage.class.getName())) {
-                if (G.iTowPanModDesinLayout != null) {
-                    G.iTowPanModDesinLayout.setBackChatVisibility(true);
+                if (G.isLandscape) {
+                    return R.id.roomListFrame;
+                } else {
+                    return R.id.mainFrame;
                 }
-                return R.id.fullScreenFrame;
+            } else if (fragmentClassName.equals(FragmentShowImage.class.getName())) {
+                /*if (G.isLandscape) {*/
+                    if (G.iTowPanModDesinLayout != null) {
+                        G.iTowPanModDesinLayout.setBackChatVisibility(true);
+                    }
+                    return R.id.fullScreenFrame;
+                /*} else {
+                    return R.id.mainFrame;
+                }*/
             } else if (isChatFragment(fragmentClassName)) {
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.show);
                 }
                 //TODO: fixed it in tablet mode load fragment Chat
                 return 0/*R.id.am_frame_chat_container*/;
-            } else if (fragmentClassName.equals(BottomNavigationFragment.class.getName())){
+            } else if (fragmentClassName.equals(BottomNavigationFragment.class.getName())) {
                 return R.id.mainFrame;
             } else {
                 if (G.iTowPanModDesinLayout != null) {

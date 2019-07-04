@@ -168,9 +168,7 @@ public class BaseFragment extends SwipeBackFragment {
     public void popBackStackFragment() {
         try {
             if (getActivity() != null) {
-                if (!getActivity().isFinishing()) {
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
+                getActivity().onBackPressed();
 
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
