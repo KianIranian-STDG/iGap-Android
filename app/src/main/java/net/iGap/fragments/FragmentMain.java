@@ -971,8 +971,14 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        if (getActivity() != null){
-            new HelperFragment(getActivity().getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
+        if (!G.isWalletRegister){
+            if (getActivity() != null && ActivityMain.userPhoneNumber != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
+            }
+        }else {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
+            }
         }
     }
 
