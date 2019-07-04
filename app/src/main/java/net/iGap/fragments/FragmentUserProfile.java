@@ -78,7 +78,7 @@ public class FragmentUserProfile extends BaseFragment {
                 bundle.putString("TITLE", "ADD");
                 fragment.setArguments(bundle);
                 try {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -179,7 +179,7 @@ public class FragmentUserProfile extends BaseFragment {
 
         viewModel.goToSettingPage.observe(this, go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
             }
         });
 

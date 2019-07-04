@@ -4,6 +4,4 @@ public interface OnBottomNavigationBadge {
     int callCount();
 
     int messageCount();
-
-    int badgeColor();
 }

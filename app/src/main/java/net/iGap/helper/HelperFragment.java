@@ -154,12 +154,11 @@ public class HelperFragment {
             fragmentTransaction.addToBackStack(tag);
         }
 
-        Log.wtf(this.getClass().getName(), "fragment name: " + fragment.getClass().getName());
-        Log.wtf(this.getClass().getName(), "resource id is roomListFrame: " + (R.id.roomListFrame == resourceContainer));
-
         if (replace) {
+            Log.wtf(this.getClass().getName(),"replace");
             fragmentTransaction.replace(resourceContainer, fragment, tag);
         } else {
+            Log.wtf(this.getClass().getName(),"add");
             fragmentTransaction.add(resourceContainer, fragment, tag);
         }
 

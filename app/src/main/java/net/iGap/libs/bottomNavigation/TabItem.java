@@ -95,7 +95,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     }
 
     private void setupViews() {
-        /*if (isDarkTheme)
+        if (isDarkTheme)
             imageView.setImageResource(darkSelectedIcon);
         else
             imageView.setImageResource(selectedIcon);
@@ -103,7 +103,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
         if (position == bottomNavigation.getDefaultItem())
             active = true;
-        setSelectedItem(active);*/
+        setSelectedItem(active);
     }
 
     private void parseAttr(AttributeSet attributeSet) {

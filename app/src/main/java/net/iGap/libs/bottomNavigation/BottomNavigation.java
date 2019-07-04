@@ -33,9 +33,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
     private int backgroundColor;
+    private int badgeColor;
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        badgeColor = context.getResources().getColor(R.color.red);
         init(attrs);
     }
 
@@ -194,7 +196,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     public void setOnBottomNavigationBadge(OnBottomNavigationBadge callBack) {
         for (int i = 0; i < tabItems.size(); i++) {
             TabItem tabItem = tabItems.get(i);
-            tabItem.setBadgeColor(callBack.badgeColor());
+            tabItem.setBadgeColor(badgeColor);
 
             switch (i) {
                 case 0:

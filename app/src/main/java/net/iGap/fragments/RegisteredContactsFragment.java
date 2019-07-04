@@ -1364,7 +1364,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                                     @Override
                                     public void complete() {
                                         hideProgress();
-                                        popBackStackFragment();
+                                        /*popBackStackFragment();*/
                                     }
                                 }, new HelperPublicMethod.OnError() {
                                     @Override
