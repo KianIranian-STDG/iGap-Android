@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -56,7 +54,6 @@ import net.iGap.interfaces.OnGroupKickModerator;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
@@ -753,9 +750,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         if (mHelperToolbar.getEditTextSearch().getText().toString().trim().length() > 0) {
             mHelperToolbar.getEditTextSearch().setText("");
-        } else {
-            InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
     }

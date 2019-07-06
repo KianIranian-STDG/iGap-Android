@@ -642,8 +642,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public void onBtnClearSearchClickListener(View view) {
         if (edtSearch.getText().length() > 0) {
             edtSearch.setText("");
-        } else {
-            closeKeyboard(getView());
         }
     }
 

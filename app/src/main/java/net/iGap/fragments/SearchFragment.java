@@ -747,8 +747,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onBtnClearSearchClickListener(View view) {
-        InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+        }
     }
 
     @Override

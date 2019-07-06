@@ -371,7 +371,12 @@ public class HelperToolbar {
     public void resizeSearchBoxWithAnimation(final boolean bigView , final boolean isOpenKeyboard ) {
 
 
-        if (!isOpenKeyboard) setSearchEditableMode(false);
+        if (!isOpenKeyboard) {
+            setSearchEditableMode(false);
+
+            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEdtSearch.getWindowToken(), 0);
+        }
 
         Animation animation ;
 
