@@ -169,31 +169,45 @@ public class FragmentContactsProfile extends BaseFragment {
             new RequestClientMuteRoom().muteRoom(viewModel.roomId, isChecked);
         });
 
-        viewModel.contactName.observe(this,name->{
-            if (name!=null){
+        viewModel.contactName.observe(this, name -> {
+            if (name != null) {
                 t.getGroupName().setText(name);
             }
         });
 
-        viewModel.lastSeen.observe(this,lastSeen->{
-            if (lastSeen!=null){
+        viewModel.lastSeen.observe(this, lastSeen -> {
+            if (lastSeen != null) {
                 t.getGroupMemberCount().setText(HelperCalander.unicodeManage(lastSeen));
             }
         });
 
-        viewModel.goToChatPage.observe(this,userRoomId->{
+        viewModel.goToChatPage.observe(this, userRoomId -> {
             if (getActivity() != null && userRoomId != null) {
                 if (G.twoPaneMode) {
-                    ((ActivityMain)getActivity()).removeAllFragment();
+                    ((ActivityMain) getActivity()).removeAllFragment();
+                } else {
+                    ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                 }
                 new GoToChatActivity(userRoomId).startActivity(getActivity());
             }
         });
 
-        if (viewModel.phone != null && (!viewModel.phone.get().equals("0")|| viewModel.showNumber.get())){
+        viewModel.goBack.observe(this, isBack -> {
+            if (isBack != null && isBack) {
+                popBackStackFragment();
+            }
+        });
+
+        viewModel.goToShearedMediaPage.observe(this, data -> {
+            if (getActivity() != null && data != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(data)).setReplace(false).load();
+            }
+        });
+
+        if (viewModel.phone != null && (!viewModel.phone.get().equals("0") || viewModel.showNumber.get())) {
             t.getProfileTell().setText(viewModel.phone.get());
             t.getProfileTell().setOnClickListener(v -> viewModel.onPhoneNumberClick());
-        }else {
+        } else {
             t.getProfileTell().setVisibility(View.GONE);
         }
 

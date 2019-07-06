@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -430,7 +431,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 return;
             }
 
-            if (checkValidationForRealm(userInfo)){
+            if (checkValidationForRealm(userInfo)) {
                 userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
             }
 
@@ -1011,7 +1012,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void openActivityPassCode() {
         if (G.isPassCode) {
-            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME , SHP_SETTING.KEY_LOCK_STARTUP_STATE );
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
         }
 
         if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
@@ -1649,7 +1650,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //removeAllFragmentLoadedLikeDialogInTabletMode
     public void removeAllFragment() {
-        getFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
         findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+    }
+
+    public void removeAllFragmentFromMain() {
+        getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
     }
 }

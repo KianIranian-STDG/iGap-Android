@@ -415,7 +415,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             fillListGif();
         } else if (countOFFILE > 0) {
             fillListFile();
-        } else if (countOFFILE > 0) {
+        } else if (countOFLink > 0) {
             fillListLink();
         } else {
             fillListImage();
