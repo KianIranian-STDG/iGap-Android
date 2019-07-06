@@ -5,19 +5,14 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.BottomNavigationFragment;
-import net.iGap.fragments.discovery.DiscoveryFragment;
-
-import static net.iGap.fragments.FragmentCall.OPEN_IN_FRAGMENT_MAIN;
 
 /**
  * this is helper class for open new fragment
@@ -149,17 +144,13 @@ public class HelperFragment {
         if (resourceContainer == 0) {
             resourceContainer = getResContainer(tag);
         }
-        Log.wtf(this.getClass().getName(), "resourceContainer: " + (resourceContainer == R.id.mainFrame));
-        Log.wtf(this.getClass().getName(), "addToBackStack: " + addToBackStack);
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(tag);
         }
 
         if (replace) {
-            Log.wtf(this.getClass().getName(), "replace");
             fragmentTransaction.replace(resourceContainer, fragment, tag);
         } else {
-            Log.wtf(this.getClass().getName(), "add");
             fragmentTransaction.add(resourceContainer, fragment, tag);
         }
 
@@ -206,7 +197,7 @@ public class HelperFragment {
     public void removeAll(boolean keepMain) {
         /*if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {*/
         for (int i = fragmentManager.getBackStackEntryCount() - 1; i > -1; i--) {
-            Log.wtf(this.getClass().getName(), "fragment: " + fragmentManager.getBackStackEntryAt(i).getName());
+
         }
         /*for (Fragment fragment : fragmentManager.getFragments()) {
             if (fragment != null) {
