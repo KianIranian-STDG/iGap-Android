@@ -330,7 +330,7 @@ public final class AppUtils {
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case FAILED:
-                iconTextView.setText("ß");
+                iconTextView.setText(".");
                 iconTextView.setTextColor(context.getResources().getColor(R.color.red));
                 break;
             case SEEN:
@@ -378,7 +378,7 @@ public final class AppUtils {
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case FAILED:
-                iconTextView.setText("ß");
+                iconTextView.setText(".");
                 iconTextView.setTextColor(context.getResources().getColor(R.color.red));
                 break;
             case LISTENED:
