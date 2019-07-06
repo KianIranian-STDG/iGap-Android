@@ -114,6 +114,7 @@ public class HelperToolbar {
     private boolean isPassCodeEnable;
     private int mPassCodeIcon;
     private int mScannerIcon;
+    private int mAnimationOldPositionItem = 0;
 
     private HelperToolbar() {
     }
@@ -336,18 +337,36 @@ public class HelperToolbar {
 
     }
 
-    public void animateSearchBox(boolean isGone){
+    //offset must be negative or zero
+    public void animateSearchBox(boolean isGone , int lastItemPosition , int offset){
 
         if (mSearchBox == null ) return;
 
-        //dont animate when anim is in process
-        if (isToolbarSearchAnimationInProccess) return;
+        if (lastItemPosition == 0 ){
 
-        //ban to animate show when view is show
-        if ( mSearchBox.isShown() && !isGone) return;
+            mAnimationOldPositionItem = 0 ;
+            mSearchBox.setVisibility(View.VISIBLE);
+            mSearchBox.clearAnimation();
 
-        //ban to animate gone when view is gone
-        if ( !mSearchBox.isShown() && isGone) return;
+        }else if ((lastItemPosition - mAnimationOldPositionItem ) > Math.abs(offset)){
+
+            mAnimationOldPositionItem = lastItemPosition ;
+            if ( !mSearchBox.isShown() && isGone) return;
+            if (isToolbarSearchAnimationInProccess) return;
+            setAnimation(isGone);
+
+        }else if ((lastItemPosition - mAnimationOldPositionItem ) < offset){
+
+            mAnimationOldPositionItem = lastItemPosition ;
+            if ( mSearchBox.isShown() && !isGone) return;
+            if (isToolbarSearchAnimationInProccess) return;
+            setAnimation(isGone);
+
+        }
+
+    }
+
+    private void setAnimation(boolean isGone) {
 
         if (!isGone) mSearchBox.setVisibility(View.VISIBLE);
 
@@ -369,8 +388,8 @@ public class HelperToolbar {
             );
         }
 
-        animation.setDuration(300);
-        animation.setFillAfter(true);
+        animation.setDuration(200);
+        animation.setFillAfter(false);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
