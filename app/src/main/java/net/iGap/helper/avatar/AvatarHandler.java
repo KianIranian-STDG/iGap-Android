@@ -157,7 +157,7 @@ public class AvatarHandler {
                     if (imageViews != null) {
                         for (ImageView imageView : imageViews) {
                             ImageHashValue imageHashValue = imageViewHashValue.get(imageView);
-                            if (imageHashValue != null) {
+                            if (imageHashValue != null && bmImg != null) {
                                 imageView.setImageBitmap(bmImg);
                                 if (imageHashValue.onChangeAvatar != null)
                                     imageHashValue.onChangeAvatar.onChange(false);
