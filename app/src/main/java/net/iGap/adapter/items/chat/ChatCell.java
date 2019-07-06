@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -208,6 +209,19 @@ public class ChatCell extends ConstraintLayout {
         bottomView.setBackgroundColor(isDarkTheme ? getResources().getColor(R.color.gray_6c) : getResources().getColor(R.color.gray_300));
         addView(bottomView);
 
+
+        /**
+         * force gravity in message preview
+         * */
+        if (isRtl) {
+            firstTextView.setGravity(Gravity.RIGHT);
+            secondTextView.setGravity(Gravity.RIGHT);
+            thirdTextView.setGravity(Gravity.RIGHT);
+        } else {
+            firstTextView.setGravity(Gravity.LEFT);
+            secondTextView.setGravity(Gravity.LEFT);
+            thirdTextView.setGravity(Gravity.LEFT);
+        }
 
         /**
          * set views dependency
