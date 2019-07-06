@@ -1,4 +1,4 @@
-package net.iGap.popular.adapter;
+package net.iGap.adapter.items.popular;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,23 +10,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.popular.model.Channel;
+import net.iGap.adapter.items.popular.model.Channel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterGridChannel extends RecyclerView.Adapter<AdapterGridChannel.FragmentGridViewHolder> {
+public class AdapterParentGridItem extends RecyclerView.Adapter<AdapterParentGridItem.FragmentGridViewHolder> {
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
 
-    public AdapterGridChannel(Context context) {
+    public AdapterParentGridItem(Context context) {
         this.context = context;
         Channel channel = new Channel();
         channel.setChannelImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
-        channel.setChannelTitle("کانال اخرین خبر");
+        channel.setChannelTitle("باشگاه");
         channelList.add(channel);
         channelList.add(channel);
         channelList.add(channel);
@@ -50,7 +50,7 @@ public class AdapterGridChannel extends RecyclerView.Adapter<AdapterGridChannel.
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid_parent, viewGroup, false);
         return new FragmentGridViewHolder(view);
     }
 
@@ -70,9 +70,8 @@ public class AdapterGridChannel extends RecyclerView.Adapter<AdapterGridChannel.
 
         public FragmentGridViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            channelImageGrid = itemView.findViewById(R.id.circle_item_popular_fragment_grid);
-            channelTitleGrid = itemView.findViewById(R.id.tv_item_popular_fragment_grid);
+            channelImageGrid = itemView.findViewById(R.id.circle_item_popular_rv_grid);
+            channelTitleGrid = itemView.findViewById(R.id.tv_item_popular_rv_grid);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -91,7 +90,7 @@ public class AdapterGridChannel extends RecyclerView.Adapter<AdapterGridChannel.
         this.onClickedItemEventCallBack = onClickedItemEventCallBack;
     }
 
-    public interface OnClickedItemEventCallBack{
+    public interface OnClickedItemEventCallBack {
         void onClickedItem();
     }
 }

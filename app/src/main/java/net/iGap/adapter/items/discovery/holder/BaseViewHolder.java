@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.fragments.popular.FragmentPopularChannelParent;
 import net.iGap.helper.HelperFragment;
-import net.iGap.popular.FragmentPopularChannelParent;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 
 
@@ -43,7 +43,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
 
@@ -52,7 +52,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
 
-        new HelperFragment(activity.getSupportFragmentManager(),new FragmentPopularChannelParent()).setReplace(false).load();
+        new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelParent()).setReplace(false).load();
 //        switch (discoveryField.actionType) {
 //            case PAGE:/** tested **/
 //                actionPage(discoveryField.value);
@@ -86,7 +86,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 //            case IVANDLIST:
 //                new HelperFragment(activity.getSupportFragmentManager(),FragmentIVandActivities.newInstance()).setReplace(false).load();
 //                break;
-//            case WEB_VIEW_LINK:/** tested title needed**/
+//            case WEB_VIEW7_LINK:/** tested title needed**/
 //                if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
 //                    HelperUrl.openWithoutBrowser(discoveryField.value);
 //                } else {
@@ -268,8 +268,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 //                break;
 //            case UNRECOGNIZED:
 //                break;
-        }
-//    }
+    }
 //
     private void actionPage(String value) {
         new HelperFragment(activity.getSupportFragmentManager(),DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);

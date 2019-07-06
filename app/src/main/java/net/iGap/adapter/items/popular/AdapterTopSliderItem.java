@@ -1,4 +1,4 @@
-package net.iGap.popular.adapter;
+package net.iGap.adapter.items.popular;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,17 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import net.iGap.R;
-import net.iGap.popular.model.Slider;
+import net.iGap.adapter.items.popular.model.Slider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterTopSlider extends RecyclerView.Adapter<AdapterTopSlider.SliderViewHolder> {
+public class AdapterTopSliderItem extends RecyclerView.Adapter<AdapterTopSliderItem.SliderViewHolder> {
     private List<Slider> sliderList = new ArrayList<>();
     private Context context;
 
-
-    public AdapterTopSlider(Context context) {
+    public AdapterTopSliderItem(Context context) {
 
         this.context = context;
         Slider sliderTop = new Slider();
@@ -32,11 +31,7 @@ public class AdapterTopSlider extends RecyclerView.Adapter<AdapterTopSlider.Slid
         sliderList.add(sliderTop);
         sliderList.add(sliderTop);
         sliderList.add(sliderTop);
-
-
     }
-
-
 
     @NonNull
     @Override
@@ -55,24 +50,16 @@ public class AdapterTopSlider extends RecyclerView.Adapter<AdapterTopSlider.Slid
         return sliderList.size();
     }
 
-
     public class SliderViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
 
         public SliderViewHolder(@NonNull final View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.iv_item_popular_slider_top);
-
         }
 
         public void bindImage(final Slider slider) {
             imageView.setImageDrawable(slider.getSliderImage());
-
         }
     }
-
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package net.iGap.popular.model;
+package net.iGap.adapter.items.popular.model;
 
 import android.graphics.drawable.Drawable;
 

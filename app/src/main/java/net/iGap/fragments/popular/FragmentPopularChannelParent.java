@@ -1,4 +1,4 @@
-package net.iGap.popular;
+package net.iGap.fragments.popular;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,11 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import net.iGap.R;
+import net.iGap.adapter.items.popular.AdapterBottomSliderItem;
+import net.iGap.adapter.items.popular.AdapterLinearChannelItem;
+import net.iGap.adapter.items.popular.AdapterParentGridItem;
+import net.iGap.adapter.items.popular.AdapterTopSliderItem;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.popular.adapter.AdapterBottomSlider;
-import net.iGap.popular.adapter.AdapterGridChannel;
-import net.iGap.popular.adapter.AdapterLinearChannel;
-import net.iGap.popular.adapter.AdapterTopSlider;
 
 public class FragmentPopularChannelParent extends BaseFragment {
     private RecyclerView rvTopSlider;
@@ -27,10 +27,10 @@ public class FragmentPopularChannelParent extends BaseFragment {
     private RecyclerView rvParentLinearThree;
     private RecyclerView rvParentBottomSlider;
     private RecyclerView rvParentGrid;
-    private AdapterLinearChannel adapterLinearChannel;
-    private AdapterTopSlider adapterTopSlider;
-    private AdapterBottomSlider adapterBottomSlider;
-    private AdapterGridChannel fragmentGridAdapter;
+    private AdapterLinearChannelItem adapterLinearChannel;
+    private AdapterTopSliderItem adapterTopSlider;
+    private AdapterBottomSliderItem adapterBottomSlider;
+    private AdapterParentGridItem adapterParentGridItem;
     private ImageView icMoreOne;
     private ImageView icMoreTwo;
     private ImageView icMoreThree;
@@ -48,12 +48,10 @@ public class FragmentPopularChannelParent extends BaseFragment {
         icMoreOne = view.findViewById(R.id.ic_fragment_popular_p_more_one);
         icMoreTwo = view.findViewById(R.id.ic_fragment_popular_p_more_two);
         icMoreThree = view.findViewById(R.id.ic_fragment_popular_p_more_three);
-        adapterLinearChannel = new AdapterLinearChannel(getContext());
-        adapterTopSlider = new AdapterTopSlider(getContext());
-        adapterBottomSlider = new AdapterBottomSlider(getContext());
-        fragmentGridAdapter = new AdapterGridChannel(getContext());
-
-
+        adapterLinearChannel = new AdapterLinearChannelItem(getContext());
+        adapterTopSlider = new AdapterTopSliderItem(getContext());
+        adapterBottomSlider = new AdapterBottomSliderItem(getContext());
+        adapterParentGridItem = new AdapterParentGridItem(getContext());
         return view;
     }
 
@@ -75,30 +73,29 @@ public class FragmentPopularChannelParent extends BaseFragment {
         rvParentLinearThree.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         rvParentLinearThree.setAdapter(adapterLinearChannel);
         rvParentGrid.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
-        rvParentGrid.setAdapter(fragmentGridAdapter);
+        rvParentGrid.setAdapter(adapterParentGridItem);
 
-        adapterBottomSlider.setOnClickSliderEventCallBack(new AdapterBottomSlider.OnClickSliderEventCallBack() {
+        adapterBottomSlider.setOnClickSliderEventCallBack(new AdapterBottomSliderItem.OnClickSliderEventCallBack() {
             @Override
             public void clickedSlider() {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild());
+                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild2());
                 fragmentTransaction.addToBackStack(null).commit();
             }
         });
-        fragmentGridAdapter.setOnClickedItemEventCallBack(new AdapterGridChannel.OnClickedItemEventCallBack() {
+        adapterParentGridItem.setOnClickedItemEventCallBack(new AdapterParentGridItem.OnClickedItemEventCallBack() {
             @Override
             public void onClickedItem() {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild());
+                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild2());
                 fragmentTransaction.addToBackStack(null).commit();
             }
         });
-
         icMoreOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild());
+                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild1());
                 fragmentTransaction.addToBackStack(null).commit();
             }
         });
@@ -106,7 +103,7 @@ public class FragmentPopularChannelParent extends BaseFragment {
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild());
+                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild1());
                 fragmentTransaction.addToBackStack(null).commit();
             }
         });
@@ -114,12 +111,10 @@ public class FragmentPopularChannelParent extends BaseFragment {
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild());
+                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild1());
                 fragmentTransaction.addToBackStack(null).commit();
             }
         });
 
-
     }
-
 }

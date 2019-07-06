@@ -1,4 +1,4 @@
-package net.iGap.popular.adapter;
+package net.iGap.adapter.items.popular;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,19 +10,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import net.iGap.R;
-import net.iGap.popular.model.Slider;
+import net.iGap.adapter.items.popular.model.Slider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterBottomSlider extends RecyclerView.Adapter<AdapterBottomSlider.BottomSliderViewHolder> {
+public class AdapterBottomSliderItem extends RecyclerView.Adapter<AdapterBottomSliderItem.BottomSliderViewHolder> {
     private List<Slider> sliderList = new ArrayList<>();
     private Context context;
     private OnClickSliderEventCallBack onClickSliderEventCallBack;
 
-    public AdapterBottomSlider(Context context) {
+    public AdapterBottomSliderItem(Context context) {
         this.context = context;
-        Slider sliderBottom=new Slider();
+        Slider sliderBottom = new Slider();
         sliderBottom.setSliderImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
         sliderList.add(sliderBottom);
         sliderList.add(sliderBottom);
@@ -66,9 +66,9 @@ public class AdapterBottomSlider extends RecyclerView.Adapter<AdapterBottomSlide
                 }
             });
         }
+
         public void bindImage(final Slider slider) {
             imageView.setImageDrawable(slider.getSliderImage());
-
         }
     }
 
