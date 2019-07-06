@@ -43,6 +43,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
     private boolean isInit = false;
     DiscoveryAdapter adapterDiscovery;
     private HelperToolbar mHelperToolbar;
+    private LinearLayoutManager layoutManager;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
@@ -136,13 +137,15 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
 
+                    int position = layoutManager.findFirstVisibleItemPosition();
+
                     //check recycler scroll for search box animation
                     if (dy <= 0) {
                         // Scrolling up
-                        mHelperToolbar.animateSearchBox(false);
+                        mHelperToolbar.animateSearchBox(false , position , -2);
                     } else  {
                         // Scrolling down
-                        mHelperToolbar.animateSearchBox(true);
+                        mHelperToolbar.animateSearchBox(true , position , -2);
                     }
                 }
             });
@@ -186,7 +189,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
+        layoutManager = new LinearLayoutManager(G.currentActivity);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         rcDiscovery.setLayoutManager(layoutManager);

@@ -141,6 +141,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     private List<RealmRoom> mSelectedRoomList = new ArrayList<>();
     private ViewGroup mLayoutMultiSelectedActions;
     private TextView mBtnRemoveSelected;
+    private LinearLayoutManager layoutManager;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -248,7 +249,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 notifyChatRoomsList();
 
                 if (!mHelperToolbar.getmSearchBox().isShown()){
-                    mHelperToolbar.animateSearchBox(false);
+                    mHelperToolbar.animateSearchBox(false , 0 , 0);
                 }
             });
         }
@@ -257,7 +258,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
            notifyChatRoomsList();
 
             if (!mHelperToolbar.getmSearchBox().isShown()){
-                mHelperToolbar.animateSearchBox(false);
+                mHelperToolbar.animateSearchBox(false  , 0 , 0);
             }
 
         });
@@ -265,7 +266,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setItemViewCacheSize(0);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         initRecycleView();
@@ -350,28 +351,28 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                                 progressBar.setVisibility(View.VISIBLE);
                         }
                     }
-                } /*else {
-                    mRecyclerView.removeOnScrollListener(onScrollListener);
-                }*/
+                }
 
                 //check if music player was enable disable scroll detecting for search box
                 if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
 
                     if (!mHelperToolbar.getmSearchBox().isShown()){
-                        mHelperToolbar.animateSearchBox(false);
+                        mHelperToolbar.animateSearchBox(false , 0 , 0);
 
                     }
 
                     return;
                 }
 
+                int position = layoutManager.findFirstVisibleItemPosition();
+
                 //check recycler scroll for search box animation
-                if (dy < 0) {
+                    if (dy <= 0) {
                     // Scrolling up
-                    mHelperToolbar.animateSearchBox(false);
-                } else if(dy > 0)  {
+                    mHelperToolbar.animateSearchBox(false , position , -3);
+                } else   {
                     // Scrolling down
-                    mHelperToolbar.animateSearchBox(true);
+                    mHelperToolbar.animateSearchBox(true , position , -3);
                 }
             }
 
@@ -904,7 +905,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
             if (!mHelperToolbar.getmSearchBox().isShown()){
-                mHelperToolbar.animateSearchBox(false);
+                mHelperToolbar.animateSearchBox(false , 0 , 0 );
 
             }
 
