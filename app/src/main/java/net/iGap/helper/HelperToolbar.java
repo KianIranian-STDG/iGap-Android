@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -364,6 +365,60 @@ public class HelperToolbar {
 
         }
 
+    }
+
+
+    public void resizeSearchBoxWithAnimation(final boolean bigView , final boolean isOpenKeyboard ) {
+
+
+        if (!isOpenKeyboard) setSearchEditableMode(false);
+
+        Animation animation ;
+
+        if (bigView){
+
+            animation = new ScaleAnimation(
+                    1f, 1.09f,
+                    1f, 1.01f,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f
+            );
+
+        }else {
+
+            animation = new ScaleAnimation(
+                    1.09f , 1f ,
+                    1.01f , 1f,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f
+            );
+
+        }
+
+        animation.setDuration(400);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                if (isOpenKeyboard){
+                    setSearchEditableMode(true);
+                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mEdtSearch, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        mSearchBox.startAnimation(animation);
     }
 
     private void setAnimation(boolean isGone) {
@@ -832,7 +887,10 @@ public class HelperToolbar {
         if (visible && mSearchBox != null) {
 
             mSearchBox.setOnClickListener(v -> {
-                if (isShowEditTextForSearch) setSearchEditableMode(mTxtSearch.isShown());
+                if (isShowEditTextForSearch) {
+                    if (!mBtnClearSearch.isShown()) resizeSearchBoxWithAnimation(true , true);
+                    //setSearchEditableMode(mTxtSearch.isShown());
+                }
                 mToolbarListener.onSearchClickListener(v);
             });
 
@@ -840,10 +898,12 @@ public class HelperToolbar {
 
                 if (!mEdtSearch.getText().toString().trim().equals(""))
                     mEdtSearch.setText("");
-                else if (isShowEditTextForSearch)
-                    setSearchEditableMode(mTxtSearch.isShown());
-
-                mToolbarListener.onBtnClearSearchClickListener(v);
+                else if (isShowEditTextForSearch) {
+                    resizeSearchBoxWithAnimation(false , false);
+                }
+                G.handler.postDelayed(() -> {
+                    mToolbarListener.onBtnClearSearchClickListener(v);
+                } , 500);
             });
 
             mEdtSearch.addTextChangedListener(new TextWatcher() {
@@ -1297,6 +1357,7 @@ public class HelperToolbar {
                 //region search box
 
                 if (isSearchBoxShown) {
+
                     searchLayout = new RelativeLayout(getContext());
                     searchLayout.setGravity(Gravity.CENTER_VERTICAL);
                     searchLayout.setId(R.id.view_toolbar_search_layout);
@@ -1319,7 +1380,7 @@ public class HelperToolbar {
                     setRoot.connect(searchLayout.getId(), START, mainConstraint.getId(), START);
                     setRoot.connect(searchLayout.getId(), END, mainConstraint.getId(), END);
                     setRoot.connect(searchLayout.getId(), TOP, mainConstraint.getId(), BOTTOM);
-                    setRoot.connect(searchLayout.getId(), BOTTOM, mainConstraint.getId(), BOTTOM);
+                    setRoot.connect(searchLayout.getId(), BOTTOM, mainConstraint.getId(), BOTTOM );
                     addView(searchLayout);
 
                     tvSearch = new TextView(getContext());
@@ -1351,7 +1412,7 @@ public class HelperToolbar {
                     tvClearSearch.setText(R.string.close_icon);
                     tvClearSearch.setVisibility(GONE);
                     Utils.setTextSize(tvClearSearch, R.dimen.largeTextSize);
-                    RelativeLayout.LayoutParams lp = setLayoutParams(tvClearSearch, i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp2));
+                    RelativeLayout.LayoutParams lp = setLayoutParams(tvClearSearch, WRAP_CONTENT, i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp20));
                     lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, searchLayout.getId());
                     lp.addRule(RelativeLayout.CENTER_VERTICAL, searchLayout.getId());
                     tvClearSearch.setLayoutParams(lp);
@@ -1901,6 +1962,15 @@ public class HelperToolbar {
             view.setLayoutParams(lp);
             view.setPadding(lpadding, 0, rpadding, 0);
 
+        }
+
+        private RelativeLayout.LayoutParams setLayoutParams(View view, int width, int height, int lpadding, int rpadding) {
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
+            view.setLayoutParams(lp);
+            view.setPadding(lpadding, 0, rpadding, 0);
+
+            return lp ;
         }
 
         private RelativeLayout.LayoutParams setLayoutParams(View view, int width, int height, int mlef, int mright, int padding) {
