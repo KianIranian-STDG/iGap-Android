@@ -4435,7 +4435,7 @@ public class FragmentChat extends BaseFragment
                                     }
                                 }
 
-                                setBtnDownVisible(realmRoomMessage);
+                                setBtnDownVisible(messageCopy);
 
                             }
                         });
@@ -4468,7 +4468,8 @@ public class FragmentChat extends BaseFragment
                                         removeLayoutUnreadMessage();
                                     }
                                 }
-                                setBtnDownVisible(realmRoomMessage);
+
+                                setBtnDownVisible(messageCopy);
                             }
                         });
 
@@ -4708,7 +4709,7 @@ public class FragmentChat extends BaseFragment
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isManaged() && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
+        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
             countNewMessage = 0;
             txtNewUnreadMessage.setVisibility(View.GONE);
             txtNewUnreadMessage.setText(countNewMessage + "");
@@ -8892,7 +8893,7 @@ public class FragmentChat extends BaseFragment
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
-            if (firstUnreadMessage == null || !firstUnreadMessage.isManaged() || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+            if (firstUnreadMessage == null || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
                 firstUnreadMessage = getFirstUnreadMessage(getRealmChat());
             }
 
