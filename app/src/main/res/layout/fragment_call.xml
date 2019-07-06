@@ -150,6 +150,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_icCall" />
 
+    <android.support.constraint.Group
+        android:id="@+id/empty_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="textEmptyCal,img_icCall"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fc_recycler_view_call"
         android:layout_width="match_parent"
