@@ -48,15 +48,17 @@
                     android:textSize="12sp"
                     tools:text="جدیدترین ها" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_popular_channel_all"
-                    android:orientation="horizontal">
+                    android:background="@drawable/shape_popular_channel_all">
 
                     <FrameLayout
+                        android:id="@+id/frame_more_one"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true">
 
                         <ImageView
                             android:id="@+id/ic_fragment_popular_p_more_one"
@@ -73,9 +75,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp4"
-                        android:orientation="horizontal" />
+                        android:orientation="horizontal"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/frame_more_one"/>
 
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,15 +97,17 @@
                     android:textSize="12sp"
                     tools:text="جدیدترین ها" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_popular_channel_all"
-                    android:orientation="horizontal">
+                    android:background="@drawable/shape_popular_channel_all">
 
                     <FrameLayout
+                        android:id="@+id/frame_more_two"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true">
 
                         <ImageView
                             android:id="@+id/ic_fragment_popular_p_more_two"
@@ -118,9 +124,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp4"
-                        android:orientation="horizontal" />
+                        android:orientation="horizontal"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/frame_more_two"/>
 
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -139,15 +147,17 @@
                     android:textSize="12sp"
                     tools:text="بروزترین ها " />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_popular_channel_all"
-                    android:orientation="horizontal">
+                    android:background="@drawable/shape_popular_channel_all">
 
                     <FrameLayout
+                        android:id="@+id/frame_more_three"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true">
 
                         <ImageView
                             android:id="@+id/ic_fragment_popular_p_more_three"
@@ -164,9 +174,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp4"
-                        android:orientation="horizontal" />
+                        android:orientation="horizontal"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/frame_more_three"/>
 
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
 
             <android.support.v7.widget.CardView
