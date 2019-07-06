@@ -165,15 +165,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         Utils.darkModeHandler(toolbarLayout);
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLeftIcon(R.string.edit_icon)
-                .setRightIcons(R.string.add_icon)
-                .setFragmentActivity(getActivity())
-                .setPassCodeVisibility(true , R.string.unlock_icon)
-                .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
-                .setSearchBoxShown(true)
-                .setLogoShown(true);
 
         if (isContact) {
 
@@ -196,6 +187,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     .setSearchBoxShown(true)
                     .setLogoShown(true);
 
+        }
+
+        if (mPageMode == CALL){
+            mHelperToolbar.setDefaultTitle(getString(R.string.make_call));
+        }else if (mPageMode == ADD){
+            mHelperToolbar.setDefaultTitle(getString(R.string.create_chat));
         }
 
         toolbarLayout.addView(mHelperToolbar.getView());
@@ -860,6 +857,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                                                 break;
                                             case 1:
                                                 CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+
                                                 popBackStackFragment();
                                                 break;
                                         }
