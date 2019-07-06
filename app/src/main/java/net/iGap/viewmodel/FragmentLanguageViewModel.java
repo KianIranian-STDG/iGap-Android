@@ -55,7 +55,6 @@ public class FragmentLanguageViewModel extends ViewModel {
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = false;
             FragmentLanguage.languageChanged = true;
-            G.isRestartActivity = true;
             refreshActivityForChangeLanguage.setValue("en");
         }
 
@@ -79,7 +78,6 @@ public class FragmentLanguageViewModel extends ViewModel {
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = true;
             FragmentLanguage.languageChanged = true;
-            G.isRestartActivity = true;
             refreshActivityForChangeLanguage.setValue("fa");
         }
 
@@ -104,7 +102,6 @@ public class FragmentLanguageViewModel extends ViewModel {
             HelperCalander.isLanguageArabic = true;
             G.isAppRtl = true;
             FragmentLanguage.languageChanged = true;
-            G.isRestartActivity = true;
             refreshActivityForChangeLanguage.setValue("ar");
         }
 

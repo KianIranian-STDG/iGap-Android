@@ -34,6 +34,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -183,8 +184,7 @@ public class FragmentContactsProfile extends BaseFragment {
         viewModel.goToChatPage.observe(this,userRoomId->{
             if (getActivity() != null && userRoomId != null) {
                 if (G.twoPaneMode) {
-                    /*((ActivityMain)getActivity()).removeAllFragment();*/
-                    /*new HelperFragment(getActivity().getSupportFragmentManager()).removeAll(true);*/
+                    ((ActivityMain)getActivity()).removeAllFragment();
                 }
                 new GoToChatActivity(userRoomId).startActivity(getActivity());
             }

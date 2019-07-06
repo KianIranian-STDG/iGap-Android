@@ -24,6 +24,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -68,7 +69,7 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.wtf(this.getClass().getName(),"onViewCreated");
+        Log.wtf(this.getClass().getName(), "onViewCreated");
 
         viewModel.goToAddMemberPage.observe(this, aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
@@ -251,12 +252,18 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
+        viewModel.resetApp.observe(this, isReset -> {
+            if (getActivity() instanceof ActivityEnhanced && isReset != null && isReset) {
+                ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
+            }
+        });
+
         binding.fupBtnDarkMode.setOnClickListener(v -> {
             binding.darkTheme.setChecked(!G.isDarkTheme);
             viewModel.onThemeClick(G.isDarkTheme);
         });
 
-        Log.wtf(this.getClass().getName(),"onViewCreated");
+        Log.wtf(this.getClass().getName(), "onViewCreated");
     }
 
     @Override

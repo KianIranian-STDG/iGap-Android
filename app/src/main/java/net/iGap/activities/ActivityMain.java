@@ -108,7 +108,6 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -116,9 +115,7 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
-import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestInfoWallpaper;
-import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -141,7 +138,6 @@ import retrofit2.Response;
 
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
-import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
 
@@ -1153,7 +1149,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 ((TabletMainFragment) f).handleFirstFragment();
                             }
                         } else {
-                            finish();
+                            if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                                finish();
+                            }
                         }
                     } else {
                         finish();
@@ -1163,7 +1161,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     super.onBackPressed();
                 } else {
-                    finish();
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    if (fragment instanceof BottomNavigationFragment) {
+                        if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                            finish();
+                        }
+                    }
                 }
                 /*if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() < 1) {
                     if (!this.isFinishing()) {
@@ -1697,17 +1700,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //removeAllFragmentLoadedLikeDialogInTabletMode
     public void removeAllFragment() {
-        if (findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE) {//handle back in fragment show like dialog
-            while (getSupportFragmentManager().findFragmentById(R.id.detailFrame) != null) {
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
-                if (fragment != null) {
-                    getSupportFragmentManager().popBackStackImmediate();
-                }
-                Fragment fragmentShowed = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
-                if (fragmentShowed == null) {
-                    findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
-                }
-            }
-        }
+        getFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
     }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.databinding.FragmentThemColorCustomBinding;
 import net.iGap.viewmodel.FragmentThemColorCustomViewModel;
 
@@ -46,6 +47,12 @@ public class FragmentThemColorCustom extends BaseFragment {
             public void onClick(View v) {
                 // mActivity.getSupportFragmentManager().popBackStack();
                 popBackStackFragment();
+            }
+        });
+
+        fragmentThemColorCustomViewModel.resetApp.observe(this, isReset -> {
+            if (getActivity() instanceof ActivityEnhanced && isReset != null && isReset) {
+                ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
             }
         });
     }

@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.R;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.databinding.FragmentThemColorBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
@@ -60,7 +63,25 @@ public class FragmentThemColor extends BaseFragment {
 
         fragmentThemColorViewModel.goToDarkThemePage.observe(this, go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(),FragmentDarkTheme.newInstance()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDarkTheme.newInstance()).setReplace(false).load();
+            }
+        });
+
+        fragmentThemColorViewModel.showDialogChangeTheme.observe(this, data -> {
+            if (getActivity() != null && data != null) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.customization)
+                        .positiveText(R.string.ok)
+                        .negativeText(R.string.cansel)
+                        .onPositive((dialog, which) -> fragmentThemColorViewModel.setNewTheme(data, dialog.isPromptCheckBoxChecked()))
+                        .checkBoxPromptRes(R.string.Apply_colors_to_customize, false, null)
+                        .show();
+            }
+        });
+
+        fragmentThemColorViewModel.reCreateApp.observe(this, isRecreate -> {
+            if (getActivity() instanceof ActivityEnhanced && isRecreate != null && isRecreate) {
+                ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
             }
         });
     }

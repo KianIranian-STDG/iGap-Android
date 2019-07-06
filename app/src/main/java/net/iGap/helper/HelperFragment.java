@@ -155,10 +155,10 @@ public class HelperFragment {
         }
 
         if (replace) {
-            Log.wtf(this.getClass().getName(),"replace");
+            Log.wtf(this.getClass().getName(), "replace");
             fragmentTransaction.replace(resourceContainer, fragment, tag);
         } else {
-            Log.wtf(this.getClass().getName(),"add");
+            Log.wtf(this.getClass().getName(), "add");
             fragmentTransaction.add(resourceContainer, fragment, tag);
         }
 
@@ -203,37 +203,40 @@ public class HelperFragment {
     }
 
     public void removeAll(boolean keepMain) {
-        if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {
-            for (Fragment fragment : fragmentManager.getFragments()) {
-                if (fragment != null) {
+        /*if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {*/
+        for (int i = fragmentManager.getBackStackEntryCount() - 1; i > -1; i--) {
+            Log.wtf(this.getClass().getName(), "fragment: " + fragmentManager.getBackStackEntryAt(i).getName());
+        }
+        /*for (Fragment fragment : fragmentManager.getFragments()) {
+            if (fragment != null) {
 
-                    if (keepMain) {
-                        if (fragment.getClass().getName().equals(FragmentMain.class.getName())) {
+                if (keepMain) {
+                    if (fragment.getClass().getName().equals(FragmentMain.class.getName())) {
+                        continue;
+                    }
+                    if (fragment.getClass().getName().equals(DiscoveryFragment.class.getName())) {
+                        if (fragment.getArguments().getInt("page") == 0) {
                             continue;
                         }
-                        if (fragment.getClass().getName().equals(DiscoveryFragment.class.getName())) {
-                            if (fragment.getArguments().getInt("page") == 0) {
-                                continue;
-                            }
-                        }
-                        if (fragment instanceof FragmentCall) {
-                            if (fragment.getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN)) {
-                                continue;
-                            }
-                        }
-
-                        fragmentManager.beginTransaction().remove(fragment).commit();
-                    } else {
-                        fragmentManager.beginTransaction().remove(fragment).commit();
                     }
+                    if (fragment instanceof FragmentCall) {
+                        if (fragment.getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN)) {
+                            continue;
+                        }
+                    }
+
+                    fragmentManager.beginTransaction().remove(fragment).commit();
+                } else {
+                    fragmentManager.beginTransaction().remove(fragment).commit();
                 }
             }
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);*/
+        /*}*/
 
-        if (G.iTowPanModDesinLayout != null) {
+        /*if (G.iTowPanModDesinLayout != null) {
             G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
-        }
+        }*/
     }
 
     public void popBackStack() {
@@ -288,10 +291,10 @@ public class HelperFragment {
                 }
             } else if (fragmentClassName.equals(FragmentShowImage.class.getName())) {
                 /*if (G.isLandscape) {*/
-                    if (G.iTowPanModDesinLayout != null) {
-                        G.iTowPanModDesinLayout.setBackChatVisibility(true);
-                    }
-                    return R.id.fullScreenFrame;
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.setBackChatVisibility(true);
+                }
+                return R.id.fullScreenFrame;
                 /*} else {
                     return R.id.mainFrame;
                 }*/

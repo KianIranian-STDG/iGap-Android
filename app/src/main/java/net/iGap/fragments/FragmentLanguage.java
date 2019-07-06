@@ -54,7 +54,7 @@ public class FragmentLanguage extends BaseFragment {
 
         fragmentLanguageViewModel.refreshActivityForChangeLanguage.observe(this, language -> {
             if (getActivity() instanceof ActivityEnhanced && language != null) {
-                ((ActivityEnhanced) getActivity()).onRefreshActivity(language);
+                ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
             }
         });
 

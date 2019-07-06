@@ -396,17 +396,19 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         updateResources(getBaseContext());
     }
 
-    public void onRefreshActivity(String language) {
+    public void onRefreshActivity(boolean changeColor,String language) {
 
-        G.isUpdateNotificaionColorMain = false;
-        G.isUpdateNotificaionColorChannel = false;
-        G.isUpdateNotificaionColorGroup = false;
-        G.isUpdateNotificaionColorChat = false;
-        G.isUpdateNotificaionCall = false;
+        G.isUpdateNotificaionColorMain = changeColor;
+        G.isUpdateNotificaionColorChannel = changeColor;
+        G.isUpdateNotificaionColorGroup = changeColor;
+        G.isUpdateNotificaionColorChat = changeColor;
+        G.isUpdateNotificaionCall = changeColor;
+        G.isRestartActivity = true;
 
         new HelperFragment(getSupportFragmentManager()).removeAll(false);
 
         this.recreate();
+
     }
 
 }
