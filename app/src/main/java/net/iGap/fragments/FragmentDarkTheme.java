@@ -10,11 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentDarkThemeBinding;
 import net.iGap.viewmodel.FragmentDarkThemeViewModel;
-import net.iGap.viewmodel.FragmentLanguageViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

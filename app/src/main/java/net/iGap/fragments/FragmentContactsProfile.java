@@ -182,6 +182,10 @@ public class FragmentContactsProfile extends BaseFragment {
 
         viewModel.goToChatPage.observe(this,userRoomId->{
             if (getActivity() != null && userRoomId != null) {
+                if (G.twoPaneMode) {
+                    /*((ActivityMain)getActivity()).removeAllFragment();*/
+                    /*new HelperFragment(getActivity().getSupportFragmentManager()).removeAll(true);*/
+                }
                 new GoToChatActivity(userRoomId).startActivity(getActivity());
             }
         });

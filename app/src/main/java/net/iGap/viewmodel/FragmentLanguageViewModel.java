@@ -7,8 +7,10 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.view.View;
 
@@ -22,13 +24,13 @@ import net.iGap.module.SHP_SETTING;
 import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.onRefreshActivity;
 
-public class FragmentLanguageViewModel {
+public class FragmentLanguageViewModel extends ViewModel {
 
     private SharedPreferences sharedPreferences;
     private FragmentLanguage fragmentLanguage;
     private String textLanguage;
+    public MutableLiveData<String> refreshActivityForChangeLanguage = new MutableLiveData<>();
 
 
     public FragmentLanguageViewModel(FragmentLanguage fragmentLanguage) {
@@ -52,11 +54,9 @@ public class FragmentLanguageViewModel {
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = false;
-            if (onRefreshActivity != null) {
-                FragmentLanguage.languageChanged = true;
-                G.isRestartActivity = true;
-                onRefreshActivity.refresh("en");
-            }
+            FragmentLanguage.languageChanged = true;
+            G.isRestartActivity = true;
+            refreshActivityForChangeLanguage.setValue("en");
         }
 
         if (MusicPlayer.updateName != null) {
@@ -78,11 +78,9 @@ public class FragmentLanguageViewModel {
             HelperCalander.isLanguagePersian = true;
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = true;
-            if (onRefreshActivity != null) {
-                FragmentLanguage.languageChanged = true;
-                G.isRestartActivity = true;
-                onRefreshActivity.refresh("fa");
-            }
+            FragmentLanguage.languageChanged = true;
+            G.isRestartActivity = true;
+            refreshActivityForChangeLanguage.setValue("fa");
         }
 
         if (MusicPlayer.updateName != null) {
@@ -105,12 +103,9 @@ public class FragmentLanguageViewModel {
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = true;
             G.isAppRtl = true;
-
-            if (onRefreshActivity != null) {
-                FragmentLanguage.languageChanged = true;
-                G.isRestartActivity = true;
-                onRefreshActivity.refresh("ar");
-            }
+            FragmentLanguage.languageChanged = true;
+            G.isRestartActivity = true;
+            refreshActivityForChangeLanguage.setValue("ar");
         }
 
         if (MusicPlayer.updateName != null) {
@@ -121,15 +116,15 @@ public class FragmentLanguageViewModel {
     }
 
     public boolean isEnglish() {
-        return textLanguage.equals("English") ? true : false;
+        return textLanguage.equals("English");
     }
 
     public boolean isFarsi() {
-        return textLanguage.equals("فارسی") ? true : false;
+        return textLanguage.equals("فارسی");
     }
 
     public boolean isArabi() {
-        return textLanguage.equals("العربی") ? true : false;
+        return textLanguage.equals("العربی");
     }
 
 

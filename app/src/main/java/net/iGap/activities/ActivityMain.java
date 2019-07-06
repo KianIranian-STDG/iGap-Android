@@ -1069,78 +1069,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.isRestartActivity = false;
     }
 
-    /**
-     * init  menu drawer
-     */
-
-    private void initDrawerMenu() {
-        RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
-        if (callConfig == null)
-            new RequestSignalingGetConfiguration().signalingGetConfiguration();
-    }
-
-    private void openMapFragment() {
-        try {
-            HelperPermission.getLocationPermission(ActivityMain.this, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
-                    try {
-                        if (!waitingForConfiguration) {
-                            waitingForConfiguration = true;
-                            if (mapUrls == null || mapUrls.isEmpty() || mapUrls.size() == 0) {
-                                G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
-                                    @Override
-                                    public void onGetConfiguration() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                G.handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        waitingForConfiguration = false;
-                                                    }
-                                                }, 2000);
-                                                new HelperFragment(getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void getConfigurationTimeOut() {
-                                        G.handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                waitingForConfiguration = false;
-                                            }
-                                        }, 2000);
-                                    }
-                                };
-                                new RequestGeoGetConfiguration().getConfiguration();
-                            } else {
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        waitingForConfiguration = false;
-                                    }
-                                }, 2000);
-                                new HelperFragment(getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        e.getStackTrace();
-                    }
-                }
-
-                @Override
-                public void deny() {
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void initComponent() {
 
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1264,23 +1192,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         /**
          * after change language in ActivitySetting this part refresh Activity main
          */
-        G.onRefreshActivity = new OnRefreshActivity() {
-            @Override
-            public void refresh(String changeLanguag) {
-
-                G.isUpdateNotificaionColorMain = false;
-                G.isUpdateNotificaionColorChannel = false;
-                G.isUpdateNotificaionColorGroup = false;
-                G.isUpdateNotificaionColorChat = false;
-                G.isUpdateNotificaionCall = false;
-
-                new HelperFragment(getSupportFragmentManager()).removeAll(false);
-
-                ActivityMain.this.recreate();
-
-            }
-        };
-
         designLayout(chatLayoutMode.none);
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
@@ -1781,6 +1692,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setChatPage(fragmentChat);
+        }
+    }
+
+    //removeAllFragmentLoadedLikeDialogInTabletMode
+    public void removeAllFragment() {
+        if (findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE) {//handle back in fragment show like dialog
+            while (getSupportFragmentManager().findFragmentById(R.id.detailFrame) != null) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                if (fragment != null) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                }
+                Fragment fragmentShowed = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                if (fragmentShowed == null) {
+                    findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+                }
+            }
         }
     }
 }

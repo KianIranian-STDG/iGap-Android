@@ -300,7 +300,7 @@ public class G extends Application {
     /*public static OnGroupUpdateUsername onGroupUpdateUsername;*/
     public static OnChannelUpdateUsername onChannelUpdateUsername;
     public static OnGroupAvatarDelete onGroupAvatarDelete;
-    public static OnRefreshActivity onRefreshActivity;
+    /*public static OnRefreshActivity onRefreshActivity;*/
     //    public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
     public static OnStickerDownloaded onStickerDownloaded;
