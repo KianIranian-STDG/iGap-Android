@@ -57,6 +57,7 @@
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/subtitle"
                 android:layout_width="wrap_content"
+                style="?textTitleColorSettingTheme"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical|start"

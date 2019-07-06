@@ -32,7 +32,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.adapter_list_cobtact, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.adapter_list_contact, parent, false);
         return new ViewHolder(view);
     }
 
