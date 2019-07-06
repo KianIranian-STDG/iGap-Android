@@ -373,9 +373,6 @@ public class HelperToolbar {
 
         if (!isOpenKeyboard) {
             setSearchEditableMode(false);
-
-            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mEdtSearch.getWindowToken(), 0);
         }
 
         Animation animation ;
@@ -412,8 +409,10 @@ public class HelperToolbar {
 
                 if (isOpenKeyboard){
                     setSearchEditableMode(true);
-                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(mEdtSearch, InputMethodManager.SHOW_IMPLICIT);
+
+                    G.handler.postDelayed( () -> {
+                        openKeyboard();
+                    } , 200);
                 }
             }
 
@@ -424,6 +423,17 @@ public class HelperToolbar {
         });
 
         mSearchBox.startAnimation(animation);
+    }
+
+    private void openKeyboard() {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(mEdtSearch, InputMethodManager.SHOW_IMPLICIT);
+     }
+
+    private void closeKeyboard() {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEdtSearch.getWindowToken(), 0);
+
     }
 
     private void setAnimation(boolean isGone) {
@@ -904,7 +914,10 @@ public class HelperToolbar {
                 if (!mEdtSearch.getText().toString().trim().equals(""))
                     mEdtSearch.setText("");
                 else if (isShowEditTextForSearch) {
-                    resizeSearchBoxWithAnimation(false , false);
+                    closeKeyboard();
+                    G.handler.postDelayed(() -> {
+                        resizeSearchBoxWithAnimation(false , false);
+                    } , 200);
                 }
                 G.handler.postDelayed(() -> {
                     mToolbarListener.onBtnClearSearchClickListener(v);
