@@ -154,4 +154,13 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
             return null;
         }
     }
+
+    public boolean isFirstTabItem(){
+        if (mViewPager.getCurrentItem() == 2){
+            return true;
+        }else{
+            mViewPager.setCurrentItem(2);
+            return false;
+        }
+    }
 }

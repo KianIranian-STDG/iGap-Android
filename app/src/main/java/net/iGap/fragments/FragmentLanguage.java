@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.databinding.FragmentLanguageBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -50,6 +51,12 @@ public class FragmentLanguage extends BaseFragment {
 
         initDataBinding();
         initToolbar();
+
+        fragmentLanguageViewModel.refreshActivityForChangeLanguage.observe(this, language -> {
+            if (getActivity() instanceof ActivityEnhanced && language != null) {
+                ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
+            }
+        });
 
     }
 

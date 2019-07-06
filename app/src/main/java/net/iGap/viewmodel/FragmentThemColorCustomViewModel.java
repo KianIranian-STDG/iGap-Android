@@ -9,6 +9,8 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -29,14 +31,14 @@ import net.iGap.fragments.FragmentThemColorCustom;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.viewmodel.FragmentThemColorViewModel.resetApp;
 
 
-public class FragmentThemColorCustomViewModel {
+public class FragmentThemColorCustomViewModel extends ViewModel {
 
     private SharedPreferences sharedPreferences;
     private FragmentThemColorCustom fragmentThemColorCustom;
     private FragmentThemColorCustomBinding fragmentThemColorCustomBinding;
+    public MutableLiveData<Boolean> resetApp = new MutableLiveData<>();
 
 
     public FragmentThemColorCustomViewModel(FragmentThemColorCustom fragmentThemColorCustom, FragmentThemColorCustomBinding fragmentThemColorCustomBinding) {
@@ -61,10 +63,7 @@ public class FragmentThemColorCustomViewModel {
         editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         editor.apply();
-
-        Theme.setThemeColor();
-        resetApp();
-
+        resetApp.setValue(true);
     }
 
     public void onClickTitleBarColor(View view) {

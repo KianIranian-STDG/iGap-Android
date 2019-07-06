@@ -85,22 +85,6 @@ public class ActivityRegisteration extends ActivityEnhanced {
             }
         });
 
-        G.onRefreshActivity = new OnRefreshActivity() {
-            @Override
-            public void refresh(String changeLanguag) {
-
-                G.isUpdateNotificaionColorMain = false;
-                G.isUpdateNotificaionColorChannel = false;
-                G.isUpdateNotificaionColorGroup = false;
-                G.isUpdateNotificaionColorChat = false;
-                G.isUpdateNotificaionCall = false;
-
-                new HelperFragment(getSupportFragmentManager()).removeAll(false);
-
-                ActivityRegisteration.this.recreate();
-
-            }
-        };
         if (savedInstanceState != null) {
             repository.saveInstance(
                     savedInstanceState.getInt(KEY_SAVE_CODE_NUMBER),

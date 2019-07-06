@@ -32,6 +32,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.UserStatusController;
@@ -393,6 +394,21 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateResources(getBaseContext());
+    }
+
+    public void onRefreshActivity(boolean changeColor,String language) {
+
+        G.isUpdateNotificaionColorMain = changeColor;
+        G.isUpdateNotificaionColorChannel = changeColor;
+        G.isUpdateNotificaionColorGroup = changeColor;
+        G.isUpdateNotificaionColorChat = changeColor;
+        G.isUpdateNotificaionCall = changeColor;
+        G.isRestartActivity = true;
+
+        new HelperFragment(getSupportFragmentManager()).removeAll(false);
+
+        this.recreate();
+
     }
 
 }

@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -26,17 +27,20 @@ import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.fragments.FragmentThemColor;
 import net.iGap.fragments.FragmentThemColorCustom;
 import net.iGap.helper.HelperFragment;
+import net.iGap.model.ChangeTheme;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FragmentThemColorViewModel {
+public class FragmentThemColorViewModel extends ViewModel {
 
     private SharedPreferences sharedPreferences;
     private FragmentThemColor fragmentThemColor;
     private FragmentThemColorBinding fragmentThemColorBinding;
     public MutableLiveData<Boolean> goToThemeColorCustomPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToDarkThemePage = new MutableLiveData<>();
+    public MutableLiveData<ChangeTheme> showDialogChangeTheme = new MutableLiveData<>();
+    public MutableLiveData<Boolean> reCreateApp = new MutableLiveData<>();
 
 
     public FragmentThemColorViewModel(FragmentThemColor fragmentThemColor, FragmentThemColorBinding fragmentThemColorBinding) {
@@ -165,54 +169,28 @@ public class FragmentThemColorViewModel {
 
     public void onClickThemeGreyComplete(View v) {
         setSetting(Theme.GREY_COMPLETE, false);
-
     }
 
-    private void setSetting(final int config, final boolean isDark) {
-
-        new MaterialDialog.Builder(G.currentActivity)
-                .title(R.string.customization)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cansel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, config);
-                        editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, isDark);
-                        editor.apply();
-                        Theme.setThemeColor();
-                        if (dialog.isPromptCheckBoxChecked()) {
-                            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
-                            editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
-                            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
-                            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
-                            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
-                            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
-                            editor.apply();
-                        }
-                        resetApp();
-                    }
-                })
-                .checkBoxPromptRes(R.string.Apply_colors_to_customize, false, null)
-                .show();
-
+    private void setSetting(int config,boolean isDark) {
+        showDialogChangeTheme.setValue(new ChangeTheme(config,isDark));
     }
 
-    public static void resetApp() {
-
-        G.isUpdateNotificaionColorMain = true;
-        G.isUpdateNotificaionColorChannel = true;
-        G.isUpdateNotificaionColorGroup = true;
-        G.isUpdateNotificaionColorChat = true;
-        G.fragmentActivity.recreate();
-
-        if (G.onRefreshActivity != null) {
-            G.isRestartActivity = true;
-            G.onRefreshActivity.refresh("");
+    public void setNewTheme(ChangeTheme newTheme,boolean applyColorsToCustomize){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, newTheme.getConfig());
+        editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, newTheme.isDark());
+        editor.apply();
+        if (applyColorsToCustomize) {
+            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+            editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
+            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
+            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
+            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
+            editor.apply();
         }
+        reCreateApp.setValue(true);
     }
-
 
     private void getInfo() {
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);

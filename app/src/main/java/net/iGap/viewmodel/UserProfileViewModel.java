@@ -131,6 +131,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> isEditProfile = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> resetApp = new MutableLiveData<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -478,8 +479,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 editor.putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor);
                 editor.apply();
             }
-            Theme.setThemeColor();
-            FragmentThemColorViewModel.resetApp();
+            resetApp.setValue(true);
         }
     }
 
