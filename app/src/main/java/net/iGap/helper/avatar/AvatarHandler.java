@@ -334,7 +334,7 @@ public class AvatarHandler {
                 notifyAll(path, baseParam.avatarId, false, realmAvatar.getFile().getId());
             } else {
 
-                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
+                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
 
