@@ -53,16 +53,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <net.iGap.module.FontIconTextView
+                <ImageView
                     android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:layout_marginEnd="32dp"
                     android:layout_marginRight="20dp"
-                    android:text="@string/play_icon"
+                    android:layout_marginBottom="8dp"
                     android:textSize="35dp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_album_name"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_albumFragment_header" />
+                    app:layout_constraintBottom_toTopOf="@+id/tv_album_artistName"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_albumFragment_header"
+                    app:srcCompat="@drawable/ic_beeptunes_play" />
 
                 <TextView
                     android:id="@+id/tv_album_name"
