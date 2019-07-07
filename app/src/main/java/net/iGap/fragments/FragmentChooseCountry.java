@@ -267,7 +267,7 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
 
     @Override
     public void onBtnClearSearchClickListener(View view) {
-        closeKeyboard(view);
+
     }
 
     @Override

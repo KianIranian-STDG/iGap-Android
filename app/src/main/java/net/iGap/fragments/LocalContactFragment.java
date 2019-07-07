@@ -114,9 +114,6 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     public void onBtnClearSearchClickListener(View view) {
         recyclerView.setAdapter(adapterListContact);
 
-        if (!inSearchMode)
-            closeKeyboard(view);
-
         inSearchMode = false;
     }
 

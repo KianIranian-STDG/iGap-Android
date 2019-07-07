@@ -2844,5 +2844,7 @@
     <string name="point">points</string>
     <string name="rank">Rank</string>
     <string name="tablet_empty_chat_description">Get Started  Welcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
+    <string name="make_call">Make Phone Call</string>
+    <string name="create_chat">Create Chat</string>
 
 </resources>

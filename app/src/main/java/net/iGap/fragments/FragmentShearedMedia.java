@@ -568,7 +568,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             mHelperToolbar.getEditTextSearch().setText("");
         } else {
             isToolbarInEditMode = false;
-            closeKeyboard(getView());
+
         }
     }
 
