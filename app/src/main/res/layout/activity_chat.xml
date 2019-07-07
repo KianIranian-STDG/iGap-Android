@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ac_ll_parent"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
     android:clickable="true"
     android:layoutDirection="ltr"
     tools:ignore="MissingPrefix">
@@ -15,10 +15,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
-            style="?backgroundColorSettingTheme"
             android:orientation="vertical">
 
             <!--dont use-->
@@ -38,11 +38,11 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
 
                         <net.iGap.libs.rippleeffect.RippleView
@@ -445,9 +445,7 @@
                 layout="@layout/chat_sub_layout_block_user"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:visibility="gone"
-
-                />
+                android:visibility="gone" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -476,10 +474,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:paddingTop="@dimen/dp2"
-                            android:clipToPadding="true"
                             android:background="@android:color/transparent"
+                            android:clipToPadding="true"
                             android:fadeScrollbars="true"
+                            android:paddingTop="@dimen/dp2"
                             android:scrollbarSize="@dimen/dp4"
                             android:scrollbarStyle="outsideOverlay"
                             android:scrollbars="vertical"
@@ -525,9 +523,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/dp14"
-                        app:cardCornerRadius="5dp"
                         android:visibility="gone"
-                        >
+                        app:cardCornerRadius="5dp">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -540,10 +537,10 @@
                                 android:layout_gravity="center_horizontal"
                                 android:background="@drawable/background_log_time"
                                 android:maxLines="1"
-                                android:paddingBottom="@dimen/dp4"
                                 android:paddingLeft="@dimen/dp16"
-                                android:paddingRight="@dimen/dp16"
                                 android:paddingTop="@dimen/dp4"
+                                android:paddingRight="@dimen/dp16"
+                                android:paddingBottom="@dimen/dp4"
                                 android:singleLine="true"
                                 android:text="Today"
                                 android:textAllCaps="false"
@@ -576,9 +573,8 @@
                         android:layout_marginTop="@dimen/dp12"
                         android:background="@drawable/circle_mic"
                         android:gravity="center"
-                        style="@style/myIconTextViewStyle"
                         android:text="@string/md_downwards_arrow"
-                        android:textAppearance="@style/TextIconAppearance_toolbar"
+                        style="@style/myIconToolbarStyle"
                         android:textColor="@color/white" />
 
 
@@ -639,15 +635,14 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_cancel_sending_file"
+                    style="@style/myIconToolbarStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp8"
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:text="@string/md_close_button"
-                    android:textAppearance="@style/TextIconAppearance.all"
-                    android:textColor="@color/red"
-                    android:layout_margin="@dimen/dp8"
-                    />
+                    android:textColor="@color/red" />
             </LinearLayout>
 
             <LinearLayout
@@ -796,91 +791,91 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
 
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/ac_layout_selected_item"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp52"
-                android:layout_marginTop="-10dp"
-                android:paddingTop="10dp"
-                android:visibility="gone"
                 android:layout_below="@id/ac_toolbars_container"
+                android:layout_marginTop="-10dp"
+                android:background="@drawable/shape_multi_select_bg"
                 android:layoutDirection="ltr"
-                android:background="@drawable/shape_multi_select_bg">
+                android:paddingTop="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/ac_layout_selected_txt_counter"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:text=""
-                    style="?textTitleColorSettingTheme"
-                    android:textSize="@dimen/standardTextSize"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:gravity="bottom"
                     android:paddingBottom="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:text=""
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_layout_selected_btn_delete"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/multi_select_icon_height"
                     android:layout_height="@dimen/multi_select_icon_height"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginRight="@dimen/multi_select_icon_margin"
-                    style="@style/myIconTextViewStyle"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
+                    android:layout_marginRight="@dimen/multi_select_icon_margin"
+                    android:gravity="center"
+                    android:text="@string/delete_icon"
                     android:textColor="@color/red"
                     android:textSize="@dimen/multi_select_icon_size"
-                    android:gravity="center"
-                    android:text="@string/delete_icon"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_layout_selected_btn_forward"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/multi_select_icon_height"
                     android:layout_height="@dimen/multi_select_icon_height"
-                    app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_delete"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    style="@style/myIconTextViewStyle"
-                    android:textSize="@dimen/multi_select_icon_size"
+                    android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:gravity="center"
-                    android:text="@string/forward_icon"/>
+                    android:text="@string/forward_icon"
+                    android:textSize="@dimen/multi_select_icon_size"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_delete" />
 
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_layout_selected_btn_copy"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/multi_select_icon_height"
                     android:layout_height="@dimen/multi_select_icon_height"
-                    app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_forward"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    style="@style/myIconTextViewStyle"
-                    android:textSize="@dimen/multi_select_icon_size"
+                    android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:gravity="center"
-                    android:text="@string/copy_icon"/>
+                    android:text="@string/copy_icon"
+                    android:textSize="@dimen/multi_select_icon_size"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_forward" />
 
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_layout_selected_btn_reply"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/multi_select_icon_height"
                     android:layout_height="@dimen/multi_select_icon_height"
-                    app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_copy"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                    style="@style/myIconTextViewStyle"
-                    android:textSize="@dimen/multi_select_icon_size"
+                    android:layout_marginRight="@dimen/multi_select_icon_margin"
                     android:gravity="center"
-                    android:text="@string/reply_icon"/>
+                    android:text="@string/reply_icon"
+                    android:textSize="@dimen/multi_select_icon_size"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_copy" />
 
 
             </android.support.constraint.ConstraintLayout>
@@ -896,8 +891,8 @@
                     android:id="@+id/ac_ll_search_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/toolbar_height"
-                    android:gravity="center"
                     android:background="@drawable/shape_toolbar_background"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/dp8"
                     android:paddingLeft="@dimen/dp8"
@@ -945,7 +940,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/toolbar_height"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal" />
 
             </LinearLayout>
 

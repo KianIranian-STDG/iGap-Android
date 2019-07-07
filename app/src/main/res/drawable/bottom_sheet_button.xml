@@ -10,5 +10,5 @@
                 android:topRightRadius="8dp" />
         </shape>
     </item>
-    <item android:drawable="?attr/selectableItemBackground" />
+    <!--<item android:drawable="?attr/selectableItemBackground" />-->
 </layer-list>

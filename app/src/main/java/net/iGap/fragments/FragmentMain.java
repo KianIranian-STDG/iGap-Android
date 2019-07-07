@@ -42,6 +42,8 @@ import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
@@ -77,6 +79,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelDelete;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
@@ -179,20 +182,33 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         pbLoading.setVisibility(View.VISIBLE);
         viewById.setVisibility(View.GONE);
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLeftIcon(R.string.edit_icon )
-                .setRightIcons(R.string.add_icon)
-                .setFragmentActivity(getActivity())
-                .setPassCodeVisibility(true , R.string.unlock_icon)
-                .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
-                .setLogoShown(true)
-                .setPlayerEnable(true)
-                .setSearchBoxShown(true, false)
-                .setListener(this);
-
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
+
+        if (G.twoPaneMode && G.isLandscape) {
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setTabletIcons(R.string.add_icon, R.string.edit_icon, R.string.search_icon)
+                    .setTabletMode(true)
+                    .setListener(this);
+            layoutToolbar.addView(mHelperToolbar.getView());
+            RealmUserInfo userInfo = realmFragmentMain.where(RealmUserInfo.class).findFirst();
+            mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
+            mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
+            avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        } else {
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setLeftIcon(R.string.edit_icon)
+                    .setRightIcons(R.string.add_icon)
+                    .setFragmentActivity(getActivity())
+                    .setPassCodeVisibility(true, R.string.unlock_icon)
+                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                    .setLogoShown(true)
+                    .setPlayerEnable(true)
+                    .setSearchBoxShown(true, false)
+                    .setListener(this);
+            layoutToolbar.addView(mHelperToolbar.getView());
+        }
 
         mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
         TextView mBtnClearCacheSelected = view.findViewById(R.id.amr_btn_clear_cache_selected);
@@ -355,13 +371,14 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
                 //check if music player was enable disable scroll detecting for search box
                 if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
+                    if (mHelperToolbar.getmSearchBox()!=null) {
+                        if (!mHelperToolbar.getmSearchBox().isShown()) {
+                            mHelperToolbar.animateSearchBox(false, 0, 0);
 
-                    if (!mHelperToolbar.getmSearchBox().isShown()){
-                        mHelperToolbar.animateSearchBox(false , 0 , 0);
+                        }
 
+                        return;
                     }
-
-                    return;
                 }
 
                 int position = layoutManager.findFirstVisibleItemPosition();
@@ -407,7 +424,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         };
 
     }
-    
+
     //***************************************************************************************************************************
 
 
@@ -886,8 +903,12 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
-            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
-            mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
+            if (G.isLandscape && G.twoPaneMode){
+
+            }else{
+                mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+                mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
+            }
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
@@ -899,15 +920,16 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             mRecyclerView.setLayoutParams(marginLayoutParams);
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
-            mHelperToolbar.getRightButton().setVisibility(View.GONE);
-            mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-            mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
-            mHelperToolbar.setLeftIcon(R.string.back_icon);
-
-            if (!mHelperToolbar.getmSearchBox().isShown()){
-                mHelperToolbar.animateSearchBox(false , 0 , 0 );
-
+            if (G.twoPaneMode && G.isLandscape){
+            } else {
+                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+                mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                if (!mHelperToolbar.getmSearchBox().isShown()){
+                    mHelperToolbar.animateSearchBox(false , 0 , 0 );
+                }
             }
+            mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }
     }

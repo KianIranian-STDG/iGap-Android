@@ -22,6 +22,7 @@ import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.OnUserContactEdit;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserUpdateStatus;
+import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.proto.ProtoGlobal;
@@ -96,6 +97,8 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public MutableLiveData<String> contactName = new MutableLiveData<>();
     public MutableLiveData<String> lastSeen = new MutableLiveData<>();
     public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
 
     public List<String> items;
     private Realm realm;
@@ -192,28 +195,39 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     }
 
     public void onClickGoToChat(){
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
-        if (realmRoom != null) {
-            goToChatPage.setValue(realmRoom.getId());
+        if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
+            RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            if (realmRoom != null) {
+                goToChatPage.setValue(realmRoom.getId());
+            } else {
+                G.onChatGetRoom = new OnChatGetRoom() {
+                    @Override
+                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                goToChatPage.setValue(room.getId());
+                                G.onChatGetRoom = null;
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onChatGetRoomTimeOut() {
+
+                    }
+
+                    @Override
+                    public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                    }
+                };
+
+                new RequestChatGetRoom().chatGetRoom(userId);
+            }
+            realm.close();
         } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(ProtoGlobal.Room room) {
-                    goToChatPage.setValue(room.getId());
-                    G.onChatGetRoom = null;
-                }
-
-                @Override
-                public void onChatGetRoomTimeOut() {
-
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                }
-            };
-            new RequestChatGetRoom().chatGetRoom(userId);
+            goBack.setValue(true);
         }
     }
 
@@ -269,6 +283,11 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             }
         };
         new RequestUserContactsDelete().contactsDelete(phone.get());
+    }
+
+    //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
+    public void onSharedMediaItemClick(int type){
+        goToShearedMediaPage.setValue(new GoToSharedMediaModel(roomId, type));
     }
 
     //===============================================================================

@@ -21,8 +21,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -35,12 +33,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -50,9 +44,7 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.TouchImageView;
 import net.iGap.module.structs.StructMessageInfo;
@@ -103,7 +95,6 @@ public class FragmentShowImage extends BaseFragment {
     private Long selectedFileToken;
     private MediaPlayer mMediaPlayer;
     private String path;
-    private String type = null;
     private boolean isLockScreen = false;
     private boolean isFocusable = false;
     private Realm realmShowImage;
@@ -220,8 +211,9 @@ public class FragmentShowImage extends BaseFragment {
                 return false;
             }
 
+            //todo : remove for and handle it with query
             for (RealmRoomMessage roomMessage : mRealmList) {
-                if (RealmRoomMessage.isImageOrVideo(roomMessage, convertType(type))) {
+                if (RealmRoomMessage.isImageOrVideo(roomMessage, messageType)) {
                     if ((roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment()) != null)
                         mFList.add(roomMessage);
                 }
@@ -926,7 +918,7 @@ public class FragmentShowImage extends BaseFragment {
 
                     @Override
                     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                        Log.e("ddd", "width  :" + width + "    height  : " + height);
+                        /*Log.e("ddd", "width  :" + width + "    height  : " + height);*/
                     }
 
                     @Override

@@ -604,18 +604,19 @@ public class HelperToolbar {
     }
 
     public void checkPassCodeVisibility(){
+        if (!G.isLandscape) {
+            if (G.isPassCode) {
+                passCodeBtn.setVisibility(View.VISIBLE);
+                ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
 
-        if (G.isPassCode) {
-            passCodeBtn.setVisibility(View.VISIBLE);
-            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME , SHP_SETTING.KEY_LOCK_STARTUP_STATE );
-
-            if (ActivityMain.isLock) {
-                passCodeBtn.setText(mContext.getString(R.string.lock_icon));
+                if (ActivityMain.isLock) {
+                    passCodeBtn.setText(mContext.getString(R.string.lock_icon));
+                } else {
+                    passCodeBtn.setText(mContext.getString(R.string.unlock_icon));
+                }
             } else {
-                passCodeBtn.setText(mContext.getString(R.string.unlock_icon));
+                passCodeBtn.setVisibility(View.GONE);
             }
-        } else {
-            passCodeBtn.setVisibility(View.GONE);
         }
     }
 
@@ -1182,14 +1183,16 @@ public class HelperToolbar {
 
         private void init() {
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                setLayoutDirection(LAYOUT_DIRECTION_LTR);
+            }
+
             if (!isTabletMode){
 
                 ConstraintSet setRoot = new ConstraintSet();
                 ConstraintSet set = new ConstraintSet();
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    setLayoutDirection(LAYOUT_DIRECTION_LTR);
-                }
+
 
                 //region media player and ongoing call
                 //check and add media player cause of ui and this must be the below of main toolbar view
