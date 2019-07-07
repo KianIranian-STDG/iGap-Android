@@ -10,7 +10,6 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoInfoPage;
 import net.iGap.proto.ProtoRequest;
@@ -24,15 +23,12 @@ public class RequestInfoPage {
 
         RequestWrapper requestWrapper = new RequestWrapper(503, infoPage, id);
         try {
-            if (G.userLogin) {
-                RequestQueue.sendRequest(requestWrapper);
-                return true;
-            }
+            RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return true;
     }
 
     public interface OnInfoPage {
@@ -47,14 +43,11 @@ public class RequestInfoPage {
 
         RequestWrapper requestWrapper = new RequestWrapper(503, infoPage, onInfoPage);
         try {
-            if (G.userLogin) {
-                RequestQueue.sendRequest(requestWrapper);
-                return true;
-            }
+            RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return true;
     }
 }
