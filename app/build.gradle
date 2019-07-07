@@ -18,7 +18,7 @@ repositories {
 
 apply plugin: 'realm-android'
 
-apply plugin : 'kotlin-android'
+apply plugin: 'kotlin-android'
 
 
 android {
@@ -149,7 +149,7 @@ dependencies {
     implementation 'io.fotoapparat.fotoapparat:library:1.3.0'
     implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
     implementation 'com.github.pchmn:MaterialChipsInput:1.0.8'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta2'
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'org.parceler:parceler:1.1.6'
 

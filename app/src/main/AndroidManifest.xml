@@ -60,6 +60,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup,supportsRtl">
+        <activity android:name=".activities.TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".module.CustomButtonListener"
@@ -119,7 +126,6 @@
             -->
 
         </activity>
-
         <activity
             android:name="org.paygear.WalletActivity"
             android:screenOrientation="portrait"
@@ -132,7 +138,6 @@
             android:name=".activities.ActivityMain"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:launchMode="singleTask"
-
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>

@@ -53,6 +53,8 @@ public class FragmentChannelProfile extends BaseFragment {
     private FragmentChannelProfileViewModel viewModel;
     private ActivityProfileChannelBinding binding;
     private CircleImageView imvChannelAvatar;
+    private TextView name ;
+    private TextView status ;
 
     public static FragmentChannelProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
@@ -106,14 +108,16 @@ public class FragmentChannelProfile extends BaseFragment {
                     }
                 });
 
-        binding.toolbar.addView(t.getView());
-        imvChannelAvatar = t.getGroupAvatar();
+       // binding.toolbar.addView(t.getView());
+        imvChannelAvatar = view.findViewById(R.id.at_avatar);
+        name = view.findViewById(R.id.at_name);
+        status = view.findViewById(R.id.at_status);
         imvChannelAvatar.setOnClickListener(v -> viewModel.onClickCircleImage());
 
-        viewModel.channelName.observe(this, s -> t.getGroupName().setText(s));
+        viewModel.channelName.observe(this, s -> name.setText(s));
 
-        viewModel.channelSecondsTitle.observe(this, s -> t.getGroupMemberCount().setText(s));
-
+        viewModel.channelSecondsTitle.observe(this, s -> status.setText(s));
+/*
         viewModel.menuPopupVisibility.observe(this, integer -> {
             if (integer != null) {
                 t.getRightButton().setVisibility(integer);
@@ -124,7 +128,7 @@ public class FragmentChannelProfile extends BaseFragment {
             if (visibility != null) {
                 t.getSecondRightButton().setVisibility(visibility);
             }
-        });
+        });*/
 
         viewModel.channelDescription.observe(this, description -> {
             if (getActivity() != null && description != null) {
