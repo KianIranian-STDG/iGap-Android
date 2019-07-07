@@ -1,382 +1,367 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menu_parent_layout"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:clickable="true"
-    tools:ignore="MissingPrefix">
+    android:layoutDirection="locale">
 
     <LinearLayout
         android:id="@+id/frg_contact_ll_toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height_root_with_search"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@null"
-        android:layoutDirection="ltr"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <!--view added at runtime with toolbar helper-->
+    <RelativeLayout
+        android:id="@+id/fc_layout_selected_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp10"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingTop="@dimen/dp2"
+        android:paddingEnd="@dimen/dp4"
+        android:paddingRight="@dimen/dp4"
+        android:paddingBottom="@dimen/dp2"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frg_contact_ll_toolbar_layout">
 
-    </LinearLayout>
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fc_selected_mode_btn_cancel"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:gravity="center"
+            android:text="@string/close_icon"
+            android:textSize="@dimen/dp22" />
+
+        <TextView
+            android:id="@+id/fc_selected_mode_txt_counter"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
+            android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
+            android:fontFamily="@font/main_font"
+            android:textSize="@dimen/standardTextSize" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/fc_selected_mode_btn_delete"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dp4"
+            android:text="@string/delete_icon"
+            android:textSize="@dimen/dp22" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/fc_selected_mode_btn_share"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dp4"
+            android:layout_toStartOf="@id/fc_selected_mode_btn_delete"
+            android:layout_toLeftOf="@id/fc_selected_mode_btn_delete"
+            android:text="@string/share_icon"
+            android:textSize="@dimen/dp22"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/inviteFriendsIcon"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/contact_icon_size"
+        android:layout_height="@dimen/contact_icon_size"
+        android:text="@string/invite_icon"
+        app:layout_constraintStart_toStartOf="@id/menu_layout_inviteFriend"
+        app:layout_constraintEnd_toStartOf="@id/inviteFriendsTitle"
+        app:layout_constraintTop_toBottomOf="@id/fc_layout_selected_mode"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/inviteFriendsTitle"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:gravity="start|center_vertical"
+        android:singleLine="true"
+        android:text="@string/Invite_Friends"
+        app:layout_constraintTop_toTopOf="@id/inviteFriendsIcon"
+        app:layout_constraintBottom_toBottomOf="@id/inviteFriendsIcon"
+        app:layout_constraintStart_toEndOf="@id/inviteFriendsIcon"
+        app:layout_constraintEnd_toEndOf="@id/menu_layout_inviteFriend"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textSize="@dimen/standardTextSize" />
+
+    <android.support.constraint.Group
+        android:id="@+id/menu_layout_inviteFriend"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/dp10"
+        android:visibility="visible"
+        app:constraint_referenced_ids="inviteFriendsIcon,inviteFriendsTitle"
+        app:layout_constraintWidth_percent=".9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fc_layout_selected_mode"
+        app:layout_constraintBottom_toBottomOf="@id/inviteFriendsIcon"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/contact_icon_size"
+        android:layout_height="@dimen/contact_icon_size"
+        android:text="@string/channel_icon" />
 
 
-    <!--    <android.support.v4.widget.NestedScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/nestedScrollContact"
-            style="?backgroundColorSettingTheme"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/frg_contact_ll_toolbar_layout"
-            android:fillViewport="true"
-            android:scrollbars="vertical">-->
-
-
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        style="?textTitleColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/frg_contact_ll_toolbar_layout"
-        android:orientation="vertical">
+        android:layout_marginStart="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:gravity="start|center_vertical"
+        android:singleLine="true"
+        android:text="@string/new_channel"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textSize="@dimen/standardTextSize" />
 
-        <LinearLayout
-            android:id="@+id/fc_layout_appbar_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="?backgroundColorSettingTheme"
-            android:orientation="vertical">
+    <android.support.constraint.Group
+        android:id="@+id/menu_layout_add_new_channel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp10"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_inviteFriend"/>
 
-            <LinearLayout
-                android:id="@+id/fc_layout_selected_mode"
-                style="?backgroundColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="@dimen/dp10"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingTop="@dimen/dp2"
-                android:paddingEnd="@dimen/dp4"
-                android:paddingRight="@dimen/dp4"
-                android:paddingBottom="@dimen/dp2"
-                android:visibility="gone">
+    <LinearLayout
+        android:id="@+id/menu_layout_add_new_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp10"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_channel">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/fc_selected_mode_btn_cancel"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/toolbar_icon_size"
-                        android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp4"
-                        android:layout_marginRight="@dimen/dp4"
-                        android:gravity="center"
-                        android:text="@string/close_icon"
-                        android:textSize="@dimen/dp22" />
-
-                    <TextView
-                        android:id="@+id/fc_selected_mode_txt_counter"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
-                        android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
-                        android:fontFamily="@font/main_font"
-                        android:textSize="@dimen/standardTextSize" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/fc_selected_mode_btn_delete"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/toolbar_icon_size"
-                        android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="@dimen/dp4"
-                        android:text="@string/delete_icon"
-                        android:textSize="@dimen/dp22" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/fc_selected_mode_btn_share"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/toolbar_icon_size"
-                        android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="@dimen/dp4"
-                        android:layout_toStartOf="@id/fc_selected_mode_btn_delete"
-                        android:layout_toLeftOf="@id/fc_selected_mode_btn_delete"
-                        android:text="@string/share_icon"
-                        android:textSize="@dimen/dp22"
-                        android:visibility="gone" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_inviteFriend"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp10"
-                android:visibility="visible">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="@dimen/contact_icon_size"
-                    android:layout_height="@dimen/contact_icon_size"
-                    android:text="@string/invite_icon" />
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/contact_icon_size"
+            android:layout_height="@dimen/contact_icon_size"
+            android:text="@string/group_icon" />
 
 
-                <TextView
-                    android:id="@+id/title"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:gravity="start|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/Invite_Friends"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textSize="@dimen/standardTextSize" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_add_new_channel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layoutDirection="locale"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp10"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="@dimen/contact_icon_size"
-                    android:layout_height="@dimen/contact_icon_size"
-                    android:text="@string/channel_icon" />
-
-
-                <TextView
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:gravity="start|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/new_channel"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textSize="@dimen/standardTextSize" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_add_new_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layoutDirection="locale"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp10"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="@dimen/contact_icon_size"
-                    android:layout_height="@dimen/contact_icon_size"
-                    android:text="@string/group_icon" />
-
-
-                <TextView
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:gravity="start|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/new_group"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textSize="@dimen/standardTextSize" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_btn_secret_chat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layoutDirection="locale"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp10"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="@dimen/contact_icon_size"
-                    android:layout_height="@dimen/contact_icon_size"
-                    android:text="@string/secret_chat_icon" />
-
-
-                <TextView
-                    android:id="@+id/title3"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:gravity="start|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/secret_chat"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textSize="@dimen/standardTextSize" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_new_group_call"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layoutDirection="locale"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp10"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="@dimen/contact_icon_size"
-                    android:layout_height="@dimen/contact_icon_size"
-                    android:text="@string/group_icon" />
-
-
-                <net.iGap.module.CustomTextViewMedium
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:gravity="start|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/new_group_call"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textSize="@dimen/standardTextSize" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_add_new_contact"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layoutDirection="locale"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp10"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="@dimen/contact_icon_size"
-                    android:layout_height="@dimen/contact_icon_size"
-                    android:text="@string/invite_icon" />
-
-
-                <net.iGap.module.CustomTextViewMedium
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:gravity="start|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/menu_add_contact"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textSize="@dimen/standardTextSize" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/menu_layout_btn_dial_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layoutDirection="locale"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp10"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="@dimen/contact_icon_size"
-                    android:layout_height="@dimen/contact_icon_size"
-                    android:text="@string/dial_number_icon" />
-
-
-                <net.iGap.module.CustomTextViewMedium
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:gravity="start|center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/dial_number"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textSize="@dimen/standardTextSize" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                style="?lineColorSettingTheme"
-                android:layout_marginTop="@dimen/dp10"
-                android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginRight="@dimen/dp10"/>
-
-        </LinearLayout>
-
-
-        <android.support.v7.widget.RecyclerView
-            style="?backgroundColorSettingTheme"
-            android:id="@+id/recycler_view"
+        <TextView
+            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingLeft="@dimen/dp8"
-            android:paddingRight="@dimen/dp8"
-            android:paddingBottom="50dp"
-            android:visibility="visible" />
-
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:text="@string/new_group"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textSize="@dimen/standardTextSize" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_layout_btn_secret_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp10"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_group">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/contact_icon_size"
+            android:layout_height="@dimen/contact_icon_size"
+            android:text="@string/secret_chat_icon" />
+
+
+        <TextView
+            android:id="@+id/title3"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:text="@string/secret_chat"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textSize="@dimen/standardTextSize" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_layout_new_group_call"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp10"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_btn_secret_chat">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/contact_icon_size"
+            android:layout_height="@dimen/contact_icon_size"
+            android:text="@string/group_icon" />
+
+
+        <net.iGap.module.CustomTextViewMedium
+            style="?textTitleColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:text="@string/new_group_call"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textSize="@dimen/standardTextSize" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/addContactIcon"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/contact_icon_size"
+        android:layout_height="@dimen/contact_icon_size"
+        android:text="@string/invite_icon" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/addContactTitle"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:gravity="start|center_vertical"
+        android:singleLine="true"
+        android:text="@string/menu_add_contact"
+        app:layout_constraintWidth_percent=".75"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_new_group_call" />
+
+    <android.support.constraint.Group
+        android:id="@+id/menu_layout_add_new_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="addContactTitle,addContactIcon"
+        android:padding="@dimen/dp10"
+        android:visibility="visible" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dialNumberIcon"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/contact_icon_size"
+        android:layout_height="@dimen/contact_icon_size"
+        android:text="@string/dial_number_icon"
+        app:layout_constraintBottom_toBottomOf="@id/dialNumberTitle"
+        app:layout_constraintEnd_toStartOf="@id/dialNumberTitle"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/dialNumberTitle" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dialNumberTitle"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:gravity="start|center_vertical"
+        android:singleLine="true"
+        android:text="@string/dial_number"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@id/dialNumberIcon"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_contact"
+        app:layout_constraintWidth_percent=".8" />
+
+    <android.support.constraint.Group
+        android:id="@+id/menu_layout_btn_dial_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/dp10"
+        android:visibility="visible"
+        app:constraint_referenced_ids="dialNumberIcon,dialNumberTitle"
+        app:layout_constraintBottom_toBottomOf="@id/dialNumberIcon"
+        app:layout_constraintEnd_toEndOf="@id/dialNumberTitle"
+        app:layout_constraintStart_toStartOf="@id/dialNumberIcon"
+        app:layout_constraintTop_toTopOf="@id/dialNumberIcon" />
+
+    <View
+        android:id="@+id/divider"
+        style="?lineColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_btn_dial_number" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        style="?backgroundColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
+        android:paddingBottom="50dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
 
     <ProgressBar
         android:id="@+id/prgWaiting_loadList"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:indeterminate="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-    <!--   <ProgressBar
-           android:id="@+id/pb_contact_goToChat"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_centerInParent="true"
-           android:indeterminate="true"
-           android:visibility="visible" />-->
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
