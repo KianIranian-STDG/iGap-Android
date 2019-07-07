@@ -4,8 +4,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
-public class Datum {
+public class Album {
 
     @Expose
     private List<Artist> artists;
