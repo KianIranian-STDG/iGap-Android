@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.uncopt.android.widget.text.justify.JustifiedTextView
+                <TextView
                     android:id="@+id/agreement"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
