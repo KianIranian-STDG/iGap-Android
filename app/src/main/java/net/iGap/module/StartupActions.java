@@ -678,6 +678,11 @@ public final class StartupActions {
                     @Override
                     public boolean shouldCompact(long totalBytes, long usedBytes) {
                         final long thresholdSize = 10 * 1024 * 1024;
+
+                        if (totalBytes > 500 * 1024 * 1024) {
+                            HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                        }
+
                         return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
                     }
                 })
