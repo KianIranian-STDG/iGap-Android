@@ -1,6 +1,5 @@
 package net.iGap.fragments.popular;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +17,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
-import net.iGap.adapter.items.popular.AdapterSliderItem;
-import net.iGap.adapter.items.popular.AdapterLinearItem;
 import net.iGap.adapter.items.popular.AdapterGridItem;
+import net.iGap.adapter.items.popular.AdapterLinearItem;
+import net.iGap.adapter.items.popular.AdapterSliderItem;
+import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.repository.PopularChannelRepository;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.api.popularChannel.NormalChannel;
 
 public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
     private RecyclerView rvTopSlider;
@@ -41,6 +44,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
     private AdapterGridItem childAdapterGridItem;
     private View rootView;
     private HelperToolbar toolbar;
+    private PopularChannelRepository repository;
 
     @NonNull
     @Override
@@ -55,11 +59,11 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         ivMoreOne = rootView.findViewById(R.id.iv_frag_popular_more_one);
         ivMoreTwo = rootView.findViewById(R.id.iv_frag_popular_more_two);
         ivMoreThree = rootView.findViewById(R.id.iv_frag_popular_more_three);
-        topAdapterSliderItem = new AdapterSliderItem(getContext(),false);
-        bottomAdapterSliderItem = new AdapterSliderItem(getContext(),true);
+        topAdapterSliderItem = new AdapterSliderItem(getContext(), false);
+        bottomAdapterSliderItem = new AdapterSliderItem(getContext(), true);
         adapterLinearItem = new AdapterLinearItem(getContext());
-        parentAdapterGridItem = new AdapterGridItem(getContext(),true);
-        childAdapterGridItem = new AdapterGridItem(getContext(),false);
+        parentAdapterGridItem = new AdapterGridItem(getContext(), true);
+        childAdapterGridItem = new AdapterGridItem(getContext(), false);
         return rootView;
     }
 
@@ -73,6 +77,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 .setDefaultTitle("کانال های پر مخاطب")
                 .setLeftIcon(R.string.back_icon);
         toolbarContainer.addView(toolbar.getView());
+        repository = new PopularChannelRepository();
     }
 
     @Override
@@ -104,9 +109,9 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         });
         parentAdapterGridItem.setOnClickedItemEventCallBack(new AdapterGridItem.OnClickedItemEventCallBack() {
             @Override
-        public void onClickedItem() {
+            public void onClickedItem() {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild());
+                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChild());
                 fragmentTransaction.addToBackStack(null).commit();
             }
         });
@@ -132,6 +137,28 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelChildLinear());
                 fragmentTransaction.addToBackStack(null).commit();
+            }
+        });
+
+        repository.getNormalChannel("title", "asc", new ApiResponse<NormalChannel>() {
+            @Override
+            public void onResponse(NormalChannel normalChannel) {
+                Log.i("nazanin", "onResponse: " + normalChannel.getData().size());
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+            }
+
+            @Override
+            public void onStart() {
+                Log.i("nazanin", "onStart: ");
+            }
+
+            @Override
+            public void onFinish() {
+                Log.i("nazanin", "onFinish: ");
             }
         });
 
