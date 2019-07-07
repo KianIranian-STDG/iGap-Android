@@ -4,9 +4,6 @@
 
     <data>
 
-        <variable
-            name="viewModel"
-            type="net.iGap.beepTunes.album.AlbumViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
