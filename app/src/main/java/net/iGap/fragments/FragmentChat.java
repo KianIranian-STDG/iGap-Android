@@ -8913,11 +8913,6 @@ public class FragmentChat extends BaseFragment
                         getMessages();
                         return;
                     }
-                    countNewMessage = unreadCount;
-                    txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                    txtNewUnreadMessage.setText(countNewMessage + "");
-                    setDownBtnVisible();
-                    firstUnreadMessageInChat = firstUnreadMessage;
                 }
             } else {
                 if (firstUnreadMessage == null) {
@@ -8928,6 +8923,15 @@ public class FragmentChat extends BaseFragment
                 unreadLayoutMessage();
                 fetchMessageId = firstUnreadMessage.getMessageId();
             }
+
+            if (hasUnread()) {
+                countNewMessage = unreadCount;
+                txtNewUnreadMessage.setVisibility(View.VISIBLE);
+                txtNewUnreadMessage.setText(countNewMessage + "");
+                setDownBtnVisible();
+                firstUnreadMessageInChat = firstUnreadMessage;
+            }
+
             startFutureMessageIdUp = fetchMessageId;
 
             // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
