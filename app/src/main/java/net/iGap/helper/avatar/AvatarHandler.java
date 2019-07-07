@@ -146,7 +146,7 @@ public class AvatarHandler {
                 }
             }
         } else {
-            HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain));
+            HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + new File(avatarPath).exists()));
         }
 
         G.handler.post(new Runnable() {
@@ -337,6 +337,9 @@ public class AvatarHandler {
                 new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
+                        if (!(new File(filepath).exists())) {
+                            HelperLog.setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                        }
 
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
                         final ArrayList<Long> fileIdList = new ArrayList<>();
@@ -507,10 +510,15 @@ public class AvatarHandler {
         @Override
         public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
             if (progress == 100) {
+                if (!(new File(filePath).exists())) {
+                    HelperLog.setErrorLog(new Exception("After Download File Not Exist Bug. Please check" + filePath));
+                }
+
                 String _newPath = filePath.replace(G.DIR_TEMP, G.DIR_IMAGE_USER);
                 try {
                     AndroidUtils.cutFromTemp(filePath, _newPath);
                 } catch (IOException e) {
+                    HelperLog.setErrorLog(e);
                     e.printStackTrace();
                 }
 
