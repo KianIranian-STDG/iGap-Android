@@ -17,11 +17,11 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterChildGridItem2 extends RecyclerView.Adapter<AdapterChildGridItem2.ChildGridItemViewHolder2> {
+public class AdapterChildLinearGridItem extends RecyclerView.Adapter<AdapterChildLinearGridItem.ChildGridItemViewHolder> {
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
 
-    public AdapterChildGridItem2(Context context) {
+    public AdapterChildLinearGridItem(Context context) {
         this.context = context;
         Channel channel = new Channel();
         channel.setChannelImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
@@ -48,14 +48,15 @@ public class AdapterChildGridItem2 extends RecyclerView.Adapter<AdapterChildGrid
 
     @NonNull
     @Override
-    public ChildGridItemViewHolder2 onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid_child2, viewGroup, false);
-        return new ChildGridItemViewHolder2(view);
+    public ChildGridItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid_linear_child, viewGroup, false);
+        return new ChildGridItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChildGridItemViewHolder2 childGridItemViewHolder2, int i) {
-        childGridItemViewHolder2.bindChannel(channelList.get(i));
+    public void onBindViewHolder(@NonNull ChildGridItemViewHolder gridItemPrentViewHolder, int i) {
+        gridItemPrentViewHolder.bindChannel(channelList.get(i));
+
     }
 
     @Override
@@ -63,20 +64,19 @@ public class AdapterChildGridItem2 extends RecyclerView.Adapter<AdapterChildGrid
         return channelList.size();
     }
 
+    public class ChildGridItemViewHolder extends RecyclerView.ViewHolder {
+        private CircleImageView channelImageGridChild;
+        private TextView channelTitleGridChild;
 
-    public class ChildGridItemViewHolder2 extends RecyclerView.ViewHolder {
-        private CircleImageView channelImageGridChild2;
-        private TextView channelTitleGridChild2;
-
-        public ChildGridItemViewHolder2(@NonNull View itemView) {
+        public ChildGridItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            channelImageGridChild2 = itemView.findViewById(R.id.circle_item_popular_rv_grid_child2);
-            channelTitleGridChild2 = itemView.findViewById(R.id.tv_item_popular_rv_grid_child2);
+            channelImageGridChild = itemView.findViewById(R.id.circle_item_popular_child_rv_grid);
+            channelTitleGridChild = itemView.findViewById(R.id.tv_item_popular_child_rv_grid);
         }
 
         public void bindChannel(Channel channel) {
-            channelImageGridChild2.setImageDrawable(channel.getChannelImage());
-            channelTitleGridChild2.setText(channel.getChannelTitle());
+            channelImageGridChild.setImageDrawable(channel.getChannelImage());
+            channelTitleGridChild.setText(channel.getChannelTitle());
         }
     }
 }

@@ -18,11 +18,11 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterLinearChannelItem extends RecyclerView.Adapter<AdapterLinearChannelItem.ChannelViewHolder> {
+public class AdapterLinearItem extends RecyclerView.Adapter<AdapterLinearItem.ChannelViewHolder> {
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
 
-    public AdapterLinearChannelItem(Context context) {
+    public AdapterLinearItem(Context context) {
         this.context = context;
         Channel channel = new Channel();
         channel.setChannelImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));

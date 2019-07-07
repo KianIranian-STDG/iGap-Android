@@ -17,13 +17,15 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterParentGridItem extends RecyclerView.Adapter<AdapterParentGridItem.FragmentGridViewHolder> {
+public class AdapterGridItem extends RecyclerView.Adapter<AdapterGridItem.FragmentGridViewHolder> {
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
+    public boolean clickable;
 
-    public AdapterParentGridItem(Context context) {
+    public AdapterGridItem(Context context,boolean clickable) {
         this.context = context;
+        this.clickable=clickable;
         Channel channel = new Channel();
         channel.setChannelImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
         channel.setChannelTitle("باشگاه");
@@ -50,7 +52,7 @@ public class AdapterParentGridItem extends RecyclerView.Adapter<AdapterParentGri
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid_parent, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid, viewGroup, false);
         return new FragmentGridViewHolder(view);
     }
 
@@ -75,6 +77,7 @@ public class AdapterParentGridItem extends RecyclerView.Adapter<AdapterParentGri
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(clickable)
                     onClickedItemEventCallBack.onClickedItem();
                 }
             });

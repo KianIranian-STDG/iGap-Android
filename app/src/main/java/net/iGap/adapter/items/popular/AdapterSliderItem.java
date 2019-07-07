@@ -15,13 +15,15 @@ import net.iGap.adapter.items.popular.model.Slider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterBottomSliderItem extends RecyclerView.Adapter<AdapterBottomSliderItem.BottomSliderViewHolder> {
+public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.BottomSliderViewHolder> {
     private List<Slider> sliderList = new ArrayList<>();
     private Context context;
     private OnClickSliderEventCallBack onClickSliderEventCallBack;
+    public boolean clickable;
 
-    public AdapterBottomSliderItem(Context context) {
+    public AdapterSliderItem(Context context, boolean clickable) {
         this.context = context;
+        this.clickable = clickable;
         Slider sliderBottom = new Slider();
         sliderBottom.setSliderImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
         sliderList.add(sliderBottom);
@@ -37,7 +39,7 @@ public class AdapterBottomSliderItem extends RecyclerView.Adapter<AdapterBottomS
     @NonNull
     @Override
     public BottomSliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_slider_bottom, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_slider, parent, false);
         return new BottomSliderViewHolder(view);
     }
 
@@ -58,11 +60,13 @@ public class AdapterBottomSliderItem extends RecyclerView.Adapter<AdapterBottomS
 
         public BottomSliderViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.iv_item_popular_slider_bottom);
+            imageView = itemView.findViewById(R.id.iv_item_popular_slider);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickSliderEventCallBack.clickedSlider();
+                    if (clickable == true)
+                        onClickSliderEventCallBack.clickedSlider();
                 }
             });
         }

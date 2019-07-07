@@ -19,7 +19,7 @@
                 android:background="@drawable/shape_popular_channel_all">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_fragment_popular_child_slider2"
+                    android:id="@+id/rv_fragment_popular_child_slider_linear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_fragment_popular_child_grid2"
+                    android:id="@+id/rv_fragment_popular_child_grid_linear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
