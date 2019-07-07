@@ -266,7 +266,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load();
                     }
 
                     @Override
