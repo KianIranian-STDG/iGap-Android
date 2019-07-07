@@ -308,6 +308,7 @@ import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
+import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
@@ -405,7 +406,6 @@ public class FragmentChat extends BaseFragment
     public static List<StructGroupSticker> data = new ArrayList<>();
     public static ArrayList<String> listPathString;
     public static OnUpdateSticker onUpdateSticker;
-    private static boolean isLoadingMoreMessage;
     private static List<StructBottomSheet> contacts;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
@@ -605,6 +605,8 @@ public class FragmentChat extends BaseFragment
     private boolean allowGetHistoryDown = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
     private boolean firstUp = true; // if is firstUp getClientRoomHistory with low limit in UP direction
     private boolean firstDown = true; // if is firstDown getClientRoomHistory with low limit in DOWN direction
+    private String lastRandomRequestIdUp = ""; // last RandomRequestId Up
+    private String lastRandomRequestIdDown = ""; // last RandomRequestId Down
     private long gapMessageIdUp; // messageId that maybe lost in local
     private long gapMessageIdDown; // messageId that maybe lost in local
     private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
@@ -3134,12 +3136,7 @@ public class FragmentChat extends BaseFragment
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
-                    FragmentChat.isLoadingMoreMessage = true;
-                    prgWaiting.setVisibility(View.VISIBLE);
-                    return;
-                }
+                cancelAllRequestFetchHistory();
 
                 latestButtonClickTime = System.currentTimeMillis();
                 /**
@@ -3595,6 +3592,12 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
+    private void cancelAllRequestFetchHistory() {
+        RequestQueue.cancelRequest(lastRandomRequestIdDown);
+        RequestQueue.cancelRequest(lastRandomRequestIdUp);
+        isWaitingForHistoryUp = false;
+        isWaitingForHistoryDown = false;
+    }
 
     private void sendNewMessageForRequestCardToCard() {
         String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
@@ -9068,9 +9071,6 @@ public class FragmentChat extends BaseFragment
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (FragmentChat.isLoadingMoreMessage) {
-                    return;
-                }
                 LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
                 int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
                 View view = linearLayoutManager.getChildAt(0);
@@ -9233,7 +9233,8 @@ public class FragmentChat extends BaseFragment
                 limit = Config.LIMIT_GET_HISTORY_LOW;
             }
 
-            MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
+
+            String requestId = MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, List<RealmRoomMessage> realmRoomMessages, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
                     if (roomId != mRoomId) {
@@ -9252,14 +9253,6 @@ public class FragmentChat extends BaseFragment
                         firstDown = false;
                         startFutureMessageIdDown = endMessageId;
                         isWaitingForHistoryDown = false;
-                    }
-                    if (FragmentChat.isLoadingMoreMessage) {
-                        if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
-                            FragmentChat.isLoadingMoreMessage = false;
-                            hideProgress();
-                            llScrollNavigate.performClick();
-                        }
-                        return;
                     }
 
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN);
@@ -9363,17 +9356,8 @@ public class FragmentChat extends BaseFragment
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (FragmentChat.isLoadingMoreMessage) {
-                                if (!isWaitingForHistoryUp &&
-                                        !isWaitingForHistoryDown) {
-                                    FragmentChat.isLoadingMoreMessage = false;
-                                    hideProgress();
-                                    llScrollNavigate.performClick();
-                                }
-                            } else {
-                                if (majorCode == 5) {
-                                    getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
-                                }
+                            if (majorCode == 5) {
+                                getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
                             }
                         }
                     });
@@ -9381,6 +9365,12 @@ public class FragmentChat extends BaseFragment
 
                 }
             });
+
+            if (direction == UP) {
+                lastRandomRequestIdUp = requestId;
+            } else {
+                lastRandomRequestIdDown = requestId;
+            }
         }
     }
 
