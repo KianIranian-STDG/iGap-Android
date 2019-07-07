@@ -2813,6 +2813,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        cancelAllRequestFetchHistory();
                         resetMessagingValue();
                         setDownBtnGone();
                         RealmRoomMessage.ClearAllMessageRoomAsync(getRealmChat(), mRoomId, new Realm.Transaction.OnSuccess() {
