@@ -1,4 +1,4 @@
-package net.iGap.beepTunes.album;
+package net.iGap.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,12 +11,10 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentBeeptunesAlbumBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
 public class AlbumFragment extends BaseFragment implements ToolbarListener {
-    private AlbumViewModel viewModel;
     private FragmentBeeptunesAlbumBinding binding;
     private HelperToolbar toolbar;
 
@@ -24,15 +22,13 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_beeptunes_album, container, false);
-        viewModel = new AlbumViewModel();
-        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
 
         toolbar = HelperToolbar.create()
