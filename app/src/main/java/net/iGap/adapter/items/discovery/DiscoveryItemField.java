@@ -13,6 +13,7 @@ public class DiscoveryItemField implements Serializable {
     public boolean refresh;
     public String agreementSlug;
     public boolean agreement;
+    public String param;
 
     public DiscoveryItemField(ProtoGlobal.DiscoveryField discoveryField) {
         id = discoveryField.getId();
@@ -23,5 +24,6 @@ public class DiscoveryItemField implements Serializable {
         refresh = discoveryField.getRefresh();
         agreementSlug = discoveryField.getAgreementSlug();
         agreement = discoveryField.getAgreement();
+        param = discoveryField.getParam();
     }
 }

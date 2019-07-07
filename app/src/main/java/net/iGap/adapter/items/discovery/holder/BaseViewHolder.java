@@ -78,7 +78,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
+    void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
 
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
             return;
@@ -114,7 +114,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case WEB_LINK:/** tested **/
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                 int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
                 if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openBrowser(discoveryField.value);
@@ -135,7 +135,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
                 } else {
-                    new HelperFragment(FragmentWebView.newInstance(discoveryField.value, discoveryField.refresh)).setReplace(false).load();
+                    new HelperFragment(FragmentWebView.newInstance(discoveryField.value, discoveryField.refresh, discoveryField.param)).setReplace(false).load();
                 }
                 break;
             case USERNAME_LINK:/** tested **/

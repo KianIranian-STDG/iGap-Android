@@ -50,17 +50,18 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     private View customView;
     private WebChromeClient.CustomViewCallback callback;
 
-    public static FragmentWebView newInstance(String url, boolean igRef) {
+    public static FragmentWebView newInstance(String url, boolean igRef, String param) {
         FragmentWebView discoveryFragment = new FragmentWebView();
         Bundle bundle = new Bundle();
         bundle.putString("url", url);
         bundle.putBoolean("igRef", igRef);
+        bundle.putString("param", param);
         discoveryFragment.setArguments(bundle);
         return discoveryFragment;
     }
 
     public static FragmentWebView newInstance(String url) {
-        return newInstance(url, true);
+        return newInstance(url, true, "");
     }
 
     @Override
@@ -74,6 +75,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         forceCloseFragment = false;
         url = getArguments().getString("url");
         igRef = getArguments().getBoolean("igRef");
+        String param = getArguments().getString("param");
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             url = "http://" + url;
         }
@@ -137,7 +139,11 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         webView.setWebChromeClient(new GeoWebChromeClient());
         customWebViewClient = new CustomWebViewClient();
         webView.setWebViewClient(customWebViewClient);
-        webView.loadUrl(url);
+        if (param != null && param.length() > 1) {
+            webView.postUrl(url, param.getBytes());
+        } else {
+            webView.loadUrl(url);
+        }
     }
 
     private void setWebViewVisibleWithDelay() {
