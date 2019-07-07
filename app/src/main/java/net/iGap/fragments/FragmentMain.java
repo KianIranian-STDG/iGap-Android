@@ -1138,7 +1138,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
             final boolean isMyCloud;
 
-            isMyCloud = mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId;
+            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId)
+                isMyCloud=true;
+            else
+                isMyCloud = false;
 
             if (mInfo.isValid()) {
 
@@ -1152,6 +1155,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                     if (holder.avatarIv.getVisibility() == View.GONE) {
                         holder.avatarIv.setVisibility(View.VISIBLE);
                     }
+                    holder.avatarIv.setImageResource(0);
                     setAvatar(mInfo, holder);
                 }
 

@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -46,9 +47,9 @@ public class ChatCell extends ConstraintLayout {
         pinView.setId(R.id.iv_iv_chatCell_pin);
         pinView.setScaleType(ImageView.ScaleType.FIT_XY);
         if (isRtl) {
-            pinView.setImageResource(isDarkTheme ? R.drawable.shape_pin_rtl_dark : R.drawable.shape_pin_rtl);
+            pinView.setImageResource(R.drawable.pin_rtl);
         } else {
-            pinView.setImageResource(isDarkTheme ? R.drawable.shape_pin_dark : R.drawable.shape_pin);
+            pinView.setImageResource(R.drawable.pin);
         }
         addView(pinView);
 
@@ -210,6 +211,19 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
+         * force gravity in message preview
+         * */
+        if (isRtl) {
+            firstTextView.setGravity(Gravity.RIGHT);
+            secondTextView.setGravity(Gravity.RIGHT);
+            thirdTextView.setGravity(Gravity.RIGHT);
+        } else {
+            firstTextView.setGravity(Gravity.LEFT);
+            secondTextView.setGravity(Gravity.LEFT);
+            thirdTextView.setGravity(Gravity.LEFT);
+        }
+
+        /**
          * set views dependency
          * */
 
@@ -285,7 +299,7 @@ public class ChatCell extends ConstraintLayout {
             set.connect(chatIcon.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.LEFT);
             set.connect(roomName.getId(), ConstraintSet.RIGHT, chatIcon.getId(), ConstraintSet.LEFT);
             set.connect(verify.getId(), ConstraintSet.RIGHT, roomName.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
-            set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp12));
+            set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp16));
 
             set.connect(badgeView.getId(), ConstraintSet.LEFT, messageStatus.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
             set.connect(badgeView.getId(), ConstraintSet.RIGHT, thirdTextView.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
@@ -317,7 +331,7 @@ public class ChatCell extends ConstraintLayout {
             set.connect(chatIcon.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
             set.connect(roomName.getId(), ConstraintSet.LEFT, chatIcon.getId(), ConstraintSet.RIGHT);
             set.connect(verify.getId(), ConstraintSet.LEFT, roomName.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
-            set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp12));
+            set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp16));
 
             set.connect(badgeView.getId(), ConstraintSet.LEFT, thirdTextView.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
             set.connect(badgeView.getId(), ConstraintSet.RIGHT, messageStatus.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));

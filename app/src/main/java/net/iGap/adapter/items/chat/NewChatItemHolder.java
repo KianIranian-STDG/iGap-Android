@@ -163,8 +163,8 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
                         4, 0, 4, 0));
 
 
-        set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainHeight(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainHeight(messageDetailContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
 
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
