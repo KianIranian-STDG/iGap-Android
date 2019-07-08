@@ -130,8 +130,8 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static void getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistoryNotSafe, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
-        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistoryNotSafe, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId, messageIdGetHistoryNotSafe, reachMessageId, direction));
+    public static String getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistoryNotSafe, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+        String requestId = new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistoryNotSafe, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId, messageIdGetHistoryNotSafe, reachMessageId, direction));
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
             @Override
@@ -244,6 +244,8 @@ public final class MessageLoader {
                 onMessageReceive.onError(majorCode, minorCode, messageIdGetHistory, direction);
             }
         };
+
+        return requestId;
     }
 
     //*********** detect gap in message

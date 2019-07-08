@@ -311,6 +311,7 @@ import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
+import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
@@ -406,11 +407,11 @@ public class FragmentChat extends BaseFragment
     public static List<StructGroupSticker> data = new ArrayList<>();
     public static ArrayList<String> listPathString;
     public static OnUpdateSticker onUpdateSticker;
-    private static boolean isLoadingMoreMessage;
     private static List<StructBottomSheet> contacts;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private EmojiPopup emojiPopup;
+    private boolean isPaused;
 
     /**
      * *************************** common method ***************************
@@ -602,6 +603,8 @@ public class FragmentChat extends BaseFragment
     private boolean allowGetHistoryDown = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
     private boolean firstUp = true; // if is firstUp getClientRoomHistory with low limit in UP direction
     private boolean firstDown = true; // if is firstDown getClientRoomHistory with low limit in DOWN direction
+    private String lastRandomRequestIdUp = ""; // last RandomRequestId Up
+    private String lastRandomRequestIdDown = ""; // last RandomRequestId Down
     private long gapMessageIdUp; // messageId that maybe lost in local
     private long gapMessageIdDown; // messageId that maybe lost in local
     private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
@@ -894,6 +897,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onResume() {
+        isPaused = false;
         super.onResume();
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
@@ -1098,6 +1102,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onPause() {
+        isPaused = true;
         storingLastPosition();
         super.onPause();
 
@@ -2715,6 +2720,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }).show();
                 } else if (items.get(position).equals(getString(R.string.clean_up))) {
+                    cancelAllRequestFetchHistory();
                     resetMessagingValue();
                     setDownBtnGone();
                     RealmRoomMessage.ClearAllMessageRoomAsync(getRealmChat(), mRoomId, new Realm.Transaction.OnSuccess() {
@@ -2965,12 +2971,7 @@ public class FragmentChat extends BaseFragment
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
-                    FragmentChat.isLoadingMoreMessage = true;
-                    prgWaiting.setVisibility(View.VISIBLE);
-                    return;
-                }
+                cancelAllRequestFetchHistory();
 
                 latestButtonClickTime = System.currentTimeMillis();
                 /**
@@ -3425,6 +3426,13 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void cancelAllRequestFetchHistory() {
+        RequestQueue.cancelRequest(lastRandomRequestIdDown);
+        RequestQueue.cancelRequest(lastRandomRequestIdUp);
+        isWaitingForHistoryUp = false;
+        isWaitingForHistoryDown = false;
     }
 
     private void showCardToCard() {
@@ -4165,7 +4173,7 @@ public class FragmentChat extends BaseFragment
                             StructBackGroundSeen _BackGroundSeen = null;
 
                             ProtoGlobal.RoomMessageStatus roomMessageStatus;
-                            if (G.isAppInFg && isEnd()) {
+                            if (G.isAppInFg && isEnd() && !isPaused) {
 
 
                                 if (messageCopy.isValid() && !messageCopy.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
@@ -4215,7 +4223,7 @@ public class FragmentChat extends BaseFragment
                                     }
                                 }
 
-                                setBtnDownVisible(realmRoomMessage);
+                                setBtnDownVisible(messageCopy);
 
                             }
                         });
@@ -4248,7 +4256,8 @@ public class FragmentChat extends BaseFragment
                                         removeLayoutUnreadMessage();
                                     }
                                 }
-                                setBtnDownVisible(realmRoomMessage);
+
+                                setBtnDownVisible(messageCopy);
                             }
                         });
 
@@ -4490,7 +4499,7 @@ public class FragmentChat extends BaseFragment
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isManaged() && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
+        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
             countNewMessage = 0;
             txtNewUnreadMessage.setVisibility(View.GONE);
             txtNewUnreadMessage.setText(countNewMessage + "");
@@ -4506,7 +4515,8 @@ public class FragmentChat extends BaseFragment
 
             RealmClientCondition.addOfflineSeenAsync(mRoomId, Long.parseLong(messageInfo.messageID));
             RealmRoomMessage.setStatusSeenInChatAsync(parseLong(messageInfo.messageID));
-            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, parseLong(messageInfo.messageID), ProtoGlobal.RoomMessageStatus.SEEN);
+            if (!isPaused)
+                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, parseLong(messageInfo.messageID), ProtoGlobal.RoomMessageStatus.SEEN);
         }
     }
 
@@ -8513,7 +8523,7 @@ public class FragmentChat extends BaseFragment
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
-            if (firstUnreadMessage == null || !firstUnreadMessage.isManaged() || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+            if (firstUnreadMessage == null || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
                 firstUnreadMessage = getFirstUnreadMessage(getRealmChat());
             }
 
@@ -8530,11 +8540,6 @@ public class FragmentChat extends BaseFragment
                         getMessages();
                         return;
                     }
-                    countNewMessage = unreadCount;
-                    txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                    txtNewUnreadMessage.setText(countNewMessage + "");
-                    setDownBtnVisible();
-                    firstUnreadMessageInChat = firstUnreadMessage;
                 }
             } else {
                 if (firstUnreadMessage == null) {
@@ -8545,6 +8550,15 @@ public class FragmentChat extends BaseFragment
                 unreadLayoutMessage();
                 fetchMessageId = firstUnreadMessage.getMessageId();
             }
+
+            if (hasUnread()) {
+                countNewMessage = unreadCount;
+                txtNewUnreadMessage.setVisibility(View.VISIBLE);
+                txtNewUnreadMessage.setText(countNewMessage + "");
+                setDownBtnVisible();
+                firstUnreadMessageInChat = firstUnreadMessage;
+            }
+
             startFutureMessageIdUp = fetchMessageId;
 
             // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
@@ -8688,9 +8702,6 @@ public class FragmentChat extends BaseFragment
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (FragmentChat.isLoadingMoreMessage) {
-                    return;
-                }
                 LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
                 int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
                 View view = linearLayoutManager.getChildAt(0);
@@ -8853,7 +8864,8 @@ public class FragmentChat extends BaseFragment
                 limit = Config.LIMIT_GET_HISTORY_LOW;
             }
 
-            MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
+
+            String requestId = MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, List<RealmRoomMessage> realmRoomMessages, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
                     if (roomId != mRoomId) {
@@ -8872,14 +8884,6 @@ public class FragmentChat extends BaseFragment
                         firstDown = false;
                         startFutureMessageIdDown = endMessageId;
                         isWaitingForHistoryDown = false;
-                    }
-                    if (FragmentChat.isLoadingMoreMessage) {
-                        if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
-                            FragmentChat.isLoadingMoreMessage = false;
-                            hideProgress();
-                            llScrollNavigate.performClick();
-                        }
-                        return;
                     }
 
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN);
@@ -8983,17 +8987,8 @@ public class FragmentChat extends BaseFragment
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (FragmentChat.isLoadingMoreMessage) {
-                                if (!isWaitingForHistoryUp &&
-                                        !isWaitingForHistoryDown) {
-                                    FragmentChat.isLoadingMoreMessage = false;
-                                    hideProgress();
-                                    llScrollNavigate.performClick();
-                                }
-                            } else {
-                                if (majorCode == 5) {
-                                    getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
-                                }
+                            if (majorCode == 5) {
+                                getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
                             }
                         }
                     });
@@ -9001,6 +8996,12 @@ public class FragmentChat extends BaseFragment
 
                 }
             });
+
+            if (direction == UP) {
+                lastRandomRequestIdUp = requestId;
+            } else {
+                lastRandomRequestIdDown = requestId;
+            }
         }
     }
 
