@@ -227,6 +227,17 @@ public class AvatarHandler {
 
     // ******************************************* End *********************************************
 
+    public void removeImageViewFromHandler(ImageView avatarIv) {
+        HashSet<ImageView> imageViewHashSet = avatarHashImages.get((Long) avatarIv.getTag());
+
+        if (imageViewHashSet != null) {
+            imageViewHashSet.remove(avatarIv);
+        }
+
+        imageViewHashValue.remove(avatarIv);
+        avatarIv.setTag(-1);
+    }
+
     public void getAvatar(BaseParam baseParam) {
 
         if (Looper.myLooper() != Looper.getMainLooper()) {
@@ -242,6 +253,8 @@ public class AvatarHandler {
         if (baseParam.imageView == null || baseParam.avatarId == null) {
             return;
         }
+
+        baseParam.imageView.setTag(baseParam.avatarId);
 
         synchronized (mutex) {
             Bitmap cacheValue = null;
