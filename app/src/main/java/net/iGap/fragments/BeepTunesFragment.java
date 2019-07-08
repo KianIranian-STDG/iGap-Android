@@ -14,7 +14,6 @@ import net.iGap.interfaces.ToolbarListener;
 
 public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     private View rootView;
-    private HelperToolbar helperToolbar;
 
     @Nullable
     @Override
@@ -29,10 +28,11 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
         initToolBar(toolBar);
 
+
     }
 
     private void initToolBar(ViewGroup viewGroup) {
-        helperToolbar = HelperToolbar.create()
+        HelperToolbar helperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setSearchBoxShown(true)
                 .setLogoShown(true)

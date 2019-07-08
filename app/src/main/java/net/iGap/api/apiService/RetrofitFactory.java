@@ -24,11 +24,10 @@ public class RetrofitFactory {
 
     Retrofit getRetrofit(String clientType) {
         if (clientType.equals(ApiStatic.BEEP_TUNES)) {
-
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(ApiStatic.BEEP_TUNES_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient)
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
             return retrofit;
 
