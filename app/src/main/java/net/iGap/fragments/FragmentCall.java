@@ -98,13 +98,13 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && !isInit) {
-            G.handler.postDelayed(new Runnable() {
+            /*G.handler.postDelayed(new Runnable() {
                 @Override
-                public void run() {
+                public void run() {*/
 
                     init();
-                }
-            }, 800);
+                /*}
+            }, 800);*/
         }
     }
 

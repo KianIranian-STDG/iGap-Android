@@ -166,11 +166,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         isDarkMode.set(G.isDarkTheme);
 
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+
         //set credit amount
         if (G.selectedCard != null) {
             currentCredit.set(G.selectedCard.cashOutBalance);
         } else {
-            currentCredit.set(0);
+            getUserCredit();
         }
 
         Realm realm = Realm.getDefaultInstance();
@@ -198,17 +199,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
-        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
-            @Override
-            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-                G.handler.post(() -> currentScore.set(String.valueOf(score.getScore())));
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
+        getIVandScore();
 
         updateUserInfoUI();
 
@@ -804,6 +795,22 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         idAvatar = SUID.id().get();
         pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
         return new File(pathSaveImage);
+    }
+
+    private void getIVandScore(){
+        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
+            @Override
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
+                G.handler.post(() -> currentScore.set(String.valueOf(score.getScore())));
+            }
+
+            @Override
+            public void onError(int major,int minor) {
+                if (major == 5 && minor == 1){
+                    getIVandScore();
+                }
+            }
+        });
     }
 
     @Override

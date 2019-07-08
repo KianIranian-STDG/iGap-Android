@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.interfaces.OnUserIVandGetScore;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserIVandGetScore;
 
 public class UserIVandGetScoreResponse extends MessageHandler {
@@ -42,8 +43,8 @@ public class UserIVandGetScoreResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        ((OnUserIVandGetScore) identity).onError();
-
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        ((OnUserIVandGetScore) identity).onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
     }
 }
 

@@ -344,7 +344,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             e.printStackTrace();
         }
 
-        /*realmRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) realmRecyclerView.getLayoutManager()) {
+        realmRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) realmRecyclerView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (!endPage) {
@@ -352,7 +352,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 //                    prgWaitingLoadList.setVisibility(View.VISIBLE);
                 }
             }
-        });*/
+        });
 
         btnAddNewChannel.setOnClickListener(v -> {
             if (getActivity() != null) {
