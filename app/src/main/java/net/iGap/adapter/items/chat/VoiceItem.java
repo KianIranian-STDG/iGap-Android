@@ -102,21 +102,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.waveView.setProgress(animProgress);
         });
 
-        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-            MusicPlayer.playerStatusObservable.observe(G.fragmentActivity, playerStatus -> {
-                if (playerStatus != null) {
-                    if (playerStatus == MusicPlayer.PLAY)
-                        voiceIsPlaying(holder, anim);
-
-                    if (playerStatus == MusicPlayer.PAUSE)
-                        voiceIsPause(holder, anim);
-
-                    if (playerStatus == MusicPlayer.STOP)
-                        voiceIsStop(holder, anim);
-                } else
-                    Log.d(TAG, "play status: " + playStatus);
-            });
-        }
+        holder.mMessageID = mMessage.messageID;
+        animationPlayer(holder,anim);
 
         holder.complete = (result, messageOne, MessageTow) -> {
             if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
@@ -191,6 +178,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 holder.mTimeMusic = MusicPlayer.musicTime;
             }
             MusicPlayer.messageId = mMessage.messageID;
+            animationPlayer(holder,anim);
         });
 
         holder.waveView.setOnTouchListener((v, event) -> {
@@ -248,11 +236,28 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
         }
 
-        holder.mMessageID = mMessage.messageID;
 
         if (HelperCalander.isPersianUnicode)
             holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
 
+    }
+
+    private void animationPlayer(ViewHolder holder,ValueAnimator anim){
+        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+            MusicPlayer.playerStatusObservable.observe(G.fragmentActivity, playerStatus -> {
+                if (playerStatus != null) {
+                    if (playerStatus == MusicPlayer.PLAY)
+                        voiceIsPlaying(holder, anim);
+
+                    if (playerStatus == MusicPlayer.PAUSE)
+                        voiceIsPause(holder, anim);
+
+                    if (playerStatus == MusicPlayer.STOP)
+                        voiceIsStop(holder, anim);
+                } else
+                    Log.d("voicePlayer", "play status: " + playStatus);
+            });
+        }
     }
 
     private void voiceIsStop(ViewHolder holder, ValueAnimator anim) {

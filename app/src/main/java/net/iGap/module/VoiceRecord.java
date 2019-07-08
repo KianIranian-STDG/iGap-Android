@@ -12,7 +12,6 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -114,6 +113,7 @@ public class VoiceRecord {
                 if (continuePlay) {
                     continuePlay = false;
                     MusicPlayer.playSound();
+                    MusicPlayer.playerStatusObservable.setValue(MusicPlayer.PLAY);
                 }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
@@ -126,6 +126,7 @@ public class VoiceRecord {
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
                 MusicPlayer.pauseSound();
+                MusicPlayer.playerStatusObservable.setValue(MusicPlayer.PAUSE);
                 MusicPlayer.pauseSoundFromIGapCall = true;
                 continuePlay = true;
             }
