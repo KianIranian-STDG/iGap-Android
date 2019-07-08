@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Group;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.AppCompatTextView;
@@ -55,8 +56,10 @@ import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
+import net.iGap.module.FastScroller;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
@@ -89,14 +92,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     protected ArrayMap<Long, Boolean> selectedList = new ArrayMap<>();
     private List<RealmContacts> results;
 
-    private LinearLayout btnAddNewChannel;
-    private LinearLayout btnAddNewGroup;
-    private LinearLayout btnAddSecretChat;
-    private LinearLayout btnAddNewGroupCall;
-    private LinearLayout btnAddNewContact;
-    private LinearLayout btnDialNumber;
+    private View btnAddNewChannel;
+    private View btnAddNewGroup;
+    private View btnAddSecretChat;
+    private View btnAddNewGroupCall;
+    private View btnAddNewContact;
+    private View btnDialNumber;
     private RecyclerView realmRecyclerView;
-    private ViewGroup vgInviteFriend;
+    private View vgInviteFriend;
     private EditText edtSearch;
     private HelperToolbar mHelperToolbar;
     private ProgressBar prgWaitingLoadList;
@@ -107,7 +110,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private Context context = G.context;
     private Realm realm;
     private ActionMode mActionMode;
-    private FastItemAdapter fastItemAdapter;
+    /*private FastItemAdapter fastItemAdapter;*/
     private ContactListAdapter contactListAdapter;
 
     private int mPageMode = NEW_CHAT;
@@ -173,12 +176,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     .setLeftIcon(R.string.edit_icon)
                     .setRightIcons(R.string.add_icon)
                     .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true , R.string.unlock_icon)
-                    .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
+                    .setPassCodeVisibility(true, R.string.unlock_icon)
+                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
                     .setSearchBoxShown(true)
                     .setLogoShown(true);
 
-        }else {
+        } else {
 
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
@@ -189,9 +192,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         }
 
-        if (mPageMode == CALL){
+        if (mPageMode == CALL) {
             mHelperToolbar.setDefaultTitle(getString(R.string.make_call));
-        }else if (mPageMode == ADD){
+        } else if (mPageMode == ADD) {
             mHelperToolbar.setDefaultTitle(getString(R.string.create_chat));
         }
 
@@ -280,11 +283,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
 
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        /*LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);*/
 
         realmRecyclerView = view.findViewById(R.id.recycler_view);
-        realmRecyclerView.setLayoutManager(layoutManager);
+        realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
+        /*realmRecyclerView.setLayoutManager(layoutManager);*/
         realmRecyclerView.setNestedScrollingEnabled(false);
+        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+        fastScroller.setRecyclerView(realmRecyclerView,ContactManager.getContactSize());
+
 
         onClickRecyclerView = (view, position) -> {
             if (isMultiSelect) {
@@ -304,12 +311,12 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             multi_select(position);
         };
 
-        fastItemAdapter = new FastItemAdapter();
+        /*fastItemAdapter = new FastItemAdapter();*/
 
         try {
             if (getPermission && isContact) {
                 getPermission = false;
-                HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         /**
@@ -337,7 +344,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             e.printStackTrace();
         }
 
-        realmRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        /*realmRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) realmRecyclerView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (!endPage) {
@@ -345,7 +352,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 //                    prgWaitingLoadList.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        });*/
 
         btnAddNewChannel.setOnClickListener(v -> {
             if (getActivity() != null) {
@@ -610,7 +617,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Override
     public void onSearchTextChangeListener(View view, String text) {
 
-        fastItemAdapter.filter(text.toLowerCase());
+        /*fastItemAdapter.filter(text.toLowerCase());*/
 
         if (text.length() > 0) {
             results = getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
@@ -688,6 +695,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                     G.handler.postDelayed(this::notifyDataSetChanged, 1000);
                 }
             }
+        }
+
+        public String getBubbleText(int position) {
+            return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
         }
 
         void insertContact(RealmContacts realmContacts, int i) {
@@ -917,8 +928,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         if (isCallAction) {
                             long userId = realmContacts.getId();
                             if (userId != 134 && G.userId != userId) {
-                                CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId,false,ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING );
-                                callSelectFragment.show(getFragmentManager(),null);
+                                CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                callSelectFragment.show(getFragmentManager(), null);
                             }
 
                         } else {

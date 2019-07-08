@@ -73,4 +73,8 @@ public class ContactManager {
         }
     }
 
+    public static int getContactSize() {
+        return results.size();
+    }
+
 }
