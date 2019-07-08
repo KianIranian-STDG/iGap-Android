@@ -13,6 +13,7 @@
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutDirection="ltr"
         app:layoutDescription="@xml/profile_motion2">
 
         <android.support.v4.widget.NestedScrollView
@@ -20,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
+            android:layoutDirection="locale"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -618,9 +620,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:fontFamily="@font/main_font"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMinTextSize="@dimen/largeTextSize"
-                app:autoSizeMaxTextSize="@dimen/xlargeTextSize"
+                android:textSize="@dimen/standardTextSize"
                 android:singleLine="true"
                 android:gravity="left"
                 android:paddingLeft="@dimen/dp4"
@@ -632,9 +632,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:fontFamily="@font/main_font"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMinTextSize="@dimen/smallTextSize"
-                app:autoSizeMaxTextSize="@dimen/standardTextSize"
+                android:textSize="@dimen/verySmallTextSize"
                 android:singleLine="true"
                 android:gravity="left"
                 app:emojiSize="@dimen/verySmallTextSize"

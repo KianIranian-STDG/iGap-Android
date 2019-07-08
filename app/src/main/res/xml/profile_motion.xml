@@ -20,7 +20,7 @@
         <Constraint
             android:id="@+id/toolbar_background"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp200"
+            android:layout_height="@dimen/dp140"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent">
@@ -44,11 +44,20 @@
             />
 
         <Constraint
+            android:visibility="visible"
+            android:id="@+id/chi_fab_setPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp20"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintRight_toRightOf="@id/toolbar_background"
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_background" />
+
+        <Constraint
             android:id="@+id/toolbar_avatar"
-            android:layout_width="@dimen/dp100"
-            android:layout_height="@dimen/dp100"
-            android:layout_marginBottom="@dimen/dp10"
-            motion:layout_constraintTop_toBottomOf="@id/toolbar_back"
+            android:layout_width="@dimen/dp120"
+            android:layout_height="@dimen/dp120"
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_background"
             motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
             motion:layout_constraintStart_toStartOf="@id/toolbar_background"
             android:layout_marginLeft="@dimen/dp20"
@@ -56,14 +65,39 @@
             />
 
         <Constraint
-            android:id="@+id/toolbar_txtLayout"
+            android:id="@+id/toolbar_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
+            motion:layout_constraintBottom_toTopOf="@id/toolbar_status"
+            motion:layout_constraintEnd_toStartOf="@id/chi_fab_setPic"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_avatar" />
+
+        <Constraint
+            android:id="@+id/toolbar_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_avatar" />
+
+        <Constraint
+            android:id="@+id/toolbar_phone"
+            android:layout_width="0dp"
+            android:visibility="visible"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
             motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            motion:layout_constraintTop_toTopOf="@id/toolbar_avatar"
-            motion:layout_constraintEnd_toEndOf="@id/toolbar_background"
-            />
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_phone"/>
+
+        <Constraint
+            android:id="@+id/toolbar_bio"
+            android:layout_width="0dp"
+            android:visibility="visible"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_background" />
 
     </ConstraintSet>
 
@@ -94,6 +128,18 @@
             motion:layout_constraintHorizontal_bias="0"
             />
 
+
+        <Constraint
+            android:visibility="invisible"
+            android:id="@+id/chi_fab_setPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp20"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintRight_toRightOf="@id/toolbar_background"
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_background" />
+
+
         <Constraint
             android:id="@+id/toolbar_avatar"
             android:layout_width="@dimen/dp40"
@@ -103,19 +149,43 @@
             motion:layout_constraintStart_toEndOf="@id/toolbar_back"
             android:layout_marginLeft="@dimen/dp6"
             android:layout_marginStart="@dimen/dp6"
-            android:layout_marginBottom="0dp"
             />
 
-
         <Constraint
-            android:id="@+id/toolbar_txtLayout"
+            android:id="@+id/toolbar_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
             motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
             motion:layout_constraintTop_toTopOf="@id/toolbar_avatar"
-            motion:layout_constraintEnd_toStartOf="@id/layout_buttons"
-            />
+            motion:layout_constraintEnd_toStartOf="@id/layout_buttons" />
+
+        <Constraint
+            android:id="@+id/toolbar_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_avatar" />
+
+        <Constraint
+            android:id="@+id/toolbar_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_phone" />
+
+        <Constraint
+            android:id="@+id/toolbar_bio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_background"/>
 
     </ConstraintSet>
 

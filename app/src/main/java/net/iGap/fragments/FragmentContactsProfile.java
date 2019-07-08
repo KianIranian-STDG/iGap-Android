@@ -15,6 +15,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,11 +44,9 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.structs.StructListOfContact;
@@ -113,53 +113,35 @@ public class FragmentContactsProfile extends BaseFragment {
         viewModel = new FragmentContactsProfileViewModel(roomId, userId, enterFrom, avatarHandler);
         binding.setViewModel(viewModel);
 
-        HelperToolbar t = HelperToolbar.create().setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.video_call_icon, R.string.voice_call_icon)
-                .setContactProfile(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
+        if (G.isDarkTheme){
+            binding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
+            DrawableCompat.setTint(binding.chiFabSetPic.getDrawable() , getContext().getResources().getColor(R.color.white));
+        }
 
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        viewModel.onMoreButtonClick();
-                    }
+        binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
+        binding.toolbarVideoCall.setOnClickListener(v -> viewModel.onVideoCallClick());
+        binding.toolbarVoiceCall.setOnClickListener(v -> viewModel.onVoiceCallButtonClick());
+        binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
 
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        viewModel.onVideoCallClick();
-                    }
-
-                    @Override
-                    public void onThirdRightIconClickListener(View view) {
-                        viewModel.onVoiceCallButtonClick();
-                    }
-                });
-
-        binding.toolbar.addView(t.getView());
-
-        userAvatarImageView = t.getGroupAvatar();
+        userAvatarImageView = binding.toolbarAvatar;
 
         userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
 
         viewModel.menuVisibility.observe(this, visibility -> {
             if (visibility != null) {
-                t.getRightButton().setVisibility(visibility);
+                binding.toolbarMore.setVisibility(visibility);
             }
         });
 
         viewModel.videoCallVisibility.observe(this, visibility -> {
             if (visibility != null) {
-                t.getSecondRightButton().setVisibility(visibility);
+                binding.toolbarVideoCall.setVisibility(visibility);
             }
         });
 
         viewModel.callVisibility.observe(this, visibility -> {
             if (visibility != null) {
-                t.getThirdRightButton().setVisibility(visibility);
+                binding.toolbarVoiceCall.setVisibility(visibility);
             }
         });
 
@@ -171,13 +153,13 @@ public class FragmentContactsProfile extends BaseFragment {
 
         viewModel.contactName.observe(this, name -> {
             if (name != null) {
-                t.getGroupName().setText(name);
+                binding.toolbarName.setText(name);
             }
         });
 
         viewModel.lastSeen.observe(this, lastSeen -> {
             if (lastSeen != null) {
-                t.getGroupMemberCount().setText(HelperCalander.unicodeManage(lastSeen));
+                binding.toolbarStatus.setText(HelperCalander.unicodeManage(lastSeen));
             }
         });
 
@@ -205,15 +187,15 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         if (viewModel.phone != null && (!viewModel.phone.get().equals("0") || viewModel.showNumber.get())) {
-            t.getProfileTell().setText(viewModel.phone.get());
-            t.getProfileTell().setOnClickListener(v -> viewModel.onPhoneNumberClick());
+            binding.toolbarPhone.setText(viewModel.phone.get());
+            binding.toolbarPhone.setOnClickListener(v -> viewModel.onPhoneNumberClick());
         } else {
-            t.getProfileTell().setVisibility(View.GONE);
+            binding.toolbarPhone.setVisibility(View.GONE);
         }
 
-        t.getProfileStatus().setText(viewModel.username.get());
+        binding.toolbarBio.setText(viewModel.username.get());
 
-        t.getProfileFabChat().setOnClickListener(v -> {
+        binding.chiFabSetPic.setOnClickListener(v -> {
             viewModel.onClickGoToChat();
         });
 
@@ -471,7 +453,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
-                                showPopupPhoneNumber(t.getProfileTell(), viewModel.phone.get());
+                                showPopupPhoneNumber(binding.toolbarPhone, viewModel.phone.get());
                             }
 
                             @Override
