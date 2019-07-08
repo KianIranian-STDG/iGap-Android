@@ -15,27 +15,15 @@
         android:layout_height="match_parent"
         app:layoutDescription="@xml/profile_motion2">
 
-        <LinearLayout
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <android.support.v4.widget.NestedScrollView
-            android:id="@+id/apc_scroll_content"
+            android:id="@+id/scroll_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
-            android:layout_marginTop="-10dp"
-            android:paddingTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/at_bg">
+            app:layout_constraintTop_toBottomOf="@id/toolbar_background">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -531,7 +519,7 @@
 
 
         <ImageView
-            android:id="@+id/at_bg"
+            android:id="@+id/toolbar_background"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp200"
             android:scaleType="centerCrop"
@@ -542,88 +530,105 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/at_back"
+            android:id="@+id/toolbar_back"
             style="@style/myIconToolbarStyle"
             android:text="@string/back_icon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="@dimen/dp10"
-            app:layout_constraintTop_toTopOf="@id/at_bg"
-            app:layout_constraintStart_toStartOf="@id/at_bg"
-            app:layout_constraintBottom_toBottomOf="@id/at_bg"
-            app:layout_constraintEnd_toEndOf="@id/at_bg"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/toolbar_background"
+            app:layout_constraintStart_toStartOf="@id/toolbar_background"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintVertical_bias="0"
             />
 
         <TextView
-            android:id="@+id/at_more"
+            android:id="@+id/toolbar_more"
             style="@style/myIconToolbarStyle"
             android:text="@string/more_icon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="@dimen/dp10"
-            app:layout_constraintTop_toTopOf="@id/at_bg"
-            app:layout_constraintBottom_toBottomOf="@id/at_bg"
-            app:layout_constraintEnd_toEndOf="@id/at_bg"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/toolbar_background"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
             app:layout_constraintVertical_bias="0"
             />
 
         <TextView
-            android:id="@+id/at_edit"
+            android:id="@+id/toolbar_edit"
             style="@style/myIconToolbarStyle"
             android:text="@string/edit_icon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="@dimen/dp10"
-            app:layout_constraintTop_toTopOf="@id/at_bg"
-            app:layout_constraintBottom_toBottomOf="@id/at_bg"
-            app:layout_constraintEnd_toStartOf="@id/at_more"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/toolbar_background"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            app:layout_constraintEnd_toStartOf="@id/toolbar_more"
             app:layout_constraintVertical_bias="0"
             />
 
         <net.iGap.module.CircleImageView
-            android:id="@+id/at_avatar"
-            android:layout_width="@dimen/dp120"
-            android:layout_height="@dimen/dp120"
+            android:id="@+id/toolbar_avatar"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp100"
             android:layout_marginBottom="@dimen/dp10"
-            android:src="@drawable/avatar"
-            app:layout_constraintTop_toBottomOf="@id/at_back"
-            app:layout_constraintBottom_toBottomOf="@id/at_bg"
-            app:layout_constraintStart_toStartOf="@id/at_bg"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_back"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            app:layout_constraintStart_toStartOf="@id/toolbar_background"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginStart="@dimen/dp20"/>
 
-        <TextView
-            android:id="@+id/at_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:text="Alireza Nazari"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp18"
-            android:layout_marginTop="@dimen/dp10"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@id/at_status"
-            app:layout_constraintStart_toEndOf="@id/at_avatar"
-            app:layout_constraintTop_toTopOf="@id/at_avatar"/>
 
-        <TextView
-            android:id="@+id/at_status"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/toolbar_txtLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:text="Last seen recently"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp18"
-            android:layout_marginTop="@dimen/dp10"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="@id/at_name"
-            app:layout_constraintTop_toBottomOf="@id/at_name"
-            app:layout_constraintBottom_toBottomOf="@id/at_avatar"
-            />
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp6"
+            android:paddingRight="@dimen/dp6"
+            app:layout_constraintTop_toTopOf="@id/toolbar_avatar"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
+            app:layout_constraintStart_toEndOf="@id/toolbar_avatar"
+            app:layout_constraintEnd_toEndOf="@id/toolbar_background">
+
+            <net.iGap.module.EmojiTextViewE
+                android:id="@+id/toolbar_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/main_font"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="@dimen/largeTextSize"
+                app:autoSizeMaxTextSize="@dimen/xlargeTextSize"
+                android:singleLine="true"
+                android:gravity="left"
+                android:paddingLeft="@dimen/dp4"
+                app:emojiSize="@dimen/standardTextSize"/>
+
+            <net.iGap.module.EmojiTextViewE
+                android:id="@+id/toolbar_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/main_font"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="@dimen/smallTextSize"
+                app:autoSizeMaxTextSize="@dimen/standardTextSize"
+                android:singleLine="true"
+                android:gravity="left"
+                app:emojiSize="@dimen/verySmallTextSize"
+                android:paddingLeft="@dimen/dp4"
+                android:layout_marginTop="@dimen/dp4"
+                />
+
+        </LinearLayout>
+
 
     </android.support.constraint.motion.MotionLayout>
 </layout>

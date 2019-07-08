@@ -10,7 +10,7 @@
 
         <OnSwipe
             motion:dragDirection="dragUp"
-            motion:touchAnchorId="@id/apc_scroll_content"
+            motion:touchAnchorId="@id/scroll_content"
             motion:touchAnchorSide="top"/>
 
     </Transition>
@@ -18,7 +18,7 @@
     <ConstraintSet android:id="@+id/expanded">
 
         <Constraint
-            android:id="@+id/at_bg"
+            android:id="@+id/toolbar_background"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp200"
             motion:layout_constraintTop_toTopOf="parent"
@@ -31,57 +31,40 @@
         </Constraint>
         
         <Constraint
-            android:id="@+id/at_back"
+            android:id="@+id/toolbar_back"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="@dimen/dp10"
-            motion:layout_constraintTop_toTopOf="@id/at_bg"
-            motion:layout_constraintStart_toStartOf="@id/at_bg"
-            motion:layout_constraintBottom_toBottomOf="@id/at_bg"
-            motion:layout_constraintEnd_toEndOf="@id/at_bg"
+            motion:layout_constraintTop_toTopOf="@id/toolbar_background"
+            motion:layout_constraintStart_toStartOf="@id/toolbar_background"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_background"
             motion:layout_constraintHorizontal_bias="0"
             motion:layout_constraintVertical_bias="0"
             />
         
         <Constraint
-            android:id="@+id/at_avatar"
-            android:layout_width="@dimen/dp120"
-            android:layout_height="@dimen/dp120"
+            android:id="@+id/toolbar_avatar"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp100"
             android:layout_marginBottom="@dimen/dp10"
-            motion:layout_constraintTop_toBottomOf="@id/at_back"
-            motion:layout_constraintBottom_toBottomOf="@id/at_bg"
-            motion:layout_constraintStart_toStartOf="@id/at_bg"
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_back"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintStart_toStartOf="@id/toolbar_background"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginStart="@dimen/dp20"
             />
-        
+
         <Constraint
-            android:id="@+id/at_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/toolbar_txtLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:scaleX="1.0"
             android:scaleY="1.0"
-            android:translationX="0dp"
-            android:layout_marginTop="@dimen/dp16"
-            motion:layout_constraintVertical_chainStyle="packed"
-            motion:layout_constraintBottom_toTopOf="@id/at_status"
-            motion:layout_constraintStart_toEndOf="@id/at_avatar"
-            motion:layout_constraintTop_toTopOf="@id/at_avatar"
-            />
-        
-        <Constraint
-            android:id="@+id/at_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="1.0"
-            android:scaleY="1.0"
-            android:translationX="0dp"
-            android:layout_marginTop="@dimen/dp10"
-            android:layout_marginBottom="0dp"
-            motion:layout_constraintVertical_chainStyle="packed"
-            motion:layout_constraintStart_toStartOf="@id/at_name"
-            motion:layout_constraintTop_toBottomOf="@id/at_name"
-            motion:layout_constraintBottom_toBottomOf="@id/at_avatar"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
+            motion:layout_constraintTop_toTopOf="@id/toolbar_avatar"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_background"
             />
 
     </ConstraintSet>
@@ -89,7 +72,7 @@
     <ConstraintSet android:id="@+id/collapsed">
 
         <Constraint
-            android:id="@+id/at_bg"
+            android:id="@+id/toolbar_background"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp60"
             motion:layout_constraintTop_toTopOf="parent"
@@ -102,25 +85,24 @@
         </Constraint>
 
         <Constraint
-            android:id="@+id/at_back"
+            android:id="@+id/toolbar_back"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="0dp"
-            motion:layout_constraintTop_toTopOf="@id/at_bg"
-            motion:layout_constraintStart_toStartOf="@id/at_bg"
-            motion:layout_constraintBottom_toBottomOf="@id/at_bg"
-            motion:layout_constraintEnd_toEndOf="@id/at_bg"
+            motion:layout_constraintTop_toTopOf="@id/toolbar_background"
+            motion:layout_constraintStart_toStartOf="@id/toolbar_background"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_background"
             motion:layout_constraintHorizontal_bias="0"
             />
 
         <Constraint
-            android:id="@+id/at_avatar"
+            android:id="@+id/toolbar_avatar"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
-            motion:layout_constraintTop_toTopOf="@id/at_bg"
-            motion:layout_constraintBottom_toBottomOf="@id/at_bg"
-            motion:layout_constraintStart_toEndOf="@id/at_back"
-            motion:layout_constraintEnd_toStartOf="@id/at_name"
+            motion:layout_constraintTop_toTopOf="@id/toolbar_background"
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_back"
             android:layout_marginLeft="@dimen/dp6"
             android:layout_marginStart="@dimen/dp6"
             android:layout_marginBottom="0dp"
@@ -128,32 +110,15 @@
 
 
         <Constraint
-            android:id="@+id/at_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/toolbar_txtLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:scaleX="0.625"
             android:scaleY="0.625"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp20"
-            motion:layout_constraintVertical_chainStyle="packed"
-            motion:layout_constraintBottom_toTopOf="@id/at_status"
-            motion:layout_constraintStart_toEndOf="@id/at_avatar"
-            motion:layout_constraintTop_toTopOf="@id/at_avatar"
-            />
-
-        <Constraint
-            android:id="@+id/at_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="0.625"
-            android:scaleY="0.625"
-            android:layout_marginBottom="@dimen/dp20"
-            android:layout_marginTop="0dp"
-            motion:layout_constraintVertical_chainStyle="packed"
-            motion:layout_constraintStart_toStartOf="@id/at_name"
-            motion:layout_constraintTop_toBottomOf="@id/at_name"
-            motion:layout_constraintBottom_toBottomOf="@id/at_avatar"
-
+            motion:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
+            motion:layout_constraintStart_toEndOf="@id/toolbar_back"
+            motion:layout_constraintTop_toTopOf="@id/toolbar_avatar"
+            motion:layout_constraintEnd_toEndOf="@id/toolbar_edit"
             />
 
     </ConstraintSet>

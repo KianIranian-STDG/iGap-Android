@@ -24,11 +24,9 @@ import net.iGap.R;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
@@ -53,8 +51,6 @@ public class FragmentChannelProfile extends BaseFragment {
     private FragmentChannelProfileViewModel viewModel;
     private ActivityProfileChannelBinding binding;
     private CircleImageView imvChannelAvatar;
-    private TextView name ;
-    private TextView status ;
 
     public static FragmentChannelProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
@@ -85,50 +81,39 @@ public class FragmentChannelProfile extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HelperToolbar t = HelperToolbar.create().setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.edit_icon)
-                .setGroupProfile(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        showPopUp();
-                    }
-
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
-                        }
-                    }
-                });
-
        // binding.toolbar.addView(t.getView());
-        imvChannelAvatar = view.findViewById(R.id.at_avatar);
-        name = view.findViewById(R.id.at_name);
-        status = view.findViewById(R.id.at_status);
+        imvChannelAvatar = binding.toolbarAvatar ;
         imvChannelAvatar.setOnClickListener(v -> viewModel.onClickCircleImage());
 
-        viewModel.channelName.observe(this, s -> name.setText(s));
+        viewModel.channelName.observe(this, s -> binding.toolbarName.setText(s));
 
-        viewModel.channelSecondsTitle.observe(this, s -> status.setText(s));
-/*
+        viewModel.channelSecondsTitle.observe(this, s -> binding.toolbarStatus.setText(s));
+
         viewModel.menuPopupVisibility.observe(this, integer -> {
             if (integer != null) {
-                t.getRightButton().setVisibility(integer);
+                binding.toolbarMore.setVisibility(integer);
             }
         });
 
-        viewModel.editButtonVisibility.observe(this, visibility -> {
-            if (visibility != null) {
-                t.getSecondRightButton().setVisibility(visibility);
+        binding.toolbarEdit.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
             }
-        });*/
+        });
+
+        viewModel.editButtonVisibility.observe( this , state -> {
+            if (state != null){
+                binding.toolbarEdit.setVisibility(state);
+            }
+        });
+
+        binding.toolbarMore.setOnClickListener(v -> {
+            showPopUp();
+        });
+
+        binding.toolbarBack.setOnClickListener(v -> {
+            popBackStackFragment();
+        });
 
         viewModel.channelDescription.observe(this, description -> {
             if (getActivity() != null && description != null) {
