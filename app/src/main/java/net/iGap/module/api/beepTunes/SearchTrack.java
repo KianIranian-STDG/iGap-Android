@@ -4,19 +4,18 @@ import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
-public class SearchAlbum {
+public class SearchTrack {
 
     @Expose
-    private List<Datum> data;
+    private List<Track> data;
     @Expose
     private Pagination pagination;
 
-    public List<Datum> getData() {
+    public List<Track> getData() {
         return data;
     }
 
-    public void setData(List<Datum> data) {
+    public void setData(List<Track> data) {
         this.data = data;
     }
 

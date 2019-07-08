@@ -1,8 +1,12 @@
 package net.iGap.api;
 
-
+import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
-import net.iGap.module.api.beepTunes.SearchAlbum;
+import net.iGap.module.api.beepTunes.Albums;
+import net.iGap.module.api.beepTunes.Artist;
+import net.iGap.module.api.beepTunes.SearchArtist;
+import net.iGap.module.api.beepTunes.SearchTrack;
+import net.iGap.module.api.beepTunes.TrackInfo;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,13 +15,44 @@ import retrofit2.http.Query;
 public interface BeepTunesApi {
 
     @GET("search/album")
-    Call<SearchAlbum> getSearchAlbume(
+    Call<Albums> getSearchAlbum(
             @Query("q") String q,
             @Query("page") int page
     );
 
     @GET("album/tracks")
-    Call<AlbumTrack> getAlbumeTrack(
+    Call<AlbumTrack> getAlbumTrack(
             @Query("id") long id
+    );
+
+    @GET("album/info")
+    Call<Album> getAlbumInfo(
+            @Query("id") long id
+    );
+
+    @GET("search/track")
+    Call<SearchTrack> getSearchTrack(
+            @Query("q") String q,
+            @Query("page") int page);
+
+    @GET("track/info")
+    Call<TrackInfo> getTrackInfo(
+            @Query("id") long id
+    );
+
+    @GET("artist/albums")
+    Call<Albums> getArtistAlbums(
+            @Query("id") long id
+    );
+
+    @GET("artist/info")
+    Call<Artist> getArtistInfo(
+            @Query("id") long id
+    );
+
+    @GET("search/artist")
+    Call<SearchArtist> getSearchArtist(
+            @Query("q") String q,
+            @Query("page") int page
     );
 }
