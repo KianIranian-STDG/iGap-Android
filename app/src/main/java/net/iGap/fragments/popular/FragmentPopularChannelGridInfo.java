@@ -16,17 +16,16 @@ import net.iGap.adapter.items.popular.AdapterGridItem;
 import net.iGap.adapter.items.popular.AdapterSliderItem;
 import net.iGap.fragments.BaseFragment;
 
-public class FragmentPopularChannelChild extends BaseFragment {
+public class FragmentPopularChannelGridInfo extends BaseFragment {
     private RecyclerView recyclerViewSlider2;
     private RecyclerView recyclerViewGridItem2;
     private AdapterGridItem adapterGridItem2;
     private AdapterSliderItem adapterSliderItem2;
 
-
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_child, container, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_grid_info, container, false);
         recyclerViewSlider2 = view.findViewById(R.id.rv_fragment_popular_child_slider);
         recyclerViewSlider2.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         SnapHelper snapHelper = new PagerSnapHelper();

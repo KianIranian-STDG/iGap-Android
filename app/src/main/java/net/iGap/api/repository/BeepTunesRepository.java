@@ -41,7 +41,7 @@ public class BeepTunesRepository {
             public void onResponse(Call<AlbumTrack> call, Response<AlbumTrack> response) {
                 apiResponse.onResponse(response.body());
                 apiResponse.onFinish();
-                Log.i("aabolfazl", "onResponse: "+response.toString());
+                Log.i("aabolfazl", "onResponse: " + response.toString());
             }
 
             @Override
