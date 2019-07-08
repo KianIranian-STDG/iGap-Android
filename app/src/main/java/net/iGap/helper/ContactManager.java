@@ -53,11 +53,16 @@ public class ContactManager {
 
     private static void getIgapContact() {
         if (results == null) {
+            //todo : fixed query
             Realm realm = Realm.getDefaultInstance();
             results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
             contactSize = results.size();
             realm.close();
         }
+    }
+
+    public static int getContactSize() {
+        return results.size();
     }
 
 }
