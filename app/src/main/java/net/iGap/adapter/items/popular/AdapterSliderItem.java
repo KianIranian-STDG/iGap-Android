@@ -72,7 +72,9 @@ public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.Bo
         }
 
         public void bindImage(final Slider slider) {
-            imageView.setImageDrawable(slider.getSliderImage());
+            if(slider!=null) {
+                imageView.setImageDrawable(slider.getSliderImage());
+            }else itemView.setVisibility(View.GONE);
         }
     }
 

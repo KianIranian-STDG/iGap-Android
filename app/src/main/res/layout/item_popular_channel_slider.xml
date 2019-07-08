@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:adjustViewBounds="true"
     android:src="@drawable/image_sample">
+
 </ImageView>

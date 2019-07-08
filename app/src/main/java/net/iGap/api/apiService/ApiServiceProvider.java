@@ -1,13 +1,13 @@
 package net.iGap.api.apiService;
 
 import net.iGap.api.BeepTunesApi;
-import net.iGap.api.ChannelApi;
+import net.iGap.api.PopularChannelApi;
 
 public class ApiServiceProvider {
     private static RetrofitFactory factory = new RetrofitFactory();
 
     private static BeepTunesApi beepTunesApi;
-    private static ChannelApi channelApi;
+    private static PopularChannelApi channelApi;
 
     public static BeepTunesApi getBeepTunesClient() {
         if (beepTunesApi == null) {
@@ -16,9 +16,9 @@ public class ApiServiceProvider {
         return beepTunesApi;
     }
 
-    public static ChannelApi getChannelApi() {
+    public static PopularChannelApi getChannelApi() {
         if (channelApi == null) {
-            channelApi = factory.getRetrofit(ApiStatic.CHANNEL).create(ChannelApi.class);
+            channelApi = factory.getRetrofit(ApiStatic.CHANNEL).create(PopularChannelApi.class);
         }
         return channelApi;
     }

@@ -23,7 +23,7 @@ public class AdapterGridItem extends RecyclerView.Adapter<AdapterGridItem.Fragme
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
     public boolean clickable;
 
-    public AdapterGridItem(Context context,boolean clickable) {
+    public AdapterGridItem(Context context, boolean clickable) {
         this.context = context;
         this.clickable=clickable;
         Channel channel = new Channel();

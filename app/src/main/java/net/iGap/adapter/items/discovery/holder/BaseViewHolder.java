@@ -85,11 +85,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
-
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
-
         mLastClickTime = SystemClock.elapsedRealtime();
         handleDiscoveryFieldsClickStatic(discoveryField, activity);
     }

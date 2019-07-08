@@ -17,11 +17,11 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterChildLinearGridItem extends RecyclerView.Adapter<AdapterChildLinearGridItem.ChildGridItemViewHolder> {
+public class AdapterRowInfoItem extends RecyclerView.Adapter<AdapterRowInfoItem.ChildGridItemViewHolder> {
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
 
-    public AdapterChildLinearGridItem(Context context) {
+    public AdapterRowInfoItem(Context context) {
         this.context = context;
         Channel channel = new Channel();
         channel.setChannelImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
@@ -49,7 +49,7 @@ public class AdapterChildLinearGridItem extends RecyclerView.Adapter<AdapterChil
     @NonNull
     @Override
     public ChildGridItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid_linear_child, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_row_info, viewGroup, false);
         return new ChildGridItemViewHolder(view);
     }
 
