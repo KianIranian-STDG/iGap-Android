@@ -37,6 +37,14 @@ public class Utils {
         }
     }
 
+    public static void setShapeBackground(View view , int light , int dark){
+        if (G.isDarkTheme){
+            view.setBackgroundResource(dark);
+        }else {
+            view.setBackgroundResource(light);
+        }
+    }
+
     public static void setBackgroundColorGray(View view) {
         if (G.isDarkTheme) {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_300));
