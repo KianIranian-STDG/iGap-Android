@@ -81,7 +81,6 @@ public class FragmentChannelProfile extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-       // binding.toolbar.addView(t.getView());
         imvChannelAvatar = binding.toolbarAvatar ;
         imvChannelAvatar.setOnClickListener(v -> viewModel.onClickCircleImage());
 
