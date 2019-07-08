@@ -1170,14 +1170,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 setLastMessage(mInfo, holder, isMyCloud);
 
                 if (isMyCloud) {
-
+                    avatarHandler.removeImageViewFromHandler(holder.avatarIv);
                     holder.avatarIv.setImageResource(R.drawable.ic_cloud_space_blue);
 
                 } else {
                     if (holder.avatarIv.getVisibility() == View.GONE) {
                         holder.avatarIv.setVisibility(View.VISIBLE);
                     }
-                    holder.avatarIv.setImageResource(0);
                     setAvatar(mInfo, holder);
                 }
 
