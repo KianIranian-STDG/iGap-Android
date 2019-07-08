@@ -509,7 +509,7 @@ public class AvatarHandler {
 
         @Override
         public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-            if (progress == 100) {
+            if (progress >= 100) {
                 if (!(new File(filePath).exists())) {
                     HelperLog.setErrorLog(new Exception("After Download File Not Exist Bug. Please check" + filePath));
                 }
@@ -528,7 +528,7 @@ public class AvatarHandler {
                  * don't use offset in getting thumbnail
                  */
                 try {
-                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, fileSize, 0, RequestFileDownload.TypeDownload.AVATAR));
+                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR));
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
