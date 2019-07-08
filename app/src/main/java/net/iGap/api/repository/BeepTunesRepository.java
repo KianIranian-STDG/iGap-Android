@@ -19,87 +19,87 @@ public class BeepTunesRepository {
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
 
     public void getSearchAlbum(String q, int page, ApiResponse<Albums> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getSearchAlbum(q, page).enqueue(new Callback<Albums>() {
             @Override
             public void onResponse(Call<Albums> call, Response<Albums> response) {
                 apiResponse.onResponse(response.body());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
 
             @Override
             public void onFailure(Call<Albums> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
         });
     }
 
     public void getAlbumTrack(long id, ApiResponse<AlbumTrack> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getAlbumTrack(id).enqueue(new Callback<AlbumTrack>() {
             @Override
             public void onResponse(Call<AlbumTrack> call, Response<AlbumTrack> response) {
                 if (response.isSuccessful()) {
                     apiResponse.onResponse(response.body());
-                    apiResponse.onFinish();
+                    apiResponse.setProgressIndicator(false);
                 }
             }
 
             @Override
             public void onFailure(Call<AlbumTrack> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
         });
     }
 
     public void getAlbumInfo(long id, ApiResponse<Album> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getAlbumInfo(id).enqueue(new Callback<Album>() {
             @Override
             public void onResponse(Call<Album> call, Response<Album> response) {
                 apiResponse.onResponse(response.body());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
 
             @Override
             public void onFailure(Call<Album> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
         });
     }
 
     public void getSearchTrack(String q, int page, ApiResponse<SearchTrack> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getSearchTrack(q, page).enqueue(new Callback<SearchTrack>() {
             @Override
             public void onResponse(Call<SearchTrack> call, Response<SearchTrack> response) {
                 apiResponse.onResponse(response.body());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
 
             @Override
             public void onFailure(Call<SearchTrack> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
         });
     }
 
     public void getTrackInfo(long id, ApiResponse<TrackInfo> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getTrackInfo(id).enqueue(new Callback<TrackInfo>() {
             @Override
             public void onResponse(Call<TrackInfo> call, Response<TrackInfo> response) {
                 apiResponse.onResponse(response.body());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
 
             @Override
             public void onFailure(Call<TrackInfo> call, Throwable t) {
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
                 apiResponse.onFailed(t.getMessage());
             }
         });
@@ -110,52 +110,52 @@ public class BeepTunesRepository {
     }
 
     public void getArtistAlbums(long id, ApiResponse<Albums> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
             @Override
             public void onResponse(Call<Albums> call, Response<Albums> response) {
                 apiResponse.onResponse(response.body());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
 
             @Override
             public void onFailure(Call<Albums> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
         });
     }
 
     public void getArtistInfo(long id, ApiResponse<Artist> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getArtistInfo(id).enqueue(new Callback<Artist>() {
             @Override
             public void onResponse(Call<Artist> call, Response<Artist> response) {
                 apiResponse.onResponse(response.body());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
 
             @Override
             public void onFailure(Call<Artist> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
         });
     }
 
     public void getSearchArtist(String q, int page, ApiResponse<SearchArtist> apiResponse) {
-        apiResponse.onStart();
+        apiResponse.setProgressIndicator(true);
         apiService.getSearchArtist(q, page).enqueue(new Callback<SearchArtist>() {
             @Override
             public void onResponse(Call<SearchArtist> call, Response<SearchArtist> response) {
                 apiResponse.onResponse(response.body());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
 
             @Override
             public void onFailure(Call<SearchArtist> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
-                apiResponse.onFinish();
+                apiResponse.setProgressIndicator(false);
             }
         });
     }
