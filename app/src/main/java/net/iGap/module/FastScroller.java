@@ -31,7 +31,7 @@ public class FastScroller extends LinearLayout {
     private RecyclerView recyclerView;
 
     private static final int HANDLE_ANIMATION_DURATION = 100;
-    private static final int HANDLE_HIDE_DELAY = 1000;
+    private static final int HANDLE_HIDE_DELAY = 500;
     private static final int TRACK_SNAP_RANGE = 5;
 
     private final HandleHider handleHider = new HandleHider();
@@ -93,6 +93,7 @@ public class FastScroller extends LinearLayout {
             }
             recyclerView.setOnScrollListener(null);
             setRecyclerViewPosition(event.getY());
+            bubble.setSelected(true);
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             recyclerView.setOnScrollListener(scrollListener);
@@ -105,6 +106,7 @@ public class FastScroller extends LinearLayout {
     private class HandleHider implements Runnable {
         @Override
         public void run() {
+            bubble.setSelected(false);
             hideHandle();
         }
     }
@@ -136,6 +138,7 @@ public class FastScroller extends LinearLayout {
         int bubbleResId;
         int handleResId;
         if (G.isDarkTheme) {
+            handle.setTextColor(context.getResources().getColor(R.color.gray));
             bubbleResId = R.drawable.fastscroll_handle_dark;
             if (G.isAppRtl) {
                 handleResId = R.drawable.fastscroll_bubble_dark_left;
@@ -143,6 +146,7 @@ public class FastScroller extends LinearLayout {
                 handleResId = R.drawable.fastscroll_bubble_dark_right;
             }
         } else {
+            handle.setTextColor(context.getResources().getColor(R.color.white));
             bubbleResId = R.drawable.fastscroll_handle_light;
             if (G.isAppRtl) {
                 handleResId = R.drawable.fastscroll_bubble_light_left;

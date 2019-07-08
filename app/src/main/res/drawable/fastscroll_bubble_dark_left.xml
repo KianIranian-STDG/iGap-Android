@@ -3,12 +3,12 @@
     android:shape="rectangle">
 
     <corners
-        android:bottomLeftRadius="0dp"
+        android:bottomLeftRadius="8dp"
         android:bottomRightRadius="24dp"
         android:topLeftRadius="24dp"
         android:topRightRadius="24dp" />
 
-    <solid android:color="@color/md_green_400" />
+    <solid android:color="#394b4b" />
 
     <size
         android:width="48dp"

@@ -54,6 +54,7 @@ public class ContactManager {
 
 
         if (results == null) {
+            //todo : fixed query
             Realm realm = Realm.getDefaultInstance();
 //            realm.executeTransaction(realm1 -> {
 //                RealmContacts contacts = realm1.where(RealmContacts.class).sort(RealmContactsFields.DISPLAY_NAME).findFirst();
