@@ -16,14 +16,13 @@ import java.util.List;
 public class UserScoreViewModel extends ViewModel {
 
     public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
-
-    private MutableLiveData<String> userScore = new MutableLiveData<>();
-    private MutableLiveData<String> userRank = new MutableLiveData<>();
-    private MutableLiveData<String> totalRank = new MutableLiveData<>();
     public MutableLiveData<List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore>> ivandScore = new MutableLiveData<>();
     //ui
     public MutableLiveData<Integer> userScorePointer = new MutableLiveData<>();
     public MutableLiveData<Integer> userRankPointer = new MutableLiveData<>();
+    private MutableLiveData<String> userScore = new MutableLiveData<>();
+    private MutableLiveData<String> userRank = new MutableLiveData<>();
+    private MutableLiveData<String> totalRank = new MutableLiveData<>();
     private String of;
 
     public UserScoreViewModel() {
@@ -35,24 +34,7 @@ public class UserScoreViewModel extends ViewModel {
         userRank.setValue("0");
         totalRank.setValue(of + "0");
         //Todo:move to repository
-        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
-            @Override
-            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-                userScorePointer.postValue((score.getScore() % 1000) / 360);
-                userRankPointer.postValue((score.getUserRank() * 360) / score.getTotalRank());
-                userScore.postValue(String.valueOf(score.getScore()));
-                totalRank.postValue(of + score.getTotalRank());
-                userRank.postValue(String.valueOf(score.getUserRank()));
-                ivandScore.postValue(score.getScoresList());
-            }
-
-            @Override
-            public void onError() {
-                userScorePointer.postValue(0);
-                userRankPointer.postValue(0);
-                userScore.postValue(String.valueOf(-1));
-            }
-        });
+        getUserIVandScore();
     }
 
     public LiveData<String> getTotalRank() {
@@ -90,5 +72,29 @@ public class UserScoreViewModel extends ViewModel {
 
     public void onInviteClick() {
 
+    }
+
+    private void getUserIVandScore() {
+        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
+            @Override
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
+                userScorePointer.postValue((score.getScore() % 1000) / 360);
+                userRankPointer.postValue((score.getUserRank() * 360) / score.getTotalRank());
+                userScore.postValue(String.valueOf(score.getScore()));
+                totalRank.postValue(of + score.getTotalRank());
+                userRank.postValue(String.valueOf(score.getUserRank()));
+                ivandScore.postValue(score.getScoresList());
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                userScorePointer.postValue(0);
+                userRankPointer.postValue(0);
+                userScore.postValue(String.valueOf(-1));
+                if (major == 5 && minor == 1) {
+                    getUserIVandScore();
+                }
+            }
+        });
     }
 }

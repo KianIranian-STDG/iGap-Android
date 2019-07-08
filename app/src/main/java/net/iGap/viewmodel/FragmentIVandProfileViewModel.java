@@ -29,6 +29,15 @@ public class FragmentIVandProfileViewModel {
     public FragmentIVandProfileViewModel() {
     }
 
+    public static void scanBarCode(Activity activity) {
+        IntentIntegrator integrator = new IntentIntegrator(activity);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        integrator.setRequestCode(REQUEST_CODE_QR_IVAND_CODE);
+        integrator.setBeepEnabled(false);
+        integrator.setPrompt("");
+        integrator.initiateScan();
+    }
+
     private void initData() {
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         if (getRealm() != null) {
@@ -56,21 +65,16 @@ public class FragmentIVandProfileViewModel {
         goToIVandPage.setValue(true);
     }
 
-    public static void scanBarCode(Activity activity) {
-        IntentIntegrator integrator = new IntentIntegrator(activity);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.setRequestCode(REQUEST_CODE_QR_IVAND_CODE);
-        integrator.setBeepEnabled(false);
-        integrator.setPrompt("");
-        integrator.initiateScan();
-    }
-
     public void onDestroy() {
         mRealm.close();
     }
 
     public void onResume() {
         initData();
+        getIVandScore();
+    }
+
+    private void getIVandScore() {
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
@@ -83,8 +87,10 @@ public class FragmentIVandProfileViewModel {
             }
 
             @Override
-            public void onError() {
-
+            public void onError(int major, int minor) {
+                if (major == 5 && minor == 1) {
+                    getIVandScore();
+                }
             }
         });
     }
