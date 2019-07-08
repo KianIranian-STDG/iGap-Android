@@ -15,6 +15,7 @@
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutDirection="ltr"
         app:layoutDescription="@xml/profile_motion2">
 
         <android.support.v4.widget.NestedScrollView
@@ -22,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
+            android:layoutDirection="locale"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
