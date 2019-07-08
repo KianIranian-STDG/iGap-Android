@@ -27,8 +27,6 @@ import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
@@ -106,7 +104,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
                     .setLeftIcon(R.string.flag_icon)
-                    .setRightSmallAvatarShown(true)
+                   // .setRightSmallAvatarShown(true)
                     .setLogoShown(true)
                     .setFragmentActivity(getActivity())
                     .setPassCodeVisibility(true , R.string.unlock_icon)
@@ -186,7 +184,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         });
 
         //load user avatar in toolbar
-        avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        //avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
 
         layoutManager = new LinearLayoutManager(G.currentActivity);
