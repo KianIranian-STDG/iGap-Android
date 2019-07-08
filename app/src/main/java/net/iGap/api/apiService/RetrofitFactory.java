@@ -1,8 +1,5 @@
 package net.iGap.api.apiService;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
@@ -35,13 +32,9 @@ public class RetrofitFactory {
             return retrofit;
 
         } else if (clientType.equals(ApiStatic.CHANNEL)) {
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(ApiStatic.CHANNEL_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient)
                     .build();
             return retrofit;
