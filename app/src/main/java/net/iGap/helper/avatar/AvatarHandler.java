@@ -228,6 +228,9 @@ public class AvatarHandler {
     // ******************************************* End *********************************************
 
     public void removeImageViewFromHandler(ImageView avatarIv) {
+        if (avatarIv.getTag() == null)
+            return;
+
         HashSet<ImageView> imageViewHashSet = avatarHashImages.get((Long) avatarIv.getTag());
 
         if (imageViewHashSet != null) {
