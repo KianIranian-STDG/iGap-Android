@@ -14,10 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Selection;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -26,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,28 +39,22 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarDelete;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnGroupCheckUsername;
 import net.iGap.interfaces.OnGroupUpdateUsername;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.DeviceUtils;
-import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MEditText;
-import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
@@ -80,7 +71,6 @@ import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -137,46 +127,37 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HelperToolbar t = HelperToolbar.create().setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.edit_icon)
-                .setGroupProfile(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        viewModel.onClickRippleMenu();
-                    }
-
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
-                        }
-                    }
-                });
         // because actionbar not in this view do that and not correct in viewModel
-        binding.toolbar.addView(t.getView());
-        imvGroupAvatar = t.getGroupAvatar();
-        imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
+        imvGroupAvatar = binding.toolbarAvatar;
+        imvGroupAvatar.setOnClickListener(v -> binding.toolbarEdit.setVisibility(View.GONE));
 
-        viewModel.groupName.observe(this, s -> t.getGroupName().setText(s));
+        binding.toolbarEdit.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
+            }
+        });
 
-        viewModel.groupNumber.observe(this, s -> t.getGroupMemberCount().setText(String.format("%s %s", s, getString(R.string.member))));
+        binding.toolbarMore.setOnClickListener(v -> {
+            viewModel.onClickRippleMenu();
+        });
+
+        binding.toolbarBack.setOnClickListener(v -> {
+            popBackStackFragment();
+        });
+
+        viewModel.groupName.observe(this, s -> binding.toolbarName.setText(s));
+
+        viewModel.groupNumber.observe(this, s -> binding.toolbarStatus.setText(String.format("%s %s", s, getString(R.string.member))));
 
         viewModel.showMoreMenu.observe(this, isShow -> {
             if (isShow != null) {
-                t.getRightButton().setVisibility(isShow ? View.VISIBLE : View.GONE);
+                binding.toolbarMore.setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
 
         viewModel.showEditButton.observe(this, isShow -> {
             if (isShow != null) {
-                t.getSecondRightButton().setVisibility(isShow ? View.VISIBLE : View.GONE);
+                binding.toolbarEdit.setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
 

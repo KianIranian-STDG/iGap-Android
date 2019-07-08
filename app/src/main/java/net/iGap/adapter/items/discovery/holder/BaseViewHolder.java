@@ -30,6 +30,9 @@ import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.adapter.items.discovery.DiscoveryItem;
+import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.popular.FragmentPopularChannelParent;
 import net.iGap.helper.CardToCardHelper;
@@ -82,15 +85,31 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
+
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
-        mLastClickTime = SystemClock.elapsedRealtime();
-        new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
 
+        mLastClickTime = SystemClock.elapsedRealtime();
+        handleDiscoveryFieldsClickStatic(discoveryField, activity);
+    }
+
+    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+
+        if (discoveryField.agreementSlug != null && discoveryField.agreementSlug.length() > 1) {
+            if (!discoveryField.agreement) {
+                new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragmentAgreement.newInstance(discoveryField, discoveryField.agreementSlug)).setReplace(false).load();
+                return;
+            }
+        }
+
+        new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
-                actionPage(discoveryField.value);
+                actionPage(discoveryField.value, activity);
                 break;
             case JOIN_LINK:
                 int index = discoveryField.value.lastIndexOf("/");
@@ -125,7 +144,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
                 } else {
-                    new HelperFragment(activity.getSupportFragmentManager(), FragmentWebView.newInstance(discoveryField.value, !discoveryField.value.contains("igref=false"))).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(), FragmentWebView.newInstance(discoveryField.value, discoveryField.refresh, discoveryField.param)).setReplace(false).load();
                 }
                 break;
             case USERNAME_LINK:/** tested **/
@@ -275,7 +294,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case CALL: /** tested **/
-                dialPhoneNumber(activity, discoveryField.value);
+                dialPhoneNumber(activity, discoveryField.value, activity);
                 break;
             case SHOW_ALERT:/** tested **/
                 new MaterialDialog.Builder(activity).content(discoveryField.value).positiveText(R.string.dialog_ok)
@@ -309,11 +328,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void actionPage(String value) {
+    private static void actionPage(String value, FragmentActivity activity) {
         new HelperFragment(activity.getSupportFragmentManager(),DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
     }
 
-    public void dialPhoneNumber(Context context, String phoneNumber) {
+    public static void dialPhoneNumber(Context context, String phoneNumber, FragmentActivity activity) {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
         if (intent.resolveActivity(activity.getPackageManager()) != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

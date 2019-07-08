@@ -120,10 +120,9 @@ public class FragmentUserScore extends BaseFragment {
     private class IvandScoreAdapter extends RecyclerView.Adapter<IvandScoreAdapter.ViewHolder>{
 
         private List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore> items ;
-        private LayoutInflater inflater ;
 
         public IvandScoreAdapter() {
-            inflater = LayoutInflater.from(getContext());
+
         }
 
         public void setItems(List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore> items) {
@@ -133,7 +132,7 @@ public class FragmentUserScore extends BaseFragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            return new ViewHolder(inflater.inflate(R.layout.row_score_items , viewGroup , false));
+            return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_score_items , viewGroup , false));
         }
 
         @Override

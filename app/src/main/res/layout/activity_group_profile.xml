@@ -5,34 +5,27 @@
     <data>
 
         <import type="android.view.View" />
-
+        <import type="net.iGap.G" />
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentGroupProfileViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.constraint.motion.MotionLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/profile_motion2">
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scroll_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            app:layout_constraintTop_toBottomOf="@id/toolbar_background">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -425,19 +418,145 @@
                     app:layout_constraintEnd_toEndOf="@id/addMember"
                     app:layout_constraintTop_toBottomOf="@id/addMember" />
 
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.showLoading}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v4.widget.NestedScrollView>
 
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.showLoading}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <ImageView
+            android:id="@+id/toolbar_background"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp200"
+            android:scaleType="centerCrop"
+            android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default = @drawable/shape_toolbar_background}"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/toolbar_back"
+            style="@style/myIconToolbarStyle"
+            android:text="@string/back_icon"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="@id/toolbar_background"
+            app:layout_constraintStart_toStartOf="@id/toolbar_background"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintVertical_bias="0"
+            />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layout_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            app:layout_constraintTop_toTopOf="@id/toolbar_background"
+            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
+            >
+
+
+            <TextView
+                android:id="@+id/toolbar_more"
+                style="@style/myIconToolbarStyle"
+                android:text="@string/more_icon"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0"
+                />
+
+            <TextView
+                android:id="@+id/toolbar_edit"
+                style="@style/myIconToolbarStyle"
+                android:text="@string/edit_icon"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/toolbar_more"
+                app:layout_constraintVertical_bias="0"
+                />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <net.iGap.module.CircleImageView
+            android:id="@+id/toolbar_avatar"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp100"
+            android:layout_marginBottom="@dimen/dp10"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_back"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
+            app:layout_constraintStart_toStartOf="@id/toolbar_background"
+            android:layout_marginLeft="@dimen/dp20"
+            android:layout_marginStart="@dimen/dp20"/>
+
+
+        <LinearLayout
+            android:id="@+id/toolbar_txtLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp6"
+            android:paddingRight="@dimen/dp6"
+            app:layout_constraintTop_toTopOf="@id/toolbar_avatar"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
+            app:layout_constraintStart_toEndOf="@id/toolbar_avatar"
+            app:layout_constraintEnd_toEndOf="@id/toolbar_background">
+
+            <net.iGap.module.EmojiTextViewE
+                android:id="@+id/toolbar_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/main_font"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="@dimen/largeTextSize"
+                app:autoSizeMaxTextSize="@dimen/xlargeTextSize"
+                android:singleLine="true"
+                android:gravity="left"
+                android:paddingLeft="@dimen/dp4"
+                app:emojiSize="@dimen/standardTextSize"/>
+
+            <net.iGap.module.EmojiTextViewE
+                android:id="@+id/toolbar_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/main_font"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="@dimen/smallTextSize"
+                app:autoSizeMaxTextSize="@dimen/standardTextSize"
+                android:singleLine="true"
+                android:gravity="left"
+                app:emojiSize="@dimen/verySmallTextSize"
+                android:paddingLeft="@dimen/dp4"
+                android:layout_marginTop="@dimen/dp4"
+                />
+
+        </LinearLayout>
+
+    </android.support.constraint.motion.MotionLayout>
 </layout>

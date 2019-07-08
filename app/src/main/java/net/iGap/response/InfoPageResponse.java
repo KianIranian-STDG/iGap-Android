@@ -11,15 +11,17 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoInfoPage;
+import net.iGap.request.RequestInfoPage;
 
 public class InfoPageResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public InfoPageResponse(int actionId, Object protoClass, String identity) {
+    public InfoPageResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -32,18 +34,21 @@ public class InfoPageResponse extends MessageHandler {
         super.handler();
         ProtoInfoPage.InfoPageResponse.Builder infoPageResponse = (ProtoInfoPage.InfoPageResponse.Builder) message;
         String body = infoPageResponse.getBody();
-
-        switch (identity) {
-            case "TOS":
-                if (G.onReceivePageInfoTOS != null) {
-                    G.onReceivePageInfoTOS.onReceivePageInfo(body);
-                }
-                break;
-            case "WALLET_AGREEMENT":
-                if (G.onReceivePageInfoWalletAgreement != null) {
-                    G.onReceivePageInfoWalletAgreement.onReceivePageInfo(body);
-                }
-                break;
+        if (identity instanceof String) {
+            switch ((String) identity) {
+                case "TOS":
+                    if (G.onReceivePageInfoTOS != null) {
+                        G.onReceivePageInfoTOS.onReceivePageInfo(body);
+                    }
+                    break;
+                case "WALLET_AGREEMENT":
+                    if (G.onReceivePageInfoWalletAgreement != null) {
+                        G.onReceivePageInfoWalletAgreement.onReceivePageInfo(body);
+                    }
+                    break;
+            }
+        } else if (identity instanceof RequestInfoPage.OnInfoPage){
+            ((RequestInfoPage.OnInfoPage) identity).onInfo(body);
         }
     }
 
@@ -55,6 +60,12 @@ public class InfoPageResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        if (identity instanceof RequestInfoPage.OnInfoPage) {
+            ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+            int majorCode = errorResponse.getMajorCode();
+            int minorCode = errorResponse.getMinorCode();
+            ((RequestInfoPage.OnInfoPage) identity).onError(majorCode, minorCode);
+        }
     }
 }
 
