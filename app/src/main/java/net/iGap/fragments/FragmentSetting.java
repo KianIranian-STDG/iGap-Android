@@ -62,7 +62,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import io.realm.Realm;
-import ir.metrix.sdk.Metrix;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
@@ -100,8 +99,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Metrix.getInstance().newEvent("wthwa");
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);

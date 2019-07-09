@@ -32,8 +32,6 @@ import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 
-import ir.metrix.sdk.Metrix;
-
 public class DiscoveryFragment extends FragmentToolBarBack {
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
@@ -85,8 +83,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Metrix.getInstance().newEvent("qkslv");
-
         this.view = view;
         page = getArguments().getInt("page");
         if (page == 0) {

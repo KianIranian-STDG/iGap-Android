@@ -135,7 +135,6 @@ import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import ir.metrix.sdk.Metrix;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
@@ -467,7 +466,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_NEARBY_PAGE);
-        Metrix.getInstance().newEvent("vvcid");
         G.onLocationChanged = this;
         G.onGetNearbyCoordinate = this;
         G.onMapRegisterState = this;

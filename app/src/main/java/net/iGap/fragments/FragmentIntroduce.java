@@ -44,8 +44,6 @@ import net.iGap.module.CustomCircleImage;
 import net.iGap.request.RequestInfoLocation;
 import net.iGap.request.RequestInfoPage;
 
-import ir.metrix.sdk.Metrix;
-
 import static net.iGap.G.context;
 
 public class FragmentIntroduce extends BaseFragment {
@@ -85,7 +83,6 @@ public class FragmentIntroduce extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         goToProgram(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
-        Metrix.getInstance().newEvent("szlrq");
     }
 
     @Override

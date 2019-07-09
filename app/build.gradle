@@ -39,6 +39,7 @@ android {
         }
     }
 
+
     compileOptions {
         targetCompatibility 1.8 // never don't decrease it
         sourceCompatibility 1.8

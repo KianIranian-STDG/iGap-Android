@@ -70,7 +70,6 @@ import org.webrtc.voiceengine.WebRtcAudioUtils;
 import java.io.IOException;
 
 
-import ir.metrix.sdk.Metrix;
 
 import static android.bluetooth.BluetoothProfile.HEADSET;
 
@@ -256,11 +255,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         userId = getIntent().getExtras().getLong(USER_ID_STR);
         isIncomingCall = getIntent().getExtras().getBoolean(INCOMING_CALL_STR);
         callTYpe = (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE);
-        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            Metrix.getInstance().newEvent("dcsqk");
-        } else if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
-            Metrix.getInstance().newEvent("znfwd");
-        }
 
 
         ActivityCall.allowOpenCall = true;

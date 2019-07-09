@@ -16,8 +16,6 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentPaymentViewModel;
 
-import ir.metrix.sdk.Metrix;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -45,7 +43,6 @@ public class FragmentPayment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Metrix.getInstance().newEvent("dbbfk");
         HelperTracker.sendTracker(HelperTracker.TRACKER_FINANCIAL_SERVICES);
         initDataBinding(getArguments());
     }

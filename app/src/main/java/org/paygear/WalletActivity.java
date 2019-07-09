@@ -24,7 +24,6 @@ import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
-import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.app.NavigationBarActivity;
@@ -86,10 +85,10 @@ public class WalletActivity extends NavigationBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Metrix.getInstance().newEvent("yxhgb");
 
         Raad.language = selectedLanguage;
         Raad.isFA = G.isAppRtl;
+
         RelativeLayout navBarView = findViewById(R.id.nav_bar);
         navBarView.setVisibility(View.GONE);
 

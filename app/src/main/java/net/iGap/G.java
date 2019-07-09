@@ -25,7 +25,6 @@ import android.os.SystemClock;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.crashlytics.android.Crashlytics;
@@ -489,7 +488,7 @@ public class G extends MultiDexApplication {
         Metrix.initialize(this, "jpbnabzrmeqvxme");
 
         Metrix.getInstance().enableLogging(true);
-        Metrix.getInstance().setLogLevel(Log.DEBUG);
+//        Metrix.getInstance().setLogLevel(Log.DEBUG);
         Metrix.getInstance().setEventUploadPeriodMillis(30000);
 
         // not exist in dashboard
