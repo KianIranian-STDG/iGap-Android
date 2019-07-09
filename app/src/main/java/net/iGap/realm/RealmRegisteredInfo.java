@@ -222,8 +222,10 @@ public class RealmRegisteredInfo extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (realmRegisteredInfo != null) {
-            if (userStatus.toLowerCase().equals("offline") && !realmRegisteredInfo.getStatus().toLowerCase().equals("online"))
+            if (userStatus.toLowerCase().equals("offline") && !realmRegisteredInfo.getStatus().toLowerCase().equals("online")) {
+                realm.close();
                 return false;
+            }
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override

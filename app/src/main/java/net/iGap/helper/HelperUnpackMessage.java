@@ -70,7 +70,6 @@ public class HelperUnpackMessage {
             }
         } else {
             if (!G.requestQueueMap.containsKey(responseId)) {
-                Log.i("SOC", "HelperUnpackMessage responseId is not exist in requestQueueMap ");
                 return false;
             }
 

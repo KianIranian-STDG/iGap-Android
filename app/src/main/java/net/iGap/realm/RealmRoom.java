@@ -240,8 +240,6 @@ public class RealmRoom extends RealmObject {
         }
 
         realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), room.getDraft().getMessage(), room.getDraft().getReplyTo(), room.getDraft().getDraftTime()));
-        Log.i("CCCCCC", "2 put: " + realmRoom.getUpdatedTime());
-
 
         return realmRoom;
     }
@@ -896,6 +894,23 @@ public class RealmRoom extends RealmObject {
         return room;
     }
 
+    public static RealmRoom setCountWithCallBack(Realm realm, final long roomId, final int count) {
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            room.setUnreadCount(count);
+        }
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.onUnreadChange != null) {
+                    G.onUnreadChange.onChange();
+                }
+            }
+        }, 100);
+
+        return room;
+    }
+
     public static void setAction(final long roomId, final long userId, final String action) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -923,17 +938,9 @@ public class RealmRoom extends RealmObject {
                     realmRoom.setLastScrollPositionOffset(offset);
                 }
             }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                realm.close();
-            }
         });
+
+        realm.close();
     }
 
     public static void clearAllScrollPositions() {
@@ -997,7 +1004,7 @@ public class RealmRoom extends RealmObject {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
+                if (realmRoom != null && realmRoom.getLastMessage() != null) {
                     if (realmRoom.getLastMessage().getUpdateTime() == 0) {
                         realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
                     } else {
@@ -1005,17 +1012,8 @@ public class RealmRoom extends RealmObject {
                     }
                 }
             }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                realm.close();
-            }
         });
+        realm.close();
     }
 
     /**
@@ -1023,7 +1021,7 @@ public class RealmRoom extends RealmObject {
      */
     public static void clearAllActions() {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
@@ -1698,7 +1696,9 @@ public class RealmRoom extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         if (realmRoom != null) {
-            return realmRoom.isFromPromote();
+            boolean isPromote = realmRoom.isFromPromote();
+            realm.close();
+            return isPromote;
         }
         realm.close();
         return false;

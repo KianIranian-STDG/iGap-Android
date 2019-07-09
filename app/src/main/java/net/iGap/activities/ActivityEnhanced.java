@@ -21,14 +21,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.WindowManager;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -42,104 +39,92 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.proto.ProtoUserUpdateStatus;
-import net.iGap.request.RequestUserUpdateStatus;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+
+import static net.iGap.G.updateResources;
 
 
 public class ActivityEnhanced extends AppCompatActivity {
 
     public AvatarHandler avatarHandler;
-    protected boolean canSetUserStatus = true;
     public boolean isOnGetPermission = false;
-    BroadcastReceiver mybroadcast = new BroadcastReceiver() {
+    protected boolean canSetUserStatus = true;
+    BroadcastReceiver myBroadcast = new BroadcastReceiver() {
         //When Event is published, onReceive method is called
         @Override
         public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            Log.i("[BroadcastReceiver]", "MyReceiver");
-
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-//                if (G.isPassCode && !ActivityMain.isActivityEnterPassCode ) {
-//                    G.isFirstPassCode = true;
-//                    Intent i = new Intent(ActivityEnhanced.this, ActivityEnterPassCode.class);
-//                    startActivity(i);
-//                } else {
+            if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 if (G.isPassCode) ActivityMain.isLock = true;
-//                }
-
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             }
-
         }
     };
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         makeDirectoriesIfNotExist();
-
         G.currentActivity = this;
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        if (G.ISOK) {
+            avatarHandler = new AvatarHandler();
+            setThemeSetting();
 
-        avatarHandler = new AvatarHandler();
-        setThemeSetting();
+            checkFont();
 
+            IntentFilter screenStateFilter = new IntentFilter();
+            screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
+            screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+            registerReceiver(myBroadcast, screenStateFilter);
 
-        checkFont();
+            SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        IntentFilter screenStateFilter = new IntentFilter();
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mybroadcast, screenStateFilter);
+            boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
-
-        if (G.isPassCode && !allowScreen) {
-            try {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-            } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+            if (G.isPassCode && !allowScreen) {
+                try {
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                } catch (Exception e) {
+                    HelperLog.setErrorLog(e);
+                }
+            } else {
+                try {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                } catch (Exception e) {
+                    HelperLog.setErrorLog(e);
+                }
             }
-        } else {
-            try {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+
+            super.onCreate(savedInstanceState);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
             }
-        }
 
-        super.onCreate(savedInstanceState);
+            makeDirectoriesIfNotExist();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
-        }
+            boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+            if (!checkedEnableDataShams) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+            }
 
-        makeDirectoriesIfNotExist();
-
-        boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
-        if (!checkedEnableDataShams) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+            super.onCreate(savedInstanceState);
         }
 
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     private void setThemeSetting() {
@@ -251,52 +236,61 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        if (G.ISOK) {
+            if (!G.isAppInFg) {
+                G.isAppInFg = true;
+                G.isChangeScrFg = false;
 
-        if (!G.isAppInFg) {
-            G.isAppInFg = true;
-            G.isChangeScrFg = false;
-
-            /**
-             * if user isn't login and page come in foreground try for reconnect
-             */
-            if (!G.userLogin) {
-                WebSocketClient.reconnect(true);
+                /**
+                 * if user isn't login and page come in foreground try for reconnect
+                 */
+                if (!G.userLogin) {
+                    WebSocketClient.reconnect(true);
+                }
+            } else {
+                G.isChangeScrFg = true;
             }
+            G.isScrInFg = true;
+
+            AttachFile.isInAttach = false;
+            if (canSetUserStatus)
+                UserStatusController.getInstance().setOnline();
+
+            super.onStart();
+            avatarHandler.registerChangeFromOtherAvatarHandler();
         } else {
-            G.isChangeScrFg = true;
+            super.onStart();
         }
-        G.isScrInFg = true;
 
-        AttachFile.isInAttach = false;
-        if (canSetUserStatus)
-            UserStatusController.getInstance().setOnline();
-
-        super.onStart();
-        avatarHandler.registerChangeFromOtherAvatarHandler();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        avatarHandler.unregisterChangeFromOtherAvatarHandler();
+        if (G.ISOK) {
+            avatarHandler.unregisterChangeFromOtherAvatarHandler();
 
-        if (!G.isScrInFg || !G.isChangeScrFg) {
-            G.isAppInFg = false;
+            if (!G.isScrInFg || !G.isChangeScrFg) {
+                G.isAppInFg = false;
+            }
+            G.isScrInFg = false;
+            try {
+
+                HelperDataUsage.insertDataUsage(null, true, true);
+                HelperDataUsage.insertDataUsage(null, true, false);
+
+                HelperDataUsage.insertDataUsage(null, false, true);
+                HelperDataUsage.insertDataUsage(null, false, false);
+
+            } catch (Exception e) {
+            }
+            ;
+
+            if (!AttachFile.isInAttach && canSetUserStatus) {
+                UserStatusController.getInstance().setOffline();
+            }
         }
-        G.isScrInFg = false;
-        try{
 
-            HelperDataUsage.insertDataUsage(null, true, true);
-            HelperDataUsage.insertDataUsage(null, true, false);
-
-            HelperDataUsage.insertDataUsage(null, false, true);
-            HelperDataUsage.insertDataUsage(null, false, false);
-
-        }catch (Exception e){};
-
-        if (!AttachFile.isInAttach && canSetUserStatus) {
-            UserStatusController.getInstance().setOffline();
-        }
     }
 
     /**
@@ -367,28 +361,16 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mybroadcast);
+        if (G.ISOK) {
+            unregisterReceiver(myBroadcast);
+        }
     }
 
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        checkLanguage();
+        updateResources(getBaseContext());
     }
 
-    public void checkLanguage() {
-        try {
-            G.context = getApplicationContext();
-            String selectedLanguage = G.selectedLanguage;
-            if (selectedLanguage == null) return;
-            Locale locale = new Locale(selectedLanguage);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

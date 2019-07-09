@@ -1260,6 +1260,11 @@
     <string name="wimax_charging">WiMAX charge</string>
     <string name="permanently_charge">Charge permanent SIM cards</string>
 
+    <string name="get_gifts">Get Gift</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="unsuccessful">Failed</string>
+    <string name="disabled_qr_voucher">This voucher is disabled or used before. </string>
+
     <string name="charge_1"> 10,000 Rials</string>
     <string name="charge_2"> 20,000 Rials</string>
     <string name="charge_5"> 50,000 Rials</string>
@@ -1717,13 +1722,30 @@
     <string name="card_bank">Bank Card</string>
     <string name="paygear_card">Wallet Card</string>
     <string name="set_password">Set Password</string>
-    <string name="change_password">Change Password</string>
+    <string name="change_password">Change Wallet Password</string>
     <string name="text_forgot">Wallet password sent to you.
 (The password will expire after 2 minutes, please change it after retrieving it)</string>
     <string name="text_forgot_title">Resend Password</string>
-    <string name="Forgot_Passwords">Password recovery</string>
+    <string name="Forgot_Passwords">Wallet Password recovery</string>
     <string name="enter_your_province">select your province</string>
 
+    <string name="cashier">finance</string>
+    <string name="balance_low">Your wallet balance is not enough.please top-up it.</string>
+    <string name="admin">admin</string>
+    <string name="taxi_balance">Taxi Balance</string>
+    <string name="shop_balance">Shop Balance</string>
+    <string name="cashout_taxi">Cashout</string>
+    <string name="bank_card">‌Bank Card</string>
+    <string name="wallet_card">Wallet</string>
+
+    <string name="amount_to_pay">Amount to pay (Rials) :</string>
+    <string name="club_balance">Club card balance (Rials)</string>
+    <string name="wallet_balance">Wallet balance (Rials)</string>
+    <string name="total_amount">Total Amount (Rials) :</string>
+    <string name="discount_amount">Discount Amount (Rials) :</string>
+    <string name="personalAccountType">Personal</string>
+    <string name="taxiAccountType">Driver</string>
+    <string name="shopAccountType">Shop</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
@@ -1732,8 +1754,8 @@
     <string name="cash_to_wallet">to Personal wallet</string>
     <string name="person">person</string>
     <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">Enter Four digits code</string>
-    <string name="four_digit_code">Four digit code</string>
+    <string name="enter_four_digit_code">Enter Six digits code</string>
+    <string name="four_digit_code">Six digit code</string>
     <string name="show_receipt">مشاهده رسید</string>
     <string name="reciever_name">Receiver</string>
     <string name="date_time">date and time</string>
@@ -1749,6 +1771,10 @@
     <string name="card_to_card_message">Card to Card Message</string>
     <string name="payment_message">Payment Message</string>
 
+    <string name="available_merchants">See merchants that accepts this card</string>
+    <string name="available_merchants_title">See merchants that accepts this card</string>
+    <string name="balance_title">balance : </string>
+
     <string name="WALLET_TRANSFER_MONEY">Wallet Money Transfer</string>
     <string name="CARD_TRANSFER_MONEY">Card To Card Money Transfer</string>
     <string name="PAYMENT_TRANSFER_MONEY">Payment Money Transfer</string>
@@ -1762,4 +1788,5 @@
     <string name="amCardToCardIconText">Transfer Request</string>
     <string name="cardToCardBtnText">Card to Card</string>
     <string name="crad_to_card_dest_name">Account Owner Name</string>
+    <string name="location_dialog_message">Do you want to use your location?</string>
 </resources>

@@ -16,6 +16,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 
 import net.iGap.G;
+import net.iGap.helper.HelperTracker;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserRegister;
 
@@ -51,6 +52,8 @@ public class UserRegisterResponse extends MessageHandler {
         }
 
         Crashlytics.logException(new Exception("installationSource : " + installationSource));
+
+        HelperTracker.sendTracker(HelperTracker.TRACKER_SUBMIT_NUMBER);
     }
 
     @Override

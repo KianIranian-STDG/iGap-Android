@@ -29,6 +29,7 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -45,7 +46,7 @@ import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.paygear.wallet.WalletActivity;
+import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
@@ -78,12 +79,23 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
+
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
             return;
         }
 
         mLastClickTime = SystemClock.elapsedRealtime();
+        handleDiscoveryFieldsClickStatic(discoveryField);
+    }
 
+    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField) {
+
+        if (discoveryField.agreementSlug != null && discoveryField.agreementSlug.length() > 1) {
+            if (!discoveryField.agreement) {
+                new HelperFragment(DiscoveryFragmentAgreement.newInstance(discoveryField, discoveryField.agreementSlug)).setReplace(false).load();
+                return;
+            }
+        }
 
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
         switch (discoveryField.actionType) {
@@ -102,7 +114,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case WEB_LINK:/** tested **/
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                 int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
                 if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openBrowser(discoveryField.value);
@@ -123,7 +135,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
                 } else {
-                    new HelperFragment(FragmentWebView.newInstance(discoveryField.value)).setReplace(false).load();
+                    new HelperFragment(FragmentWebView.newInstance(discoveryField.value, discoveryField.refresh, discoveryField.param)).setReplace(false).load();
                 }
                 break;
             case USERNAME_LINK:/** tested **/
@@ -162,8 +174,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                     String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
                     if (!G.isWalletRegister) {
-                        new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
+                        if (discoveryField.value.equals("QR_USER_WALLET")) {
+                            new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2), true)).load();
+                        } else {
+                            new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2), false)).load();
+                        }
                     } else {
+
                         Intent intent = new Intent(G.context, WalletActivity.class);
                         intent.putExtra("Language", "fa");
                         intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
@@ -178,6 +195,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
                         intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                         intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                        if (discoveryField.value.equals("QR_USER_WALLET")) {
+                            intent.putExtra("isScan", true);
+                        } else {
+                            intent.putExtra("isScan", true);
+                        }
                         G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
                     }
                 } catch (Exception e) {
@@ -294,11 +316,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void actionPage(String value) {
+    private static void actionPage(String value) {
         new HelperFragment(DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
     }
 
-    public void dialPhoneNumber(Context context, String phoneNumber) {
+    public static void dialPhoneNumber(Context context, String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
         if (intent.resolveActivity(G.context.getPackageManager()) != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

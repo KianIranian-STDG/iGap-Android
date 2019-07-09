@@ -209,6 +209,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30619, "ProtoClientGetFavoriteMenu.ClientGetFavoriteMenuResponse");
         lookupMap.put(30620, "ProtoClientGetDiscovery.ClientGetDiscoveryResponse");
         lookupMap.put(30621, "ProtoClientSetDiscoveryItemClick.ClientSetDiscoveryItemClickResponse");
+        lookupMap.put(30623, "ProtoClientSetDiscoveryItemAgreement.ClientSetDiscoveryItemAgreementResponse");
 
         // FileUpload,Download 7xx , 307xx
         lookupMap.put(30700, "ProtoFileUploadOption.FileUploadOptionResponse");

@@ -315,7 +315,7 @@ public final class ContactUtils {
             HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
-                    final Realm realm = Realm.getDefaultInstance();
+                    Realm realm = Realm.getDefaultInstance();
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(final Realm realm) {
@@ -355,17 +355,8 @@ public final class ContactUtils {
                                 }
                             }, 500);
                         }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            realm.close();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            realm.close();
-                        }
                     });
+                    realm.close();
                 }
 
                 @Override

@@ -156,7 +156,6 @@ public class DirectPayHelper {
 
     public static void setResultOfDirectPay(String data, int retryCount, ProgressDialog dialogg, String messageToShow) {
 
-        Log.d("bagi", "setResultOfDirectPay" + retryCount);
         if (dialogg == null) {
             dialogg = ProgressDialog.show(G.currentActivity, "",
                     G.context.getString(R.string.please_wait), true);

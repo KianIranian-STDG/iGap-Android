@@ -85,6 +85,7 @@ public class RealmUserInfo extends RealmObject {
                 }
             }
         });
+        realm.close();
     }
 
     public static void sendPushNotificationToServer() {
@@ -96,6 +97,7 @@ public class RealmUserInfo extends RealmObject {
                 new RequestClientRegisterDevice().clientRegisterDevice(token);
             }
         }
+        realm.close();
     }
 
     public static void updateGender(final ProtoGlobal.Gender gender) {

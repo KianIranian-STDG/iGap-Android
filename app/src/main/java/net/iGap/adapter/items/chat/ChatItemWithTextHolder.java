@@ -33,14 +33,11 @@ public class ChatItemWithTextHolder extends ChatItemHolder {
         messageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("bagi" , "OnClickMessage" + FragmentChat.isInSelectionMode);
-
                 if (FragmentChat.isInSelectionMode) {
                     itemView.performLongClick();
                 } else {
                     mainContainer.performClick();
                 }
-
             }
         });
 

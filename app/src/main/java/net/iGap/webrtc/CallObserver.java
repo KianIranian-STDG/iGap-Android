@@ -17,6 +17,7 @@ import android.view.View;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityCall;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.helper.HelperError;
 import net.iGap.interfaces.ISignalingAccept;
@@ -245,7 +246,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override
     public void onErrore(int major, int minor) {
-
+        ActivityCall.allowOpenCall = false;
         String message = G.context.getString(R.string.e_call_permision);
 
         switch (major) {

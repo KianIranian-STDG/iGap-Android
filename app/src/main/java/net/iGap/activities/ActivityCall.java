@@ -47,6 +47,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
@@ -81,6 +82,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private static final int SENSOR_SENSITIVITY = 4;
 
     //public static TextView txtTimeChat, txtTimerMain;
+    public static boolean allowOpenCall = true;
     public static boolean isGoingfromApp = false;
     public static View stripLayoutChat;
     public static View stripLayoutMain;
@@ -177,6 +179,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
         canSetUserStatus = false;
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
@@ -260,6 +263,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         }
 
 
+        ActivityCall.allowOpenCall = true;
         try {
             HelperPermission.getMicroPhonePermission(this, new OnGetPermission() {
                 @Override
@@ -333,6 +337,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     }
 
     private void init() {
+        if (!ActivityCall.allowOpenCall) {
+            G.isInCall = false;
+            finish();
+            if (isIncomingCall) {
+                WebRTC.getInstance().leaveCall();
+            }
+        }
         WebRTC.getInstance().setCallType(callTYpe);
         //setContentView(R.layout.activity_call);
         activityCallBinding = DataBindingUtil.setContentView(ActivityCall.this, R.layout.activity_call);
@@ -894,7 +905,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
-        Log.i("#peymanProxy", "Activity call");
+
     }
 
     @Override
@@ -920,13 +931,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                /* int state = intent.getIntExtra("state", -1);
                 switch (state) {
                     case 0:
-                        Log.d("dddddd", "Headset is unplugged");
                         break;
                     case 1:
-                        Log.d("dddddd", "Headset is plugged");
                         break;
                     default:
-                        Log.d("dddddd", "I have no idea what the headset state is");
                 }
 
               */

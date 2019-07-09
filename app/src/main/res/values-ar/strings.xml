@@ -2173,6 +2173,11 @@
     <string name="wimax_charging">شحن وایمکس</string>
     <string name="permanently_charge">قم بشحن بطاقة  بشكل دائم</string>
 
+    <string name="get_gifts">دریافت هدیه</string>
+    <string name="congratulations">مبارک باشد</string>
+    <string name="unsuccessful">موفقیت آمیز نبود</string>
+    <string name="disabled_qr_voucher">متاسفانه این Qr قابل استفاده نیست یا قبلا استفاده شده است</string>
+
     <string name="charge_1"> 10.000 ریالی</string>
     <string name="charge_2"> 20.000 ریالی</string>
     <string name="charge_5"> 50.000 ریالی</string>
@@ -2670,11 +2675,28 @@
     <string name="card_bank">کارت بانک</string>
     <string name="paygear_card">کیف پول کارت</string>
     <string name="set_password">ثبت رمز عبور</string>
-    <string name="change_password">تغییر رمز عبور</string>
+    <string name="change_password">تغییر رمز عبور کیف پول</string>
     <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
 ( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
     <string name="text_forgot_title">ارسال مجدد رمز</string>
-    <string name="Forgot_Passwords">بازیابی رمز</string>
+    <string name="Forgot_Passwords">بازیابی رمز عبور کیف پول</string>
+    <string name="cashier">المالية</string>
+    <string name="admin">مشرف</string>
+    <string name="taxi_balance">موجودی تاکسی</string>
+    <string name="shop_balance">موجودی فروشگاه</string>
+    <string name="cashout_taxi">برداشت از موجودی</string>
+    <string name="balance_low">موجودی کیف پول شما کم است. موجودی کیف پول خود را افزایش دهید.</string>
+    <string name="bank_card">کارت بانکی</string>
+    <string name="wallet_card">کیف پول</string>
+    <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>
+    <string name="club_balance">موجودی کارت باشگاهی (ریال)</string>
+    <string name="wallet_balance">موجودی کیف پول (ریال)</string>
+    <string name="total_amount">مبلغ کل (ریال) :</string>
+    <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
+
+    <string name="personalAccountType">الشخصية</string>
+    <string name="taxiAccountType">سائق</string>
+    <string name="shopAccountType">متجر</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
@@ -2683,8 +2705,8 @@
     <string name="cash_to_wallet">to Personal wallet</string>
     <string name="person">person</string>
     <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">Enter Four digits code that we`ve sent to your phone number</string>
-    <string name="four_digit_code">Four digit code</string>
+    <string name="enter_four_digit_code">Enter Six digits code that we`ve sent to your phone number</string>
+    <string name="four_digit_code">Six digit code</string>
     <string name="show_receipt">مشاهده رسید</string>
     <string name="reciever_name">Receiver</string>
     <string name="date_time">date and time</string>
@@ -2700,6 +2722,10 @@
     <string name="card_to_card_message">بطاقة إلى رسالة بطاقة</string>
     <string name="payment_message">رسالة الدفع</string>
 
+    <string name="available_merchants">مشاهده فروشگاه های پذیرنده این کارت</string>
+    <string name="available_merchants_title">پذیرندگان این کارت</string>
+    <string name="balance_title">موجودی :</string>
+
     <string name="WALLET_TRANSFER_MONEY">محفظة تحويل الأموال</string>
     <string name="CARD_TRANSFER_MONEY">بطاقة إلى بطاقة تحويل الأموال</string>
     <string name="PAYMENT_TRANSFER_MONEY">دفع تحويل الأموال</string>
@@ -2714,4 +2740,5 @@
     <string name="cardToCardBtnText">بطاقة إلى بطاقة</string>
 
     <string name="crad_to_card_dest_name">اسم صاحب الحساب</string>
+    <string name="location_dialog_message">هل تريد استخدام موقعك؟</string>
 </resources>

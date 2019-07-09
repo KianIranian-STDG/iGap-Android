@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.helper.HelperTracker;
 import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmChannelRoom;
@@ -42,6 +43,7 @@ public class ChannelCreateResponse extends MessageHandler {
                 G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink(), identity);
             }
         }
+        HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_CHANNEL);
     }
 
     @Override

@@ -11,7 +11,6 @@
 package net.iGap;
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -50,8 +49,9 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
 
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.utils.Utils;
+import org.paygear.RaadApp;
+import org.paygear.model.Card;
+import org.paygear.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,6 +86,7 @@ public class G extends MultiDexApplication {
     public static final String IMAGE_USER = "/.image_user";
     public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static boolean ISOK = true;
     public static Context context;
     public static Handler handler;
     public static boolean isCalling = false;
@@ -418,7 +419,6 @@ public class G extends MultiDexApplication {
 
     public static OnCountryCode onCountryCode;
     //public static LocationListenerResponse locationListenerResponse;
-    private Tracker mTracker;
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {
@@ -483,6 +483,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
 
         Metrix.initialize(this, "jpbnabzrmeqvxme");
@@ -504,7 +505,6 @@ public class G extends MultiDexApplication {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         Raad.init(getApplicationContext());
-        Utils.setInstart(context, "fa");
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
 
         try {
@@ -531,14 +531,6 @@ public class G extends MultiDexApplication {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateResources(this);
-    }
-
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_track);
-        }
-        return mTracker;
+        updateResources(getBaseContext());
     }
 }

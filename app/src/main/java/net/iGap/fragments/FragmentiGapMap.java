@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.solver.widgets.Helper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,6 +68,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGeoCommentResponse;
@@ -464,6 +466,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_NEARBY_PAGE);
         Metrix.getInstance().newEvent("vvcid");
         G.onLocationChanged = this;
         G.onGetNearbyCoordinate = this;
@@ -1790,7 +1793,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
     @Override
     public void onShowPress(MotionEvent motionEvent) {
-        Log.i("TTT", "onShowPress");
+
     }
 
     @Override

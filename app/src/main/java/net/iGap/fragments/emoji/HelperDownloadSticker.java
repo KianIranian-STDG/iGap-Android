@@ -11,12 +11,12 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestFileDownload;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HelperDownloadSticker {
 
 
-    public static HashMap<String, UpdateStickerListener> hashMap = new HashMap<>();
+    public static ConcurrentHashMap<String, UpdateStickerListener> hashMap = new ConcurrentHashMap<>();
 
     public interface UpdateStickerListener {
         void OnProgress(String path, String token, int progress);

@@ -27,6 +27,7 @@ import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperTracker;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && !isInit) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_DISCOVERY_PAGE);
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

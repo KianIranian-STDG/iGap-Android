@@ -50,8 +50,6 @@ public final class MessageLoader {
      * @return Object[] ==> [0] -> ArrayList<StructMessageInfo>, [1] -> boolean hasMore, [2] -> boolean hasGap
      */
     public static Object[] getLocalMessage(Realm realm, long roomId, long messageId, long gapMessageId, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        //+Realm realm = Realm.getDefaultInstance();
-        Log.d("bagi" , "getLocalMessageCalled");
         boolean hasMore = true;
         boolean hasSpaceToGap = true;
         List<RealmRoomMessage> realmRoomMessages;
@@ -132,23 +130,17 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static void getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistory, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
-        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistory, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId, messageIdGetHistory, reachMessageId, direction));
+    public static String getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistoryNotSafe, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+        String requestId = new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistoryNotSafe, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId, messageIdGetHistoryNotSafe, reachMessageId, direction));
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
             @Override
 
-            public void onGetRoomHistory(final long roomId, final long startMessageId, final long endMessageId, final long reachMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction historyDirection) {
-                //Realm realmResponse;
-                //if (!realm.isClosed()) {
-                //    realmResponse = realm;
-                //} else {
-                //    realmResponse = Realm.getDefaultInstance();
-                //}
+            public void onGetRoomHistory(final long roomId, final long startMessageId, final long endMessageId, final long reachMessageId, long messageIdGetHistorySafe, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction historyDirection) {
                 /**
                  * convert message from RealmRoomMessage to StructMessageInfo for send to view
                  */
-
+                Realm realm = Realm.getDefaultInstance();
                 boolean gapReached = false;
                 boolean jumpOverLocal = false;
 
@@ -159,7 +151,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (startMessageId <= (long) gapExist(getRealmChat(), roomId, reachMessageId, UP)[0]) {
+                        if (startMessageId <= (long) gapExist(realm, roomId, reachMessageId, UP)[0]) {
                             jumpOverLocal = true;
                         }
                     }
@@ -170,7 +162,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (endMessageId >= (long) gapExist(getRealmChat(), roomId, reachMessageId, DOWN)[0]) {
+                        if (endMessageId >= (long) gapExist(realm, roomId, reachMessageId, DOWN)[0]) {
                             jumpOverLocal = true;
                         }
                     }
@@ -178,21 +170,20 @@ public final class MessageLoader {
 
                 final boolean gapReachedFinal = gapReached;
                 final boolean jumpOverLocalFinal = jumpOverLocal;
-                //+Realm realm = Realm.getDefaultInstance();
-                getRealmChat().executeTransactionAsync(new Realm.Transaction() {
+                long finalMessageId;
+                if (UP == historyDirection) {
+                    finalMessageId = startMessageId;
+                } else {
+                    finalMessageId = endMessageId;
+                }
+
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        long finalMessageId;
-                        if (UP == historyDirection) {
-                            finalMessageId = startMessageId;
-                        } else {
-                            finalMessageId = endMessageId;
-                        }
-
                         /**
                          * clear before state gap for avoid compute this message for gap state again
                          */
-                        clearGap(roomId, messageIdGetHistory, finalMessageId, historyDirection, realm);
+                        clearGap(roomId, messageIdGetHistorySafe, finalMessageId, historyDirection, realm);
 
                         /**
                          * if not reached to gap yet and exist reachMessageId
@@ -202,14 +193,25 @@ public final class MessageLoader {
                             setGap(finalMessageId, historyDirection, realm);
                         }
                     }
-                }, new Realm.Transaction.OnSuccess() {
+                });
+
+                Sort sort;
+                if (historyDirection == UP) {
+                    sort = Sort.DESCENDING;
+                } else {
+                    sort = Sort.ASCENDING;
+                }
+
+                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
+                List<RealmRoomMessage> list = realm.copyFromRealm(realmRoomMessages);
+                G.handler.post(new Runnable() {
                     @Override
-                    public void onSuccess() {
-                        onMessageReceive.onMessage(roomId, startMessageId, endMessageId, gapReachedFinal, jumpOverLocalFinal, historyDirection);
+                    public void run() {
+                        G.refreshRealmUi();
+                        onMessageReceive.onMessage(roomId, startMessageId, endMessageId, list, gapReachedFinal, jumpOverLocalFinal, historyDirection);
                     }
                 });
-                //realm.close();
-                //realmResponse.close();
+                realm.close();
             }
 
             @Override
@@ -242,6 +244,8 @@ public final class MessageLoader {
                 onMessageReceive.onError(majorCode, minorCode, messageIdGetHistory, direction);
             }
         };
+
+        return requestId;
     }
 
     //*********** detect gap in message
@@ -269,17 +273,17 @@ public final class MessageLoader {
          * detect message that have previousMessageId or futureMessageId
          */
         if (direction == UP) {
-            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, 0).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-            if (realmRoomMessages.size() > 0) {
-                realmRoomMessage = realmRoomMessages.first();
+            Number maxMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, 0).max(RealmRoomMessageFields.MESSAGE_ID);
+            if (maxMessageId != null) {
+                realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, (long) maxMessageId).findFirst();
                 if (realmRoomMessage != null) {
                     checkMessageId = realmRoomMessage.getPreviousMessageId();
                 }
             }
         } else {
-            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo("futureMessageId", 0).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
-            if (realmRoomMessages.size() > 0) {
-                realmRoomMessage = realmRoomMessages.first();
+            Number minMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.FUTURE_MESSAGE_ID, 0).min(RealmRoomMessageFields.MESSAGE_ID);
+            if (minMessageId != null) {
+                realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, (long) minMessageId).findFirst();
                 if (realmRoomMessage != null) {
                     checkMessageId = realmRoomMessage.getFutureMessageId();
                 }
@@ -413,7 +417,7 @@ public final class MessageLoader {
     /**
      * send message status to server
      */
-    public static void sendMessageStatus(long roomId, RealmResults<RealmRoomMessage> roomMessages, ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageStatus status, Realm realm) {
+    public static void sendMessageStatus(long roomId, List<RealmRoomMessage> roomMessages, ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageStatus status) {
         /**
          * send seen status to server when get message from server
          */

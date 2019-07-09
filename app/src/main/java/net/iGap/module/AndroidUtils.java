@@ -11,6 +11,7 @@
 package net.iGap.module;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperLog;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -45,6 +47,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public final class AndroidUtils {
     private AndroidUtils() throws InstantiationException {
@@ -578,5 +581,25 @@ public final class AndroidUtils {
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    }
+
+
+    /**
+     * check latest activity or base activity from latest open fragment currently is running or no.
+     * Hint: usage of this method is for related action to open activity. for example: open alert dialog,...
+     **/
+    public static Boolean isActivityRunning() {
+        if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {
+            return true;
+        } else if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
+            return true;
+        } else {
+            HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
+            return false;
+        }
+    }
+
+    public static boolean canOpenDialog(){
+        return isActivityRunning();
     }
 }

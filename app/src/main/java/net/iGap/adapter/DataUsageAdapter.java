@@ -41,7 +41,6 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private DataUsageListener clearData;
 
     public DataUsageAdapter(Context context, ArrayList<DataUsageStruct> dataList, long totalReceive, long totalSend, boolean connectivityType, DataUsageListener clearData) {
-        Log.i("WWW", "totalReceive: " + totalReceive);
         this.context = context;
         this.dataList = dataList;
         this.totalReceive = totalReceive;

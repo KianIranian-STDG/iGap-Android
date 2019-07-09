@@ -99,7 +99,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
     public static final String SELECTEDROLE = "SELECTED_ROLE";
     public static final String ISNEEDGETMEMBERLIST = "IS_NEED_GET_MEMBER_LIST";
     public static List<StructMessageInfo> lists = new ArrayList<>();
-    public static OnComplete infoUpdateListenerCount;
+    private OnComplete infoUpdateListenerCount;
     private static Fragment fragment;
     List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> listMembers = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
     List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> listMembersChannal = new ArrayList<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member>();
@@ -122,6 +122,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
     private boolean isDeleteMemberList = true;
     private ProtoGlobal.Room.Type roomType;
     private boolean isOne = true;
+    private Realm mRealm;
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         Bundle bundle = new Bundle();
@@ -151,7 +152,14 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mRealm = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_show_member, container, false));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mRealm.close();
     }
 
     @Override
@@ -282,7 +290,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                     listMembers.clear();
                     for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
                         listMembers.add(member);
-                        new RequestUserInfo().userInfo(member.getUserId(), "" + member.getUserId());
+                        new RequestUserInfo().userInfoWithCallBack(infoUpdateListenerCount, member.getUserId(), "" + member.getUserId());
                     }
                 } else {
                     G.handler.post(new Runnable() {
@@ -313,7 +321,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                     listMembersChannal.clear();
                     for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
                         listMembersChannal.add(member);
-                        new RequestUserInfo().userInfo(member.getUserId(), "" + member.getUserId());
+                        new RequestUserInfo().userInfoWithCallBack(infoUpdateListenerCount, member.getUserId(), "" + member.getUserId());
                     }
                 } else {
                     G.handler.post(new Runnable() {
@@ -447,7 +455,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
 
             @Override
             public void afterTextChanged(final Editable s) {
-                RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRoomID, s.toString());
+                RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRealm, mRoomID, s.toString());
                 mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -525,7 +533,8 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
         } else {
             role = RealmChannelRoom.detectMineRole(mRoomID).toString();
         }
-        RealmResults<RealmMember> realmMembers = RealmMember.filterRole(mRoomID, roomType, selectedRole);
+
+        RealmResults<RealmMember> realmMembers = RealmMember.filterRole(mRealm, mRoomID, roomType, selectedRole);
 
         if (realmMembers.size() > 0 && G.fragmentActivity != null) {
             mAdapter = new MemberAdapter(realmMembers, roomType, mMainRole, userID);
@@ -1155,6 +1164,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
                 s.userID = userId;
+                realm.close();
                 return s;
             }
 

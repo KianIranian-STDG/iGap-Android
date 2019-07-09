@@ -74,6 +74,7 @@ public class AvatarHandler {
 
     private final Object mutex;
     private final Object mutex2;
+    private static final Object mutex3 = new Object();
     private HashMap<Long, Boolean> mRepeatList = new HashMap<>();
     private ArrayList<String> reDownloadFiles = new ArrayList<>();
 
@@ -118,7 +119,7 @@ public class AvatarHandler {
     private void notifyMe(String avatarPath, long avatarId, boolean isMain, long fileId) {
         final Bitmap bmImg = BitmapFactory.decodeFile(avatarPath);
         if (bmImg != null) {
-            synchronized (mutex) {
+            synchronized (mutex3) {
                 ArrayList<Long> myLimitedList;
                 ConcurrentHashMap<Long, CacheValue> myAvatarCache;
                 int limit;
@@ -145,7 +146,8 @@ public class AvatarHandler {
                 }
             }
         } else {
-            HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain));
+            HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + new File(avatarPath).exists() +
+                    " FileSize=" + new File(avatarPath).length()));
         }
 
         G.handler.post(new Runnable() {
@@ -156,7 +158,7 @@ public class AvatarHandler {
                     if (imageViews != null) {
                         for (ImageView imageView : imageViews) {
                             ImageHashValue imageHashValue = imageViewHashValue.get(imageView);
-                            if (imageHashValue != null) {
+                            if (imageHashValue != null && bmImg != null) {
                                 imageView.setImageBitmap(bmImg);
                                 if (imageHashValue.onChangeAvatar != null)
                                     imageHashValue.onChangeAvatar.onChange(false);
@@ -226,6 +228,20 @@ public class AvatarHandler {
 
     // ******************************************* End *********************************************
 
+    public void removeImageViewFromHandler(ImageView avatarIv) {
+        if (avatarIv.getTag() == null)
+            return;
+
+        HashSet<ImageView> imageViewHashSet = avatarHashImages.get((Long) avatarIv.getTag());
+
+        if (imageViewHashSet != null) {
+            imageViewHashSet.remove(avatarIv);
+        }
+
+        imageViewHashValue.remove(avatarIv);
+        avatarIv.setTag(-1);
+    }
+
     public void getAvatar(BaseParam baseParam) {
 
         if (Looper.myLooper() != Looper.getMainLooper()) {
@@ -241,6 +257,8 @@ public class AvatarHandler {
         if (baseParam.imageView == null || baseParam.avatarId == null) {
             return;
         }
+
+        baseParam.imageView.setTag(baseParam.avatarId);
 
         synchronized (mutex) {
             Bitmap cacheValue = null;
@@ -333,9 +351,12 @@ public class AvatarHandler {
                 notifyAll(path, baseParam.avatarId, false, realmAvatar.getFile().getId());
             } else {
 
-                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
+                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
+                        if (!(new File(filepath).exists())) {
+                            HelperLog.setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                        }
 
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
                         final ArrayList<Long> fileIdList = new ArrayList<>();
@@ -505,11 +526,16 @@ public class AvatarHandler {
 
         @Override
         public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-            if (progress == 100) {
+            if (progress >= 100) {
+                if (!(new File(filePath).exists())) {
+                    HelperLog.setErrorLog(new Exception("After Download File Not Exist Bug. Please check" + filePath));
+                }
+
                 String _newPath = filePath.replace(G.DIR_TEMP, G.DIR_IMAGE_USER);
                 try {
                     AndroidUtils.cutFromTemp(filePath, _newPath);
                 } catch (IOException e) {
+                    HelperLog.setErrorLog(e);
                     e.printStackTrace();
                 }
 
@@ -519,7 +545,7 @@ public class AvatarHandler {
                  * don't use offset in getting thumbnail
                  */
                 try {
-                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, fileSize, 0, RequestFileDownload.TypeDownload.AVATAR));
+                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR));
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }

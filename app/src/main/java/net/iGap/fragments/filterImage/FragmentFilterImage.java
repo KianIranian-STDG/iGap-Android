@@ -14,7 +14,6 @@ package net.iGap.fragments.filterImage;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,8 +41,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentEditImage;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.ImageHelper;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 
 import java.io.File;
@@ -129,6 +128,7 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
             @Override
             public void onClick(View v) {
                 if (isChange) {
+                    if (!AndroidUtils.canOpenDialog()) {return;}
                     new MaterialDialog.Builder(G.fragmentActivity)
                             .title(R.string.tab_filters)
                             .content(R.string.filter_cancel_content)
@@ -136,9 +136,11 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-                                    if (FragmentEditImage.updateImage != null && path != null) {
-                                        FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
+                                    if (getActivity() != null) {
+                                        final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                                        if (FragmentEditImage.updateImage != null && path != null) {
+                                            FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
+                                        }
                                     }
                                     popBackStackFragment();
                                 }

@@ -8,7 +8,7 @@
     android:background="@color/disabled_text_light"
     android:clickable="true"
     android:orientation="vertical"
-    tools:context="org.paygear.wallet.fragment.PaymentHistoryFragment">
+    tools:context="org.paygear.fragment.PaymentHistoryFragment">
 
     <!--<android.support.v7.widget.CardView-->
     <!--android:layout_width="match_parent"-->

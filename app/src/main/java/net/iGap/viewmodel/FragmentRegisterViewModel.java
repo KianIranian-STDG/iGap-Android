@@ -56,6 +56,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnPushLoginToken;
@@ -68,6 +69,7 @@ import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.BotInit;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
@@ -1084,7 +1086,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             try {
                 userVerifyResponse(verificationCode);
                 ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
-                userVerify.setCode(Integer.parseInt(verificationCode));
+                userVerify.setCode(Integer.parseInt(verificationCode
+                        .replaceAll("[^0-9]", "")
+                        .replaceAll("[\u0000-\u001f]", "")));
                 userVerify.setUsername(userName);
 
                 RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
@@ -1276,8 +1280,10 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         imgVerifyServerVisibility.set(View.VISIBLE);
 
                         txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+                        BotInit.setCheckDrIgap(true);
 
                         if (newUser) {
+                            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1293,6 +1299,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             // get user info for set nick name and after from that go to ActivityMain
                             getUserInfo();
                             requestUserInfo();
+                            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);
                         }
                         realm.close();
                     }
@@ -1336,6 +1343,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     @Override
                     public void execute(Realm realm) {
                         G.displayName = user.getDisplayName();
+                        G.userId = user.getId();
 
                         RealmUserInfo.putOrUpdate(realm, user);
 
