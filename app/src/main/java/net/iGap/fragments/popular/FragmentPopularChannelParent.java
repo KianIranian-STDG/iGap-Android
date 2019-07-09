@@ -25,7 +25,7 @@ import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.module.api.popularChannel.ParentChannel;
+import net.iGap.module.api.PopularChannel.ParentChannel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -142,7 +142,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
                 for (int i = 0; i < response.body().getData().get(i).getType().length(); i++) {
                     if (response.body().getData().get(i).getType() == "advertisement") {
-                        adapterSliderItemTop.setSliderList(response.body().getData().get(i).getSlides());
+
                     }
                 }
                 Log.i("nazanin", "onResponse: " + response.body().getData().size());

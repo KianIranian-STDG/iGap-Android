@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
-import net.iGap.module.api.popularChannel.Slide;
+import net.iGap.module.api.PopularChannel.Slide;
 
 import java.util.ArrayList;
 import java.util.List;

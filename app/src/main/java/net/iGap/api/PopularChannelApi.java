@@ -1,7 +1,7 @@
 package net.iGap.api;
 
 
-import net.iGap.module.api.popularChannel.ParentChannel;
+import net.iGap.module.api.PopularChannel.ParentChannel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
