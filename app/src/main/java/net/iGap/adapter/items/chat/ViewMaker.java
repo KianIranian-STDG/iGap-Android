@@ -902,6 +902,16 @@ public class ViewMaker {
         linearLayout_205.setLayoutParams(layout_218);
         linearLayout_205.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
+        CheckBox checkBox = new CheckBox(G.context);
+        checkBox.setId(R.id.fcsl_check_box);
+        checkBox.setVisibility(View.GONE);
+        checkBox.setButtonDrawable(R.drawable.check_box_background);
+        LinearLayout.LayoutParams lp_checkBox = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp_checkBox.setMargins(i_Dp(R.dimen.dp10), 0 , i_Dp(R.dimen.dp4), 0);
+        lp_checkBox.gravity = Gravity.CENTER;
+        checkBox.setLayoutParams(lp_checkBox);
+        linearLayout_205.addView(checkBox);
+
         CircleImageView fcsl_imv_picture = new CircleImageView(G.context);
         fcsl_imv_picture.setId(R.id.fcsl_imv_picture);
         LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));

@@ -5,6 +5,15 @@
     android:layout_height="wrap_content"
     android:clickable="true">
 
+    <CheckBox
+        android:id="@+id/fcsl_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:button="@drawable/check_box_background"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp4"/>
 
     <net.iGap.module.CircleImageView
         android:id="@+id/fcsl_imv_picture"
@@ -44,8 +53,8 @@
                     android:text="Name"
                     android:textSize="@dimen/dp15"
                     android:textStyle="bold" />
-
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">

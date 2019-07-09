@@ -13,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -36,6 +38,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
+import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
@@ -78,6 +81,10 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private CallAdapter callAdapter;
     private Realm mRealm;
     private HelperToolbar mHelperToolbar;
+    private boolean mIsMultiSelectEnable = false ;
+    private List<RealmCallLog> mSelectedLogList = new ArrayList<>();
+    private ViewGroup mMultiSelectLayout , mFiltersLayout ;
+    private TextView mBtnDeleteAllLogs , mBtnDeleteLog;
 
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
@@ -135,7 +142,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.more_icon)
+                .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
                 .setFragmentActivity(getActivity())
                 .setPassCodeVisibility(true , R.string.unlock_icon)
@@ -163,6 +170,10 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         empty_call = view.findViewById(R.id.textEmptyCal);
         progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
+        mMultiSelectLayout = view.findViewById(R.id.fc_layout_multi_select);
+        mFiltersLayout = view.findViewById(R.id.fc_layout_filters);
+        mBtnDeleteAllLogs = view.findViewById(R.id.fc_btn_remove_all);
+        mBtnDeleteLog = view.findViewById(R.id.fc_btn_delete);
 
         setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
 
@@ -190,6 +201,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         realmResults = getRealmResult(mSelectedStatus, realm);
         realm.close();
 
+        realmResults.addChangeListener((realmCallLogs, changeSet) -> {
+            checkListIsEmpty();
+        });
         checkListIsEmpty();
 
         callAdapter = new CallAdapter(realmResults);
@@ -327,6 +341,68 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             }
 
         });
+
+        //clear all logs
+        mBtnDeleteAllLogs.setOnClickListener(v -> {
+            if (G.userLogin) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                        positiveText(R.string.B_ok).onPositive((dialog, which) -> {
+                    Realm realm_ = Realm.getDefaultInstance();
+                    try {
+                        setViewState(false);
+                        RealmCallLog realmCallLog = realm_.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL);
+                        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                        mSelectedLogList.clear();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        realm_.close();
+                    }
+                }).negativeText(R.string.B_cancel).show();
+            } else {
+                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+            }
+
+        });
+
+        //clear selected logs
+        mBtnDeleteLog.setOnClickListener(v -> {
+
+            if (mSelectedLogList.size() == 0 ) {
+                Toast.makeText(_mActivity, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (G.userLogin) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
+
+                    Realm realm_ = Realm.getDefaultInstance();
+                    try {
+                        for(int i = 0 ; i<mSelectedLogList.size() ; i++) {
+                            new RequestSignalingClearLog().signalingClearLog(mSelectedLogList.get(i).getLogId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.SINGLE);
+                        }
+                        setViewState(false);
+
+                        mSelectedLogList.clear();
+
+                        if (realmResults.size() == 0 ){
+                            view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        realm_.close();
+                    }
+
+
+                }).negativeText(R.string.B_cancel).show();
+            } else {
+                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+            }
+
+        });
     }
 
     private void checkListIsEmpty() {
@@ -425,7 +501,47 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
     @Override
     public void onLeftIconClickListener(View view) {
-        openDialogMenu();
+
+        mSelectedLogList.clear();
+        if (realmResults.size() == 0 ) {
+            Toast.makeText(_mActivity, getString(R.string.empty_call), Toast.LENGTH_SHORT).show();
+            if (mIsMultiSelectEnable) setViewState(false);
+            return;
+        }
+        setViewState(!mIsMultiSelectEnable);
+    }
+
+    private void setViewState(boolean state){
+
+        if (!state){
+
+            mIsMultiSelectEnable = false;
+            mHelperToolbar.setLeftIcon(R.string.edit_icon);
+
+            mFiltersLayout.setVisibility(View.VISIBLE);
+            mMultiSelectLayout.setVisibility(View.GONE);
+
+            mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+            if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+
+            refreshCallList(0 , true);
+
+        }else {
+
+            mIsMultiSelectEnable = true ;
+            mHelperToolbar.setLeftIcon(R.string.back_icon);
+
+            mFiltersLayout.setVisibility(View.GONE);
+            mMultiSelectLayout.setVisibility(View.VISIBLE);
+
+            mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+            if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+
+            refreshCallList(0 , true);
+
+        }
     }
 
     @Override
@@ -446,7 +562,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     Realm realm = Realm.getDefaultInstance();
                     try {
                         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL);
                         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -497,6 +613,17 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
     }
 
+
+    private void refreshCallList(int pos, boolean isRefreshAll) {
+
+        if (isRefreshAll) {
+            callAdapter.notifyDataSetChanged();
+        } else {
+            callAdapter.notifyItemChanged(pos);
+        }
+
+    }
+
     /**
      * **********************************************************************************
      * ********************************** RealmAdapter **********************************
@@ -526,6 +653,26 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 return;
             }
             // set icon and icon color
+
+            if (mIsMultiSelectEnable) {
+                viewHolder.checkBox.setVisibility(View.VISIBLE);
+
+                try{
+
+                    if ( mSelectedLogList.contains(item)){
+                        viewHolder.checkBox.setChecked(true);
+                    }else {
+                        viewHolder.checkBox.setChecked(false);
+                    }
+
+                }catch (Exception e){
+
+                }
+
+            }else {
+                viewHolder.checkBox.setVisibility(View.GONE);
+                viewHolder.checkBox.setChecked(false);
+            }
 
             switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
                 case OUTGOING:
@@ -584,6 +731,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             private MaterialDesignTextView icon;
             private TextView timeAndInfo;
             private TextView timeDuration;
+            private CheckBox checkBox ;
 
             public ViewHolder(View view) {
                 super(view);
@@ -597,12 +745,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 name = itemView.findViewById(R.id.fcsl_txt_name);
                 icon = itemView.findViewById(R.id.fcsl_txt_icon);
                 timeAndInfo = itemView.findViewById(R.id.fcsl_txt_time_info);
+                checkBox = itemView.findViewById(R.id.fcsl_check_box);
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                itemView.setOnClickListener(v -> {
 
-                        // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getLogProto().getPeer().getId(), null, null);
+                    if (mIsMultiSelectEnable){
+
+                        multiSelectHandler(getItem(getAdapterPosition()) , getAdapterPosition() , !checkBox.isChecked());
+
+                    }else {
 
                         if (canclick) {
                             long userId = callLog.getUser().getId();
@@ -612,6 +763,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                                 callSelectFragment.show(getFragmentManager(), null);
                             }
                         }
+
                     }
                 });
 
@@ -635,6 +787,17 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                         return false;
                     }
                 });
+            }
+
+            private void multiSelectHandler(RealmCallLog item,int pos , boolean checked) {
+
+                if (checked){
+                    mSelectedLogList.add(item);
+                }else {
+                    mSelectedLogList.remove(item);
+                }
+
+                refreshCallList(pos , false);
             }
         }
     }

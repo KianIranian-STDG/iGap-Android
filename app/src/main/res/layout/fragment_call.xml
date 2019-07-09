@@ -14,43 +14,130 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <HorizontalScrollView
-        android:id="@+id/v"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/fc_top_buttons"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layoutDirection="locale"
-        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fc_layout_toolbar">
 
-        <LinearLayout
-            android:id="@+id/fc_layout_calls_filter"
-            android:layout_width="wrap_content"
+        <HorizontalScrollView
+            android:id="@+id/fc_layout_filters"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layoutDirection="locale"
-            android:orientation="horizontal">
+            android:scrollbars="none">
 
-            <TextView
-                android:id="@+id/fc_btn_all_calls"
+            <LinearLayout
+                android:id="@+id/fc_layout_calls_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/round_button_enabled_bg"
                 android:gravity="center"
-                android:minWidth="@dimen/round_button_max_width"
-                android:paddingLeft="@dimen/round_buttons_large_padding"
-                android:paddingTop="@dimen/round_buttons_small_padding"
-                android:paddingRight="@dimen/round_buttons_large_padding"
-                android:paddingBottom="@dimen/round_buttons_small_padding"
-                android:singleLine="true"
-                android:text="@string/all"
-                android:textColor="@color/white"
-                android:textSize="@dimen/smallTextSize" />
+                android:layoutDirection="locale"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fc_btn_all_calls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/round_buttons_margin"
+                    android:background="@drawable/round_button_enabled_bg"
+                    android:gravity="center"
+                    android:minWidth="@dimen/round_button_max_width"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingTop="@dimen/round_buttons_small_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
+                    android:paddingBottom="@dimen/round_buttons_small_padding"
+                    android:singleLine="true"
+                    android:text="@string/all"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/smallTextSize" />
+
+                <TextView
+                    android:id="@+id/fc_btn_missed_calls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/round_buttons_margin"
+                    android:background="@drawable/round_button_disabled_bg"
+                    android:gravity="center"
+                    android:minWidth="@dimen/round_button_max_width"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingTop="@dimen/round_buttons_small_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
+                    android:paddingBottom="@dimen/round_buttons_small_padding"
+                    android:singleLine="true"
+                    android:text="@string/missed"
+                    android:textColor="@color/gray_4c"
+                    android:textSize="@dimen/smallTextSize" />
+
+
+                <TextView
+                    android:id="@+id/fc_btn_incoming_calls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/round_buttons_margin"
+                    android:background="@drawable/round_button_disabled_bg"
+                    android:gravity="center"
+                    android:minWidth="@dimen/round_button_max_width"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingTop="@dimen/round_buttons_small_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
+                    android:paddingBottom="@dimen/round_buttons_small_padding"
+                    android:singleLine="true"
+                    android:text="@string/incoming"
+                    android:textColor="@color/gray_4c"
+                    android:textSize="@dimen/smallTextSize" />
+
+                <TextView
+                    android:id="@+id/fc_btn_canceled_calls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/round_buttons_margin"
+                    android:background="@drawable/round_button_disabled_bg"
+                    android:gravity="center"
+                    android:minWidth="@dimen/round_button_max_width"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingTop="@dimen/round_buttons_small_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
+                    android:paddingBottom="@dimen/round_buttons_small_padding"
+                    android:singleLine="true"
+                    android:text="@string/canceled"
+                    android:textColor="@color/gray_4c"
+                    android:textSize="@dimen/smallTextSize" />
+
+
+                <TextView
+                    android:id="@+id/fc_btn_outgoing_calls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/round_buttons_margin"
+                    android:background="@drawable/round_button_disabled_bg"
+                    android:gravity="center"
+                    android:minWidth="@dimen/round_button_max_width"
+                    android:paddingLeft="@dimen/round_buttons_large_padding"
+                    android:paddingTop="@dimen/round_buttons_small_padding"
+                    android:paddingRight="@dimen/round_buttons_large_padding"
+                    android:paddingBottom="@dimen/round_buttons_small_padding"
+                    android:singleLine="true"
+                    android:text="@string/outgoing"
+                    android:textColor="@color/gray_4c"
+                    android:textSize="@dimen/smallTextSize" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/fc_layout_multi_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layoutDirection="locale"
+            android:visibility="gone">
 
             <TextView
-                android:id="@+id/fc_btn_missed_calls"
+                android:id="@+id/fc_btn_remove_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/round_buttons_margin"
@@ -62,13 +149,12 @@
                 android:paddingRight="@dimen/round_buttons_large_padding"
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
-                android:text="@string/missed"
+                android:text="@string/delete_all"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/smallTextSize" />
 
-
             <TextView
-                android:id="@+id/fc_btn_incoming_calls"
+                android:id="@+id/fc_btn_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/round_buttons_margin"
@@ -80,48 +166,13 @@
                 android:paddingRight="@dimen/round_buttons_large_padding"
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
-                android:text="@string/incoming"
-                android:textColor="@color/gray_4c"
-                android:textSize="@dimen/smallTextSize" />
-
-            <TextView
-                android:id="@+id/fc_btn_canceled_calls"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/round_button_disabled_bg"
-                android:gravity="center"
-                android:minWidth="@dimen/round_button_max_width"
-                android:paddingLeft="@dimen/round_buttons_large_padding"
-                android:paddingTop="@dimen/round_buttons_small_padding"
-                android:paddingRight="@dimen/round_buttons_large_padding"
-                android:paddingBottom="@dimen/round_buttons_small_padding"
-                android:singleLine="true"
-                android:text="@string/canceled"
-                android:textColor="@color/gray_4c"
-                android:textSize="@dimen/smallTextSize" />
-
-
-            <TextView
-                android:id="@+id/fc_btn_outgoing_calls"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/round_button_disabled_bg"
-                android:gravity="center"
-                android:minWidth="@dimen/round_button_max_width"
-                android:paddingLeft="@dimen/round_buttons_large_padding"
-                android:paddingTop="@dimen/round_buttons_small_padding"
-                android:paddingRight="@dimen/round_buttons_large_padding"
-                android:paddingBottom="@dimen/round_buttons_small_padding"
-                android:singleLine="true"
-                android:text="@string/outgoing"
+                android:text="@string/delete"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/smallTextSize" />
 
         </LinearLayout>
 
-    </HorizontalScrollView>
+    </RelativeLayout>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/img_icCall"
@@ -162,7 +213,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/v" />
+        app:layout_constraintTop_toBottomOf="@id/fc_top_buttons" />
 
     <ProgressBar
         android:id="@+id/pb_load"

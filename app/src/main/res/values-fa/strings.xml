@@ -988,7 +988,8 @@
     <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، ‫ تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
     <string name="nothing">چیزی نیست!</string>
-    <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس های ورودی و خروجی اطمینان دارید؟</string>
+    <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس ها اطمینان دارید؟</string>
+    <string name="are_you_sure_clear_call_log">آیا از حذف  تماس های انتخاب شده اطمینان دارید؟</string>
     <string name="please_write_your_reasons">لطفاً دلیل خود را بنویسید</string>
     <string name="error_check_password">به دلیل تلاش پیاپی، رمزعبور برای مدتی غیرفعال است.</string>
 
@@ -1901,6 +1902,7 @@
     <string name="tablet_empty_chat_description">Get Started  Welcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
     <string name="make_call">ایجاد تماس</string>
     <string name="create_chat">ایجاد گفتگو</string>
+    <string name="delete_all">حذف همه</string>
 
 
 </resources>
