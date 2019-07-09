@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Group;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.AppCompatTextView;
@@ -35,7 +34,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -55,8 +53,8 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
-import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.FastScroller;
+import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.ScrollingLinearLayoutManager;
@@ -744,7 +742,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText("+" + contact.getPhone());
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(),contact.getLast_seen(),false));
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
