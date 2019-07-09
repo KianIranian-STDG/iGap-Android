@@ -28,6 +28,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
@@ -483,6 +484,7 @@ public class G extends Application {
 
     @Override
     public void onCreate() {
+        Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate();
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
@@ -523,7 +525,7 @@ public class G extends Application {
             WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
         } catch (Exception e) {
         }*/
-
+        Log.wtf(this.getClass().getName(), "onCreate");
     }
 
     @Override

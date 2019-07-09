@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,7 @@ import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.ViewPagerAdapter;
-import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
@@ -23,7 +23,6 @@ import net.iGap.realm.RealmRoom;
 public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
 
     //Todo: create viewModel for this it was test class and become main class :D
-    private ViewPager mViewPager;
     private BottomNavigation bottomNavigation;
 
     @Nullable
@@ -37,10 +36,69 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewPager = view.findViewById(R.id.viewpager);
         bottomNavigation = view.findViewById(R.id.bn_main_bottomNavigation);
+        bottomNavigation.setDefaultItem(2);
+        bottomNavigation.setOnItemChangeListener(this::loadFragment);
+        bottomNavigation.setCurrentItem(2);
+    }
 
-        initTabStrip();
+    private void loadFragment(int position) {
+        Log.wtf(this.getClass().getName(), "position: " + position);
+        Log.wtf(this.getClass().getName(), "loadFragment");
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            Log.wtf(this.getClass().getName(), "fragmentManager not null");
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            int p = G.isAppRtl ? 4 - position : position;
+            Log.wtf(this.getClass().getName(), "p: " + p);
+            Fragment fragment;
+            switch (p) {
+                case 0:
+                    fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
+                    if (fragment == null) {
+                        fragment = new FragmentUserProfile();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 1:
+                    fragment = fragmentManager.findFragmentByTag(DiscoveryFragment.class.getName());
+                    if (fragment == null) {
+                        fragment = DiscoveryFragment.newInstance(0);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 2:
+                    if (G.twoPaneMode) {
+                        fragment = fragmentManager.findFragmentByTag(TabletMainFragment.class.getName());
+                        if (fragment == null) {
+                            fragment = new TabletMainFragment();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                    } else {
+                        fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
+                        if (fragment == null) {
+                            fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                    }
+                    break;
+                case 3:
+                    fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
+                    if (fragment == null) {
+                        fragment = FragmentCall.newInstance(true);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                default:
+                    fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
+                    if (fragment == null) {
+                        fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+            }
+            fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+        }
     }
 
     @Override
@@ -68,77 +126,16 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     }
 
-    private void initTabStrip() {
-
-        boolean isRtl = HelperCalander.isPersianUnicode;
-        bottomNavigation.setDefaultItem(2);
-
-        bottomNavigation.setOnItemChangeListener(i -> {
-            if (isRtl) {
-                if (i == 4)
-                    mViewPager.setCurrentItem(0, false);
-                if (i == 3)
-                    mViewPager.setCurrentItem(1, false);
-                if (i == 2)
-                    mViewPager.setCurrentItem(2, false);
-                if (i == 1)
-                    mViewPager.setCurrentItem(3, false);
-                if (i == 0)
-                    mViewPager.setCurrentItem(4, false);
-            } else {
-                mViewPager.setCurrentItem(i, false);
-            }
-        });
-
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                if (isRtl) {
-                    if (i == 4)
-                        bottomNavigation.setCurrentItem(0);
-                    if (i == 3)
-                        bottomNavigation.setCurrentItem(1);
-                    if (i == 2)
-                        bottomNavigation.setCurrentItem(2);
-                    if (i == 1)
-                        bottomNavigation.setCurrentItem(3);
-                    if (i == 0)
-                        bottomNavigation.setCurrentItem(4);
-                } else
-                    bottomNavigation.setCurrentItem(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
-
-        mViewPager.setOffscreenPageLimit(5);
-        mViewPager.setAdapter(new ViewPagerAdapter(getFragmentManager()));
-        mViewPager.setCurrentItem(bottomNavigation.getDefaultItem());
-
-        if (HelperCalander.isPersianUnicode) {
-            ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
-        }
-    }
-
     public void goToUserProfile() {
-        mViewPager.setCurrentItem(HelperCalander.isPersianUnicode ? 0 : 4);
+        loadFragment(HelperCalander.isPersianUnicode ? 0 : 4);
     }
 
     public void setChatPage(FragmentChat fragmentChat) {
         if (getFragmentManager() != null) {
-            if (mViewPager.getCurrentItem() != 2) {
-                mViewPager.setCurrentItem(2);
+            if (bottomNavigation.getSelectedItemPosition() != 2) {
+                bottomNavigation.setCurrentItem(2);
             }
-            Fragment page = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + mViewPager.getCurrentItem());
+            Fragment page = getFragmentManager().findFragmentById(R.id.viewpager);
             // based on the current position you can then cast the page to the correct
             // class and call the method:
             if (page instanceof TabletMainFragment) {
@@ -149,17 +146,17 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     public Fragment getViewPagerCurrentFragment() {
         if (getFragmentManager() != null) {
-            return getFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + mViewPager.getCurrentItem());
+            return getFragmentManager().findFragmentById(R.id.viewpager);
         } else {
             return null;
         }
     }
 
-    public boolean isFirstTabItem(){
-        if (mViewPager.getCurrentItem() == 2){
+    public boolean isFirstTabItem() {
+        if (bottomNavigation.getSelectedItemPosition() == 2) {
             return true;
-        }else{
-            mViewPager.setCurrentItem(2);
+        } else {
+            bottomNavigation.setCurrentItem(2);
             return false;
         }
     }

@@ -337,6 +337,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -632,6 +633,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setContentView(textView);
             showToast(textView);
         }
+        Log.wtf(this.getClass().getName(), "onCreate");
     }
 
     private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
@@ -1151,12 +1153,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     protected void onResume() {
+        Log.wtf(this.getClass().getName(), "onResume");
         super.onResume();
         if (G.ISOK) {
             resume();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
-
+        Log.wtf(this.getClass().getName(), "onResume");
     }
 
     public void resume() {
@@ -1232,6 +1235,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     protected void onPause() {
+        Log.wtf(this.getClass().getName(), "onPause");
         super.onPause();
         if (G.ISOK) {
             if (isNeedToRegister) {
@@ -1240,6 +1244,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             AppUtils.updateBadgeOnly(getRealm(), -1);
         }
+        Log.wtf(this.getClass().getName(), "onPause");
     }
 
 
