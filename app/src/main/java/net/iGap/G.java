@@ -490,7 +490,10 @@ public class G extends MultiDexApplication {
 
         Metrix.getInstance().enableLogging(true);
         Metrix.getInstance().setLogLevel(Log.DEBUG);
-        Metrix.getInstance().setEventUploadThreshold(5);
+        Metrix.getInstance().setEventUploadPeriodMillis(30000);
+
+        // not exist in dashboard
+        Metrix.getInstance().setScreenFlowsAutoFill(true);
 
         new Thread(new Runnable() {
             @Override
