@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.realm.RealmCallLog;
 
@@ -18,9 +17,9 @@ public class SignalingClearLogResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public SignalingClearLogResponse(int actionId, Object protoClass, String identity) {
+    public SignalingClearLogResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -32,11 +31,19 @@ public class SignalingClearLogResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoSignalingClearLog.SignalingClearLogResponse.Builder builder = (ProtoSignalingClearLog.SignalingClearLogResponse.Builder) message;
-        RealmCallLog.clearCallLog(builder.getClearId());
 
-        if (G.onCallLogClear != null) {
-            G.onCallLogClear.onCallLogClear();
+        ProtoSignalingClearLog.SignalingClearLog.Builder builderRequest = (ProtoSignalingClearLog.SignalingClearLog.Builder) identity;
+
+        if (builderRequest.getClearType() == ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL){
+            RealmCallLog.clearCallLog(builder.getClearId());
+        }else if (builderRequest.getClearType() == ProtoSignalingClearLog.SignalingClearLog.ClearType.SINGLE){
+            RealmCallLog.clearCallLogById(builderRequest.getClearId());
         }
+
+
+        /*if (G.onCallLogClear != null) {
+            G.onCallLogClear.onCallLogClear();
+        }*/
     }
 
     @Override

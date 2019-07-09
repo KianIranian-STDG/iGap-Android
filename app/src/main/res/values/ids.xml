@@ -153,5 +153,6 @@
     <item name="view_toolbar_btn_left2" type="id" />
     <item name="view_toolbar_btn_passCode" type="id" />
     <item name="view_toolbar_btn_scanner" type="id" />
+    <item name="fcsl_check_box" type="id" />
 
 </resources>

@@ -1825,7 +1825,8 @@
 
     <string name="nothing">لا بأس !</string>
 
-    <string name="are_you_sure_clear_call_logs">هل أنت متأكد من حذف جميع الاتصالات الواردة و الصادرة؟</string>
+    <string name="are_you_sure_clear_call_logs">هل أنت متأكد من حذف جميع الاتصالات؟</string>
+    <string name="are_you_sure_clear_call_log">هل أنت متأكد من حذف الاتصالات؟</string>
 
     <string name="please_write_your_reasons">من فضلك اكتب السبب</string>
 
@@ -2846,5 +2847,6 @@
     <string name="tablet_empty_chat_description">Get Started  Welcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
+    <string name="delete_all">Delete All</string>
 
 </resources>

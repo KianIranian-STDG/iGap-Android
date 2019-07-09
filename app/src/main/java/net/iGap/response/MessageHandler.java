@@ -12,7 +12,6 @@ package net.iGap.response;
 
 import android.support.annotation.CallSuper;
 import android.util.Log;
-import android.widget.Toast;
 
 import net.iGap.BuildConfig;
 import net.iGap.G;
@@ -41,7 +40,7 @@ public abstract class MessageHandler {
     @CallSuper
     public void handler() throws NullPointerException {
         if (BuildConfig.DEBUG) {
-           // Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
+            Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
         }
         latestResponse = System.currentTimeMillis();
     }

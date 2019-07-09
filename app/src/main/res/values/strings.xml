@@ -1023,7 +1023,8 @@
     <string name="not_answer">Unanswered Call</string>
 
     <string name="nothing">Nothing</string>
-    <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all incoming and outgoing calls?</string>
+    <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all calls?</string>
+    <string name="are_you_sure_clear_call_log">Are you sure you want to clear selected calls?</string>
     <string name="please_write_your_reasons">Please write your reasons</string>
     <string name="your_confirm_email">Enter the confirmation code sent to Email</string>
     <string name="confirm_email_title">Confirmation email</string>
@@ -1899,4 +1900,5 @@
     <string name="tablet_empty_chat_description">Get Started \nWelcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
+    <string name="delete_all">Delete All</string>
 </resources>

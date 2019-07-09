@@ -29,11 +29,13 @@ public class RealmCallLog extends RealmObject {
 
     @PrimaryKey
     private long id;
+    private long logId;
     private String type;
     private String status;
     private RealmRegisteredInfo user;
     private int offerTime;
     private int duration;
+    // log id
 
     private static void addLog(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog, Realm realm) {
         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
@@ -45,6 +47,7 @@ public class RealmCallLog extends RealmObject {
         realmCallLog.setUser(RealmRegisteredInfo.putOrUpdate(realm, callLog.getPeer()));
         realmCallLog.setOfferTime(callLog.getOfferTime());
         realmCallLog.setDuration(callLog.getDuration());
+        realmCallLog.setLogId(callLog.getLogId());
     }
 
     public static void addLogList(final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list) {
@@ -66,6 +69,21 @@ public class RealmCallLog extends RealmObject {
             @Override
             public void execute(Realm realm) {
                 realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
+            }
+        });
+        realm.close();
+    }
+
+    public static void clearCallLogById(final long logId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                try {
+                    realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, logId).findFirst().deleteFromRealm();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
         realm.close();
@@ -143,5 +161,13 @@ public class RealmCallLog extends RealmObject {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public long getLogId() {
+        return logId;
+    }
+
+    public void setLogId(long logId) {
+        this.logId = logId;
     }
 }
