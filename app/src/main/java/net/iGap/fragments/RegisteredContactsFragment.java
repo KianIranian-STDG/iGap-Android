@@ -21,6 +21,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -288,7 +289,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         /*realmRecyclerView.setLayoutManager(layoutManager);*/
         realmRecyclerView.setNestedScrollingEnabled(false);
         FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
-        fastScroller.setRecyclerView(realmRecyclerView,ContactManager.getContactSize());
+        fastScroller.setRecyclerView(realmRecyclerView, ContactManager.getContactSize());
 
 
         onClickRecyclerView = (view, position) -> {
@@ -742,7 +743,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(),contact.getLast_seen(),false));
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
@@ -911,6 +912,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 title = view.findViewById(R.id.tv_itemContactCall_userName);
                 subtitle = view.findViewById(R.id.tv_itemContactCall_userPhoneNumber);
                 btnVoiceCall = view.findViewById(R.id.tv_itemContactCall_voiceCall);
+
+                if (G.isAppRtl) {
+                    title.setGravity(Gravity.RIGHT);
+                } else
+                    title.setGravity(Gravity.LEFT);
 
                 btnVoiceCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
