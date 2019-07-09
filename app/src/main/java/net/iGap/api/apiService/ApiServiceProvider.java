@@ -11,14 +11,14 @@ public class ApiServiceProvider {
 
     public static BeepTunesApi getBeepTunesClient() {
         if (beepTunesApi == null) {
-            beepTunesApi = factory.getRetrofit(ApiStatic.BEEP_TUNES).create(BeepTunesApi.class);
+            beepTunesApi = factory.getBeepTunesRetrofit().create(BeepTunesApi.class);
         }
         return beepTunesApi;
     }
 
     public static PopularChannelApi getChannelApi() {
         if (channelApi == null) {
-            channelApi = factory.getRetrofit(ApiStatic.CHANNEL).create(PopularChannelApi.class);
+            channelApi = factory.getChannelRetrofit().create(PopularChannelApi.class);
         }
         return channelApi;
     }

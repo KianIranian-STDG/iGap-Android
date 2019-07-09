@@ -22,23 +22,22 @@ public class RetrofitFactory {
         httpClient = builder.build();
     }
 
-    Retrofit getRetrofit(String clientType) {
-        if (clientType.equals(ApiStatic.BEEP_TUNES)) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(ApiStatic.BEEP_TUNES_URL)
-                    .client(httpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            return retrofit;
+    Retrofit getBeepTunesRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.BEEP_TUNES_URL)
+                .client(httpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit;
 
-        } else if (clientType.equals(ApiStatic.CHANNEL)) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(ApiStatic.CHANNEL_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient)
-                    .build();
-            return retrofit;
-        } else
-            return null;
+    }
+
+    Retrofit getChannelRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.CHANNEL_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+        return retrofit;
     }
 }
