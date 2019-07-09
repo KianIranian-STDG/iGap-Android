@@ -38,6 +38,23 @@ public class ChatCell extends ConstraintLayout {
         init();
     }
 
+    public static Bitmap loadBitmapAsset(String fileName, Context context) {
+        final AssetManager assetManager = context.getAssets();
+        BufferedInputStream bis = null;
+        try {
+            bis = new BufferedInputStream(assetManager.open(fileName));
+            return BitmapFactory.decodeStream(bis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bis.close();
+            } catch (Exception e) {
+
+            }
+        }
+        return null;
+    }
 
     private void init() {
 
@@ -52,14 +69,10 @@ public class ChatCell extends ConstraintLayout {
 
         AppCompatImageView pinView = new AppCompatImageView(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-//        pinView.setScaleType(ImageView.ScaleType.FIT_XY);
-
         Bitmap bitmap = loadBitmapAsset("pinpatch.9.png", getContext());
         NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
-        pinView.setBackground( drawable );
+        pinView.setBackground(drawable);
 
-//
-//
 //        if (isRtl) {
 //            pinView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.pinpatch));
 //        } else {
@@ -73,7 +86,6 @@ public class ChatCell extends ConstraintLayout {
         CheckBox cellCheckbox = new CheckBox(getContext());
         cellCheckbox.setId(R.id.iv_itemContactChat_checkBox);
         cellCheckbox.setButtonDrawable(R.drawable.check_box_background);
-        cellCheckbox.setPadding(10, 0, 0, 0);
         cellCheckbox.setClickable(false);
         addView(cellCheckbox);
 
@@ -243,10 +255,8 @@ public class ChatCell extends ConstraintLayout {
         set.constrainHeight(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(cellCheckbox.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(cellCheckbox.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        set.connect(cellCheckbox.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-        set.connect(cellCheckbox.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
-                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT, 16);
+        set.connect(cellCheckbox.getId(), ConstraintSet.TOP, avatarImageView.getId(), ConstraintSet.TOP);
+        set.connect(cellCheckbox.getId(), ConstraintSet.BOTTOM, avatarImageView.getId(), ConstraintSet.BOTTOM);
 
         set.constrainHeight(avatarImageView.getId(), i_Dp(R.dimen.dp60));
         set.constrainWidth(avatarImageView.getId(), i_Dp(R.dimen.dp60));
@@ -334,6 +344,13 @@ public class ChatCell extends ConstraintLayout {
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
             set.connect(mute.getId(), ConstraintSet.LEFT, messageData.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(4));
 
+            set.setMargin(cellCheckbox.getId(),ConstraintSet.LEFT,LayoutCreator.dp(32));
+
+            int[] checkBoxChain = {cellCheckbox.getId(), avatarImageView.getId()};
+            float[] checkBoxWeight = {0, 0};
+            set.createHorizontalChainRtl(ConstraintSet.PARENT_ID, ConstraintSet.START, firstTextView.getId(), ConstraintSet.START,
+                    checkBoxChain, checkBoxWeight, ConstraintSet.CHAIN_PACKED);
+
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
@@ -367,6 +384,11 @@ public class ChatCell extends ConstraintLayout {
             set.connect(mute.getId(), ConstraintSet.RIGHT, messageData.getId(), ConstraintSet.LEFT, LayoutCreator.dp(4));
 
 
+            int[] checkBoxChain = {cellCheckbox.getId(), avatarImageView.getId()};
+            float[] checkBoxWeight = {0, 0};
+            set.createHorizontalChain(ConstraintSet.PARENT_ID, ConstraintSet.LEFT, firstTextView.getId(), ConstraintSet.LEFT,
+                    checkBoxChain, checkBoxWeight, ConstraintSet.CHAIN_PACKED);
+
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
             set.createHorizontalChain(avatarImageView.getId(), ConstraintSet.RIGHT, messageStatus.getId(), ConstraintSet.LEFT,
@@ -389,23 +411,5 @@ public class ChatCell extends ConstraintLayout {
 
     private void setTypeFace(TextView v) {
         v.setTypeface(G.typeface_IRANSansMobile);
-    }
-
-    public static Bitmap loadBitmapAsset(String fileName, Context context) {
-        final AssetManager assetManager = context.getAssets();
-        BufferedInputStream bis = null;
-        try {
-            bis = new BufferedInputStream(assetManager.open(fileName));
-            return BitmapFactory.decodeStream(bis);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                bis.close();
-            } catch (Exception e) {
-
-            }
-        }
-        return null;
     }
 }
