@@ -69,15 +69,17 @@ public class ChatCell extends ConstraintLayout {
 
         AppCompatImageView pinView = new AppCompatImageView(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-        Bitmap bitmap = loadBitmapAsset("pinpatch.9.png", getContext());
-        NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
-        pinView.setBackground(drawable);
 
-//        if (isRtl) {
-//            pinView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.pinpatch));
-//        } else {
-//            pinView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.pinpatch));
-//        }
+
+        if (isRtl) {
+            Bitmap bitmap = loadBitmapAsset("pinrtl.9.png", getContext());
+            NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
+            pinView.setBackground(drawable);
+        } else {
+            Bitmap bitmap = loadBitmapAsset("pin.9.png", getContext());
+            NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
+            pinView.setBackground(drawable);
+        }
         addView(pinView);
 
         /**
