@@ -146,7 +146,8 @@ public class AvatarHandler {
                 }
             }
         } else {
-            HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + new File(avatarPath).exists()));
+            HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + new File(avatarPath).exists() +
+                    " FileSize=" + new File(avatarPath).length()));
         }
 
         G.handler.post(new Runnable() {
