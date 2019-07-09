@@ -239,7 +239,7 @@ public class AvatarHandler {
         }
 
         imageViewHashValue.remove(avatarIv);
-        avatarIv.setTag(-1);
+        avatarIv.setTag(-1L);
     }
 
     public void getAvatar(BaseParam baseParam) {
