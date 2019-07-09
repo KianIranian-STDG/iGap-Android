@@ -1130,7 +1130,8 @@ public class FragmentChat extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
 
-        emojiPopup.releaseMemory();
+        if (emojiPopup != null)
+            emojiPopup.releaseMemory();
     }
 
     @Override

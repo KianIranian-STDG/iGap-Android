@@ -726,6 +726,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @param reaction Up or Down
      */
     private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
+        long authorRoomId = 0;
+        long messageId = 0;
+        if (mMessage.forwardedFrom != null) {
+            authorRoomId = mMessage.forwardedFrom.getAuthorRoomId();
+            messageId = mMessage.forwardedFrom.getMessageId();
+        }
+
+        if (messageId < 0) {
+            messageId = messageId * (-1);
+        }
+
+        long finalAuthorRoomId = authorRoomId;
+        long finalMessageId = messageId;
 
         getRealmChat().executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -740,21 +753,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     if ((mMessage.forwardedFrom != null)) {
                         ProtoGlobal.Room.Type roomType = null;
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, finalAuthorRoomId).findFirst();
                         if (realmRoom != null) {
                             roomType = realmRoom.getType();
                         }
                         if ((roomType == ProtoGlobal.Room.Type.CHANNEL)) {
-                            long forwardMessageId = mMessage.forwardedFrom.getMessageId();
-                            /**
-                             * check with this number for detect is multiply now or no
-                             * hint : use another solution
-                             */
-                            if (mMessage.forwardedFrom.getMessageId() < 0) {
-                                forwardMessageId = forwardMessageId * (-1);
-                            }
-                            long finalForwardMessageId = forwardMessageId;
-                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getAuthorRoomId(), Long.parseLong(mMessage.messageID), reaction, finalForwardMessageId));
+                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReactionForward(finalAuthorRoomId, Long.parseLong(mMessage.messageID), reaction, finalMessageId));
                         } else {
                             G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
                         }
