@@ -1,32 +1,36 @@
 package net.iGap.fragments.popular;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterGridItem;
 import net.iGap.adapter.items.popular.AdapterRowItem;
 import net.iGap.adapter.items.popular.AdapterSliderItem;
-import net.iGap.api.repository.PopularChannelRepository;
+import net.iGap.api.PopularChannelApi;
+import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.api.popularChannel.ParentChannel;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
     private RecyclerView rvTopSlider;
@@ -48,8 +52,9 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
     private View rootView;
     private HelperToolbar toolbar;
-    private PopularChannelRepository repository;
-    private    LinearLayout linearLayoutItemRow;
+    private LinearLayout linearLayoutItemRow;
+
+    private PopularChannelApi api;
 
     @NonNull
     @Override
@@ -75,10 +80,11 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         ivMore = viewItemRow.findViewById(R.id.iv_item_popular_more);
         textViewTitle = viewItemRow.findViewById(R.id.tv_item_popular_title);
         linearLayoutItemContainer.addView(viewItemRow);
-
+//api
+        api = ApiServiceProvider.getChannelApi();
         return rootView;
 
-   }
+    }
 
 
     @Override
@@ -129,8 +135,24 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 .setDefaultTitle("کانال های پر مخاطب")
                 .setLeftIcon(R.string.back_icon);
         toolbarContainer.addView(toolbar.getView());
-        repository = new PopularChannelRepository();
 
+
+        api.getParentChannel().enqueue(new Callback<ParentChannel>() {
+            @Override
+            public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
+                for (int i = 0; i < response.body().getData().get(i).getType().length(); i++) {
+                    if (response.body().getData().get(i).getType() == "advertisement") {
+                        adapterSliderItemTop.setSliderList(response.body().getData().get(i).getSlides());
+                    }
+                }
+                Log.i("nazanin", "onResponse: " + response.body().getData().size());
+            }
+
+            @Override
+            public void onFailure(Call<ParentChannel> call, Throwable t) {
+                Log.i("nazanin", "onFailure: " + t.getMessage());
+            }
+        });
 
     }
 

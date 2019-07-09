@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterRowInfoItem;
 import net.iGap.adapter.items.popular.AdapterSliderItem;
@@ -43,4 +42,7 @@ public class FragmentPopularChannelRowInfo extends BaseFragment {
         return view;
 
     }
+
+
+
 }

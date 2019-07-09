@@ -2,7 +2,6 @@ package net.iGap.adapter.items.popular;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import net.iGap.R;
-import net.iGap.adapter.items.popular.model.Slider;
+import net.iGap.helper.ImageLoadingService;
+import net.iGap.module.api.popularChannel.Slide;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.BottomSliderViewHolder> {
-    private List<Slider> sliderList = new ArrayList<>();
+    private List<Slide> sliderList = new ArrayList<>();
     private Context context;
     private OnClickSliderEventCallBack onClickSliderEventCallBack;
     public boolean clickable;
@@ -24,16 +24,11 @@ public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.Bo
     public AdapterSliderItem(Context context, boolean clickable) {
         this.context = context;
         this.clickable = clickable;
-        Slider sliderBottom = new Slider();
-        sliderBottom.setSliderImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
-        sliderList.add(sliderBottom);
-        sliderList.add(sliderBottom);
-        sliderList.add(sliderBottom);
-        sliderList.add(sliderBottom);
-        sliderList.add(sliderBottom);
-        sliderList.add(sliderBottom);
-        sliderList.add(sliderBottom);
-        sliderList.add(sliderBottom);
+    }
+
+    public void setSliderList(List<Slide> sliderList) {
+        this.sliderList = sliderList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -71,10 +66,9 @@ public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.Bo
             });
         }
 
-        public void bindImage(final Slider slider) {
-            if(slider!=null) {
-                imageView.setImageDrawable(slider.getSliderImage());
-            }else itemView.setVisibility(View.GONE);
+        public void bindImage(final Slide slide) {
+
+            ImageLoadingService.load(slide.getImageUrl(), imageView);
         }
     }
 

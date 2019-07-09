@@ -14,13 +14,20 @@ import android.view.ViewGroup;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterGridItem;
 import net.iGap.adapter.items.popular.AdapterSliderItem;
+import net.iGap.api.PopularChannelApi;
+import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragmentPopularChannelGridInfo extends BaseFragment {
     private RecyclerView recyclerViewSlider2;
     private RecyclerView recyclerViewGridItem2;
     private AdapterGridItem adapterGridItem2;
     private AdapterSliderItem adapterSliderItem2;
+//    private PopularChannelApi api;
 
     @NonNull
     @Override
@@ -36,6 +43,25 @@ public class FragmentPopularChannelGridInfo extends BaseFragment {
         recyclerViewGridItem2.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
         adapterGridItem2 = new AdapterGridItem(getContext(), false);
         recyclerViewGridItem2.setAdapter(adapterGridItem2);
+//         api = ApiServiceProvider.getChannelApi();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+//        api.getChildChannel(0,"5d1cc0bc072e82477b6a957c").enqueue(new Callback<ChildChannel>() {
+//            @Override
+//            public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
+//                response.body().getChannels();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ChildChannel> call, Throwable t) {
+//
+//            }
+//        });
+
     }
 }
