@@ -231,14 +231,14 @@ public class AvatarHandler {
         if (avatarIv.getTag() == null)
             return;
 
-        HashSet<ImageView> imageViewHashSet = avatarHashImages.get(avatarIv.getTag());
+        HashSet<ImageView> imageViewHashSet = avatarHashImages.get((Long) avatarIv.getTag());
 
         if (imageViewHashSet != null) {
             imageViewHashSet.remove(avatarIv);
         }
 
         imageViewHashValue.remove(avatarIv);
-        avatarIv.setTag(-1);
+        avatarIv.setTag(-1L);
     }
 
     public void getAvatar(BaseParam baseParam) {
