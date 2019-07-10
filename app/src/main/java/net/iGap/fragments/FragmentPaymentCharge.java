@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentChargeBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IBackHandler;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentChargeViewModel;
 
 /**
@@ -55,6 +57,19 @@ public class FragmentPaymentCharge extends BaseFragment {
                 popBackStackFragment();
             }
         };
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.buy_charge))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+        fragmentPaymentChargeBinding.fpcToolbar.addView(toolbar.getView());
 
         fragmentPaymentChargeBinding.setBackHandler(iBackHandler);
 
