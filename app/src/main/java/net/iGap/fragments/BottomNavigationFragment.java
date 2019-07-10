@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,15 +42,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     private void loadFragment(int position) {
-        Log.wtf(this.getClass().getName(), "position: " + position);
-        Log.wtf(this.getClass().getName(), "loadFragment");
         FragmentManager fragmentManager = getChildFragmentManager();
-        Log.wtf(this.getClass().getName(), "fragmentManager not null");
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        int p = G.isAppRtl ? 4 - position : position;
-        Log.wtf(this.getClass().getName(), "p: " + p);
         Fragment fragment;
-        switch (p) {
+        switch (position) {
             case 0:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
                 if (fragment == null) {
