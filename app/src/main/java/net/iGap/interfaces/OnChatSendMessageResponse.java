@@ -19,5 +19,5 @@ public interface OnChatSendMessageResponse {
 
     void onMessageReceive(long roomId, String message, ProtoGlobal.RoomMessageType messageType, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType);
 
-    void onMessageFailed(long roomId, RealmRoomMessage roomMessage);
+    void onMessageFailed(long roomId, long roomMessage);
 }

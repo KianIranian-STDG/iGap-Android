@@ -4502,10 +4502,10 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onMessageFailed(long roomId, RealmRoomMessage message) {
+    public void onMessageFailed(long roomId, long messageId) {
 
-        if (roomId == mRoomId && mAdapter != null && message != null) {
-            mAdapter.updateMessageStatus(message.getMessageId(), ProtoGlobal.RoomMessageStatus.FAILED);
+        if (roomId == mRoomId && mAdapter != null) {
+            mAdapter.updateMessageStatus(messageId, ProtoGlobal.RoomMessageStatus.FAILED);
         }
     }
 
