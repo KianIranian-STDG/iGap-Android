@@ -654,7 +654,7 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
     }
 
     @Override
-    public void onMessageFailed(long roomId, RealmRoomMessage roomMessage) {
+    public void onMessageFailed(long roomId, long messageId) {
 
     }
 
