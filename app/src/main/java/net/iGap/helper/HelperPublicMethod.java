@@ -91,14 +91,14 @@ public class HelperPublicMethod {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (user.getId() == peerId) {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRegisteredInfo.putOrUpdate(realm, user);
-                        }
-                    });
-                    realm.close();
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRegisteredInfo.putOrUpdate(realm, user);
+                            }
+                        });
+                    }
 
                     G.handler.post(new Runnable() {
                         @Override

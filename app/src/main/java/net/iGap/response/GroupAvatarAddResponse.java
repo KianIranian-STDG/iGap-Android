@@ -37,15 +37,14 @@ public class GroupAvatarAddResponse extends MessageHandler {
         super.handler();
 
         final ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse = (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
-
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAvatar.putOrUpdate(realm, groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
-            }
-        });
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAvatar.putOrUpdate(realm, groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
+                }
+            });
+        }
 
         G.handler.post(new Runnable() {
             @Override

@@ -79,25 +79,22 @@ public class FileUploadResponse extends MessageHandler {
      * make messages failed
      */
     private void makeFailed() {
-        // message failed
-
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identityFileUpload.identify)).findFirst();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (message != null) {
-                    message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                }
-            }
-        });
-
         long roomId = -1L;
-        if (message != null) {
-            roomId = message.getRoomId();
-        }
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identityFileUpload.identify)).findFirst();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    if (message != null) {
+                        message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                    }
+                }
+            });
 
-        realm.close();
+            if (message != null) {
+                roomId = message.getRoomId();
+            }
+        }
 
         if (roomId != -1L) {
             long finalRoomId = roomId;
