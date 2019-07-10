@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +147,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
 
         rcDiscovery.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), discoveryArrayList));
-        if (discoveryArrayList == null || discoveryArrayList.size() == 0) {
+        if (discoveryArrayList == null) {
             tryToUpdateOrFetchRecycleViewData(0);
         }
     }
@@ -195,7 +196,6 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
                     edit.putString("page0", cache).apply();
                     edit.putString("title", title).apply();
                 }
-                DiscoveryFragment.this.discoveryArrayList = discoveryArrayList;
                 G.handler.post(() -> {
                     setAdapterData(discoveryArrayList, title);
                     setRefreshing(false);
@@ -216,6 +216,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     }
 
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
+        this.discoveryArrayList = discoveryArrayList;
         if (rcDiscovery.getAdapter() instanceof DiscoveryAdapter) {
             ((DiscoveryAdapter) rcDiscovery.getAdapter()).setDiscoveryList(discoveryArrayList);
             mHelperToolbar.setDefaultTitle(title);
