@@ -1,152 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<net.iGap.module.NotTouchableCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    tools:ignore="MissingPrefix">
+    android:layout_height="match_parent">
 
-
-    <RelativeLayout
+    <HorizontalScrollView
+        android:id="@+id/v0"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:overScrollMode="never">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/cl_recycler_view_contact"
-            style="?backgroundColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="@dimen/dp24"
-            android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_search" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_search"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/amr_layout_toolbar"
-            android:layout_width="match_parent"
+            android:id="@+id/amr_layout_selected_actions"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/toolbar_height_root_with_search"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp32"
+            android:paddingBottom="5dp"
+            android:visibility="gone">
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/amr_layout_toolbar"
-            style="?backgroundColorSettingTheme"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:id="@+id/amr_layout_selected_actions"
+            <TextView
+                android:id="@+id/amr_btn_read_all_selected"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp40"
-                android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/amr_btn_read_all_selected"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/round_button_disabled_bg"
-                    android:fontFamily="@font/main_font"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/round_buttons_large_padding"
-                    android:paddingRight="@dimen/round_buttons_large_padding"
-                    android:singleLine="true"
-                    android:text="@string/read_all"
-                    android:textSize="@dimen/smallTextSize"
-                    android:textColor="@color/gray_4c" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/round_button_disabled_bg"
+                android:fontFamily="@font/main_font"
+                android:gravity="center"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:singleLine="true"
+                android:text="@string/read_all"
+                android:textColor="@color/gray_4c"
+                android:textSize="@dimen/smallTextSize" />
 
 
-                <TextView
-                    android:id="@+id/amr_btn_make_as_read_selected"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:background="@drawable/round_button_disabled_bg"
-                    android:fontFamily="@font/main_font"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/round_buttons_large_padding"
-                    android:paddingRight="@dimen/round_buttons_large_padding"
-                    android:singleLine="true"
-                    android:textSize="@dimen/smallTextSize"
-                    android:text="@string/make_as_read"
-                    android:textColor="@color/gray_4c" />
+            <TextView
+                android:id="@+id/amr_btn_make_as_read_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/round_button_disabled_bg"
+                android:fontFamily="@font/main_font"
+                android:gravity="center"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:singleLine="true"
+                android:text="@string/make_as_read"
+                android:textColor="@color/gray_4c"
+                android:textSize="@dimen/smallTextSize" />
 
 
-                <TextView
-                    android:id="@+id/amr_btn_delete_selected"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:background="@drawable/round_button_disabled_bg"
-                    android:fontFamily="@font/main_font"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/round_buttons_large_padding"
-                    android:paddingRight="@dimen/round_buttons_large_padding"
-                    android:textSize="@dimen/smallTextSize"
-                    android:singleLine="true"
-                    android:text="@string/delete"
-                    android:textColor="@color/gray_4c" />
+            <TextView
+                android:id="@+id/amr_btn_delete_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/round_button_disabled_bg"
+                android:fontFamily="@font/main_font"
+                android:gravity="center"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:singleLine="true"
+                android:text="@string/delete"
+                android:textColor="@color/gray_4c"
+                android:textSize="@dimen/smallTextSize" />
 
 
-                <TextView
-                    android:id="@+id/amr_btn_clear_cache_selected"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/round_button_disabled_bg"
-                    android:fontFamily="@font/main_font"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/round_buttons_large_padding"
-                    android:paddingRight="@dimen/round_buttons_large_padding"
-                    android:textSize="@dimen/smallTextSize"
-                    android:singleLine="true"
-                    android:text="@string/clear_history"
-                    android:textColor="@color/gray_4c" />
+            <TextView
+                android:id="@+id/amr_btn_clear_cache_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/round_button_disabled_bg"
+                android:fontFamily="@font/main_font"
+                android:gravity="center"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:singleLine="true"
+                android:text="@string/clear_history"
+                android:textColor="@color/gray_4c"
+                android:textSize="@dimen/smallTextSize" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
-        </HorizontalScrollView>
+    </HorizontalScrollView>
 
-    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cl_recycler_view_contact"
+        style="?backgroundColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/dp24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v0" />
 
+    <LinearLayout
+        android:id="@+id/amr_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/toolbar_height_root_with_search"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/empty_icon"
+        layout="@layout/empty_layout"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/ac_progress_bar_waiting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
         android:indeterminate="true"
         android:padding="@dimen/dp4"
-        android:visibility="gone" />
-
-    <include
-        android:id="@+id/empty_icon"
-        layout="@layout/empty_layout"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/cl_recycler_view_contact"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <ProgressBar
         android:id="@+id/pbLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="160dp"
-        android:padding="@dimen/dp4"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-</net.iGap.module.NotTouchableCoordinatorLayout>
+</android.support.constraint.ConstraintLayout>
