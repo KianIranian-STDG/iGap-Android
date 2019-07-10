@@ -723,38 +723,6 @@ public class RealmRoom extends RealmObject {
         return 0;
     }
 
-    public static void updateMute(final long roomId, final ProtoGlobal.RoomMute muteState) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        if (room != null) {
-                            room.setMute(muteState);
-                        }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        /** call this listener for update tab bars unread count */
-                        if (G.onUnreadChange != null) {
-                            G.onUnreadChange.onChange();
-                        }
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
-            }
-        });
-    }
-
     public static void updatePin(final long roomId, final boolean pin, final long pinId) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
