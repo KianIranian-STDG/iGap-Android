@@ -232,7 +232,7 @@ public class AvatarHandler {
         if (avatarIv.getTag() == null)
             return;
 
-        HashSet<ImageView> imageViewHashSet = avatarHashImages.get((Long) avatarIv.getTag());
+        HashSet<ImageView> imageViewHashSet = avatarHashImages.get(avatarIv.getTag());
 
         if (imageViewHashSet != null) {
             imageViewHashSet.remove(avatarIv);

@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +18,9 @@ import net.iGap.databinding.FragmentChatSettingsBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.StartupActions;
 import net.iGap.viewmodel.FragmentChatSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
-
-import yogesh.firzen.mukkiasevaigal.M;
 
 public class FragmentChatSettings extends BaseFragment {
 

@@ -66,7 +66,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemCount() {
-        return discoveryList.size();
+        return discoveryList != null ? discoveryList.size() : 0;
     }
 
     @Override

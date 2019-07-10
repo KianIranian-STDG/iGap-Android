@@ -9,10 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -23,25 +23,24 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.fragments.FragmentToolBarBack;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 
-public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarListener {
+public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
+
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
     private int page;
-    private View view;
-    private boolean isInit = false;
-    DiscoveryAdapter adapterDiscovery;
+    private boolean isSwipeBackEnable = true;
     private HelperToolbar mHelperToolbar;
-    private LinearLayoutManager layoutManager;
+
+    private ArrayList<DiscoveryItem> discoveryArrayList;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
@@ -50,149 +49,107 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         if (page == 0) {
             discoveryFragment.isSwipeBackEnable = false;
         }
-
         discoveryFragment.setArguments(bundle);
         return discoveryFragment;
     }
 
+    @Nullable
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !isInit) {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_DISCOVERY_PAGE);
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    init();
-                }
-            }, 400);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_discovery, container, false);
+        if (isSwipeBackEnable) {
+            return attachToSwipeBack(view);
+        } else {
+            return view;
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        RecyclerView.Adapter adapter = rcDiscovery.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
+        if (rcDiscovery.getAdapter() != null) {
+            rcDiscovery.getAdapter().notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.fragment_discovery, root, true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.view = view;
         page = getArguments().getInt("page");
-        appBarLayout.setVisibility(View.GONE);
 
         //uncomment this lines after added small avatar and discovery setting
-        if (page != 0){
-
+        if (page != 0) {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
                     .setLogoShown(true)
                     .setLeftIcon(R.string.back_icon)
                     .setListener(this);
 
-        }else {
-
+        } else {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
                     //.setLeftIcon(R.string.flag_icon)
-                   // .setRightSmallAvatarShown(true)
+                    // .setRightSmallAvatarShown(true)
                     .setLogoShown(true)
                     .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true , R.string.unlock_icon)
-                    .setScannerVisibility(true ,  R.string.scan_qr_code_icon)
-                    .setSearchBoxShown(true , false)
+                    .setPassCodeVisibility(true, R.string.unlock_icon)
+                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                    .setSearchBoxShown(true, false)
                     .setListener(this);
-
         }
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
 
-        init();
-    }
-
-    private void init() {
-        if (view == null) {
-            return;
-        }
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
 
-        if (page == 0){
-
+        if (page == 0) {
             rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
 
-                    int position = layoutManager.findFirstVisibleItemPosition();
+                    int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
                     //check recycler scroll for search box animation
                     if (dy <= 0) {
                         // Scrolling up
-                        mHelperToolbar.animateSearchBox(false , position , -2);
-                    } else  {
+                        mHelperToolbar.animateSearchBox(false, position, -2);
+                    } else {
                         // Scrolling down
-                        mHelperToolbar.animateSearchBox(true , position , -2);
+                        mHelperToolbar.animateSearchBox(true, position, -2);
                     }
                 }
             });
 
         }
 
-        if (!getUserVisibleHint()) {
-            if (!isInit) {
-                setRefreshing(true);
-            }
-            return;
-        }
-        isInit = true;
-//        setRefreshing(false);
-
-        adapterDiscovery = new DiscoveryAdapter(getActivity(), new ArrayList<>());
-
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setRefreshing(true);
-                boolean isSend = updateOrFetchRecycleViewData();
-                if (!isSend) {
-                    setRefreshing(false);
-                    HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-                }
+        pullToRefresh.setOnRefreshListener(() -> {
+            setRefreshing(true);
+            boolean isSend = updateOrFetchRecycleViewData();
+            if (!isSend) {
+                setRefreshing(false);
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
 
-        emptyRecycle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isSend = updateOrFetchRecycleViewData();
-                if (!isSend) {
-                    HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-                }
+        emptyRecycle.setOnClickListener(v -> {
+            boolean isSend = updateOrFetchRecycleViewData();
+            if (!isSend) {
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
 
         //load user avatar in toolbar
         //avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
-
-        layoutManager = new LinearLayoutManager(G.currentActivity);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        rcDiscovery.setLayoutManager(layoutManager);
-        rcDiscovery.setAdapter(adapterDiscovery);
-        tryToUpdateOrFetchRecycleViewData(0);
+        rcDiscovery.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), discoveryArrayList));
+        if (discoveryArrayList == null) {
+            tryToUpdateOrFetchRecycleViewData(0);
+        }
     }
 
     private void setRefreshing(boolean value) {
@@ -200,10 +157,10 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
         if (value) {
             emptyRecycle.setVisibility(View.GONE);
         } else {
-            if (adapterDiscovery.getItemCount() == 0) {
-                emptyRecycle.setVisibility(View.VISIBLE);
-            } else {
+            if (rcDiscovery.getAdapter() != null && rcDiscovery.getAdapter().getItemCount() > 0) {
                 emptyRecycle.setVisibility(View.GONE);
+            } else {
+                emptyRecycle.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -217,12 +174,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
             loadOfflinePageZero();
 
             if (count < 3) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tryToUpdateOrFetchRecycleViewData(count + 1);
-                    }
-                }, 1000);
+                G.handler.postDelayed(() -> tryToUpdateOrFetchRecycleViewData(count + 1), 1000);
             } else {
                 setRefreshing(false);
             }
@@ -232,51 +184,45 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
     }
 
     private boolean updateOrFetchRecycleViewData() {
-        boolean isSend = new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
+        return new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override
             public void onDiscoveryListReady(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (page == 0) {
-                            GsonBuilder builder = new GsonBuilder();
-                            Gson gson = builder.create();
-                            SharedPreferences pref = G.context.getSharedPreferences("DiscoveryPages", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor edit = pref.edit();
-                            String cache = gson.toJson(discoveryArrayList);
-                            edit.putString("page0", cache).apply();
-                            edit.putString("title", title).apply();
-                        }
-                        setAdapterData(discoveryArrayList, title);
-
-                        setRefreshing(false);
-                    }
+                if (page == 0) {
+                    GsonBuilder builder = new GsonBuilder();
+                    Gson gson = builder.create();
+                    SharedPreferences pref = G.context.getSharedPreferences("DiscoveryPages", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = pref.edit();
+                    String cache = gson.toJson(discoveryArrayList);
+                    edit.putString("page0", cache).apply();
+                    edit.putString("title", title).apply();
+                }
+                G.handler.post(() -> {
+                    setAdapterData(discoveryArrayList, title);
+                    setRefreshing(false);
                 });
             }
 
             @Override
             public void onError() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (page == 0) {
-                            loadOfflinePageZero();
-                        }
-
-                        setRefreshing(false);
+                G.handler.post(() -> {
+                    if (page == 0) {
+                        loadOfflinePageZero();
                     }
+
+                    setRefreshing(false);
                 });
             }
         });
-
-        return isSend;
     }
 
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
-        adapterDiscovery.setDiscoveryList(discoveryArrayList);
-        titleTextView.setText(title);
-        if (page != 0 ) mHelperToolbar.setDefaultTitle(title);
-        adapterDiscovery.notifyDataSetChanged();
+        this.discoveryArrayList = discoveryArrayList;
+        if (rcDiscovery.getAdapter() instanceof DiscoveryAdapter) {
+            ((DiscoveryAdapter) rcDiscovery.getAdapter()).setDiscoveryList(discoveryArrayList);
+            mHelperToolbar.setDefaultTitle(title);
+            if (page != 0) mHelperToolbar.setDefaultTitle(title);
+            rcDiscovery.getAdapter().notifyDataSetChanged();
+        }
     }
 
     private void loadOfflinePageZero() {

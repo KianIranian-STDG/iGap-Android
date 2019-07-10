@@ -22,7 +22,6 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -55,7 +54,6 @@ import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
-import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
@@ -71,7 +69,6 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
-import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
@@ -93,9 +90,7 @@ import net.iGap.request.RequestGroupLeft;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollection;
@@ -109,7 +104,6 @@ import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
-import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -118,33 +112,27 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
-
 public class FragmentMain extends BaseFragment implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
-    public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
-    public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
-    public MainType mainType;
-    boolean isThereAnyMoreItemToLoad = true;
+    private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
+
+    private boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
     private int mOffset = 0;
     private View viewById;
     private RecyclerView mRecyclerView;
     private long tagId;
     private Realm realmFragmentMain;
-    private RecyclerView.OnScrollListener onScrollListener;
-    private String switcher;
-    private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
-    private long latestScrollToTop;
 
+    private RoomAdapter roomAdapter;
     private HelperToolbar mHelperToolbar;
     private boolean isChatMultiSelectEnable = false;
     private onChatCellClick onChatCellClickedInEditMode;
-    private RoomAdapter roomsAdapter;
     private List<RealmRoom> mSelectedRoomList = new ArrayList<>();
     private ViewGroup mLayoutMultiSelectedActions;
     private TextView mBtnRemoveSelected;
-    private LinearLayoutManager layoutManager;
+    private RealmResults<RealmRoom> results;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -157,13 +145,13 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        isNeedResume = true;
         return inflater.inflate(R.layout.activity_main_rooms, container, false);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isNeedResume = true;
         G.onVersionCallBack = this;
         realmFragmentMain = Realm.getDefaultInstance();
     }
@@ -174,7 +162,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
         tagId = System.currentTimeMillis();
 
-        mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
         progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
         mLayoutMultiSelectedActions = view.findViewById(R.id.amr_layout_selected_actions);
@@ -242,7 +229,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             setColorToDarkMode(mBtnClearCacheSelected);
             setColorToDarkMode(mBtnMakeAsReadSelected);
             setColorToDarkMode(mBtnReadAllSelected);
-        }else {
+        } else {
             setColorToLightMode(mBtnRemoveSelected);
             setColorToLightMode(mBtnClearCacheSelected);
             setColorToLightMode(mBtnMakeAsReadSelected);
@@ -260,21 +247,21 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             //setVisiblityForSelectedActionsInEverySelection();
         };
 
-        if(MusicPlayer.playerStateChangeListener != null){
-            MusicPlayer.playerStateChangeListener.observe(this , isVisible -> {
+        if (MusicPlayer.playerStateChangeListener != null) {
+            MusicPlayer.playerStateChangeListener.observe(this, isVisible -> {
                 notifyChatRoomsList();
 
-                if (!mHelperToolbar.getmSearchBox().isShown()){
-                    mHelperToolbar.animateSearchBox(false , 0 , 0);
+                if (!mHelperToolbar.getmSearchBox().isShown()) {
+                    mHelperToolbar.animateSearchBox(false, 0, 0);
                 }
             });
         }
 
-        G.callStripLayoutVisiblityListener.observe(this , isVisible -> {
-           notifyChatRoomsList();
+        G.callStripLayoutVisiblityListener.observe(this, isVisible -> {
+            notifyChatRoomsList();
 
-            if (!mHelperToolbar.getmSearchBox().isShown()){
-                mHelperToolbar.animateSearchBox(false  , 0 , 0);
+            if (!mHelperToolbar.getmSearchBox().isShown()) {
+                mHelperToolbar.animateSearchBox(false, 0, 0);
             }
 
         });
@@ -282,9 +269,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setItemViewCacheSize(0);
-        layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         initRecycleView();
 
         //just check at first time page loaded
@@ -294,7 +279,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
     private void notifyChatRoomsList() {
 
-        try{
+        try {
             if (mRecyclerView != null) {
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
@@ -304,7 +289,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
                 }
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -320,41 +305,29 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {
-
-        if (isRefreshAll) {
-            roomsAdapter.notifyDataSetChanged();
-        } else {
-            roomsAdapter.notifyItemChanged(pos);
+        if (mRecyclerView.getAdapter() != null) {
+            if (isRefreshAll) {
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            } else {
+                mRecyclerView.getAdapter().notifyItemChanged(pos);
+            }
         }
-
     }
 
     private void initRecycleView() {
 
-        RealmResults<RealmRoom> results = null;
-        String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
-        Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-        RealmQuery<RealmRoom> temp = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
-
-        switch (mainType) {
-            case all:
-                results = temp.sort(fieldNames, sort).findAllAsync();
-                break;
-            case chat:
-                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).sort(fieldNames, sort).findAllAsync();
-                break;
-            case group:
-                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).sort(fieldNames, sort).findAllAsync();
-                break;
-            case channel:
-                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).sort(fieldNames, sort).findAllAsync();
-                break;
+        if (results == null) {
+            String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
+            Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
+            RealmQuery<RealmRoom> temp = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
+            results = temp.sort(fieldNames, sort).findAllAsync();
+            roomAdapter = new RoomAdapter(results, this, viewById, pbLoading);
+            getChatLists();
+        }else{
+            pbLoading.setVisibility(View.GONE);
         }
 
-
-        roomsAdapter = new RoomAdapter(results, this, viewById, pbLoading);
-
-        onScrollListener = new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -371,7 +344,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
                 //check if music player was enable disable scroll detecting for search box
                 if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
-                    if (mHelperToolbar.getmSearchBox()!=null) {
+                    if (mHelperToolbar.getmSearchBox() != null) {
                         if (!mHelperToolbar.getmSearchBox().isShown()) {
                             mHelperToolbar.animateSearchBox(false, 0, 0);
 
@@ -381,15 +354,15 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                     }
                 }
 
-                int position = layoutManager.findFirstVisibleItemPosition();
+                int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
                 //check recycler scroll for search box animation
-                    if (dy <= 0) {
+                if (dy <= 0) {
                     // Scrolling up
-                    mHelperToolbar.animateSearchBox(false , position , -3);
-                } else   {
+                    mHelperToolbar.animateSearchBox(false, position, -3);
+                } else {
                     // Scrolling down
-                    mHelperToolbar.animateSearchBox(true , position , -3);
+                    mHelperToolbar.animateSearchBox(true, position, -3);
                 }
             }
 
@@ -397,28 +370,14 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
             }
-        };
-        mRecyclerView.addOnScrollListener(onScrollListener);
+        });
 
-        mRecyclerView.setAdapter(roomsAdapter);
+        mRecyclerView.setAdapter(roomAdapter);
 
-        if (roomAdapterHashMap == null) {
-            roomAdapterHashMap = new HashMap<>();
-        }
-        roomAdapterHashMap.put(mainType, roomsAdapter);
-
-        if (mainType == all) {
-            getChatLists();
-        }
-
-
-        G.onNotifyTime = new OnNotifyTime() {
-            @Override
-            public void notifyTime() {
-                if (mRecyclerView != null) {
-                    if (mRecyclerView.getAdapter() != null) {
-                        mRecyclerView.getAdapter().notifyDataSetChanged();
-                    }
+        G.onNotifyTime = () -> {
+            if (mRecyclerView != null) {
+                if (mRecyclerView.getAdapter() != null) {
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
                 }
             }
         };
@@ -444,27 +403,20 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     }
 
     private void getChatLists() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.isSecure && G.userLogin) {
-                    boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                    if (send)
-                        progressBar.setVisibility(View.VISIBLE);
-                } else {
-                    getChatLists();
-                }
-            }
-        }, 1000);
+        if (G.isSecure && G.userLogin) {
+            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+            if (send)
+                progressBar.setVisibility(View.VISIBLE);
+        } else {
+            G.handler.postDelayed(this::getChatLists, 1000);
+        }
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
         if (checkValidationForRealm(item)) {
             switch (message) {
                 case "pinToTop":
-
                     pinToTop(item.getId(), item.isPinned());
-
                     break;
                 case "txtMuteNotification":
                     muteNotification(item.getId(), item.getMute());
@@ -535,7 +487,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         }, 50);
     }
 
-
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
         if (realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded()) {
             return true;
@@ -549,9 +500,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
      */
     @Override
     public void onChange() {
-        for (Map.Entry<MainType, RoomAdapter> entry : roomAdapterHashMap.entrySet()) {
-            RoomAdapter requestWrapper = entry.getValue();
-            requestWrapper.notifyDataSetChanged();
+        if (mRecyclerView.getAdapter() != null) {
+            mRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -757,46 +707,21 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             AppUtils.setProgresColler(progressBar);
         }
 
-        try{
+        try {
             mHelperToolbar.checkIsAvailableOnGoingCall();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (mHelperToolbar != null ){
+        if (mHelperToolbar != null) {
             mHelperToolbar.checkPassCodeVisibility();
         }
 
         boolean canUpdate = false;
 
-        if (mainType != null) {
-            switch (mainType) {
-
-                case all:
-                    if (G.isUpdateNotificaionColorMain) {
-                        canUpdate = true;
-                        G.isUpdateNotificaionColorMain = false;
-                    }
-                    break;
-                case chat:
-                    if (G.isUpdateNotificaionColorChat) {
-                        canUpdate = true;
-                        G.isUpdateNotificaionColorChat = false;
-                    }
-                    break;
-                case group:
-                    if (G.isUpdateNotificaionColorGroup) {
-                        canUpdate = true;
-                        G.isUpdateNotificaionColorGroup = false;
-                    }
-                    break;
-                case channel:
-                    if (G.isUpdateNotificaionColorChannel) {
-                        canUpdate = true;
-                        G.isUpdateNotificaionColorChannel = false;
-                    }
-                    break;
-            }
+        if (G.isUpdateNotificaionColorMain) {
+            canUpdate = true;
+            G.isUpdateNotificaionColorMain = false;
         }
 
         if (canUpdate) {
@@ -830,16 +755,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                                     .titleColor(Color.parseColor("#f44336"))
                                     .content(R.string.deprecated)
                                     .contentGravity(GravityEnum.CENTER)
-                                    .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                    // HelperUrl.openBrowser("http://d.igap.net/update");
-                                    String url = "http://d.igap.net/update";
-                                    Intent i = new Intent(Intent.ACTION_VIEW);
-                                    i.setData(Uri.parse(url));
-                                    startActivity(i);
-                                }
+                                    .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
+                                String url = "http://d.igap.net/update";
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(url));
+                                startActivity(i);
                             })
                                     .show();
                         }
@@ -856,35 +776,21 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     public void isUpdateAvailable() {
         try {
             if (getActivity() != null && !getActivity().isFinishing()) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getActivity().hasWindowFocus()) {
-                            new MaterialDialog.Builder(getActivity())
-                                    .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
-                                    .titleGravity(GravityEnum.CENTER)
-                                    .buttonsGravity(GravityEnum.CENTER)
-                                    .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                                    .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                    dialog.dismiss();
-                                }
-                            }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                    // HelperUrl.openBrowser("http://d.igap.net/update");
-                                    String url = "http://d.igap.net/update";
-                                    Intent i = new Intent(Intent.ACTION_VIEW);
-                                    i.setData(Uri.parse(url));
-                                    startActivity(i);
-                                    dialog.dismiss();
-                                }
-                            })
-                                    .show();
-                        }
+                getActivity().runOnUiThread(() -> {
+                    if (getActivity().hasWindowFocus()) {
+                        new MaterialDialog.Builder(getActivity())
+                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                .titleGravity(GravityEnum.CENTER)
+                                .buttonsGravity(GravityEnum.CENTER)
+                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative((dialog, which) -> dialog.dismiss()).positiveText(R.string.startUpdate).onPositive((dialog, which) -> {
+                            String url = "http://d.igap.net/update";
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                            dialog.dismiss();
+                        })
+                                .show();
                     }
                 });
             }
@@ -898,35 +804,35 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         if (isChatMultiSelectEnable) {
             mLayoutMultiSelectedActions.setVisibility(View.GONE);
-            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
+            /*ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_search), 0, 10);
-            mRecyclerView.setLayoutParams(marginLayoutParams);
+            mRecyclerView.setLayoutParams(marginLayoutParams)*/
+            ;
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
-            if (G.isLandscape && G.twoPaneMode){
+            if (G.isLandscape && G.twoPaneMode) {
 
-            }else{
+            } else {
                 mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             }
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
-            //setVisiblityForSelectedActionsInEverySelection();
         } else {
             mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
-            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
+            /*ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_room_selected_mode), 0, 10);
-            mRecyclerView.setLayoutParams(marginLayoutParams);
+            mRecyclerView.setLayoutParams(marginLayoutParams);*/
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
-            if (G.twoPaneMode && G.isLandscape){
+            if (G.twoPaneMode && G.isLandscape) {
             } else {
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
                 mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
-                if (!mHelperToolbar.getmSearchBox().isShown()){
-                    mHelperToolbar.animateSearchBox(false , 0 , 0 );
+                if (!mHelperToolbar.getmSearchBox().isShown()) {
+                    mHelperToolbar.animateSearchBox(false, 0, 0);
                 }
             }
             mHelperToolbar.setLeftIcon(R.string.back_icon);
@@ -942,7 +848,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
                         .setAnimated(true)
                         .setReplace(false)
-                        .setAnimation(R.anim.fade_in , R.anim.fade_out , R.anim.fade_in , R.anim.fade_out)
+                        .setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                         .load();
             } catch (Exception e) {
                 e.getStackTrace();
@@ -952,7 +858,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
     @Override
     public void onRightIconClickListener(View view) {
-        Fragment fragment = RegisteredContactsFragment.newInstance(true,false,RegisteredContactsFragment.ADD);
+        Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
@@ -1161,7 +1067,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             final boolean isMyCloud;
 
             if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId)
-                isMyCloud=true;
+                isMyCloud = true;
             else
                 isMyCloud = false;
 

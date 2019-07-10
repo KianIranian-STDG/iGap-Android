@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -97,6 +98,7 @@ import static net.iGap.G.userTextSize;
 public final class StartupActions {
 
     public StartupActions() {
+        Log.wtf(this.getClass().getName(), "StartupActions");
 
         new Thread(this::manageSettingPreferences).start();
         EmojiManager.install(new IosEmojiProvider());
@@ -120,8 +122,7 @@ public final class StartupActions {
                         RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
                         RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
 
-                        for (RealmRoom room : realmRooms)
-                        {
+                        for (RealmRoom room : realmRooms) {
                             if (room.getLastMessage() != null) {
                                 roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
                             }
@@ -149,6 +150,7 @@ public final class StartupActions {
             new Thread(() -> checkDataUsage()).start();
             new Thread(() -> mainUserInfo()).start();
             new Thread(this::connectToServer).start();
+            Log.wtf(this.getClass().getName(), "StartupActions");
         }
 
     }

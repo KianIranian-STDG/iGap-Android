@@ -165,6 +165,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
+    public int getSelectedItemPosition() {
+        return selectedItemPosition;
+    }
+
     private void onSelectedItemChanged() {
         for (int i = 0; i < tabItems.size(); i++) {
             if (tabItems.get(i).getPosition() == selectedItemPosition) {
