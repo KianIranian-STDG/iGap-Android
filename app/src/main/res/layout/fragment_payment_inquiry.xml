@@ -27,6 +27,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
+      android:layoutDirection="locale"
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
@@ -105,7 +106,7 @@
 
               <EditText
                 android:id="@+id/fpi_edt_mci"
-                style="@style/hint_style_setting_black"
+                style="?hintColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp44"
                   android:background="@drawable/background_cancel_money_action"
@@ -162,7 +163,7 @@
 
                 <EditText
                   android:id="@+id/fpi_edt_telecom_area"
-                  style="@style/hint_style_setting_black"
+                  style="?hintColorSettingTheme"
                   android:layout_width="match_parent"
                   android:layout_height="@dimen/dp44"
                     android:background="@drawable/background_cancel_money_action"
@@ -212,7 +213,7 @@
 
                 <EditText
                   android:id="@+id/fpi_edt_telecom"
-                  style="@style/hint_style_setting_black"
+                  style="?hintColorSettingTheme"
                   android:layout_width="match_parent"
                   android:layout_height="@dimen/dp44"
                     android:background="@drawable/background_cancel_money_action"
@@ -319,6 +320,7 @@
                   android:layout_height="wrap_content"
                   android:gravity="start"
                   android:text="@string/billing_id"
+                    style="?textSubColorSettingTheme"
                   android:textSize="@dimen/dp16" />
 
                 <TextView
@@ -327,6 +329,7 @@
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
                   android:gravity="start"
+                    style="?textTitleColorSettingTheme"
                   android:text="@{fragmentPaymentInquiryViewModel.lastTermBillId}"
                   android:textSize="@dimen/dp16" />
               </LinearLayout>
@@ -343,6 +346,7 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
+                    style="?textSubColorSettingTheme"
                   android:text="@string/payment_code"
                   android:textSize="@dimen/dp16" />
 
@@ -352,6 +356,7 @@
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
                   android:gravity="start"
+                    style="?textTitleColorSettingTheme"
                   android:text="@{fragmentPaymentInquiryViewModel.lastTermPayId}"
                   android:textSize="@dimen/dp16" />
               </LinearLayout>
@@ -368,6 +373,7 @@
                   android:layout_height="wrap_content"
                   android:gravity="start"
                   android:text="@string/amount"
+                    style="?textSubColorSettingTheme"
                   android:textSize="@dimen/dp16" />
 
                 <TextView
@@ -376,6 +382,7 @@
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
                   android:gravity="start"
+                    style="?textTitleColorSettingTheme"
                   android:text="@{fragmentPaymentInquiryViewModel.lastTermAmount}"
                   android:textSize="@dimen/dp16" />
               </LinearLayout>
@@ -410,6 +417,7 @@
               android:layout_height="wrap_content"
               android:gravity="center"
               android:text="@string/mid_term"
+                style="?textSubColorSettingTheme"
               android:textSize="@dimen/dp16" />
 
             <TextView
@@ -419,6 +427,7 @@
               android:layout_marginTop="@dimen/dp6"
               android:layout_marginBottom="@dimen/dp6"
               android:gravity="center"
+                style="?textTitleColorSettingTheme"
               android:text="@{fragmentPaymentInquiryViewModel.midTermMessage}"
               android:textSize="@dimen/dp16"
               android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ? View.VISIBLE : View.GONE }" />
@@ -441,6 +450,7 @@
                   android:layout_height="wrap_content"
                   android:gravity="start"
                   android:text="@string/billing_id"
+                    style="?textSubColorSettingTheme"
                   android:textSize="@dimen/dp16" />
 
                 <TextView
@@ -448,6 +458,7 @@
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
                   android:gravity="start"
+                    style="?textTitleColorSettingTheme"
                   android:text="@{fragmentPaymentInquiryViewModel.midTermBillId}"
                   android:textSize="@dimen/dp16" />
               </LinearLayout>
@@ -463,6 +474,7 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
+                    style="?textSubColorSettingTheme"
                   android:text="@string/payment_code"
                   android:textSize="@dimen/dp16" />
 
@@ -471,6 +483,7 @@
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
+                    style="?textTitleColorSettingTheme"
                   android:gravity="start"
                   android:text="@{fragmentPaymentInquiryViewModel.midTermPayId}"
                   android:textSize="@dimen/dp16" />
@@ -488,6 +501,7 @@
                   android:layout_height="wrap_content"
                   android:gravity="start"
                   android:text="@string/amount"
+                    style="?textSubColorSettingTheme"
                   android:textSize="@dimen/dp16" />
 
                 <TextView
@@ -496,6 +510,7 @@
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
                   android:gravity="start"
+                    style="?textTitleColorSettingTheme"
                   android:text="@{fragmentPaymentInquiryViewModel.midTermAmount}"
                   android:textSize="@dimen/dp16" />
               </LinearLayout>

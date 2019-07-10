@@ -234,4 +234,5 @@
     <string name="down_arrow_icon">È</string>
     <string name="unlock_icon">Å</string>
     <string name="lock_icon">}</string>
+    <string name="coin_icon">2</string>
 </resources>
