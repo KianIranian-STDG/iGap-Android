@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.QR;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
@@ -56,7 +53,7 @@ public class MyQRFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_qr, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
 
 
@@ -132,6 +129,7 @@ public class MyQRFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (getActivity() instanceof  NavigationBarActivity)
         ((NavigationBarActivity) getActivity()).broadcastMessageToPreviousFragment(
                 MyQRFragment.this, null, ScannerFragment.class);
     }

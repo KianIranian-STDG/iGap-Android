@@ -49,6 +49,7 @@ import net.iGap.R;
 import net.iGap.databinding.CongratulationsDialogBinding;
 import net.iGap.databinding.QrVoucherDialogBinding;
 import net.iGap.databinding.UnsuccessfulDialogBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -152,6 +153,9 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                         if (getActivity() instanceof NavigationBarActivity) {
                             isVisible = false;
                             ((NavigationBarActivity) getActivity()).pushFullFragment(new MyQRFragment(), "MyQRFragment");
+                        }else {
+                            isVisible = false ;
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new MyQRFragment()).setReplace(false).load();
                         }
                     }
                 });
@@ -226,9 +230,14 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
         try{
             WalletActivity.backgroundTheme = G.backgroundTheme;
+            WalletActivity.backgroundTheme_2 = G.backgroundTheme_2;
 
             if (WalletActivity.backgroundTheme.length() == 9) {
                 WalletActivity.backgroundTheme = "#FF" + WalletActivity.backgroundTheme.substring(3);
+            }
+
+            if (WalletActivity.backgroundTheme_2.length() == 9) {
+                WalletActivity.backgroundTheme_2 = "#FF" + WalletActivity.backgroundTheme_2.substring(3);
             }
 
             WalletActivity.primaryColor = G.appBarColor ;
