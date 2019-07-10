@@ -938,7 +938,7 @@ public class RealmRoomMessage extends RealmObject {
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message.getMessageId());
         }
     }
 

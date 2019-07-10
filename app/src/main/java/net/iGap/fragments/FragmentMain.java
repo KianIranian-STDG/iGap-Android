@@ -566,7 +566,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     }
 
     @Override
-    public void onMessageFailed(long roomId, RealmRoomMessage roomMessage) {
+    public void onMessageFailed(long roomId, long messageId) {
 
     }
 
