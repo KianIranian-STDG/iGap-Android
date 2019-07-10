@@ -6641,7 +6641,7 @@ public class FragmentChat extends BaseFragment
     private void initAttachForward() {
         canClearForwardList = true;
         multiForwardList = new ArrayList<>();
-        viewBottomSheetForward = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet_forward, null);
+        viewBottomSheetForward = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet_forward, null);
 
         fastItemAdapterForward = new FastItemAdapter();
 
@@ -6652,7 +6652,7 @@ public class FragmentChat extends BaseFragment
         rcvItem.setLayoutManager(new GridLayoutManager(rcvItem.getContext(), 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
         rcvItem.setAdapter(fastItemAdapterForward);
-        bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity,G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
+        bottomSheetDialogForward = new BottomSheetDialog(getActivity(),G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
 

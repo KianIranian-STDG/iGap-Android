@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
@@ -26,6 +27,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,13 +76,10 @@ public class FragmentContactsProfile extends BaseFragment {
     private static final String ROOM_ID = "RoomId";
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
-    /*private long userId = 0;
-    private long roomId = 0;*/
-    private String report;
 
+    private String report;
     private FragmentContactsProfileBinding binding;
     private FragmentContactsProfileViewModel viewModel;
-    private CircleImageView userAvatarImageView;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -92,16 +91,18 @@ public class FragmentContactsProfile extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(FragmentContactsProfileViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contacts_profile, container, false);
-        return attachToSwipeBack(binding.getRoot());
-    }
-
-    @Override
-    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
         long userId = 0;
         long roomId = 0;
         String enterFrom = "";
@@ -110,12 +111,17 @@ public class FragmentContactsProfile extends BaseFragment {
             roomId = getArguments().getLong(ROOM_ID);
             enterFrom = getArguments().getString(ENTER_FROM);
         }
-        viewModel = new FragmentContactsProfileViewModel(roomId, userId, enterFrom, avatarHandler);
-        binding.setViewModel(viewModel);
+        viewModel.init(roomId, userId, enterFrom, avatarHandler);
+        return attachToSwipeBack(binding.getRoot());
+    }
 
-        if (G.isDarkTheme){
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (G.isDarkTheme) {
             binding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
-            DrawableCompat.setTint(binding.chiFabSetPic.getDrawable() , getContext().getResources().getColor(R.color.white));
+            DrawableCompat.setTint(binding.chiFabSetPic.getDrawable(), getContext().getResources().getColor(R.color.white));
         }
 
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
@@ -123,47 +129,43 @@ public class FragmentContactsProfile extends BaseFragment {
         binding.toolbarVoiceCall.setOnClickListener(v -> viewModel.onVoiceCallButtonClick());
         binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
 
-        userAvatarImageView = binding.toolbarAvatar;
-
-        userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
-
-        viewModel.menuVisibility.observe(this, visibility -> {
+        viewModel.menuVisibility.observe(getViewLifecycleOwner(), visibility -> {
             if (visibility != null) {
                 binding.toolbarMore.setVisibility(visibility);
             }
         });
 
-        viewModel.videoCallVisibility.observe(this, visibility -> {
+        viewModel.videoCallVisibility.observe(getViewLifecycleOwner(), visibility -> {
             if (visibility != null) {
                 binding.toolbarVideoCall.setVisibility(visibility);
             }
         });
 
-        viewModel.callVisibility.observe(this, visibility -> {
+        viewModel.callVisibility.observe(getViewLifecycleOwner(), visibility -> {
             if (visibility != null) {
                 binding.toolbarVoiceCall.setVisibility(visibility);
             }
         });
 
         //todo: fixed it and move to viewModel
-        viewModel.isMuteNotificationChangeListener.observe(this, isChecked -> {
+        viewModel.isMuteNotificationChangeListener.observe(getViewLifecycleOwner(), isChecked -> {
             binding.enableNotification.setChecked(isChecked);
             new RequestClientMuteRoom().muteRoom(viewModel.roomId, isChecked);
         });
 
-        viewModel.contactName.observe(this, name -> {
+        viewModel.contactName.observe(getViewLifecycleOwner(), name -> {
             if (name != null) {
                 binding.toolbarName.setText(name);
             }
         });
 
-        viewModel.lastSeen.observe(this, lastSeen -> {
+        viewModel.lastSeen.observe(getViewLifecycleOwner(), lastSeen -> {
             if (lastSeen != null) {
                 binding.toolbarStatus.setText(HelperCalander.unicodeManage(lastSeen));
             }
         });
 
-        viewModel.goToChatPage.observe(this, userRoomId -> {
+        viewModel.goToChatPage.observe(getViewLifecycleOwner(), userRoomId -> {
             if (getActivity() != null && userRoomId != null) {
                 if (G.twoPaneMode) {
                     ((ActivityMain) getActivity()).removeAllFragment();
@@ -174,13 +176,13 @@ public class FragmentContactsProfile extends BaseFragment {
             }
         });
 
-        viewModel.goBack.observe(this, isBack -> {
+        viewModel.goBack.observe(getViewLifecycleOwner(), isBack -> {
             if (isBack != null && isBack) {
                 popBackStackFragment();
             }
         });
 
-        viewModel.goToShearedMediaPage.observe(this, data -> {
+        viewModel.goToShearedMediaPage.observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(data)).setReplace(false).load();
             }
@@ -494,7 +496,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
         viewModel.setAvatar.observe(this, aBoolean -> {
             if (aBoolean != null && aBoolean) {
-                avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarImageView, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                avatarHandler.getAvatar(new ParamWithAvatarType(binding.toolbarAvatar, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
             }
         });
 
@@ -523,6 +525,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
         viewModel.goToShowAvatarPage.observe(this, isCurrentUser -> {
             if (getActivity() != null && isCurrentUser != null) {
+                Log.wtf(this.getClass().getName(), "goToShowAvatarPage observe");
                 FragmentShowAvatars fragment;
                 if (isCurrentUser) {
                     fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.setting);

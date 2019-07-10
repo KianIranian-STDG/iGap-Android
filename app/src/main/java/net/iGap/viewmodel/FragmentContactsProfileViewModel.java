@@ -1,6 +1,7 @@
 package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -51,7 +52,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
 
-public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
+public class FragmentContactsProfileViewModel extends ViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
 
     public ObservableInt bioVisibility = new ObservableInt(View.VISIBLE);
     public ObservableBoolean showNumber = new ObservableBoolean(true);
@@ -123,7 +124,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     private AvatarHandler avatarHandler;
     private boolean isBot = false;
 
-    public FragmentContactsProfileViewModel(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
+    public void init(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
         this.roomId = roomId;
         this.userId = userId;
         this.enterFrom = enterFrom;
