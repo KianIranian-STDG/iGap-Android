@@ -9,15 +9,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentToolBarBack;
@@ -117,8 +120,30 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
             }
         });
 
+        updateFontTabLayout(tabLayout);
+
     }
 
+    private void updateFontTabLayout(TabLayout tabLayout) {
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if (tabLayout.getTabAt(i) == null) {
+                continue;
+            }
+
+            TextView tv = new TextView(getContext());
+            tv.setText(tabLayout.getTabAt(i).getText());
+            tv.setGravity(Gravity.CENTER);
+            tv.setTypeface(G.typeface_IRANSansMobile);
+
+            if (G.isDarkTheme){
+                tv.setTextColor(G.context.getResources().getColor(R.color.white));
+            }
+            else {
+                tv.setTextColor(G.context.getResources().getColor(R.color.black));
+            }
+            tabLayout.getTabAt(i).setCustomView(tv);
+        }
+    }
     public class SectionPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionPagerAdapter(FragmentManager fm) {
