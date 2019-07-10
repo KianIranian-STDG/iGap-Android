@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -62,76 +60,39 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private boolean isSendRequestForLoading = false;
     private boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
+    private View emptuListView;
     private boolean canclick = false;
     private int move = 0;
     private int mOffset = 0;
     private int mLimit = 50;
     private RecyclerView.OnScrollListener onScrollListener;
-    private AppCompatImageView imgCallEmpty;
-    private AppCompatTextView empty_call;
     private int attampOnError = 0;
     private RecyclerView mRecyclerView;
     private ProtoSignalingGetLog.SignalingGetLog.Filter mSelectedStatus = ProtoSignalingGetLog.SignalingGetLog.Filter.ALL;
 
     private TextView mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls;
     private RealmResults<RealmCallLog> realmResults;
-    private CallAdapter callAdapter;
-    private Realm mRealm;
     private HelperToolbar mHelperToolbar;
 
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
-
         FragmentCall fragmentCall = new FragmentCall();
-
         Bundle bundle = new Bundle();
         bundle.putBoolean(OPEN_IN_FRAGMENT_MAIN, openInFragmentMain);
         fragmentCall.setArguments(bundle);
-
         return fragmentCall;
     }
-
-
-    private boolean isInit = false;
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !isInit) {
-            /*G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {*/
-
-                    init();
-                /*}
-            }, 800);*/
-        }
-    }
-
 
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         RealmCallLog.manageClearCallLog();
-        /*openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);*/
-        /*if (openInMain) {*/
         return inflater.inflate(R.layout.fragment_call, container, false);
-        /*}
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));*/
     }
-
-    private View view;
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.view = view;
-
-        addToolbar();
-        init();
-    }
-
-    private void addToolbar() {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -146,58 +107,36 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
 
-    }
-
-    private void init() {
-        if (view == null) {
-            return;
-        }
-
         mBtnAllCalls = view.findViewById(R.id.fc_btn_all_calls);
         mBtnMissedCalls = view.findViewById(R.id.fc_btn_missed_calls);
         mBtnCanceledCalls = view.findViewById(R.id.fc_btn_canceled_calls);
         mBtnIncomingCalls = view.findViewById(R.id.fc_btn_incoming_calls);
         mBtnOutgoingCalls = view.findViewById(R.id.fc_btn_outgoing_calls);
         progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
-        imgCallEmpty = view.findViewById(R.id.img_icCall);
-        empty_call = view.findViewById(R.id.textEmptyCal);
+        emptuListView = view.findViewById(R.id.empty_layout);
         progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
 
         setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
 
-        if (!getUserVisibleHint()) {
-            if (!isInit) {
-                imgCallEmpty.setVisibility(View.VISIBLE);
-                empty_call.setVisibility(View.VISIBLE);
-                view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
-            }
-            return;
-        }
-
-        isInit = true;
-        view.findViewById(R.id.pb_load).setVisibility(View.GONE);
-        imgCallEmpty.setVisibility(View.GONE);
-        empty_call.setVisibility(View.GONE);
-
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
-        LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(linearVertical);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
 
-        Realm realm = Realm.getDefaultInstance();
-        realmResults = getRealmResult(mSelectedStatus, realm);
-        realm.close();
+        if (realmResults == null) {
+            Realm realm = Realm.getDefaultInstance();
+            realmResults = getRealmResult(mSelectedStatus, realm);
+            realm.close();
+        }
 
         checkListIsEmpty();
 
-        callAdapter = new CallAdapter(realmResults);
-        mRecyclerView.setAdapter(callAdapter);
+        mRecyclerView.setAdapter(new CallAdapter(realmResults));
 
         getLogListWithOffset();
 
-        callAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        mRecyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -214,16 +153,13 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         });
 
         onScrollListener = new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (isThereAnyMoreItemToLoad) {
                     if (!isSendRequestForLoading) {
-
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-
                         if (lastVisiblePosition + 15 >= mOffset) {
                             getLogListWithOffset();
                         }
@@ -237,35 +173,11 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         G.iSignalingGetCallLog = new ISignalingGetCallLog() {
             @Override
             public void onGetList(final int size, final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> signalingLogList) {
-
                 if (signalingLogList != null) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Realm realm = Realm.getDefaultInstance();
-                            //realm.executeTransaction(new Realm.Transaction() {
-                            //    @Override
-                            //    public void execute(Realm realm) {
-                            //        for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog : signalingLogList) {
-                            //            RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
-                            //            if (realmCallLog != null && mAdapter.getPosition(callLog.getId()) == -1) {
-                            //                if (imgCallEmpty != null && imgCallEmpty.getVisibility() == View.VISIBLE) {
-                            //                    imgCallEmpty.setVisibility(View.GONE);
-                            //                    empty_call.setVisibility(View.GONE);
-                            //                }
-                            //                mAdapter.add(0, new CallItem().setInfo(realmCallLog).withIdentifier(callLog.getId()));
-                            //            }
-                            //        }
-                            //    }
-                            //});
-                            //realm.close();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
+                    G.handler.post(() -> progressBar.setVisibility(View.GONE));
                 }
 
                 if (size == -1) {
-
                     if (attampOnError < 2) {
                         isSendRequestForLoading = false;
                         attampOnError++;
@@ -284,21 +196,17 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         };
 
         mBtnAllCalls.setOnClickListener(v -> {
-
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.ALL) {
                 setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
             }
-
         });
 
         mBtnMissedCalls.setOnClickListener(v -> {
-
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED) {
                 setEnableButton(mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
             }
-
         });
 
         mBtnOutgoingCalls.setOnClickListener(v -> {
@@ -330,7 +238,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     }
 
     private void checkListIsEmpty() {
-        view.findViewById(R.id.empty_layout).setVisibility(realmResults.size() > 0 ? View.GONE : View.VISIBLE);
+        emptuListView.setVisibility(realmResults.size() > 0 ? View.GONE : View.VISIBLE);
     }
 
     private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
@@ -339,10 +247,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         Realm realm = Realm.getDefaultInstance();
         realmResults = getRealmResult(mSelectedStatus, realm);
         realm.close();
-
-        callAdapter = new CallAdapter(realmResults);
-        mRecyclerView.setAdapter(callAdapter);
-
+        mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
     }
 
@@ -398,7 +303,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     public void showContactListForCall() {
         try {
             if (getActivity() != null) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance(true,true,RegisteredContactsFragment.CALL);
+                Fragment fragment = RegisteredContactsFragment.newInstance(true,true,RegisteredContactsFragment.CALL);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
@@ -413,12 +318,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit, mSelectedStatus);
             progressBar.setVisibility(View.VISIBLE);
         } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getLogListWithOffset();
-                }
-            }, 1000);
+            new Handler().postDelayed(this::getLogListWithOffset, 1000);
         }
 
     }
@@ -430,7 +330,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
     @Override
     public void onRightIconClickListener(View view) {
-
         showContactListForCall();
     }
 
@@ -447,7 +346,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     try {
                         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
                         new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                        emptuListView.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
