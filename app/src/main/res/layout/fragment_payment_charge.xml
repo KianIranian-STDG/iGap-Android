@@ -27,6 +27,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
+      android:layoutDirection="locale"
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
@@ -211,11 +212,11 @@
           android:orientation="horizontal">
 
           <net.iGap.module.MaterialDesignTextView
-            style="?iconColorMenuTheme"
+            style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/md_currency_usd"
+            android:text="@string/coin_icon"
             android:textAppearance="@style/TextIconAppearance.menu"
             android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp22"

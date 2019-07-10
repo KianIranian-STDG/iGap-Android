@@ -129,7 +129,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         // because actionbar not in this view do that and not correct in viewModel
         imvGroupAvatar = binding.toolbarAvatar;
-        imvGroupAvatar.setOnClickListener(v -> binding.toolbarEdit.setVisibility(View.GONE));
+        imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
 
         binding.toolbarEdit.setOnClickListener(v -> {
             if (getActivity() != null) {

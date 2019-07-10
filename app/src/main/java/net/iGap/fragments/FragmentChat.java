@@ -1705,6 +1705,11 @@ public class FragmentChat extends BaseFragment
         manageExtraLayout();
     }
 
+    private void goneCallButtons(){
+        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
+        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+    }
+
     private long getMessagesCount() {
         return getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size();
     }
@@ -1774,6 +1779,7 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 if (isCloudRoom) {
                     txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                    goneCallButtons();
                 } else if (isBot) {
                     txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                 } else {
@@ -5085,6 +5091,7 @@ public class FragmentChat extends BaseFragment
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                            goneCallButtons();
                         } else if (isBot) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                         } else {
@@ -5398,6 +5405,7 @@ public class FragmentChat extends BaseFragment
                     userTime = time;
                     if (isCloudRoom) {
                         txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                        goneCallButtons();
                         //  avi.setVisibility(View.GONE);
                         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -5470,6 +5478,7 @@ public class FragmentChat extends BaseFragment
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                            goneCallButtons();
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
