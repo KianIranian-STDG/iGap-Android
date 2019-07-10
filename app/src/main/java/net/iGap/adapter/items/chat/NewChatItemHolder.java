@@ -107,6 +107,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         editedIndicatorTv = new AppCompatTextView(getContext());
         editedIndicatorTv.setId(R.id.tv_chatItem_edited);
         setTextSize(editedIndicatorTv,R.dimen.smallTextSize);
+        setTypeFace(editedIndicatorTv);
         editedIndicatorTv.setText(getResources().getString(R.string.edited));
         editedIndicatorTv.setGravity(LEFT);
 
