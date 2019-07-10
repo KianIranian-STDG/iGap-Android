@@ -1800,4 +1800,8 @@
     <string name="cardToCardBtnText">کارت به کارت</string>
     <string name="crad_to_card_dest_name">نام دارنده حساب</string>
     <string name="location_dialog_message">آیا می خواهید از موقیعت مکانی شما استفاده شود؟</string>
+
+    <string name="str_frag_sync_contactTitle">به دوستان خود سلام کنید و بهشون بگید که در آی گپ هستید.</string>
+    <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
+    <string name="str_frag_sync_skipBtn">شروع برنامه</string>
 </resources>

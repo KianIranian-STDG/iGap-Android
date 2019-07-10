@@ -2741,4 +2741,8 @@
 
     <string name="crad_to_card_dest_name">اسم صاحب الحساب</string>
     <string name="location_dialog_message">هل تريد استخدام موقعك؟</string>
+
+    <string name="str_frag_sync_contactTitle">قل مرحبا لأصدقائك</string>
+    <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
+    <string name="str_frag_sync_skipBtn">البدء</string>
 </resources>
