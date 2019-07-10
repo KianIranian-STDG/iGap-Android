@@ -28,6 +28,9 @@ allprojects {
         google()
         jcenter()
         maven { url "https://maven.google.com" }
+        maven {
+            url 'https://dl.bintray.com/metrixorg/maven'
+        }
     }
 }
 

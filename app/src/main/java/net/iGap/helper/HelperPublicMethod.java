@@ -87,46 +87,39 @@ public class HelperPublicMethod {
     }
 
     private static void getUserInfo(final long peerId, final long roomId, final OnComplete onComplete, final OnError onError) {
-
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (user.getId() == peerId) {
-                            Realm realm = Realm.getDefaultInstance();
-
-                            realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRegisteredInfo.putOrUpdate(realm, user);
-                                }
-                            }, new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
-                                    try {
-
-                                        if (onComplete != null) {
-                                            onComplete.complete();
-                                        }
-
-                                        goToRoom(roomId, peerId);
-
-                                        G.onUserInfoResponse = null;
-
-                                    } catch (IllegalStateException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-
-                            realm.close();
-                        }
+                if (user.getId() == peerId) {
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRegisteredInfo.putOrUpdate(realm, user);
+                            }
+                        });
                     }
-                });
+
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+
+                                G.refreshRealmUi();
+
+                                if (onComplete != null) {
+                                    onComplete.complete();
+                                }
+
+                                goToRoom(roomId, peerId);
+
+                                G.onUserInfoResponse = null;
+                            } catch (IllegalStateException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
             }
 
             @Override

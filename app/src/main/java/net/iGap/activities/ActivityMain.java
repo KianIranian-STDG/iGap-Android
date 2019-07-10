@@ -1342,7 +1342,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onMessageFailed(final long roomId, RealmRoomMessage roomMessage) {
+    public void onMessageFailed(final long roomId, long messageId) {
         //empty
     }
 

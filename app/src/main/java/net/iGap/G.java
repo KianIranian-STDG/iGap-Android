@@ -65,6 +65,7 @@ import javax.crypto.spec.SecretKeySpec;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
@@ -486,6 +487,15 @@ public class G extends Application {
         super.onCreate();
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
+
+        Metrix.initialize(this, "jpbnabzrmeqvxme");
+
+        Metrix.getInstance().enableLogging(true);
+//        Metrix.getInstance().setLogLevel(Log.DEBUG);
+        Metrix.getInstance().setEventUploadPeriodMillis(30000);
+
+        // not exist in dashboard
+        Metrix.getInstance().setScreenFlowsAutoFill(true);
 
         new Thread(new Runnable() {
             @Override

@@ -10,9 +10,6 @@
 
 package net.iGap.response;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import net.iGap.G;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.realm.RealmAvatar;
@@ -39,37 +36,25 @@ public class ChannelAvatarAddResponse extends MessageHandler {
 
         final ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAvatar.putOrUpdate(realm, builder.getRoomId(), builder.getAvatar());
+                }
+            });
+        }
+
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAvatar.putOrUpdate(realm, builder.getRoomId(), builder.getAvatar());
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        if (G.onChannelAvatarAdd != null) {
-
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    G.onChannelAvatarAdd.onAvatarAdd(builder.getRoomId(), builder.getAvatar());
-                                }
-                            });
-                        }
-
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                    }
-                });
-                realm.close();
+                if (G.onChannelAvatarAdd != null) {
+                    G.refreshRealmUi();
+                    G.onChannelAvatarAdd.onAvatarAdd(builder.getRoomId(), builder.getAvatar());
+                }
             }
         });
+
     }
 
     @Override
