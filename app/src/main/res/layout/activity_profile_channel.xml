@@ -415,6 +415,7 @@
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
                     android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
