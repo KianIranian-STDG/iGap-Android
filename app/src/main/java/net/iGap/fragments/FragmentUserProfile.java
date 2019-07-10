@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -53,7 +54,6 @@ import io.realm.Realm;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-
 public class FragmentUserProfile extends BaseFragment {
 
     private FragmentUserProfileBinding binding;
@@ -62,7 +62,8 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        viewModel.init(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class FragmentUserProfile extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
 
-        viewModel.goToAddMemberPage.observe(this, aBoolean -> {
+        viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 Realm realm = Realm.getDefaultInstance();
                 Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
@@ -92,13 +93,13 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.goToWalletAgreementPage.observe(this, phoneNumber -> {
+        viewModel.goToWalletAgreementPage.observe(getViewLifecycleOwner(), phoneNumber -> {
             if (getActivity() != null && phoneNumber != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
             }
         });
 
-        viewModel.goToWalletPage.observe(this, phoneNumber -> {
+        viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
             if (phoneNumber != null) {
                 Intent intent = new Intent(getActivity(), WalletActivity.class);
                 intent.putExtra("Language", "fa");
@@ -118,7 +119,7 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.shareInviteLink.observe(this, link -> {
+        viewModel.shareInviteLink.observe(getViewLifecycleOwner(), link -> {
             if (link != null) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
@@ -129,7 +130,7 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.goToScannerPage.observe(this, go -> {
+        viewModel.goToScannerPage.observe(getViewLifecycleOwner(), go -> {
             if (go != null && go) {
                 try {
                     HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
@@ -153,7 +154,7 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.checkLocationPermission.observe(this, isCheck -> {
+        viewModel.checkLocationPermission.observe(getViewLifecycleOwner(), isCheck -> {
             if (isCheck != null && isCheck) {
                 try {
                     HelperPermission.getLocationPermission(getActivity(), new OnGetPermission() {
@@ -172,51 +173,51 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.goToIGapMapPage.observe(this, isGo -> {
+        viewModel.goToIGapMapPage.observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null && isGo) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
             }
         });
 
-        viewModel.goToFAQPage.observe(this, link -> {
+        viewModel.goToFAQPage.observe(getViewLifecycleOwner(), link -> {
             if (link != null) {
                 HelperUrl.openBrowser(link);
             }
         });
 
-        viewModel.goToSettingPage.observe(this, go -> {
+        viewModel.goToSettingPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
             }
         });
 
-        viewModel.goToShowAvatarPage.observe(this, userId -> {
+        viewModel.goToShowAvatarPage.observe(getViewLifecycleOwner(), userId -> {
             if (getActivity() != null && userId != null) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
 
-        viewModel.goToUserScorePage.observe(this, go -> {
+        viewModel.goToUserScorePage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();
             }
         });
 
-        viewModel.setUserAvatar.observe(this, userId -> {
+        viewModel.setUserAvatar.observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
                 avatarHandler.getAvatar(new ParamWithAvatarType(binding.fupUserImage, userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
             }
         });
 
-        viewModel.deleteAvatar.observe(this, deleteAvatarModel -> {
+        viewModel.deleteAvatar.observe(getViewLifecycleOwner(), deleteAvatarModel -> {
             if (deleteAvatarModel != null) {
                 avatarHandler.avatarDelete(new ParamWithAvatarType(binding.fupUserImage, deleteAvatarModel.getUserId())
                         .avatarType(AvatarHandler.AvatarType.USER), deleteAvatarModel.getAvatarId());
             }
         });
 
-        viewModel.setUserAvatarPath.observe(this, changeImageModel -> {
+        viewModel.setUserAvatarPath.observe(getViewLifecycleOwner(), changeImageModel -> {
             if (changeImageModel != null) {
                 if (changeImageModel.getImagePath() == null || !new File(changeImageModel.getImagePath()).exists()) {
                     //Realm realm1 = Realm.getDefaultInstance();
@@ -228,13 +229,13 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.goToChatPage.observe(this, roomId -> {
+        viewModel.goToChatPage.observe(getViewLifecycleOwner(), roomId -> {
             if (getActivity() != null && roomId != null) {
                 new GoToChatActivity(roomId).startActivity(getActivity());
             }
         });
 
-        viewModel.isEditProfile.observe(this, isEditProfile -> {
+        viewModel.isEditProfile.observe(getViewLifecycleOwner(), isEditProfile -> {
             if (isEditProfile != null) {
                 if (!isEditProfile) {
                     hideKeyboard();
@@ -252,13 +253,13 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.showDialogChooseImage.observe(this, aBoolean -> {
+        viewModel.showDialogChooseImage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 startDialog();
             }
         });
 
-        viewModel.resetApp.observe(this, isReset -> {
+        viewModel.resetApp.observe(getViewLifecycleOwner(), isReset -> {
             if (getActivity() instanceof ActivityEnhanced && isReset != null && isReset) {
                 ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
             }

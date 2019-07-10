@@ -48,6 +48,7 @@ import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserIVandGetScore;
@@ -112,26 +113,26 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
     private ObservableInt showLoading = new ObservableInt(View.GONE);
     private ObservableField<Integer> textsGravity = new ObservableField<>(Gravity.LEFT);
-    
+
     //ui
-    public MutableLiveData<Boolean> goToAddMemberPage = new MutableLiveData<>();
-    public MutableLiveData<String> goToWalletAgreementPage = new MutableLiveData<>();
-    public MutableLiveData<String> goToWalletPage = new MutableLiveData<>();
-    public MutableLiveData<String> shareInviteLink = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToScannerPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> checkLocationPermission = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToIGapMapPage = new MutableLiveData<>();
-    public MutableLiveData<String> goToFAQPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToSettingPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToUserScorePage = new MutableLiveData<>();
-    public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
-    public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
-    public MutableLiveData<DeleteAvatarModel> deleteAvatar = new MutableLiveData<>();
-    public MutableLiveData<ChangeImageModel> setUserAvatarPath = new MutableLiveData<>();
-    public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> shareInviteLink = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToScannerPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> checkLocationPermission = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToIGapMapPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> goToFAQPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToSettingPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToUserScorePage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Long> goToShowAvatarPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Long> setUserAvatar = new SingleLiveEvent<>();
+    public SingleLiveEvent<DeleteAvatarModel> deleteAvatar = new SingleLiveEvent<>();
+    public SingleLiveEvent<ChangeImageModel> setUserAvatarPath = new SingleLiveEvent<>();
+    public SingleLiveEvent<Long> goToChatPage = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> isEditProfile = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showDialogChooseImage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> resetApp = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showDialogChooseImage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> resetApp = new SingleLiveEvent<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -150,14 +151,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private AvatarHandler avatarHandler;
 
-    public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
+    public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
+
         this.sharedPreferences = sharedPreferences;
         this.avatarHandler = avatarHandler;
 
         //set user info text gravity
-        if (G.selectedLanguage.equals("en")){
+        if (G.selectedLanguage.equals("en")) {
             textsGravity.set(Gravity.LEFT);
-        }else{
+        } else {
             textsGravity.set(Gravity.RIGHT);
         }
 
@@ -797,7 +799,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return new File(pathSaveImage);
     }
 
-    private void getIVandScore(){
+    private void getIVandScore() {
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
@@ -805,8 +807,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             }
 
             @Override
-            public void onError(int major,int minor) {
-                if (major == 5 && minor == 1){
+            public void onError(int major, int minor) {
+                if (major == 5 && minor == 1) {
                     getIVandScore();
                 }
             }
