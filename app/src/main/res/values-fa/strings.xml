@@ -1599,7 +1599,7 @@
     <string name="no_camera_found">دوربین دستگاه یافت نشد</string>
 
     <string name="paygear_balance">موجودی کیف پول</string>
-    <string name="paygear_card_balance">موجودی کیف پول کارت</string>
+    <string name="paygear_card_balance">موجودی کیف پول</string>
     <string name="paygear_account_balance">موجودی حساب کیف پول</string>
     <string name="cashable_balance">موجودی قابل برداشت</string>
     <string name="cashable_price">مبلغ قابل برداشت</string>
@@ -1732,7 +1732,7 @@
     <string name="bank_etebari_tosee">موسسه اعتباری توسعه</string>
     <string name="bank_etebari_asgarieh">موسسه اعتباری عسگریه</string>
     <string name="card_bank">کارت بانک</string>
-    <string name="paygear_card">کیف پول کارت</string>
+    <string name="paygear_card">کیف پول</string>
     <string name="set_password">ثبت رمز عبور</string>
     <string name="change_password">تغییر رمز عبور کیف پول</string>
     <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
