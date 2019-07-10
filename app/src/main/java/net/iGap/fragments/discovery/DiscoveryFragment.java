@@ -103,7 +103,7 @@ public class DiscoveryFragment extends FragmentToolBarBack implements ToolbarLis
 
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
-                    .setLeftIcon(R.string.flag_icon)
+                    //.setLeftIcon(R.string.flag_icon)
                    // .setRightSmallAvatarShown(true)
                     .setLogoShown(true)
                     .setFragmentActivity(getActivity())

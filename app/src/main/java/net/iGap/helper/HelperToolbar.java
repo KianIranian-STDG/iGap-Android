@@ -1483,6 +1483,8 @@ public class HelperToolbar {
                     civAvatar = new CircleImageView(getContext());
                     civCloud  = new CircleImageView(getContext());
 
+                    civAvatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
                     civAvatar.setId(R.id.view_toolbar_user_chat_avatar);
                     civCloud.setId(R.id.view_toolbar_user_cloud_avatar);
 
