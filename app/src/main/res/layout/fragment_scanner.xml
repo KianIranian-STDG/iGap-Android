@@ -20,18 +20,16 @@
         android:id="@+id/root_current"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp">
+        android:layout_height="wrap_content">
     <TextView
         android:id="@+id/balance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:background="@color/green"
         android:gravity="center_horizontal"
         android:padding="14dp"
         android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:textSize="@dimen/standardTextSize" />
 
 
     <RelativeLayout
@@ -53,7 +51,7 @@
             android:layout_centerHorizontal="true"
             android:text="@string/scan"
             android:textColor="@android:color/white"
-            android:textSize="38sp" />
+            android:textSize="35dp" />
 
         <ImageView
             android:id="@+id/scan_frame"

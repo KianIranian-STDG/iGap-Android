@@ -140,7 +140,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.scan_qr_code_icon)
-                .setDefaultTitle(getString(R.string.payment_history))
+                .setDefaultTitle(getString(R.string.scanner))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
