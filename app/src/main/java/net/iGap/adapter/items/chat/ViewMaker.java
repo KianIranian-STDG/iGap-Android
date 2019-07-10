@@ -905,6 +905,7 @@ public class ViewMaker {
         CheckBox checkBox = new CheckBox(G.context);
         checkBox.setId(R.id.fcsl_check_box);
         checkBox.setVisibility(View.GONE);
+        checkBox.setClickable(false);
         checkBox.setButtonDrawable(R.drawable.check_box_background);
         LinearLayout.LayoutParams lp_checkBox = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT);
         lp_checkBox.setMargins(i_Dp(R.dimen.dp10), 0 , i_Dp(R.dimen.dp4), 0);
