@@ -62,6 +62,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
@@ -590,7 +591,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         TextView textView = new TextView(getContext());
         textView.setText(mSharedTypesList.get(pos));
-        textView.setTextSize((int) (getContext().getResources().getDimension(R.dimen.smallTextSize) / getContext().getResources().getDisplayMetrics().density));
+        Utils.setTextSize(textView,R.dimen.dp14);
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setSingleLine(true);
 
