@@ -4,6 +4,7 @@ package org.paygear.fragment;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -83,7 +84,9 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     private static final int CAMERA_REQUEST_CODE = 200;
     private static final int CAPTURE_REQUEST_CODE = 300;
     private static final int LOCATION_REQUEST_CODE = 400;
-
+    QrVoucherDialogBinding qrVoucherDialogBinding;
+    CongratulationsDialogBinding successfulDialogBinding;
+    UnsuccessfulDialogBinding unsuccessfulDialogBinding;
     private View rootView;
     private RaadToolBar appBar;
     private ImageView appBarImage;
@@ -96,24 +99,17 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     private TextView balanceText;
     private ImageView scanFrame;
     private TextView scanText;
-
     private FrameLayout progressLayout;
     private LinearLayout mCodeLayout;
     private EditText mCodeText;
-
     private View showingTipText;
     private int tipTextNumber = -1;
-
     private boolean isTorchOn;
-
     private Handler mHandler;
     private boolean isVisible = true;
     private Dialog qrVoucherDialog;
-    QrVoucherDialogBinding qrVoucherDialogBinding;
     private Dialog unsuccessfulDialog;
     private Dialog successfulDialog;
-    CongratulationsDialogBinding successfulDialogBinding;
-    UnsuccessfulDialogBinding unsuccessfulDialogBinding;
 
     public ScannerFragment() {
     }
@@ -232,7 +228,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     @Override
     public void onFragmentResult(Fragment fragment, Bundle bundle) {
         if (fragment instanceof AccountPaymentDialog || fragment instanceof FactorPaymentDialog || fragment instanceof CreditPaymentDialog || fragment instanceof NewAccountPaymentDialog
-                ||fragment instanceof MyQRFragment) {
+                || fragment instanceof MyQRFragment) {
             if (bundle != null) {
                 isVisible = bundle.getBoolean("Visible");
             } else {
@@ -328,12 +324,12 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                                     Intent intent = new Intent(Intent.ACTION_VIEW);
                                     intent.setData(Uri.parse(content));
                                     startActivity(intent);
-                                }else if(content.contains("hyperme.ir")){
+                                } else if (content.contains("hyperme.ir")) {
                                     try {
                                         Uri uri = Uri.parse(content);
                                         List<String> pathSegments = uri.getPathSegments();
-                                        loadHyperMeQrData(uri.getLastPathSegment(),Long.parseLong(pathSegments.get(0)),pathSegments.get(1));
-                                    }catch (Exception e){
+                                        loadHyperMeQrData(uri.getLastPathSegment(), Long.parseLong(pathSegments.get(0)), pathSegments.get(1));
+                                    } catch (Exception e) {
                                         Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
                                     }
                                 } else {
@@ -369,7 +365,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     }
 
     private void restartDecoding() {
-
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -544,7 +539,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 } else {
                     isVisible = true;
                 }
-
                 progressLayout.setVisibility(View.GONE);
             }
 
@@ -557,6 +551,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             }
         });
     }
+
     private void loadHyperMeQrData(String data, final long amount, final String invoiceNumber) {
         isVisible = false;
         progressLayout.setVisibility(View.VISIBLE);
@@ -574,7 +569,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                     if (qrData.type != 10) {
 
                         if (!TextUtils.isEmpty(qrData.accountId)) {
-                            NewAccountPaymentDialog.newInstance(qrData,amount,invoiceNumber).show(
+                            NewAccountPaymentDialog.newInstance(qrData, amount, invoiceNumber).show(
                                     getActivity().getSupportFragmentManager(), "NewAccountPaymentDialog");
                         } else {
                             Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
@@ -600,6 +595,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     }
 
     private void showVoucherQrDialog(final QRResponse qrData) {
+        isVisible = false;
         qrVoucherDialog = new Dialog(getContext());
         WindowManager.LayoutParams params = qrVoucherDialog.getWindow().getAttributes();
         qrVoucherDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -631,6 +627,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         qrVoucherDialogBinding.ignore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isVisible = true;
                 qrVoucherDialog.dismiss();
             }
         });
@@ -641,14 +638,15 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 if (qrData.isDisabled) {
                     showUnsuccessfulDialog(getString(R.string.disabled_qr_voucher));
                 } else {
-                    isVisible = false;
                     progressLayout.setVisibility(View.VISIBLE);
                     Web.getInstance().getWebService().confirmVoucherQr(qrData.sequenceNumber).enqueue(new Callback<ConfirmVoucherQr_Result>() {
                         @Override
                         public void onResponse(Call<ConfirmVoucherQr_Result> call, Response<ConfirmVoucherQr_Result> response) {
                             Boolean success = Web.checkResponse(ScannerFragment.this, call, response);
-                            if (success == null)
+                            if (success == null) {
+                                isVisible = true;
                                 return;
+                            }
 
                             if (success) {
                                 try {
@@ -661,19 +659,18 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
                                 }
 
-                            }else {
+                            } else {
                                 showUnsuccessfulDialog(getString(R.string.disabled_qr_voucher));
                             }
 
                             progressLayout.setVisibility(View.GONE);
-                            isVisible = true;
+
 
                         }
 
                         @Override
                         public void onFailure(Call<ConfirmVoucherQr_Result> call, Throwable t) {
                             if (Web.checkFailureResponse(ScannerFragment.this, call, t)) {
-                                isVisible = true;
                                 progressLayout.setVisibility(View.GONE);
                                 showUnsuccessfulDialog(getString(R.string.disabled_qr_voucher));
                             }
@@ -684,9 +681,18 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             }
         });
 
+        qrVoucherDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
+                return (keyCode == android.view.KeyEvent.KEYCODE_BACK);
+            }
+        });
+
+
     }
 
     private void showSuccessfulDialog(String message) {
+        isVisible = false;
         final Context context = getContext();
         if (context == null)
             return;
@@ -717,12 +723,22 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                     ((NavigationBarActivity) getActivity()).broadcastMessage(
                             ScannerFragment.this, null, CardsFragment.class);
                 }
+                isVisible = true;
                 successfulDialog.dismiss();
+            }
+        });
+
+
+        successfulDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
+                return (keyCode == android.view.KeyEvent.KEYCODE_BACK);
             }
         });
     }
 
     private void showUnsuccessfulDialog(String message) {
+        isVisible = false;
         Context context = getContext();
         if (context == null)
             return;
@@ -748,7 +764,15 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         unsuccessfulDialogBinding.confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isVisible = true;
                 unsuccessfulDialog.dismiss();
+            }
+        });
+
+        unsuccessfulDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
+                return (keyCode == android.view.KeyEvent.KEYCODE_BACK);
             }
         });
     }
