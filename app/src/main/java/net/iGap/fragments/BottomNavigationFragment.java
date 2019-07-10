@@ -45,60 +45,58 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     private void loadFragment(int position) {
         Log.wtf(this.getClass().getName(), "position: " + position);
         Log.wtf(this.getClass().getName(), "loadFragment");
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null) {
-            Log.wtf(this.getClass().getName(), "fragmentManager not null");
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            int p = G.isAppRtl ? 4 - position : position;
-            Log.wtf(this.getClass().getName(), "p: " + p);
-            Fragment fragment;
-            switch (p) {
-                case 0:
-                    fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
+        FragmentManager fragmentManager = getChildFragmentManager();
+        Log.wtf(this.getClass().getName(), "fragmentManager not null");
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        int p = G.isAppRtl ? 4 - position : position;
+        Log.wtf(this.getClass().getName(), "p: " + p);
+        Fragment fragment;
+        switch (p) {
+            case 0:
+                fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
+                if (fragment == null) {
+                    fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                break;
+            case 1:
+                fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
+                if (fragment == null) {
+                    fragment = FragmentCall.newInstance(true);
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                break;
+            case 2:
+                if (G.twoPaneMode) {
+                    fragment = fragmentManager.findFragmentByTag(TabletMainFragment.class.getName());
                     if (fragment == null) {
-                        fragment = new FragmentUserProfile();
+                        fragment = new TabletMainFragment();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    break;
-                case 1:
-                    fragment = fragmentManager.findFragmentByTag(DiscoveryFragment.class.getName());
+                } else {
+                    fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
                     if (fragment == null) {
-                        fragment = DiscoveryFragment.newInstance(0);
+                        fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    break;
-                case 2:
-                    if (G.twoPaneMode) {
-                        fragment = fragmentManager.findFragmentByTag(TabletMainFragment.class.getName());
-                        if (fragment == null) {
-                            fragment = new TabletMainFragment();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                    } else {
-                        fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
-                        if (fragment == null) {
-                            fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                    }
-                    break;
-                case 3:
-                    fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
-                    if (fragment == null) {
-                        fragment = FragmentCall.newInstance(true);
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    break;
-                default:
-                    fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
-                    if (fragment == null) {
-                        fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    break;
-            }
-            fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                }
+                break;
+            case 3:
+                fragment = fragmentManager.findFragmentByTag(DiscoveryFragment.class.getName());
+                if (fragment == null) {
+                    fragment = DiscoveryFragment.newInstance(0);
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                break;
+            default:
+                fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
+                if (fragment == null) {
+                    fragment = new FragmentUserProfile();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                break;
         }
+        fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
     }
 
     @Override
