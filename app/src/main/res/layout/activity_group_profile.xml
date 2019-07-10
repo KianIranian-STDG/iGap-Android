@@ -12,6 +12,7 @@
     </data>
 
     <android.support.constraint.motion.MotionLayout
+        android:id="@+id/motionLayout"
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -552,12 +553,12 @@
                 android:textSize="@dimen/verySmallTextSize"
                 app:autoSizeTextType="uniform"
                 app:autoSizeMinTextSize="@dimen/verySmallTextSize"
-                app:autoSizeMaxTextSize="@dimen/smallTextSize"
+                app:autoSizeMaxTextSize="@dimen/standardTextSize"
                 android:singleLine="true"
                 android:gravity="left"
                 app:emojiSize="@dimen/verySmallTextSize"
                 android:paddingLeft="@dimen/dp4"
-                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginTop="@dimen/dp2"
                 />
 
         </LinearLayout>
