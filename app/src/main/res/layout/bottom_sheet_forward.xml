@@ -21,18 +21,18 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/searchIcon"
             style="@style/myIconTextViewStyle"
-            android:layout_margin="@dimen/dp8"
             android:layout_width="@dimen/dp28"
             android:layout_height="@dimen/dp28"
+            android:layout_margin="@dimen/dp8"
             android:text="@string/search_icon" />
 
         <net.iGap.module.MEditText
             android:id="@+id/edtSearch"
             style="?hintColorSettingTheme"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp8"
-            android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:hint="@string/search" />
     </LinearLayout>
@@ -41,9 +41,8 @@
         android:id="@+id/rcvBottomSheetForward"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp8"
+        android:layout_margin="@dimen/dp8"
         android:layout_weight="1"
-        android:padding="@dimen/dp10"
         app:layout_constraintBottom_toTopOf="@id/divider1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -62,12 +61,14 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/copyLink"
+        style="?textTitleColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:background="?attr/selectableItemBackground"
         android:padding="8dp"
         android:text="@string/copy_link_title"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/txtSend"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

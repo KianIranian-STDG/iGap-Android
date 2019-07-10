@@ -166,9 +166,9 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
 
         public ViewHolder(View view) {
             super(view);
-            txtName = (EmojiTextViewE) view.findViewById(R.id.txtTitle_forward_bottomSheet);
-            imgSrc = (CircleImageView) view.findViewById(R.id.imageView_forward_bottomSheet);
-            checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.checkBox_forward_bottomSheet);
+            txtName = view.findViewById(R.id.txtTitle_forward_bottomSheet);
+            imgSrc = view.findViewById(R.id.imageView_forward_bottomSheet);
+            checkBoxSelect = view.findViewById(R.id.checkBox_forward_bottomSheet);
         }
     }
 
