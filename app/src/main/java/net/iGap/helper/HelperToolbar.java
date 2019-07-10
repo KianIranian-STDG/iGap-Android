@@ -1359,7 +1359,7 @@ public class HelperToolbar {
                     logo.setTextColor(getContext().getResources().getColor(R.color.white));
                     logo.setTypeface(tfFontIcon);
                     InputFilter[] fArray = new InputFilter[1];
-                    fArray[0] = new InputFilter.LengthFilter(28);
+                    fArray[0] = new InputFilter.LengthFilter(31);
                     logo.setFilters(fArray);
                     logo.setSingleLine(true);
 
