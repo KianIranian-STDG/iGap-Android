@@ -2,19 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/dp4">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/ll_container_child"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@android:color/black"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
         </LinearLayout>

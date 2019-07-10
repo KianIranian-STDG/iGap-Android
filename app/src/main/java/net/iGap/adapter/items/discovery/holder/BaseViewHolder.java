@@ -106,7 +106,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
 
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
-        new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelChild()).setReplace(false).load();
+        new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelParent()).setReplace(false).load();
 
 //        switch (discoveryField.actionType) {
 //            case PAGE:/** tested **/

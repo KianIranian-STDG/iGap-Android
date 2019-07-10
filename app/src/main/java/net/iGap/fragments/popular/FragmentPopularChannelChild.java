@@ -2,7 +2,9 @@ package net.iGap.fragments.popular;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,26 +34,25 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
         popularChannelApi = ApiServiceProvider.getChannelApi();
 
-        popularChannelApi.getChildChannel("5d1cc0bc072e82477b6a957c", 0).enqueue(new Callback<ChildChannel>() {
+        popularChannelApi.getChildChannel("5d1cc0bc072e82477b6a957c").enqueue(new Callback<ChildChannel>() {
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
-//                Log.i("nazanin", "onResponse: " + response.isSuccessful());
-//                LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
-//                for (int i = 0; i < response.body().getInfo().getAdvertisement().getSlides().size(); i++) {
-//                RecyclerView sliderRecyclerViewChild = new RecyclerView(getContext());
-//                sliderRecyclerViewChild.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-//                sliderRecyclerViewChild.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                sliderRecyclerViewChild.setAdapter(new AdapterSliderItem(getContext(), false, response.body().getInfo().getAdvertisement().getSlides()));
-//                linearLayoutItemContainerChild.addView(sliderRecyclerViewChild);
-//
-//                RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
-//                categoryRecyclerViewChild.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-//                categoryRecyclerViewChild.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                AdapterChannelInfoItem gridItem = new AdapterChannelInfoItem(getContext(), response.body().getChannels());
-//                categoryRecyclerViewChild.setAdapter(gridItem);
-//                linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
+                LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
 
-                Log.i("aabolfazl", "onResponse: "+response.body().getChannels().size());
+                RecyclerView sliderRecyclerViewChild = new RecyclerView(getContext());
+                sliderRecyclerViewChild.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+                sliderRecyclerViewChild.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                PagerSnapHelper snapHelper = new PagerSnapHelper();
+                snapHelper.attachToRecyclerView(sliderRecyclerViewChild);
+                sliderRecyclerViewChild.setAdapter(new AdapterSliderItem(getContext(), false, response.body().getInfo().getAdvertisement().getSlides()));
+                linearLayoutItemContainerChild.addView(sliderRecyclerViewChild);
+
+                RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
+                categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4,RecyclerView.HORIZONTAL, false));
+                categoryRecyclerViewChild.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                AdapterChannelInfoItem gridItem = new AdapterChannelInfoItem(getContext(), response.body().getChannels());
+                categoryRecyclerViewChild.setAdapter(gridItem);
+                linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
 
             }
 

@@ -16,7 +16,6 @@ public interface PopularChannelApi {
 
     @GET("category/{categoryId}")
     Call<ChildChannel> getChildChannel(
-            @Path("categoryId") String path,
-            @Query("page") int page
+            @Path("categoryId") String path
     );
 }

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.R;
@@ -44,18 +45,18 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     }
 
     public class ChannelInfoViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView imageView;
+        private ImageView circleImageView;
         private TextView textView;
 
         public ChannelInfoViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.circle_item_popular_rv_grid);
+            circleImageView = itemView.findViewById(R.id.circle_item_popular_rv_grid);
             textView = itemView.findViewById(R.id.tv_item_popular_rv_grid);
 
         }
 
         public void bindChannel(Channel channel) {
-            ImageLoadingService.load(channel.getIcon(), imageView);
+            ImageLoadingService.load(channel.getIcon(), circleImageView);
             textView.setText(channel.getTitle());
         }
     }

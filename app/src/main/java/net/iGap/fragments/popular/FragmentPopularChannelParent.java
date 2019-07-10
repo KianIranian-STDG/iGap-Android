@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -68,15 +68,15 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
                         case ParentChannel.TYPE_CHANNEL:
                             View channelView = LayoutInflater.from(getContext()).inflate(R.layout.item_popular_channel_channel, null);
-                            ImageView imageViewMore = channelView.findViewById(R.id.iv_item_popular_more);
-                            imageViewMore.setOnClickListener(new View.OnClickListener() {
+                            FrameLayout frameLayout = new FrameLayout(getContext());
+                            frameLayout = channelView.findViewById(R.id.frame_more_one);
+                            frameLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
                                     fragmentTransition.replace(R.id.ll_container, new FragmentPopularChannelChild());
                                     fragmentTransition.addToBackStack(null);
                                     fragmentTransition.commit();
-
                                 }
                             });
                             TextView textViewTitle = channelView.findViewById(R.id.tv_item_popular_title);

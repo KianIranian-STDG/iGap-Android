@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.R;
@@ -48,7 +49,7 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
     }
 
     public class FragmentGridViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView channelImageGrid;
+        private ImageView channelImageGrid;
         private TextView channelTitleGrid;
 
         public FragmentGridViewHolder(@NonNull View itemView) {
