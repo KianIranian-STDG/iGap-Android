@@ -3,6 +3,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:clickable="true"
+    android:layoutDirection="locale"
   android:orientation="vertical">
 
   <RelativeLayout
@@ -18,19 +19,22 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
       android:minWidth="@dimen/dp100"
       android:text="@string/array_Photo"
+        android:textSize="@dimen/standardTextSize"
       android:button="@drawable/check_box_background"
-      android:textColor="@color/gray_6c" />
+      style="?textTitleColorSettingTheme" />
 
     <TextView
       android:id="@+id/st_txt_sizeFolder_photo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:text="@string/photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
+      style="?textSubColorSettingTheme"
+      android:textSize="@dimen/standardTextSize" />
   </RelativeLayout>
 
   <!--VIDEO-->
@@ -48,10 +52,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+        android:textSize="@dimen/standardTextSize"
       android:minWidth="@dimen/dp100"
       android:text="@string/array_Video"
       android:button="@drawable/check_box_background"
-      android:textColor="@color/gray_6c"
+      style="?textTitleColorSettingTheme"
         />
 
     <TextView
@@ -59,9 +65,10 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:text="@string/photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
+        style="?textSubColorSettingTheme"
+      android:textSize="@dimen/standardTextSize" />
   </RelativeLayout>
 
   <!--NEXT2-->
@@ -78,19 +85,22 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/standardTextSize"
       android:minWidth="@dimen/dp100"
       android:text="@string/Documents"
-      android:textColor="@color/gray_6c"
-      android:button="@drawable/check_box_background" />
+        style="?textTitleColorSettingTheme"
+        android:button="@drawable/check_box_background" />
 
     <TextView
       android:id="@+id/st_txt_sizeFolder_document_dialogClearCash"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:text="@string/photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
+        style="?textSubColorSettingTheme"
+      android:textSize="@dimen/standardTextSize" />
   </RelativeLayout>
   <!--NEXT3-->
   <!--NEXT2-->
@@ -108,10 +118,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/standardTextSize"
       android:minWidth="@dimen/dp100"
       android:text="@string/audio"
-      android:textColor="@color/gray_6c"
-      android:button="@drawable/check_box_background" />
+        style="?textTitleColorSettingTheme"
+        android:button="@drawable/check_box_background" />
 
 
     <TextView
@@ -119,11 +131,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:layout_centerVertical="true"
       android:gravity="center_vertical"
       android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
+        style="?textSubColorSettingTheme"
+      android:textSize="@dimen/standardTextSize" />
   </RelativeLayout>
 
   <RelativeLayout
@@ -140,10 +153,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/standardTextSize"
       android:minWidth="@dimen/dp100"
       android:text="@string/map"
-      android:textColor="@color/gray_6c"
-      android:button="@drawable/check_box_background" />
+        style="?textTitleColorSettingTheme"
+        android:button="@drawable/check_box_background" />
 
 
     <TextView
@@ -151,11 +166,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:layout_centerVertical="true"
       android:gravity="center_vertical"
       android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
+        style="?textSubColorSettingTheme"
+        android:textSize="@dimen/standardTextSize" />
   </RelativeLayout>
 
   <RelativeLayout
@@ -172,21 +188,24 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/standardTextSize"
       android:minWidth="@dimen/dp100"
       android:text="@string/other_files"
-      android:textColor="@color/gray_6c"
-      android:button="@drawable/check_box_background" />
+        style="?textTitleColorSettingTheme"
+        android:button="@drawable/check_box_background" />
 
     <TextView
       android:id="@+id/st_txt_otherFiles"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:layout_centerVertical="true"
       android:gravity="center_vertical"
       android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
+        style="?textSubColorSettingTheme"
+      android:textSize="@dimen/standardTextSize" />
 
   </RelativeLayout>
 
@@ -203,24 +222,26 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/largeTextSize"
       android:layout_centerVertical="true"
       android:gravity="center_vertical"
       android:minWidth="@dimen/dp100"
       android:padding="@dimen/dp6"
       android:text="@string/total_size"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp18" />
+        style="?textTitleColorSettingTheme" />
 
     <TextView
       android:id="@+id/st_txt_totalSize_dialogClearCash"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:layout_centerVertical="true"
       android:gravity="center_vertical"
       android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp18" />
+        style="?textSubColorSettingTheme"
+        android:textSize="@dimen/standardTextSize" />
   </RelativeLayout>
 
 </LinearLayout>
