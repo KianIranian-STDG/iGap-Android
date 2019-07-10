@@ -3,7 +3,6 @@ package net.iGap.adapter.items.popular;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,29 +10,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.adapter.items.popular.model.Channel;
+import net.iGap.helper.ImageLoadingService;
+import net.iGap.model.PopularChannel.Channel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterRowItem extends RecyclerView.Adapter<AdapterRowItem.ChannelViewHolder> {
-    private List<Channel> channelList = new ArrayList<>();
+public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.ChannelViewHolder> {
+    private List<Channel> channelList;
     private Context context;
 
-    public AdapterRowItem(Context context) {
+    public AdapterChannelItem(Context context, List<Channel> channelList) {
         this.context = context;
-        Channel channel = new Channel();
-        channel.setChannelImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
-        channel.setChannelTitle("باشگاه خبرنگاران جوان");
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
+        this.channelList = channelList;
     }
 
     @NonNull
@@ -64,8 +54,8 @@ public class AdapterRowItem extends RecyclerView.Adapter<AdapterRowItem.ChannelV
         }
 
         public void bindChannel(Channel channel) {
-            channelImage.setImageDrawable(channel.getChannelImage());
-            channelTitle.setText(channel.getChannelTitle());
+            ImageLoadingService.load(channel.getIcon(), channelImage);
+            channelTitle.setText(channel.getTitle());
         }
     }
 }

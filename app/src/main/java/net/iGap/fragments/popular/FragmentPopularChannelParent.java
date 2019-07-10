@@ -7,8 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.adapter.items.popular.AdapterGridItem;
-import net.iGap.adapter.items.popular.AdapterRowItem;
+import net.iGap.adapter.items.popular.AdapterCategoryItem;
+import net.iGap.adapter.items.popular.AdapterChannelItem;
 import net.iGap.adapter.items.popular.AdapterSliderItem;
 import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.module.api.PopularChannel.ParentChannel;
+import net.iGap.model.PopularChannel.ParentChannel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,100 +31,15 @@ import retrofit2.Response;
 
 
 public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
-    private RecyclerView rvTopSlider;
-    private RecyclerView rvBottomSlider;
-    private RecyclerView rvGridItem;
-
-    private LinearLayout linearLayoutItemContainer;
-    private RecyclerView rvRowItem;
-    private ImageView ivMore;
-    private TextView textViewTitle;
-
-    private AdapterSliderItem adapterSliderItemTop;
-    private AdapterSliderItem adapterSliderItemBottom;
-
-    private AdapterRowItem adapterRowItem;
-
-    private AdapterGridItem adapterGridItemParent;
-    private AdapterGridItem adapterGridItemChild;
-
-    private View rootView;
     private HelperToolbar toolbar;
-    private LinearLayout linearLayoutItemRow;
-
     private PopularChannelApi api;
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
-        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_parent, container, false);
-//RecyclerView
-        rvTopSlider = rootView.findViewById(R.id.rv_fragment_popular_p_top_slider);
-        rvBottomSlider = rootView.findViewById(R.id.rv_fragment_popular_p_bottom_slider);
-        rvGridItem = rootView.findViewById(R.id.rv_fragment_popular_p_grid);
-//Adapter
-        adapterSliderItemTop = new AdapterSliderItem(getContext(), false);
-        adapterSliderItemBottom = new AdapterSliderItem(getContext(), true);
-        adapterRowItem = new AdapterRowItem(getContext());
-
-        adapterGridItemParent = new AdapterGridItem(getContext(), true);
-        adapterGridItemChild = new AdapterGridItem(getContext(), false);
-//LinearLayoutRowsContainer
-        linearLayoutItemContainer = rootView.findViewById(R.id.ll_frag_pop_parent_container_row_item);
-        View viewItemRow = LayoutInflater.from(getContext()).inflate(R.layout.item_popular_channel_rowes, container, false);
-        rvRowItem = viewItemRow.findViewById(R.id.rv_item_popular_row);
-        rvRowItem.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        rvRowItem.setAdapter(adapterRowItem);
-        ivMore = viewItemRow.findViewById(R.id.iv_item_popular_more);
-        textViewTitle = viewItemRow.findViewById(R.id.tv_item_popular_title);
-        linearLayoutItemContainer.addView(viewItemRow);
-//api
+        View rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_parent, container, false);
         api = ApiServiceProvider.getChannelApi();
-        return rootView;
 
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        rvTopSlider.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        rvTopSlider.setAdapter(adapterSliderItemTop);
-        SnapHelper snapHelper1 = new PagerSnapHelper();
-        snapHelper1.attachToRecyclerView(rvTopSlider);
-
-        rvBottomSlider.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        rvBottomSlider.setAdapter(adapterSliderItemBottom);
-        SnapHelper snapHelper2 = new PagerSnapHelper();
-        snapHelper2.attachToRecyclerView(rvBottomSlider);
-
-        rvGridItem.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
-        rvGridItem.setAdapter(adapterGridItemParent);
-//onClick
-        adapterSliderItemBottom.setOnClickSliderEventCallBack(new AdapterSliderItem.OnClickSliderEventCallBack() {
-            @Override
-            public void clickedSlider() {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelGridInfo());
-                fragmentTransaction.addToBackStack(null).commit();
-            }
-        });
-        adapterGridItemParent.setOnClickedItemEventCallBack(new AdapterGridItem.OnClickedItemEventCallBack() {
-            @Override
-            public void onClickedItem() {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelGridInfo());
-                fragmentTransaction.addToBackStack(null).commit();
-            }
-        });
-        ivMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.rl_fragmentContainer, new FragmentPopularChannelRowInfo());
-                fragmentTransaction.addToBackStack(null).commit();
-            }
-        });
         LinearLayout toolbarContainer = rootView.findViewById(R.id.ll_popular_parent_toolbar);
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -136,23 +49,71 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 .setLeftIcon(R.string.back_icon);
         toolbarContainer.addView(toolbar.getView());
 
-
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
-                for (int i = 0; i < response.body().getData().get(i).getType().length(); i++) {
-                    if (response.body().getData().get(i).getType() == "advertisement") {
+
+                LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
+                for (int i = 0; i < response.body().getData().size(); i++) {
+                    switch (response.body().getData().get(i).getType()) {
+                        case ParentChannel.TYPE_SLIDE:
+                            RecyclerView sliderRecyclerView = new RecyclerView(getContext());
+                            sliderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+                            sliderRecyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            PagerSnapHelper snapHelper = new PagerSnapHelper();
+                            snapHelper.attachToRecyclerView(sliderRecyclerView);
+                            sliderRecyclerView.setAdapter(new AdapterSliderItem(getContext(), false, response.body().getData().get(i).getSlides()));
+                            linearLayoutItemContainer.addView(sliderRecyclerView);
+                            break;
+
+                        case ParentChannel.TYPE_CHANNEL:
+                            View channelView = LayoutInflater.from(getContext()).inflate(R.layout.item_popular_channel_channel, null);
+                            ImageView imageViewMore = channelView.findViewById(R.id.iv_item_popular_more);
+                            imageViewMore.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
+                                    fragmentTransition.replace(R.id.ll_container, new FragmentPopularChannelChild());
+                                    fragmentTransition.addToBackStack(null);
+                                    fragmentTransition.commit();
+
+                                }
+                            });
+                            TextView textViewTitle = channelView.findViewById(R.id.tv_item_popular_title);
+                            textViewTitle.setText(response.body().getData().get(0).getInfo().getTitle());
+                            RecyclerView channelsRecyclerView = channelView.findViewById(R.id.rv_item_popular_row);
+                            channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+                            channelsRecyclerView.setAdapter(new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels()));
+                            linearLayoutItemContainer.addView(channelView);
+                            break;
+                        case ParentChannel.TYPE_CATEGORY:
+                            RecyclerView categoryRecyclerView = new RecyclerView(getContext());
+                            categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, LinearLayoutManager.VERTICAL, false));
+                            categoryRecyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            AdapterCategoryItem gridItem = new AdapterCategoryItem(getContext(), true, response.body().getData().get(i).getCategories());
+                            gridItem.setOnClickedItemEventCallBack(new AdapterCategoryItem.OnClickedItemEventCallBack() {
+                                @Override
+                                public void onClickedItem() {
+                                    FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
+                                    fragmentTransition.replace(R.id.ll_container, new FragmentPopularChannelChild());
+                                    fragmentTransition.addToBackStack(null);
+                                    fragmentTransition.commit();
+                                }
+                            });
+                            categoryRecyclerView.setAdapter(gridItem);
+                            linearLayoutItemContainer.addView(categoryRecyclerView);
+                            break;
 
                     }
                 }
-                Log.i("nazanin", "onResponse: " + response.body().getData().size());
             }
 
             @Override
             public void onFailure(Call<ParentChannel> call, Throwable t) {
-                Log.i("nazanin", "onFailure: " + t.getMessage());
+
             }
         });
+        return rootView;
 
     }
 

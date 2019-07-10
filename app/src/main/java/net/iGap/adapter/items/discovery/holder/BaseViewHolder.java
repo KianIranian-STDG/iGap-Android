@@ -34,6 +34,7 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.popular.FragmentPopularChannelChild;
 import net.iGap.fragments.popular.FragmentPopularChannelParent;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -105,7 +106,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
 
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
-        new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelParent()).setReplace(false).load();
+        new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelChild()).setReplace(false).load();
 
 //        switch (discoveryField.actionType) {
 //            case PAGE:/** tested **/

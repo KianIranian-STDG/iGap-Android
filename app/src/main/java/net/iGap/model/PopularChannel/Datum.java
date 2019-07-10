@@ -1,5 +1,5 @@
 
-package net.iGap.module.api.PopularChannel;
+package net.iGap.model.PopularChannel;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -18,6 +18,11 @@ public class Datum {
     private List<Slide> mSlides;
     @SerializedName("type")
     private String mType;
+    @SerializedName("channels")
+    private List<Channel> channels;
+    @SerializedName("categories")
+    private List<Category> categories;
+
 
     public Long getDataCount() {
         return mDataCount;
@@ -59,4 +64,19 @@ public class Datum {
         mType = type;
     }
 
+    public List<Channel> getChannels() {
+        return channels;
+    }
+
+    public void setChannels(List<Channel> channels) {
+        this.channels = channels;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
 }

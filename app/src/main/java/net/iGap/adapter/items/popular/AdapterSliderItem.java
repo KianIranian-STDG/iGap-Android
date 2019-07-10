@@ -8,27 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
-import net.iGap.module.api.PopularChannel.Slide;
+import net.iGap.model.PopularChannel.Slide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.BottomSliderViewHolder> {
-    private List<Slide> sliderList = new ArrayList<>();
+    private List<Slide> sliderList ;
     private Context context;
     private OnClickSliderEventCallBack onClickSliderEventCallBack;
     public boolean clickable;
 
-    public AdapterSliderItem(Context context, boolean clickable) {
+    public AdapterSliderItem(Context context, boolean clickable,List<Slide> sliderList) {
         this.context = context;
         this.clickable = clickable;
-    }
-
-    public void setSliderList(List<Slide> sliderList) {
-        this.sliderList = sliderList;
-        notifyDataSetChanged();
+        this.sliderList=sliderList;
     }
 
     @NonNull
@@ -50,6 +47,7 @@ public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.Bo
     }
 
 
+
     public class BottomSliderViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
 
@@ -67,7 +65,6 @@ public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.Bo
         }
 
         public void bindImage(final Slide slide) {
-
             ImageLoadingService.load(slide.getImageUrl(), imageView);
         }
     }

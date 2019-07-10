@@ -35,13 +35,10 @@ public class RetrofitFactory {
             return retrofit;
 
         } else if (clientType.equals(ApiStatic.CHANNEL)) {
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(ApiStatic.CHANNEL_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient)
                     .build();
             return retrofit;

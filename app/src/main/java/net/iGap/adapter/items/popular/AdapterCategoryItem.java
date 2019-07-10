@@ -2,7 +2,6 @@ package net.iGap.adapter.items.popular;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,60 +9,42 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.adapter.items.popular.model.Channel;
+import net.iGap.helper.ImageLoadingService;
+import net.iGap.model.PopularChannel.Category;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterGridItem extends RecyclerView.Adapter<AdapterGridItem.FragmentGridViewHolder> {
-    private List<Channel> channelList = new ArrayList<>();
+public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryItem.FragmentGridViewHolder> {
+    private List<Category> categoryList;
     private Context context;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
     public boolean clickable;
 
-    public AdapterGridItem(Context context, boolean clickable) {
+    public AdapterCategoryItem(Context context, boolean clickable, List<Category> categoryList) {
         this.context = context;
-        this.clickable=clickable;
-        Channel channel = new Channel();
-        channel.setChannelImage(ResourcesCompat.getDrawable(context.getResources(), R.drawable.image_sample, null));
-        channel.setChannelTitle("باشگاه");
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
-        channelList.add(channel);
+        this.clickable = clickable;
+        this.categoryList = categoryList;
+
     }
 
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_grid, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_category, viewGroup, false);
         return new FragmentGridViewHolder(view);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull FragmentGridViewHolder holder, int i) {
-        holder.bindChannel(channelList.get(i));
+        holder.bindChannel(categoryList.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return channelList.size();
+        return categoryList.size();
     }
 
     public class FragmentGridViewHolder extends RecyclerView.ViewHolder {
@@ -77,15 +58,15 @@ public class AdapterGridItem extends RecyclerView.Adapter<AdapterGridItem.Fragme
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(clickable)
-                    onClickedItemEventCallBack.onClickedItem();
+                    if (clickable)
+                        onClickedItemEventCallBack.onClickedItem();
                 }
             });
         }
 
-        public void bindChannel(Channel channel) {
-            channelImageGrid.setImageDrawable(channel.getChannelImage());
-            channelTitleGrid.setText(channel.getChannelTitle());
+        public void bindChannel(Category category) {
+            ImageLoadingService.load(category.getIcon(), channelImageGrid);
+            channelTitleGrid.setText(category.getTitle());
         }
     }
 
