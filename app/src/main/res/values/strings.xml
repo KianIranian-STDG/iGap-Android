@@ -1290,7 +1290,7 @@
     <string name="pay_id_is_not_valid">Payment Id is not valid</string>
     <string name="charge_type">Charge type</string>
     <string name="operator">operator</string>
-    <string name="trabord">Ported subscriber</string>
+    <string name="trabord">\tPorted subscriber</string>
     <string name="time_out_error">time out error</string>
     <string name="connection_error">no connection error</string>
     <string name="server_error">Server Error</string>

@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,10 @@ import android.view.ViewGroup;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBinding;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.IBackHandler;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +62,20 @@ public class FragmentPayment extends BaseFragment {
                 popBackStackFragment();
             }
         };
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.financial_services))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        fragmentPaymentBinding.fpToolbar.addView(toolbar.getView());
 
         fragmentPaymentBinding.setBackHandler(iBackHandler);
 

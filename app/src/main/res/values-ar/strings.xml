@@ -2200,7 +2200,7 @@
     <string name="pay_id_is_not_valid">معرف الدفع غير صالح</string>
     <string name="charge_type">نوع التهمة</string>
     <string name="operator">عامل</string>
-    <string name="trabord">ترابرد</string>
+    <string name="trabord">\tترابرد</string>
     <string name="time_out_error">مهلة خطأ</string>
     <string name="connection_error">لا يوجد خطأ اتصال</string>
     <string name="server_error">خطأ في الخادم</string>
