@@ -10,6 +10,7 @@ import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -40,6 +41,9 @@ public class ChatCell extends ConstraintLayout {
         boolean isDarkTheme = G.isDarkTheme;
         ConstraintSet set = new ConstraintSet();
 
+        TypedValue rippleView = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, rippleView, true);
+        this.setBackgroundResource(rippleView.resourceId);
 
         /**
          * init pinned room on top
