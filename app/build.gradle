@@ -192,6 +192,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'ir.metrix:metrix:0.9.1'
+    implementation 'com.android.installreferrer:installreferrer:1.0'
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
