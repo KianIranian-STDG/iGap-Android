@@ -663,7 +663,7 @@
             app:autoSizeTextType="uniform"
             app:layout_constraintEnd_toEndOf="@id/toolbar_name"
             app:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_phone" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_bio" />
 
         <TextView
             android:id="@+id/toolbar_bio"

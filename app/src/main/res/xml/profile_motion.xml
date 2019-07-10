@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
             motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            motion:layout_constraintTop_toBottomOf="@id/toolbar_phone"/>
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_bio"/>
 
         <Constraint
             android:id="@+id/toolbar_bio"
@@ -176,7 +176,7 @@
             android:visibility="invisible"
             motion:layout_constraintEnd_toEndOf="@id/toolbar_name"
             motion:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            motion:layout_constraintTop_toBottomOf="@id/toolbar_phone" />
+            motion:layout_constraintTop_toBottomOf="@id/toolbar_bio" />
 
         <Constraint
             android:id="@+id/toolbar_bio"
