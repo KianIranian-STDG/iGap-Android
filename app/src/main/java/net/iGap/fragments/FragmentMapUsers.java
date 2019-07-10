@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,8 +18,10 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
@@ -29,8 +30,6 @@ import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyDistance;
-
-import java.util.HashMap;
 
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
@@ -85,11 +84,28 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     }
 
     private void initComponent(View view) {
+        ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.igap_nearby))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (ActivityMain.onBackPressedListener != null) {
+                            ActivityMain.onBackPressedListener.doBack();
+                        }
+                        popBackStackFragment();
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fmu_toolbar);
+        layoutToolbar.addView(toolbar.getView());
 
         imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
         txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
-        rippleBack = (RippleView) view.findViewById(R.id.rippleBackMapUser);
-        view.findViewById(R.id.toolbarMapUsers).setBackgroundColor(Color.parseColor(G.appBarColor));
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -105,16 +121,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         //fastAdapter
         //mAdapter = new MapUserAdapterA();
         mRecyclerView.setAdapter(mAdapter);
-        ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
-        rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityMain.onBackPressedListener != null) {
-                    ActivityMain.onBackPressedListener.doBack();
-                }
-                popBackStackFragment();
-            }
-        });
+
 
         if (mAdapter.getItemCount() > 0) {
             imvNothingFound.setVisibility(View.GONE);
