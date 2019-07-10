@@ -49,6 +49,7 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryReader;
@@ -102,38 +103,38 @@ public class FragmentRegister extends BaseFragment {
         fragmentRegisterBinding.conditionText.setMovementMethod(LinkMovementMethod.getInstance());
         fragmentRegisterBinding.conditionText.setHighlightColor(Color.TRANSPARENT);
 
-        fragmentRegisterViewModel.showConditionErrorDialog.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.showConditionErrorDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDialogConditionError();
             }
         });
 
-        fragmentRegisterViewModel.goNextStep.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.goNextStep.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 FragmentActivation fragment = new FragmentActivation();
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
             }
         });
 
-        fragmentRegisterViewModel.closeKeyword.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.closeKeyword.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 closeKeyboard();
             }
         });
 
-        fragmentRegisterViewModel.showEnteredPhoneNumberStartWithZeroError.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.showEnteredPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
             }
         });
 
-        fragmentRegisterViewModel.showChooseCountryDialog.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.showChooseCountryDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showCountryDialog();
             }
         });
 
-        fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 new DefaultRoundDialog(getActivity()).setMessage(getString(R.string.Re_dialog_verify_number_part1) + "\n" +
                         fragmentRegisterViewModel.callbackEdtCodeNumber.get() + "" + fragmentRegisterViewModel.callBackEdtPhoneNumber.get() + "\n" +
@@ -141,7 +142,7 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.showEnteredPhoneNumberError.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.showEnteredPhoneNumberError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getContext() != null && aBoolean != null) {
                 if (aBoolean) {
                     new DefaultRoundDialog(getContext()).setTitle(R.string.phone_number).setMessage(R.string.please_enter_correct_phone_number).setPositiveButton(R.string.B_ok, null).show();
@@ -151,31 +152,31 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.showConnectionErrorDialog.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.showConnectionErrorDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getContext() != null && aBoolean != null && aBoolean) {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.please_check_your_connenction).setPositiveButton(R.string.ok, null).show();
             }
         });
 
-        fragmentRegisterViewModel.showDialogWaitTime.observe(this, data -> {
+        fragmentRegisterViewModel.showDialogWaitTime.observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 dialogWaitTime(data);
             }
         });
 
-        fragmentRegisterViewModel.showErrorMessageEmptyErrorPhoneNumberDialog.observe(this, isShow -> {
+        fragmentRegisterViewModel.showErrorMessageEmptyErrorPhoneNumberDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (getContext() != null && isShow != null && isShow) {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.phone_number_is_not_valid).setPositiveButton(R.string.ok, null).show();
             }
         });
 
-        fragmentRegisterViewModel.showDialogQrCode.observe(this, integer -> {
+        fragmentRegisterViewModel.showDialogQrCode.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
                 showQrCodeDialog(integer);
             }
         });
 
-        fragmentRegisterViewModel.shareQrCodeIntent.observe(this, uri -> {
+        fragmentRegisterViewModel.shareQrCodeIntent.observe(getViewLifecycleOwner(), uri -> {
             if (getActivity() != null && uri != null) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/*");
@@ -184,14 +185,14 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.hideDialogQRCode.observe(this, aBoolean -> {
+        fragmentRegisterViewModel.hideDialogQRCode.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 if (dialogQrCode != null && dialogQrCode.isShowing())
                     dialogQrCode.dismiss();
             }
         });
 
-        fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(this, userId -> {
+        fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
             if (getActivity() != null && userId != null) {
                 if (dialogQrCode != null && dialogQrCode.isShowing()) {
                     dialogQrCode.dismiss();
@@ -200,9 +201,15 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.showDialogUserBlock.observe(this, isShow -> {
+        fragmentRegisterViewModel.showDialogUserBlock.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
                 new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+            }
+        });
+
+        fragmentRegisterViewModel.showError.observe(getViewLifecycleOwner(), isShow -> {
+            if (isShow != null && isShow) {
+                HelperError.showSnackMessage(getString(R.string.error), false);
             }
         });
     }

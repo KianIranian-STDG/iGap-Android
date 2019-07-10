@@ -19,24 +19,20 @@ import android.os.Handler;
 import android.support.v4.text.HtmlCompat;
 import android.view.View;
 
+import com.google.protobuf.ByteString;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
-import net.iGap.helper.HelperString;
-import net.iGap.helper.HelperTracker;
-import net.iGap.interfaces.OnInfoCountryResponse;
-import net.iGap.interfaces.OnReceiveInfoLocation;
-import net.iGap.interfaces.OnReceivePageInfoTOS;
-import net.iGap.interfaces.OnUserInfoResponse;
-import net.iGap.interfaces.OnUserLogin;
-import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.request.RequestQrCodeNewDevice;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +55,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Integer> showDialogQrCode = new MutableLiveData<>();
     public MutableLiveData<Uri> shareQrCodeIntent = new MutableLiveData<>();
     public MutableLiveData<Boolean> hideDialogQRCode = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showError = new MutableLiveData<>();
 
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -287,17 +284,31 @@ public class FragmentRegisterViewModel extends ViewModel {
 
     public void onClickQrCode() {
         isShowLoading.set(View.VISIBLE);
-        new RequestQrCodeNewDevice().qrCodeNewDevice((codeImage, expireTime) -> {
-            _resultQrCode = G.DIR_TEMP + "/" + "QrCode" + ".jpg";
-            File f = new File(_resultQrCode);
-            if (f.exists()) {
-                f.delete();
-            }
-            AndroidUtils.writeBytesToFile(_resultQrCode, codeImage.toByteArray());
-            image_uriQrCode = Uri.parse("file://" + _resultQrCode);
-            G.handler.post(() -> isShowLoading.set(View.GONE));
-            showDialogQrCode.postValue(expireTime);
-        });
+        new RequestQrCodeNewDevice().qrCodeNewDevice(
+                new OnQrCodeNewDevice() {
+                    @Override
+                    public void getQrCode(ByteString codeImage, int expireTime) {
+                        _resultQrCode = G.DIR_TEMP + "/" + "QrCode" + ".jpg";
+                        File f = new File(_resultQrCode);
+                        if (f.exists()) {
+                            f.delete();
+                        }
+                        AndroidUtils.writeBytesToFile(_resultQrCode, codeImage.toByteArray());
+                        image_uriQrCode = Uri.parse("file://" + _resultQrCode);
+                        G.handler.post(() -> isShowLoading.set(View.GONE));
+                        showDialogQrCode.postValue(expireTime);
+                    }
+
+                    @Override
+                    public void onError(int major, int minor) {
+                        isShowLoading.set(View.GONE);
+                        if (major == 5 && minor == 1) {
+                            onClickQrCode();
+                        } else {
+                            showError.setValue(true);
+                        }
+                    }
+                });
     }
 
     public void timerFinished() {

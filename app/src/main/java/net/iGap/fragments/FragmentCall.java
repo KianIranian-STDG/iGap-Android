@@ -67,7 +67,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private boolean canclick = false;
     private int move = 0;
     private int mOffset = 0;
-    private int mLimit = 50;
     private RecyclerView.OnScrollListener onScrollListener;
     private int attampOnError = 0;
     private RecyclerView mRecyclerView;
@@ -76,10 +75,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     private TextView mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls;
     private RealmResults<RealmCallLog> realmResults;
     private HelperToolbar mHelperToolbar;
-    private boolean mIsMultiSelectEnable = false ;
+    private boolean mIsMultiSelectEnable = false;
     private List<RealmCallLog> mSelectedLogList = new ArrayList<>();
-    private ViewGroup mMultiSelectLayout , mFiltersLayout ;
-    private TextView mBtnDeleteAllLogs , mBtnDeleteLog;
+    private ViewGroup mMultiSelectLayout, mFiltersLayout;
 
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
@@ -106,8 +104,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon)
                 .setFragmentActivity(getActivity())
-                .setPassCodeVisibility(true , R.string.unlock_icon)
-                .setScannerVisibility(true , R.string.scan_qr_code_icon)
+                .setPassCodeVisibility(true, R.string.unlock_icon)
+                .setScannerVisibility(true, R.string.scan_qr_code_icon)
                 .setLogoShown(true)
                 .setListener(this);
 
@@ -125,8 +123,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mMultiSelectLayout = view.findViewById(R.id.fc_layout_multi_select);
         mFiltersLayout = view.findViewById(R.id.fc_layout_filters);
-        mBtnDeleteAllLogs = view.findViewById(R.id.fc_btn_remove_all);
-        mBtnDeleteLog = view.findViewById(R.id.fc_btn_delete);
+        TextView mBtnDeleteAllLogs = view.findViewById(R.id.fc_btn_remove_all);
+        TextView mBtnDeleteLog = view.findViewById(R.id.fc_btn_delete);
 
         setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
 
@@ -277,24 +275,24 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         //clear selected logs
         mBtnDeleteLog.setOnClickListener(v -> {
 
-            if (mSelectedLogList.size() == 0 ) {
+            if (mSelectedLogList.size() == 0) {
                 Toast.makeText(_mActivity, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (G.userLogin) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
+                new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
 
                     Realm realm_ = Realm.getDefaultInstance();
                     try {
-                        for(int i = 0 ; i<mSelectedLogList.size() ; i++) {
+                        for (int i = 0; i < mSelectedLogList.size(); i++) {
                             new RequestSignalingClearLog().signalingClearLog(mSelectedLogList.get(i).getLogId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.SINGLE);
                         }
                         setViewState(false);
 
                         mSelectedLogList.clear();
 
-                        if (realmResults.size() == 0 ){
+                        if (realmResults.size() == 0) {
                             view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
                         }
 
@@ -307,7 +305,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
                 }).negativeText(R.string.B_cancel).show();
             } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
 
         });
@@ -379,7 +377,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     public void showContactListForCall() {
         try {
             if (getActivity() != null) {
-                Fragment fragment = RegisteredContactsFragment.newInstance(true,true,RegisteredContactsFragment.CALL);
+                Fragment fragment = RegisteredContactsFragment.newInstance(true, true, RegisteredContactsFragment.CALL);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
@@ -391,6 +389,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         if (G.isSecure && G.userLogin) {
             isSendRequestForLoading = true;
+            int mLimit = 50;
             new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit, mSelectedStatus);
             progressBar.setVisibility(View.VISIBLE);
         } else {
@@ -403,7 +402,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
     public void onLeftIconClickListener(View view) {
 
         mSelectedLogList.clear();
-        if (realmResults.size() == 0 ) {
+        if (realmResults.size() == 0) {
             Toast.makeText(_mActivity, getString(R.string.empty_call), Toast.LENGTH_SHORT).show();
             if (mIsMultiSelectEnable) setViewState(false);
             return;
@@ -411,9 +410,9 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
         setViewState(!mIsMultiSelectEnable);
     }
 
-    private void setViewState(boolean state){
+    private void setViewState(boolean state) {
 
-        if (!state){
+        if (!state) {
 
             mIsMultiSelectEnable = false;
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
@@ -425,11 +424,11 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
 
-            refreshCallList(0 , true);
+            refreshCallList(0, true);
 
-        }else {
+        } else {
 
-            mIsMultiSelectEnable = true ;
+            mIsMultiSelectEnable = true;
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
             mFiltersLayout.setVisibility(View.GONE);
@@ -439,7 +438,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
 
-            refreshCallList(0 , true);
+            refreshCallList(0, true);
 
         }
     }
@@ -514,13 +513,13 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
 
     private void refreshCallList(int pos, boolean isRefreshAll) {
-
-        if (isRefreshAll) {
-            callAdapter.notifyDataSetChanged();
-        } else {
-            callAdapter.notifyItemChanged(pos);
+        if (mRecyclerView.getAdapter() != null) {
+            if (isRefreshAll) {
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            } else {
+                mRecyclerView.getAdapter().notifyItemChanged(pos);
+            }
         }
-
     }
 
     /**
@@ -556,19 +555,19 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             if (mIsMultiSelectEnable) {
                 viewHolder.checkBox.setVisibility(View.VISIBLE);
 
-                try{
+                try {
 
-                    if ( mSelectedLogList.contains(item)){
+                    if (mSelectedLogList.contains(item)) {
                         viewHolder.checkBox.setChecked(true);
-                    }else {
+                    } else {
                         viewHolder.checkBox.setChecked(false);
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
 
-            }else {
+            } else {
                 viewHolder.checkBox.setVisibility(View.GONE);
                 viewHolder.checkBox.setChecked(false);
             }
@@ -630,7 +629,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             private MaterialDesignTextView icon;
             private TextView timeAndInfo;
             private TextView timeDuration;
-            private CheckBox checkBox ;
+            private CheckBox checkBox;
 
             public ViewHolder(View view) {
                 super(view);
@@ -648,11 +647,11 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
                 itemView.setOnClickListener(v -> {
 
-                    if (mIsMultiSelectEnable){
+                    if (mIsMultiSelectEnable) {
 
-                        multiSelectHandler(getItem(getAdapterPosition()) , getAdapterPosition() , !checkBox.isChecked());
+                        multiSelectHandler(getItem(getAdapterPosition()), getAdapterPosition(), !checkBox.isChecked());
 
-                    }else {
+                    } else {
 
                         if (canclick) {
                             long userId = callLog.getUser().getId();
@@ -688,15 +687,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 });
             }
 
-            private void multiSelectHandler(RealmCallLog item,int pos , boolean checked) {
+            private void multiSelectHandler(RealmCallLog item, int pos, boolean checked) {
 
-                if (checked){
+                if (checked) {
                     mSelectedLogList.add(item);
-                }else {
+                } else {
                     mSelectedLogList.remove(item);
                 }
 
-                refreshCallList(pos , false);
+                refreshCallList(pos, false);
             }
         }
     }

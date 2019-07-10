@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.request;
 
@@ -15,6 +15,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import net.iGap.interfaces.OnQrCodeNewDevice;
@@ -48,7 +49,7 @@ public class RequestQrCodeNewDevice {
         builder.setDevice(typeMobile());
         builder.setDeviceName(Device);
 
-        RequestWrapper requestWrapper = new RequestWrapper(802, builder,callback);
+        RequestWrapper requestWrapper = new RequestWrapper(802, builder, callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
@@ -69,7 +70,8 @@ public class RequestQrCodeNewDevice {
             AppVersion = pInfo.versionName.replace(".beta", "")
                     .replace("beta", "")
                     .replace(".local", "")
-                    .replace("local", "");
+                    .replace("local", "")
+                    .replace(".newUi1", "");
             AppBuildVersion = pInfo.versionCode;
         }
         Device = Build.BRAND;

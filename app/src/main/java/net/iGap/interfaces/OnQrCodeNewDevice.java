@@ -15,4 +15,6 @@ public interface OnQrCodeNewDevice {
 
     void getQrCode(ByteString codeImage, int expireTime);
 
+    void onError(int major,int minor);
+
 }

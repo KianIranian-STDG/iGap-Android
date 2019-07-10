@@ -55,17 +55,16 @@ public class FragmentIntroduce extends BaseFragment {
         btnStart.setOnClickListener(view1 -> startRegistration());
 
         view.findViewById(R.id.changeLanguage).setOnClickListener(v -> {
-            if (!isAdded() || G.fragmentActivity.isFinishing()) {
-                return;
-            }
-            if (G.socketConnection) {
-                FragmentLanguage fragment = new FragmentLanguage();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("canSwipeBack", false);
-                fragment.setArguments(bundle);
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-            } else {
-                G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
+            if (getActivity()!=null) {
+                if (G.socketConnection) {
+                    FragmentLanguage fragment = new FragmentLanguage();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("canSwipeBack", false);
+                    fragment.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                } else {
+                    G.handler.post(() -> HelperError.showSnackMessage(getString(R.string.waiting_for_connection), false));
+                }
             }
         });
 
@@ -104,15 +103,11 @@ public class FragmentIntroduce extends BaseFragment {
 
         try {
             if (beforeState != G.isLandscape) {
-                G.handler.post(() -> {
-                    if (!isAdded() || G.fragmentActivity.isFinishing()) {
-                        return;
-                    }
-
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
                     FragmentIntroduce fragment = new FragmentIntroduce();
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                });
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                }
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -121,15 +116,14 @@ public class FragmentIntroduce extends BaseFragment {
     }
 
     private void startRegistration() {
-        if (!isAdded() || G.fragmentActivity.isFinishing()) {
-            return;
-        }
-        if (G.socketConnection) {
-            FragmentRegister fragment = new FragmentRegister();
-            G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-            G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
-        } else {
-            G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
+        if (getActivity() != null) {
+            if (G.socketConnection) {
+                FragmentRegister fragment = new FragmentRegister();
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
+            } else {
+                G.handler.post(() -> HelperError.showSnackMessage(getString(R.string.waiting_for_connection), false));
+            }
         }
     }
 
@@ -152,11 +146,11 @@ public class FragmentIntroduce extends BaseFragment {
         @Override
         public Object instantiateItem(@NotNull ViewGroup container, int position) {
 
-            int layout ;
+            int layout;
             if (G.isLandscape)
-                layout = R.layout.view_pager_introduce_land ;
+                layout = R.layout.view_pager_introduce_land;
             else
-                layout = R.layout.view_pager_introduce_1 ;
+                layout = R.layout.view_pager_introduce_1;
 
             View view = G.inflater.inflate(layout, container, false);
             AppCompatImageView introImage = view.findViewById(R.id.introImage);
