@@ -38,37 +38,22 @@ public class GroupAvatarAddResponse extends MessageHandler {
 
         final ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse = (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmAvatar.putOrUpdate(realm, groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
+            }
+        });
+        realm.close();
+
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAvatar.putOrUpdate(realm, groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (G.onGroupAvatarResponse != null) {
-                                    G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
-                                }
-                            }
-                        });
-
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
+                if (G.onGroupAvatarResponse != null) {
+                    G.refreshRealmUi();
+                    G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
+                }
             }
         });
     }
