@@ -1,7 +1,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -26,9 +25,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class ChatCell extends ConstraintLayout {
@@ -36,24 +32,6 @@ public class ChatCell extends ConstraintLayout {
     public ChatCell(Context context) {
         super(context);
         init();
-    }
-
-    public static Bitmap loadBitmapAsset(String fileName, Context context) {
-        final AssetManager assetManager = context.getAssets();
-        BufferedInputStream bis = null;
-        try {
-            bis = new BufferedInputStream(assetManager.open(fileName));
-            return BitmapFactory.decodeStream(bis);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                bis.close();
-            } catch (Exception e) {
-
-            }
-        }
-        return null;
     }
 
     private void init() {
@@ -72,11 +50,11 @@ public class ChatCell extends ConstraintLayout {
 
 
         if (isRtl) {
-            Bitmap bitmap = loadBitmapAsset("pinrtl.9.png", getContext());
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pinrtl);
             NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
             pinView.setBackground(drawable);
         } else {
-            Bitmap bitmap = loadBitmapAsset("pin.9.png", getContext());
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
             NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
             pinView.setBackground(drawable);
         }
