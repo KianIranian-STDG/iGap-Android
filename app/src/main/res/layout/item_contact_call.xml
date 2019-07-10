@@ -60,6 +60,7 @@
         android:layout_marginRight="8dp"
         android:fontFamily="@font/main_font"
         android:text="contact name"
+        app:layout_constraintVertical_chainStyle="packed"
         android:textColor="@android:color/black"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
@@ -70,12 +71,13 @@
 
     <TextView
         android:id="@+id/tv_itemContactCall_userPhoneNumber"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp20"
         android:fontFamily="@font/main_font"
         android:text="09xxxxxxxxx"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_itemContactCall_userName"
         app:layout_constraintStart_toStartOf="@+id/tv_itemContactCall_userName"
         app:layout_constraintTop_toBottomOf="@+id/tv_itemContactCall_userName" />
 

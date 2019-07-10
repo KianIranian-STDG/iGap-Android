@@ -849,6 +849,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 title = view.findViewById(R.id.tv_itemContactChat_userName);
                 subtitle = view.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
 
+                if (G.isAppRtl) {
+                    title.setGravity(Gravity.RIGHT);
+                    subtitle.setGravity(Gravity.RIGHT);
+                } else {
+                    title.setGravity(Gravity.LEFT);
+                    subtitle.setGravity(Gravity.LEFT);
+                }
+
                 root.setOnClickListener(v -> {
 
                     if (!isMultiSelect) {
@@ -916,8 +924,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
                 if (G.isAppRtl) {
                     title.setGravity(Gravity.RIGHT);
-                } else
+                    subtitle.setGravity(Gravity.RIGHT);
+                } else {
                     title.setGravity(Gravity.LEFT);
+                    subtitle.setGravity(Gravity.LEFT);
+                }
 
                 btnVoiceCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
