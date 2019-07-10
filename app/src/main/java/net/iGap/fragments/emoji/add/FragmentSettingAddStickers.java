@@ -37,6 +37,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
     private TextView emptyRecycle;
     private SectionPagerAdapter adapter;
     private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     public FragmentSettingAddStickers() {
 
@@ -72,7 +73,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
 
         tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setSelectedTabIndicatorColor(getContext().getResources().getColor(R.color.setting_items_value_color));
-        ViewPager viewPager = view.findViewById(R.id.pager);
+        viewPager = view.findViewById(R.id.pager);
 
         adapter = new SectionPagerAdapter(getActivity().getSupportFragmentManager(), new StickerCategory[0]);
 
@@ -106,9 +107,21 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
                             }
 
                             pBar.setVisibility(View.GONE);
-                            adapter.setData(structCategoryResult.getStickerCategories());
+
+
+                            StickerCategory[] tabs = structCategoryResult.getStickerCategories();
+
+                            if (G.selectedLanguage.equals("fa")) {
+                                tabs = reverseArray(tabs , tabs.length);
+                            }
+
+                            adapter.setData(tabs);
                             adapter.notifyDataSetChanged();
                             updateFontTabLayout();
+
+                            if (G.selectedLanguage.equals("fa")){
+                                viewPager.setCurrentItem(tabs.length - 1);
+                            }
                         }
                     });
                 } else {
@@ -123,6 +136,17 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
                 pBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    private  StickerCategory[] reverseArray(StickerCategory[] old, int size) {
+        StickerCategory[] newArray = new StickerCategory[size];
+        int j = size;
+        for (int i = 0; i < size; i++) {
+            newArray[j - 1] = old[i];
+            j = j - 1;
+        }
+
+        return newArray;
     }
 
     private void updateFontTabLayout() {
