@@ -59,8 +59,8 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public ObservableField<String> username = new ObservableField<>();
     public ObservableField<String> phone = new ObservableField<>("0");
     public ObservableField<String> bio = new ObservableField<>();
-    public ObservableField<Integer> verifyTextVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> textsGravity = new ObservableField<>(Gravity.LEFT);
+    public ObservableInt verifyTextVisibility = new ObservableInt(View.VISIBLE);
+    public ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
 
     public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoCount = new ObservableInt(0);
@@ -77,6 +77,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
     public ObservableInt sharedEmptyVisibility = new ObservableInt(View.VISIBLE);
+    public ObservableInt callVisibility = new ObservableInt(View.GONE);
+    public ObservableInt videoCallVisibility = new ObservableInt(View.GONE);
+    public ObservableInt menuVisibility = new ObservableInt(View.GONE);
 
     public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
     public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
@@ -92,9 +95,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Boolean> showDialogReportContact = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogStartSecretChat = new MutableLiveData<>();
     public MutableLiveData<Boolean> showPhoneNumberDialog = new MutableLiveData<>();
-    public MutableLiveData<Integer> menuVisibility = new MutableLiveData<>();
-    public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
-    public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
     public MutableLiveData<String> contactName = new MutableLiveData<>();
     public MutableLiveData<String> lastSeen = new MutableLiveData<>();
     public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
@@ -195,7 +195,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }*/
     }
 
-    public void onClickGoToChat(){
+    public void onClickGoToChat() {
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
             RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
             if (realmRoom != null) {
@@ -287,7 +287,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     }
 
     //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
-    public void onSharedMediaItemClick(int type){
+    public void onSharedMediaItemClick(int type) {
         goToShearedMediaPage.setValue(new GoToSharedMediaModel(roomId, type));
     }
 
@@ -315,14 +315,14 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
         if (registeredInfo != null) {
             isBot = registeredInfo.isBot();
-            if (isBot) {
-                callVisibility.setValue(View.GONE);
-                menuVisibility.setValue(View.GONE);
-                videoCallVisibility.setValue(View.GONE);
+            if (isBot || userId == G.userId) {
+                callVisibility.set(View.GONE);
+                menuVisibility.set(View.GONE);
+                videoCallVisibility.set(View.GONE);
             } else {
-                callVisibility.setValue(View.VISIBLE);
-                menuVisibility.setValue(View.VISIBLE);
-                videoCallVisibility.setValue(View.VISIBLE);
+                callVisibility.set(View.VISIBLE);
+                menuVisibility.set(View.VISIBLE);
+                videoCallVisibility.set(View.VISIBLE);
             }
 
             isBlockUser = registeredInfo.isBlockUser();
@@ -397,16 +397,16 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             if (callConfig != null) {
 
                 if (isBot) {
-                    callVisibility.setValue(View.GONE);
-                    videoCallVisibility.setValue(View.GONE);
+                    callVisibility.set(View.GONE);
+                    videoCallVisibility.set(View.GONE);
                 } else {
 
                     if (callConfig.isVoice_calling()) {
-                        callVisibility.setValue(View.VISIBLE);
+                        callVisibility.set(View.VISIBLE);
                     }
 
                     if (callConfig.isVideo_calling()) {
-                        videoCallVisibility.setValue(View.VISIBLE);
+                        videoCallVisibility.set(View.VISIBLE);
                     }
                 }
 
@@ -425,15 +425,14 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             disableDeleteContact = true;
         }
 
-        if (G.selectedLanguage.equals("en")){
+        if (G.selectedLanguage.equals("en")) {
             textsGravity.set(Gravity.LEFT);
-        }else {
+        } else {
             textsGravity.set(Gravity.RIGHT);
         }
 
         setUserStatus(userStatus, lastSeenValue);
-        setAvatar.setValue(true);
-        setAvatar.setValue(true);
+        setAvatar.setValue(userId != G.userId);
         //todo: change it
         FragmentShearedMedia.getCountOfSharedMedia(shearedId);
     }
@@ -468,7 +467,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                     if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
                         contactName.setValue(user.getDisplayName());
                     }
-                    setAvatar.setValue(true);
+                    setAvatar.setValue(userId != G.userId);
                 }
             });
         }
@@ -489,7 +488,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                setAvatar.setValue(true);
+                setAvatar.setValue(userId != G.userId);
                 contactName.setValue(firstName + " " + lastName);
             }
         });

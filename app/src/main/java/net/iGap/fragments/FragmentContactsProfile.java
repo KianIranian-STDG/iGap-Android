@@ -49,7 +49,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserReport;
@@ -125,27 +124,6 @@ public class FragmentContactsProfile extends BaseFragment {
         }
 
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
-        binding.toolbarVideoCall.setOnClickListener(v -> viewModel.onVideoCallClick());
-        binding.toolbarVoiceCall.setOnClickListener(v -> viewModel.onVoiceCallButtonClick());
-        binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
-
-        viewModel.menuVisibility.observe(getViewLifecycleOwner(), visibility -> {
-            if (visibility != null) {
-                binding.toolbarMore.setVisibility(visibility);
-            }
-        });
-
-        viewModel.videoCallVisibility.observe(getViewLifecycleOwner(), visibility -> {
-            if (visibility != null) {
-                binding.toolbarVideoCall.setVisibility(visibility);
-            }
-        });
-
-        viewModel.callVisibility.observe(getViewLifecycleOwner(), visibility -> {
-            if (visibility != null) {
-                binding.toolbarVoiceCall.setVisibility(visibility);
-            }
-        });
 
         //todo: fixed it and move to viewModel
         viewModel.isMuteNotificationChangeListener.observe(getViewLifecycleOwner(), isChecked -> {
@@ -495,8 +473,12 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         viewModel.setAvatar.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                avatarHandler.getAvatar(new ParamWithAvatarType(binding.toolbarAvatar, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+            if (aBoolean != null) {
+                if (aBoolean) {
+                    avatarHandler.getAvatar(new ParamWithAvatarType(binding.toolbarAvatar, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                }else{
+                    binding.toolbarAvatar.setImageResource(R.drawable.ic_cloud_space_blue);
+                }
             }
         });
 
