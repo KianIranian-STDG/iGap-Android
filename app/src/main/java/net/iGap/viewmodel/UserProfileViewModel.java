@@ -150,8 +150,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private long userId;
     public String pathSaveImage;
     private long idAvatar;
-
     private AvatarHandler avatarHandler;
+
+    //Todo: fixed it
+    private int getIvanScoreTime = 0;
 
     public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
 
@@ -802,6 +804,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void getIVandScore() {
+        getIvanScoreTime++;
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
@@ -810,8 +813,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             @Override
             public void onError(int major, int minor) {
-                if (major == 5 && minor == 1) {
-                    getIVandScore();
+                if (getIvanScoreTime > 3) {
+                    if (major == 5 && minor == 1) {
+                        getIVandScore();
+                    }
                 }
             }
         });
