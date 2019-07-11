@@ -1,6 +1,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -10,7 +11,6 @@ import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -25,6 +25,9 @@ import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
 
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
@@ -41,24 +44,18 @@ public class ChatCell extends ConstraintLayout {
         boolean isDarkTheme = G.isDarkTheme;
         ConstraintSet set = new ConstraintSet();
 
-        TypedValue rippleView = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, rippleView, true);
-        this.setBackgroundResource(rippleView.resourceId);
-
         /**
          * init pinned room on top
          * */
 
         AppCompatImageView pinView = new AppCompatImageView(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-
-
         if (isRtl) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pinrtl);
+            Bitmap bitmap = loadBitmapAsset("pinrtl.9.png", getContext());
             NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
             pinView.setBackground(drawable);
         } else {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
+            Bitmap bitmap = loadBitmapAsset("pin.9.png", getContext());
             NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
             pinView.setBackground(drawable);
         }
@@ -328,11 +325,9 @@ public class ChatCell extends ConstraintLayout {
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
             set.connect(mute.getId(), ConstraintSet.LEFT, messageData.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(4));
 
-            set.setMargin(cellCheckbox.getId(),ConstraintSet.LEFT,LayoutCreator.dp(32));
-
             int[] checkBoxChain = {cellCheckbox.getId(), avatarImageView.getId()};
             float[] checkBoxWeight = {0, 0};
-            set.createHorizontalChainRtl(ConstraintSet.PARENT_ID, ConstraintSet.START, firstTextView.getId(), ConstraintSet.START,
+            set.createHorizontalChainRtl(ConstraintSet.PARENT_ID, ConstraintSet.START, firstTextView.getId(), ConstraintSet.END,
                     checkBoxChain, checkBoxWeight, ConstraintSet.CHAIN_PACKED);
 
 
@@ -396,4 +391,23 @@ public class ChatCell extends ConstraintLayout {
     private void setTypeFace(TextView v) {
         v.setTypeface(G.typeface_IRANSansMobile);
     }
+
+    private Bitmap loadBitmapAsset(String fileName, Context context) {
+        final AssetManager assetManager = context.getAssets();
+        BufferedInputStream bis = null;
+        try {
+            bis = new BufferedInputStream(assetManager.open(fileName));
+            return BitmapFactory.decodeStream(bis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bis.close();
+            } catch (Exception e) {
+
+            }
+        }
+        return null;
+    }
+
 }
