@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="net.iGap.fragments.beepTunes.album.AlbumViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -22,10 +25,9 @@
 
         </LinearLayout>
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             android:scrollbarThumbVertical="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,12 +42,6 @@
                     android:id="@+id/iv_albumFragment_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:src="@drawable/beeptrack"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -54,60 +50,61 @@
                     android:id="@+id/textView"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="8dp"
-                    android:textSize="35dp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_album_artistName"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_albumFragment_header"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_album_artistName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_album_name"
                     app:srcCompat="@drawable/ic_beeptunes_play" />
 
                 <TextView
                     android:id="@+id/tv_album_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginRight="16dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="ایران من"
+                    android:text="@{viewModel.albumName}"
                     android:textSize="@dimen/largeTextSize"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_album_artistName"
                     app:layout_constraintEnd_toStartOf="@+id/textView"
-                    app:layout_constraintStart_toStartOf="@+id/iv_albumFragment_header"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_albumFragment_header" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_albumFragment_header"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
                     android:id="@+id/tv_album_artistName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="12dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="همایون شجریان"
+                    android:text="@{viewModel.artistName}"
                     android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintBottom_toTopOf="@+id/view5"
                     app:layout_constraintEnd_toStartOf="@+id/tv_album_albumeCost"
                     app:layout_constraintStart_toStartOf="@+id/tv_album_name"
                     app:layout_constraintTop_toBottomOf="@+id/tv_album_name" />
 
                 <TextView
                     android:id="@+id/tv_album_albumeCost"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="12000 تومان"
+                    android:text="@{viewModel.albumCost}"
                     android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_album_artistName"
                     app:layout_constraintEnd_toEndOf="@+id/tv_album_name"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_album_name" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_album_artistName" />
 
                 <View
                     android:id="@+id/view5"
@@ -127,26 +124,39 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_album_songs"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toTopOf="@+id/rv_album_artistAlbums"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_f2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view5" />
+
+                <TextView
+                    android:id="@+id/tv_album_artistOtherAlbum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:text="آلبوم های خواننده"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintStart_toStartOf="@+id/rv_album_artistAlbums"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_album_songs" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_album_artistAlbums"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_album_artistOtherAlbum" />
 
             </android.support.constraint.ConstraintLayout>
 
 
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
 
     </android.support.constraint.ConstraintLayout>
