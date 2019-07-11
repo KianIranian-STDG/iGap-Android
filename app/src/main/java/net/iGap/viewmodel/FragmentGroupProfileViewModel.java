@@ -30,6 +30,8 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
+import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmChatRoom;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmNotificationSetting;
@@ -119,6 +121,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private Realm realmGroupProfile;
     private FragmentGroupProfile fragment;
     private String memberCount;
+    private RealmNotificationSetting realmNotificationSetting;
 
 
     public FragmentGroupProfileViewModel(FragmentGroupProfile fragmentGroupProfile , long roomId, boolean isNotJoin) {
@@ -134,6 +137,27 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
+        } else if (realmRoom.getGroupRoom() != null) {
+            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+            if (realmGroupRoom != null) {
+                if (realmGroupRoom.getRealmNotificationSetting() == null) {
+                    setRealm(Realm.getDefaultInstance(), realmGroupRoom, null, null);
+                } else {
+                    realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                }
+                getRealm();
+                switch (realmNotificationSetting.getNotification()) {
+                    case DEFAULT:
+                        notificationState.set(R.string.array_Default);
+                        break;
+                    case ENABLE:
+                        notificationState.set(R.string.array_enable);
+                        break;
+                    case DISABLE:
+                        notificationState.set(R.string.array_Disable);
+                        break;
+                }
+            }
         }
 
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -142,19 +166,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         groupNumber.setValue(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(realmGroupRoom.getParticipantsCountLabel()) : realmGroupRoom.getParticipantsCountLabel());
         role = realmGroupRoom.getRole();
         isPrivate = realmGroupRoom.isPrivate();
-        if (realmGroupRoom.getRealmNotificationSetting() != null) {
-            switch (realmGroupRoom.getRealmNotificationSetting().getNotification()) {
-                case DEFAULT:
-                    notificationState.set(R.string.array_Default);
-                    break;
-                case ENABLE:
-                    notificationState.set(R.string.array_enable);
-                    break;
-                case DISABLE:
-                    notificationState.set(R.string.array_Disable);
-                    break;
-            }
-        }
 
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
@@ -183,6 +194,10 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         onGroupAddMemberCallback();
         onGroupKickMemberCallback();
 
+    }
+
+    private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom, RealmChannelRoom realmChannelRoom, RealmChatRoom realmChatRoom) {
+        realm.executeTransaction(realm1 -> realmNotificationSetting = RealmNotificationSetting.put(realm1, realmChatRoom, realmGroupRoom, realmChannelRoom));
     }
 
     public void onClickRippleMenu() {
