@@ -109,7 +109,7 @@
                     android:layout_marginTop="@dimen/dp16"
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="@dimen/dp8"
-                    android:text="@string/app_notif_color"
+                    android:text="@string/st_title_messageNotification"
                     app:layout_constraintStart_toStartOf="parent"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -62,13 +62,13 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
-        viewModel.init(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
+        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        viewModel.init(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -175,7 +175,7 @@ public class FragmentUserProfile extends BaseFragment {
 
         viewModel.goToIGapMapPage.observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null && isGo) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setReplace(false).load();
             }
         });
 

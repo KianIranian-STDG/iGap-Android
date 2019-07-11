@@ -19,17 +19,17 @@
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutDescription="@xml/profile_motion"
-        android:layoutDirection="ltr">
+        android:layoutDirection="ltr"
+        app:layoutDescription="@xml/profile_motion">
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/scroll_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layoutDirection="locale"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layoutDirection="locale"
             app:layout_constraintTop_toBottomOf="@id/toolbar_avatar">
 
             <android.support.constraint.ConstraintLayout
@@ -39,10 +39,10 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/userBio"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    style="?textTitleColorSettingTheme"
                     android:text="@{viewModel.bio}"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/enableNotificationLyt"
@@ -536,42 +536,46 @@
             app:layout_constraintVertical_bias="0">
 
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/toolbar_more"
                 style="@style/myIconToolbarStyle"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp10"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{()->viewModel.onMoreButtonClick()}"
                 android:text="@string/more_icon"
+                android:visibility="@{viewModel.menuVisibility}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/toolbar_videoCall"
                 style="@style/myIconToolbarStyle"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp10"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{()->viewModel.onVideoCallClick()}"
                 android:text="@string/video_call_icon"
-                android:visibility="gone"
+                android:visibility="@{viewModel.videoCallVisibility}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/toolbar_more"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/toolbar_voiceCall"
                 style="@style/myIconToolbarStyle"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp10"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{()->viewModel.onVoiceCallButtonClick()}"
                 android:text="@string/voice_call_icon"
-                android:visibility="gone"
+                android:visibility="@{viewModel.callVisibility}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/toolbar_videoCall"
                 app:layout_constraintTop_toTopOf="parent"

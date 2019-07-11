@@ -39,6 +39,7 @@ import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.BottomSheetListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,6 +98,7 @@ public class TopSheetDialog extends AppCompatDialog {
     }
 
     public TopSheetDialog setListDataWithResourceId(List<Integer> listItem, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
+        itemList = new ArrayList<>();
         for (int i = 0; i < listItem.size(); i++) {
             this.itemList.add(getContext().getString(listItem.get(i)));
         }

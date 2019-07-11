@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="net.iGap.G" />
+
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentChannelProfileViewModel" />
@@ -95,20 +97,20 @@
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.isVerifiedChannel}"
                     app:layout_constraintBottom_toBottomOf="@id/channelVerify"
+                    app:layout_constraintEnd_toEndOf="@id/channelInfo"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toEndOf="@id/channelVerify"
-                    app:layout_constraintEnd_toEndOf="@id/channelInfo"
                     app:layout_constraintTop_toTopOf="@id/channelVerify" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelLink"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
-                    android:textSize="@dimen/standardTextSize"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onClickChannelLink()}"
                     android:padding="4dp"
                     android:text="@{viewModel.channelLink}"
+                    android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.isShowLink}"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
                     app:layout_constraintRight_toRightOf="@id/notification"
@@ -120,8 +122,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:textSize="@dimen/standardTextSize"
                     android:text="@{viewModel.channelLinkTitle}"
+                    android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.isShowLink}"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
                     app:layout_constraintRight_toRightOf="@id/notification"
@@ -149,8 +151,8 @@
                     android:fontFamily="@font/main_font"
                     android:onClick="@{()-> viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
                     android:padding="8dp"
-                    android:textSize="@dimen/standardTextSize"
                     android:text="@string/mute_notification"
+                    android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider1"
@@ -200,8 +202,8 @@
                     android:text="@string/subscribers_title"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showMemberList}"
-                    app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintEnd_toStartOf="@id/subscribersCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintTop_toBottomOf="@id/members" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -215,8 +217,8 @@
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/subscribers"
-                    app:layout_constraintStart_toEndOf="@id/subscribers"
                     app:layout_constraintEnd_toEndOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/subscribers"
                     app:layout_constraintTop_toTopOf="@id/subscribers" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -230,8 +232,8 @@
                     android:text="@string/administrators_title"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showMemberList}"
-                    app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintTop_toBottomOf="@id/subscribers" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -245,8 +247,8 @@
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
-                    app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintEnd_toEndOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -260,8 +262,8 @@
                     android:text="@string/moderators_title"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showMemberList}"
-                    app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -275,8 +277,8 @@
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
-                    app:layout_constraintStart_toEndOf="@id/moderator"
                     app:layout_constraintEnd_toEndOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/moderator"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
 
                 <View
@@ -316,8 +318,8 @@
                     android:text="@string/shared_image"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
-                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -345,8 +347,8 @@
                     android:text="@string/shared_video"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
-                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/photo" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -374,8 +376,8 @@
                     android:text="@string/shared_audio"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
-                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/video" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -403,8 +405,8 @@
                     android:text="@string/shared_voice"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
-                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/audioFiles" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -432,8 +434,8 @@
                     android:text="@string/shared_gif"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
-                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/gifCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/voiceMessage" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -461,8 +463,8 @@
                     android:text="@string/shared_files"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
-                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/filesCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/gif" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -471,9 +473,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:textSize="@dimen/smallTextSize"
                     android:text="@{String.valueOf(viewModel.sharedFileCount)}"
                     android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/files"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
@@ -490,8 +492,8 @@
                     android:text="@string/shared_links"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
-                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintEnd_toStartOf="@id/linksCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/files" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -499,9 +501,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:textSize="@dimen/smallTextSize"
                     android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
                     android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/links"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
@@ -525,8 +527,8 @@
             android:id="@+id/toolbar_background"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp200"
-            android:scaleType="centerCrop"
             android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default = @drawable/shape_toolbar_background}"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -535,57 +537,54 @@
         <TextView
             android:id="@+id/toolbar_back"
             style="@style/myIconToolbarStyle"
-            android:text="@string/back_icon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="@dimen/dp10"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintTop_toTopOf="@id/toolbar_background"
-            app:layout_constraintStart_toStartOf="@id/toolbar_background"
+            android:text="@string/back_icon"
             app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
             app:layout_constraintEnd_toEndOf="@id/toolbar_background"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintVertical_bias="0"
-            />
+            app:layout_constraintStart_toStartOf="@id/toolbar_background"
+            app:layout_constraintTop_toTopOf="@id/toolbar_background"
+            app:layout_constraintVertical_bias="0" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/layout_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintTop_toTopOf="@id/toolbar_background"
             app:layout_constraintEnd_toEndOf="@id/toolbar_background"
-            >
+            app:layout_constraintTop_toTopOf="@id/toolbar_background"
+            app:layout_constraintVertical_bias="0">
 
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/toolbar_more"
                 style="@style/myIconToolbarStyle"
-                android:text="@string/more_icon"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp10"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/more_icon"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="0"
-                />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0" />
 
             <TextView
                 android:id="@+id/toolbar_edit"
                 style="@style/myIconToolbarStyle"
-                android:text="@string/edit_icon"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp10"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/edit_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/toolbar_more"
-                app:layout_constraintVertical_bias="0"
-                />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0" />
 
 
         </android.support.constraint.ConstraintLayout>
@@ -595,12 +594,12 @@
             android:id="@+id/toolbar_avatar"
             android:layout_width="@dimen/dp100"
             android:layout_height="@dimen/dp100"
+            android:layout_marginStart="@dimen/dp20"
+            android:layout_marginLeft="@dimen/dp20"
             android:layout_marginBottom="@dimen/dp10"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_back"
             app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
             app:layout_constraintStart_toStartOf="@id/toolbar_background"
-            android:layout_marginLeft="@dimen/dp20"
-            android:layout_marginStart="@dimen/dp20"/>
+            app:layout_constraintTop_toBottomOf="@id/toolbar_back" />
 
 
         <LinearLayout
@@ -610,36 +609,35 @@
             android:orientation="vertical"
             android:paddingLeft="@dimen/dp6"
             android:paddingRight="@dimen/dp6"
-            app:layout_constraintTop_toTopOf="@id/toolbar_avatar"
             app:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
+            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
             app:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_background">
+            app:layout_constraintTop_toTopOf="@id/toolbar_avatar">
 
             <net.iGap.module.EmojiTextViewE
                 android:id="@+id/toolbar_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
                 android:fontFamily="@font/main_font"
-                android:textSize="@dimen/standardTextSize"
-                android:singleLine="true"
                 android:gravity="left"
                 android:paddingLeft="@dimen/dp4"
-                app:emojiSize="@dimen/standardTextSize"/>
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/standardTextSize"
+                app:emojiSize="@dimen/standardTextSize" />
 
             <net.iGap.module.EmojiTextViewE
                 android:id="@+id/toolbar_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:fontFamily="@font/main_font"
-                android:textSize="@dimen/verySmallTextSize"
-                android:singleLine="true"
-                android:gravity="left"
-                app:emojiSize="@dimen/verySmallTextSize"
-                android:paddingLeft="@dimen/dp4"
                 android:layout_marginTop="@dimen/dp2"
-                />
+                android:fontFamily="@font/main_font"
+                android:gravity="left"
+                android:paddingLeft="@dimen/dp4"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/verySmallTextSize"
+                app:emojiSize="@dimen/verySmallTextSize" />
 
         </LinearLayout>
 
