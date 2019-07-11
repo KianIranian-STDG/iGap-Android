@@ -175,7 +175,7 @@ public class FragmentUserProfile extends BaseFragment {
 
         viewModel.goToIGapMapPage.observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null && isGo) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setReplace(false).load();
             }
         });
 
