@@ -180,6 +180,7 @@ import net.iGap.viewmodel.FragmentThemColorViewModel;
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
 import org.paygear.fragment.PaymentHistoryFragment;
+import org.paygear.fragment.ScannerFragment;
 import org.paygear.model.Card;
 import org.paygear.web.Web;
 
@@ -2228,6 +2229,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     isLock = true;
                 }
 
+            }
+        });
+
+        findViewById(R.id.am_btn_scanner).setOnClickListener(v -> {
+            if (!G.isWalletRegister) {
+                new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
+                lockNavigation();
+            } else {
+                new HelperFragment(new ScannerFragment()).load();
             }
         });
 

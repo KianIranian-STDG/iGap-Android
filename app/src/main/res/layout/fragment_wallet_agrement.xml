@@ -93,20 +93,14 @@
         android:orientation="vertical">
 
 
-        <com.uncopt.android.widget.text.justify.JustifiedTextView
+        <android.support.v7.widget.AppCompatTextView
           android:id="@+id/txtAgreement_register"
           style="?textTitleColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_margin="@dimen/dp8"
-          android:fadeScrollbars="false"
           android:lineSpacingExtra="@dimen/dp4"
-          android:overScrollMode="always"
           android:padding="@dimen/dp4"
-          android:scrollbarSize="@dimen/dp6"
-          android:scrollbarStyle="outsideInset"
-          android:scrollbarThumbVertical="@color/gray_5c"
-          android:scrollbars="vertical"
           android:text="@{fragmentWalletAgreementViewModel.callbackTxtAgreement , default = @string/loading_wallet_agreement}"
           android:textSize="@dimen/dp14" />
 
