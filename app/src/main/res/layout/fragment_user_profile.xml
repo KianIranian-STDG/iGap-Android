@@ -436,9 +436,10 @@
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{()->viewModel.onInviteFriendsClick()}"
                 app:layout_constraintBottom_toBottomOf="@id/inviteIcon"
-                app:layout_constraintEnd_toEndOf="@id/inviteTitle"
-                app:layout_constraintStart_toStartOf="@id/inviteIcon"
-                app:layout_constraintTop_toTopOf="@id/inviteIcon" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/inviteIcon"
+                app:layout_constraintWidth_percent=".85" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/scanQRIcon"
