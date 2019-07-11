@@ -40,27 +40,27 @@ public class FragmentPaymentViewModel extends ViewModel {
         observeBackGround.set(myIcon);
     }
 
-    public void onClickCharge(View v) {
+    public void onClickCharge() {
         goToPaymentCharge.setValue(true);
     }
 
-    public void onClickCardToCard(View v) {
+    public void onClickCardToCard() {
         CardToCardHelper.CallCardToCard(G.currentActivity);
     }
 
-    public void onClickBill(View v) {
+    public void onClickBill() {
         goToPaymentBillPage.setValue(R.string.pay_bills);
     }
 
-    public void onClickBillTraffic(View v) {
+    public void onClickBillTraffic() {
         goToPaymentBillPage.setValue(R.string.pay_bills_crime);
     }
 
-    public void onClickInquiryMci(View v) {
+    public void onClickInquiryMci() {
         goToPaymentInquiryPage.setValue(FragmentPaymentInquiryViewModel.OperatorType.mci);
     }
 
-    public void onClickInquiryTelecom(View v) {
+    public void onClickInquiryTelecom() {
         goToPaymentInquiryPage.setValue(FragmentPaymentInquiryViewModel.OperatorType.telecome);
     }
 

@@ -29,7 +29,7 @@
         android:id="@+id/goToSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/IGapButtonStyle"
+        style="?iGapButton"
         android:text="@string/settings"
         app:layout_constraintRight_toRightOf="@id/description"
         app:layout_constraintLeft_toLeftOf="@id/description"

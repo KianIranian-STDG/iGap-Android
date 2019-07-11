@@ -11,9 +11,9 @@
         android:id="@+id/int_circleButton_introduce"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp28"
-        android:layoutDirection="ltr"
-        android:layout_marginBottom="@dimen/dp8"
         android:layout_marginLeft="@dimen/dp28"
+        android:layout_marginBottom="@dimen/dp8"
+        android:layoutDirection="ltr"
         app:layout_constraintBottom_toTopOf="@id/int_btnStart"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -22,14 +22,14 @@
         android:id="@+id/int_viewPager_introduce"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/int_circleButton_introduce"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/int_circleButton_introduce"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.button.MaterialButton
         android:id="@+id/int_btnStart"
-        style="@style/IGapButtonStyle"
+        style="@style/BaseIGapButtonStyle"
         android:layout_width="@dimen/dp200"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -37,6 +37,7 @@
         android:gravity="center"
         android:text="@string/btn_start_page6"
         android:visibility="visible"
+        app:backgroundTint="@color/buttonColor"
         app:layout_constraintBottom_toTopOf="@id/changeLanguage"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -48,10 +49,10 @@
         android:layout_height="@dimen/dp48"
         android:layout_below="@id/int_btnStart"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp8"
         android:text="@string/change_language_title"
         android:textAllCaps="false"
         android:textColor="@color/gray"
-        android:layout_marginBottom="@dimen/dp8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

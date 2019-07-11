@@ -1,543 +1,526 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-  <data>
+    <data>
 
-    <import type="android.graphics.Color" />
+        <import type="android.graphics.Color" />
 
-    <import type="android.view.View" />
+        <import type="android.view.View" />
 
-    <import type="net.iGap.G" />
+        <import type="net.iGap.G" />
 
-    <variable
-      name="fragmentPaymentInquiryViewModel"
-      type="net.iGap.viewmodel.FragmentPaymentInquiryViewModel" />
+        <variable
+            name="fragmentPaymentInquiryViewModel"
+            type="net.iGap.viewmodel.FragmentPaymentInquiryViewModel" />
 
-    <variable
-      name="backHandler"
-      type="net.iGap.interfaces.IBackHandler" />
-  </data>
-
-  <LinearLayout
-    style="?backgroundColorSettingTheme"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-      android:layoutDirection="locale"
-    android:orientation="vertical"
-    tools:ignore="MissingPrefix">
+        <variable
+            name="backHandler"
+            type="net.iGap.interfaces.IBackHandler" />
+    </data>
 
     <LinearLayout
-        android:id="@+id/fpi_layout_toolbar"
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:layoutDirection="locale"
         android:orientation="vertical"
-        android:minHeight="@dimen/toolbar_height"/>
-
-    <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-          android:layout_marginTop="@dimen/dp10"
-        android:padding="@dimen/dp8">
+        tools:ignore="MissingPrefix">
 
         <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:visibility="@{fragmentPaymentInquiryViewModel.observeInquiry ?   View.GONE: View.VISIBLE }">
-
-          <LinearLayout
+            android:id="@+id/fpi_layout_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="vertical" />
 
-            <TextView
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="@dimen/dp100"
-              android:layout_height="wrap_content"
-              android:gravity="start"
-              android:text="@string/bill_type"
-              android:textColor="@color/green"
-              android:textSize="@dimen/dp16" />
-
-            <Spinner
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:entries="@array/bill_type"
-              android:minHeight="@dimen/dp44"
-              android:onItemSelected="@{fragmentPaymentInquiryViewModel::onItemSelectBillType}" />
-
-
-          </LinearLayout>
-
-          <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp68"
-            android:orientation="horizontal"
-            android:visibility="@{fragmentPaymentInquiryViewModel.observeMci}">
-
-            <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
-              android:layout_width="@dimen/dp44"
-              android:layout_height="@dimen/dp44"
-              android:gravity="center"
-              android:text="@string/md_dialpad"
-              android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-              android:textSize="@dimen/dp22"
-              android:textStyle="bold" />
+            android:layout_height="match_parent">
 
             <LinearLayout
-              android:layout_width="match_parent"
-              android:orientation="vertical"
-              android:layout_height="match_parent">
-
-              <EditText
-                android:id="@+id/fpi_edt_mci"
-                style="?hintColorSettingTheme"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp44"
-                  android:background="@drawable/background_cancel_money_action"
-                android:hint="@string/phone"
-                android:inputType="phone"
-                android:maxLength="11"
-                android:minHeight="@dimen/dp44"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingRight="@dimen/dp10"
-                android:textSize="@dimen/dp16" />
-
-              <TextView
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingRight="@dimen/dp10"
-                android:gravity="start"
-                android:text="@string/ex_mobile_phone"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/dp10" />
-
-            </LinearLayout>
-
-
-          </LinearLayout>
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="@{fragmentPaymentInquiryViewModel.observeTelecom}">
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/dp68"
-              android:orientation="horizontal">
-
-              <net.iGap.module.MaterialDesignTextView
-                style="?iconColorMenuTheme"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp44"
-                android:gravity="center"
-                android:text="="
-                android:textAppearance="@style/TextIconAppearance.menu"
-                android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                android:textSize="@dimen/dp22"
-                android:textStyle="bold" />
-
-              <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dp10"
                 android:orientation="vertical"
-                android:layout_height="match_parent">
+                android:padding="@dimen/dp8">
 
-                <EditText
-                  android:id="@+id/fpi_edt_telecom_area"
-                  style="?hintColorSettingTheme"
-                  android:layout_width="match_parent"
-                  android:layout_height="@dimen/dp44"
-                    android:background="@drawable/background_cancel_money_action"
-                  android:hint="@string/area_code"
-                  android:inputType="phone"
-                  android:maxLength="4"
-                  android:minHeight="@dimen/dp44"
-                  android:paddingLeft="@dimen/dp10"
-                  android:paddingRight="@dimen/dp10"
-                  android:textSize="@dimen/dp16" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{fragmentPaymentInquiryViewModel.observeInquiry ?   View.GONE: View.VISIBLE }">
 
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingLeft="@dimen/dp10"
-                  android:paddingRight="@dimen/dp10"
-                  android:gravity="start"
-                  android:text="@string/ex_area"
-                  android:textColor="@color/gray"
-                  android:textSize="@dimen/dp10" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="@dimen/dp100"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:text="@string/bill_type"
+                            android:textColor="@color/green"
+                            android:textSize="@dimen/dp16" />
+
+                        <Spinner
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:entries="@array/bill_type"
+                            android:minHeight="@dimen/dp44"
+                            android:onItemSelected="@{fragmentPaymentInquiryViewModel::onItemSelectBillType}" />
 
 
-              </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp68"
+                        android:orientation="horizontal"
+                        android:visibility="@{fragmentPaymentInquiryViewModel.observeMci}">
+
+                        <net.iGap.module.MaterialDesignTextView
+                            style="@style/myIconTextViewStyle"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp44"
+                            android:gravity="center"
+                            android:text="@string/md_dialpad"
+                            android:textAppearance="@style/TextIconAppearance.menu"
+                            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                            android:textSize="@dimen/dp22"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/fpi_edt_mci"
+                                style="?hintColorSettingTheme"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp44"
+                                android:background="@drawable/background_cancel_money_action"
+                                android:hint="@string/phone"
+                                android:inputType="phone"
+                                android:maxLength="11"
+                                android:minHeight="@dimen/dp44"
+                                android:paddingLeft="@dimen/dp10"
+                                android:paddingRight="@dimen/dp10"
+                                android:textSize="@dimen/dp16" />
+
+                            <TextView
+                                fontPath="fonts/IRANSansMobile.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:paddingLeft="@dimen/dp10"
+                                android:paddingRight="@dimen/dp10"
+                                android:text="@string/ex_mobile_phone"
+                                android:textColor="@color/gray"
+                                android:textSize="@dimen/dp10" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="@{fragmentPaymentInquiryViewModel.observeTelecom}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp68"
+                            android:orientation="horizontal">
+
+                            <net.iGap.module.MaterialDesignTextView
+                                style="@style/myIconTextViewStyle"
+                                android:layout_width="@dimen/dp44"
+                                android:layout_height="@dimen/dp44"
+                                android:gravity="center"
+                                android:text="="
+                                android:textAppearance="@style/TextIconAppearance.menu"
+                                android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                                android:textSize="@dimen/dp22"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/fpi_edt_telecom_area"
+                                    style="?hintColorSettingTheme"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/dp44"
+                                    android:background="@drawable/background_cancel_money_action"
+                                    android:hint="@string/area_code"
+                                    android:inputType="phone"
+                                    android:maxLength="4"
+                                    android:minHeight="@dimen/dp44"
+                                    android:paddingLeft="@dimen/dp10"
+                                    android:paddingRight="@dimen/dp10"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:paddingLeft="@dimen/dp10"
+                                    android:paddingRight="@dimen/dp10"
+                                    android:text="@string/ex_area"
+                                    android:textColor="@color/gray"
+                                    android:textSize="@dimen/dp10" />
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp68"
+                            android:orientation="horizontal">
+
+                            <net.iGap.module.MaterialDesignTextView
+                                style="@style/myIconTextViewStyle"
+                                android:layout_width="@dimen/dp44"
+                                android:layout_height="@dimen/dp44"
+                                android:gravity="center"
+                                android:text="@string/md_dialpad"
+                                android:textAppearance="@style/TextIconAppearance.menu"
+                                android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                                android:textSize="@dimen/dp22"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/fpi_edt_telecom"
+                                    style="?hintColorSettingTheme"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/dp44"
+                                    android:background="@drawable/background_cancel_money_action"
+                                    android:hint="@string/phone"
+                                    android:inputType="phone"
+                                    android:maxLength="8"
+                                    android:minHeight="@dimen/dp44"
+                                    android:paddingLeft="@dimen/dp10"
+                                    android:paddingRight="@dimen/dp10"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:paddingLeft="@dimen/dp10"
+                                    android:paddingRight="@dimen/dp10"
+                                    android:text="@string/ex_phone"
+                                    android:textColor="@color/gray"
+                                    android:textSize="@dimen/dp10" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <android.support.design.button.MaterialButton
+                        style="?iGapButton"
+                        android:layout_width="@dimen/dp180"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp12"
+                        android:layout_marginBottom="@dimen/dp12"
+                        android:onClick="@{fragmentPaymentInquiryViewModel::onInquiryClick}"
+                        android:text="@string/inquiry"
+                        android:textAllCaps="false" />
+
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        android:visibility="@{fragmentPaymentInquiryViewModel.observeProgress}" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp6"
+                    android:orientation="vertical"
+                    android:visibility="@{fragmentPaymentInquiryViewModel.observeInquiry ?   View.VISIBLE  : View.GONE }">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp20"
+                        android:background="@drawable/background_cancel_money_action"
+                        android:orientation="vertical">
+
+                        <TextView
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/last_term"
+                            android:textSize="@dimen/dp16" />
+
+                        <TextView
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp6"
+                            android:layout_marginBottom="@dimen/dp6"
+                            android:gravity="center"
+                            android:text="@{fragmentPaymentInquiryViewModel.lastTermMessage}"
+                            android:textSize="@dimen/dp16"
+                            android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?   View.VISIBLE  : View.GONE }" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?  View.GONE : View.VISIBLE }">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="?textSubColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="@dimen/dp110"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text="@string/billing_id"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    style="?textTitleColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="start"
+                                    android:text="@{fragmentPaymentInquiryViewModel.lastTermBillId}"
+                                    android:textSize="@dimen/dp16" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="?textSubColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="@dimen/dp110"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text="@string/payment_code"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    style="?textTitleColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="start"
+                                    android:text="@{fragmentPaymentInquiryViewModel.lastTermPayId}"
+                                    android:textSize="@dimen/dp16" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="?textSubColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="@dimen/dp110"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text="@string/amount"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    style="?textTitleColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="start"
+                                    android:text="@{fragmentPaymentInquiryViewModel.lastTermAmount}"
+                                    android:textSize="@dimen/dp16" />
+                            </LinearLayout>
+
+
+                            <android.support.design.button.MaterialButton
+                                style="?iGapButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/dp20"
+                                android:onClick="@{fragmentPaymentInquiryViewModel::onLastTermPayment}"
+                                android:text="@string/last_term_payment"
+                                android:textAllCaps="false" />
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp10"
+                        android:background="@drawable/background_cancel_money_action"
+                        android:orientation="vertical"
+                        android:visibility="@{fragmentPaymentInquiryViewModel.observeMidTerm}">
+
+                        <TextView
+                            style="?textSubColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/mid_term"
+                            android:textSize="@dimen/dp16" />
+
+                        <TextView
+                            style="?textTitleColorSettingTheme"
+                            fontPath="fonts/IRANSansMobile.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp6"
+                            android:layout_marginBottom="@dimen/dp6"
+                            android:gravity="center"
+                            android:text="@{fragmentPaymentInquiryViewModel.midTermMessage}"
+                            android:textSize="@dimen/dp16"
+                            android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ? View.VISIBLE : View.GONE }" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ?  View.GONE : View.VISIBLE }">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="?textSubColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="@dimen/dp110"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text="@string/billing_id"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    style="?textTitleColorSettingTheme"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="start"
+                                    android:text="@{fragmentPaymentInquiryViewModel.midTermBillId}"
+                                    android:textSize="@dimen/dp16" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="?textSubColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="@dimen/dp110"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text="@string/payment_code"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    style="?textTitleColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="start"
+                                    android:text="@{fragmentPaymentInquiryViewModel.midTermPayId}"
+                                    android:textSize="@dimen/dp16" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="?textSubColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="@dimen/dp110"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text="@string/amount"
+                                    android:textSize="@dimen/dp16" />
+
+                                <TextView
+                                    style="?textTitleColorSettingTheme"
+                                    fontPath="fonts/IRANSansMobile.ttf"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="start"
+                                    android:text="@{fragmentPaymentInquiryViewModel.midTermAmount}"
+                                    android:textSize="@dimen/dp16" />
+                            </LinearLayout>
+
+
+                            <android.support.design.button.MaterialButton
+                                style="?iGapButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/dp20"
+                                android:onClick="@{fragmentPaymentInquiryViewModel::onMidTermPayment}"
+                                android:text="@string/intermediate_payment"
+                                android:textAllCaps="false" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/dp68"
-              android:orientation="horizontal">
-
-              <net.iGap.module.MaterialDesignTextView
-                style="?iconColorMenuTheme"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp44"
-                android:gravity="center"
-                android:text="@string/md_dialpad"
-                android:textAppearance="@style/TextIconAppearance.menu"
-                android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                android:textSize="@dimen/dp22"
-                android:textStyle="bold" />
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="match_parent">
-
-                <EditText
-                  android:id="@+id/fpi_edt_telecom"
-                  style="?hintColorSettingTheme"
-                  android:layout_width="match_parent"
-                  android:layout_height="@dimen/dp44"
-                    android:background="@drawable/background_cancel_money_action"
-                  android:hint="@string/phone"
-                  android:inputType="phone"
-                  android:maxLength="8"
-                  android:minHeight="@dimen/dp44"
-                  android:paddingLeft="@dimen/dp10"
-                  android:paddingRight="@dimen/dp10"
-                  android:textSize="@dimen/dp16" />
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingLeft="@dimen/dp10"
-                  android:paddingRight="@dimen/dp10"
-                  android:gravity="start"
-                  android:text="@string/ex_phone"
-                  android:textColor="@color/gray"
-                  android:textSize="@dimen/dp10" />
-
-              </LinearLayout>
-
-
-            </LinearLayout>
-
-          </LinearLayout>
-<!--
-          android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
--->
-
-          <android.support.design.button.MaterialButton
-              style="@style/IGapButtonStyle"
-            android:layout_width="@dimen/dp180"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp12"
-            android:textAllCaps="false"
-            android:layout_marginBottom="@dimen/dp12"
-            android:onClick="@{fragmentPaymentInquiryViewModel::onInquiryClick}"
-            android:text="@string/inquiry" />
-
-          <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="@{fragmentPaymentInquiryViewModel.observeProgress}" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/dp6"
-          android:orientation="vertical"
-          android:visibility="@{fragmentPaymentInquiryViewModel.observeInquiry ?   View.VISIBLE  : View.GONE }">
-
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp20"
-            android:background="@drawable/oval_gray"
-            android:orientation="vertical">
-
-            <TextView
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:text="@string/last_term"
-              android:textSize="@dimen/dp16" />
-
-            <TextView
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:layout_marginTop="@dimen/dp6"
-              android:layout_marginBottom="@dimen/dp6"
-              android:text="@{fragmentPaymentInquiryViewModel.lastTermMessage}"
-              android:textSize="@dimen/dp16"
-              android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?   View.VISIBLE  : View.GONE }" />
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?  View.GONE : View.VISIBLE }">
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:orientation="horizontal">
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="@dimen/dp110"
-                  android:layout_height="wrap_content"
-                  android:gravity="start"
-                  android:text="@string/billing_id"
-                    style="?textSubColorSettingTheme"
-                  android:textSize="@dimen/dp16" />
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:gravity="start"
-                    style="?textTitleColorSettingTheme"
-                  android:text="@{fragmentPaymentInquiryViewModel.lastTermBillId}"
-                  android:textSize="@dimen/dp16" />
-              </LinearLayout>
-
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:orientation="horizontal">
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="@dimen/dp110"
-                  android:layout_height="wrap_content"
-                  android:gravity="start"
-                    style="?textSubColorSettingTheme"
-                  android:text="@string/payment_code"
-                  android:textSize="@dimen/dp16" />
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:gravity="start"
-                    style="?textTitleColorSettingTheme"
-                  android:text="@{fragmentPaymentInquiryViewModel.lastTermPayId}"
-                  android:textSize="@dimen/dp16" />
-              </LinearLayout>
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:orientation="horizontal">
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="@dimen/dp110"
-                  android:layout_height="wrap_content"
-                  android:gravity="start"
-                  android:text="@string/amount"
-                    style="?textSubColorSettingTheme"
-                  android:textSize="@dimen/dp16" />
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:gravity="start"
-                    style="?textTitleColorSettingTheme"
-                  android:text="@{fragmentPaymentInquiryViewModel.lastTermAmount}"
-                  android:textSize="@dimen/dp16" />
-              </LinearLayout>
-
-
-              <android.support.design.button.MaterialButton
-                  style="@style/IGapButtonStyle"
-                  android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp20"
-                android:textAllCaps="false"
-                android:onClick="@{fragmentPaymentInquiryViewModel::onLastTermPayment}"
-                android:text="@string/last_term_payment" />
-
-
-            </LinearLayout>
-
-
-          </LinearLayout>
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp10"
-            android:background="@drawable/oval_gray"
-            android:orientation="vertical"
-            android:visibility="@{fragmentPaymentInquiryViewModel.observeMidTerm}">
-
-            <TextView
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:text="@string/mid_term"
-                style="?textSubColorSettingTheme"
-              android:textSize="@dimen/dp16" />
-
-            <TextView
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dp6"
-              android:layout_marginBottom="@dimen/dp6"
-              android:gravity="center"
-                style="?textTitleColorSettingTheme"
-              android:text="@{fragmentPaymentInquiryViewModel.midTermMessage}"
-              android:textSize="@dimen/dp16"
-              android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ? View.VISIBLE : View.GONE }" />
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ?  View.GONE : View.VISIBLE }">
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:orientation="horizontal">
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="@dimen/dp110"
-                  android:layout_height="wrap_content"
-                  android:gravity="start"
-                  android:text="@string/billing_id"
-                    style="?textSubColorSettingTheme"
-                  android:textSize="@dimen/dp16" />
-
-                <TextView
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:gravity="start"
-                    style="?textTitleColorSettingTheme"
-                  android:text="@{fragmentPaymentInquiryViewModel.midTermBillId}"
-                  android:textSize="@dimen/dp16" />
-              </LinearLayout>
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:orientation="horizontal">
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="@dimen/dp110"
-                  android:layout_height="wrap_content"
-                  android:gravity="start"
-                    style="?textSubColorSettingTheme"
-                  android:text="@string/payment_code"
-                  android:textSize="@dimen/dp16" />
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                    style="?textTitleColorSettingTheme"
-                  android:gravity="start"
-                  android:text="@{fragmentPaymentInquiryViewModel.midTermPayId}"
-                  android:textSize="@dimen/dp16" />
-              </LinearLayout>
-
-              <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
-                android:orientation="horizontal">
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="@dimen/dp110"
-                  android:layout_height="wrap_content"
-                  android:gravity="start"
-                  android:text="@string/amount"
-                    style="?textSubColorSettingTheme"
-                  android:textSize="@dimen/dp16" />
-
-                <TextView
-                  fontPath="fonts/IRANSansMobile.ttf"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:gravity="start"
-                    style="?textTitleColorSettingTheme"
-                  android:text="@{fragmentPaymentInquiryViewModel.midTermAmount}"
-                  android:textSize="@dimen/dp16" />
-              </LinearLayout>
-
-
-              <android.support.design.button.MaterialButton
-                  style="@style/IGapButtonStyle"
-                  android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp20"
-                android:textAllCaps="false"
-                android:onClick="@{fragmentPaymentInquiryViewModel::onMidTermPayment}"
-                android:text="@string/intermediate_payment"/>
-
-            </LinearLayout>
-
-
-          </LinearLayout>
-
-
-        </LinearLayout>
-
-
-      </LinearLayout>
-
-    </ScrollView>
-
-
-  </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </layout>

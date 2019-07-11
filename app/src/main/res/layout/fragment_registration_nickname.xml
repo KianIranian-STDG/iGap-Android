@@ -164,7 +164,7 @@
 
         <android.support.design.button.MaterialButton
             android:id="@+id/pu_btn_letsGo"
-            style="@style/IGapButtonStyle"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.OnClickBtnLetsGo(nameEditText.getEditableText().toString(),lastNameEditText.getEditableText().toString())}"
@@ -172,6 +172,7 @@
             android:textAllCaps="false"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp14"
+            app:backgroundTint="@color/buttonColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

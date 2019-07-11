@@ -47,7 +47,7 @@
         </LinearLayout>
 
         <android.support.design.button.MaterialButton
-            style="@style/IGapButtonStyle"
+            style="?iGapButton"
             android:id="@+id/txtRemoveSticker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

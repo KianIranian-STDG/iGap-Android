@@ -69,7 +69,7 @@
 
         <android.support.design.button.MaterialButton
             android:id="@+id/tsv_txtSetAdditionPassword"
-            style="@style/IGapButtonStyle"
+            style="?iGapButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp60"

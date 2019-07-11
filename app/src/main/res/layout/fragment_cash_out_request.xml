@@ -109,7 +109,7 @@
                     android:padding="16dp">
 
                     <android.support.design.button.MaterialButton
-                        style="@style/IGapButtonStyle"
+                        style="?iGapButton"
                         android:id="@+id/button"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"

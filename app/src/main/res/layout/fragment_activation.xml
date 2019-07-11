@@ -140,11 +140,12 @@
 
         <android.support.design.button.MaterialButton
             android:id="@+id/loginButton"
-            style="@style/IGapButtonStyle"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.loginButtonOnClick(activationCodeEditText1.getEditableText().toString() + activationCodeEditText2.getEditableText().toString() + activationCodeEditText3.getEditableText().toString() + activationCodeEditText4.getEditableText().toString()+activationCodeEditText5.getEditableText().toString())}"
             android:text="@string/login"
+            app:backgroundTint="@color/buttonColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

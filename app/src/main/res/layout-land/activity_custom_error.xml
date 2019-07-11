@@ -64,7 +64,7 @@
         <!--android:text="@string/E_2" />-->
 
         <android.support.design.button.MaterialButton
-            style="@style/IGapButtonStyle"
+            style="?iGapButton"
           android:id="@+id/restart_button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
