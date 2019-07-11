@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.BeepTunesProfileFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -28,8 +29,6 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         super.onViewCreated(view, savedInstanceState);
         LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
         initToolBar(toolBar);
-
-
     }
 
     private void initToolBar(ViewGroup viewGroup) {
@@ -38,12 +37,20 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setListener(this)
+                .setRightSmallAvatarShown(true)
                 .setLeftIcon(R.string.back_icon);
+
         viewGroup.addView(helperToolbar.getView());
     }
 
     @Override
     public void onLeftIconClickListener(View view) {
         getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onSmallAvatarClickListener(View view) {
+        BeepTunesProfileFragment profileFragment = new BeepTunesProfileFragment();
+        profileFragment.show(getChildFragmentManager(), null);
     }
 }
