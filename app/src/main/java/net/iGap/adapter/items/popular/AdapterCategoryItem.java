@@ -30,6 +30,8 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
 
     }
 
+
+
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -49,7 +51,7 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
     }
 
     public class FragmentGridViewHolder extends RecyclerView.ViewHolder {
-        private ImageView channelImageGrid;
+        private CircleImageView channelImageGrid;
         private TextView channelTitleGrid;
 
         public FragmentGridViewHolder(@NonNull View itemView) {

@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,6 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_parent, container, false);
         api = ApiServiceProvider.getChannelApi();
-
         LinearLayout toolbarContainer = rootView.findViewById(R.id.ll_popular_parent_toolbar);
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -52,7 +52,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
-
+                Log.i("nazanin", "onResponse: " + response.isSuccessful());
                 LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
@@ -68,8 +68,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
                         case ParentChannel.TYPE_CHANNEL:
                             View channelView = LayoutInflater.from(getContext()).inflate(R.layout.item_popular_channel_channel, null);
-                            FrameLayout frameLayout = new FrameLayout(getContext());
-                            frameLayout = channelView.findViewById(R.id.frame_more_one);
+                            FrameLayout frameLayout = channelView.findViewById(R.id.frame_more_one);
                             frameLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -103,18 +102,16 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             categoryRecyclerView.setAdapter(gridItem);
                             linearLayoutItemContainer.addView(categoryRecyclerView);
                             break;
-
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ParentChannel> call, Throwable t) {
-
+                Log.i("nazanin", "onFailure: " + t.getMessage());
             }
         });
         return rootView;
-
     }
 
     @Override

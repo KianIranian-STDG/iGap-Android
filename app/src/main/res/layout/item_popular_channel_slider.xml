@@ -3,10 +3,5 @@
     android:id="@+id/iv_item_popular_slider"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/dp6"
-    android:layout_marginTop="@dimen/dp4"
-    android:layout_marginEnd="@dimen/dp6"
     android:adjustViewBounds="true"
-    android:src="@drawable/image_sample">
-
-</ImageView>
+    android:src="@drawable/image_sample"/>

@@ -26,6 +26,7 @@ import retrofit2.Response;
 
 public class FragmentPopularChannelChild extends BaseFragment {
     private PopularChannelApi popularChannelApi;
+    private int page = 1;
 
     @NonNull
     @Override
@@ -34,9 +35,11 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
         popularChannelApi = ApiServiceProvider.getChannelApi();
 
-        popularChannelApi.getChildChannel("5d1cc0bc072e82477b6a957c").enqueue(new Callback<ChildChannel>() {
+        popularChannelApi.getChildChannel("5d1cc0bc072e82477b6a957c",page ).enqueue(new Callback<ChildChannel>() {
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
+                Log.i("nazanin", "onResponse: " + response.isSuccessful());
+
                 LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
 
                 RecyclerView sliderRecyclerViewChild = new RecyclerView(getContext());
@@ -48,14 +51,13 @@ public class FragmentPopularChannelChild extends BaseFragment {
                 linearLayoutItemContainerChild.addView(sliderRecyclerViewChild);
 
                 RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
-                categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4,RecyclerView.HORIZONTAL, false));
+                categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
                 categoryRecyclerViewChild.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 AdapterChannelInfoItem gridItem = new AdapterChannelInfoItem(getContext(), response.body().getChannels());
                 categoryRecyclerViewChild.setAdapter(gridItem);
                 linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
 
             }
-
 
             @Override
             public void onFailure(Call<ChildChannel> call, Throwable t) {

@@ -6,15 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.model.PopularChannel.Channel;
-import net.iGap.module.CircleImageView;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelInfoItem.ChannelInfoViewHolder> {
 
@@ -25,6 +25,16 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
         this.channelList = channelList;
         this.context = context;
 
+    }
+
+    public void setChannelList(List<Channel> channelList) {
+        this.channelList = channelList;
+        notifyDataSetChanged();
+    }
+
+    public void addChannelList(List<Channel> channelList) {
+        this.channelList.addAll(channelList);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -45,7 +55,7 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     }
 
     public class ChannelInfoViewHolder extends RecyclerView.ViewHolder {
-        private ImageView circleImageView;
+        private CircleImageView circleImageView;
         private TextView textView;
 
         public ChannelInfoViewHolder(@NonNull View itemView) {
