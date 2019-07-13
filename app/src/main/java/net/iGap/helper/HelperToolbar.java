@@ -1368,6 +1368,7 @@ public class HelperToolbar {
                     Utils.setTextSize(logo, R.dimen.standardTextSize);
                     logo.setTextColor(getContext().getResources().getColor(R.color.white));
                     logo.setTypeface(tfFontIcon);
+                    logo.setPadding(0 , 0 , 0 , i_Dp(R.dimen.dp4));
                     InputFilter[] fArray = new InputFilter[1];
                     fArray[0] = new InputFilter.LengthFilter(31);
                     logo.setFilters(fArray);
