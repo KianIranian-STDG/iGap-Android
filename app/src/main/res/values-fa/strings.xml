@@ -5,7 +5,7 @@
     <string name="text_line_1_introduce_page1">"آی"</string>
     <string name="text_line_2_introduce_page1">"ارتباطی بی حد و مرز"</string>
     <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آیگپ بسازید."</string>
-    <string name="text_line_4_introduce_page1">"فقط چند دقیقه زمان میبرد تا شما هم به جمع آی گپی ها بپیوندید."</string>
+    <string name="text_line_4_introduce_page1">"فقط چند دقیقه زمان میبرد تا شما هم به جمع آیگپی ها بپیوندید."</string>
 
     <!-- Page 2 introduce app -->
     <string name="text_line_1_introduce_page2">"امنیت در آیگپ"</string>
@@ -208,7 +208,7 @@
     <string name="st_save_to_gallery">"ذخیره‌ کردن در گالری"</string>
     <string name="st_title_support">"پشتیبانی برنامه"</string>
     <string name="st_ask_question">"سؤالی بپرسید."</string>
-    <string name="st_About_iGap">"دربارهٔ آی‌گپ"</string>
+    <string name="st_About_iGap">"دربارهٔ آیگپ"</string>
     <string name="st_privacy_policy">"سیاست های حریم خصوصی"</string>
     <string name="st_keepMedia">"نگهداری فایل‌های چند رسانه‌ای"</string>
     <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری شده که در صورت نیاز می توانید مجدداً آنها را دانلود کنید.‬‬‬‬‬‬
@@ -280,7 +280,7 @@
     <string name="fac_Phone_Number">"شماره تلفن"</string>
     <string name="fac_Find_in_Page">"یافتن در صفحه"</string>
     <string name="fac_Open_in_Chrome">"باز کردن در مرورگر کروم"</string>
-    <string name="fac_Powered_by_iGap">"قدرت گرفته توسط آی‌گپ"</string>
+    <string name="fac_Powered_by_iGap">"قدرت گرفته توسط آیگپ"</string>
     <string name="menu_add_contact">"افزودن مخاطب"</string>
     <string name="shared_media">"رسانه‌های به اشتراک گذاشته شده"</string>
     <string name="shared_files">"فایل‌های به اشتراک گذاشته شده"</string>
@@ -537,7 +537,7 @@
     <string name="please_wait">منتظر باشید.</string>
     <string name="New_Chat">گفتگوی جدید</string>
     <string name="Invite_Friends">دعوت کردن دوستان</string>
-    <string name="iGap_FAQ">‫پرسش‌های متداول آی‌گپ</string>‬‬‬‬‬‬
+    <string name="iGap_FAQ">‫پرسش‌های متداول آیگپ</string>‬‬‬‬‬‬
     <string name="Documents">اسناد</string>
     <string name="remove_admin">حذف مدیر</string>
     <string name="remove_moderator">حذف ناظر</string>
@@ -678,8 +678,8 @@
     <string name="error">خطا</string>
     <string name="please_enter_code_for_verify">کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
-    <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
-    <string name="share_video_from_igap">به اشتراک گذاشتن ویدیو از آی‌گپ</string>
+    <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آیگپ</string>
+    <string name="share_video_from_igap">به اشتراک گذاشتن ویدیو از آیگپ</string>
     <string name="TERMINATE">لغو</string>
     <string name="iGap_version">آیگپ اندروید نسخه</string>
     <string name="Bazzar">کافه بازار</string>
@@ -1395,7 +1395,7 @@
     <string name="start">شروع</string>
     <string name="bot">ربات</string>
     <string name="back_to_menu">بازگشت به منوی اصلی</string>
-    <string name="empty_text_dr_bot">به دستیار هوشمند آی‌گپ خوش آمدید!</string>
+    <string name="empty_text_dr_bot">به دستیار هوشمند آیگپ خوش آمدید!</string>
     <string name="deprecated">نسخه فعلی منقضی شده است لطفا برای استفاده به روز رسانی نمایید</string>
     <string name="new_version_avilable">نسخه جدید موجود است</string>
     <string name="new_version_alert">هشدار</string>
@@ -1405,7 +1405,7 @@
     <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که ای گپ در پس زمینه فعال نیست ای گپ را از منو انتخاب و فعال نمایید</string>
     <string name="dont_show_again"> مجددا نمایش نده</string>
     <string name="invitation_message">سلام!
-از طریق لینک زیر میتونی تو آی‌گپ عضو بشی، منتظرتیم
+از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم
      https://www.igap.net
     شناسه دعوت کننده هست :</string>
 
