@@ -167,7 +167,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             textsGravity.set(Gravity.RIGHT);
         }
 
-        isEditProfile.setValue(false);
         appVersion.set(BuildConfig.VERSION_NAME);
         isDarkMode.set(G.isDarkTheme);
 
@@ -362,18 +361,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onEditProfileClick() {
-        if (isEditProfile.getValue() != null) {
-            if (isEditProfile.getValue()) {
-                if (editProfileIcon.get() == R.string.check_icon) {
-                    submitData();
-                } else {
-                    editProfileIcon.set(R.string.edit_icon);
-                    isEditProfile.setValue(false);
-                }
+        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
+            if (editProfileIcon.get() == R.string.check_icon) {
+                submitData();
             } else {
-                editProfileIcon.set(R.string.close_icon);
-                isEditProfile.setValue(true);
+                editProfileIcon.set(R.string.edit_icon);
+                isEditProfile.setValue(false);
             }
+        } else {
+            editProfileIcon.set(R.string.close_icon);
+            isEditProfile.setValue(true);
         }
     }
 
