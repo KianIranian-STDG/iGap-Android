@@ -28,6 +28,7 @@ import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.PopularChannel.Category;
 import net.iGap.model.PopularChannel.ParentChannel;
 
 import retrofit2.Call;
@@ -121,9 +122,11 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             AdapterCategoryItem gridItem = new AdapterCategoryItem(getContext(), true, response.body().getData().get(i).getCategories());
                             gridItem.setOnClickedItemEventCallBack(new AdapterCategoryItem.OnClickedItemEventCallBack() {
                                 @Override
-                                public void onClickedItem() {
+                                public void onClickedItem(Category category) {
+                                    FragmentPopularChannelChild fragmentPopularChannelChild=   new FragmentPopularChannelChild();
+                                    fragmentPopularChannelChild.setId(category.getId());
                                     FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
-                                    fragmentTransition.replace(R.id.ll_container, new FragmentPopularChannelChild());
+                                    fragmentTransition.replace(R.id.ll_container, fragmentPopularChannelChild);
                                     fragmentTransition.addToBackStack(null);
                                     fragmentTransition.commit();
                                 }

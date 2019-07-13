@@ -62,13 +62,7 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
             super(itemView);
             channelImageGrid = itemView.findViewById(R.id.circle_item_popular_rv_grid);
             channelTitleGrid = itemView.findViewById(R.id.tv_item_popular_rv_grid);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickable)
-                        onClickedItemEventCallBack.onClickedItem();
-                }
-            });
+
             linearLayout = itemView.findViewById(R.id.ll_item_pop_card_category);
             if (G.isDarkTheme) {
                 linearLayout.setBackgroundResource(R.drawable.shape_popular_channel_dark_item_them);
@@ -80,7 +74,13 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
         public void bindChannel(Category category) {
             ImageLoadingService.load(category.getIcon(), channelImageGrid);
             channelTitleGrid.setText(category.getTitle());
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (clickable)
+                        onClickedItemEventCallBack.onClickedItem(category);
+                }
+            });
         }
     }
 
@@ -89,6 +89,6 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
     }
 
     public interface OnClickedItemEventCallBack {
-        void onClickedItem();
+        void onClickedItem(Category category);
     }
 }

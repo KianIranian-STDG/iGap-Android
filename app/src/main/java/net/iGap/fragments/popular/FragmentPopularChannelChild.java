@@ -34,7 +34,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_child, container, false);
-        Log.i("nazanin", "onCreateView: "+id);
+        Log.i("nazanin", "onCreateView: " + id);
         popularChannelApi = ApiServiceProvider.getChannelApi();
 
         popularChannelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
@@ -44,16 +44,19 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
                 LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
 
-                RecyclerView sliderRecyclerViewChild = new RecyclerView(getContext());
 
-                sliderRecyclerViewChild.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 8, 0, 8);
-                sliderRecyclerViewChild.setLayoutParams(layoutParams);
-                PagerSnapHelper snapHelper = new PagerSnapHelper();
-                snapHelper.attachToRecyclerView(sliderRecyclerViewChild);
-                sliderRecyclerViewChild.setAdapter(new AdapterSliderItem(getContext(), false, response.body().getInfo().getAdvertisement().getSlides()));
-                linearLayoutItemContainerChild.addView(sliderRecyclerViewChild);
+                if (response.body().getInfo().getHasAd()) {
+                    RecyclerView sliderRecyclerViewChild = new RecyclerView(getContext());
+                    sliderRecyclerViewChild.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams.setMargins(0, 8, 0, 8);
+                    sliderRecyclerViewChild.setLayoutParams(layoutParams);
+                    PagerSnapHelper snapHelper = new PagerSnapHelper();
+                    snapHelper.attachToRecyclerView(sliderRecyclerViewChild);
+                    AdapterSliderItem slideAdapter = new AdapterSliderItem(getContext(), false, response.body().getInfo().getAdvertisement().getSlides());
+                    sliderRecyclerViewChild.setAdapter(slideAdapter);
+                    linearLayoutItemContainerChild.addView(sliderRecyclerViewChild);
+                }
 
                 RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
                 categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
