@@ -171,7 +171,7 @@ dependencies {
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
     releaseImplementation 'com.github.KianIranian-STDG:Proto:Build114'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta6'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta7'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
