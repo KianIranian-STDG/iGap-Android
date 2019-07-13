@@ -36,9 +36,10 @@
 
                     <ImageView
                         android:id="@+id/sfl_imv_nothing_found"
-                        android:layout_width="@dimen/dp180"
-                        android:layout_height="@dimen/dp180"
+                        android:layout_width="@dimen/dp260"
+                        android:layout_height="@dimen/dp260"
                         android:layout_gravity="top|center"
+                        android:scaleType="fitCenter"
                         android:layout_marginLeft="@dimen/dp20"
                         android:layout_marginTop="@dimen/dp20"
                         android:layout_marginRight="@dimen/dp20"
