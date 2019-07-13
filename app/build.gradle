@@ -170,8 +170,8 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
-    releaseImplementation 'com.github.KianIranian-STDG:Proto:Build114'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta6'
+    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain7'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta7'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
@@ -202,6 +202,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     implementation 'android.arch.lifecycle:common-java8:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 
 configurations.all {

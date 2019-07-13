@@ -2849,4 +2849,8 @@
     <string name="create_chat">Create Chat</string>
     <string name="delete_all">Delete All</string>
 
+    <string name="maximum_poll">لقد وصلت إلى حد تصويتك.</string>
+    <string name="before_try">لقد قمت بالفعل بتسجيل صوتك.</string>
+    <string name="poll_ok">تم تسجيل صوتك بنجاح.</string>
+
 </resources>

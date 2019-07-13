@@ -1901,4 +1901,7 @@
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
     <string name="delete_all">Delete All</string>
+    <string name="maximum_poll">You Have Reached Your Vote Limit.</string>
+    <string name="before_try">You have already registered your vote.</string>
+    <string name="poll_ok">Your vote was successfully recorded.</string>
 </resources>
