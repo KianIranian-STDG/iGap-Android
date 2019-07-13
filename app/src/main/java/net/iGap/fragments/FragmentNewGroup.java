@@ -23,13 +23,11 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +66,8 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
-import net.iGap.module.LinedEditText;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -730,7 +728,8 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         public class ViewHolderSelectedContact extends RecyclerView.ViewHolder {
 
-            private TextView txtName, txtPhone;
+            private EmojiTextViewE txtName;
+            private TextView txtPhone;
             private de.hdodenhof.circleimageview.CircleImageView imgAvatar;
             private TextView btnRemove;
             private CheckBox chSelected;

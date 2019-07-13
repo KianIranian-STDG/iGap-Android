@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <net.iGap.module.EmojiTextViewE
         android:id="@+id/tv_itemContactCall_userName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -63,7 +63,9 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:textColor="@android:color/black"
         android:textSize="@dimen/standardTextSize"
+        android:singleLine="true"
         android:textStyle="bold"
+        app:emojiSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactCall_userPhoneNumber"
         app:layout_constraintEnd_toStartOf="@+id/tv_itemContactCall_voiceCall"
         app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"
@@ -75,6 +77,7 @@
         android:layout_height="@dimen/dp20"
         android:fontFamily="@font/main_font"
         android:text="09xxxxxxxxx"
+        android:singleLine="true"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_itemContactCall_userName"
