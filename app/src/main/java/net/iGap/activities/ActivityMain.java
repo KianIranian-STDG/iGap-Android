@@ -2237,7 +2237,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
                 lockNavigation();
             } else {
-                new HelperFragment(new ScannerFragment()).load();
+                Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
+                intent.putExtra("Language", "fa");
+                intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
+                intent.putExtra("PrimaryColor", G.appBarColor);
+                intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                intent.putExtra("AccentColor", G.appBarColor);
+                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
+                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
+                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                intent.putExtra("isScan",true);
+                startActivityForResult(intent, WALLET_REQUEST_CODE);
             }
         });
 
@@ -3054,9 +3069,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 if (walletActive) {
+                    findViewById(R.id.am_btn_scanner).setVisibility(View.VISIBLE);
                     findViewById(R.id.lm_ll_wallet).setVisibility(View.VISIBLE);
                 } else {
                     findViewById(R.id.lm_ll_wallet).setVisibility(View.GONE);
+                    findViewById(R.id.am_btn_scanner).setVisibility(View.GONE);
                 }
 
                 if (!G.isMplActive && !G.isWalletActive) {
