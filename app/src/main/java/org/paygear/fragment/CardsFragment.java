@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.iGap.G;
@@ -61,10 +62,8 @@ import java.util.ArrayList;
 
 import ir.radsense.raadcore.OnFragmentInteraction;
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.Auth;
-import ir.radsense.raadcore.model.JWT;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.widget.ProgressLayout;
@@ -254,6 +253,10 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         if (Auth.getCurrentAuth() != null && Auth.getCurrentAuth().getPublicKey() == null) {
             loadKey();
         } else {
+
+            if (WalletActivity.isScan && getActivity() != null) {
+                ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
+            }
             loadCards();
         }
     }
@@ -280,6 +283,11 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
                     if (auth != null) {
                         Auth.getCurrentAuth().setPublicKey(auth.publicKey);
                         loadCards();
+                        Toast.makeText(getContext(), "babanajnaj", Toast.LENGTH_SHORT).show();
+
+                        if (WalletActivity.isScan && getActivity() != null) {
+                            ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
+                        }
                         return;
                     }
                 }
