@@ -184,5 +184,6 @@
 
     <color name="not_now_button_normal">#f44336</color>
     <color name="not_now_button_selected">#a12c23</color>
+    <color name="tick_background_color">#66000000</color>
 
 </resources>

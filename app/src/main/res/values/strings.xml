@@ -1789,4 +1789,7 @@
     <string name="cardToCardBtnText">Card to Card</string>
     <string name="crad_to_card_dest_name">Account Owner Name</string>
     <string name="location_dialog_message">Do you want to use your location?</string>
+    <string name="maximum_poll">You Have Reached Your Vote Limit.</string>
+    <string name="before_try">You have already registered your vote.</string>
+    <string name="poll_ok">Your vote was successfully recorded.</string>
 </resources>

@@ -2741,4 +2741,7 @@
 
     <string name="crad_to_card_dest_name">اسم صاحب الحساب</string>
     <string name="location_dialog_message">هل تريد استخدام موقعك؟</string>
+    <string name="maximum_poll">لقد وصلت إلى حد تصويتك.</string>
+    <string name="before_try">لقد قمت بالفعل بتسجيل صوتك.</string>
+    <string name="poll_ok">تم تسجيل صوتك بنجاح.</string>
 </resources>

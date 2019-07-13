@@ -31,6 +31,7 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.poll.PollFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
@@ -310,6 +311,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 ActivityMain.doIvandScore(discoveryField.value, G.currentActivity);
                 break;
             case NONE:
+                break;
+            case POLL:
+                new HelperFragment(PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
                 break;
             case UNRECOGNIZED:
                 break;

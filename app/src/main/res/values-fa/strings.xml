@@ -1800,4 +1800,7 @@
     <string name="cardToCardBtnText">کارت به کارت</string>
     <string name="crad_to_card_dest_name">نام دارنده حساب</string>
     <string name="location_dialog_message">آیا می خواهید از موقیعت مکانی شما استفاده شود؟</string>
+    <string name="maximum_poll">شما به تعداد مجاز رای خود را ثبت کرده اید.</string>
+    <string name="before_try">قبلا رای خود را ثبت کرده اید.</string>
+    <string name="poll_ok">رای شما با موفقیت ثبت شد</string>
 </resources>
