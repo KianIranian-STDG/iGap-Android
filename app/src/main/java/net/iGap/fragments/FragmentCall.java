@@ -309,6 +309,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             }
 
         });
+        //Todo: fixed it, cause load view with delay
+        setViewState(mIsMultiSelectEnable);
     }
 
     private void checkListIsEmpty() {
