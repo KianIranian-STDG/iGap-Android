@@ -2,6 +2,7 @@ package net.iGap.libs.bottomNavigation.Util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -42,6 +43,14 @@ public class Utils {
             view.setBackgroundResource(dark);
         }else {
             view.setBackgroundResource(light);
+        }
+    }
+
+    public static void setCardsBackground(CardView cardView , int light , int dark){
+        if (G.isDarkTheme){
+            cardView.setCardBackgroundColor(context.getResources().getColor(dark));
+        }else {
+            cardView.setCardBackgroundColor(context.getResources().getColor(light));
         }
     }
 

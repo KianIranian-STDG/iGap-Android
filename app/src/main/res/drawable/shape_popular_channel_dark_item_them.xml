@@ -3,5 +3,5 @@
     android:shape="rectangle">
     <corners android:topLeftRadius="@dimen/dp4"
         android:topRightRadius="@dimen/dp4" />
-    <solid android:color="@color/toolbar_search_box_bg" />
+    <solid android:color="@color/navigation_dark_mode_bg" />
 </shape>

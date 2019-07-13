@@ -27,15 +27,17 @@ import retrofit2.Response;
 public class FragmentPopularChannelChild extends BaseFragment {
     private PopularChannelApi popularChannelApi;
     private int page = 1;
+    private String id;
+
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_child, container, false);
-
+        Log.i("nazanin", "onCreateView: "+id);
         popularChannelApi = ApiServiceProvider.getChannelApi();
 
-        popularChannelApi.getChildChannel("5d1cc0bc072e82477b6a957c",page ).enqueue(new Callback<ChildChannel>() {
+        popularChannelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
                 Log.i("nazanin", "onResponse: " + response.isSuccessful());
@@ -43,8 +45,11 @@ public class FragmentPopularChannelChild extends BaseFragment {
                 LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
 
                 RecyclerView sliderRecyclerViewChild = new RecyclerView(getContext());
+
                 sliderRecyclerViewChild.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-                sliderRecyclerViewChild.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 8, 0, 8);
+                sliderRecyclerViewChild.setLayoutParams(layoutParams);
                 PagerSnapHelper snapHelper = new PagerSnapHelper();
                 snapHelper.attachToRecyclerView(sliderRecyclerViewChild);
                 sliderRecyclerViewChild.setAdapter(new AdapterSliderItem(getContext(), false, response.body().getInfo().getAdvertisement().getSlides()));
@@ -52,10 +57,13 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
                 RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
                 categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
-                categoryRecyclerViewChild.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams1.setMargins(0, 8, 0, 8);
+                categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                 AdapterChannelInfoItem gridItem = new AdapterChannelInfoItem(getContext(), response.body().getChannels());
                 categoryRecyclerViewChild.setAdapter(gridItem);
                 linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
+
 
             }
 
@@ -68,5 +76,9 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
     }
 
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
 }
