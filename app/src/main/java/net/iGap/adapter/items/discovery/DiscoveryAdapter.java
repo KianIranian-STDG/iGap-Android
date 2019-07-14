@@ -1,6 +1,5 @@
 package net.iGap.adapter.items.discovery;
 
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -23,14 +22,17 @@ import java.util.ArrayList;
 public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private FragmentActivity activity;
     private ArrayList<DiscoveryItem> discoveryList;
+    private int width;
 
-    public DiscoveryAdapter(FragmentActivity activity, ArrayList<DiscoveryItem> discoveryList) {
+    public DiscoveryAdapter(FragmentActivity activity, int width, ArrayList<DiscoveryItem> discoveryList) {
         this.activity = activity;
         this.discoveryList = discoveryList;
+        this.width = width;
     }
 
-    public void setDiscoveryList(ArrayList<DiscoveryItem> discoveryList) {
+    public void setDiscoveryList(ArrayList<DiscoveryItem> discoveryList,int width) {
         this.discoveryList = discoveryList;
+        this.width = width;
     }
 
     @NonNull
@@ -39,27 +41,27 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         LayoutInflater layoutInflater = LayoutInflater.from(activity);
         switch (i) {
             case 1:
-                return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false),activity);
+                return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false), activity);
             case 2:
-                return new Type2ViewHolder(layoutInflater.inflate(R.layout.item_discovery_2, viewGroup, false),activity);
+                return new Type2ViewHolder(layoutInflater.inflate(R.layout.item_discovery_2, viewGroup, false), activity);
             case 3:
-                return new Type3ViewHolder(layoutInflater.inflate(R.layout.item_discovery_3, viewGroup, false),activity);
+                return new Type3ViewHolder(layoutInflater.inflate(R.layout.item_discovery_3, viewGroup, false), activity);
             case 4:
-                return new Type4ViewHolder(layoutInflater.inflate(R.layout.item_discovery_4, viewGroup, false),activity);
+                return new Type4ViewHolder(layoutInflater.inflate(R.layout.item_discovery_4, viewGroup, false), activity);
             case 5:
-                return new Type5ViewHolder(layoutInflater.inflate(R.layout.item_discovery_5, viewGroup, false),activity);
+                return new Type5ViewHolder(layoutInflater.inflate(R.layout.item_discovery_5, viewGroup, false), activity);
             case 6:
-                return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_discovery_6, viewGroup, false),activity);
+                return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_discovery_6, viewGroup, false), activity);
             case 7:
-                return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_discovery_7, viewGroup, false),activity);
+                return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_discovery_7, viewGroup, false), activity);
         }
-        return new TypeUnknownViewHolder(layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false),activity);
+        return new TypeUnknownViewHolder(layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false), activity);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder viewHolder, int i) {
         String[] scales = discoveryList.get(i).scale.split(":");
-        float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+        float height = width * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
         viewHolder.itemView.getLayoutParams().height = Math.round(height);
         viewHolder.bindView(discoveryList.get(i));
     }
