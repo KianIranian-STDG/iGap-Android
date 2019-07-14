@@ -38,18 +38,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
             android:text="ابوالفضل عباسی"
-            app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage"
-            app:layout_constraintTop_toTopOf="@+id/iv_userProfile_userImage" />
+            app:layout_constraintBottom_toTopOf="@+id/tv_userProfile_userScore"
+            app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage" />
 
         <TextView
             android:id="@+id/tv_userProfile_userScore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="امتیاز کاربر: 150"
-            app:layout_constraintStart_toStartOf="@+id/tv_userProfile_userName"
-            app:layout_constraintTop_toBottomOf="@+id/tv_userProfile_userName" />
+            app:layout_constraintBottom_toBottomOf="@+id/iv_userProfile_userImage"
+            app:layout_constraintStart_toStartOf="@+id/tv_userProfile_userName" />
 
         <View
             android:id="@+id/view4"
@@ -66,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="32dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:padding="@dimen/dp16"

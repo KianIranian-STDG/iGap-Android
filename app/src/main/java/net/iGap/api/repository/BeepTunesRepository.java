@@ -7,6 +7,7 @@ import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.Artist;
+import net.iGap.module.api.beepTunes.PurchaseList;
 import net.iGap.module.api.beepTunes.SearchArtist;
 import net.iGap.module.api.beepTunes.SearchTrack;
 import net.iGap.module.api.beepTunes.TrackInfo;
@@ -156,6 +157,23 @@ public class BeepTunesRepository {
             public void onFailure(Call<SearchArtist> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
                 apiResponse.setProgressIndicator(false);
+            }
+        });
+    }
+
+    public void getPurchase(ApiResponse<PurchaseList> apiResponse) {
+        apiResponse.setProgressIndicator(true);
+        apiService.getPurchases().enqueue(new Callback<PurchaseList>() {
+            @Override
+            public void onResponse(Call<PurchaseList> call, Response<PurchaseList> response) {
+                apiResponse.setProgressIndicator(false);
+                apiResponse.onResponse(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<PurchaseList> call, Throwable t) {
+                apiResponse.setProgressIndicator(false);
+                apiResponse.onFailed(t.getMessage());
             }
         });
     }

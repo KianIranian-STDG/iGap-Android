@@ -4,6 +4,7 @@ import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.Artist;
+import net.iGap.module.api.beepTunes.PurchaseList;
 import net.iGap.module.api.beepTunes.SearchArtist;
 import net.iGap.module.api.beepTunes.SearchTrack;
 import net.iGap.module.api.beepTunes.TrackInfo;
@@ -55,4 +56,7 @@ public interface BeepTunesApi {
             @Query("q") String q,
             @Query("page") int page
     );
+
+    @GET("purchase-list")
+    Call<PurchaseList> getPurchases();
 }
