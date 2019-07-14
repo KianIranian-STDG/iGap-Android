@@ -46,9 +46,12 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserReport;
@@ -79,6 +82,7 @@ public class FragmentContactsProfile extends BaseFragment {
     private String report;
     private FragmentContactsProfileBinding binding;
     private FragmentContactsProfileViewModel viewModel;
+    private CircleImageView userAvatarImageView;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -118,12 +122,52 @@ public class FragmentContactsProfile extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (G.isDarkTheme) {
-            binding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
-            DrawableCompat.setTint(binding.chiFabSetPic.getDrawable(), getContext().getResources().getColor(R.color.white));
-        }
 
-        binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
+        HelperToolbar t = HelperToolbar.create().setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon, R.string.video_call_icon, R.string.voice_call_icon)
+                .setContactProfile(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        viewModel.onMoreButtonClick();
+                    }
+
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        viewModel.onVideoCallClick();
+                    }
+
+                    @Override
+                    public void onThirdRightIconClickListener(View view) {
+                        viewModel.onVoiceCallButtonClick();
+                    }
+                });
+        binding.toolbar.addView(t.getView());
+
+        userAvatarImageView = t.getGroupAvatar() ;
+        userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
+
+        t.getRightButton().setVisibility(View.GONE);
+        t.getSecondRightButton().setVisibility(View.GONE);
+        t.getThirdRightButton().setVisibility(View.GONE);
+
+        viewModel.menuVisibility.observe(this , visible -> {
+            if (visible != null) t.getRightButton().setVisibility(visible);
+        });
+
+        viewModel.callVisibility.observe(this , visible -> {
+            if (visible != null) t.getThirdRightButton().setVisibility(visible);
+        });
+
+        viewModel.videoCallVisibility.observe(this , visible -> {
+            if (visible != null) t.getSecondRightButton().setVisibility(visible);
+        });
 
         //todo: fixed it and move to viewModel
         viewModel.isMuteNotificationChangeListener.observe(getViewLifecycleOwner(), isChecked -> {
@@ -133,13 +177,13 @@ public class FragmentContactsProfile extends BaseFragment {
 
         viewModel.contactName.observe(getViewLifecycleOwner(), name -> {
             if (name != null) {
-                binding.toolbarName.setText(name);
+                t.getGroupName().setText(name);
             }
         });
 
         viewModel.lastSeen.observe(getViewLifecycleOwner(), lastSeen -> {
             if (lastSeen != null) {
-                binding.toolbarStatus.setText(HelperCalander.unicodeManage(lastSeen));
+                t.getGroupMemberCount().setText(HelperCalander.unicodeManage(lastSeen));
             }
         });
 
@@ -167,15 +211,15 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         if (viewModel.phone != null && (!viewModel.phone.get().equals("0") || viewModel.showNumber.get())) {
-            binding.toolbarPhone.setText(viewModel.phone.get());
-            binding.toolbarPhone.setOnClickListener(v -> viewModel.onPhoneNumberClick());
+            t.getProfileTell().setText(viewModel.phone.get());
+            t.getProfileTell().setOnClickListener(v -> viewModel.onPhoneNumberClick());
         } else {
-            binding.toolbarPhone.setVisibility(View.GONE);
+            t.getProfileTell().setVisibility(View.GONE);
         }
 
-        binding.toolbarBio.setText(viewModel.username.get());
+        t.getProfileStatus().setText(viewModel.username.get());
 
-        binding.chiFabSetPic.setOnClickListener(v -> {
+        t.getProfileFabChat().setOnClickListener(v -> {
             viewModel.onClickGoToChat();
         });
 
@@ -433,7 +477,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
-                                showPopupPhoneNumber(binding.toolbarPhone, viewModel.phone.get());
+                                showPopupPhoneNumber(t.getProfileTell(), viewModel.phone.get());
                             }
 
                             @Override
@@ -475,9 +519,9 @@ public class FragmentContactsProfile extends BaseFragment {
         viewModel.setAvatar.observe(this, aBoolean -> {
             if (aBoolean != null) {
                 if (aBoolean) {
-                    avatarHandler.getAvatar(new ParamWithAvatarType(binding.toolbarAvatar, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                    avatarHandler.getAvatar(new ParamWithAvatarType(t.getGroupAvatar(), viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
                 }else{
-                    binding.toolbarAvatar.setImageResource(R.drawable.ic_cloud_space_blue);
+                    t.getGroupAvatar().setImageResource(R.drawable.ic_cloud_space_blue);
                 }
             }
         });

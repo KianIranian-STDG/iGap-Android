@@ -1683,7 +1683,13 @@ public class HelperToolbar {
                     //button to go on chat room
                     fabChat = new FloatingActionButton(getContext());
                     fabChat.setId(R.id.chi_fab_setPic);
-                    fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
+
+                    if (G.isDarkTheme){
+                        fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
+                    }else{
+                        fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
+                    }
+
                     fabChat.setImageResource(R.mipmap.comment);
                     fabChat.setSize(FloatingActionButton.SIZE_MINI);
                     DrawableCompat.setTint(fabChat.getDrawable() , getContext().getResources().getColor(R.color.white));

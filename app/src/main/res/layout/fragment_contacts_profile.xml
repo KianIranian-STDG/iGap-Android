@@ -15,22 +15,28 @@
             type="net.iGap.viewmodel.FragmentContactsProfileViewModel" />
     </data>
 
-    <android.support.constraint.motion.MotionLayout
+    <android.support.constraint.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="ltr"
-        app:layoutDescription="@xml/profile_motion">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v4.widget.NestedScrollView
-            android:id="@+id/scroll_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layoutDirection="locale"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_avatar">
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -498,196 +504,5 @@
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v4.widget.NestedScrollView>
-
-
-        <ImageView
-            android:id="@+id/toolbar_background"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp140"
-            android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default = @drawable/shape_toolbar_background}"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/toolbar_back"
-            style="@style/myIconToolbarStyle"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginTop="@dimen/dp10"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:text="@string/back_icon"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="@id/toolbar_background"
-            app:layout_constraintTop_toTopOf="@id/toolbar_background"
-            app:layout_constraintVertical_bias="0" />
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/layout_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
-            app:layout_constraintTop_toTopOf="@id/toolbar_background"
-            app:layout_constraintVertical_bias="0">
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/toolbar_more"
-                style="@style/myIconToolbarStyle"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{()->viewModel.onMoreButtonClick()}"
-                android:text="@string/more_icon"
-                android:visibility="@{viewModel.menuVisibility}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/toolbar_videoCall"
-                style="@style/myIconToolbarStyle"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{()->viewModel.onVideoCallClick()}"
-                android:text="@string/video_call_icon"
-                android:visibility="@{viewModel.videoCallVisibility}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/toolbar_more"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/toolbar_voiceCall"
-                style="@style/myIconToolbarStyle"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{()->viewModel.onVoiceCallButtonClick()}"
-                android:text="@string/voice_call_icon"
-                android:visibility="@{viewModel.callVisibility}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/toolbar_videoCall"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
-
-
-        </android.support.constraint.ConstraintLayout>
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/chi_fab_setPic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp20"
-            android:onClick="@{()->viewModel.onClickGoToChat()}"
-            android:src="@mipmap/comment"
-            app:backgroundTint="@color/setting_items_value_color"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintRight_toRightOf="@id/toolbar_background"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_background"
-            app:tint="@color/white" />
-
-
-        <net.iGap.module.CircleImageView
-            android:id="@+id/toolbar_avatar"
-            android:layout_width="@dimen/dp120"
-            android:layout_height="@dimen/dp120"
-            android:layout_marginStart="@dimen/dp20"
-            android:layout_marginLeft="@dimen/dp20"
-            android:layout_marginBottom="@dimen/dp10"
-            android:onClick="@{()->viewModel.onImageClick()}"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintStart_toStartOf="@id/toolbar_background"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_background" />
-
-        <net.iGap.module.EmojiTextViewE
-            android:id="@+id/toolbar_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/main_font"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp10"
-            android:paddingRight="@dimen/dp10"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            app:autoSizeMaxTextSize="@dimen/xlargeTextSize"
-            app:autoSizeMinTextSize="@dimen/largeTextSize"
-            app:autoSizeTextType="uniform"
-            app:emojiSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toTopOf="@id/toolbar_status"
-            app:layout_constraintEnd_toStartOf="@id/chi_fab_setPic"
-            app:layout_constraintStart_toEndOf="@id/toolbar_avatar" />
-
-        <net.iGap.module.EmojiTextViewE
-            android:id="@+id/toolbar_status"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/main_font"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp10"
-            android:paddingRight="@dimen/dp10"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            app:autoSizeMaxTextSize="@dimen/standardTextSize"
-            app:autoSizeMinTextSize="@dimen/smallTextSize"
-            app:autoSizeTextType="uniform"
-            app:emojiSize="@dimen/verySmallTextSize"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_name"
-            app:layout_constraintStart_toEndOf="@id/toolbar_avatar" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/toolbar_phone"
-            style="?textSubColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/main_font"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp10"
-            android:paddingRight="@dimen/dp10"
-            android:singleLine="true"
-            app:autoSizeMaxTextSize="@dimen/standardTextSize"
-            app:autoSizeMinTextSize="@dimen/smallTextSize"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_name"
-            app:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_bio" />
-
-        <TextView
-            android:id="@+id/toolbar_bio"
-            style="?textSubColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/main_font"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp10"
-            android:paddingRight="@dimen/dp10"
-            android:singleLine="true"
-            app:autoSizeMaxTextSize="@dimen/standardTextSize"
-            app:autoSizeMinTextSize="@dimen/smallTextSize"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_name"
-            app:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_background" />
-
-    </android.support.constraint.motion.MotionLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>
