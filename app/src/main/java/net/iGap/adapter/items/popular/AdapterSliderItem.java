@@ -19,12 +19,9 @@ import java.util.List;
 public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.BottomSliderViewHolder> {
     private List<Slide> sliderList ;
     private Context context;
-    private OnClickSliderEventCallBack onClickSliderEventCallBack;
-    public boolean clickable;
 
-    public AdapterSliderItem(Context context, boolean clickable,List<Slide> sliderList) {
+    public AdapterSliderItem(Context context,List<Slide> sliderList) {
         this.context = context;
-        this.clickable = clickable;
         this.sliderList=sliderList;
     }
 
@@ -58,8 +55,7 @@ public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.Bo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (clickable == true)
-                        onClickSliderEventCallBack.clickedSlider();
+
                 }
             });
         }
@@ -69,11 +65,5 @@ public class AdapterSliderItem extends RecyclerView.Adapter<AdapterSliderItem.Bo
         }
     }
 
-    public void setOnClickSliderEventCallBack(OnClickSliderEventCallBack onClickSliderEventCallBack) {
-        this.onClickSliderEventCallBack = onClickSliderEventCallBack;
-    }
 
-    public interface OnClickSliderEventCallBack {
-        void clickedSlider();
-    }
 }
