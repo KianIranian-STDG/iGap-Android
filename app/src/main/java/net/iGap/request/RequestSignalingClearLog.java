@@ -12,6 +12,8 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoSignalingClearLog;
 
+import java.util.List;
+
 public class RequestSignalingClearLog {
 
     /**
@@ -21,6 +23,20 @@ public class RequestSignalingClearLog {
 
         ProtoSignalingClearLog.SignalingClearLog.Builder builder = ProtoSignalingClearLog.SignalingClearLog.newBuilder();
         builder.setClearId(clearId);
+        RequestWrapper requestWrapper = new RequestWrapper(908, builder, builder);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * @param logIds list of  logs  for clear
+     */
+    public void signalingClearLog(List<Long> logIds) {
+
+        ProtoSignalingClearLog.SignalingClearLog.Builder builder = ProtoSignalingClearLog.SignalingClearLog.newBuilder();
+        builder.addAllLogId(logIds);
 
         RequestWrapper requestWrapper = new RequestWrapper(908, builder, builder);
         try {

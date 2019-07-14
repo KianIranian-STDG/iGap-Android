@@ -18,9 +18,7 @@ import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.fragment.CardsFragment;
-import org.paygear.fragment.ScannerFragment;
 import org.paygear.model.Payment;
-import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
@@ -159,9 +157,6 @@ public class WalletActivity extends NavigationBarActivity {
         }
         ft.commit();
 
-        if (isScan) {
-            pushFullFragment(new ScannerFragment(), "ScannerFragment");
-        }
     }
 
     @Override

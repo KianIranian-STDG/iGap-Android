@@ -36,7 +36,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
-import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
@@ -285,9 +284,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
                     Realm realm_ = Realm.getDefaultInstance();
                     try {
+
+                        List<Long> logIds = new ArrayList<>();
+
                         for (int i = 0; i < mSelectedLogList.size(); i++) {
-                            new RequestSignalingClearLog().signalingClearLog(mSelectedLogList.get(i).getLogId());
+                            logIds.add(mSelectedLogList.get(i).getLogId());
                         }
+                        new RequestSignalingClearLog().signalingClearLog(logIds);
+
+
                         setViewState(false);
 
                         mSelectedLogList.clear();

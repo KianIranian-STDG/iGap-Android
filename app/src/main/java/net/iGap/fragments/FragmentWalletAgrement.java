@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.interfaces.OnReceivePageInfoWalletAgreement;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestInfoPage;
 import net.iGap.viewmodel.FragmentWalletAgreementViewModel;
 
@@ -56,6 +58,23 @@ public class FragmentWalletAgrement extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding(getArguments());
+        initToolbar();
+    }
+
+    private void initToolbar() {
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.wallet_agrement))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+        fragmentWalletAgrementBinding.fwaLayoutToolbar.addView(toolbar.getView());
     }
 
     private void initDataBinding(Bundle arguments) {

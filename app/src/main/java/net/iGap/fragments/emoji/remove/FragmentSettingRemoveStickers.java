@@ -65,7 +65,7 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
         stickerList = (List<StructGroupSticker>) getArguments().getSerializable("GROUP_ID");
         recentStickerList = (ArrayList<StructItemSticker>) getArguments().getSerializable("RECENT");
 
-        menu_item1.setText(R.string.md_rubbish_delete_file);
+        menu_item1.setText(R.string.delete_icon);
         menu_item1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

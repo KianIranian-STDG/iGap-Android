@@ -1301,7 +1301,7 @@
     <string name="please_select_operator">please select operator</string>
     <string name="wallet">Wallet</string>
     <string name="loading_wallet_agreement">Loading wallet agreement …</string>
-    <string name="i_agree_with_the_terms">I agree with the terms</string>
+    <string name="i_agree_with_the_terms">\tI agree with the terms</string>
     <string name="accept_the_terms">Accept the terms</string>
     <string name="wallet_agrement">Wallet agreement</string>
     <string name="SendMoney">Send Money</string>

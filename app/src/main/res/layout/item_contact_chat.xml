@@ -37,20 +37,22 @@
 
     </LinearLayout>
 
-    <TextView
+    <net.iGap.module.EmojiTextViewE
         android:id="@+id/tv_itemContactChat_userName"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        app:emojiSize="@dimen/standardTextSize"
         android:fontFamily="@font/main_font"
         android:text="user name"
         android:textColor="@android:color/black"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
+        android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"
@@ -65,6 +67,7 @@
         android:fontFamily="@font/main_font"
         android:text="09xxxxx"
         android:textSize="@dimen/smallTextSize"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_itemContactChat_userName"
         app:layout_constraintStart_toStartOf="@+id/tv_itemContactChat_userName"

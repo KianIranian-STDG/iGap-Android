@@ -123,7 +123,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        setupTheme();
+        //setupTheme();
 
         View view = rootView = inflater.inflate(R.layout.fragment_scanner, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);

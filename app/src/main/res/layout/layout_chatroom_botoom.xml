@@ -8,7 +8,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"
-        style="@style/myIconTextViewStyle"
+        style="@style/myIconTextViewStyleGray"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
@@ -39,8 +39,8 @@
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp4"
         style="?hintColorSettingTheme"
-        android:textSize="@dimen/dp16"
-        app:emojiSize="@dimen/dp22"
+        android:textSize="@dimen/standardTextSize"
+        app:emojiSize="@dimen/largeTextSize"
         android:layout_margin="@dimen/dp8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_chatRoom_botAction"
@@ -49,7 +49,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_botAction"
-        style="@style/myIconTextViewStyle"
+        style="@style/myIconTextViewStyleGray"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
@@ -90,7 +90,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_wallet"
-            style="@style/myIconTextViewStyle"
+            style="@style/myIconTextViewStyleGray"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -101,7 +101,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
-            style="@style/myIconTextViewStyle"
+            style="@style/myIconTextViewStyleGray"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -112,7 +112,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_mic"
-            style="@style/myIconTextViewStyle"
+            style="@style/myIconTextViewStyleGray"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"

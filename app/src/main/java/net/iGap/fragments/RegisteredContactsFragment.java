@@ -53,6 +53,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
@@ -799,7 +800,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             private CircleImageView image;
-            private TextView title;
+            private EmojiTextViewE title;
             private TextView subtitle;
             private RealmContacts realmContacts;
             private ConstraintLayout root;
@@ -870,7 +871,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         public class ViewHolderCall extends RecyclerView.ViewHolder {
 
             private CircleImageView image;
-            private TextView title;
+            private EmojiTextViewE title;
             private TextView subtitle;
             private MaterialDesignTextView btnVoiceCall;
             private RealmContacts realmContacts;
