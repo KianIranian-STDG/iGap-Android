@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,9 +157,11 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             }
         });
 
-        viewModel.goToRoomListPage.observe(this, go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);
+        viewModel.goToRoomListPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() instanceof ActivityMain && go != null && go) {
+                Log.wtf(this.getClass().getName(),"goToRoomListPage observe");
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
             }
         });
     }

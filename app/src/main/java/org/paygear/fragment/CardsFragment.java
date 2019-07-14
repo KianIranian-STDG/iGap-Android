@@ -61,10 +61,8 @@ import java.util.ArrayList;
 
 import ir.radsense.raadcore.OnFragmentInteraction;
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.Auth;
-import ir.radsense.raadcore.model.JWT;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.widget.ProgressLayout;
@@ -201,6 +199,10 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         updateAppBar();
         mCards = RaadApp.cards;
         if (mCards != null) {
+
+            if (Auth.getCurrentAuth() != null  &&WalletActivity.isScan && getActivity() != null) {
+                ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
+            }
             setAdapter();
         } else if (Auth.getCurrentAuth() != null) {
             load();
@@ -280,6 +282,11 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
                     if (auth != null) {
                         Auth.getCurrentAuth().setPublicKey(auth.publicKey);
                         loadCards();
+
+                        if (WalletActivity.isScan && getActivity() != null) {
+                            ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
+                        }
+
                         return;
                     }
                 }

@@ -1301,7 +1301,7 @@
     <string name="please_select_operator">please select operator</string>
     <string name="wallet">Wallet</string>
     <string name="loading_wallet_agreement">Loading wallet agreement …</string>
-    <string name="i_agree_with_the_terms">I agree with the terms</string>
+    <string name="i_agree_with_the_terms">\tI agree with the terms</string>
     <string name="accept_the_terms">Accept the terms</string>
     <string name="wallet_agrement">Wallet agreement</string>
     <string name="SendMoney">Send Money</string>
@@ -1901,6 +1901,9 @@
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
     <string name="delete_all">Delete All</string>
+    <string name="maximum_poll">You Have Reached Your Vote Limit.</string>
+    <string name="before_try">You have already registered your vote.</string>
+    <string name="poll_ok">Your vote was successfully recorded.</string>
 
     <!-- kuknos -->
     <string name="kuknos_login_messge_str">Please enter your ID number for registration.</string>

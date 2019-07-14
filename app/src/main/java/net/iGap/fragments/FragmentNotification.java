@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,9 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentNotificationViewModel;
 
 /**
@@ -49,18 +49,24 @@ public class FragmentNotification extends BaseFragment {
 
         roomId = getArguments().getLong("ID");
         initDataBinding();
-        fragmentNotificationBinding.toolbar2.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        fragmentNotificationBinding.ntgTxtBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    popBackStackFragment();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.ntg_title_toolbar))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        try {
+                            popBackStackFragment();
+                        } catch (IllegalStateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        fragmentNotificationBinding.ntgLayoutToolbar.addView(toolbar.getView());
+
     }
 
     private void initDataBinding() {

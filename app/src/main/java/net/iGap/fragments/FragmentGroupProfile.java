@@ -17,6 +17,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
@@ -268,9 +270,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.goToRoomListPage.observe(this, isGo -> {
-            if (getActivity() != null && isGo != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(2);
+        viewModel.goToRoomListPage.observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() instanceof ActivityMain && isGo != null) {
+                Log.wtf(this.getClass().getName(),"goToRoomListPage observe");
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(2);*/
             }
         });
 

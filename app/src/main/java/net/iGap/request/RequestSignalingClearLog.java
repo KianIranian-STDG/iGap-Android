@@ -12,16 +12,31 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoSignalingClearLog;
 
+import java.util.List;
+
 public class RequestSignalingClearLog {
 
     /**
      * @param clearId last callLog Id for clear all call history
      */
-    public void signalingClearLog(long clearId, ProtoSignalingClearLog.SignalingClearLog.ClearType clearType) {
+    public void signalingClearLog(long clearId) {
 
         ProtoSignalingClearLog.SignalingClearLog.Builder builder = ProtoSignalingClearLog.SignalingClearLog.newBuilder();
         builder.setClearId(clearId);
-        builder.setClearType(clearType);
+        RequestWrapper requestWrapper = new RequestWrapper(908, builder, builder);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * @param logIds list of  logs  for clear
+     */
+    public void signalingClearLog(List<Long> logIds) {
+
+        ProtoSignalingClearLog.SignalingClearLog.Builder builder = ProtoSignalingClearLog.SignalingClearLog.newBuilder();
+        builder.addAllLogId(logIds);
 
         RequestWrapper requestWrapper = new RequestWrapper(908, builder, builder);
         try {

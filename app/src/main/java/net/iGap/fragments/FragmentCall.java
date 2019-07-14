@@ -36,7 +36,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
-import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
@@ -257,7 +256,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     try {
                         setViewState(false);
                         RealmCallLog realmCallLog = realm_.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL);
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
                         mSelectedLogList.clear();
                     } catch (Exception e) {
@@ -285,9 +284,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
                     Realm realm_ = Realm.getDefaultInstance();
                     try {
+
+                        List<Long> logIds = new ArrayList<>();
+
                         for (int i = 0; i < mSelectedLogList.size(); i++) {
-                            new RequestSignalingClearLog().signalingClearLog(mSelectedLogList.get(i).getLogId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.SINGLE);
+                            logIds.add(mSelectedLogList.get(i).getLogId());
                         }
+                        new RequestSignalingClearLog().signalingClearLog(logIds);
+
+
                         setViewState(false);
 
                         mSelectedLogList.clear();
@@ -309,6 +314,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             }
 
         });
+        //Todo: fixed it, cause load view with delay
+        setViewState(mIsMultiSelectEnable);
     }
 
     private void checkListIsEmpty() {
@@ -460,7 +467,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     Realm realm = Realm.getDefaultInstance();
                     try {
                         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL);
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         emptuListView.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         e.printStackTrace();

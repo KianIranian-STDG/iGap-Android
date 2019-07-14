@@ -176,8 +176,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/img_icCall"
-        android:layout_width="@dimen/dp160"
-        android:layout_height="@dimen/dp160"
+        android:layout_width="@dimen/igap_hint_images"
+        android:layout_height="@dimen/igap_hint_images"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"

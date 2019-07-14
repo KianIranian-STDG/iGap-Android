@@ -89,7 +89,6 @@
         android:layout_height="@dimen/contact_icon_size"
         android:text="@string/invite_icon"
         app:layout_constraintBottom_toBottomOf="@id/inviteFriendsTitle"
-        app:layout_constraintEnd_toStartOf="@id/inviteFriendsTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_inviteFriend"
         app:layout_constraintTop_toTopOf="@id/inviteFriendsTitle" />
 
@@ -116,7 +115,7 @@
         android:layout_height="0dp"
         android:background="?attr/selectableItemBackground"
         android:visibility="visible"
-        app:constraint_referenced_ids="inviteFriendsIcon,inviteFriendsTitle"
+        app:constraint_referenced_ids="inviteFriendsTitle,inviteFriendsIcon"
         app:layout_constraintBottom_toBottomOf="@id/inviteFriendsTitle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -290,10 +289,10 @@
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
         android:text="@string/invite_icon"
+        app:layout_constraintBottom_toBottomOf="@id/addContactTitle"
         app:layout_constraintEnd_toStartOf="@id/addContactTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_contact"
-        app:layout_constraintTop_toTopOf="@id/addContactTitle"
-        app:layout_constraintBottom_toBottomOf="@id/addContactTitle"/>
+        app:layout_constraintTop_toTopOf="@id/addContactTitle" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/addContactTitle"
@@ -303,8 +302,8 @@
         android:layout_marginStart="@dimen/dp10"
         android:layout_marginLeft="@dimen/dp10"
         android:gravity="start|center_vertical"
-        android:singleLine="true"
         android:padding="@dimen/dp10"
+        android:singleLine="true"
         android:text="@string/menu_add_contact"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_add_new_contact"
@@ -330,11 +329,11 @@
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
         android:text="@string/dial_number_icon"
+        app:layout_constraintBottom_toBottomOf="@id/dialNumberTitle"
         app:layout_constraintEnd_toStartOf="@id/dialNumberTitle"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@id/menu_layout_btn_dial_number"
-        app:layout_constraintTop_toTopOf="@id/dialNumberTitle"
-        app:layout_constraintBottom_toBottomOf="@id/dialNumberTitle"/>
+        app:layout_constraintTop_toTopOf="@id/dialNumberTitle" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/dialNumberTitle"
@@ -344,8 +343,8 @@
         android:layout_marginStart="@dimen/dp10"
         android:layout_marginLeft="@dimen/dp10"
         android:gravity="start|center_vertical"
-        android:singleLine="true"
         android:padding="@dimen/dp10"
+        android:singleLine="true"
         android:text="@string/dial_number"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_btn_dial_number"
@@ -396,9 +395,9 @@
         android:id="@+id/fast_scroller"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/recycler_view"
         app:layout_constraintBottom_toBottomOf="@id/recycler_view"
-        app:layout_constraintEnd_toEndOf="@id/recycler_view"/>
+        app:layout_constraintEnd_toEndOf="@id/recycler_view"
+        app:layout_constraintTop_toTopOf="@id/recycler_view" />
 
     <ProgressBar
         android:id="@+id/prgWaiting_loadList"

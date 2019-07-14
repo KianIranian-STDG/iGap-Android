@@ -2211,7 +2211,7 @@
     <string name="please_select_operator">يرجى اختيار المشغل</string>
     <string name="wallet">محفظة</string>
     <string name="loading_wallet_agreement">تحميل اتفاقية المحفظة</string>
-    <string name="i_agree_with_the_terms">أنا أتفق مع الشروط</string>
+    <string name="i_agree_with_the_terms">\tأنا أتفق مع الشروط</string>
     <string name="accept_the_terms">اقبل الشروط</string>
     <string name="wallet_agrement">اتفاقية المحفظة</string>
     <string name="SendMoney">إرسال الأموال</string>
@@ -2848,5 +2848,9 @@
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
     <string name="delete_all">Delete All</string>
+
+    <string name="maximum_poll">لقد وصلت إلى حد تصويتك.</string>
+    <string name="before_try">لقد قمت بالفعل بتسجيل صوتك.</string>
+    <string name="poll_ok">تم تسجيل صوتك بنجاح.</string>
 
 </resources>

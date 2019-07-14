@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.vanniktech.emoji.EmojiPopup;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -62,6 +63,7 @@ import net.iGap.request.RequestChannelRemoveUsername;
 import net.iGap.request.RequestChannelRevokeLink;
 import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.viewmodel.EditChannelViewModel;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -177,17 +179,18 @@ public class EditChannelFragment extends BaseFragment {
             }
         });
 
-        viewModel.goToChatRoom.observe(this,go->{
-            if (getActivity()!=null&&go!=null&&go){
-                new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);
+        viewModel.goToChatRoom.observe(this, go -> {
+            if (getActivity() instanceof ActivityMain && go != null && go) {
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
             }
         });
 
-        viewModel.onSignClickListener.observe(this , isClicked -> {
+        viewModel.onSignClickListener.observe(this, isClicked -> {
             binding.signedMessage.setChecked(!binding.signedMessage.isChecked());
         });
 
-        viewModel.onReactionMessageClickListener.observe(this , isClicked -> {
+        viewModel.onReactionMessageClickListener.observe(this, isClicked -> {
             binding.rateMessage.setChecked(!binding.rateMessage.isChecked());
         });
 

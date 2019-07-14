@@ -174,16 +174,14 @@ public class FragmentPaymentChargeViewModel {
     }
 
     private void onOpereatorChange(int arrayId) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(G.context, arrayId, R.layout.spinner_item_custom);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        fragmentPaymentChargeBinding.fpcSpinnerChargeType.setAdapter(adapter);
+        MySpinnerAdapter adapter1 = new MySpinnerAdapter(G.context,R.layout.spinner_item_custom,Arrays.asList(G.context.getResources().getTextArray(arrayId)));
+        fragmentPaymentChargeBinding.fpcSpinnerChargeType.setAdapter(adapter1);
         fragmentPaymentChargeBinding.fpcSpinnerChargeType.setSelection(0);
         observeChargeTypeHint.set(View.GONE);
     }
 
     private void onPriceChange(int arrayId) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(G.context, arrayId, R.layout.spinner_item_custom);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        MySpinnerAdapter adapter = new MySpinnerAdapter(G.context,R.layout.spinner_item_custom,Arrays.asList(G.context.getResources().getTextArray(arrayId)));
         fragmentPaymentChargeBinding.fpcSpinnerPrice.setAdapter(adapter);
         fragmentPaymentChargeBinding.fpcSpinnerPrice.setSelection(0);
         observePriceHint.set(View.GONE);
@@ -191,7 +189,6 @@ public class FragmentPaymentChargeViewModel {
 
     private void setAdapterOperatorType() {
         MySpinnerAdapter adapter = new MySpinnerAdapter(G.context, R.layout.spinner_item_custom, Arrays.asList(G.context.getResources().getTextArray(R.array.phone_operator)));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fragmentPaymentChargeBinding.fpcSpinnerOperator.setAdapter(adapter);
         fragmentPaymentChargeBinding.fpcSpinnerOperator.setSelection(0);
     }

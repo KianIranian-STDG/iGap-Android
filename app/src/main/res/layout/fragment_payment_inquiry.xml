@@ -111,6 +111,7 @@
                                 android:hint="@string/phone"
                                 android:inputType="phone"
                                 android:maxLength="11"
+                                android:gravity="center"
                                 android:minHeight="@dimen/dp44"
                                 android:paddingLeft="@dimen/dp10"
                                 android:paddingRight="@dimen/dp10"
@@ -167,6 +168,7 @@
                                     android:hint="@string/area_code"
                                     android:inputType="phone"
                                     android:maxLength="4"
+                                    android:gravity="center"
                                     android:minHeight="@dimen/dp44"
                                     android:paddingLeft="@dimen/dp10"
                                     android:paddingRight="@dimen/dp10"
@@ -217,6 +219,7 @@
                                     android:hint="@string/phone"
                                     android:inputType="phone"
                                     android:maxLength="8"
+                                    android:gravity="center"
                                     android:minHeight="@dimen/dp44"
                                     android:paddingLeft="@dimen/dp10"
                                     android:paddingRight="@dimen/dp10"
@@ -276,6 +279,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -285,6 +289,7 @@
 
                         <TextView
                             fontPath="fonts/IRANSansMobile.ttf"
+                            style="?textTitleColorSettingTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp6"

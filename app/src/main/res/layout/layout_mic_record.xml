@@ -87,7 +87,7 @@
 
           <net.iGap.module.MaterialDesignTextView
             android:id="@+id/lmr_txt_Lock"
-            style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+            style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp32"
             android:layout_height="@dimen/dp32"
             android:layout_gravity="bottom|center"
@@ -101,7 +101,7 @@
 
           <net.iGap.module.MaterialDesignTextView
             android:id="@+id/lmr_btn_mic_layout"
-            style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+            style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp68"
             android:layout_height="@dimen/dp68"
             android:layout_gravity="bottom"

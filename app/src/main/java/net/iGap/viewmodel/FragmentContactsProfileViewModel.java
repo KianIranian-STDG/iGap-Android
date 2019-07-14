@@ -392,6 +392,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             verifyTextVisibility.set(View.INVISIBLE);
         }
 
+        //todo: fixed it two times check it and first and her
         if (userId != 134 && G.userId != userId) {
             RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
             if (callConfig != null) {
@@ -414,6 +415,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             } else {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
+        } else {
+            callVisibility.set(View.GONE);
+            videoCallVisibility.set(View.GONE);
         }
         RealmContacts realmContacts = getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
 

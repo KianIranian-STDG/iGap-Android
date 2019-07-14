@@ -14,11 +14,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Group;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -53,6 +55,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
@@ -98,7 +101,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private View btnAddNewContact;
     private View btnDialNumber;
     private RecyclerView realmRecyclerView;
-    private View vgInviteFriend;
+    private Group vgInviteFriend;
     private EditText edtSearch;
     private HelperToolbar mHelperToolbar;
     private ProgressBar prgWaitingLoadList;
@@ -187,8 +190,9 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             Contacts.getContact = true;
         }
 
-        if (results == null)
+        if (results == null){
             results = ContactManager.getContactList(ContactManager.FIRST);
+        }
 
         prgWaitingLoadList = view.findViewById(R.id.prgWaiting_loadList);
         realmRecyclerView.setAdapter(new ContactListAdapter(results));
@@ -208,7 +212,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         mTxtSelectedCount = view.findViewById(R.id.fc_selected_mode_txt_counter);
         AppCompatTextView mBtnDeleteSelected = view.findViewById(R.id.fc_selected_mode_btn_delete);
         MaterialDesignTextView mBtnCancelSelected = view.findViewById(R.id.fc_selected_mode_btn_cancel);
-        mTxtSelectedCount.setText(0 + " " + G.context.getResources().getString(R.string.item_selected));
+        mTxtSelectedCount.setText(0 + " " + getString(R.string.item_selected));
 
         switch (mPageMode) {
             case CALL:
@@ -222,6 +226,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 btnAddNewGroup.setVisibility(View.VISIBLE);
                 vgInviteFriend.setVisibility(View.GONE);
                 break;
+            case CONTACTS:
+
         }
 
         vgInviteFriend.setOnClickListener(v -> {
@@ -384,21 +390,29 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             selectedList.clear();
             refreshAdapter(0, true);
         });
+
+        //todo: fixed it ,effect in load time
+        if (isMultiSelect) {
+            refreshAdapter(0, true);
+            if (!mLayoutMultiSelected.isShown()) {
+                Log.wtf(this.getClass().getName(),"setPageShowingMode 4");
+                setPageShowingMode(4);
+            }
+            isLongClick = true;
+        }
     }
 
     private void setPageShowingMode(int mode) {
-
+        Log.wtf(this.getClass().getName(),"setPageShowingMode mode: "+mode);
         if (mode == 0 || mode == 1) { //contact mode
-
             btnAddNewGroupCall.setVisibility(View.GONE);
             btnAddNewContact.setVisibility(View.GONE);
             btnDialNumber.setVisibility(View.GONE);
-            vgInviteFriend.setVisibility(View.VISIBLE);
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
             btnAddSecretChat.setVisibility(View.GONE);
             mLayoutMultiSelected.setVisibility(View.GONE);
-
+            vgInviteFriend.setVisibility(View.VISIBLE);
         } else if (mode == 2) { // call mode
 
             btnAddNewGroupCall.setVisibility(View.VISIBLE);
@@ -422,7 +436,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             mLayoutMultiSelected.setVisibility(View.GONE);
 
         } else if (mode == 4) {//edit mode
-
+            Log.wtf(this.getClass().getName(),"setPageShowingMode 4");
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
             btnAddSecretChat.setVisibility(View.GONE);
@@ -431,7 +445,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             btnAddNewContact.setVisibility(View.GONE);
             btnDialNumber.setVisibility(View.GONE);
             mLayoutMultiSelected.setVisibility(View.VISIBLE);
-
+            Log.wtf(this.getClass().getName(),"setPageShowingMode 4");
         }
     }
 
@@ -799,7 +813,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             private CircleImageView image;
-            private TextView title;
+            private EmojiTextViewE title;
             private TextView subtitle;
             private RealmContacts realmContacts;
             private ConstraintLayout root;
@@ -870,7 +884,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         public class ViewHolderCall extends RecyclerView.ViewHolder {
 
             private CircleImageView image;
-            private TextView title;
+            private EmojiTextViewE title;
             private TextView subtitle;
             private MaterialDesignTextView btnVoiceCall;
             private RealmContacts realmContacts;

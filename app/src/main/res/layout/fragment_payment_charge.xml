@@ -70,12 +70,13 @@
 
                         <EditText
                             android:id="@+id/fpc_editText_phone_number"
-                            style="@style/hint_style_setting_black"
+                            style="?hintColorSettingTheme"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dp44"
                             android:background="@drawable/background_cancel_money_action"
                             android:hint="@string/phone_number"
                             android:inputType="phone"
+                            android:gravity="center"
                             android:maxLength="11"
                             android:minHeight="@dimen/dp44"
                             android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}"
