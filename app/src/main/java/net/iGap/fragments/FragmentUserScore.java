@@ -70,29 +70,6 @@ public class FragmentUserScore extends BaseFragment {
 
         binding.toolbar.addView(t.getView());
 
-        binding.scoreView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Ensure you call it only once
-                binding.scoreView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                ConstraintSet set = new ConstraintSet();
-                set.clone(binding.root);
-                set.constrainCircle(binding.scorePointer.getId(), binding.scoreView.getId(), binding.scoreView.getWidth() / 2, 0);
-                set.constrainCircle(binding.rankPointer.getId(), binding.rankView.getId(), binding.rankView.getWidth() / 2, 180);
-                set.applyTo(binding.root);
-            }
-        });
-
-        viewModel.userScorePointer.observe(this, integer -> {
-            if (integer != null) {
-                ConstraintSet set = new ConstraintSet();
-                set.clone(binding.root);
-                set.constrainCircle(binding.scorePointer.getId(), binding.scoreView.getId(), binding.scoreView.getWidth() / 2, integer);
-                set.applyTo(binding.root);
-                TransitionManager.beginDelayedTransition(binding.root);
-            }
-        });
-
         viewModel.userRankPointer.observe(this, integer -> {
             if (integer != null) {
                 ConstraintSet set = new ConstraintSet();
