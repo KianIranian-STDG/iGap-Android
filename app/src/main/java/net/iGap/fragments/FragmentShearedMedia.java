@@ -639,7 +639,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
                     mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.gray_4c));
                 } else {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
+                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_selected_bg));
                     mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
                 }
             }

@@ -348,7 +348,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
             disable3.setTextColor(getResources().getColor(R.color.white));
             disable4.setTextColor(getResources().getColor(R.color.white));
         } else {
-            enable.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            enable.setBackground(getResources().getDrawable(R.drawable.round_button_selected_bg));
             disable.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
             disable2.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
             disable3.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
