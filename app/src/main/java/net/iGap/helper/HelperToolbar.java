@@ -88,6 +88,10 @@ public class HelperToolbar {
     private TextView mTabletUserName ;
     private TextView mTabletUserPhone;
 
+    private TextView mTabletSearchIcon;
+    private TextView mTabletAddIcon;
+    private TextView mTabletEditIcon;
+
     private Context mContext;
     private FragmentActivity mFragmentActivity;
     private ViewGroup mViewGroup = null;
@@ -324,10 +328,13 @@ public class HelperToolbar {
             scannerBtn.setOnClickListener(v -> onScannerClickListener());
         }
 
-        if (isTabletMode){
-            viewMaker.gettIconEdit().setOnClickListener(v -> mToolbarListener.onLeftIconClickListener(v));
-            viewMaker.gettIconAdd().setOnClickListener(v -> mToolbarListener.onRightIconClickListener(v));
-            viewMaker.gettIconSearch().setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
+        if (isTabletMode) {
+            mTabletSearchIcon = viewMaker.gettIconSearch();
+            mTabletAddIcon = viewMaker.gettIconAdd();
+            mTabletEditIcon = viewMaker.gettIconEdit();
+            mTabletEditIcon.setOnClickListener(v -> mToolbarListener.onLeftIconClickListener(v));
+            mTabletAddIcon.setOnClickListener(v -> mToolbarListener.onRightIconClickListener(v));
+            mTabletSearchIcon.setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
         }
 
         if (mTxtLogo != null){
@@ -604,7 +611,19 @@ public class HelperToolbar {
         return mTabletUserPhone;
     }
 
-    public void checkPassCodeVisibility(){
+    public TextView getTabletSearchIcon() {
+        return mTabletSearchIcon;
+    }
+
+    public TextView getTabletAddIcon() {
+        return mTabletAddIcon;
+    }
+
+    public TextView getTabletEditIcon() {
+        return mTabletEditIcon;
+    }
+
+    public void checkPassCodeVisibility() {
         if (!G.isLandscape) {
             if (G.isPassCode) {
                 passCodeBtn.setVisibility(View.VISIBLE);
