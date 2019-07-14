@@ -45,6 +45,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
+        Fragment current = fragmentManager.findFragmentById(R.id.viewpager);
         switch (position) {
             case 0:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
@@ -52,7 +53,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                if (!(current instanceof FragmentMain) || !(current instanceof TabletMainFragment)) {
                     fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
                 }
                 fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
@@ -74,6 +75,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     if (fragment == null) {
                         fragment = new TabletMainFragment();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                    }else{
+                        if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof TabletMainFragment)) {
+                            fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
+                        }
+                        fragmentTransaction.show(fragment).commit();
                     }
                 } else {
                     fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
@@ -140,7 +147,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     public void goToUserProfile() {
-        loadFragment(HelperCalander.isPersianUnicode ? 0 : 4);
+        bottomNavigation.setCurrentItem(4);
     }
 
     public void setChatPage(FragmentChat fragmentChat) {
