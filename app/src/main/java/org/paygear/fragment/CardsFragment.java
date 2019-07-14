@@ -657,6 +657,11 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
             } else {
                 progress.setStatus(1);
             }
+
+            if (WalletActivity.isScan) {
+                ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
+                WalletActivity.isScan = false;
+            }
         } else {
             if (merchantCards == null)
                 return;

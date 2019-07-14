@@ -159,9 +159,6 @@ public class WalletActivity extends NavigationBarActivity {
         }
         ft.commit();
 
-        if (isScan) {
-            pushFullFragment(new ScannerFragment(), "ScannerFragment");
-        }
     }
 
     @Override
