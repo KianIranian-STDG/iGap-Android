@@ -73,7 +73,7 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
                 linearLayout.setBackgroundResource(R.drawable.shape_popular_channel_dark_item_them);
             }
             root = itemView.findViewById(R.id.card_item_pop_category);
-            Utils.setCardsBackground(root, R.color.white, R.color.gray_9d);
+            Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
 
         }
 

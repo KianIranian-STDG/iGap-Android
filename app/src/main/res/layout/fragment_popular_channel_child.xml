@@ -5,7 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v4.widget.NestedScrollView
+    <life.knowledge4.videotrimmer.view.ProgressBarView
+        android:id="@+id/progress_frag_popular"
+        android:layout_width="@dimen/dp24"
+        android:layout_height="@dimen/dp24"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp4">
@@ -14,8 +21,7 @@
             android:id="@+id/ll_container_child"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/dp4" />
-    </android.support.v4.widget.NestedScrollView>
+            android:orientation="vertical" />
+    </ScrollView>
 
 </LinearLayout>

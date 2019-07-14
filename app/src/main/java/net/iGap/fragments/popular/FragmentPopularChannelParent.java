@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -84,18 +83,17 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             if (G.isDarkTheme) {
                                 relativeLayoutRow.setBackground(getResources().getDrawable(R.drawable.shape_popular_channel_all_them));
                                 linearLayoutRow.setBackground(getResources().getDrawable(R.drawable.shape_popular_channel_dark_them));
-                                imageViewMore.setColorFilter(getResources().getColor(R.color.md_dark_primary_text));
+                                imageViewMore.setColorFilter(getResources().getColor(R.color.navigation_dark_mode_bg));
                             }
                             FrameLayout frameLayout = channelView.findViewById(R.id.frame_more_one);
-                            int finalI1 = i;
+                            int finalId = i;
                             frameLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Log.i("nazanin", "onClick: "+response.body().getData().get(finalI1).getId());
                                     FragmentPopularChannelChild fragmentPopularChannelChild=   new FragmentPopularChannelChild();
-                                    fragmentPopularChannelChild.setId(response.body().getData().get(finalI1).getId());
+                                    fragmentPopularChannelChild.setId(response.body().getData().get(finalId).getId());
                                     FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
-                                    fragmentTransition.replace(R.id.ll_container, fragmentPopularChannelChild);
+                                    fragmentTransition.replace(R.id.frame_fragment_container, fragmentPopularChannelChild);
                                     fragmentTransition.addToBackStack(null);
                                     fragmentTransition.commit();
                                 }
@@ -123,10 +121,10 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             gridItem.setOnClickedItemEventCallBack(new AdapterCategoryItem.OnClickedItemEventCallBack() {
                                 @Override
                                 public void onClickedItem(Category category) {
-                                    FragmentPopularChannelChild fragmentPopularChannelChild=   new FragmentPopularChannelChild();
+                                    FragmentPopularChannelChild fragmentPopularChannelChild=new FragmentPopularChannelChild();
                                     fragmentPopularChannelChild.setId(category.getId());
                                     FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
-                                    fragmentTransition.replace(R.id.ll_container, fragmentPopularChannelChild);
+                                    fragmentTransition.replace(R.id.frame_fragment_container,fragmentPopularChannelChild);
                                     fragmentTransition.addToBackStack(null);
                                     fragmentTransition.commit();
                                 }
