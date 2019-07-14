@@ -34,11 +34,11 @@ public class SignalingClearLogResponse extends MessageHandler {
 
         ProtoSignalingClearLog.SignalingClearLog.Builder builderRequest = (ProtoSignalingClearLog.SignalingClearLog.Builder) identity;
 
-        if (builderRequest.getClearType() == ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL){
-            RealmCallLog.clearCallLog(builder.getClearId());
-        }else if (builderRequest.getClearType() == ProtoSignalingClearLog.SignalingClearLog.ClearType.SINGLE){
-            RealmCallLog.clearCallLogById(builderRequest.getClearId());
-        }
+//        if (builderRequest.getClearType() == ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL){
+//            RealmCallLog.clearCallLog(builder.getClearId());
+//        }else if (builderRequest.getClearType() == ProtoSignalingClearLog.SignalingClearLog.ClearType.SINGLE){
+//            RealmCallLog.clearCallLogById(builderRequest.getClearId());
+//        }
 
 
         /*if (G.onCallLogClear != null) {

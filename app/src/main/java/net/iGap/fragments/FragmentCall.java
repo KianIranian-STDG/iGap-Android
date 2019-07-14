@@ -257,7 +257,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     try {
                         setViewState(false);
                         RealmCallLog realmCallLog = realm_.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL);
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
                         mSelectedLogList.clear();
                     } catch (Exception e) {
@@ -286,7 +286,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     Realm realm_ = Realm.getDefaultInstance();
                     try {
                         for (int i = 0; i < mSelectedLogList.size(); i++) {
-                            new RequestSignalingClearLog().signalingClearLog(mSelectedLogList.get(i).getLogId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.SINGLE);
+                            new RequestSignalingClearLog().signalingClearLog(mSelectedLogList.get(i).getLogId());
                         }
                         setViewState(false);
 
@@ -460,7 +460,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                     Realm realm = Realm.getDefaultInstance();
                     try {
                         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId(), ProtoSignalingClearLog.SignalingClearLog.ClearType.ALL);
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         emptuListView.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         e.printStackTrace();

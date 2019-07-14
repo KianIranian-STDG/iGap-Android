@@ -17,11 +17,10 @@ public class RequestSignalingClearLog {
     /**
      * @param clearId last callLog Id for clear all call history
      */
-    public void signalingClearLog(long clearId, ProtoSignalingClearLog.SignalingClearLog.ClearType clearType) {
+    public void signalingClearLog(long clearId) {
 
         ProtoSignalingClearLog.SignalingClearLog.Builder builder = ProtoSignalingClearLog.SignalingClearLog.newBuilder();
         builder.setClearId(clearId);
-        builder.setClearType(clearType);
 
         RequestWrapper requestWrapper = new RequestWrapper(908, builder, builder);
         try {

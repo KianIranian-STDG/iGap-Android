@@ -320,7 +320,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case NONE:
                 break;
             case POLL:
-                new HelperFragment(PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
                 break;
             case UNRECOGNIZED:
                 break;
