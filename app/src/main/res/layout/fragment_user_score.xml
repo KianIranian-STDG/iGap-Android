@@ -100,15 +100,6 @@
                     app:layout_constraintTop_toTopOf="@id/scoreView" />
 
                 <View
-                    android:id="@+id/scorePointer"
-                    android:layout_width="@dimen/dp16"
-                    android:layout_height="@dimen/dp16"
-                    android:background="@drawable/score_pointer"
-                    app:layout_constraintCircle="@id/scoreView"
-                    app:layout_constraintCircleAngle="0"
-                    app:layout_constraintCircleRadius="83dp" />
-
-                <View
                     android:id="@+id/rankPointer"
                     android:layout_width="@dimen/dp16"
                     android:layout_height="@dimen/dp16"

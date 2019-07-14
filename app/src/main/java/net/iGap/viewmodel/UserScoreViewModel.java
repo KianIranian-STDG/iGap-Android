@@ -18,7 +18,6 @@ public class UserScoreViewModel extends ViewModel {
     public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
     public MutableLiveData<List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore>> ivandScore = new MutableLiveData<>();
     //ui
-    public MutableLiveData<Integer> userScorePointer = new MutableLiveData<>();
     public MutableLiveData<Integer> userRankPointer = new MutableLiveData<>();
     private MutableLiveData<String> userScore = new MutableLiveData<>();
     private MutableLiveData<String> userRank = new MutableLiveData<>();
@@ -78,7 +77,6 @@ public class UserScoreViewModel extends ViewModel {
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-                userScorePointer.postValue((score.getScore() % 1000) / 360);
                 userRankPointer.postValue((score.getUserRank() * 360) / score.getTotalRank());
                 userScore.postValue(String.valueOf(score.getScore()));
                 totalRank.postValue(of + score.getTotalRank());
@@ -88,7 +86,6 @@ public class UserScoreViewModel extends ViewModel {
 
             @Override
             public void onError(int major, int minor) {
-                userScorePointer.postValue(0);
                 userRankPointer.postValue(0);
                 userScore.postValue(String.valueOf(-1));
                 if (major == 5 && minor == 1) {
