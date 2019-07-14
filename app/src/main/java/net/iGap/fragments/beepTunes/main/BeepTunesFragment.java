@@ -3,6 +3,7 @@ package net.iGap.fragments.beepTunes.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,14 @@ import net.iGap.interfaces.ToolbarListener;
 
 public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     private View rootView;
+    private BeepTunesViewModel viewModel;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_beep_tunes, container, false);
+        viewModel = new BeepTunesViewModel();
         return rootView;
     }
 
@@ -30,7 +34,7 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
         initToolBar(toolBar);
 
-
+        recyclerView = rootView.findViewById(R.id.rv_beepTunes_main);
 
 
 
@@ -47,6 +51,24 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
                 .setLeftIcon(R.string.back_icon);
 
         viewGroup.addView(helperToolbar.getView());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.onResume();
     }
 
     @Override

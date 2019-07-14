@@ -17,8 +17,8 @@
 
         <net.iGap.view.SquareImageView
             android:id="@+id/iv_trackItem"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp100"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="wrap_content"
             android:src="@drawable/parsianlogo_pec" />
 
         <TextView

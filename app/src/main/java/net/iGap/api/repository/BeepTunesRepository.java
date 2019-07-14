@@ -106,10 +106,6 @@ public class BeepTunesRepository {
         });
     }
 
-    public void purchaseTrack() {
-        // TODO: 7/7/19 do it
-    }
-
     public void getArtistAlbums(long id, ApiResponse<Albums> apiResponse) {
         apiResponse.setProgressIndicator(true);
         apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
