@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -237,7 +238,8 @@ public class HelperFragment {
 
     public void popBackStack(int count) {
         for (int i = 0; i < count; i++) {
-            fragmentManager.popBackStack();
+            Log.wtf(this.getClass().getName(), "fragment: " + fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() -1 - i).getName());
+            fragmentManager.popBackStackImmediate();
         }
     }
 

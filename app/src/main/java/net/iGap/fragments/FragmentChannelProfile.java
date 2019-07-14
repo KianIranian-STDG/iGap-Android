@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperFragment;
@@ -127,8 +128,9 @@ public class FragmentChannelProfile extends BaseFragment {
         });
 
         viewModel.goToRoomListPage.observe(this, isGo -> {
-            if (getActivity() != null && isGo != null && isGo) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(2);
+            if (getActivity() instanceof ActivityMain && isGo != null && isGo) {
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(2);*/
             }
         });
 

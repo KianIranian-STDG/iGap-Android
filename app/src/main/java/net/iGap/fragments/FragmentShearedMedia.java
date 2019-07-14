@@ -462,8 +462,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 }
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();
-                if (getActivity() != null) {
-                    new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);
+                if (getActivity() instanceof ActivityMain) {
+                    ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                    /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
                 }
             }
         });

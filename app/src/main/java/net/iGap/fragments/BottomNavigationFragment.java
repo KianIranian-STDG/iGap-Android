@@ -52,6 +52,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
+                }
+                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 1:
                 fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
@@ -59,6 +63,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = FragmentCall.newInstance(true);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
+                }
+                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 2:
                 if (G.twoPaneMode) {
@@ -72,6 +80,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     if (fragment == null) {
                         fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                    } else {
+                        if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                            fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
+                        }
+                        fragmentTransaction.show(fragment).commit();
                     }
                 }
                 break;
@@ -81,6 +95,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = DiscoveryFragment.newInstance(0);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
+                }
+                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             default:
                 fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
@@ -88,9 +106,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = new FragmentUserProfile();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
+                }
+                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
         }
-        fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
     }
 
     @Override
