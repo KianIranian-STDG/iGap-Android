@@ -77,9 +77,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
     public ObservableInt sharedEmptyVisibility = new ObservableInt(View.VISIBLE);
-    public ObservableInt callVisibility = new ObservableInt(View.GONE);
-    public ObservableInt videoCallVisibility = new ObservableInt(View.GONE);
-    public ObservableInt menuVisibility = new ObservableInt(View.GONE);
+    public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
+    public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
+    public MutableLiveData<Integer> menuVisibility = new MutableLiveData<>();
 
     public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
     public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
@@ -316,13 +316,13 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         if (registeredInfo != null) {
             isBot = registeredInfo.isBot();
             if (isBot || userId == G.userId) {
-                callVisibility.set(View.GONE);
-                menuVisibility.set(View.GONE);
-                videoCallVisibility.set(View.GONE);
+                callVisibility.setValue(View.GONE);
+                menuVisibility.setValue(View.GONE);
+                videoCallVisibility.setValue(View.GONE);
             } else {
-                callVisibility.set(View.VISIBLE);
-                menuVisibility.set(View.VISIBLE);
-                videoCallVisibility.set(View.VISIBLE);
+                callVisibility.setValue(View.VISIBLE);
+                menuVisibility.setValue(View.VISIBLE);
+                videoCallVisibility.setValue(View.VISIBLE);
             }
 
             isBlockUser = registeredInfo.isBlockUser();
@@ -398,16 +398,16 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             if (callConfig != null) {
 
                 if (isBot) {
-                    callVisibility.set(View.GONE);
-                    videoCallVisibility.set(View.GONE);
+                    callVisibility.setValue(View.GONE);
+                    videoCallVisibility.setValue(View.GONE);
                 } else {
 
                     if (callConfig.isVoice_calling()) {
-                        callVisibility.set(View.VISIBLE);
+                        callVisibility.setValue(View.VISIBLE);
                     }
 
                     if (callConfig.isVideo_calling()) {
-                        videoCallVisibility.set(View.VISIBLE);
+                        videoCallVisibility.setValue(View.VISIBLE);
                     }
                 }
 
@@ -416,8 +416,8 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         } else {
-            callVisibility.set(View.GONE);
-            videoCallVisibility.set(View.GONE);
+            callVisibility.setValue(View.GONE);
+            videoCallVisibility.setValue(View.GONE);
         }
         RealmContacts realmContacts = getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
 

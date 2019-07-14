@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_enabled_bg"
+                    android:background="@drawable/round_button_selected_bg"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"

@@ -11,15 +11,21 @@
             type="net.iGap.viewmodel.FragmentChannelProfileViewModel" />
     </data>
 
-    <android.support.constraint.motion.MotionLayout
+    <android.support.constraint.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="ltr"
-        app:layoutDescription="@xml/profile_motion2">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v4.widget.NestedScrollView
-            android:id="@+id/scroll_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
@@ -27,7 +33,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_background">
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -522,125 +528,5 @@
 
         </android.support.v4.widget.NestedScrollView>
 
-
-        <ImageView
-            android:id="@+id/toolbar_background"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp200"
-            android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default = @drawable/shape_toolbar_background}"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/toolbar_back"
-            style="@style/myIconToolbarStyle"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginTop="@dimen/dp10"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:text="@string/back_icon"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="@id/toolbar_background"
-            app:layout_constraintTop_toTopOf="@id/toolbar_background"
-            app:layout_constraintVertical_bias="0" />
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/layout_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
-            app:layout_constraintTop_toTopOf="@id/toolbar_background"
-            app:layout_constraintVertical_bias="0">
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/toolbar_more"
-                style="@style/myIconToolbarStyle"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="@string/more_icon"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
-
-            <TextView
-                android:id="@+id/toolbar_edit"
-                style="@style/myIconToolbarStyle"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="@string/edit_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/toolbar_more"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
-
-
-        </android.support.constraint.ConstraintLayout>
-
-
-        <net.iGap.module.CircleImageView
-            android:id="@+id/toolbar_avatar"
-            android:layout_width="@dimen/dp100"
-            android:layout_height="@dimen/dp100"
-            android:layout_marginStart="@dimen/dp20"
-            android:layout_marginLeft="@dimen/dp20"
-            android:layout_marginBottom="@dimen/dp10"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_background"
-            app:layout_constraintStart_toStartOf="@id/toolbar_background"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_back" />
-
-
-        <LinearLayout
-            android:id="@+id/toolbar_txtLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp6"
-            android:paddingRight="@dimen/dp6"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar_avatar"
-            app:layout_constraintEnd_toEndOf="@id/toolbar_background"
-            app:layout_constraintStart_toEndOf="@id/toolbar_avatar"
-            app:layout_constraintTop_toTopOf="@id/toolbar_avatar">
-
-            <net.iGap.module.EmojiTextViewE
-                android:id="@+id/toolbar_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/main_font"
-                android:gravity="left"
-                android:paddingLeft="@dimen/dp4"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/standardTextSize"
-                app:emojiSize="@dimen/standardTextSize" />
-
-            <net.iGap.module.EmojiTextViewE
-                android:id="@+id/toolbar_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
-                android:fontFamily="@font/main_font"
-                android:gravity="left"
-                android:paddingLeft="@dimen/dp4"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/verySmallTextSize"
-                app:emojiSize="@dimen/verySmallTextSize" />
-
-        </LinearLayout>
-
-
-    </android.support.constraint.motion.MotionLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>
