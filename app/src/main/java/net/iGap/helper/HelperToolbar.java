@@ -1690,9 +1690,8 @@ public class HelperToolbar {
                         fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
                     }
 
-                    fabChat.setImageResource(R.mipmap.comment);
+                    fabChat.setImageResource(R.drawable.ic_chat_message);
                     fabChat.setSize(FloatingActionButton.SIZE_MINI);
-                    DrawableCompat.setTint(fabChat.getDrawable() , getContext().getResources().getColor(R.color.white));
                     addView(fabChat);
 
                     setRoot.constrainHeight(fabChat.getId() , WRAP_CONTENT);
