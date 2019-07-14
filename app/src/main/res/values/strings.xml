@@ -1901,4 +1901,12 @@
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
     <string name="delete_all">Delete All</string>
+
+    <!-- kuknos -->
+    <string name="kuknos_login_messge_str">Please enter your ID number for registration.</string>
+    <string name="kuknos_login_id_str">ID Number</string>
+    <string name="kuknos_login_tel_str">Phone Number</string>
+    <string name="kuknos_login_submit_str">Register</string>
+    <string name="kuknos_login_error_empty_str">Enter your ID number</string>
+    <string name="kuknos_login_error_invalid_str">Enter a Valid ID number</string>
 </resources>
