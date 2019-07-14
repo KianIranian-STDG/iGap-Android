@@ -1110,7 +1110,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     if (fragmentShowed == null) {
                         findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
                     }
-                } else {//handle back in viewPager
+                } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                     if (fragment instanceof BottomNavigationFragment) {
                         Fragment f = ((BottomNavigationFragment) fragment).getViewPagerCurrentFragment();

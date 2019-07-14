@@ -38,6 +38,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     private int page;
     private boolean isSwipeBackEnable = true;
     private HelperToolbar mHelperToolbar;
+    private int pageWidth;
 
     private ArrayList<DiscoveryItem> discoveryArrayList;
 
@@ -145,10 +146,15 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
         //avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
         rcDiscovery.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), discoveryArrayList));
+        rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), pageWidth, discoveryArrayList));
         if (discoveryArrayList == null) {
             tryToUpdateOrFetchRecycleViewData(0);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void setRefreshing(boolean value) {
@@ -217,7 +223,8 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
         this.discoveryArrayList = discoveryArrayList;
         if (rcDiscovery.getAdapter() instanceof DiscoveryAdapter) {
-            ((DiscoveryAdapter) rcDiscovery.getAdapter()).setDiscoveryList(discoveryArrayList);
+            pageWidth = rcDiscovery.getWidth();
+            ((DiscoveryAdapter) rcDiscovery.getAdapter()).setDiscoveryList(discoveryArrayList, pageWidth);
             if (page != 0) mHelperToolbar.setDefaultTitle(title);
             rcDiscovery.getAdapter().notifyDataSetChanged();
         }

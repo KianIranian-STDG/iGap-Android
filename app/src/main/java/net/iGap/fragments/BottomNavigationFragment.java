@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
+        Fragment current = fragmentManager.findFragmentById(R.id.viewpager);
         switch (position) {
             case 0:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
@@ -52,7 +54,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                if (!(current instanceof FragmentMain) || !(current instanceof TabletMainFragment)) {
                     fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
                 }
                 fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
@@ -74,7 +76,14 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     if (fragment == null) {
                         fragment = new TabletMainFragment();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
+                    } /*else {
+                        Log.wtf(this.getClass().getName(),"loadFragment in else position2");
+                        if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof TabletMainFragment)) {
+                            fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
+                        }
+                        fragmentTransaction.show(fragment).commit();
+                    }*/
+                    fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 } else {
                     fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
                     if (fragment == null) {
@@ -140,29 +149,26 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     public void goToUserProfile() {
-        loadFragment(HelperCalander.isPersianUnicode ? 0 : 4);
+        bottomNavigation.setCurrentItem(4);
     }
 
     public void setChatPage(FragmentChat fragmentChat) {
-        if (getFragmentManager() != null) {
-            if (bottomNavigation.getSelectedItemPosition() != 2) {
-                bottomNavigation.setCurrentItem(2);
-            }
-            Fragment page = getFragmentManager().findFragmentById(R.id.viewpager);
-            // based on the current position you can then cast the page to the correct
-            // class and call the method:
-            if (page instanceof TabletMainFragment) {
-                ((TabletMainFragment) page).loadChatFragment(fragmentChat);
-            }
+        if (bottomNavigation.getSelectedItemPosition() != 2) {
+            bottomNavigation.setCurrentItem(2);
+        }
+        Fragment page = getChildFragmentManager().findFragmentById(R.id.viewpager);
+        // based on the current position you can then cast the page to the correct
+        // class and call the method:
+        if (page instanceof TabletMainFragment) {
+            Log.wtf(this.getClass().getName(), "if");
+            ((TabletMainFragment) page).loadChatFragment(fragmentChat);
+        } else {
+            Log.wtf(this.getClass().getName(), "else");
         }
     }
 
     public Fragment getViewPagerCurrentFragment() {
-        if (getFragmentManager() != null) {
-            return getFragmentManager().findFragmentById(R.id.viewpager);
-        } else {
-            return null;
-        }
+        return getChildFragmentManager().findFragmentById(R.id.viewpager);
     }
 
     public boolean isFirstTabItem() {
