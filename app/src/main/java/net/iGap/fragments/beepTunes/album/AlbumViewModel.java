@@ -1,7 +1,6 @@
 package net.iGap.fragments.beepTunes.album;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableField;
 import android.util.Log;
 
@@ -11,10 +10,11 @@ import net.iGap.api.repository.BeepTunesRepository;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Track;
+import net.iGap.viewmodel.BaseViewModel;
 
 import java.util.List;
 
-public class AlbumViewModel extends ViewModel {
+public class AlbumViewModel extends BaseViewModel {
 
     private static final String TAG = "aabolfazlAlbum";
     public MutableLiveData<String> albumImageUrl = new MutableLiveData<>();
@@ -76,4 +76,28 @@ public class AlbumViewModel extends ViewModel {
 
     }
 
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onResume() {
+
+    }
 }

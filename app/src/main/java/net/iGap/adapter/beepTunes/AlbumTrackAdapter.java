@@ -1,4 +1,4 @@
-package net.iGap.fragments.beepTunes.album;
+package net.iGap.adapter.beepTunes;
 
 import android.media.MediaPlayer;
 import android.support.annotation.NonNull;

@@ -9,7 +9,7 @@ import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.TabletMainFragment;
-import net.iGap.fragments.beepTunes.BeepTunesFragment;
+import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.HelperCalander;
 

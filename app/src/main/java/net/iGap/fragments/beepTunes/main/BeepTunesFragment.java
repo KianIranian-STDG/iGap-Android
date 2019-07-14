@@ -1,4 +1,4 @@
-package net.iGap.fragments.beepTunes;
+package net.iGap.fragments.beepTunes.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +29,12 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         super.onViewCreated(view, savedInstanceState);
         LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
         initToolBar(toolBar);
+
+
+
+
+
+
     }
 
     private void initToolBar(ViewGroup viewGroup) {

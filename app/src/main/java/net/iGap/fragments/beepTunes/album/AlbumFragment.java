@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
+import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.databinding.FragmentBeeptunesAlbumBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
