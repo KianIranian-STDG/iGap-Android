@@ -487,6 +487,11 @@ public class G extends MultiDexApplication {
 
         Metrix.initialize(this, "jpbnabzrmeqvxme");
 
+        // dont remove below line please
+        if (!BuildConfig.DEBUG && BuildConfig.Token.length() > 1) {
+            Metrix.getInstance().setDefaultTracker(BuildConfig.Token);
+        }
+
         Metrix.getInstance().enableLogging(true);
 //        Metrix.getInstance().setLogLevel(Log.DEBUG);
         Metrix.getInstance().setEventUploadPeriodMillis(30000);

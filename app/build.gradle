@@ -53,6 +53,41 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
+            buildConfigField "String", "Token", "\"\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            debuggable true
+            jniDebuggable true
+            buildConfigField "String", "Token", "\"\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Myket {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Token", "\"qkvtld\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Iran {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Token", "\"d11rrq\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Web {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Token", "\"fd0txl\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -76,13 +111,13 @@ android {
     }
 
     productFlavors {
-        GooglePlay { // 32 and 64 bit ndk compile
+        Full { // 32 and 64 bit ndk compile
             ndk {
                 dimension "default"
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
             }
         }
-        Bazaar { // only 32 bit ndk compile
+        Min { // only 32 bit ndk compile
             ndk {
                 dimension "default"
                 abiFilters "armeabi-v7a", "x86"
@@ -168,6 +203,9 @@ dependencies {
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
     releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain7'
+    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain7'
+    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain7'
+    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain7'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta7'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
