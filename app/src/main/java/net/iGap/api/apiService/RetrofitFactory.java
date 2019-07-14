@@ -40,4 +40,13 @@ public class RetrofitFactory {
                 .build();
         return retrofit;
     }
+
+    Retrofit getKuknosRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.KUKNOS_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+        return retrofit;
+    }
 }
