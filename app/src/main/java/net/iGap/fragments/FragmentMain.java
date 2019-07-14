@@ -322,7 +322,7 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             results = temp.sort(fieldNames, sort).findAllAsync();
             roomAdapter = new RoomAdapter(results, this, viewById, pbLoading);
             getChatLists();
-        }else{
+        } else {
             pbLoading.setVisibility(View.GONE);
         }
 
@@ -810,7 +810,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
             if (G.isLandscape && G.twoPaneMode) {
-
+                mHelperToolbar.getTabletAddIcon().setVisibility(View.VISIBLE);
+                mHelperToolbar.getTabletSearchIcon().setVisibility(View.VISIBLE);
+                mHelperToolbar.getTabletEditIcon().setText(R.string.edit_icon);
             } else {
                 mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
@@ -826,6 +828,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
             if (G.twoPaneMode && G.isLandscape) {
+                mHelperToolbar.getTabletAddIcon().setVisibility(View.INVISIBLE);
+                mHelperToolbar.getTabletSearchIcon().setVisibility(View.INVISIBLE);
+                mHelperToolbar.getTabletEditIcon().setText(R.string.close_icon);
             } else {
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
