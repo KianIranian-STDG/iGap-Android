@@ -24,8 +24,8 @@
 
         <net.iGap.module.CircleImageView
             android:id="@+id/iv_userProfile_userImage"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/dp68"
+            android:layout_height="@dimen/dp68"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
@@ -38,7 +38,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginBottom="4dp"
             android:text="ابوالفضل عباسی"
             app:layout_constraintBottom_toTopOf="@+id/tv_userProfile_userScore"
             app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage" />

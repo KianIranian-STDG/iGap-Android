@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.beepTunes.PurchaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 
@@ -30,6 +33,10 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         profileImage = rootView.findViewById(R.id.iv_userProfile_userImage);
+        TextView perchesList = rootView.findViewById(R.id.tv_userProfile_downloads);
+        perchesList.setOnClickListener(v -> {
+            new HelperFragment(getChildFragmentManager(),new PurchaseFragment()).setReplace(false).load();
+        });
 
     }
 
