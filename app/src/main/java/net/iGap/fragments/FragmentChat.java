@@ -1238,7 +1238,7 @@ public class FragmentChat extends BaseFragment
                 latestUri = null; // check
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    if (data.getClipData() != null) { // multi select file
+                    if (data != null && data.getClipData() != null) { // multi select file
                         listPathString = AttachFile.getClipData(data.getClipData());
 
                         if (listPathString != null) {
