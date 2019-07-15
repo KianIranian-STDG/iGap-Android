@@ -35,6 +35,11 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.width = width;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
