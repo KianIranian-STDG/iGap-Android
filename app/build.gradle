@@ -28,7 +28,7 @@ android {
         applicationId "net.iGap"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 112
+        versionCode 113
         versionName "1.1.7.newUi1"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
@@ -224,7 +224,7 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation 'com.github.KianIranian-STDG.ig_sticker:emoji-ios:2.1.5'
+    implementation 'com.github.KianIranian-STDG.ig_sticker:emoji-ios:2.1.6'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation project(':paygearcore')

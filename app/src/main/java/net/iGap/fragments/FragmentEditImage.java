@@ -654,6 +654,10 @@ public class FragmentEditImage extends BaseFragment {
             return;
         }
         String newPath = "file://" + itemGalleryList.get(viewPager.getCurrentItem()).path;
+        if (newPath.lastIndexOf(".") <= 0){
+            return;
+        }
+
         String fileNameWithOutExt = newPath.substring(newPath.lastIndexOf("/"));
         String extension = newPath.substring(newPath.lastIndexOf("."));
         SAMPLE_CROPPED_IMAGE_NAME = fileNameWithOutExt.substring(0, fileNameWithOutExt.lastIndexOf(".")) + num + extension;
