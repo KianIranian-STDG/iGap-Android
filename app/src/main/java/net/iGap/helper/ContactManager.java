@@ -18,7 +18,7 @@ public class ContactManager {
 
     private static int first = 0;
     private static int loadMore = LOAD_AVG;
-    private static int contactSize;
+    /*private static int contactSize;*/
 
     private ContactManager() {
 
@@ -35,19 +35,28 @@ public class ContactManager {
             return new RealmList<>();
     }
 
+    // todo: fixed it and handle contact paging
     private static RealmList<RealmContacts> overLoadContact() {
         RealmList<RealmContacts> contacts = new RealmList<>();
 
-        if (results == null)
-            getIgapContact();
+        if (results == null) {
+            // contact paging and remove it for crash
+            /*getIgapContact();*/
+            Realm realm = Realm.getDefaultInstance();
+            results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            /*contactSize = results.size();*/
+            realm.close();
+        }
 
-        if (loadMore < contactSize)
+        // contact paging and remove it for crash
+        /*if (loadMore < contactSize)
             contacts.addAll(results.subList(first, loadMore));
         else if (first < contactSize)
             contacts.addAll(results.subList(first, contactSize));
 
         first = loadMore;
-        loadMore = loadMore + LOAD_AVG;
+        loadMore = loadMore + LOAD_AVG;*/
+        contacts.addAll(results);
         return contacts;
     }
 
@@ -56,13 +65,13 @@ public class ContactManager {
             //todo : fixed query
             Realm realm = Realm.getDefaultInstance();
             results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
-            contactSize = results.size();
+            /*contactSize = results.size();*/
             realm.close();
         }
     }
 
-    public static int getContactSize() {
+    /*public static int getContactSize() {
         return results.size();
-    }
+    }*/
 
 }

@@ -254,7 +254,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         realmRecyclerView.setNestedScrollingEnabled(false);
         FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
-        fastScroller.setRecyclerView(realmRecyclerView, ContactManager.getContactSize());
+        fastScroller.setRecyclerView(realmRecyclerView);
 
 
         onClickRecyclerView = (v, position) -> {
@@ -308,14 +308,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             e.printStackTrace();
         }
 
-        realmRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) realmRecyclerView.getLayoutManager()) {
+        // remove contact paging for fixed bug
+        /*realmRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) realmRecyclerView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (!endPage && realmRecyclerView.getAdapter() instanceof ContactListAdapter) {
                     ((ContactListAdapter) realmRecyclerView.getAdapter()).addUserList(ContactManager.getContactList(ContactManager.OVER_LOAD));
                 }
             }
-        });
+        });*/
 
         btnAddNewChannel.setOnClickListener(v -> {
             if (getActivity() != null) {
