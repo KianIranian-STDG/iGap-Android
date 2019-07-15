@@ -284,6 +284,7 @@ public class FragmentRegisterViewModel extends ViewModel {
 
     public void onClickQrCode() {
         isShowLoading.set(View.VISIBLE);
+        //todo:move it to repository for  ehsan from baggi
         new RequestQrCodeNewDevice().qrCodeNewDevice(
                 new OnQrCodeNewDevice() {
                     @Override

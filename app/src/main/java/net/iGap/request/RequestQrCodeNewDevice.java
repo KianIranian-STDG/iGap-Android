@@ -71,7 +71,7 @@ public class RequestQrCodeNewDevice {
                     .replace("beta", "")
                     .replace(".local", "")
                     .replace("local", "")
-                    .replace(".newUi1", "");
+                    .replace(".newUi", "");
             AppBuildVersion = pInfo.versionCode;
         }
         Device = Build.BRAND;
