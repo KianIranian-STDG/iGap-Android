@@ -66,7 +66,6 @@ import net.iGap.request.RequestUserProfileCheckUsername;
 import net.iGap.request.RequestUserProfileGetBio;
 import net.iGap.request.RequestUserProfileGetEmail;
 import net.iGap.request.RequestUserProfileGetGender;
-import net.iGap.request.RequestUserProfileGetRepresentative;
 import net.iGap.request.RequestUserProfileSetBio;
 import net.iGap.request.RequestUserProfileSetEmail;
 import net.iGap.request.RequestUserProfileSetGender;
@@ -114,7 +113,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
     private ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
     private ObservableInt showLoading = new ObservableInt(View.GONE);
-    private ObservableField<Integer> textsGravity = new ObservableField<>(Gravity.LEFT);
+    private ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
 
     //ui
     public SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
@@ -128,7 +127,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> goToSettingPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToUserScorePage = new SingleLiveEvent<>();
     public SingleLiveEvent<Long> goToShowAvatarPage = new SingleLiveEvent<>();
-    public SingleLiveEvent<Long> setUserAvatar = new SingleLiveEvent<>();
+    public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
     public SingleLiveEvent<DeleteAvatarModel> deleteAvatar = new SingleLiveEvent<>();
     public SingleLiveEvent<ChangeImageModel> setUserAvatarPath = new SingleLiveEvent<>();
     public SingleLiveEvent<Long> goToChatPage = new SingleLiveEvent<>();
@@ -155,58 +154,27 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     //Todo: fixed it
     private int getIvanScoreTime = 0;
 
-    public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
-
-        this.sharedPreferences = sharedPreferences;
-        this.avatarHandler = avatarHandler;
-
-        //set user info text gravity
-        if (G.selectedLanguage.equals("en")) {
-            textsGravity.set(Gravity.LEFT);
-        } else {
-            textsGravity.set(Gravity.RIGHT);
-        }
-
-        appVersion.set(BuildConfig.VERSION_NAME);
-        isDarkMode.set(G.isDarkTheme);
-
+    public UserProfileViewModel() {
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-
-        //set credit amount
-        if (G.selectedCard != null) {
-            currentCredit.set(G.selectedCard.cashOutBalance);
-        } else {
-            getUserCredit();
-        }
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);
-        realm.close();
-
-        if (isIntroduce) {
-            new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
-                @Override
-                public void onRepresent(String phoneNumber) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailed() {
-                }
+        if (checkValidationForRealm(userInfo)) {
+            userInfo.addChangeListener(realmModel -> {
+                Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
+                Log.wtf("view Model", "1");
+                userInfo = (RealmUserInfo) realmModel;
+                updateUserInfoUI();
             });
         }
+        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
+            @Override
+            public void onChangePhoto(final String imagePath) {
+                setUserAvatarPath.postValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
+            }
 
-        new RequestUserProfileGetGender().userProfileGetGender();
-        new RequestUserProfileGetEmail().userProfileGetEmail();
-        new RequestUserProfileGetBio().getBio();
-        getIVandScore();
-
-        updateUserInfoUI();
+            @Override
+            public void onChangeInitials(final String initials, final String color) {
+                setUserAvatarPath.postValue(new ChangeImageModel(null, initials, color));
+            }
+        };
 
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
             long mAvatarId = 0;
@@ -214,7 +182,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 mAvatarId = Long.parseLong(messageOne);
             }
             long finalMAvatarId = mAvatarId;
-            G.handler.post(() -> deleteAvatar.setValue(new DeleteAvatarModel(userId, finalMAvatarId)));
+            deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
         };
 
         FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
@@ -231,7 +199,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
                 @Override
                 public void OnError() {
-                    showLoading.set(View.GONE);
+                    G.handler.post(() -> showLoading.set(View.GONE));
                 }
             });
         };
@@ -239,17 +207,45 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         G.onUserAvatarResponse = this;
     }
 
+    public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
+
+        this.sharedPreferences = sharedPreferences;
+        this.avatarHandler = avatarHandler;
+
+        //set user info text gravity
+        if (G.selectedLanguage.equals("en")) {
+            textsGravity.set(Gravity.LEFT);
+        } else {
+            textsGravity.set(Gravity.RIGHT);
+        }
+
+        appVersion.set(BuildConfig.VERSION_NAME);
+        isDarkMode.set(G.isDarkTheme);
+
+        //set credit amount
+        if (G.selectedCard != null) {
+            currentCredit.set(G.selectedCard.cashOutBalance);
+        } else {
+            getUserCredit();
+        }
+
+        getIVandScore();
+        new RequestUserProfileGetGender().userProfileGetGender();
+        new RequestUserProfileGetEmail().userProfileGetEmail();
+        new RequestUserProfileGetBio().getBio();
+
+    }
+
     private void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
             userId = userInfo.getUserId();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             userPhoneNumber.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(phoneNumber) : phoneNumber);
-            setUserAvatar.setValue(G.userId);
+            setUserAvatar.setValue(userInfo.getUserId());
             currentName = userInfo.getUserInfo().getDisplayName();
             currentUserName = userInfo.getUserInfo().getUsername();
             currentUserEmail = userInfo.getEmail();
             currentBio = userInfo.getUserInfo().getBio();
-            phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             ProtoGlobal.Gender userGender = userInfo.getGender();
             if (userGender != null) {
                 if (userGender == ProtoGlobal.Gender.MALE) {
@@ -265,27 +261,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             bio.set(currentBio);
             userName.set(currentUserName);
             email.set(currentUserEmail);
-            G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-                @Override
-                public void onChangePhoto(final String imagePath) {
-                    G.handler.post(() -> setUserAvatarPath.setValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor())));
-                }
-
-                @Override
-                public void onChangeInitials(final String initials, final String color) {
-                    G.handler.post(() -> setUserAvatarPath.setValue(new ChangeImageModel(null, initials, color)));
-                }
-            };
-            userInfo.addChangeListener(realmModel -> {
-                Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
-                userInfo = (RealmUserInfo) realmModel;
-                updateUserInfoUI();
-            });
         }
     }
 
     private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
-        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
+        return realmUserInfo != null && realmUserInfo.isValid();
     }
 
     public ObservableField<String> getAppVersion() {
@@ -316,7 +296,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return name;
     }
 
-    public ObservableField<Integer> getTextsGravity() {
+    public ObservableInt getTextsGravity() {
         return textsGravity;
     }
 
@@ -619,6 +599,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             mRealm = Realm.getDefaultInstance();
         }
         return mRealm;
+    }
+
+    @Override
+    protected void onCleared() {
+        userInfo.removeAllChangeListeners();
+        mRealm.close();
+        super.onCleared();
     }
 
     private boolean isEditMode() {

@@ -37,8 +37,6 @@ public class UserProfileSetGenderResponse extends MessageHandler {
 
         if (identity instanceof OnUserProfileSetGenderResponse) {
             ((OnUserProfileSetGenderResponse) identity).onUserProfileGenderResponse(userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
-        } else {
-            throw new ClassCastException("identity must be : " + OnUserProfileSetGenderResponse.class.getName());
         }
     }
 
@@ -51,8 +49,6 @@ public class UserProfileSetGenderResponse extends MessageHandler {
 
         if (identity instanceof OnUserProfileSetGenderResponse) {
             ((OnUserProfileSetGenderResponse) identity).Error(majorCode, minorCode);
-        } else {
-            throw new ClassCastException("identity must be : " + OnUserProfileSetGenderResponse.class.getName());
         }
     }
 
@@ -61,8 +57,6 @@ public class UserProfileSetGenderResponse extends MessageHandler {
         super.timeOut();
         if (identity instanceof OnUserProfileSetGenderResponse) {
             ((OnUserProfileSetGenderResponse) identity).onTimeOut();
-        } else {
-            throw new ClassCastException("identity must be : " + OnUserProfileSetGenderResponse.class.getName());
         }
     }
 }

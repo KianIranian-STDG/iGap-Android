@@ -43,7 +43,7 @@ public class FastScroller extends LinearLayout {
     private AnimatorSet currentAnimator = null;
 
     private int height;
-    private int totalItemCount;
+    /*private int totalItemCount;*/
 
     private final ScrollListener scrollListener = new ScrollListener();
 
@@ -74,9 +74,9 @@ public class FastScroller extends LinearLayout {
         height = h;
     }
 
-    public void setRecyclerView(RecyclerView recyclerView, int totalItemCount) {
+    public void setRecyclerView(RecyclerView recyclerView/*, int totalItemCount*/) {
         this.recyclerView = recyclerView;
-        this.totalItemCount = totalItemCount;
+        /*this.totalItemCount = totalItemCount;*/
         recyclerView.setOnScrollListener(scrollListener);
     }
 
@@ -121,7 +121,7 @@ public class FastScroller extends LinearLayout {
             } else {
                 proportion = y / (float) height;
             }
-            int targetPos = getValueInRange(0, totalItemCount - 1, (int) (proportion * (float) totalItemCount));
+            int targetPos = getValueInRange(0, recyclerView.getAdapter().getItemCount() - 1, (int) (proportion * (float) recyclerView.getAdapter().getItemCount()));
             handle.setText(((RegisteredContactsFragment.ContactListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
             recyclerView.scrollToPosition(targetPos);
         }
@@ -216,20 +216,18 @@ public class FastScroller extends LinearLayout {
     private class ScrollListener extends RecyclerView.OnScrollListener {
         @Override
         public void onScrolled(@NotNull RecyclerView rc, int dx, int dy) {
-            /*View firstVisibleView = recyclerView.getChildAt(0);*/
             int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()/*recyclerView.getChildPosition(firstVisibleView)*/;
-            /*int visibleRange = recyclerView.getChildCount();*/
             int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition()/*firstVisiblePosition + visibleRange*/;
             int range = lastVisiblePosition - firstVisiblePosition;
             int position;
             if (firstVisiblePosition == 0) {
                 position = 0;
-            } else if (lastVisiblePosition == totalItemCount - 1) {
-                position = totalItemCount - 1;
+            } else if (lastVisiblePosition == recyclerView.getAdapter().getItemCount() - 1) {
+                position = recyclerView.getAdapter().getItemCount() - 1;
             } else {
                 position = firstVisiblePosition;
             }
-            float proportion = (float) position / (float) (totalItemCount - range);
+            float proportion = (float) position / (float) (recyclerView.getAdapter().getItemCount() - range);
             setPosition(height * proportion);
         }
     }

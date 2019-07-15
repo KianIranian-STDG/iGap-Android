@@ -37,8 +37,6 @@ public class UserProfileSetEmailResponse extends MessageHandler {
 
         if (identity instanceof OnUserProfileSetEmailResponse) {
             ((OnUserProfileSetEmailResponse) identity).onUserProfileEmailResponse(userProfileEmail.getEmail(), userProfileEmail.getResponse());
-        } else {
-            throw new ClassCastException("identity must be : " + OnUserProfileSetEmailResponse.class.getName());
         }
     }
 
@@ -51,8 +49,6 @@ public class UserProfileSetEmailResponse extends MessageHandler {
 
         if (identity instanceof OnUserProfileSetEmailResponse) {
             ((OnUserProfileSetEmailResponse) identity).Error(majorCode, minorCode);
-        } else {
-            throw new ClassCastException("identity must be : " + OnUserProfileSetEmailResponse.class.getName());
         }
     }
 
@@ -61,8 +57,6 @@ public class UserProfileSetEmailResponse extends MessageHandler {
         super.timeOut();
         if (identity instanceof OnUserProfileSetEmailResponse) {
             ((OnUserProfileSetEmailResponse) identity).onTimeOut();
-        } else {
-            throw new ClassCastException("identity must be : " + OnUserProfileSetEmailResponse.class.getName());
         }
     }
 }
