@@ -146,6 +146,8 @@
     <dimen name="toolbar_height_root_with_profile">@dimen/dp160</dimen>
     <dimen name="contact_icon_size">@dimen/dp22</dimen>
     <dimen name="igap_hint_images">@dimen/dp220</dimen>
+    <dimen name="toolbar_profile_avatar_size_expanded">@dimen/dp80</dimen>
+    <dimen name="toolbar_profile_avatar_size_collapsed">@dimen/dp40</dimen>
 
 
 </resources>

@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -122,51 +123,24 @@ public class FragmentContactsProfile extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        HelperToolbar t = HelperToolbar.create().setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.video_call_icon, R.string.voice_call_icon)
-                .setContactProfile(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        viewModel.onMoreButtonClick();
-                    }
-
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        viewModel.onVideoCallClick();
-                    }
-
-                    @Override
-                    public void onThirdRightIconClickListener(View view) {
-                        viewModel.onVoiceCallButtonClick();
-                    }
-                });
-        binding.toolbar.addView(t.getView());
-
-        userAvatarImageView = t.getGroupAvatar() ;
+        userAvatarImageView = binding.toolbarAvatar ;
         userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
 
-        t.getRightButton().setVisibility(View.GONE);
-        t.getSecondRightButton().setVisibility(View.GONE);
-        t.getThirdRightButton().setVisibility(View.GONE);
+        binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
+        binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
+        binding.toolbarVideoCall.setOnClickListener(v -> viewModel.onVideoCallClick());
+        binding.toolbarVoiceCall.setOnClickListener(v -> viewModel.onVoiceCallButtonClick());
 
         viewModel.menuVisibility.observe(this , visible -> {
-            if (visible != null) t.getRightButton().setVisibility(visible);
+            if (visible != null) binding.toolbarMore.setVisibility(visible);
         });
 
         viewModel.callVisibility.observe(this , visible -> {
-            if (visible != null) t.getThirdRightButton().setVisibility(visible);
+            if (visible != null) binding.toolbarVoiceCall.setVisibility(visible);
         });
 
         viewModel.videoCallVisibility.observe(this , visible -> {
-            if (visible != null) t.getSecondRightButton().setVisibility(visible);
+            if (visible != null) binding.toolbarVideoCall.setVisibility(visible);
         });
 
         //todo: fixed it and move to viewModel
@@ -177,13 +151,14 @@ public class FragmentContactsProfile extends BaseFragment {
 
         viewModel.contactName.observe(getViewLifecycleOwner(), name -> {
             if (name != null) {
-                t.getGroupName().setText(name);
+                binding.toolbarTxtNameCollapsed.setText(name);
+                binding.toolbarTxtNameExpanded.setText(name);
             }
         });
 
         viewModel.lastSeen.observe(getViewLifecycleOwner(), lastSeen -> {
             if (lastSeen != null) {
-                t.getGroupMemberCount().setText(HelperCalander.unicodeManage(lastSeen));
+                binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(lastSeen));
             }
         });
 
@@ -211,15 +186,15 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         if (viewModel.phone != null && (!viewModel.phone.get().equals("0") || viewModel.showNumber.get())) {
-            t.getProfileTell().setText(viewModel.phone.get());
-            t.getProfileTell().setOnClickListener(v -> viewModel.onPhoneNumberClick());
+            binding.toolbarTxtTelExpanded.setText(viewModel.phone.get());
+            binding.toolbarTxtTelExpanded.setOnClickListener(v -> viewModel.onPhoneNumberClick());
         } else {
-            t.getProfileTell().setVisibility(View.GONE);
+            binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
         }
 
-        t.getProfileStatus().setText(viewModel.username.get());
+        binding.toolbarTxtUsernameExpanded.setText(viewModel.username.get());
 
-        t.getProfileFabChat().setOnClickListener(v -> {
+        binding.toolbarFabChat.setOnClickListener(v -> {
             viewModel.onClickGoToChat();
         });
 
@@ -477,7 +452,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
-                                showPopupPhoneNumber(t.getProfileTell(), viewModel.phone.get());
+                                showPopupPhoneNumber(/*t.getProfileTell()*/null, viewModel.phone.get());
                             }
 
                             @Override
@@ -519,9 +494,9 @@ public class FragmentContactsProfile extends BaseFragment {
         viewModel.setAvatar.observe(this, aBoolean -> {
             if (aBoolean != null) {
                 if (aBoolean) {
-                    avatarHandler.getAvatar(new ParamWithAvatarType(t.getGroupAvatar(), viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                    avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarImageView, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
                 }else{
-                    t.getGroupAvatar().setImageResource(R.drawable.ic_cloud_space_blue);
+                    userAvatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
                 }
             }
         });
@@ -561,6 +536,75 @@ public class FragmentContactsProfile extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
+
+        initialToolbar();
+    }
+
+    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
+    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private final int ALPHA_ANIMATIONS_DURATION              = 200;
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
+    private void initialToolbar() {
+
+        binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
+            int maxScroll = appBarLayout.getTotalScrollRange();
+            float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+            handleAlphaOnTitle(percentage);
+            handleToolbarTitleVisibility(percentage);
+
+        });
+        startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
+
+    }
+
+
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if(!mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if(mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, 100, View.INVISIBLE);
+                startAlphaAnimation(binding.toolbarFabChat, 100, View.INVISIBLE);
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(binding.toolbarFabChat, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+
+    public static void startAlphaAnimation (View v, long duration, int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
     }
 
     @Override

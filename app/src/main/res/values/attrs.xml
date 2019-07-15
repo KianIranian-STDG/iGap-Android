@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+  <declare-styleable name="CollapsingImageBehavior">
+    <attr name="collapsedTarget" format="reference" />
+  </declare-styleable>
+
   <declare-styleable name="CircleImageView">
     <attr name="civ_border_width" format="dimension" />
     <attr name="civ_border_color" format="color" />
