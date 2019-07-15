@@ -39,8 +39,6 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         G.displayName = userProfileNickNameResponse.getNickname();
         if (identity instanceof OnUserProfileSetNickNameResponse) {
             ((OnUserProfileSetNickNameResponse) identity).onUserProfileNickNameResponse(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getInitials());
-        } else {
-            throw new ClassCastException("identity should be: " + OnUserProfileSetNickNameResponse.class.getName());
         }
     }
 
@@ -49,8 +47,6 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         super.timeOut();
         if (identity instanceof OnUserProfileSetNickNameResponse){
             ((OnUserProfileSetNickNameResponse) identity).onUserProfileNickNameTimeOut();
-        } else {
-            throw new ClassCastException("identity should be: " + OnUserProfileSetNickNameResponse.class.getName());
         }
     }
 
@@ -63,8 +59,6 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
 
         if (identity instanceof OnUserProfileSetNickNameResponse){
             ((OnUserProfileSetNickNameResponse) identity).onUserProfileNickNameError(majorCode, minorCode);
-        } else {
-            throw new ClassCastException("identity should be: " + OnUserProfileSetNickNameResponse.class.getName());
         }
     }
 }
