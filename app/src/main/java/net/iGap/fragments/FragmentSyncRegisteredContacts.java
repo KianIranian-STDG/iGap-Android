@@ -161,6 +161,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (getActivity() == null || getActivity().isFinishing() || !isAdded())
+                    return;
+
                 contactListAdapter = new FragmentSyncRegisteredContacts.ContactListAdapter(results);
                 realmRecyclerView.setAdapter(contactListAdapter);
                 realmRecyclerView.setVisibility(View.VISIBLE);
