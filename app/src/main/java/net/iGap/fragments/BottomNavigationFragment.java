@@ -54,7 +54,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(current instanceof FragmentMain) || !(current instanceof TabletMainFragment)) {
+                if (!(current instanceof FragmentMain)) {
                     fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
                 }
                 fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
