@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -131,46 +132,34 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HelperToolbar t = HelperToolbar.create().setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.edit_icon)
-                .setGroupProfile(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        viewModel.onClickRippleMenu();
-                    }
-
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
-                        }
-                    }
-                });
         // because actionbar not in this view do that and not correct in viewModel
-        binding.toolbar.addView(t.getView());
-        imvGroupAvatar = t.getGroupAvatar();
+        imvGroupAvatar = binding.toolbarAvatar;
         imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
 
-        viewModel.groupName.observe(this, s -> t.getGroupName().setText(s));
+        binding.toolbarMore.setOnClickListener(v -> viewModel.onClickRippleMenu());
+        binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
+        binding.toolbarEdit.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
+            }
+        });
 
-        viewModel.groupNumber.observe(this, s -> t.getGroupMemberCount().setText(String.format("%s %s", s, getString(R.string.member))));
+        viewModel.groupName.observe(this, s -> {
+            binding.toolbarTxtNameCollapsed.setText(s);
+            binding.toolbarTxtNameExpanded.setText(s);
+        });
+
+        viewModel.groupNumber.observe(this, s -> binding.toolbarTxtStatusExpanded.setText(String.format("%s %s", s, getString(R.string.member))));
 
         viewModel.showMoreMenu.observe(this, isShow -> {
             if (isShow != null) {
-                t.getRightButton().setVisibility(isShow ? View.VISIBLE : View.GONE);
+                binding.toolbarMore.setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
 
         viewModel.showEditButton.observe(this, isShow -> {
             if (isShow != null) {
-                t.getSecondRightButton().setVisibility(isShow ? View.VISIBLE : View.GONE);
+                binding.toolbarEdit.setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -371,6 +360,71 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 });
             }
         };
+        initialToolbar();
+    }
+
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
+    private void initialToolbar() {
+
+        binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
+            int maxScroll = appBarLayout.getTotalScrollRange();
+            float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+            handleAlphaOnTitle(percentage);
+            handleToolbarTitleVisibility(percentage);
+        });
+        startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
+
+    }
+
+
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if(!mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if(mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, 100, View.INVISIBLE);
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+
+    public static void startAlphaAnimation (View v, long duration, int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
     }
 
     @Override
