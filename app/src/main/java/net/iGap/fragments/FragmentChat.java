@@ -4350,7 +4350,7 @@ public class FragmentChat extends BaseFragment
                              * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
                              */
                             if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
-                                firstUnreadMessage = realmRoomMessage;
+                                firstUnreadMessage = realm.copyFromRealm(realmRoomMessage);
                             }
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
