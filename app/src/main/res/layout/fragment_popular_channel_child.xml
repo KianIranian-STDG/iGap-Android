@@ -13,6 +13,7 @@
         android:visibility="visible" />
 
     <ScrollView
+        android:id="@+id/scroll_channel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp4"

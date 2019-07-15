@@ -3,7 +3,6 @@ package net.iGap.model.PopularChannel;
 
 import com.google.gson.annotations.SerializedName;
 
-@SuppressWarnings("unused")
 public class Slide {
 
     @SerializedName("action_type")

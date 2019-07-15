@@ -198,6 +198,7 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+    implementation 'com.ss.bannerslider:bannerslider:2.0.0'
 }
 
 configurations.all {

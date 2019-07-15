@@ -25,8 +25,7 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     private List<Channel> channelList;
     private Context context;
 
-    public AdapterChannelInfoItem(Context context, List<Channel> channelList) {
-        this.channelList = channelList;
+    public AdapterChannelInfoItem(Context context) {
         this.context = context;
 
     }

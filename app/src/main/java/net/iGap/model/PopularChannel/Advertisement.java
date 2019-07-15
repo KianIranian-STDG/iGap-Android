@@ -2,6 +2,7 @@
 package net.iGap.model.PopularChannel;
 
 import com.google.gson.annotations.SerializedName;
+import com.nostra13.universalimageloader.utils.L;
 
 import java.util.List;
 

@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterCategoryItem;
 import net.iGap.adapter.items.popular.AdapterChannelItem;
-import net.iGap.adapter.items.popular.AdapterSliderItem;
+import net.iGap.adapter.items.popular.ImageLoadingService;
+import net.iGap.adapter.items.popular.MainSliderAdapter;
 import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
@@ -29,16 +28,19 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.PopularChannel.Category;
 import net.iGap.model.PopularChannel.ParentChannel;
+import net.iGap.model.PopularChannel.Slide;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ss.com.bannerslider.Slider;
 
 
 public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
     private HelperToolbar toolbar;
     private PopularChannelApi api;
     private View rootView;
+    private Slide slide;
 
     @NonNull
     @Override
@@ -61,20 +63,25 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
-                            Log.i("nazanin", "onResponse: "+ParentChannel.TYPE_SLIDE);
-                            RecyclerView sliderRecyclerView = new RecyclerView(getContext());
-                            sliderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                            layoutParams.setMargins(0, 8, 0, 8);
-                            sliderRecyclerView.setLayoutParams(layoutParams);
-                            PagerSnapHelper snapHelper = new PagerSnapHelper();
-                            snapHelper.attachToRecyclerView(sliderRecyclerView);
-                            sliderRecyclerView.setAdapter(new AdapterSliderItem(getContext(), response.body().getData().get(i).getSlides()));
-                            linearLayoutItemContainer.addView(sliderRecyclerView);
+                            Slider slider = new Slider(getContext());
+                            Slider.init(new ImageLoadingService(getContext()));
+                            int finalI = i;
+                            slider.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MainSliderAdapter adapterMain = new MainSliderAdapter(getContext(), response.body().getData().get(finalI).getSlides());
+                                    slider.setAdapter(adapterMain);
+                                    slider.setSelectedSlide(0);
+                                    slider.setLoopSlides(true);
+                                    slider.setAnimateIndicators(true);
+                                    slider.setIndicatorSize(12);
+                                    slider.setInterval(3000);
+                                }
+                            }, 0);
+                            linearLayoutItemContainer.addView(slider);
                             break;
 
                         case ParentChannel.TYPE_CHANNEL:
-                            Log.i("nazanin", "onResponse: "+ParentChannel.TYPE_CHANNEL);
                             View channelView = LayoutInflater.from(getContext()).inflate(R.layout.item_popular_channel_channel, null);
                             RelativeLayout relativeLayoutRow = channelView.findViewById(R.id.rl_item_pop_rows);
                             LinearLayout linearLayoutRow = channelView.findViewById(R.id.ll_item_pop_rows);
@@ -111,7 +118,6 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             linearLayoutItemContainer.addView(channelView);
                             break;
                         case ParentChannel.TYPE_CATEGORY:
-                            Log.i("nazanin", "onResponse: "+ParentChannel.TYPE_CATEGORY);
                             RecyclerView categoryRecyclerView = new RecyclerView(getContext());
                             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             layoutParams2.setMargins(0, 8, 0, 8);
@@ -141,6 +147,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
             }
         });
+
         return rootView;
 
     }
