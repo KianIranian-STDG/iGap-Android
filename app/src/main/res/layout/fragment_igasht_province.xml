@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.IGashtProvinceViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/backgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/dp8"
+            app:imageUrl="@{viewModel.backgroundImageUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/iGashtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/main_font"
+            android:text="@string/igasht_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp32"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/backgroundImage"
+            app:layout_constraintVertical_bias=".15" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/chooseProvinceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/main_font"
+            android:text="@string/igasht_choose_province_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp20"
+            app:layout_constraintBottom_toTopOf="@id/v"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <android.support.design.card.MaterialCardView
+            android:id="@+id/v"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/dp20"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="@dimen/dp8"
+            app:layout_constraintBottom_toTopOf="@id/searchButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iGashtTitle"
+            app:layout_constraintWidth_percent=".8">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/clearProvinceSearch"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"
+                    android:text="@string/close_icon" />
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/provinceSearchText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:afterTextChanged="@{(input)->viewModel.onProvinceTextChange(input.toString())}"
+                    android:background="@color/transparent" />
+
+                <View
+                    android:layout_width="@dimen/dp1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:layout_marginBottom="@dimen/dp4"
+                    android:background="@color/gray" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()->viewModel.onSearchClick()}"
+                    android:text="@string/search_icon" />
+
+            </LinearLayout>
+        </android.support.design.card.MaterialCardView>
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/searchButton"
+            style="@style/BaseIGapButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/igasht_search_by_location"
+            app:backgroundTint="@color/buttonColor"
+            app:icon="@drawable/ic_location"
+            app:iconGravity="textStart"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/backgroundImage"
+            app:layout_constraintVertical_bias=".55"
+            app:layout_constraintWidth_percent=".6" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

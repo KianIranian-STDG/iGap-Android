@@ -1906,6 +1906,9 @@
     <string name="maximum_poll">شما به تعداد مجاز رای خود را ثبت کرده اید.</string>
     <string name="before_try">قبلا رای خود را ثبت کرده اید.</string>
     <string name="poll_ok">رای شما با موفقیت ثبت شد</string>
+    <string name="igasht_title">آیگشت</string>
+    <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
+    <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
 
 
 </resources>

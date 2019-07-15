@@ -1904,4 +1904,7 @@
     <string name="maximum_poll">You Have Reached Your Vote Limit.</string>
     <string name="before_try">You have already registered your vote.</string>
     <string name="poll_ok">Your vote was successfully recorded.</string>
+    <string name="igasht_title">آیگشت</string>
+    <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
+    <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
 </resources>
