@@ -9,9 +9,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -38,7 +40,6 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     private int page;
     private boolean isSwipeBackEnable = true;
     private HelperToolbar mHelperToolbar;
-    private int pageWidth;
 
     private ArrayList<DiscoveryItem> discoveryArrayList;
 
@@ -67,9 +68,17 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (rcDiscovery.getAdapter() != null) {
-            rcDiscovery.getAdapter().notifyDataSetChanged();
-        }
+        rcDiscovery.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Ensure you call it only once
+                rcDiscovery.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                // Here you can get the size :)
+                if (rcDiscovery.getAdapter() instanceof DiscoveryAdapter) {
+                    ((DiscoveryAdapter) rcDiscovery.getAdapter()).setWidth(rcDiscovery.getWidth());
+                }
+            }
+        });
     }
 
     @Override
@@ -104,6 +113,18 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
+
+        rcDiscovery.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Ensure you call it only once
+                rcDiscovery.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                // Here you can get the size :)
+                if (rcDiscovery.getAdapter() instanceof DiscoveryAdapter) {
+                    ((DiscoveryAdapter) rcDiscovery.getAdapter()).setWidth(rcDiscovery.getWidth());
+                }
+            }
+        });
 
         if (page == 0) {
             rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -146,7 +167,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
         //avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
 
         rcDiscovery.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), pageWidth, discoveryArrayList));
+        rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), rcDiscovery.getWidth(), discoveryArrayList));
         if (discoveryArrayList == null) {
             tryToUpdateOrFetchRecycleViewData(0);
         }
@@ -223,8 +244,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
         this.discoveryArrayList = discoveryArrayList;
         if (rcDiscovery.getAdapter() instanceof DiscoveryAdapter) {
-            pageWidth = rcDiscovery.getWidth();
-            ((DiscoveryAdapter) rcDiscovery.getAdapter()).setDiscoveryList(discoveryArrayList, pageWidth);
+            ((DiscoveryAdapter) rcDiscovery.getAdapter()).setDiscoveryList(discoveryArrayList, rcDiscovery.getWidth());
             if (page != 0) mHelperToolbar.setDefaultTitle(title);
             rcDiscovery.getAdapter().notifyDataSetChanged();
         }
