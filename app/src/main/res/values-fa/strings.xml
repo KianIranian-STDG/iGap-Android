@@ -1907,5 +1907,7 @@
     <string name="before_try">قبلا رای خود را ثبت کرده اید.</string>
     <string name="poll_ok">رای شما با موفقیت ثبت شد</string>
 
-
+    <string name="str_frag_sync_contactTitle">به دوستان خود سلام کنید و بهشون بگید که در آی گپ هستید.</string>
+    <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
+    <string name="str_frag_sync_skipBtn">شروع برنامه</string>
 </resources>

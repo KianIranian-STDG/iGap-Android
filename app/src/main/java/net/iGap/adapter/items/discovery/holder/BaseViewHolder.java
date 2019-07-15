@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -79,9 +82,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             Glide.with(imageView.getContext())
                     .asGif()
                     .load(url)
+                    .apply(new RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(Target.SIZE_ORIGINAL))
                     .into(imageView);
         } else {
-            Glide.with(imageView.getContext()).load(url).into(imageView);
+            Glide.with(imageView.getContext()).load(url)
+                    .apply(new RequestOptions()
+                            .fitCenter()
+                            .format(DecodeFormat.PREFER_ARGB_8888)
+                            .override(Target.SIZE_ORIGINAL)).into(imageView);
         }
     }
 

@@ -2852,5 +2852,7 @@
     <string name="maximum_poll">لقد وصلت إلى حد تصويتك.</string>
     <string name="before_try">لقد قمت بالفعل بتسجيل صوتك.</string>
     <string name="poll_ok">تم تسجيل صوتك بنجاح.</string>
-
+    <string name="str_frag_sync_contactTitle">قل مرحبا لأصدقائك</string>
+    <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
+    <string name="str_frag_sync_skipBtn">البدء</string>
 </resources>
