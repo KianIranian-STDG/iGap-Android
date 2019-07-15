@@ -35,6 +35,9 @@ public class Web extends WebBase<WebService> {
     @Override
     protected void onSetHeaders(Request.Builder requestBuilder) {
         super.onSetHeaders(requestBuilder);
+        if (Raad.language == null)
+            Raad.language = "fa";
+
         requestBuilder.addHeader("Accept-Language", Raad.language);
     }
 }
