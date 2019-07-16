@@ -1164,84 +1164,8 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             view.findViewById(R.id.backgroundToolbarMap).setBackgroundColor(Color.parseColor(G.appBarColor));
 
             btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
-            btnBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
-                    if (getActivity() != null &&
-                            getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1) != null &&
-                            getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())
-                    ) {
-                        return;
-                    }
-
-                    if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
-                        rippleMoreMap.setVisibility(View.VISIBLE);
-                        fabGps.show();
-                        fabStateSwitcher.setVisibility(View.VISIBLE);
-                    }
-                    if (!isBackPress) {
-                        //getActivity().getSupportFragmentManager().popBackStack();
-                        G.fragmentActivity.onBackPressed();
-                    }
-                    closeKeyboard(v);
-                    isBackPress = false;
-                    page = pageiGapMap;
-                }
-            });
 
             rippleMoreMap = (RippleView) view.findViewById(R.id.ripple_more_map);
-
-            rippleMoreMap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    List<String> items = new ArrayList<>();
-                    items.add(getString(R.string.list_user_map));
-                    items.add(getString(R.string.nearby));
-                    items.add(getString(R.string.map_registration));
-
-                    dialog = new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
-                        @Override
-                        public void onClick(int position) {
-                            if (items.get(position).equals(getString(R.string.list_user_map))) {
-                                fabGps.hide();
-                                fabStateSwitcher.setVisibility(View.GONE);
-                                rippleMoreMap.setVisibility(View.GONE);
-                                page = pageUserList;
-                                try {
-                                    if (getActivity() != null) {
-                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
-                                    }
-                                } catch (Exception e) {
-                                    e.getStackTrace();
-                                }
-                            } else if (items.get(position).equals(getString(R.string.nearby))) {
-                                if (location != null && !isSendRequestGeoCoordinate) {
-                                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                                    showProgress(true);
-                                    isSendRequestGeoCoordinate = true;
-                                }
-                            } else if (items.get(position).equals(getString(R.string.map_registration))) {
-                                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                        new RequestGeoRegister().register(false);
-
-                                    }
-                                }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                    }
-                                }).show();
-                            }
-                        }
-                    });
-                    dialog.show();
-                }
-            });
 
             if (FragmentiGapMap.mineStaticLocation != null) {
                 GPSTracker.getGpsTrackerInstance().onLocationChanged(FragmentiGapMap.mineStaticLocation);
