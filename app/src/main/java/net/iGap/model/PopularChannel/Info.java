@@ -23,6 +23,8 @@ public class Info {
     private String mType;
     @SerializedName("updatedAt")
     private String mUpdatedAt;
+    @SerializedName("scale")
+    private String mScale;
 
     public Advertisement getAdvertisement() {
         return mAdvertisement;
@@ -96,4 +98,11 @@ public class Info {
         mUpdatedAt = updatedAt;
     }
 
+    public String getScale() {
+        return mScale;
+    }
+
+    public void setScale(String mScale) {
+        this.mScale = mScale;
+    }
 }

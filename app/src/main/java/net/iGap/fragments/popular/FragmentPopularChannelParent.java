@@ -64,7 +64,9 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
                             Slider slider = new Slider(getContext());
-                            slider.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            layoutParams.setMargins(0, 8, 0, 8);
+                            slider.setLayoutParams(layoutParams);
                             Slider.init(new ImageLoadingService(getContext()));
                             int finalI = i;
                             slider.postDelayed(new Runnable() {
@@ -76,7 +78,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                                     slider.setLoopSlides(true);
                                     slider.setAnimateIndicators(true);
                                     slider.setIndicatorSize(12);
-                                    slider.setInterval(3000);
+                                    slider.setInterval(1000);
                                 }
                             }, 0);
                             linearLayoutItemContainer.addView(slider);

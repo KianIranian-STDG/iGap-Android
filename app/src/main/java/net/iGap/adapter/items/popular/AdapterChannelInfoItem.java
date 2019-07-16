@@ -37,7 +37,8 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     }
 
     public void addChannelList(List<Channel> channelList) {
-        Log.i("nazanin", "addChannelList: ");
+      this.channelList.addAll(channelList);
+      notifyDataSetChanged();
     }
 
     @NonNull

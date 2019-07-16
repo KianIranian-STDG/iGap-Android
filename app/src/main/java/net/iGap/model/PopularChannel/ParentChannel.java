@@ -8,7 +8,6 @@ import java.util.List;
 
 public class ParentChannel {
     public static final String TYPE_SLIDE = "advertisement";
-    public static final String TYPE_SLIDE1 = "advertisement";
     public static final String TYPE_CHANNEL = "channelFeaturedCategory";
     public static final String TYPE_CATEGORY = "channelNormalCategory";
 

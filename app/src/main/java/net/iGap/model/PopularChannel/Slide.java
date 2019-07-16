@@ -17,6 +17,8 @@ public class Slide {
     private String mTitle;
     @SerializedName("width")
     private Long mWidth;
+    @SerializedName("titleEn")
+    private String mTitleEn;
 
     public Long getActionType() {
         return mActionType;
@@ -66,4 +68,11 @@ public class Slide {
         mWidth = width;
     }
 
+    public String getmTitleEn() {
+        return mTitleEn;
+    }
+
+    public void setmTitleEn(String mTitleEn) {
+        this.mTitleEn = mTitleEn;
+    }
 }
