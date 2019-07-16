@@ -6,7 +6,6 @@ import android.databinding.ObservableBoolean;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
 
-import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -43,14 +42,7 @@ public class FragmentActivationViewModel extends ViewModel {
     }
 
     private void counterTimer() {
-        long time;
-        if (BuildConfig.DEBUG) {
-            time = 60/*2*/ * DateUtils.SECOND_IN_MILLIS;
-        } else {
-            time = 60 * DateUtils.SECOND_IN_MILLIS;
-        }
-
-        countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) {
+        countDownTimer = new CountDownTimer(60 * DateUtils.SECOND_IN_MILLIS, Config.COUNTER_TIMER_DELAY) {
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;

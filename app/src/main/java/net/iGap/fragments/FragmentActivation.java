@@ -65,7 +65,6 @@ public class FragmentActivation extends BaseFragment {
                 // Ensure you call it only once
                 binding.timerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 // Here you can get the size :)
-                Log.wtf("activation", "width: " + binding.timerView.getWidth());
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
                 set.constrainCircle(binding.timerPosition.getId(), binding.timerView.getId(), binding.timerView.getWidth() / 2, 0);
