@@ -49,4 +49,13 @@ public class RetrofitFactory {
                 .build();
         return retrofit;
     }
+
+    Retrofit getIgasgtRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.ATI_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+        return retrofit;
+    }
 }

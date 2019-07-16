@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/itemImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="3:2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".3" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/itemLikeIcon"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/heart_icon"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toTopOf="@id/itemLikeCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/itemImage"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/itemLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="@id/itemImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemLikeIcon" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/itemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dp22"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/itemDestination"
+        app:layout_constraintEnd_toStartOf="@id/itemImage"
+        app:layout_constraintStart_toEndOf="@id/itemLikeIcon"
+        app:layout_constraintTop_toTopOf="@id/itemImage"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/itemDestination"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp4"
+        app:layout_constraintBottom_toBottomOf="@id/itemImage"
+        app:layout_constraintEnd_toEndOf="@id/itemTitle"
+        app:layout_constraintStart_toStartOf="@id/itemTitle"
+        app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/itemVisitTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemImage" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/itemPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemVisitTime" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/itemPriceForeign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemPrice" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/addToFavoriteButton"
+        style="@style/BaseIGapButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:text="@string/igasht_add_to_favorite_title"
+        app:backgroundTint="@color/md_blue_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemPriceForeign"
+        app:layout_constraintWidth_percent=".6" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/buyTicketButton"
+        style="?iGapButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
+        android:text="@string/igasht_buy_ticket_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addToFavoriteButton"
+        app:layout_constraintWidth_percent=".6" />
+
+</android.support.constraint.ConstraintLayout>

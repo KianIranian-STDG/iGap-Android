@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtProvinceBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 public class IGashtProvinceFragment extends Fragment {
 
@@ -37,6 +40,40 @@ public class IGashtProvinceFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.toolbar.addView(HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.score_star_icon, R.string.history_icon)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        if (getActivity()!=null){
+                            new HelperFragment(getActivity().getSupportFragmentManager(),new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
+                        }
+                    }
+
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        if (getActivity()!=null){
+                            new HelperFragment(getActivity().getSupportFragmentManager(),new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+                        }
+                    }
+                }).getView());
+
+        viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtLocationListFragment()).setReplace(false).load(true);
+            }
+        });
 
     }
 }

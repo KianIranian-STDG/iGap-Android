@@ -56,6 +56,7 @@
             android:text="@string/igasht_choose_province_title"
             android:textColor="@color/white"
             android:textSize="@dimen/dp20"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/v"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -64,6 +65,7 @@
             android:id="@+id/v"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showMainView}"
             app:cardCornerRadius="@dimen/dp20"
             app:cardUseCompatPadding="true"
             app:contentPadding="@dimen/dp8"
@@ -119,7 +121,9 @@
             style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
             android:text="@string/igasht_search_by_location"
+            android:visibility="@{viewModel.showMainView}"
             app:backgroundTint="@color/buttonColor"
             app:icon="@drawable/ic_location"
             app:iconGravity="textStart"
@@ -130,6 +134,27 @@
             app:layout_constraintTop_toTopOf="@id/backgroundImage"
             app:layout_constraintVertical_bias=".55"
             app:layout_constraintWidth_percent=".6" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toTopOf="@id/searchButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{()->viewModel.onRetryClick()}"
+            android:text="@string/retry_icon"
+            android:visibility="@{viewModel.showViewRefresh}"
+            app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/backgroundImage" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

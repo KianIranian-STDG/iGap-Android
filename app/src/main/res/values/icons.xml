@@ -237,4 +237,5 @@
     <string name="unlock_icon">Å</string>
     <string name="lock_icon">}</string>
     <string name="coin_icon">2</string>
+  <string name="heart_icon">O</string>
 </resources>
