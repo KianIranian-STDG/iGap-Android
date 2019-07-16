@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
@@ -149,11 +148,11 @@ public class FragmentActivation extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
-            getActivity().registerReceiver(smsReceiver, intentFilter);
-        }
+        /*if (getActivity() != null) {*/
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+        getActivity().registerReceiver(smsReceiver, intentFilter);
+        /*}*/
     }
 
     private void startSMSListener() {
@@ -165,6 +164,7 @@ public class FragmentActivation extends BaseFragment {
                     Log.wtf(TAG, "onOTPReceived");
                     try {
                         if (message != null && message.length() > 0) {
+                            Log.wtf(TAG, "onOTPReceived");
                             viewModel.receiveVerifySms(message, true);
                         }
                     } catch (Exception e1) {
@@ -203,6 +203,7 @@ public class FragmentActivation extends BaseFragment {
 
     private void setActivationCode(String code) {
         if (code.length() == 5) {
+            Log.wtf(this.getClass().getName(), "code: " + code);
             binding.activationCodeEditText1.setText(code.charAt(0));
             binding.activationCodeEditText2.setText(code.charAt(1));
             binding.activationCodeEditText3.setText(code.charAt(2));
