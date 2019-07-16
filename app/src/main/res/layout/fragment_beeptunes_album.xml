@@ -69,7 +69,6 @@
                     android:layout_marginRight="16dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@{viewModel.albumName}"
                     android:textSize="@dimen/largeTextSize"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/tv_album_artistName"
@@ -87,7 +86,6 @@
                     android:layout_marginRight="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@{viewModel.artistName}"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toTopOf="@+id/view5"
                     app:layout_constraintEnd_toStartOf="@+id/tv_album_albumeCost"
@@ -100,7 +98,6 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@{viewModel.albumCost}"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_album_artistName"
                     app:layout_constraintEnd_toEndOf="@+id/tv_album_name"
@@ -153,12 +150,26 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_album_artistOtherAlbum" />
 
+
+                <ProgressBar
+                    android:id="@+id/pb_album_loadOtherAlbum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_album_artistAlbums"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_album_artistAlbums"
+                    app:layout_constraintStart_toStartOf="@+id/rv_album_artistAlbums"
+                    app:layout_constraintTop_toTopOf="@+id/rv_album_artistAlbums" />
+
+                <ProgressBar
+                    android:id="@+id/pb_album_loadSong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_album_songs"
+                    app:layout_constraintEnd_toEndOf="@+id/rv_album_songs"
+                    app:layout_constraintStart_toStartOf="@+id/rv_album_songs"
+                    app:layout_constraintTop_toBottomOf="@+id/view5" />
             </android.support.constraint.ConstraintLayout>
-
-
         </android.support.v4.widget.NestedScrollView>
-
-
     </android.support.constraint.ConstraintLayout>
 
 </layout>

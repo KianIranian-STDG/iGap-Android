@@ -1,80 +1,28 @@
 package net.iGap.fragments.beepTunes.album;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableField;
-import android.util.Log;
 
-import net.iGap.G;
-import net.iGap.api.apiService.ApiResponse;
-import net.iGap.api.repository.BeepTunesRepository;
-import net.iGap.module.api.beepTunes.Album;
+import net.iGap.api.BeepTunesApi;
+import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.module.api.beepTunes.AlbumTrack;
+import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.viewmodel.BaseViewModel;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AlbumViewModel extends BaseViewModel {
 
     private static final String TAG = "aabolfazlAlbum";
-    public MutableLiveData<String> albumImageUrl = new MutableLiveData<>();
-    public MutableLiveData<String> albumName = new MutableLiveData<>();
-    public ObservableField<String> artistName = new ObservableField<>();
-    public ObservableField<String> albumCost = new ObservableField<>();
-    public MutableLiveData<List<Track>> albumTrackMutableLiveData = new MutableLiveData<>();
-
-    private boolean isRtl = G.isAppRtl;
-
-    private BeepTunesRepository repository = new BeepTunesRepository();
-
-    public void loadAlbum() {
-        repository.getAlbumInfo(261434813, new ApiResponse<Album>() {
-            @Override
-            public void onResponse(Album album) {
-                setAlbumDetail(album);
-            }
-
-            @Override
-            public void onFailed(String error) {
-
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-
-            }
-        });
-
-        repository.getAlbumTrack(261434813, new ApiResponse<AlbumTrack>() {
-            @Override
-            public void onResponse(AlbumTrack albumTrack) {
-                albumTrackMutableLiveData.setValue(albumTrack.getData());
-            }
-
-            @Override
-            public void onFailed(String error) {
-                Log.i(TAG, "onFailed: " + error);
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-
-            }
-        });
-    }
-
-    private void setAlbumDetail(Album album) {
-        albumImageUrl.setValue(album.getImage());
-
-        if (isRtl)
-            albumName.setValue(album.getName());
-        else
-            albumName.setValue(album.getEnglishName());
-
-        artistName.set(album.getArtists().get(0).getName());
-        albumCost.set(album.getFinalPrice().toString());
-
-    }
+    private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
+    private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
+    private MutableLiveData<Boolean> songProgressMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> albumProgressMutableLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
@@ -99,5 +47,57 @@ public class AlbumViewModel extends BaseViewModel {
     @Override
     public void onResume() {
 
+    }
+
+    public void getAlbumSong(long id) {
+        songProgressMutableLiveData.postValue(true);
+        apiService.getAlbumTrack(id).enqueue(new Callback<AlbumTrack>() {
+            @Override
+            public void onResponse(Call<AlbumTrack> call, Response<AlbumTrack> response) {
+                songProgressMutableLiveData.postValue(false);
+                if (response.isSuccessful()) {
+                    trackMutableLiveData.postValue(response.body().getData());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AlbumTrack> call, Throwable t) {
+                songProgressMutableLiveData.postValue(false);
+            }
+        });
+    }
+
+    public void getArtistOtherAlbum(long id) {
+        albumProgressMutableLiveData.postValue(true);
+        apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
+            @Override
+            public void onResponse(Call<Albums> call, Response<Albums> response) {
+                albumProgressMutableLiveData.postValue(false);
+                if (response.isSuccessful()) {
+                    albumMutableLiveData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Albums> call, Throwable t) {
+                albumProgressMutableLiveData.postValue(false);
+            }
+        });
+    }
+
+    public MutableLiveData<List<Track>> getTrackMutableLiveData() {
+        return trackMutableLiveData;
+    }
+
+    public MutableLiveData<Albums> getAlbumMutableLiveData() {
+        return albumMutableLiveData;
+    }
+
+    public MutableLiveData<Boolean> getAlbumProgressMutableLiveData() {
+        return albumProgressMutableLiveData;
+    }
+
+    public MutableLiveData<Boolean> getSongProgressMutableLiveData() {
+        return songProgressMutableLiveData;
     }
 }

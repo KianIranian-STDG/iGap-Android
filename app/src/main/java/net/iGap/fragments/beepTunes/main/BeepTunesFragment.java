@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesAdapter;
@@ -25,7 +24,6 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     private View rootView;
     private BeepTunesViewModel viewModel;
     private BeepTunesAdapter adapter;
-    private OnItemClick onItemClick;
     private static String TAG = "aabolfazlBeepTunes";
 
 
@@ -54,7 +52,7 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClick(album -> {
-            new HelperFragment(getFragmentManager(), new AlbumFragment()).setReplace(false).load();
+            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album)).setReplace(false).load();
         });
 
     }

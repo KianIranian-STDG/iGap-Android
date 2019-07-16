@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +16,20 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.api.beepTunes.Album;
 
 public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private FragmentBeeptunesAlbumBinding binding;
-    private HelperToolbar toolbar;
     private AlbumViewModel viewModel;
     private AlbumTrackAdapter adapter;
+    private Album album;
     private String TAG = "aabolfazlAlbumView";
+
+    public AlbumFragment getInstance(Album album) {
+        AlbumFragment albumFragment = new AlbumFragment();
+        albumFragment.album = album;
+        return albumFragment;
+    }
 
     @Nullable
     @Override
@@ -31,7 +37,6 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_beeptunes_album, container, false);
         viewModel = new AlbumViewModel();
         adapter = new AlbumTrackAdapter();
-        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
@@ -39,9 +44,10 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        viewModel.loadAlbum();
+        viewModel.getAlbumSong(album.getId());
+        viewModel.getArtistOtherAlbum(album.getArtists().get(0).getId());
 
-        toolbar = HelperToolbar.create()
+        HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setListener(this)
                 .setLeftIcon(R.string.back_icon)
@@ -52,23 +58,25 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         binding.rvAlbumSongs.setLayoutManager(linearLayoutManager);
         binding.rvAlbumSongs.setAdapter(adapter);
 
-        viewModel.albumImageUrl.observe(this, imageUrl -> {
-            ImageLoadingService.load(imageUrl, binding.ivAlbumFragmentHeader);
-        });
+        binding.tvAlbumArtistName.setText(album.getArtists().get(0).getName());
+        binding.tvAlbumName.setText(album.getName());
 
-        viewModel.albumName.observe(this,albumName ->toolbar.setDefaultTitle(albumName));
 
-        viewModel.albumTrackMutableLiveData.observe(this,tracks -> {
+        ImageLoadingService.load(album.getImage(), binding.ivAlbumFragmentHeader);
+
+
+        viewModel.getTrackMutableLiveData().observe(this, tracks -> {
             adapter.setTracks(tracks);
-            Log.i(TAG, "onViewCreated: "+tracks.size());
         });
 
+        viewModel.getAlbumMutableLiveData().observe(this,albums -> {
 
-
+        });
     }
 
     @Override
     public void onLeftIconClickListener(View view) {
-        getActivity().onBackPressed();
+        if (getActivity() != null)
+            getActivity().onBackPressed();
     }
 }
