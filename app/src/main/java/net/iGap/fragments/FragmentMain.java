@@ -284,7 +284,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
                 } else if (G.isInCall) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-                } else {
+                }else if (isChatMultiSelectEnable){
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp10), 0, 0);
+                }else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
                 }
             }
@@ -842,6 +844,8 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }
+
+        notifyChatRoomsList();
     }
 
     @Override
