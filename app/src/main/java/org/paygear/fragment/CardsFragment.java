@@ -202,6 +202,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
 
             if (Auth.getCurrentAuth() != null  &&WalletActivity.isScan && getActivity() != null) {
                 ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
+                WalletActivity.isScan = false;
             }
             setAdapter();
         } else if (Auth.getCurrentAuth() != null) {
@@ -285,6 +286,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
 
                         if (WalletActivity.isScan && getActivity() != null) {
                             ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
+                            WalletActivity.isScan = false;
                         }
 
                         return;
