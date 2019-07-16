@@ -3,6 +3,7 @@ package net.iGap.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -18,7 +19,7 @@ import java.util.Locale;
 
 public class FragmentActivationViewModel extends ViewModel {
 
-    public MutableLiveData<String> timerValue = new MutableLiveData<>();
+    public ObservableField<String> timerValue = new ObservableField<>();
     public MutableLiveData<String> verifyCode = new MutableLiveData<>();
     public ObservableBoolean enabledResendCodeButton = new ObservableBoolean(false);
     public MutableLiveData<Boolean> showEnteredCodeError = new MutableLiveData<>();
@@ -38,7 +39,7 @@ public class FragmentActivationViewModel extends ViewModel {
 
     public FragmentActivationViewModel(RegisterRepository repository) {
         this.repository = repository;
-        timerValue.setValue("1:00");
+        timerValue.set("1:00");
         counterTimer();
     }
 
@@ -48,14 +49,15 @@ public class FragmentActivationViewModel extends ViewModel {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
-                timerValue.setValue(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                timerValue.set(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
                 currentTimePosition.setValue(seconds * 6);
             }
 
             public void onFinish() {
-                timerValue.setValue(String.format(Locale.getDefault(), "%02d:%02d", 0, 0));
+                timerValue.set(String.format(Locale.getDefault(), "%02d:%02d", 0, 0));
                 currentTimePosition.setValue(60 * 6);
                 enabledResendCodeButton.set(true);
+                cancelTimer();
             }
         };
         countDownTimer.start();
