@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BeeptunesAdapter extends RecyclerView.Adapter<BeeptunesAdapter.RowViewHolder> {
 
-    List<Album> albums = new ArrayList<>();
+    private List<Album> albums = new ArrayList<>();
 
     public void setAlbums(List<Album> albums) {
         this.albums = albums;

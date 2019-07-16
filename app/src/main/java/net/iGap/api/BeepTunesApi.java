@@ -4,6 +4,7 @@ import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.Artist;
+import net.iGap.module.api.beepTunes.FirstPage;
 import net.iGap.module.api.beepTunes.PurchaseList;
 import net.iGap.module.api.beepTunes.SearchArtist;
 import net.iGap.module.api.beepTunes.SearchTrack;
@@ -14,6 +15,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface BeepTunesApi {
+
+    @GET(" ")
+    Call<FirstPage> getFirstPage();
 
     @GET("search/album")
     Call<Albums> getSearchAlbum(
