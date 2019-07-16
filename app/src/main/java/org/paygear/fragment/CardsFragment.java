@@ -200,9 +200,6 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         mCards = RaadApp.cards;
         if (mCards != null) {
 
-            if (Auth.getCurrentAuth() != null  &&WalletActivity.isScan && getActivity() != null) {
-                ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
-            }
             setAdapter();
         } else if (Auth.getCurrentAuth() != null) {
             load();
@@ -282,10 +279,6 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
                     if (auth != null) {
                         Auth.getCurrentAuth().setPublicKey(auth.publicKey);
                         loadCards();
-
-                        if (WalletActivity.isScan && getActivity() != null) {
-                            ((NavigationBarActivity) getActivity()).pushFullFragment(new ScannerFragment(), "ScannerFragment");
-                        }
 
                         return;
                     }
