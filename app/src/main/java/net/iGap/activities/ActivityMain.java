@@ -342,6 +342,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISOK) {
+            initTabStrip();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -500,8 +501,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             isOpenChatBeforeSheare = false;
             checkIntent(getIntent());
-
-            initTabStrip();
 
             initComponent();
 
