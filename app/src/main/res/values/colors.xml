@@ -122,8 +122,8 @@
     <!--ripple-->
     <color name="rippelColor">#FFFFFF</color>
     <color name="statusSendingColor">#eee</color>
-    <color name="iGapColor">#3dbcb3</color>
-    <color name="iGapColorDarker">#37a9a1</color>
+    <color name="iGapColor">@color/colorToolbarBackgroundEnd</color>
+    <color name="iGapColorDarker">@color/colorToolbarBackgroundEnd</color>
     <color name="black90">#c8000000</color>
     <color name="grayNew">#8c8b8b</color>
     <color name="grayNewDarker">#4f4f4f</color>

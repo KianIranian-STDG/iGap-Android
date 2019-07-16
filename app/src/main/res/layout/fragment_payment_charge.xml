@@ -58,7 +58,6 @@
                         android:layout_height="@dimen/dp44"
                         android:gravity="center"
                         android:text="@string/md_dialpad"
-                        android:textAppearance="@style/TextIconAppearance.menu"
                         android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                         android:textSize="@dimen/dp22"
                         android:textStyle="bold" />
@@ -170,7 +169,6 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_format_list_bulleted"
-                        android:textAppearance="@style/TextIconAppearance.menu"
                         android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                         android:textSize="@dimen/dp22"
                         android:textStyle="bold" />
@@ -216,7 +214,6 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/coin_icon"
-                        android:textAppearance="@style/TextIconAppearance.menu"
                         android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                         android:textSize="@dimen/dp22"
                         android:textStyle="bold" />
