@@ -619,6 +619,11 @@ public class FragmentContactsProfile extends BaseFragment {
     public void onResume() {
         super.onResume();
         viewModel.onResume();
+
+        if (binding != null && !mIsTheTitleContainerVisible){
+            startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
+        }
+
     }
 
     @Override
