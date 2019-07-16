@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import net.iGap.R;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bannerslider.adapters.PositionController;
 import net.iGap.libs.bannerslider.adapters.SliderAdapter;
 import net.iGap.libs.bannerslider.adapters.SliderRecyclerViewAdapter;
@@ -48,7 +49,7 @@ public class BannerSlider extends FrameLayout {
     public int selectedSlidePosition = 0;
     public Timer timer;
     public PositionController positionController;
-    public static ImageLoadingService imageLoadingService;
+    public static BannerImageLoadingService bannerImageLoadingService;
     private View emptyView;
 
     public BannerSlider(@NonNull Context context) {
@@ -115,7 +116,7 @@ public class BannerSlider extends FrameLayout {
         });
         if (config.emptyView != Config.NOT_SELECTED) {
             emptyView = LayoutInflater.from(getContext()).inflate(config.emptyView, this, false);
-            addView(emptyView);
+            addView(emptyView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT,LayoutCreator.MATCH_PARENT));
         }
     }
 
@@ -272,15 +273,15 @@ public class BannerSlider extends FrameLayout {
         }
     }
 
-    public static void init(ImageLoadingService imageLoadingService) {
-        BannerSlider.imageLoadingService = imageLoadingService;
+    public static void init(BannerImageLoadingService bannerImageLoadingService) {
+        BannerSlider.bannerImageLoadingService = bannerImageLoadingService;
     }
 
-    public static ImageLoadingService getImageLoadingService() {
-        if (imageLoadingService == null) {
-            throw new IllegalStateException("ImageLoadingService is null, you should call init method first");
+    public static BannerImageLoadingService getBannerImageLoadingService() {
+        if (bannerImageLoadingService == null) {
+            throw new IllegalStateException("BannerImageLoadingService is null, you should call init method first");
         }
-        return imageLoadingService;
+        return bannerImageLoadingService;
     }
 
     private class SliderTimerTask extends TimerTask {

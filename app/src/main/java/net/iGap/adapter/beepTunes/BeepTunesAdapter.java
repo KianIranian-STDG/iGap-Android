@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.Datum;
+import net.iGap.module.api.beepTunes.Slide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +62,8 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.headerTv.setText(data.get(i).getInfo().getTitle());
                 break;
             case AD:
-
+                SlideViewHolder slideViewHolder = (SlideViewHolder) viewHolder;
+                slideViewHolder.bindSlid(data.get(i).getSlides(),data.get(i).getInfo().getPlaybackTime());
                 break;
         }
     }
@@ -80,9 +83,24 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     class SlideViewHolder extends RecyclerView.ViewHolder {
+        private BannerSlider slider;
+        private BeepTunesBannerSliderAdapter adapter;
 
         public SlideViewHolder(@NonNull View itemView) {
             super(itemView);
+            slider = itemView.findViewById(R.id.bs_advertisementItem);
+
+        }
+
+        void bindSlid(List<Slide> slides,long invertal) {
+            slider.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    slider.setAdapter(new BeepTunesBannerSliderAdapter(slides));
+                    slider.setSelectedSlide(0);
+                    slider.setInterval((int) invertal);
+                }
+            }, 1500);
         }
     }
 

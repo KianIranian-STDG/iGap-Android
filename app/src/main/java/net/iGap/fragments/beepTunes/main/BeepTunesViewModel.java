@@ -5,6 +5,7 @@ import android.util.Log;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.module.api.beepTunes.FirstPage;
 import net.iGap.viewmodel.BaseViewModel;
 
@@ -20,7 +21,7 @@ public class BeepTunesViewModel extends BaseViewModel {
 
     @Override
     public void onCreateViewModel() {
-
+        BannerSlider.init(new SliderBannerImageLoadingService());
     }
 
     @Override

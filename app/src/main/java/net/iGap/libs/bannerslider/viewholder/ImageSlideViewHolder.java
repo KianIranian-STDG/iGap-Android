@@ -17,16 +17,16 @@ public class ImageSlideViewHolder extends RecyclerView.ViewHolder {
 
     public void bindImageSlide(String imageUrl) {
         if (imageUrl != null) {
-            BannerSlider.getImageLoadingService().loadImage(imageUrl, imageView);
+            BannerSlider.getBannerImageLoadingService().loadImage(imageUrl, imageView);
         }
     }
 
     public void bindImageSlide(@DrawableRes int imageResourceId) {
-        BannerSlider.getImageLoadingService().loadImage(imageResourceId, imageView);
+        BannerSlider.getBannerImageLoadingService().loadImage(imageResourceId, imageView);
     }
 
     public void bindImageSlide(String url, @DrawableRes int placeHolder, @DrawableRes int error) {
-        BannerSlider.getImageLoadingService().loadImage(url, placeHolder, error, imageView);
+        BannerSlider.getBannerImageLoadingService().loadImage(url, placeHolder, error, imageView);
     }
 
 }

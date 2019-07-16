@@ -47,7 +47,6 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         viewModel.getFirstPageMutableLiveData().observe(this, firstPage -> {
             if (firstPage != null)
                 adapter.setData(firstPage.getData());
-            Log.i(TAG, "onViewCreated: " + firstPage.getData().size());
         });
         recyclerView.setAdapter(adapter);
     }

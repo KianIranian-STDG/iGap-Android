@@ -8,7 +8,7 @@ import android.widget.ImageView;
  * @since 4/4/18
  */
 
-public interface ImageLoadingService {
+public interface BannerImageLoadingService {
     void loadImage(String url, ImageView imageView);
 
     void loadImage(@DrawableRes int resource, ImageView imageView);
