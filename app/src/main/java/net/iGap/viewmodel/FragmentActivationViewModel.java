@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.BuildConfig;
 import net.iGap.Config;
@@ -132,16 +131,9 @@ public class FragmentActivationViewModel extends ViewModel {
         });
     }
 
-    public void receiveVerifySms(String message, boolean setCodeToUi) {
+    public void receiveVerifySms(String message) {
         String verificationCode = HelperString.regexExtractValue(message, repository.getRegexFetchCodeVerification());
-        Log.wtf("net.iGap.f.mg", "verificationCode: " + verificationCode);
-        if (setCodeToUi) {
-            verifyCode.setValue(verificationCode);
-        }
-        if (verificationCode.length() == 5) {
-            Log.wtf("net.iGap.f.mg", "loginButtonOnClick: ");
-            loginButtonOnClick(verificationCode);
-        }
+        loginButtonOnClick(verificationCode);
     }
 
     private void requestRegister() {
