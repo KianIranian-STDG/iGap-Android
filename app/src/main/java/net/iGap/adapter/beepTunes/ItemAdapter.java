@@ -18,7 +18,7 @@ import java.util.List;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private List<Album> albums = new ArrayList<>();
 
-    public void setAlbums(List<Album> albums) {
+    void setAlbums(List<Album> albums) {
         this.albums = albums;
         notifyDataSetChanged();
     }
