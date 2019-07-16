@@ -162,10 +162,10 @@ public class FragmentActivation extends BaseFragment {
             smsReceiver.setOTPListener(new SMSReceiver.OTPReceiveListener() {
                 @Override
                 public void onOTPReceived(String message) {
-
+                    Log.wtf(TAG, "onOTPReceived");
                     try {
                         if (message != null && message.length() > 0) {
-                            viewModel.receiveVerifySms(message,true);
+                            viewModel.receiveVerifySms(message, true);
                         }
                     } catch (Exception e1) {
                         e1.getStackTrace();
@@ -348,7 +348,7 @@ public class FragmentActivation extends BaseFragment {
                             binding.activationCodeEditText3.getEditableText().toString() +
                             binding.activationCodeEditText4.getEditableText().toString() +
                             binding.activationCodeEditText5.getEditableText().toString();
-                    viewModel.receiveVerifySms(message,false);
+                    viewModel.receiveVerifySms(message, false);
                 } else {
                     binding.activationCodeEditText4.requestFocus();
                 }
