@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
@@ -12,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:gravity="right"
         android:orientation="vertical">
 
         <net.iGap.view.SquareImageView
@@ -31,9 +31,9 @@
             android:layout_marginRight="@dimen/dp4"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="رگ خواب"
             android:textColor="@color/black"
-            android:textSize="@dimen/standardTextSize" />
+            android:textSize="@dimen/smallTextSize"
+            tools:text="رگ خواب" />
 
 
         <TextView
@@ -45,9 +45,9 @@
             android:layout_marginRight="@dimen/dp4"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="همایون شجریان"
             android:textColor="@color/gray"
-            android:textSize="@dimen/smallTextSize" />
+            android:textSize="@dimen/smallTextSize"
+            tools:text="همایون شجریان" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -84,22 +84,18 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     class SlideViewHolder extends RecyclerView.ViewHolder {
         private BannerSlider slider;
-        private BeepTunesBannerSliderAdapter adapter;
 
-        public SlideViewHolder(@NonNull View itemView) {
+        SlideViewHolder(@NonNull View itemView) {
             super(itemView);
             slider = itemView.findViewById(R.id.bs_advertisementItem);
 
         }
 
-        void bindSlid(List<Slide> slides,long invertal) {
-            slider.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    slider.setAdapter(new BeepTunesBannerSliderAdapter(slides));
-                    slider.setSelectedSlide(0);
-                    slider.setInterval((int) invertal);
-                }
+        void bindSlid(List<Slide> slides,long interval) {
+            slider.postDelayed(() -> {
+                slider.setAdapter(new BeepTunesBannerSliderAdapter(slides));
+                slider.setSelectedSlide(0);
+                slider.setInterval((int) interval);
             }, 1500);
         }
     }
@@ -109,7 +105,7 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView headerTv;
         private ItemAdapter adapter;
 
-        public RowViewHolder(@NonNull View itemView) {
+        RowViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.rv_rowItem);
             headerTv = itemView.findViewById(R.id.tv_rowItem_header);

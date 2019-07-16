@@ -33,6 +33,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
         ImageLoadingService.load(albums.get(i).getImage(), itemViewHolder.itemIv);
+        itemViewHolder.bindItem(albums.get(i));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         private TextView itemTitle;
         private TextView itemDetail;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             itemIv = itemView.findViewById(R.id.iv_trackItem);
             itemTitle = itemView.findViewById(R.id.tv_trackItem_name);
@@ -53,7 +54,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
 
         void bindItem(Album album) {
-
+            itemTitle.setText(album.getName());
+            itemDetail.setText(album.getArtists().get(0).getName());
         }
     }
 }

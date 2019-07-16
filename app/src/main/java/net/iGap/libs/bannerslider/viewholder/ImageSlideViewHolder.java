@@ -13,6 +13,7 @@ public class ImageSlideViewHolder extends RecyclerView.ViewHolder {
     public ImageSlideViewHolder(View itemView) {
         super(itemView);
         this.imageView = (ImageView) itemView;
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
     public void bindImageSlide(String imageUrl) {
