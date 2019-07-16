@@ -1,6 +1,7 @@
 package net.iGap.fragments.beepTunes.main;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.util.Log;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;
@@ -15,14 +16,16 @@ public class BeepTunesViewModel extends BaseViewModel {
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private MutableLiveData<FirstPage> firstPageMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
+    private String TAG = "aabolfazlBeepTunes";
 
     @Override
     public void onCreateViewModel() {
-        getFirsPage();
+
     }
 
     @Override
     public void onStart() {
+        getFirsPage();
     }
 
     @Override
@@ -56,6 +59,7 @@ public class BeepTunesViewModel extends BaseViewModel {
             @Override
             public void onFailure(Call<FirstPage> call, Throwable t) {
                 progressMutableLiveData.postValue(false);
+                Log.i(TAG, "onFailure: " + t.getMessage());
             }
         });
     }

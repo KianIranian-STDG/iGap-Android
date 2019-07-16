@@ -5,12 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
+import net.iGap.adapter.beepTunes.BeepTunesAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BeepTunesProfileFragment;
 import net.iGap.helper.HelperToolbar;
@@ -20,12 +22,16 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     private View rootView;
     private BeepTunesViewModel viewModel;
     private RecyclerView recyclerView;
+    private BeepTunesAdapter adapter;
+    private static String TAG = "aabolfazlBeepTunes";
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_beep_tunes, container, false);
         viewModel = new BeepTunesViewModel();
+        adapter = new BeepTunesAdapter();
         return rootView;
     }
 
@@ -38,10 +44,12 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         recyclerView = rootView.findViewById(R.id.rv_beepTunes_main);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        viewModel.getFirstPageMutableLiveData().observe(this,firstPage -> {
-
+        viewModel.getFirstPageMutableLiveData().observe(this, firstPage -> {
+            if (firstPage != null)
+                adapter.setData(firstPage.getData());
+            Log.i(TAG, "onViewCreated: " + firstPage.getData().size());
         });
-
+        recyclerView.setAdapter(adapter);
     }
 
     private void initToolBar(ViewGroup viewGroup) {

@@ -16,6 +16,8 @@ public class Datum {
     private Info info;
     @Expose
     private List<Slide> slides;
+    @SerializedName("albums")
+    private List<Album> albums;
     @Expose
     private String type;
 
@@ -59,4 +61,11 @@ public class Datum {
         this.type = type;
     }
 
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
 }
