@@ -164,7 +164,7 @@ public class FragmentActivation extends BaseFragment {
                     try {
                         if (message != null && message.length() > 0) {
                             Log.wtf(this.getClass().getName(), "message: " + message);
-                            setActivationCode(message);
+                            setActivationCode(viewModel.receiveVerifySms(message));
                         }
                     } catch (Exception e1) {
                         e1.getStackTrace();
@@ -352,7 +352,7 @@ public class FragmentActivation extends BaseFragment {
                             binding.activationCodeEditText4.getEditableText().toString() +
                             binding.activationCodeEditText5.getEditableText().toString();
                     Log.wtf(this.getClass().getName(), "message: " + message);
-                    viewModel.receiveVerifySms(message);
+                    viewModel.loginButtonOnClick(message);
                 } else {
                     binding.activationCodeEditText4.requestFocus();
                 }

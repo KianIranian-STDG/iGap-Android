@@ -129,11 +129,11 @@ public class FragmentActivationViewModel extends ViewModel {
         });
     }
 
-    public void receiveVerifySms(String message) {
+    public String receiveVerifySms(String message) {
         Log.wtf(this.getClass().getName(), "receiveVerifySms: " + message);
         String verificationCode = HelperString.regexExtractValue(message, repository.getRegexFetchCodeVerification());
         Log.wtf(this.getClass().getName(), "verificationCode: " + verificationCode);
-        loginButtonOnClick(verificationCode);
+        return verificationCode;
     }
 
     private void requestRegister() {
