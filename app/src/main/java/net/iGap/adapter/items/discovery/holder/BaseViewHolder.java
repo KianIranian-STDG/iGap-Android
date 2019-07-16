@@ -41,6 +41,7 @@ import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.igasht.IGashtProvinceFragment;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
@@ -153,13 +154,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentCharge.newInstance()).setReplace(false).load();
                 break;
             case BILL_MENU:/** tested **/
-                try {
+            new HelperFragment(activity.getSupportFragmentManager(),new IGashtProvinceFragment()).setReplace(false).load(true);
+                /*try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
                 } catch (JSONException e) {
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
                 }
-                break;
+                break;*/
             case TRAFFIC_BILL_MENU:/** tested **/
                 try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
