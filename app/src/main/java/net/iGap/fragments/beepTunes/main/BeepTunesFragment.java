@@ -9,19 +9,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BeepTunesProfileFragment;
+import net.iGap.fragments.beepTunes.album.AlbumFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.api.beepTunes.Album;
 
 public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     private View rootView;
     private BeepTunesViewModel viewModel;
-    private RecyclerView recyclerView;
     private BeepTunesAdapter adapter;
+    private OnItemClick onItemClick;
     private static String TAG = "aabolfazlBeepTunes";
 
 
@@ -40,7 +44,7 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
         LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
         initToolBar(toolBar);
 
-        recyclerView = rootView.findViewById(R.id.rv_beepTunes_main);
+        RecyclerView recyclerView = rootView.findViewById(R.id.rv_beepTunes_main);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         viewModel.getFirstPageMutableLiveData().observe(this, firstPage -> {
@@ -48,6 +52,11 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
                 adapter.setData(firstPage.getData());
         });
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClick(album -> {
+            new HelperFragment(getFragmentManager(), new AlbumFragment()).setReplace(false).load();
+        });
+
     }
 
     private void initToolBar(ViewGroup viewGroup) {
@@ -89,5 +98,9 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     public void onSmallAvatarClickListener(View view) {
         BeepTunesProfileFragment profileFragment = new BeepTunesProfileFragment();
         profileFragment.show(getChildFragmentManager(), null);
+    }
+
+    public interface OnItemClick {
+        void onClick(Album album);
     }
 }

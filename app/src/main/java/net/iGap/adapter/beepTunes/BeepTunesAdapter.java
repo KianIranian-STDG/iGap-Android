@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.Datum;
@@ -25,10 +26,15 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private static final String TYPE_AD = "advertisement";
     private static final String TYPE_ROW = "beepTunesCategory";
+    private BeepTunesFragment.OnItemClick onItemClick;
 
     public void setData(List<Datum> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemClick(BeepTunesFragment.OnItemClick onItemClick) {
+        this.onItemClick = onItemClick;
     }
 
     @NonNull
@@ -63,7 +69,7 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case AD:
                 SlideViewHolder slideViewHolder = (SlideViewHolder) viewHolder;
-                slideViewHolder.bindSlid(data.get(i).getSlides(),data.get(i).getInfo().getPlaybackTime());
+                slideViewHolder.bindSlid(data.get(i).getSlides(), data.get(i).getInfo().getPlaybackTime());
                 break;
         }
     }
@@ -91,7 +97,7 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
 
-        void bindSlid(List<Slide> slides,long interval) {
+        void bindSlid(List<Slide> slides, long interval) {
             slider.postDelayed(() -> {
                 slider.setAdapter(new BeepTunesBannerSliderAdapter(slides));
                 slider.setSelectedSlide(0);
@@ -112,10 +118,14 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
             adapter = new ItemAdapter();
             recyclerView.setAdapter(adapter);
+
+
         }
 
         void bindRow(List<Album> albums) {
             adapter.setAlbums(albums);
+            if (onItemClick != null)
+                adapter.setOnItemClick(onItemClick);
         }
     }
 }

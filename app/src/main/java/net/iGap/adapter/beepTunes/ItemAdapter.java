@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.module.api.beepTunes.Album;
 
@@ -17,6 +18,11 @@ import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private List<Album> albums = new ArrayList<>();
+    private BeepTunesFragment.OnItemClick onItemClick;
+
+    public void setOnItemClick(BeepTunesFragment.OnItemClick onItemClick) {
+        this.onItemClick = onItemClick;
+    }
 
     void setAlbums(List<Album> albums) {
         this.albums = albums;
@@ -56,6 +62,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         void bindItem(Album album) {
             itemTitle.setText(album.getName());
             itemDetail.setText(album.getArtists().get(0).getName());
+
+            itemView.setOnClickListener(v -> onItemClick.onClick(album));
         }
     }
 }
