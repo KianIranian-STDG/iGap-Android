@@ -82,12 +82,12 @@
       <net.iGap.module.MaterialDesignTextView
         android:id="@+id/txt_arrow_list_map"
         android:layout_width="@dimen/dp48"
+          style="@style/myIconTextViewStyle"
+          android:rotation="270"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:gravity="center"
-        android:text="@string/md_right_arrow"
-        android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/iGapColor"
+        android:text="@string/down_arrow_icon"
         android:textStyle="bold" />
 
     </LinearLayout>

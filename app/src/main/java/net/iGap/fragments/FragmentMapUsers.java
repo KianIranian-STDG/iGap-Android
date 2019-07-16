@@ -22,6 +22,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
@@ -361,9 +362,9 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             }
 
             if (G.selectedLanguage.equals("en")) {
-                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
+                holder.arrow.setRotation(270);
             } else {
-                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
+                holder.arrow.setRotation(90);
             }
 
 //            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
@@ -424,6 +425,15 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
                 distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
 
+                setupTheme();
+            }
+
+            private void setupTheme() {
+
+                Utils.darkModeHandler(username);
+                Utils.darkModeHandler(arrow);
+                Utils.darkModeHandlerGray(distance);
+                Utils.darkModeHandlerGray(comment);
             }
         }
     }

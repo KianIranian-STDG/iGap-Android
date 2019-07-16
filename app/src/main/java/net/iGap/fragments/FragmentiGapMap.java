@@ -168,9 +168,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     private final int ZOOM_LEVEL_NORMAL = 16;
     private final int ZOOM_LEVEL_MAX = 19;
     private final int BOUND_LIMIT_METERS = 5000;
-    private final int GET_NEARBY_DELAY = (int) (DateUtils.SECOND_IN_MILLIS);
     public static boolean isMenuButtonAddShown = false;
-    long firstTap = 0;
     private MapView map;
     private ItemizedOverlay<OverlayItem> latestLocation;
     private ArrayList<Marker> markers = new ArrayList<>();
@@ -183,9 +181,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     private TextView txtSendMessageGps;
     private EditText edtMessageGps;
     private ProgressBar prgWaitingSendMessage;
-    private ProgressBar prgWaitingGetUser, prgWaitingGetUserList;
-    private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
-    private GestureDetector mGestureDetector;
+    private ProgressBar prgWaitingGetUser;
     private String specialRequests;
     private boolean firstEnter = true;
     private boolean canUpdate = true;
@@ -197,18 +193,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     private double westLimitation;
     private double lastLatitude;
     private double lastLongitude;
-    private double lat1;
-    private double lon1;
-    private int lastSpecialRequestsCursorPosition = 0;
-    private long latestUpdateTime = 0;
     private boolean isEndLine = true;
     private String txtComment = "";
     private Realm realmMapUsers;
-    private RecyclerView mRecyclerView;
-    private MapUserAdapter mAdapter;
-    private SlidingUpPanelLayout slidingUpPanelLayout;
-    private View vgSlideUp;
-    private TextView iconSlide;
     private boolean isSendRequestGeoCoordinate = false;
     private String url;
     static boolean changeState = false;
@@ -871,22 +858,12 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             });
 
-            mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
-            mRecyclerView.setItemAnimator(null);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
-            getRealmMapUsers().executeTransaction(new Realm.Transaction() {
+           getRealmMapUsers().executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
                 }
             });
-
-            mAdapter = new MapUserAdapter(getRealmMapUsers().where(RealmGeoNearbyDistance.class).findAll(), true);
-
-            //fastAdapter
-            //mAdapter = new MapUserAdapterA();
-            mRecyclerView.setAdapter(mAdapter);
-
             rootTurnOnGps = (ScrollView) view.findViewById(R.id.scrollView);
             rootTurnOnGps.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -909,7 +886,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             });
 
             prgWaitingGetUser = (ProgressBar) view.findViewById(R.id.prgWaitingGetUser);
-            prgWaitingGetUserList = (ProgressBar) view.findViewById(R.id.prgWaitingGetUserList);
 
             toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
             toggleGps.setOnClickListener(new View.OnClickListener() {
@@ -946,7 +922,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
             prgWaitingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
             txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
-            txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+            txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
             if (G.isDarkTheme) {
                 txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
             } else {
@@ -967,7 +943,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                                 txtSendMessageGps.setVisibility(View.GONE);
                             }
                             prgWaitingSendMessage.setVisibility(View.GONE);
-                            txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                            txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
                             if (G.isDarkTheme) {
                                 txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
                             } else {
@@ -986,7 +962,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
                             txtSendMessageGps.setVisibility(View.VISIBLE);
                             prgWaitingSendMessage.setVisibility(View.GONE);
-                            txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                            txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
                             if (G.isDarkTheme) {
                                 txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
                             } else {
@@ -1004,7 +980,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                         public void run() {
 
                             txtSendMessageGps.setVisibility(View.VISIBLE);
-                            txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                            txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
                             if (G.isDarkTheme) {
                                 txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
                             } else {
@@ -1022,7 +998,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 public void onClick(View v) {
 
 
-                    if (txtSendMessageGps.getText().toString().contains(G.fragmentActivity.getResources().getString(R.string.md_close_button))) {
+                    if (txtSendMessageGps.getText().toString().contains(G.fragmentActivity.getResources().getString(R.string.close_icon))) {
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Clear_Status).content(R.string.Clear_Status_desc).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1030,7 +1006,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                                 new RequestGeoUpdateComment().updateComment("");
                                 edtMessageGps.setText("");
                                 txtSendMessageGps.setVisibility(View.GONE);
-                                txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                                txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
                                 if (G.isDarkTheme) {
                                     txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
                                 } else {
@@ -1055,34 +1031,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                     //edtMessageGps.setText("");
                 }
             });
-            slidingUpPanelLayout = view.findViewById(R.id.sliding_layout);
-            vgSlideUp = view.findViewById(R.id.vgSlideUp);
-            iconSlide = view.findViewById(R.id.ml_user_on_map);
-            iconSlide.setTextColor(Color.parseColor(G.appBarColor));
-
-            slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-                @Override
-                public void onPanelSlide(View panel, float slideOffset) {
-                    vgSlideUp.setAlpha(slideOffset);
-                    if (slideOffset == 1) {
-                        iconSlide.setRotation(180);
-                    } else if (slideOffset == 0) {
-                        iconSlide.setRotation(0);
-                    }
-                }
-
-                @Override
-                public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                    if (newState == SlidingUpPanelLayout.PanelState.DRAGGING && mAdapter != null && mAdapter.getItemCount() == 0) {
-                        if (location != null) {
-                            getDistanceLoop(0, false);
-                        } else {
-                            GPSTracker.getGpsTrackerInstance().detectLocation();
-                        }
-                    }
-                }
-            });
-
 
             final String beforChangeComment = edtMessageGps.getText().toString();
 
@@ -1100,7 +1048,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
                         if (!txtComment.equals(s.toString())) {
                             txtSendMessageGps.setVisibility(View.VISIBLE);
-                            txtSendMessageGps.setText(G.context.getString(R.string.md_igap_check));
+                            txtSendMessageGps.setText(G.context.getString(R.string.check_icon));
                             if (G.isDarkTheme) {
                                 txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
                             } else {
@@ -1108,7 +1056,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                             }
                         } else {
                             txtSendMessageGps.setVisibility(View.VISIBLE);
-                            txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                            txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
                             if (G.isDarkTheme) {
                                 txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
                             } else {
@@ -1423,7 +1371,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             firstEnter = false;
             currentLocation(location, true);
             getCoordinateLoop(0, false);
-            getDistanceLoop(0, false);
         }
         mapBounding(location);
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
@@ -1523,21 +1470,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         });
     }
 
-    private void showProgressList(final boolean show) {
-        G.currentActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (prgWaitingGetUserList != null) {
-                    if (show) {
-                        prgWaitingGetUserList.setVisibility(View.VISIBLE);
-                    } else {
-                        prgWaitingGetUserList.setVisibility(View.GONE);
-                    }
-                }
-            }
-        });
-    }
-
     @Override
     public void onErrorGetNearbyCoordinate() {
         showProgress(false);
@@ -1560,9 +1492,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
-                iconSlide.setVisibility(View.VISIBLE);
-                slidingUpPanelLayout.setTouchEnabled(true);
-                mAdapter.updateData(getRealmMapUsers().where(RealmGeoNearbyDistance.class).findAll());
             } else {
                 visibleViewAttention(G.fragmentActivity.getResources().getString(R.string.Visible_Status_text), false);
             }
@@ -1584,8 +1513,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         } else {
             txtDescriptionMap.setVisibility(View.VISIBLE);
         }
-        slidingUpPanelLayout.setTouchEnabled(false);
-        iconSlide.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -1659,7 +1587,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 txtComment = comment;
                 if (G.userId == userIdR && comment.length() > 0) {
                     edtMessageGps.setText(comment);
-                    txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                    txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
                     if (G.isDarkTheme) {
                         txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
                     } else {
@@ -1739,27 +1667,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         return realmMapUsers;
     }
 
-    private void getDistanceLoop(final int delay, final boolean loop) {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (loop && FragmentiGapMap.page == pageUserList) {
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
-                            getDistanceLoop(DEFAULT_LOOP_TIME, true);
-                            showProgressList(true);
-                        }
-                    }, delay);
-                } else {
-                    new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
-                    showProgressList(true);
-                }
-            }
-        }, GET_NEARBY_DELAY);
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -1770,104 +1677,10 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
     @Override
     public void onMapUsersGet() {
-        showProgressList(false);
     }
 
     public enum MarkerColor {
         GRAY, GREEN
-    }
-
-    private class MapUserAdapter extends RealmRecyclerViewAdapter<RealmGeoNearbyDistance, MapUserAdapter.ViewHolder> {
-        MapUserAdapter(RealmResults<RealmGeoNearbyDistance> data, boolean autoUpdate) {
-            super(data, autoUpdate);
-        }
-
-        @Override
-        public MapUserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MapUserAdapter.ViewHolder(inflater.inflate(R.layout.map_user_item, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(final MapUserAdapter.ViewHolder holder, int i) {
-            final RealmGeoNearbyDistance item = getItem(i);
-            if (item == null) {
-                return;
-            }
-            Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
-            if (registeredInfo == null) {
-                realm.close();
-                return;
-            }
-
-            if (G.selectedLanguage.equals("en")) {
-                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
-            } else {
-                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
-            }
-
-            holder.arrow.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.comment.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.distance.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.username.setTextColor(Color.parseColor(G.textTitleTheme));
-
-            holder.layoutMap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (getActivity() != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
-                    }
-                }
-            });
-
-            if (HelperCalander.isPersianUnicode) {
-
-                holder.username.setGravity(Gravity.RIGHT);
-            } else {
-                holder.username.setGravity(Gravity.LEFT);
-            }
-
-            holder.username.setText(registeredInfo.getDisplayName());
-            if (item.isHasComment()) {
-                if (item.getComment() == null || item.getComment().isEmpty()) {
-                    holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
-                    new RequestGeoGetComment().getComment(item.getUserId());
-                } else {
-                    holder.comment.setText(item.getComment());
-                }
-            } else {
-                holder.comment.setText(context.getResources().getString(R.string.comment_no));
-            }
-
-            holder.distance.setText(String.format(getString(R.string.distance), item.getDistance()));
-            if (HelperCalander.isPersianUnicode) {
-                holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
-            }
-            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
-            realm.close();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            public LinearLayout layoutMap;
-            public CircleImageView avatar;
-            public TextView username;
-            public TextView comment;
-            public MaterialDesignTextView arrow;
-            public CustomTextViewMedium distance;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-
-                layoutMap = (LinearLayout) itemView.findViewById(R.id.lyt_map_user);
-                avatar = (CircleImageView) itemView.findViewById(R.id.img_user_avatar_map);
-                username = (TextView) itemView.findViewById(R.id.txt_user_name_map);
-                comment = (TextView) itemView.findViewById(R.id.txt_user_comment_map);
-                arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
-                distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
-
-            }
-        }
     }
 
     @Override
