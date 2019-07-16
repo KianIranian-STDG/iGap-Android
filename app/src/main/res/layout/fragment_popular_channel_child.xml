@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:visibility="visible" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_channel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>

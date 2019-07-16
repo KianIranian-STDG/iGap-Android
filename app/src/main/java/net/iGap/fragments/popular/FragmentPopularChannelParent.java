@@ -64,6 +64,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
                             Slider slider = new Slider(getContext());
+                            slider.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             Slider.init(new ImageLoadingService(getContext()));
                             int finalI = i;
                             slider.postDelayed(new Runnable() {

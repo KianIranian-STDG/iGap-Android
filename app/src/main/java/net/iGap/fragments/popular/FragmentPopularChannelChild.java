@@ -5,15 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterChannelInfoItem;
@@ -32,10 +31,10 @@ import ss.com.bannerslider.Slider;
 
 public class FragmentPopularChannelChild extends BaseFragment {
     private PopularChannelApi popularChannelApi;
-    private int page = 1;
-    private String id;
     private ProgressBar progressBar;
     private View view;
+    private int page = 1;
+    private String id;
 
     @NonNull
     @Override
@@ -44,23 +43,27 @@ public class FragmentPopularChannelChild extends BaseFragment {
         progressBar = view.findViewById(R.id.progress_popular);
         popularChannelApi = ApiServiceProvider.getChannelApi();
         setupViews();
-
         return view;
 
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ScrollView scrollView = view.findViewById(R.id.scroll_channel);
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+        NestedScrollView scrollView = view.findViewById(R.id.scroll_channel);
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onScrollChanged() {
-                Log.i("nazanin", "onScrollChanged: "+scrollView.getScrollY()+"  "+scrollView.getScrollX());
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    setupViews();
+                    Log.i("nazanin", "onScrollChange: ");
+                }
             }
         });
 
     }
+
 
     private void setupViews() {
         popularChannelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
@@ -71,17 +74,18 @@ public class FragmentPopularChannelChild extends BaseFragment {
                 if (response.isSuccessful()) {
                     if (response.body().getInfo().getHasAd()) {
                         Slider slider = new Slider(getContext());
+                        slider.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         Slider.init(new ImageLoadingService(getContext()));
                         slider.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 MainSliderAdapter mainSliderAdapter = new MainSliderAdapter(getContext(), response.body().getInfo().getAdvertisement().getSlides());
+                                slider.setInterval(3000);
                                 slider.setAdapter(mainSliderAdapter);
                                 slider.setSelectedSlide(0);
                                 slider.setLoopSlides(true);
                                 slider.setAnimateIndicators(true);
                                 slider.setIndicatorSize(12);
-                                slider.setInterval(3000);
                             }
                         }, 0);
                         linearLayoutItemContainerChild.addView(slider);
@@ -90,7 +94,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                 }
 
                 RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
-                categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
+                categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false));
                 LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams1.setMargins(0, 8, 0, 8);
                 categoryRecyclerViewChild.setLayoutParams(layoutParams1);
@@ -112,9 +116,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
             public void onFailure(Call<ChildChannel> call, Throwable t) {
             }
         });
-
     }
-
 
     public void setId(String id) {
         this.id = id;
