@@ -6,7 +6,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -79,11 +78,8 @@ public class FragmentActivationViewModel extends ViewModel {
 
     public void loginButtonOnClick(String enteredCode) {
         closeKeyword.setValue(true);
-        Log.wtf(this.getClass().getName(), "loginButtonOnClick: " + enteredCode);
         if (enteredCode.length() == 5) {
-            Log.wtf(this.getClass().getName(), "loginButtonOnClick: " + enteredCode);
             if (G.socketConnection) {
-                Log.wtf(this.getClass().getName(), "loginButtonOnClick: " + enteredCode);
                 showLoading.setValue(true);
                 userVerification(enteredCode);
             } else {
@@ -130,10 +126,7 @@ public class FragmentActivationViewModel extends ViewModel {
     }
 
     public String receiveVerifySms(String message) {
-        Log.wtf(this.getClass().getName(), "receiveVerifySms: " + message);
-        String verificationCode = HelperString.regexExtractValue(message, repository.getRegexFetchCodeVerification());
-        Log.wtf(this.getClass().getName(), "verificationCode: " + verificationCode);
-        return verificationCode;
+        return HelperString.regexExtractValue(message, repository.getRegexFetchCodeVerification());
     }
 
     private void requestRegister() {

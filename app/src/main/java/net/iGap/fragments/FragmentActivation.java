@@ -160,10 +160,8 @@ public class FragmentActivation extends BaseFragment {
             smsReceiver.setOTPListener(new SMSReceiver.OTPReceiveListener() {
                 @Override
                 public void onOTPReceived(String message) {
-                    Log.wtf(this.getClass().getName(), "onOTPReceived");
                     try {
                         if (message != null && message.length() > 0) {
-                            Log.wtf(this.getClass().getName(), "message: " + message);
                             setActivationCode(viewModel.receiveVerifySms(message));
                         }
                     } catch (Exception e1) {
@@ -201,15 +199,12 @@ public class FragmentActivation extends BaseFragment {
     }
 
     private void setActivationCode(String code) {
-        Log.wtf(this.getClass().getName(), "code: " + code);
         if (code.length() == 5) {
-            Log.wtf(this.getClass().getName(), "set: ");
             binding.activationCodeEditText1.setText(String.valueOf(code.charAt(0)));
             binding.activationCodeEditText2.setText(String.valueOf(code.charAt(1)));
             binding.activationCodeEditText3.setText(String.valueOf(code.charAt(2)));
             binding.activationCodeEditText4.setText(String.valueOf(code.charAt(3)));
             binding.activationCodeEditText5.setText(String.valueOf(code.charAt(4)));
-            Log.wtf(this.getClass().getName(), "set: ");
         }
     }
 
@@ -344,14 +339,12 @@ public class FragmentActivation extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.wtf(this.getClass().getName(), "s: " + s);
                 if (s.length() == 1) {
                     String message = binding.activationCodeEditText1.getEditableText().toString() +
                             binding.activationCodeEditText2.getEditableText().toString() +
                             binding.activationCodeEditText3.getEditableText().toString() +
                             binding.activationCodeEditText4.getEditableText().toString() +
                             binding.activationCodeEditText5.getEditableText().toString();
-                    Log.wtf(this.getClass().getName(), "message: " + message);
                     viewModel.loginButtonOnClick(message);
                 } else {
                     binding.activationCodeEditText4.requestFocus();
