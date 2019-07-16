@@ -208,6 +208,7 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 android:textColor="@color/green"
                 android:textSize="@dimen/dp16"
+                android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
                 app:backgroundTint="@color/white"
                 app:cornerRadius="@dimen/dp18"
                 app:layout_constraintBottom_toBottomOf="parent"
