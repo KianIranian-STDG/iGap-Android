@@ -62,15 +62,29 @@
             android:layout_height="0dp"
             android:background="@drawable/add_image_background"
             android:onClick="@{()->viewModel.selectAvatarOnClick()}"
-            android:src="@mipmap/pu_camera"
+            app:srcCompat="@drawable/ic_camera_holder"
             app:avatarImage="@{viewModel.avatarImagePath}"
             app:civ_border_width="0dp"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@id/reagentPhoneNumber"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toRightOf="@id/name"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pu_txt_title_desc"
             app:layout_constraintWidth_percent=".25" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ng_profile_circle_image_holder"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:srcCompat="@drawable/ic_camera_holder"
+            android:padding="@dimen/dp32"
+            android:scaleType="fitCenter"
+            android:visibility="@{viewModel.prgVisibility}"
+            app:layout_constraintStart_toStartOf="@id/pu_profile_circle_image"
+            app:layout_constraintEnd_toEndOf="@id/pu_profile_circle_image"
+            app:layout_constraintTop_toTopOf="@id/pu_profile_circle_image"
+            app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/name"
