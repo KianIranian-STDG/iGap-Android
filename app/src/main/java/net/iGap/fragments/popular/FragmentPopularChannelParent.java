@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -28,7 +29,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.PopularChannel.Category;
 import net.iGap.model.PopularChannel.ParentChannel;
-import net.iGap.model.PopularChannel.Slide;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +40,6 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
     private HelperToolbar toolbar;
     private PopularChannelApi api;
     private View rootView;
-    private Slide slide;
 
     @NonNull
     @Override
@@ -147,7 +146,8 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
             @Override
             public void onFailure(Call<ParentChannel> call, Throwable t) {
-
+                Toast toast = Toast.makeText(getContext(), "No Response", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
 

@@ -18,6 +18,8 @@ public class Channel {
     private String mSlug;
     @SerializedName("title")
     private String mTitle;
+    @SerializedName("titleEn")
+    private String mTitleEn;
 
     public List<String> getCategories() {
         return mCategories;
@@ -57,6 +59,14 @@ public class Channel {
 
     public void setTitle(String title) {
         mTitle = title;
+    }
+
+    public String getTitleEn() {
+        return mTitleEn;
+    }
+
+    public void setTitleEn(String titleEn) {
+        mTitleEn = titleEn;
     }
 
 }

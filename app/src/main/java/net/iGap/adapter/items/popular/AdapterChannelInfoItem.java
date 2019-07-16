@@ -26,9 +26,9 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     private List<Channel> channelList;
     private Context context;
 
-    public AdapterChannelInfoItem(Context context) {
+    public AdapterChannelInfoItem(Context context, List<Channel> channelList) {
         this.context = context;
-
+        this.channelList = channelList;
     }
 
     public void setChannelList(List<Channel> channelList) {
@@ -37,8 +37,11 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     }
 
     public void addChannelList(List<Channel> channelList) {
-      this.channelList.addAll(channelList);
-      notifyDataSetChanged();
+        this.channelList = channelList;
+        Log.i("QQQ", "addChannelList: " + channelList);
+        Log.i("QQQ", "this.channelList: " + this.channelList);
+        this.channelList.addAll(channelList);
+        notifyDataSetChanged();
     }
 
     @NonNull
