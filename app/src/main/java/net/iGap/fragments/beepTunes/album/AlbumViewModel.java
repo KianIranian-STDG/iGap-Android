@@ -77,7 +77,7 @@ public class AlbumViewModel extends BaseViewModel {
     }
 
     @Override
-    public void onCreate() {
+    public void onCreateViewModel() {
 
     }
 

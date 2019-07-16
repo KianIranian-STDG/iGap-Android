@@ -6,7 +6,7 @@ public abstract class BaseViewModel extends ViewModel {
 
 
     public BaseViewModel() {
-        onCreate();
+        onCreateViewModel();
     }
 
     @Override
@@ -15,7 +15,7 @@ public abstract class BaseViewModel extends ViewModel {
         onDestroy();
     }
 
-    public abstract void onCreate();
+    public abstract void onCreateViewModel();
 
     public abstract void onStart();
 
