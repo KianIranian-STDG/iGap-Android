@@ -23,6 +23,8 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel {
             for (int i = 0; i < 10; i++) {
                 tmp.add("item " + i);
             }
+            showLoadingView.set(View.GONE);
+            showMainView.set(View.VISIBLE);
             locationList.postValue(tmp);
         }, 2000);
     }

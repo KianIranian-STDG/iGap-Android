@@ -34,11 +34,11 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<IGashtLocati
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.itemTitleTextView.setText("برج میلاد");
         viewHolder.itemDestantTextView.setText("فاصله 2.3 کیلوکتر");
-        viewHolder.itemLikeCountTextView.setText("");
-        viewHolder.itemVisitTimeTextView.setText("");
-        viewHolder.itemPriceTextView.setText("");
-        viewHolder.itemPriceForeignTextView.setText("");
-        Picasso.get().load("").placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).into(viewHolder.itemImageView);
+        viewHolder.itemLikeCountTextView.setText("126");
+        viewHolder.itemVisitTimeTextView.setText("ساعت بازدید: 9 الی 23");
+        viewHolder.itemPriceTextView.setText("قیمت برای هر نفر: 25000 تومان");
+        viewHolder.itemPriceForeignTextView.setText("قیمت برای گردشگر خارجی: 2 دلار");
+        Picasso.get().load("test").placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).fit().centerCrop().into(viewHolder.itemImageView);
         viewHolder.addToFavoriteButton.setOnClickListener(v -> {
 
         });

@@ -10,6 +10,7 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -84,6 +85,7 @@
                     style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"
                     android:text="@string/close_icon" />
@@ -109,6 +111,7 @@
                     style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:onClick="@{()->viewModel.onSearchClick()}"
                     android:text="@string/search_icon" />

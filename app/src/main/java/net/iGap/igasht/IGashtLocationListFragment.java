@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtLocationBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 public class IGashtLocationListFragment extends Fragment {
 
@@ -38,6 +41,29 @@ public class IGashtLocationListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.toolbar.addView(HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.score_star_icon,R.string.history_icon)
+                .setSearchBoxShown(false)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+
+                    }
+
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+
+                    }
+                }).getView());
+
+        binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(),DividerItemDecoration.VERTICAL));
         binding.locationListView.setAdapter(new IGashtLocationListAdapter());
 
         viewModel.getLocationList().observe(getViewLifecycleOwner(), data -> {

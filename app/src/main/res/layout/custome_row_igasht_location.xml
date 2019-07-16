@@ -30,6 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/red"
+        android:textSize="@dimen/dp22"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/itemImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/itemLikeIcon" />
@@ -101,7 +103,7 @@
         android:id="@+id/buyTicketButton"
         style="?iGapButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp48"
         android:layout_marginTop="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp8"
         android:text="@string/igasht_buy_ticket_title"
