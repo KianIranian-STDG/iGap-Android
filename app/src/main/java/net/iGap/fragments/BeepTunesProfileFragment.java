@@ -32,10 +32,12 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        TextView userName = rootView.findViewById(R.id.tv_userProfile_userName);
+        userName.setText(G.displayName);
         profileImage = rootView.findViewById(R.id.iv_userProfile_userImage);
         TextView perchesList = rootView.findViewById(R.id.tv_userProfile_downloads);
         perchesList.setOnClickListener(v -> {
-            new HelperFragment(getChildFragmentManager(),new PurchaseFragment()).setReplace(false).load();
+
         });
 
     }

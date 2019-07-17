@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesAdapter;
 import net.iGap.fragments.BaseFragment;
@@ -17,6 +18,8 @@ import net.iGap.fragments.BeepTunesProfileFragment;
 import net.iGap.fragments.beepTunes.album.AlbumFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
 
@@ -67,6 +70,9 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
                 .setLeftIcon(R.string.back_icon);
 
         viewGroup.addView(helperToolbar.getView());
+
+        avatarHandler.getAvatar(new ParamWithAvatarType(helperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+
     }
 
     @Override
