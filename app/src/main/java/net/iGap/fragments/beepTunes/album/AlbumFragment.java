@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
@@ -100,6 +99,9 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                 statusTv.setVisibility(View.VISIBLE);
             }
         });
+
+        actionButton.setOnClickListener(v -> viewModel.onActionButtonClick(album));
+
     }
 
     private void setUpViews() {

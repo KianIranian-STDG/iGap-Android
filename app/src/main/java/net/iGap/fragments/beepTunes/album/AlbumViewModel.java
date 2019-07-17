@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.Track;
@@ -17,13 +18,19 @@ import retrofit2.Response;
 
 public class AlbumViewModel extends BaseViewModel {
 
+    public static final int NOT_PURCHASED = 0;
+    public static final int PURCHASED = 1;
+    public static final int FREE = 1;
+    public static final int PURCHESED_NOT_DOWNLOAD = 2;
+    public static final int PURCHESED_AND_DOWNLOAD = 3;
+    public static final int PURCHESED_UNSUCCESSFUL = 4;
+
     private static final String TAG = "aabolfazlAlbum";
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> albumStatus = new MutableLiveData<>();
-
 
     public void getAlbumSong(long id) {
         progressMutableLiveData.postValue(true);
@@ -61,6 +68,10 @@ public class AlbumViewModel extends BaseViewModel {
         });
     }
 
+    public void onActionButtonClick(Album album) {
+
+    }
+
     public MutableLiveData<List<Track>> getTrackMutableLiveData() {
         return trackMutableLiveData;
     }
@@ -71,5 +82,9 @@ public class AlbumViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> getProgressMutableLiveData() {
         return progressMutableLiveData;
+    }
+
+    public MutableLiveData<Integer> getAlbumStatus() {
+        return albumStatus;
     }
 }
