@@ -3,21 +3,22 @@ package net.iGap.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
 
-import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
+
 import java.util.Locale;
 
 public class FragmentActivationViewModel extends ViewModel {
 
-    public MutableLiveData<String> timerValue = new MutableLiveData<>();
+    public ObservableField<String> timerValue = new ObservableField<>();
     public MutableLiveData<String> verifyCode = new MutableLiveData<>();
     public ObservableBoolean enabledResendCodeButton = new ObservableBoolean(false);
     public MutableLiveData<Boolean> showEnteredCodeError = new MutableLiveData<>();
@@ -37,31 +38,25 @@ public class FragmentActivationViewModel extends ViewModel {
 
     public FragmentActivationViewModel(RegisterRepository repository) {
         this.repository = repository;
-        timerValue.setValue("1:00");
+        timerValue.set("1:00");
         counterTimer();
     }
 
     private void counterTimer() {
-        long time;
-        if (BuildConfig.DEBUG) {
-            time = 60/*2*/ * DateUtils.SECOND_IN_MILLIS;
-        } else {
-            time = 60 * DateUtils.SECOND_IN_MILLIS;
-        }
-
-        countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) {
+        countDownTimer = new CountDownTimer(60 * DateUtils.SECOND_IN_MILLIS, Config.COUNTER_TIMER_DELAY) {
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
-                timerValue.setValue(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                timerValue.set(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
                 currentTimePosition.setValue(seconds * 6);
             }
 
             public void onFinish() {
-                timerValue.setValue(String.format(Locale.getDefault(), "%02d:%02d", 0, 0));
+                timerValue.set(String.format(Locale.getDefault(), "%02d:%02d", 0, 0));
                 currentTimePosition.setValue(60 * 6);
                 enabledResendCodeButton.set(true);
+                cancelTimer();
             }
         };
         countDownTimer.start();
@@ -130,14 +125,8 @@ public class FragmentActivationViewModel extends ViewModel {
         });
     }
 
-    public void receiveVerifySms(String message,boolean setCodeToUi) {
-        String verificationCode = HelperString.regexExtractValue(message, repository.getRegexFetchCodeVerification());
-        if (setCodeToUi){
-            verifyCode.setValue(verificationCode);
-        }
-        if (verificationCode.length() == 5) {
-            loginButtonOnClick(verificationCode);
-        }
+    public String receiveVerifySms(String message) {
+        return HelperString.regexExtractValue(message, repository.getRegexFetchCodeVerification());
     }
 
     private void requestRegister() {

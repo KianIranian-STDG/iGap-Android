@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
@@ -66,7 +65,6 @@ public class FragmentActivation extends BaseFragment {
                 // Ensure you call it only once
                 binding.timerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 // Here you can get the size :)
-                Log.wtf("activation", "width: " + binding.timerView.getWidth());
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
                 set.constrainCircle(binding.timerPosition.getId(), binding.timerView.getId(), binding.timerView.getWidth() / 2, 0);
@@ -162,10 +160,9 @@ public class FragmentActivation extends BaseFragment {
             smsReceiver.setOTPListener(new SMSReceiver.OTPReceiveListener() {
                 @Override
                 public void onOTPReceived(String message) {
-
                     try {
                         if (message != null && message.length() > 0) {
-                            viewModel.receiveVerifySms(message,true);
+                            setActivationCode(viewModel.receiveVerifySms(message));
                         }
                     } catch (Exception e1) {
                         e1.getStackTrace();
@@ -203,11 +200,11 @@ public class FragmentActivation extends BaseFragment {
 
     private void setActivationCode(String code) {
         if (code.length() == 5) {
-            binding.activationCodeEditText1.setText(code.charAt(0));
-            binding.activationCodeEditText2.setText(code.charAt(1));
-            binding.activationCodeEditText3.setText(code.charAt(2));
-            binding.activationCodeEditText4.setText(code.charAt(3));
-            binding.activationCodeEditText5.setText(code.charAt(4));
+            binding.activationCodeEditText1.setText(String.valueOf(code.charAt(0)));
+            binding.activationCodeEditText2.setText(String.valueOf(code.charAt(1)));
+            binding.activationCodeEditText3.setText(String.valueOf(code.charAt(2)));
+            binding.activationCodeEditText4.setText(String.valueOf(code.charAt(3)));
+            binding.activationCodeEditText5.setText(String.valueOf(code.charAt(4)));
         }
     }
 
@@ -348,7 +345,7 @@ public class FragmentActivation extends BaseFragment {
                             binding.activationCodeEditText3.getEditableText().toString() +
                             binding.activationCodeEditText4.getEditableText().toString() +
                             binding.activationCodeEditText5.getEditableText().toString();
-                    viewModel.receiveVerifySms(message,false);
+                    viewModel.loginButtonOnClick(message);
                 } else {
                     binding.activationCodeEditText4.requestFocus();
                 }
