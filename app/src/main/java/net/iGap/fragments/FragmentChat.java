@@ -6000,6 +6000,9 @@ public class FragmentChat extends BaseFragment
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        if (getActivity() == null && getActivity().isFinishing() && !isAdded())
+                                            return;
+
                                         if (progress == 100) {
                                             onStickerItemDownloaded.onStickerItemDownload(token);
                                         }
@@ -6024,6 +6027,9 @@ public class FragmentChat extends BaseFragment
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        if (getActivity() == null && getActivity().isFinishing() && !isAdded())
+                                            return;
+
                                         if (progress == 100) {
                                             onStickerAvatarDownloaded.onStickerAvatarDownload(token);
                                         }
