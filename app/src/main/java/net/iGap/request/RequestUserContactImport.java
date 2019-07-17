@@ -10,6 +10,7 @@
 
 package net.iGap.request;
 
+import net.iGap.G;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserContactsImport;
 
@@ -62,7 +63,10 @@ public class RequestUserContactImport {
 
             userContactsImport.setForce(force);
             userContactsImport.addContacts(i, contact);
+
         }
+
+        if (G.localHashContact != null) userContactsImport.setContactHash(G.localHashContact);
 
         return userContactsImport;
     }

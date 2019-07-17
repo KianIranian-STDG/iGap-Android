@@ -51,6 +51,7 @@ public class UserLoginResponse extends MessageHandler {
         super.handler();
         HelperConnectionState.connectionState(ConnectionState.IGAP);
         ProtoUserLogin.UserLoginResponse.Builder builder = (ProtoUserLogin.UserLoginResponse.Builder) message;
+        G.serverHashContact = builder.getContactHash() ;
       /*builder.getDeprecatedClient();
         builder.getSecondaryNodeName();
         builder.getUpdateAvailable();*/
