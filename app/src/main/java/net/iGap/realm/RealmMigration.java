@@ -536,7 +536,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 33
+        if (oldVersion == 33) {
             RealmObjectSchema realmCallLog = schema.get(RealmCallLog.class.getSimpleName());
             if (realmCallLog != null) {
                 if (realmCallLog.hasField("name")) {
@@ -557,6 +557,15 @@ public class RealmMigration implements io.realm.RealmMigration {
                         addField("offerTime", int.class, FieldAttribute.REQUIRED).
                         addField("duration", int.class, FieldAttribute.REQUIRED);
             }
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 34
+            RealmObjectSchema realmCallLog = schema.get(RealmCallLog.class.getSimpleName());
+            if (realmCallLog != null) {
+                realmCallLog.addField(RealmCallLogFields.LOG_ID, long.class, FieldAttribute.REQUIRED);
+            }
+
             oldVersion++;
         }
     }
