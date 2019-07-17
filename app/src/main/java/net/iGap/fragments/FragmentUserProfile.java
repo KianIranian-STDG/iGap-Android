@@ -229,9 +229,9 @@ public class FragmentUserProfile extends BaseFragment {
             }
         });
 
-        viewModel.goToChatPage.observe(getViewLifecycleOwner(), roomId -> {
-            if (getActivity() != null && roomId != null) {
-                new GoToChatActivity(roomId).startActivity(getActivity());
+        viewModel.goToChatPage.observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                new GoToChatActivity(data.getRoomId()).setPeerID(data.getPeerId()).startActivity(getActivity());
             }
         });
 
@@ -262,6 +262,12 @@ public class FragmentUserProfile extends BaseFragment {
         viewModel.resetApp.observe(getViewLifecycleOwner(), isReset -> {
             if (getActivity() instanceof ActivityEnhanced && isReset != null && isReset) {
                 ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
+            }
+        });
+
+        viewModel.showError.observe(getViewLifecycleOwner(), message -> {
+            if (message != null) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -94,8 +94,6 @@ import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventListener, OnUserAvatarResponse {
 
-    private final String TAG = UserProfileViewModel.class.getName();
-
     private ObservableField<String> appVersion = new ObservableField<>("");
     private ObservableField<String> userPhoneNumber = new ObservableField<>();
     private ObservableLong currentCredit = new ObservableLong(0);
@@ -130,10 +128,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
     public SingleLiveEvent<DeleteAvatarModel> deleteAvatar = new SingleLiveEvent<>();
     public SingleLiveEvent<ChangeImageModel> setUserAvatarPath = new SingleLiveEvent<>();
-    public SingleLiveEvent<Long> goToChatPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<GoToChatModel> goToChatPage = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> isEditProfile = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> showDialogChooseImage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> resetApp = new SingleLiveEvent<>();
+    public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -150,6 +149,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public String pathSaveImage;
     private long idAvatar;
     private AvatarHandler avatarHandler;
+
+    private int retryRequestTime = -1;
 
     //Todo: fixed it
     private int getIvanScoreTime = 0;
@@ -355,28 +356,45 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCloudMessageClick() {
-        final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, G.userId).findFirst();
+        showLoading.set(View.VISIBLE);
+        retryRequestTime++;
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userInfo.getUserId()).findFirst();
         if (realmRoom != null) {
-            goToChatPage.setValue(realmRoom.getId());
+            showLoading.set(View.GONE);
+            goToChatPage.setValue(new GoToChatModel(realmRoom.getId(), userInfo.getUserId()));
         } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(ProtoGlobal.Room room) {
-                    goToChatPage.setValue(room.getId());
-                    G.onChatGetRoom = null;
-                }
+            if (retryRequestTime < 3) {
+                G.onChatGetRoom = new OnChatGetRoom() {
+                    @Override
+                    public void onChatGetRoom(ProtoGlobal.Room room) {
+                        G.onChatGetRoom = null;
+                        G.handler.post(() -> {
+                            showLoading.set(View.GONE);
+                            goToChatPage.postValue(new GoToChatModel(room.getId(),userInfo.getUserId()));
+                        });
+                    }
 
-                @Override
-                public void onChatGetRoomTimeOut() {
+                    @Override
+                    public void onChatGetRoomTimeOut() {
 
-                }
+                    }
 
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                }
-            };
-            new RequestChatGetRoom().chatGetRoom(G.userId);
+                    @Override
+                    public void onChatGetRoomError(int majorCode, int minorCode) {
+                        if (majorCode == 5 && minorCode == 1) {
+                            G.handler.postDelayed(() -> onCloudMessageClick(), 2000);
+                        } else {
+                            G.handler.post(() -> showLoading.set(View.GONE));
+                            showError.postValue(R.string.error);
+                        }
+                    }
+                };
+                new RequestChatGetRoom().chatGetRoom(userInfo.getUserId());
+            } else {
+                showLoading.set(View.GONE);
+                showError.setValue(R.string.error);
+                retryRequestTime = -1;
+            }
         }
     }
 
@@ -521,7 +539,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void emailTextChangeListener(String newEmail) {
         if (isEditMode()) {
-            Log.wtf(TAG, "emailTextChangeListener: " + newEmail);
             if (!newEmail.equals(currentUserEmail)) {
                 editProfileIcon.set(R.string.check_icon);
                 emailErrorMessage.set(R.string.empty_error_message);
@@ -536,7 +553,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void bioTextChangeListener(String newBio) {
         if (isEditMode()) {
-            Log.wtf(TAG, "bioTextChangeListener: " + newBio);
             if (!currentBio.equals(newBio)) {
                 editProfileIcon.set(R.string.check_icon);
             } else {
@@ -549,7 +565,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void onCheckedListener(int checkedId) {
         if (isEditMode()) {
-            Log.wtf(TAG, "onCheckedListener: " + checkedId);
             if (checkedId != currentGender) {
                 editProfileIcon.set(R.string.check_icon);
             } else {
@@ -920,6 +935,24 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
         public long getAvatarId() {
             return avatarId;
+        }
+    }
+
+    public class GoToChatModel {
+        private long roomId;
+        private long peerId;
+
+        public GoToChatModel(long roomId, long peerId) {
+            this.roomId = userId;
+            this.peerId = peerId;
+        }
+
+        public long getRoomId() {
+            return roomId;
+        }
+
+        public long getPeerId() {
+            return peerId;
         }
     }
 }
