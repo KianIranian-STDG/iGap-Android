@@ -19,6 +19,16 @@ public class KuknosEntryOptionVM extends ViewModel {
         }
     }
 
+    public void onNewTokenClick() {
+        goNewTPage.setValue(true);
+    }
+
+    public void onRestoreTokenClick() {
+        goRestoreTPage.setValue(true);
+    }
+
+    // Setter and Getter
+
     public MutableLiveData<Boolean> getGoNewTPage() {
         return goNewTPage;
     }
@@ -33,14 +43,6 @@ public class KuknosEntryOptionVM extends ViewModel {
 
     public void setGoRestoreTPage(MutableLiveData<Boolean> goRestoreTPage) {
         this.goRestoreTPage = goRestoreTPage;
-    }
-
-    public void onNewTokenClick() {
-        goNewTPage.setValue(true);
-    }
-
-    public void onRestoreTokenClick() {
-        goRestoreTPage.setValue(true);
     }
 
 }

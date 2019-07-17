@@ -2,6 +2,8 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.os.Handler;
+import android.util.Log;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -12,12 +14,13 @@ public class KuknosSignupInfoVM extends ViewModel {
     private MutableLiveData<KuknosSignupM> kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-    private MutableLiveData<Boolean> AdvancedPage;
     private MutableLiveData<Integer> checkUsernameState;
+    private MutableLiveData<Boolean> progressSendDServerState;
     private String username;
     private String name;
     private String family;
     private String email;
+    private boolean usernameIsValid = false;
 
     public KuknosSignupInfoVM() {
         //TODO clear hard code
@@ -33,29 +36,33 @@ public class KuknosSignupInfoVM extends ViewModel {
         if (nextPage == null) {
             nextPage = new MutableLiveData<Boolean>();
         }
-        if (AdvancedPage == null) {
-            AdvancedPage = new MutableLiveData<Boolean>();
-        }
         if (checkUsernameState == null) {
             checkUsernameState = new MutableLiveData<Integer>();
             checkUsernameState.setValue(-1);
+        }
+        if (progressSendDServerState == null) {
+            progressSendDServerState = new MutableLiveData<Boolean>();
+            progressSendDServerState.setValue(false);
         }
     }
 
     public void onSubmitBtn() {
 
-        checkUsername();
-        checkEmail();
+        if (!checkEmail()) {
+            return;
+        }
+        if (usernameIsValid == true) {
+            sendDataServer();
+            return;
+        }
+        isUsernameValid(true);
 
     }
 
-    public void onAdvancedSecurity() {
-
-    }
-
-    public void checkUsername() {
+    public void isUsernameValid(boolean isCallFromBTN) {
 
         /*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*/
+
         if (username == null) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         }
@@ -64,20 +71,71 @@ public class KuknosSignupInfoVM extends ViewModel {
         }
         else {
             // TODO: fetch data from server for valid username
-            checkUsernameState.setValue(0);
+            checkUsernameServer(isCallFromBTN);
         }
-
     }
 
-    private void checkEmail() {
+    private boolean checkEmail() {
         if (email!= null) {
             if (!email.isEmpty()) {
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     error.setValue(new ErrorM(true, "Invalid Email Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+                    return false;
                 }
+                else
+                    return true;
             }
+            else
+                return true;
         }
+        else
+            return true;
     }
+
+    public void checkUsernameServer(boolean isCallFromBTN) {
+        Log.d("amini", "checkUsernameServer: start");
+        checkUsernameState.setValue(0);
+        // TODO check from server for avalibility
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //success
+                checkUsernameState.setValue(1);
+                usernameIsValid = true;
+                if (isCallFromBTN)
+                    sendDataServer();
+                //error
+//                checkUsernameState.setValue(2);
+//                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
+            }
+        }, 2000);
+    }
+
+    public void cancelUsernameServer() {
+        checkUsernameState.setValue(-1);
+        // TODO cancel current API checking
+    }
+
+    public void sendDataServer() {
+        Log.d("amini", "sendDataServer: start");
+        progressSendDServerState.setValue(true);
+        // TODO: send data to server
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressSendDServerState.setValue(false);
+
+                //success
+                nextPage.setValue(true);
+                //error
+
+            }
+        }, 2000);
+    }
+
+    //Setter and Getter
 
     public MutableLiveData<KuknosSignupM> getKuknosSignupM() {
         return kuknosSignupM;
@@ -135,19 +193,27 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public MutableLiveData<Boolean> getAdvancedPage() {
-        return AdvancedPage;
-    }
-
-    public void setAdvancedPage(MutableLiveData<Boolean> advancedPage) {
-        AdvancedPage = advancedPage;
-    }
-
     public MutableLiveData<Integer> getCheckUsernameState() {
         return checkUsernameState;
     }
 
     public void setCheckUsernameState(MutableLiveData<Integer> checkUsernameState) {
         this.checkUsernameState = checkUsernameState;
+    }
+
+    public MutableLiveData<Boolean> getProgressSendDServerState() {
+        return progressSendDServerState;
+    }
+
+    public void setProgressSendDServerState(MutableLiveData<Boolean> progressSendDServerState) {
+        this.progressSendDServerState = progressSendDServerState;
+    }
+
+    public boolean isUsernameIsValid() {
+        return usernameIsValid;
+    }
+
+    public void setUsernameIsValid(boolean usernameIsValid) {
+        this.usernameIsValid = usernameIsValid;
     }
 }

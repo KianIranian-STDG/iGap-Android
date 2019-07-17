@@ -117,7 +117,6 @@ public class KuknosRestoreFrag extends BaseFragment {
         });
     }
 
-
     private void progressState() {
         kuknosRestoreVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override

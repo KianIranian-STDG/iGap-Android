@@ -1932,9 +1932,21 @@
     <string name="kuknos_SignupInfo_email">Email Address</string>
     <string name="kuknos_SignupInfo_submitBtn">Submit</string>
     <string name="kuknos_SignupInfo_checkUsername">checking....</string>
+    <string name="kuknos_SignupInfo_submitConnecting">Saving...</string>
     <string name="kuknos_SignupInfo_advSettingBtn">Advanced Security ></string>
     <string name="kuknos_SignupInfo_errorUsernameInvalid">This username is not available.</string>
     <string name="kuknos_SignupInfo_ValidUsername">Good to go</string>
     <string name="kuknos_SignupInfo_errorEmailInvalid">Email Format is incorrect.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
+    <string name="kuknos_RecoverySK_Title">Recovery keys</string>
+    <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
+    <string name="kuknos_RecoverySK_Btn">Okay, I have written it down.</string>
+    <string name="kuknos_RecoverySK_Hint">water Blue brown ...</string>
+    <string name="kuknos_RecoverySK_Error_empty_str">Enter your key stream</string>
+    <string name="kuknos_RecoverySK_Error_invalid_str">Your key stream length is not long enough.</string>
+    <string name="kuknos_RecoverySK_Error_Snack">Ok</string>
+    <string name="kuknos_SetPass_title">Create a 4 digit PIN</string>
+    <string name="kuknos_SetPass_message">This 4 numeric PIN will be used to encrypt your secret keys. Please make sure you choose a PIN that is difficult to guess for others.</string>
+    <string name="kuknos_SetPass_submit">Submit</string>
+    <string name="kuknos_SetPass_error">Please enter your PIN code.</string>
 </resources>

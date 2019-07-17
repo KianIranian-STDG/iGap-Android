@@ -7,11 +7,11 @@
     <data>
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosRestoreVM" />
+            type="net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM" />
     </data>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/fragKuknosRContainer"
+        android:id="@+id/fragKuknosRKSContainer"
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,7 +19,7 @@
     <!-- TODO clean min height-->
 
     <LinearLayout
-        android:id="@+id/fragKuknosRToolbar"
+        android:id="@+id/fragKuknosRKSToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragKuknosRToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSToolbar">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -46,11 +46,11 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosRMessage"
+                android:id="@+id/fragKuknosRKSMessage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:text="@string/kuknos_Restore_Title"
+                android:text="@string/kuknos_RecoverySK_Title"
                 android:textStyle="bold"
                 android:textSize="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -60,20 +60,20 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosRDescription"
+                android:id="@+id/fragKuknosRKSDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/kuknos_Restore_Message"
+                android:text="@string/kuknos_RecoverySK_Message"
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRMessage"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSMessage"
                 app:layout_constraintWidth_percent="0.7" />
 
             <android.support.v7.widget.AppCompatEditText
                 style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosRkeysET"
+                android:id="@+id/fragKuknosRKSkeysET"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -82,7 +82,7 @@
                 android:scrollbars="vertical"
                 android:background="@drawable/background_cancel_money_action"
                 android:ems="10"
-                android:hint="@string/kuknos_Restore_Hint"
+                android:hint="@string/kuknos_RecoverySK_Hint"
                 android:text="@={viewmodel.keys}"
                 android:textSize="18dp"
                 android:padding="8dp"
@@ -90,9 +90,10 @@
                 android:inputType="textMultiLine"
                 android:scrollHorizontally="false"
                 android:minLines="3"
+                android:enabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRDescription"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSDescription"
                 app:layout_constraintWidth_percent="0.8" />
 
             <android.support.design.button.MaterialButton
@@ -102,26 +103,42 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:minHeight="58dp"
-                android:text="@string/kuknos_Restore_Btn"
+                android:text="@string/kuknos_RecoverySK_Btn"
                 android:textSize="18dp"
                 android:onClick="@{()->viewmodel.onNext()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRkeysET"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSkeysET"
                 app:layout_constraintWidth_percent="0.7" />
 
             <ProgressBar
-                android:id="@+id/fragKuknosRProgressV"
+                android:id="@+id/fragKuknosRKSProgressV"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:elevation="2dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit"
                 app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
                 app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
                 app:layout_constraintBottom_toBottomOf="@+id/fragKuknosIdSubmit"
                 app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintHeight_percent="0.08"/>
+
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSIAdvSetting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/kuknos_SignupInfo_advSettingBtn"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:onClick="@{()->viewmodel.onAdvancedSecurity()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdSubmit"
+                app:layout_constraintWidth_percent="0.7"/>
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

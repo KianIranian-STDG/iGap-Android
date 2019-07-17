@@ -132,7 +132,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosIdSubmit"
                     app:layout_constraintHorizontal_bias="0.05"
-                    app:layout_constraintHeight_percent="0.1"/>
+                    app:layout_constraintHeight_percent="0.08"/>
 
             </android.support.constraint.ConstraintLayout>
         </ScrollView>

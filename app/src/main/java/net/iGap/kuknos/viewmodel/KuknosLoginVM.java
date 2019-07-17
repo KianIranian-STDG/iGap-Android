@@ -63,9 +63,11 @@ public class KuknosLoginVM extends ViewModel {
                     /*error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
                     progressState.setValue(false);*/
                 }
-            }, 2000);
+            }, 1000);
         }
     }
+
+    // Setter and Getter
 
     public String getUserNum() {
         return userNum;
