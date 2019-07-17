@@ -265,4 +265,7 @@
     <color name="round_buttons_disabled_bg">#F3F3F3</color>
     <color name="tick_background_color">#66000000</color>
 
+    <color name="default_indicator_color_selected">#eeee</color>
+    <color name="default_indicator_color_unselected">#66eeeeee</color>
+
 </resources>

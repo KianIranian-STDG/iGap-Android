@@ -1907,4 +1907,5 @@
     <string name="str_frag_sync_contactTitle">Say Hi to your friends and let them know you are on IGap</string>
     <string name="str_frag_sync_contactWelcome">Welcome to IGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
+    <string name="download_icon">ï</string>
 </resources>

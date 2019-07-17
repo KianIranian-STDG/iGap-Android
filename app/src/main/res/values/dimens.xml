@@ -149,5 +149,10 @@
     <dimen name="toolbar_profile_avatar_size_expanded">@dimen/dp80</dimen>
     <dimen name="toolbar_profile_avatar_size_collapsed">@dimen/dp40</dimen>
 
+    <dimen name="default_indicator_size">8dp</dimen>
+    <dimen name="default_indicator_margins">5dp</dimen>
+    <dimen name="default_dash_indicator_width">12dp</dimen>
+    <dimen name="round_square_indicator_radius">2dp</dimen>
+    <dimen name="max_slider_indicator_size">16dp</dimen>
 
 </resources>

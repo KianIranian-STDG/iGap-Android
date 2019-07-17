@@ -1,4 +1,4 @@
-package net.iGap.fragments;
+package net.iGap.fragments.beepTunes;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,36 +9,35 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
-public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
+public class PurchaseFragment extends BaseFragment implements ToolbarListener {
+
     private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_beep_tunes, container, false);
+        rootView = inflater.inflate(R.layout.fragment_beeptunes_purchase, container);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
-        initToolBar(toolBar);
-
-
-    }
-
-    private void initToolBar(ViewGroup viewGroup) {
-        HelperToolbar helperToolbar = HelperToolbar.create()
+        HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setSearchBoxShown(true)
-                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
                 .setListener(this)
-                .setLeftIcon(R.string.back_icon);
-        viewGroup.addView(helperToolbar.getView());
+                .setDefaultTitle("لیست دانلود ها");
+
+        LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_purchase_tollBar);
+        toolBarContainer.addView(toolbar.getView());
+
+
+
+
     }
 
     @Override

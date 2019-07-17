@@ -146,7 +146,7 @@ public class BaseFragment extends SwipeBackFragment {
         }
 
         if (G.typeface_iGap == null) {
-            G.typeface_iGap = Typeface.createFromAsset(G.context.getAssets(), "fonts/igap.ttf");
+            G.typeface_iGap = Typeface.createFromAsset(G.context.getAssets(), "fonts/font_icon.ttf");
         }
     }
 

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
+import net.iGap.helper.ImageLoadingService;
 import net.iGap.module.AndroidUtils;
 
 import static net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture;
@@ -22,6 +23,13 @@ public class BindingAdapter {
             } else {
                 Picasso.get().load(AndroidUtils.suitablePath(avatarImage.imagePath)).into(imageView);
             }
+        }
+    }
+
+    @android.databinding.BindingAdapter(value = {"imageUrl"})
+    public static void setImage(ImageView imageView, String imageUrl) {
+        if (imageUrl != null) {
+            ImageLoadingService.load(imageUrl, imageView);
         }
     }
 
