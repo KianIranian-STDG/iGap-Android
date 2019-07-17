@@ -1901,4 +1901,5 @@
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
     <string name="delete_all">Delete All</string>
+    <string name="download_icon">ï</string>
 </resources>

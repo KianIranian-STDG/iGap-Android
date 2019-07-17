@@ -21,8 +21,7 @@ public class AlbumViewModel extends BaseViewModel {
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
-    private MutableLiveData<Boolean> songProgressMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> albumProgressMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
@@ -49,12 +48,13 @@ public class AlbumViewModel extends BaseViewModel {
 
     }
 
+
     public void getAlbumSong(long id) {
-        songProgressMutableLiveData.postValue(true);
+        progressMutableLiveData.postValue(true);
         apiService.getAlbumTrack(id).enqueue(new Callback<AlbumTrack>() {
             @Override
             public void onResponse(Call<AlbumTrack> call, Response<AlbumTrack> response) {
-                songProgressMutableLiveData.postValue(false);
+                progressMutableLiveData.postValue(false);
                 if (response.isSuccessful()) {
                     trackMutableLiveData.postValue(response.body().getData());
                 }
@@ -62,17 +62,17 @@ public class AlbumViewModel extends BaseViewModel {
 
             @Override
             public void onFailure(Call<AlbumTrack> call, Throwable t) {
-                songProgressMutableLiveData.postValue(false);
+                progressMutableLiveData.postValue(false);
             }
         });
     }
 
     public void getArtistOtherAlbum(long id) {
-        albumProgressMutableLiveData.postValue(true);
+        progressMutableLiveData.postValue(true);
         apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
             @Override
             public void onResponse(Call<Albums> call, Response<Albums> response) {
-                albumProgressMutableLiveData.postValue(false);
+                progressMutableLiveData.postValue(false);
                 if (response.isSuccessful()) {
                     albumMutableLiveData.postValue(response.body());
                 }
@@ -80,7 +80,7 @@ public class AlbumViewModel extends BaseViewModel {
 
             @Override
             public void onFailure(Call<Albums> call, Throwable t) {
-                albumProgressMutableLiveData.postValue(false);
+                progressMutableLiveData.postValue(false);
             }
         });
     }
@@ -93,11 +93,7 @@ public class AlbumViewModel extends BaseViewModel {
         return albumMutableLiveData;
     }
 
-    public MutableLiveData<Boolean> getAlbumProgressMutableLiveData() {
-        return albumProgressMutableLiveData;
-    }
-
-    public MutableLiveData<Boolean> getSongProgressMutableLiveData() {
-        return songProgressMutableLiveData;
+    public MutableLiveData<Boolean> getProgressMutableLiveData() {
+        return progressMutableLiveData;
     }
 }

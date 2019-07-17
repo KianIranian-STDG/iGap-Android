@@ -24,7 +24,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         this.onItemClick = onItemClick;
     }
 
-    void setAlbums(List<Album> albums) {
+    public void setAlbums(List<Album> albums) {
         this.albums = albums;
         notifyDataSetChanged();
     }

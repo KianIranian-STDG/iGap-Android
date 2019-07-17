@@ -332,7 +332,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         }
 
         if (G.typeface_iGap == null) {
-            G.typeface_iGap = Typeface.createFromAsset(getAssets(), "fonts/igap.ttf");
+            G.typeface_iGap = Typeface.createFromAsset(getAssets(), "fonts/font_icon.ttf");
         }
     }
 
