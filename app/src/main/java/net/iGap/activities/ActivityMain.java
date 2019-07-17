@@ -53,6 +53,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -103,6 +104,8 @@ import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperSaveFile;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -114,7 +117,6 @@ import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnClientCondition;
 import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
@@ -175,12 +177,12 @@ import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
-import org.paygear.wallet.OnLanguageWallet;
-import org.paygear.wallet.RaadApp;
-import org.paygear.wallet.WalletActivity;
-import org.paygear.wallet.fragment.PaymentHistoryFragment;
-import org.paygear.wallet.model.Card;
-import org.paygear.wallet.web.Web;
+import org.paygear.RaadApp;
+import org.paygear.WalletActivity;
+import org.paygear.fragment.PaymentHistoryFragment;
+import org.paygear.fragment.ScannerFragment;
+import org.paygear.model.Card;
+import org.paygear.web.Web;
 
 import java.io.File;
 import java.io.IOException;
@@ -201,7 +203,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -350,25 +352,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        closeRealm();
-        if (G.imageLoader != null) {
-            G.imageLoader.clearMemoryCache();
-        }
-        if (G.refreshWalletBalance != null) {
-            G.refreshWalletBalance = null;
-        }
-        RealmRoom.clearAllActions();
-        if (G.onAudioFocusChangeListener != null) {
-            G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_LOSS);
-        }
-        EventManager.getInstance().removeEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
-        try {
-            AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+        if (G.ISOK) {
+            closeRealm();
+            if (G.imageLoader != null) {
+                G.imageLoader.clearMemoryCache();
+            }
+            if (G.refreshWalletBalance != null) {
+                G.refreshWalletBalance = null;
+            }
+            RealmRoom.clearAllActions();
+            if (G.onAudioFocusChangeListener != null) {
+                G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_LOSS);
+            }
+            EventManager.getInstance().removeEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+            try {
+                AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
 
-            am.setRingerMode(G.mainRingerMode);
-        } catch (Exception e) {
+                am.setRingerMode(G.mainRingerMode);
+            } catch (Exception e) {
+            }
         }
-
     }
 
     /**
@@ -424,408 +427,417 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (G.ISOK) {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("android.intent.action.PHONE_STATE");
+            MyPhonStateService myPhonStateService = new MyPhonStateService();
 
-        Log.d("bagi" ,"ActivityMain:onCreate:start");
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.PHONE_STATE");
-        MyPhonStateService myPhonStateService = new MyPhonStateService();
+            registerReceiver(myPhonStateService, intentFilter);
+            G.refreshWalletBalance = this;
 
-        registerReceiver(myPhonStateService, intentFilter);
-        G.refreshWalletBalance = this;
-
-        BroadcastReceiver receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //code...
-            }
-        };
-        IntentFilter ringgerFilter = new IntentFilter(
-                AudioManager.RINGER_MODE_CHANGED_ACTION);
-
-
-        BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //code...
-                if (!G.appChangeRinggerMode) {
-                    AudioManager mainAudioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-                    G.mainRingerMode = mainAudioManager.getRingerMode();
+            BroadcastReceiver receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    //code...
                 }
+            };
+            IntentFilter ringgerFilter = new IntentFilter(
+                    AudioManager.RINGER_MODE_CHANGED_ACTION);
 
+
+            BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    //code...
+                    if (!G.appChangeRinggerMode) {
+                        AudioManager mainAudioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                        G.mainRingerMode = mainAudioManager.getRingerMode();
+                    }
+
+                }
+            };
+
+            registerReceiver(audioManagerReciver, ringgerFilter);
+
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
+                    isChinesPhone();
             }
-        };
-
-        registerReceiver(audioManagerReciver, ringgerFilter);
-
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
-                isChinesPhone();
-        }
 //        setTheme(R.style.AppThemeTranslucent);
 
-        if (G.isFirstPassCode) {
-            openActivityPassCode();
-        }
-        //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-        //isNeedToRegister = true; // continue app even don't have storage permission
-        //isOnGetPermission = true;
-        //}
-        super.onCreate(savedInstanceState);
-
-        RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
-            @Override
-            public void paygearId(String id) {
-
-                new RequestWalletIdMapping().walletIdMapping(id);
+            if (G.isFirstPassCode) {
+                openActivityPassCode();
             }
-        };
+            //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            //isNeedToRegister = true; // continue app even don't have storage permission
+            //isOnGetPermission = true;
+            //}
+            super.onCreate(savedInstanceState);
 
-        EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+            RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
+                @Override
+                public void paygearId(String id) {
 
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        finishActivity = new FinishActivity() {
-            @Override
-            public void finishActivity() {
-                // ActivityChat.this.finish();
+                    new RequestWalletIdMapping().walletIdMapping(id);
+                }
+            };
+
+            EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            finishActivity = new FinishActivity() {
+                @Override
+                public void finishActivity() {
+                    // ActivityChat.this.finish();
+                    finish();
+                }
+            };
+
+            if (isNeedToRegister) {
+
+                Intent intent = new Intent(this, ActivityRegisteration.class);
+                startActivity(intent);
+
                 finish();
-            }
-        };
-
-        if (isNeedToRegister) {
-
-            Intent intent = new Intent(this, ActivityRegisteration.class);
-            startActivity(intent);
-
-            finish();
-            return;
-        }
-
-
-        G.fragmentManager = getSupportFragmentManager();
-
-        //checkAppAccount();
-
-        try {
-            HelperPermission.getPhonePermision(this, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-
-        if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-            isNeedToRegister = true;
-            Intent intent = new Intent(this, ActivityRegisteration.class);
-            startActivity(intent);
-
-            if (mRealm != null && !mRealm.isClosed()) {
-                mRealm.close();
+                return;
             }
 
-            finish();
-            return;
-        }
 
+            G.fragmentManager = getSupportFragmentManager();
 
-        if (!G.userLogin) {
-            /**
-             * set true mFirstRun for get room history after logout and login again
-             */
+            //checkAppAccount();
 
-            //licenceChecker();
-
-            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-            boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
-
-            if (deleteFolderBackground) {
-                deleteContentFolderChatBackground();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                editor.apply();
-            }
-        }
-        setContentView(R.layout.activity_main);
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        if (G.isAppRtl) {
-            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_RTL);
-        } else {
-            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_LTR);
-        }
-
-
-        frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
-        frameMainContainer = (FrameLayout) findViewById(R.id.am_frame_main_container);
-
-        if (G.twoPaneMode) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                G.isLandscape = true;
-            } else {
-                G.isLandscape = false;
-            }
-
-            frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
-            frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
-
-            G.oneFragmentIsOpen = new OneFragmentIsOpen() {
-                @Override
-                public void justOne() {
-
-                    if (frameFragmentContainer.getChildCount() == 0) {
-                        disableSwipe = true;
-                    } else {
-                        disableSwipe = false;
-                    }
-
-
-                }
-            };
-
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int height = displayMetrics.heightPixels;
-            int width = displayMetrics.widthPixels;
-
-            int size = Math.min(width, height) - 50;
-
-            ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
-            lp.width = size;
-            lp.height = size;
-
-
-            designLayout(chatLayoutMode.none);
-
-            frameFragmentBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    onBackPressed();
-                }
-            });
-
-            G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
-                @Override
-                public void onLayout(chatLayoutMode mode) {
-                    designLayout(mode);
-                }
-
-                @Override
-                public boolean getBackChatVisibility() {
-
-                    if (frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE) {
-                        return true;
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void setBackChatVisibility(boolean visibility) {
-
-                    if (true) {
-                        if (frameFragmentBack != null) {
-                            frameFragmentBack.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            };
-
-
-        } else {
-            frameChatContainer.setVisibility(View.GONE);
-        }
-
-        isOpenChatBeforeSheare = false;
-        checkIntent(getIntent());
-
-
-        initTabStrip();
-
-        initFloatingButtonCreateNew();
-
-        arcMenu.setBackgroundTintColor();
-
-        btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-        btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-        btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
-        final G application = (G) getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        mTracker.setScreenName("RoomList");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
-        mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
-
-        MusicPlayer.setMusicPlayer(mediaLayout);
-        MusicPlayer.mainLayout = mediaLayout;
-
-        ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
-
-
-        appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
-        ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).setBehavior(new FixAppBarLayoutBehavior());
-
-        final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);
-
-        appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
-            @Override
-            public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
-                int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 10f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
-                if (lastMarginTop != marginTop) {
-                    lastMarginTop = marginTop;
-                    LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
-                    param.setMargins(0, marginTop, 0, 0);
-                    navigationTabStrip.setLayoutParams(param);
-                }
-                toolbar.clearAnimation();
-                if (moveUp) {
-                    if (toolbar.getAlpha() != 0F) {
-                        toolbar.animate().setDuration(150).alpha(0F).start();
-                    }
-                } else {
-                    if (toolbar.getAlpha() != 1F) {
-                        toolbar.animate().setDuration(150).alpha(1F).start();
-                    }
-                }
-            }
-        });
-
-        initComponent();
-
-        G.onPayment = this;
-
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
-        /**
-         * just do this action once
-         */
-        if (!isGetContactList) {
             try {
-                HelperPermission.getContactPermision(ActivityMain.this, new OnGetPermission() {
-                    @Override
-                    public void Allow() throws IOException {
-                        if (!G.isSendContact) {
-                            G.isSendContact = true;
-                            LoginActions.importContact();
-                        }
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
-                        editor.apply();
-                    }
-
-                    @Override
-                    public void deny() {
-
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
-                        editor.apply();
-
-                        /**
-                         * user not allowed to import contact, so client set
-                         * isSendContact = true for avoid from try again
-                         */
-                        isSendContact = true;
-                    }
-                });
+                HelperPermission.getPhonePermision(this, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        HelperNotification.getInstance().cancelNotification();
-        G.onGroupAvatarResponse = this;
-
-        G.onConvertToGroup = new OpenFragment() {
-            @Override
-            public void openFragmentOnActivity(String type, final Long roomId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentNewGroup fragmentNewGroup = new FragmentNewGroup();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TYPE", "ConvertToGroup");
-                        bundle.putLong("ROOMID", roomId);
-                        fragmentNewGroup.setArguments(bundle);
-
-                        try {
-                            new HelperFragment(fragmentNewGroup).setStateLoss(true).load();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                        lockNavigation();
-                    }
-                });
-            }
-        };
-
-        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
 
-        connectionState();
+            userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
-        initDrawerMenu();
+            if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
+                isNeedToRegister = true;
+                Intent intent = new Intent(this, ActivityRegisteration.class);
+                startActivity(intent);
 
-        checkKeepMedia();
+                if (mRealm != null && !mRealm.isClosed()) {
+                    mRealm.close();
+                }
 
-
-        G.onVerifyNewDevice = new OnVerifyNewDevice() {
-            @Override
-            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device, String deviceName, boolean twoStepVerification) {
-
-                final String content = "" + "App name: " + appName + "\n" + "Build version: " + appBuildVersion + "\n" + "App version: " + appVersion + "\n" + "Platform: " + platform + "\n" + "Platform version: " + platformVersion + "\n" + "Device: " + device + "\n" + "Device name: " + deviceName;
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (HelperCalander.isPersianUnicode) {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
-                        } else {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
-                        }
-                    }
-                });
+                finish();
+                return;
             }
 
-            @Override
-            public void errorVerifyNewDevice(final int majorCode, final int minCode) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                    }
-                });
-            }
-        };
+            if (!G.userLogin) {
+                /**
+                 * set true mFirstRun for get room history after logout and login again
+                 */
 
+                //licenceChecker();
 
-        // Log.i("#token",FirebaseInstanceId.getInstance().getToken().toString());
-        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-        if (backGroundPath.isEmpty()) {
-            getWallpaperAsDefault();
-        }
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-            @Override
-            public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+                boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
 
-                if (response.body() != null) {
-                    if (response.body().getOk()) {
-                        RealmStickers.updateStickers(response.body().getData());
-                    }
+                if (deleteFolderBackground) {
+                    deleteContentFolderChatBackground();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+                    editor.apply();
                 }
             }
-            @Override
-            public void onFailure(Call<StructSticker> call, Throwable t) {
-            }
-        });
+            setContentView(R.layout.activity_main);
 
-        Log.d("bagi" ,"ActivityMain:onCreate:end");
+            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+            if (G.isAppRtl) {
+                ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_RTL);
+            } else {
+                ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_LTR);
+            }
+
+
+            frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
+            frameMainContainer = (FrameLayout) findViewById(R.id.am_frame_main_container);
+
+            if (G.twoPaneMode) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    G.isLandscape = true;
+                } else {
+                    G.isLandscape = false;
+                }
+
+                frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
+                frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
+
+                G.oneFragmentIsOpen = new OneFragmentIsOpen() {
+                    @Override
+                    public void justOne() {
+
+                        if (frameFragmentContainer.getChildCount() == 0) {
+                            disableSwipe = true;
+                        } else {
+                            disableSwipe = false;
+                        }
+
+
+                    }
+                };
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+
+                int size = Math.min(width, height) - 50;
+
+                ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
+                lp.width = size;
+                lp.height = size;
+
+
+                designLayout(chatLayoutMode.none);
+
+                frameFragmentBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        onBackPressed();
+                    }
+                });
+
+                G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
+                    @Override
+                    public void onLayout(chatLayoutMode mode) {
+                        designLayout(mode);
+                    }
+
+                    @Override
+                    public boolean getBackChatVisibility() {
+
+                        if (frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE) {
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    @Override
+                    public void setBackChatVisibility(boolean visibility) {
+
+                        if (true) {
+                            if (frameFragmentBack != null) {
+                                frameFragmentBack.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                };
+
+
+            } else {
+                frameChatContainer.setVisibility(View.GONE);
+            }
+
+            isOpenChatBeforeSheare = false;
+            checkIntent(getIntent());
+
+
+            initTabStrip();
+
+            initFloatingButtonCreateNew();
+
+            arcMenu.setBackgroundTintColor();
+
+            btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+            btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+            btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+
+            mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
+
+            MusicPlayer.setMusicPlayer(mediaLayout);
+            MusicPlayer.mainLayout = mediaLayout;
+
+            ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
+
+
+            appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
+            ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).setBehavior(new FixAppBarLayoutBehavior());
+
+            final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);
+
+            appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
+                @Override
+                public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
+                    int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 10f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
+                    if (lastMarginTop != marginTop) {
+                        lastMarginTop = marginTop;
+                        LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
+                        param.setMargins(0, marginTop, 0, 0);
+                        navigationTabStrip.setLayoutParams(param);
+                    }
+                    toolbar.clearAnimation();
+                    if (moveUp) {
+                        if (toolbar.getAlpha() != 0F) {
+                            toolbar.animate().setDuration(150).alpha(0F).start();
+                        }
+                    } else {
+                        if (toolbar.getAlpha() != 1F) {
+                            toolbar.animate().setDuration(150).alpha(1F).start();
+                        }
+                    }
+                }
+            });
+
+            initComponent();
+
+            G.onPayment = this;
+
+            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
+            /**
+             * just do this action once
+             */
+            if (!isGetContactList) {
+                try {
+                    HelperPermission.getContactPermision(ActivityMain.this, new OnGetPermission() {
+                        @Override
+                        public void Allow() throws IOException {
+                            if (!G.isSendContact) {
+                                G.isSendContact = true;
+                                LoginActions.importContact();
+                            }
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
+                            editor.apply();
+                        }
+
+                        @Override
+                        public void deny() {
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
+                            editor.apply();
+
+                            /**
+                             * user not allowed to import contact, so client set
+                             * isSendContact = true for avoid from try again
+                             */
+                            isSendContact = true;
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            HelperNotification.getInstance().cancelNotification();
+            G.onGroupAvatarResponse = this;
+
+            G.onConvertToGroup = new OpenFragment() {
+                @Override
+                public void openFragmentOnActivity(String type, final Long roomId) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentNewGroup fragmentNewGroup = new FragmentNewGroup();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("TYPE", "ConvertToGroup");
+                            bundle.putLong("ROOMID", roomId);
+                            fragmentNewGroup.setArguments(bundle);
+
+                            try {
+                                new HelperFragment(fragmentNewGroup).setStateLoss(true).load();
+                            } catch (Exception e) {
+                                e.getStackTrace();
+                            }
+                            lockNavigation();
+                        }
+                    });
+                }
+            };
+
+            G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+
+
+            connectionState();
+
+            initDrawerMenu();
+
+            checkKeepMedia();
+
+
+            G.onVerifyNewDevice = new OnVerifyNewDevice() {
+                @Override
+                public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device, String deviceName, boolean twoStepVerification) {
+
+                    final String content = "" + "App name: " + appName + "\n" + "Build version: " + appBuildVersion + "\n" + "App version: " + appVersion + "\n" + "Platform: " + platform + "\n" + "Platform version: " + platformVersion + "\n" + "Device: " + device + "\n" + "Device name: " + deviceName;
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (HelperCalander.isPersianUnicode) {
+                                new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
+                            } else {
+                                new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void errorVerifyNewDevice(final int majorCode, final int minCode) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                }
+            };
+
+            boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
+            if (isDefaultBg){
+                if (G.isDarkTheme){
+                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
+                }else{
+                    getWallpaperAsDefault();
+                }
+            }
+
+            ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+                @Override
+                public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+
+                    if (response.body() != null) {
+                        if (response.body().getOk()) {
+                            RealmStickers.updateStickers(response.body().getData());
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<StructSticker> call, Throwable t) {
+                }
+            });
+        } else {
+           super.onCreate(savedInstanceState);
+           TextView textView = new TextView(this);
+           setContentView(textView);
+           showToast(textView);
+        }
     }
 
+    private void showToast(View view) {
+        Toast.makeText(ActivityMain.this, "نسخه نصب شده مناسب گوشی شما نیست!! \nلطفا از مارکت های معتبر دانلود کنید.", Toast.LENGTH_LONG).show();
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showToast(view);
+            }
+        }, 2000);
+    }
 
     private void getWallpaperAsDefault() {
         try {
@@ -871,9 +883,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void setDefaultBackground(String bigImagePath) {
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        Log.wtf(this.getClass().getName(),"setDefaultBackground");
+        String finalPath = "";
+        try {
+            finalPath = HelperSaveFile.saveInPrivateDirectory(this, bigImagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, bigImagePath);
+        editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
+        editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
         editor.apply();
     }
 
@@ -911,9 +931,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         message:مبلغ تراکنش کمتر از حد تعیین شده توسط صادرکننده کارت و یا بیشتر از حد مجاز می باشد
                         status:61
                          */
-                        Log.d("bagi", "enData:" + data.getStringExtra("enData"));
-                        Log.d("bagi", "message:" + data.getStringExtra("message"));
-                        Log.d("bagi", "status:" + data.getIntExtra("status", 0));
                         DirectPayHelper.setResultOfDirectPay(data.getStringExtra("enData"), 0, null, data.getStringExtra("message"));
                         break;
                     case 2:
@@ -1504,21 +1521,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("bagi" ,"ActivityMain:onstart:start");
+        if (G.ISOK) {
+            if (!G.isFirstPassCode) {
+                openActivityPassCode();
+            }
+            G.isFirstPassCode = false;
 
-        if (!G.isFirstPassCode) {
-            openActivityPassCode();
+            //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
+            //    @Override
+            //    public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
+            //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            //    }
+            //});
         }
-        G.isFirstPassCode = false;
-
-        //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
-        //    @Override
-        //    public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
-        //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-        //    }
-        //});
-
-        Log.d("bagi" ,"ActivityMain:onstart:end");
     }
 
     @SuppressLint("MissingSuperCall")
@@ -1746,28 +1761,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         // gone or visible view call
         RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
-        if (callConfig != null) {
-            if (callConfig.isVoice_calling()) {
-                itemNavCall.setVisibility(View.VISIBLE);
-
-                itemNavCall.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Fragment fragment = FragmentCall.newInstance(false);
-                        try {
-                            new HelperFragment(fragment).load();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                        lockNavigation();
-                        closeDrawer();
-                    }
-                });
-            } else {
-                itemNavCall.setVisibility(View.GONE);
-            }
-        } else {
+        if (callConfig == null) {
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
 
@@ -1784,6 +1778,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
@@ -2237,6 +2232,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
+        findViewById(R.id.am_btn_scanner).setOnClickListener(v -> {
+            if (!G.isWalletRegister) {
+                new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
+                lockNavigation();
+            } else {
+                Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
+                intent.putExtra("Language", "fa");
+                intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
+                intent.putExtra("PrimaryColor", G.appBarColor);
+                intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                intent.putExtra("AccentColor", G.appBarColor);
+                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
+                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
+                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                intent.putExtra("isScan",true);
+                startActivityForResult(intent, WALLET_REQUEST_CODE);
+            }
+        });
+
 
         contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
 
@@ -2415,7 +2434,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      * @param updateFromServer if is set true send request to sever for get own info
      */
     private void setDrawerInfo(boolean updateFromServer) {
-        if (userInfo != null) {
+        if (userInfo != null && userInfo.isValid()) {
             String username = userInfo.getUserInfo().getDisplayName();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
@@ -2512,57 +2531,60 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        if (G.onBackPressedWebView != null) {
-            if (G.onBackPressedWebView.onBack()) {
-                return;
-            }
-        }
-
-        if (G.onBackPressedExplorer != null) {
-            if (G.onBackPressedExplorer.onBack()) {
-                return;
-            }
-        } else if (G.onBackPressedChat != null) {
-            if (G.onBackPressedChat.onBack()) {
-                return;
-            }
-        }
-
-
-        if (onBackPressedListener != null) {
-            onBackPressedListener.doBack();
-        }
-
-        if (this.drawer.isDrawerOpen(GravityCompat.START)) {
-            this.drawer.closeDrawer(GravityCompat.START);
-        } else {
-
-            openNavigation();
-
-            // this call for create group   getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-
-            super.onBackPressed();
-
-            if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() < 1) {
-                if (!this.isFinishing()) {
-                    resume();
+        if (G.ISOK) {
+            if (G.onBackPressedWebView != null) {
+                if (G.onBackPressedWebView.onBack()) {
+                    return;
                 }
             }
 
-            designLayout(chatLayoutMode.none);
+            if (G.onBackPressedExplorer != null) {
+                if (G.onBackPressedExplorer.onBack()) {
+                    return;
+                }
+            } else if (G.onBackPressedChat != null) {
+                if (G.onBackPressedChat.onBack()) {
+                    return;
+                }
+            }
+
+
+            if (onBackPressedListener != null) {
+                onBackPressedListener.doBack();
+            }
+
+            if (this.drawer.isDrawerOpen(GravityCompat.START)) {
+                this.drawer.closeDrawer(GravityCompat.START);
+            } else {
+
+                openNavigation();
+
+                // this call for create group   getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
+                super.onBackPressed();
+
+                if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() < 1) {
+                    if (!this.isFinishing()) {
+                        resume();
+                    }
+                }
+
+                designLayout(chatLayoutMode.none);
+            }
+        } else {
+            super.onBackPressed();
         }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("bagi", "ActivityMain:onResume:start");
-
-        resume();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        Log.d("bagi", "ActivityMain:onResume:end");
+        if (G.ISOK) {
+            resume();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
     }
 
     public void resume() {
@@ -2632,7 +2654,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
-        G.onClientCondition = this;
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onUnreadChange = this;
@@ -2704,34 +2725,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onPause() {
         super.onPause();
+        if (G.ISOK) {
+            if (isNeedToRegister) {
+                return;
+            }
 
-        if (isNeedToRegister) {
-            return;
-        }
+            AppUtils.updateBadgeOnly(getRealm(), -1);
 
-        AppUtils.updateBadgeOnly(getRealm(), -1);
+            G.onUnreadChange = null;
 
-        G.onUnreadChange = null;
+            if (mViewPager != null && mViewPager.getAdapter() != null) {
 
-        if (mViewPager != null && mViewPager.getAdapter() != null) {
+                try {
 
-            try {
+                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
 
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
-                if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
+                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
+                        G.selectedTabInMainActivity = fm.mainType.toString();
+                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
 
-                    FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                    G.selectedTabInMainActivity = fm.mainType.toString();
-                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+                        G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof DiscoveryFragment) {
 
-                    G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
-                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof DiscoveryFragment) {
-
-                    G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                        G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -2900,31 +2922,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         realm.close();
-        for (Fragment f: pages) {
-            if (f instanceof FragmentMain) {
-                FragmentMain mainFragment = (FragmentMain) f;
-                switch (mainFragment.mainType) {
-                    case all:
-                        mainFragment.onAction(MainAction.downScrool);
-                        break;
-                    case chat:
-                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case group:
-                        if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case channel:
-                        if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                            mainFragment.onAction(MainAction.downScrool);
-                        }
-                        break;
-                }
-            }
-        }
 
         /**
          * don't send update status for own message
@@ -2942,28 +2939,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //*****************************************************************************************************************************
 
     @Override
-    public void onMessageFailed(final long roomId, RealmRoomMessage roomMessage) {
+    public void onMessageFailed(final long roomId, long messageId) {
         //empty
-    }
-
-    //************************
-    @Override
-    public void onClientCondition() {
-
-        notifySubFragmentForCondition();
-    }
-
-    @Override
-    public void onClientConditionError() {
-        notifySubFragmentForCondition();
-    }
-
-    private void notifySubFragmentForCondition() {
-        for (Fragment f: pages) {
-            if (f instanceof FragmentMain) {
-                ((FragmentMain)f).onAction(MainAction.clinetCondition);
-            }
-        }
     }
 
     public void lockNavigation() {
@@ -3092,9 +3069,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 if (walletActive) {
+                    findViewById(R.id.am_btn_scanner).setVisibility(View.VISIBLE);
                     findViewById(R.id.lm_ll_wallet).setVisibility(View.VISIBLE);
                 } else {
                     findViewById(R.id.lm_ll_wallet).setVisibility(View.GONE);
+                    findViewById(R.id.am_btn_scanner).setVisibility(View.GONE);
                 }
 
                 if (!G.isMplActive && !G.isWalletActive) {
@@ -3122,10 +3101,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public enum chatLayoutMode {
         none, show, hide
-    }
-
-    public interface MainInterface {
-        void onAction(MainAction action);
     }
 
     public interface OnBackPressedListener {

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class RequestClientGetRoomHistory {
 
-    public void getRoomHistory(long roomId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, Object identity) {
+    public String getRoomHistory(long roomId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, Object identity) {
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Builder builder = ProtoClientGetRoomHistory.ClientGetRoomHistory.newBuilder();
         builder.setRoomId(roomId);
@@ -27,13 +27,14 @@ public class RequestClientGetRoomHistory {
 
         RequestWrapper requestWrapper = new RequestWrapper(603, builder, identity);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            return RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return "";
         }
     }
 
-    public void getRoomHistory(long roomId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, OnHistoryReady historyReady) {
+    public String getRoomHistory(long roomId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, OnHistoryReady historyReady) {
         RequestData requestData = new RequestData(historyReady, roomId, firstMessageId, limit);
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Builder builder = ProtoClientGetRoomHistory.ClientGetRoomHistory.newBuilder();
         builder.setRoomId(roomId);
@@ -43,9 +44,10 @@ public class RequestClientGetRoomHistory {
 
         RequestWrapper requestWrapper = new RequestWrapper(603, builder, requestData);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            return RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return "";
         }
     }
 

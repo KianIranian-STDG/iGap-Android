@@ -77,14 +77,8 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
             text.setMovementMethod(LinkMovementMethod.getInstance());
             BetterLinkMovementMethod
                     .linkify(Linkify.ALL, text)
-                    .setOnLinkClickListener((tv, url) -> {
-                        Log.d("bagi" , "OnTextLinkClick");
-                        return FragmentChat.isInSelectionMode;
-                    })
-                    .setOnLinkLongClickListener((tv, url) -> {
-                        Log.d("bagi" , "OnTextLinkLongClick");
-                        return true;
-                    });
+                    .setOnLinkClickListener((tv, url) -> FragmentChat.isInSelectionMode)
+                    .setOnLinkLongClickListener((tv, url) -> true);
         }
     }
 }

@@ -68,7 +68,7 @@ public class HelperDataUsage {
         Realm realm = Realm.getDefaultInstance();
 
 
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
@@ -89,9 +89,6 @@ public class HelperDataUsage {
                                 usage.setDownloadSize(usage.getDownloadSize() + wDownloadedImageSize);
 
                             } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                                Log.i("WWW", "old usage : "+usage.getDownloadSize());
-                                Log.i("WWW", "wDownloadedVideoSize : "+wDownloadedVideoSize);
-                                Log.i("WWW", "All : "+usage.getDownloadSize() + wDownloadedVideoSize);
                                 usage.setDownloadSize(usage.getDownloadSize() + wDownloadedVideoSize);
 
                             } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
@@ -222,10 +219,7 @@ public class HelperDataUsage {
             case VIDEO_TEXT:
             case VIDEO:
                 if (connectivityType) {
-                    Log.i("WWW", "downloaded byte: "+downloadByte);
-                    Log.i("WWW", "progressDownload 1 : "+HelperDataUsage.wDownloadedVideoSize);
                     HelperDataUsage.wDownloadedVideoSize += downloadByte;
-                    Log.i("WWW", "progressDownload 2 : "+HelperDataUsage.wDownloadedVideoSize);
                 } else {
                     HelperDataUsage.dDownloadedVideoSize += downloadByte;
                 }

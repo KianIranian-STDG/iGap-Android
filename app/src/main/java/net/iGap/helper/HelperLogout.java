@@ -25,6 +25,8 @@ import net.iGap.request.RequestClientGetRoomList;
 
 import ir.radsense.raadcore.model.Auth;
 
+import static org.paygear.utils.Utils.signOutWallet;
+
 
 /**
  * truncate realm and go to ActivityIntroduce for register again
@@ -38,9 +40,9 @@ public final class HelperLogout {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                signOutWallet();
                 HelperRealm.realmTruncate();
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-                sharedPreferences.edit().clear().apply();
+                clearPreferences();
                 resetStaticField();
 
                 AppUtils.cleanBadge();
@@ -63,6 +65,15 @@ public final class HelperLogout {
         });
     }
 
+    private static void clearPreferences(){
+        SharedPreferences sharedPreferencesFile = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferencesFile.edit().clear().apply();
+
+        SharedPreferences sharedPreferencesTrackerFile = G.context.getSharedPreferences(SHP_SETTING.KEY_TRACKER_FILE, Context.MODE_PRIVATE);
+        sharedPreferencesTrackerFile.edit().clear().apply();
+    }
+
+
     private static void resetStaticField() {
         Theme.setThemeColor();
         G.userLogin = false;
@@ -70,7 +81,6 @@ public final class HelperLogout {
         G.isFirstPassCode = false;
         G.isPassCode = false;
         G.isDarkTheme = false;
-        G.isAppRtl = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
     }

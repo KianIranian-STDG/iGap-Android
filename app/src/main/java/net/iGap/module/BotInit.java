@@ -3,6 +3,7 @@ package net.iGap.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -54,6 +55,7 @@ import java.util.HashMap;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static net.iGap.G.context;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
@@ -72,6 +74,8 @@ public class BotInit implements View.OnClickListener {
     private int additionalType;
     private MaterialDesignTextView btnShowBot;
     private long roomId;
+
+    private static String prefrenceName = "DrIgap";
     // private boolean state;
 
 
@@ -81,18 +85,33 @@ public class BotInit implements View.OnClickListener {
 
     }
 
+    public static void setCheckDrIgap(boolean check) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(BotInit.prefrenceName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("check", check);
+        editor.apply();
+    }
+
+    public static boolean getCheckDrIgap() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(BotInit.prefrenceName, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("check", false);
+    }
+
     public static void checkDrIgap() {
+        if (!BotInit.getCheckDrIgap())
+            return;
 
         new RequestClientGetPromote().getPromote();
         G.ipromote = new Ipromote() {
             @Override
             public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
+                setCheckDrIgap(false);
                 ArrayList<Long> promoteIds = new ArrayList<>();
 
                 for (int i = 0; i < builder.getPromoteList().size(); i++)
                     promoteIds.add(builder.getPromoteList().get(i).getId());
 
-                final Realm realm = Realm.getDefaultInstance();
+                Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -106,7 +125,6 @@ public class BotInit implements View.OnClickListener {
                         }
                     }
                 });
-                realm.close();
 
                 for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
 
@@ -157,26 +175,19 @@ public class BotInit implements View.OnClickListener {
                                 }
                             };
                             new RequestChatGetRoom().chatGetRoom(builder.getPromoteList().get(i).getId());
-
                         } else {
-
                             new RequestClientGetRoom().clientGetRoom(builder.getPromoteList().get(i).getId(), RequestClientGetRoom.CreateRoomMode.getPromote);
-
                         }
-
-
                     } else {
-
                         new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
-                        Log.i("#peymanSize", builder.getPromoteList().size() + "");
-
                     }
                 }
+
+                realm.close();
 
             }
 
         };
-        //   G.ipromote = null;
     }
 
     public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu, RealmRoomMessage roomMessage, long roomId) {
@@ -480,13 +491,12 @@ public class BotInit implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        try {
+        try (Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
-                    Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -511,7 +521,6 @@ public class BotInit implements View.OnClickListener {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Long identity = System.currentTimeMillis();
-                            Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -546,7 +555,6 @@ public class BotInit implements View.OnClickListener {
                                 @Override
                                 public void setLocationResponse(Double latitude, Double longitude) {
                                     Long identity = System.currentTimeMillis();
-                                    Realm realm = Realm.getDefaultInstance();
                                     realm.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {

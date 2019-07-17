@@ -1225,7 +1225,6 @@ public class FragmentSettingViewModel {
                 editor.apply();
 
                 for (Integer aWhich : which) {
-                    Log.i("JJJJ", "WIFI: " + aWhich);
 
                     if (aWhich == 0) {
                         editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);

@@ -71,7 +71,10 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return discoveryList.get(position).model.getNumber() + 1;
+        try {
+            return discoveryList.get(position).model.getNumber() + 1;
+        } catch (Exception e) {
+            return -2;
+        }
     }
-
 }

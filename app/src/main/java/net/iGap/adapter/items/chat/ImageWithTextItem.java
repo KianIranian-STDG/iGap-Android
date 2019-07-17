@@ -71,7 +71,6 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bagi" , "ClickImage");
                 if (FragmentChat.isInSelectionMode){
                         holder.itemView.performLongClick();
                 } else {

@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.downloader.PRDownloader;
 import com.downloader.PRDownloaderConfig;
@@ -56,6 +57,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import ir.radsense.raadcore.Raad;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
@@ -98,53 +100,60 @@ public final class StartupActions {
         //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
 
-        realmConfiguration();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                try {
-                    long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
-                    RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                    for (RealmRoom room : realmRooms)
-                    {
-                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
-                        if (room.getLastMessage() != null) {
-                            roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+        boolean ISOK = realmConfiguration();
+        if (ISOK) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    try {
+                        long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
+                        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
+
+                        for (RealmRoom room : realmRooms)
+                        {
+                            if (room.getLastMessage() != null) {
+                                roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                            }
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
                                 .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
-                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
+                                .limit(100).findAll();
+
                         for (RealmRoomMessage var : realmRoomMessages)
                             var.removeFromRealm(realm);
+
+                    } catch (OutOfMemoryError error) {
+                        error.printStackTrace();
+                        HelperLog.setErrorLog(new Exception(error.getMessage()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        HelperLog.setErrorLog(e);
                     }
-                } catch (OutOfMemoryError error) {
-                    error.printStackTrace();
-                    HelperLog.setErrorLog(new Exception(error.getMessage()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    HelperLog.setErrorLog(e);
                 }
-            }
-        });
-        realm.close();
+            });
+            realm.close();
 
-        mainUserInfo();
-        connectToServer();
-        manageSettingPreferences();
-        makeFolder();
-        ConnectionManager.manageConnection();
-        configDownloadManager();
-        manageTime();
-        getiGapAccountInstance();
+            mainUserInfo();
+            connectToServer();
+            manageSettingPreferences();
+            makeFolder();
+            ConnectionManager.manageConnection();
+            configDownloadManager();
+            manageTime();
+            getiGapAccountInstance();
 
-        new CallObserver();
-        /**
-         * initialize download and upload listeners
-         */
-        new HelperUploadFile();
-        checkDataUsage();
+            new CallObserver();
+            /**
+             * initialize download and upload listeners
+             */
+            new HelperUploadFile();
+            checkDataUsage();
+        }
+
     }
 
     private void checkDataUsage() {
@@ -152,6 +161,7 @@ public final class StartupActions {
         RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
         if (realmDataUsage.size() == 0)
             HelperDataUsage.initializeRealmDataUsage();
+        realm.close();
     }
 
     private void manageTime() {
@@ -516,16 +526,22 @@ public final class StartupActions {
                 selectedLanguage = "fa";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
                 break;
             case "English":
                 selectedLanguage = "en";
                 HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
+                Raad.language = selectedLanguage;
+                Raad.isFA = false;
                 break;
             case "العربی":
                 selectedLanguage = "ar";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
                 break;
         }
 
@@ -583,11 +599,20 @@ public final class StartupActions {
     /**
      * initialize realm and manage migration
      */
-    private void realmConfiguration() {
+    private boolean realmConfiguration() {
         /**
          * before call RealmConfiguration client need to Realm.init(context);
          */
-        Realm.init(context);
+
+        try {
+            Realm.init(context);
+        } catch (Exception e) {
+            G.ISOK = false;
+            return G.ISOK;
+        } catch (Error e) {
+            G.ISOK = false;
+            return G.ISOK;
+        }
 
         //  new SecureRandom().nextBytes(key);
 
@@ -608,6 +633,7 @@ public final class StartupActions {
 
         Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
         configuredRealm.close();
+        return G.ISOK;
     }
 
     public Realm getPlainInstance() {
@@ -652,6 +678,11 @@ public final class StartupActions {
                     @Override
                     public boolean shouldCompact(long totalBytes, long usedBytes) {
                         final long thresholdSize = 10 * 1024 * 1024;
+
+                        if (totalBytes > 500 * 1024 * 1024) {
+                            HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                        }
+
                         return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
                     }
                 })

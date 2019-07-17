@@ -175,6 +175,7 @@ public class FragmentChannelProfileViewModel
 
     public FragmentChannelProfileViewModel(Bundle arguments, FragmentChannelProfile fragmentChannelProfile) {
         this.fragment = fragmentChannelProfile;
+        realmChannelProfile = Realm.getDefaultInstance();
         getInfo(arguments);
     }
 
@@ -282,9 +283,6 @@ public class FragmentChannelProfileViewModel
         G.onChannelLeft = this;
         G.onChannelEdit = this;
         G.onChannelRevokeLink = this;
-
-
-        realmChannelProfile = Realm.getDefaultInstance();
 
         roomId = arguments.getLong(ROOM_ID);
         isNotJoin = arguments.getBoolean(IS_NOT_JOIN);

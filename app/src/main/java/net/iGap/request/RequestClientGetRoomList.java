@@ -37,7 +37,6 @@ public class RequestClientGetRoomList {
         if (pendingRequest.contains(offset)) {
             return false;
         }
-        Log.d("bagi" , "clientGetRoomList" + offset + "" + limit + identity);
 
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));

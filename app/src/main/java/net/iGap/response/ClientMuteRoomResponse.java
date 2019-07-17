@@ -10,8 +10,12 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoClientMuteRoom;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
+
+import io.realm.Realm;
 
 public class ClientMuteRoomResponse extends MessageHandler {
 
@@ -31,7 +35,28 @@ public class ClientMuteRoomResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientMuteRoom.ClientMuteRoomResponse.Builder builder = (ProtoClientMuteRoom.ClientMuteRoomResponse.Builder) message;
-        RealmRoom.updateMute(builder.getRoomId(), builder.getRoomMute());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+                    if (room != null) {
+                        room.setMute(builder.getRoomMute());
+                    }
+                }
+            });
+        }
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                G.refreshRealmUi();
+                /** call this listener for update tab bars unread count */
+                if (G.onUnreadChange != null) {
+                    G.onUnreadChange.onChange();
+                }
+            }
+        });
     }
 
     @Override

@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
@@ -32,6 +34,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
+import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.module.CountryListComparator;
@@ -320,7 +323,14 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
     private void finalAction() {
         G.onUserInfoResponse = null;
 
-        if (getActivity() == null || getActivity().isFinishing()) {
+        FragmentSyncRegisteredContacts reagentFragment = FragmentSyncRegisteredContacts.newInstance();
+        FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.ar_layout_root, reagentFragment);
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+        transaction.commitAllowingStateLoss();
+
+        /*if (getActivity() == null || getActivity().isFinishing()) {
             return;
         }
 
@@ -332,7 +342,7 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
             G.fragmentActivity.finish();
         } else {
             G.currentActivity.onBackPressed();
-        }
+        }*/
     }
 
 

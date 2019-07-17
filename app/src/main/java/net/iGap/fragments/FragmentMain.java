@@ -15,7 +15,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,12 +36,12 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
@@ -114,7 +113,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
@@ -131,6 +130,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     private String switcher;
     private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
+    private long latestScrollToTop;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -192,9 +192,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("bagi", "FragmentMain:onViewCreated:start");
-
-        //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
         this.mView = view;
         tagId = System.currentTimeMillis();
 
@@ -204,23 +202,12 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
         viewById.setVisibility(View.GONE);
-        /*switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
-        if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
-            allSwitcher = 1;
-            initRecycleView();
-        } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
-            allSwitcher = 1;
-            initRecycleView();
-        }*/
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 initRecycleView();
             }
         }, 10);
-        Log.d("bagi" ,"FragmentMain:onViewCreated:end");
-
-
     }
 
     private void initRecycleView() {
@@ -300,7 +287,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         if (mainType == all) {
             getChatLists();
         }
-        Log.d("bagi" , "" + mOffset);
 
         if (mView != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -346,33 +332,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     }
 
     //***************************************************************************************************************************
-
-    @Override
-    public void onAction(ActivityMain.MainAction action) {
-
-        if (mRecyclerView == null) {return;}
-
-        switch (action) {
-
-            case downScrool:
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (firstVisibleItem < 5) {
-                            mRecyclerView.scrollToPosition(0);
-                        }
-                    }
-                });
-
-                break;
-            case clinetCondition:
-
-                break;
-        }
-    }
-
 
     private boolean heartBeatTimeOut() {
 
@@ -695,7 +654,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     }
 
     @Override
-    public void onMessageFailed(long roomId, RealmRoomMessage roomMessage) {
+    public void onMessageFailed(long roomId, long messageId) {
 
     }
 
@@ -724,8 +683,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
-
-        Log.d("bagi" , "onClientGetRoomList" + roomList.size() + "" + identity.offset);
+        // todo : we must change roomList with the change of out client condition. merge roomList with clientCondition.
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             mOffset = 0;
@@ -854,8 +812,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     public void onResume() {
         super.onResume();
 
-        Log.d("bagi", "FragmentMain:onResume:start");
-
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
         if (G.isDepricatedApp)
@@ -915,9 +871,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 }
             }
         }
-//        BotInit.checkDrIgap();
-
-        Log.d("bagi", "FragmentMain:onResume:end");
     }
 
     @Override

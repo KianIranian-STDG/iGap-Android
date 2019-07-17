@@ -16,7 +16,7 @@ import net.iGap.proto.ProtoRequest;
 
 public class RequestInfoPage {
 
-    public void infoPage(String id) {
+    public boolean infoPage(String id) {
         ProtoInfoPage.InfoPage.Builder infoPage = ProtoInfoPage.InfoPage.newBuilder();
         infoPage.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         infoPage.setId(id);
@@ -27,5 +27,27 @@ public class RequestInfoPage {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        return true;
+    }
+
+    public interface OnInfoPage {
+        void onInfo(String body);
+        void onError(int major, int minor);
+    }
+
+    public boolean infoPageAgreementDiscovery(String id, OnInfoPage onInfoPage) {
+        ProtoInfoPage.InfoPage.Builder infoPage = ProtoInfoPage.InfoPage.newBuilder();
+        infoPage.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        infoPage.setId(id);
+
+        RequestWrapper requestWrapper = new RequestWrapper(503, infoPage, onInfoPage);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 }

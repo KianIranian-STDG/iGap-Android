@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.FragmentShowMember;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.proto.ProtoError;
@@ -33,9 +32,9 @@ public class UserInfoResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserInfoResponse(int actionId, Object protoClass, String identity) {
+    public UserInfoResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.identity = identity;
@@ -65,13 +64,13 @@ public class UserInfoResponse extends MessageHandler {
             }
         }, RequestUserInfo.CLEAR_ARRAY_TIME);
 
-        if (identity != null && identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {
-            RealmRoom.updateChatRoom(builder.getUser().getId());
-        }
-
-        if (identity != null && identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
-            G.onRegistrationInfo.onInfo(builder.getUser());
-            return;
+        if (identity != null) {
+            if (identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {
+                RealmRoom.updateChatRoom(builder.getUser().getId());
+            } else if (identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
+                G.onRegistrationInfo.onInfo(builder.getUser());
+                return;
+            }
         }
         if ((builder.getUser().getId() == userId)) {
             if (G.onUserInfoMyClient != null) {
@@ -86,13 +85,23 @@ public class UserInfoResponse extends MessageHandler {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                if (identity instanceof String) {
+                    if (G.onUserInfoResponse != null) {
+                        G.onUserInfoResponse.onUserInfo(builder.getUser(), (String) identity);
+                    }
 
-                if (G.onUserInfoResponse != null) {
-                    G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
-                }
+                } else if (identity instanceof RequestUserInfo.UserInfoBody){
+                    if (((RequestUserInfo.UserInfoBody) identity).onComplete != null) {
+                        ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "" + builder.getUser().getId(), "OK");
+                    }
 
-                if (FragmentShowMember.infoUpdateListenerCount != null) {
-                    FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
+                    if (G.onUserInfoResponse != null) {
+                        G.onUserInfoResponse.onUserInfo(builder.getUser(), ((RequestUserInfo.UserInfoBody) identity).identity);
+                    }
+                } else if (identity == null) {
+                    if (G.onUserInfoResponse != null) {
+                        G.onUserInfoResponse.onUserInfo(builder.getUser(), null);
+                    }
                 }
 
                 // update chat message header forward after get user or room info
@@ -130,7 +139,7 @@ public class UserInfoResponse extends MessageHandler {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (identity != null) {
+                if (identity != null && identity instanceof String) {
                     RequestUserInfo.userIdArrayList.remove(identity);
                 } else {
                     RequestUserInfo.userIdArrayList.clear();
@@ -142,11 +151,9 @@ public class UserInfoResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
-        if (FragmentShowMember.infoUpdateListenerCount != null) {
-            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "ERROR");
-        }
-        if (FragmentShowMember.infoUpdateListenerCount != null) {
-            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
+        if (identity instanceof RequestUserInfo.UserInfoBody) {
+            ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "", "ERROR");
+            ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "", "");
         }
     }
 }

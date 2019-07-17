@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -294,14 +295,14 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 @Override
                 public void onMessageReceive() {
 
-                    viewPager.post(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             mList = HelperNotification.getInstance().getMessageList();
-                            viewPager.setAdapter(mAdapter);
                             btnMessageCounter.setText(1 + "/" + mList.size());
-                            setImageAndTextAppBar(viewPager.getCurrentItem());
                             listSize = mList.size();
+                            mAdapter.notifyDataSetChanged();
+                            setImageAndTextAppBar(viewPager.getCurrentItem());
                         }
                     });
                 }
@@ -379,11 +380,14 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         private void initViewPager() {
 
             viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
-            mAdapter = new AdapterViewPagerClass();
-            viewPager.setAdapter(mAdapter);
+            /** Hint : always read count of view pager with "listSize", for avoid from view pager get count error */
             listSize = mList.size();
-
-            btnMessageCounter.setText(1 + "/" + listSize);
+            if (viewPager != null && mAdapter != null){
+                mAdapter.notifyDataSetChanged();
+            } else {
+                mAdapter = new AdapterViewPagerClass();
+                viewPager.setAdapter(mAdapter);
+            }
 
             setImageAndTextAppBar(viewPager.getCurrentItem());
 
@@ -523,7 +527,10 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mList.size();
+            /**
+             * Hint : always read count of view pager with "listSize", for avoid from view pager get count error
+             */
+            return listSize;
         }
 
         @Override
@@ -532,8 +539,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
 
         @Override
-        public Object instantiateItem(View container, final int position) {
-
+        public Object instantiateItem(ViewGroup container, final int position) {
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 
@@ -555,6 +561,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE;
         }
     }
 }

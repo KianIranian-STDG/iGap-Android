@@ -30,7 +30,9 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String mToken) {
         super.onNewToken(mToken);
-        RealmUserInfo.setPushNotification(mToken);
+        if (G.ISOK) {
+            RealmUserInfo.setPushNotification(mToken);
+        }
     }
 
     @Override

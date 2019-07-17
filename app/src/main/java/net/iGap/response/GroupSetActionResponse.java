@@ -46,8 +46,6 @@ public class GroupSetActionResponse extends MessageHandler {
                     }
                 }
             });
-
-            realm.close();
             if (G.onSetAction != null) {
                 G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
             }
@@ -56,6 +54,8 @@ public class GroupSetActionResponse extends MessageHandler {
                 G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
             }
         }
+
+        realm.close();
     }
 
     @Override

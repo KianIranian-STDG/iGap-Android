@@ -293,7 +293,7 @@ public class ActivityManageSpaceViewModel {
             @Override
             public void onClick(View v) {
                 Realm realm = Realm.getDefaultInstance();
-                RealmRoomMessage.ClearAllMessage(realm, true, 0);
+                RealmRoomMessage.ClearAllMessage(realm);
                 RealmRoom.clearAllScrollPositions();
                 final long DbTotalSize = new File(realm.getConfiguration().getPath()).length();
                 realm.close();

@@ -1230,6 +1230,11 @@
     <string name="wimax_charging">شارژ وایمکس</string>
     <string name="permanently_charge">شارژ سیم کارت دائمی</string>
 
+    <string name="get_gifts">دریافت هدیه</string>
+    <string name="congratulations">تبریک</string>
+    <string name="unsuccessful">موفقیت آمیز نبود</string>
+    <string name="disabled_qr_voucher">متاسفانه این Qr قابل استفاده نیست یا قبلا استفاده شده است</string>
+
     <string name="charge_1"> 10.000 ریالی</string>
     <string name="charge_2"> 20.000 ریالی</string>
     <string name="charge_5"> 50.000 ریالی</string>
@@ -1594,7 +1599,7 @@
     <string name="no_camera_found">دوربین دستگاه یافت نشد</string>
 
     <string name="paygear_balance">موجودی کیف پول</string>
-    <string name="paygear_card_balance">موجودی کیف پول کارت</string>
+    <string name="paygear_card_balance">موجودی کیف پول</string>
     <string name="paygear_account_balance">موجودی حساب کیف پول</string>
     <string name="cashable_balance">موجودی قابل برداشت</string>
     <string name="cashable_price">مبلغ قابل برداشت</string>
@@ -1609,7 +1614,7 @@
     <string name="cashout_today_limit">سقف برداشت امروز</string>
     <string name="cash_out_request_done">درخواست تسویه انجام شد</string>
     <string name="cashout_request">درخواست تسویه</string>
-    <string name="paygear_card_pin">رمز کیف پولکارت</string>
+    <string name="paygear_card_pin">رمز کیف پول</string>
     <string name="qr">کیوآر</string>
     <string name="scanner">اسکنر</string>
 
@@ -1727,14 +1732,31 @@
     <string name="bank_etebari_tosee">موسسه اعتباری توسعه</string>
     <string name="bank_etebari_asgarieh">موسسه اعتباری عسگریه</string>
     <string name="card_bank">کارت بانک</string>
-    <string name="paygear_card">کیف پول کارت</string>
+    <string name="paygear_card">کیف پول</string>
     <string name="set_password">ثبت رمز عبور</string>
-    <string name="change_password">تغییر رمز عبور</string>
+    <string name="change_password">تغییر رمز عبور کیف پول</string>
     <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
 ( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
     <string name="text_forgot_title">ارسال مجدد رمز</string>
-    <string name="Forgot_Passwords">بازیابی رمز</string>
+    <string name="Forgot_Passwords">بازیابی رمز عبور کیف پول</string>
+    <string name="cashier">مالی</string>
+    <string name="admin">ادمین</string>
+    <string name="taxi_balance">موجودی تاکسی</string>
+    <string name="shop_balance">موجودی فروشگاه</string>
+    <string name="cashout_taxi">برداشت از موجودی</string>
+    <string name="balance_low">موجودی کیف پول شما کم است. موجودی کیف پول خود را افزایش دهید.</string>
+    <string name="bank_card">کارت بانکی</string>
+    <string name="wallet_card">کیف پول</string>
+    <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>
+    <string name="club_balance">موجودی کارت باشگاهی (ریال)</string>
+    <string name="wallet_balance">موجودی کیف پول (ریال)</string>
+    <string name="total_amount">مبلغ کل (ریال) :</string>
+    <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
 
+
+    <string name="personalAccountType">شخصی</string>
+    <string name="taxiAccountType">راننده</string>
+    <string name="shopAccountType">فروشگاه</string>
 
     <string name="default_sheba_number">شماره شبا پیش فرض</string>
     <string name="default_sheba_number_message">آیا مایل به ذخیره این شماره به عنوان شماره شبای پیش فرض خود هستید؟\n دقت کنید! در صورت انتخاب پیشفرض از این پس تمام برداشت های عادی اتوماتیک با شماره شبا پیشفرض انجام می شود.</string>
@@ -1743,7 +1765,7 @@
     <string name="cash_to_wallet">کیف ‌پولی</string>
     <string name="person">نفر</string>
     <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">کد چهار رقمی  را وارد کنید</string>
+    <string name="enter_four_digit_code">کد شش رقمی  را وارد کنید</string>
     <string name="four_digit_code">کد شش رقمی پیامک شده</string>
     <string name="show_receipt">مشاهده رسید</string>
     <string name="reciever_name">نام گیرنده</string>
@@ -1760,6 +1782,10 @@
     <string name="card_to_card_message">پیام کارت به کارت</string>
     <string name="payment_message">پیام پرداخت</string>
 
+    <string name="available_merchants">مشاهده فروشگاه های پذیرنده این کارت</string>
+    <string name="available_merchants_title">پذیرندگان باشگاه</string>
+    <string name="balance_title">موجودی : </string>
+
     <string name="WALLET_TRANSFER_MONEY">انتقال وجه کیف پول</string>
     <string name="CARD_TRANSFER_MONEY">انتقال وجه کارت به کارت</string>
     <string name="PAYMENT_TRANSFER_MONEY">پرداخت</string>
@@ -1773,4 +1799,12 @@
     <string name="amCardToCardIconText">درخواست انتقال</string>
     <string name="cardToCardBtnText">کارت به کارت</string>
     <string name="crad_to_card_dest_name">نام دارنده حساب</string>
+    <string name="location_dialog_message">آیا می خواهید از موقیعت مکانی شما استفاده شود؟</string>
+    <string name="maximum_poll">شما به تعداد مجاز رای خود را ثبت کرده اید.</string>
+    <string name="before_try">قبلا رای خود را ثبت کرده اید.</string>
+    <string name="poll_ok">رای شما با موفقیت ثبت شد</string>
+
+    <string name="str_frag_sync_contactTitle">به دوستان خود سلام کنید و بهشون بگید که در آی گپ هستید.</string>
+    <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
+    <string name="str_frag_sync_skipBtn">شروع برنامه</string>
 </resources>

@@ -111,6 +111,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     try (Realm realm = Realm.getDefaultInstance()) {
                         RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 

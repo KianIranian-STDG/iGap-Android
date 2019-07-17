@@ -8,7 +8,7 @@
     android:id="@+id/rootView"
     android:background="@android:color/white"
     android:clickable="true"
-    tools:context="org.paygear.wallet.fragment.OrderInfoFragment">
+    tools:context="org.paygear.fragment.OrderInfoFragment">
 
 <!--    <android.support.v7.widget.CardView
         android:id="@+id/app_bar_layout"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content">
 
         <!--<include layout="@layout/fragment_payment_history_list_item" />-->
-        <org.paygear.wallet.widget.OrderView
+        <org.paygear.widget.OrderView
             android:id="@+id/order_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

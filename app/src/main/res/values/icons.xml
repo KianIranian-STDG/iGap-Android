@@ -28,6 +28,8 @@
   <string name="md_chat_box">\uf366</string>  <!-- igap_message-processing -->
   <string name="md_satellite_variant">\uf471</string>  <!--igap_satellite-variant-->
 
+  <string name="md_tick">\uf5e1</string>
+
 
   <string name="md_try_agin">\uf450</string>  <!--igap_satellite-variant-->
   <string name="md_users_social_symbol">\uf00e</string>  <!-- igap_account-multiple  -->

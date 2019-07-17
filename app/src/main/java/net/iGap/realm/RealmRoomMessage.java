@@ -464,44 +464,41 @@ public class RealmRoomMessage extends RealmObject {
         return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
     }
 
-    public static void ClearAllMessage(Realm realm, boolean deleteAllMessage, final long roomId) {
-
-        //+Realm realm = Realm.getDefaultInstance();
-        if (deleteAllMessage) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmQuery<RealmRoomMessage> roomRealmQuery = realm.where(RealmRoomMessage.class);
-                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                        if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
-                            roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId());
-                        }
-
-                        if (realmRoom.getFirstUnreadMessage() != null && realmRoom.getFirstUnreadMessage().getForwardMessage() == null && realmRoom.getFirstUnreadMessage().getReplyTo() == null) {
-                            roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getFirstUnreadMessage().getMessageId());
-                        }
+    public static void ClearAllMessage(Realm realm) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<RealmRoomMessage> roomRealmQuery = realm.where(RealmRoomMessage.class);
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
+                        roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId());
                     }
-                    roomRealmQuery.findAll().deleteAllFromRealm();
-                }
-            });
-        } else {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
 
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId()).findAll().deleteAllFromRealm();
-                        } else {
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
-                        }
+                    if (realmRoom.getFirstUnreadMessage() != null && realmRoom.getFirstUnreadMessage().getForwardMessage() == null && realmRoom.getFirstUnreadMessage().getReplyTo() == null) {
+                        roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getFirstUnreadMessage().getMessageId());
                     }
                 }
-            });
-        }
+                roomRealmQuery.findAll().deleteAllFromRealm();
+            }
+        });
+    }
 
-        //realm.close();
+    public static void ClearAllMessageRoomAsync(Realm realm, final long roomId, Realm.Transaction.OnSuccess onSuccess) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId()).findAll().deleteAllFromRealm();
+                    } else {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+                    }
+                }
+            }
+        } , onSuccess);
     }
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
@@ -589,10 +586,10 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public void removeFromRealm(Realm realm) {
-        if (realmAdditional != null)
+        if (realmAdditional != null && realmAdditional.isValid())
             realmAdditional.deleteFromRealm();
 
-        if (attachment != null) {
+        if (attachment != null && attachment.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.ATTACHMENT.ID, attachment.getId())
                     .count();
@@ -601,16 +598,16 @@ public class RealmRoomMessage extends RealmObject {
                 attachment.deleteFromRealm();
         }
 
-        if (location != null)
+        if (location != null && location.isValid())
             location.deleteFromRealm();
 
-        if (roomMessageContact != null)
+        if (roomMessageContact != null && roomMessageContact.isValid())
             roomMessageContact.deleteFromRealm();
 
-        if (roomMessageWallet != null)
+        if (roomMessageWallet != null && roomMessageWallet.isValid())
             roomMessageWallet.deleteFromRealm();
 
-        if (forwardMessage != null) {
+        if (forwardMessage != null && forwardMessage.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, forwardMessage.getMessageId())
                     .or()
@@ -620,7 +617,7 @@ public class RealmRoomMessage extends RealmObject {
                 forwardMessage.deleteFromRealm();
         }
 
-        if (replyTo != null) {
+        if (replyTo != null && replyTo.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, replyTo.getMessageId())
                     .or()
@@ -922,9 +919,9 @@ public class RealmRoomMessage extends RealmObject {
      * check SEEN and LISTENED for avoid from duplicate send status request in enter to chat because in
      * send status again enter ro chat fetchMessage method will be send status so client shouldn't
      */
-    public static void setStatusSeenInChat(final long messageId) {
+    public static void setStatusSeenInChatAsync(final long messageId) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
@@ -942,7 +939,7 @@ public class RealmRoomMessage extends RealmObject {
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message.getMessageId());
         }
     }
 

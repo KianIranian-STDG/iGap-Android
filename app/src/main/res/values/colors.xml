@@ -177,4 +177,13 @@
 
     <color name="tip_text_back">#2196f3</color>
 
+    <color name="colorWhite">#fff</color>
+
+    <color name="onboard_button_normal">#1fa8f2</color>
+    <color name="onboard_button_selected">#1c90d4</color>
+
+    <color name="not_now_button_normal">#f44336</color>
+    <color name="not_now_button_selected">#a12c23</color>
+    <color name="tick_background_color">#66000000</color>
+
 </resources>

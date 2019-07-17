@@ -12,17 +12,11 @@ package net.iGap.activities;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import com.andrognito.patternlockview.PatternLockView;
-import com.andrognito.patternlockview.utils.ResourceUtils;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
 import net.iGap.module.SHP_SETTING;
@@ -42,7 +36,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         activityManageSpaceViewModel = new ActivityEnterPassCodeViewModel(this, activityEnterPassCodeBinding);
 
         activityEnterPassCodeBinding.setActivityEnterPassCodeViewModel(activityManageSpaceViewModel);
-        SharedPreferences sharedPreferences = G.currentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         boolean isLinePattern = sharedPreferences.getBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true);
 
         activityEnterPassCodeBinding.patternLockView.setViewMode(PatternLockView.PatternViewMode.CORRECT);       // Set the current viee more
@@ -51,14 +45,14 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         activityEnterPassCodeBinding.patternLockView.setInputEnabled(true);                                     // Disables any input from the pattern lock view completely
 
         activityEnterPassCodeBinding.patternLockView.setDotCount(4);
-        activityEnterPassCodeBinding.patternLockView.setDotNormalSize((int) ResourceUtils.getDimensionInPx(G.currentActivity, R.dimen.dp22));
-        activityEnterPassCodeBinding.patternLockView.setDotSelectedSize((int) ResourceUtils.getDimensionInPx(G.currentActivity, R.dimen.dp32));
-        activityEnterPassCodeBinding.patternLockView.setPathWidth((int) ResourceUtils.getDimensionInPx(G.currentActivity, R.dimen.pattern_lock_path_width));
+        activityEnterPassCodeBinding.patternLockView.setDotNormalSize((int) getResources().getDimension(R.dimen.dp22));
+        activityEnterPassCodeBinding.patternLockView.setDotSelectedSize((int) getResources().getDimension(R.dimen.dp32));
+        activityEnterPassCodeBinding.patternLockView.setPathWidth((int) getResources().getDimension(R.dimen.pattern_lock_path_width));
         activityEnterPassCodeBinding.patternLockView.setAspectRatioEnabled(true);
         activityEnterPassCodeBinding.patternLockView.setAspectRatio(PatternLockView.AspectRatio.ASPECT_RATIO_HEIGHT_BIAS);
-        activityEnterPassCodeBinding.patternLockView.setNormalStateColor(ResourceUtils.getColor(G.currentActivity, R.color.white));
-        activityEnterPassCodeBinding.patternLockView.setCorrectStateColor(ResourceUtils.getColor(G.currentActivity, R.color.white));
-        activityEnterPassCodeBinding.patternLockView.setWrongStateColor(ResourceUtils.getColor(G.currentActivity, R.color.red));
+        activityEnterPassCodeBinding.patternLockView.setNormalStateColor(getResources().getColor(R.color.white));
+        activityEnterPassCodeBinding.patternLockView.setCorrectStateColor(getResources().getColor(R.color.white));
+        activityEnterPassCodeBinding.patternLockView.setWrongStateColor(getResources().getColor(R.color.red));
         activityEnterPassCodeBinding.patternLockView.setDotAnimationDuration(150);
         activityEnterPassCodeBinding.patternLockView.setPathEndAnimationDuration(100);
 

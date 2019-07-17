@@ -77,6 +77,14 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (realmBlockedUser != null && !realmBlockedUser.isClosed()) {
+            realmBlockedUser.close();
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -150,9 +158,6 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realmBlockedUser != null && !realmBlockedUser.isClosed()) {
-            realmBlockedUser.close();
-        }
         G.onBlockStateChanged = null;
     }
 
@@ -354,9 +359,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         }
 
         private void unblock(ViewHolder viewHolder, long id) {
-            Log.d("bagi" , "unblock");
             if (!viewHolder.isOpenDialog) {
-                Log.d("bagi" , "unblock2");
                 viewHolder.isOpenDialog = true;
                 MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override

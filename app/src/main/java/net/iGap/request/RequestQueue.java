@@ -37,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static net.iGap.G.forcePriorityActionId;
+import static net.iGap.G.requestQueueMap;
 
 public class RequestQueue {
 
@@ -62,7 +63,7 @@ public class RequestQueue {
 
     // ***************************** Sending Request Methods ***************************************
 
-    public static synchronized void sendRequest(RequestWrapper... requestWrappers) throws IllegalAccessException {
+    public static synchronized String sendRequest(RequestWrapper... requestWrappers) throws IllegalAccessException {
         int length = requestWrappers.length;
         String randomId = HelperString.generateKey();
 
@@ -80,7 +81,7 @@ public class RequestQueue {
             arrayWrapper.add(requestWrappers);
             priorityRequestWrapper.put(priority, arrayWrapper);
             requestPriorityQueue.offer(priority);
-            return;
+            return randomId;
         }
 
         if (length == 1) {
@@ -102,6 +103,17 @@ public class RequestQueue {
         } else if (length == 0) {
             Log.e("SOC_REQ", "RequestWrapper length should bigger than zero");
         }
+
+        return randomId;
+    }
+
+    public static synchronized boolean cancelRequest(String id) {
+        RequestWrapper requestWrapper = requestQueueMap.get(id);
+        if (requestWrapper == null)
+            return false;
+        requestQueueMap.remove(id);
+        WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
+        return true;
     }
 
     public static synchronized void sendRequest() throws IllegalAccessException {

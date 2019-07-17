@@ -16,7 +16,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletIdMapping;
 
-import org.paygear.wallet.RaadApp;
+import org.paygear.RaadApp;
 
 public class WalletIdMappingResponse extends MessageHandler {
 
@@ -54,23 +54,17 @@ public class WalletIdMappingResponse extends MessageHandler {
 
             }
         });
-        Log.i("CCCCCCCCC", "4 handler:+ " + builder.getUserId());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        Log.i("CCCCCCCCC", "6 majorCode:+ ");
         if (RaadApp.paygearHistoryCloseWallet != null) RaadApp.paygearHistoryCloseWallet.error();
     }
 
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-        Log.i("CCCCCCCCC", "5 majorCode:+ " + majorCode);
         if (RaadApp.paygearHistoryCloseWallet != null) RaadApp.paygearHistoryCloseWallet.error();
     }
 }

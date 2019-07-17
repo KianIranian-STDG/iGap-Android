@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.helper.HelperTracker;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupCreate;
 import net.iGap.request.RequestClientGetRoom;
@@ -38,6 +39,7 @@ public class GroupCreateResponse extends MessageHandler {
         } else {
             G.onGroupCreate.onGroupCreate(builder.getRoomId());
         }
+        HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_GROUP);
     }
 
     @Override
