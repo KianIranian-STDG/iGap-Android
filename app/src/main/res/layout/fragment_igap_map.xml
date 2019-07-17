@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
-
-    android:id="@+id/sliding_layout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapContainer_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/backgroundToolbarMap"
-    android:gravity="bottom"
-    sothree:umanoDragView="@+id/dragView"
-    sothree:umanoOverlay="true"
-    sothree:umanoPanelHeight="@dimen/dp40"
-    sothree:umanoParallaxOffset="@dimen/dp10"
-    sothree:umanoScrollableView="@+id/rcy_map_user"
-    sothree:umanoShadowHeight="0dp">
-
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/mapContainer_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme"
-        android:clickable="true"
-        android:fitsSystemWindows="false"
-        android:orientation="vertical"
-        tools:ignore="MissingPrefix">
+    style="?backgroundColorSettingTheme"
+    android:clickable="true"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
 
 
         <RelativeLayout
@@ -143,7 +128,8 @@
                                 style="?backgroundColorSettingTheme"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:paddingTop="@dimen/dp10">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -182,12 +168,11 @@
 
                                     <TextView
                                         android:id="@+id/txtSendMessageGps"
-                                        style="?textSubColorSettingTheme"
+                                        style="@style/myIconTextViewStyle"
                                         android:layout_width="@dimen/dp52"
                                         android:layout_height="@dimen/dp52"
                                         android:gravity="center"
-                                        android:text="@string/md_close_button"
-                                        android:textAppearance="@style/TextIconAppearance_toolbar"
+                                        android:text="@string/close_icon"
                                         android:visibility="gone" />
 
                                     <ProgressBar
@@ -374,65 +359,3 @@
             android:visibility="gone" />
 
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <RelativeLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp52">
-
-            <View
-                android:id="@+id/vgSlideUp"
-                style="?backgroundColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp52"
-                android:alpha="0" />
-
-
-            <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/ml_user_on_map"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="@dimen/dp52"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp24"
-                android:layout_marginRight="@dimen/dp24"
-                android:background="@null"
-                android:gravity="center"
-                android:text="@string/md_igap_chevron_double_up"
-                android:textAppearance="@style/TextIconAppearance.all"
-                android:textSize="@dimen/dp26"
-                android:visibility="visible" />
-        </RelativeLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rcy_map_user"
-                style="?backgroundColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fadeScrollbars="false"
-                android:overScrollMode="never"
-                android:scrollbarSize="5dp"
-                android:scrollbarThumbVertical="@color/gray_6c"
-                android:scrollbars="vertical" />
-
-            <ProgressBar
-                android:id="@+id/prgWaitingGetUserList"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="@dimen/dp52"
-                android:layout_gravity="center"
-                android:padding="@dimen/dp12"
-                android:visibility="gone" />
-        </FrameLayout>
-    </LinearLayout>
-
-
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>

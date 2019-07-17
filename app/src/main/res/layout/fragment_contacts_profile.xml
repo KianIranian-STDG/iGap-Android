@@ -37,7 +37,7 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
                 <View
-                    android:id="@+id/test"
+                    android:id="@+id/toolbar_background"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp140"
                     android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default=@drawable/shape_toolbar_background}"
@@ -673,7 +673,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="left"
-                    android:layout_marginTop="@dimen/dp12"
+                    android:layout_marginTop="@dimen/dp10"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"
                     android:textSize="@dimen/smallTextSize" />
@@ -702,7 +702,7 @@
             android:onClick="@{()->viewModel.onClickGoToChat()}"
             app:backgroundTint="@color/setting_items_value_color"
             app:fabSize="mini"
-            app:layout_anchor="@id/test"
+            app:layout_anchor="@id/toolbar_background"
             app:layout_anchorGravity="end|bottom"
             app:srcCompat="@drawable/ic_chat_message"
             app:tint="@color/white" />

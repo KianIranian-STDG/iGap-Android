@@ -3,6 +3,7 @@ package net.iGap.module;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -128,9 +129,11 @@ public class MyInfoWindow extends InfoWindow {
         txtName.setTypeface(G.typeface_IRANSansMobile_Bold, Typeface.BOLD);
 
         if (G.selectedLanguage.equals("en")) {
-            txtOpenComment.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
+            txtComment.setGravity(Gravity.RIGHT);
+            txtOpenComment.setRotation(90);
         } else {
-            txtOpenComment.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
+            txtComment.setGravity(Gravity.LEFT);
+            txtOpenComment.setRotation(270);
         }
 
         txtClose.setOnClickListener(new View.OnClickListener() {

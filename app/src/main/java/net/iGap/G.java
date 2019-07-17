@@ -205,6 +205,8 @@ public class G extends Application {
     public static int bothChatDeleteTime = DEFAULT_BOTH_CHAT_DELETE_TIME;
     public static long currentTime;
     public static long userId;
+    public static String serverHashContact = null;
+    public static String localHashContact = null;
     public static long latestHearBeatTime = System.currentTimeMillis();
     public static long currentServerTime;
     public static long latestResponse = System.currentTimeMillis();

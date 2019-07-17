@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -31,6 +32,10 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserUpdateStatus;
 import net.iGap.request.RequestWrapper;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
@@ -151,44 +156,98 @@ public class LoginActions {
         //if (isSendContact) {
         //    return;
         //}
+        //Log.i("tag", "importContact:start ");
+        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        G.onContactFetchForServer = new OnContactFetchForServer() {
-            @Override
-            public void onFetch(List<StructListOfContact> contacts, boolean getContactList) {
-                RealmPhoneContacts.sendContactList(contacts, false, getContactList);
+        G.onPhoneContact = (contacts, isEnd) -> {
+
+            String md5Local = createMd5FromContacts(contacts);
+            G.localHashContact = md5Local;
+            //Log.i("tag", "importContact: " + G.localHashContact);
+
+            if (G.serverHashContact != null && G.serverHashContact.equals(md5Local) ){
+                //request get list
+                //Log.i("tag", "importContact: " + G.localHashContact);
+                //Log.i("tag", "importContact: " + G.serverHashContact);
+                new RequestUserContactsGetList().userContactGetList();
+                return;
+            }
+
+
+            G.onContactFetchForServer = new OnContactFetchForServer() {
+                @Override
+                public void onFetch(List<StructListOfContact> contacts, boolean getContactList) {
+                    RealmPhoneContacts.sendContactList(contacts, false, getContactList);
+                }
+            };
+
+            if (G.userLogin) {
+                /**
+                 * this can be go in the activity for check permission in api 6+
+                 */
+
+                try {
+                    if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.isSendContact = true;
+                                new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        });
+                    } else {
+                        new RequestUserContactsGetList().userContactGetList();
+                    }
+
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        importContact();
+                    }
+                }, 2000);
             }
         };
 
-        if (G.userLogin) {
-            /**
-             * this can be go in the activity for check permission in api 6+
-             */
-
-            try {
-                if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.isSendContact = true;
-                            new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        }
-                    });
-                } else {
-                    new RequestUserContactsGetList().userContactGetList();
-                }
-
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    importContact();
-                }
-            }, 2000);
-        }
     }
+
+
+    private static String createMd5FromContacts(ArrayList<StructListOfContact> phoneContactsList) {
+
+        String[] contactsArray = new String[phoneContactsList.size()];
+        for (int i = 0 ; i< phoneContactsList.size() ; i++){
+
+            contactsArray[i] = phoneContactsList.get(i).displayName + "," + phoneContactsList.get(i).phone ;
+        }
+
+        //Log.i("tag", "importContact: "+ Arrays.toString(contactsArray));
+
+        return md5(Arrays.toString(contactsArray));
+
+    }
+
+    private static String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i=0; i<messageDigest.length; i++)
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+
+            return hexString.toString();
+        }catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     /**
      * resend some of requests

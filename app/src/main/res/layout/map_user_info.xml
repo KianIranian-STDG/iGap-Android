@@ -61,8 +61,8 @@
           android:id="@+id/txt_chat_map"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/md_chat_box"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
+          android:text="@string/message_icon"
+          style="@style/myIconTextViewStyle"
           android:textColor="@color/iGapColor" />
 
         <net.iGap.module.MaterialDesignTextView
@@ -70,8 +70,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/dp4"
-          android:text="@string/md_phone"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
+          android:text="@string/voice_call_icon"
+            style="@style/myIconTextViewStyle"
           android:textColor="@color/iGapColor" />
 
         <net.iGap.module.MaterialDesignTextView
@@ -79,9 +79,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/dp4"
-          android:text="@string/md_file_video"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/iGapColor" />
+          android:text="@string/video_call_icon"
+            style="@style/myIconTextViewStyle"
+            android:textColor="@color/iGapColor" />
 
         <View
           android:layout_width="0dip"
@@ -111,8 +111,9 @@
           android:id="@+id/txt_open_comment_map"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/md_back_arrow"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
+          android:text="@string/down_arrow_icon"
+            android:rotation="90"
+            style="@style/myIconTextViewStyle"
           android:textColor="@color/iGapColor" />
 
         <TextView

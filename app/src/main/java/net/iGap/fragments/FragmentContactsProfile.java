@@ -123,6 +123,7 @@ public class FragmentContactsProfile extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        checkTheme();
         userAvatarImageView = binding.toolbarAvatar ;
         userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
 
@@ -540,6 +541,13 @@ public class FragmentContactsProfile extends BaseFragment {
         initialToolbar();
     }
 
+    private void checkTheme() {
+
+        if (G.isDarkTheme){
+            binding.toolbarFabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
+        }
+    }
+
     private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
     private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
     private final int ALPHA_ANIMATIONS_DURATION              = 200;
@@ -611,6 +619,11 @@ public class FragmentContactsProfile extends BaseFragment {
     public void onResume() {
         super.onResume();
         viewModel.onResume();
+
+        if (binding != null && !mIsTheTitleContainerVisible){
+            startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
+        }
+
     }
 
     @Override
