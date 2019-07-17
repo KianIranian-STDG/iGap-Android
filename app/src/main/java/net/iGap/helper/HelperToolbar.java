@@ -38,6 +38,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
+import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
@@ -984,15 +985,15 @@ public class HelperToolbar {
     private void onScannerClickListener() {
 
 
-        if (!G.isWalletRegister){
-            if (mFragmentActivity != null && ActivityMain.userPhoneNumber != null) {
-                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
-            }
-        }else {
-            if (mContext != null) {
-                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
-            }
-        }
+//        if (!G.isWalletRegister){
+//            if (mFragmentActivity != null && ActivityMain.userPhoneNumber != null) {
+                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), new BeepTunesFragment()).setReplace(false).load();
+//            }
+//        }else {
+//            if (mContext != null) {
+//                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), new ScannerFragment()).setReplace(false).load();
+//            }
+//        }
 
     }
 
