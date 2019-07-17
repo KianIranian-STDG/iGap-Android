@@ -49,6 +49,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnContactImport;
+import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.ToolbarListener;
@@ -80,7 +81,7 @@ import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnContactImport, OnUserContactDelete {
+public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnContactImport, OnUserContactDelete, OnContactsGetList {
 
     public static final int NEW_CHAT = 0;
     public static final int CONTACTS = 1;
@@ -150,6 +151,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         G.onContactImport = this;
         G.onUserContactdelete = this;
+        G.onContactsGetList = this;
 
         realmRecyclerView = view.findViewById(R.id.recycler_view);
 
@@ -627,6 +629,20 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         if (edtSearch.getText().length() > 0) {
             edtSearch.setText("");
         }
+    }
+
+    @Override
+    public void onContactsGetList() {
+
+        G.handler.postDelayed(() -> {
+
+            if (results == null || results.size() == 0 ){
+                results = ContactManager.getContactList(ContactManager.FIRST);
+                realmRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+        } , 920);
+
     }
 
     private interface onClickRecyclerView {
