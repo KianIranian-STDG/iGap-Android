@@ -76,18 +76,6 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        viewModel.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
     public void onLeftIconClickListener(View view) {
         getActivity().onBackPressed();
     }

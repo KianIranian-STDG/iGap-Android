@@ -22,31 +22,7 @@ public class AlbumViewModel extends BaseViewModel {
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
-
-    @Override
-    public void onCreateViewModel() {
-
-    }
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-
-    }
-
-    @Override
-    public void onPause() {
-
-    }
-
-    @Override
-    public void onResume() {
-
-    }
+    private MutableLiveData<Integer> albumStatus = new MutableLiveData<>();
 
 
     public void getAlbumSong(long id) {

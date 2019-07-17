@@ -2,7 +2,7 @@ package net.iGap.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 
-public abstract class BaseViewModel extends ViewModel {
+public class BaseViewModel extends ViewModel implements BaseViewHolder {
 
 
     public BaseViewModel() {
@@ -15,13 +15,13 @@ public abstract class BaseViewModel extends ViewModel {
         onDestroy();
     }
 
-    public abstract void onCreateViewModel();
+    @Override
+    public void onCreateViewModel() {
 
-    public abstract void onStart();
+    }
 
-    public abstract void onDestroy();
+    @Override
+    public void onDestroy() {
 
-    public abstract void onPause();
-
-    public abstract void onResume();
+    }
 }

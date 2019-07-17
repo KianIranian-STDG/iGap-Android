@@ -29,20 +29,6 @@ public class BeepTunesViewModel extends BaseViewModel {
         getFirsPage();
     }
 
-    @Override
-    public void onDestroy() {
-
-    }
-
-    @Override
-    public void onPause() {
-
-    }
-
-    @Override
-    public void onResume() {
-
-    }
 
     private void getFirsPage() {
         progressMutableLiveData.postValue(true);
