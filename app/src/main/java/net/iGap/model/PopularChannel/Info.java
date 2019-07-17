@@ -25,6 +25,9 @@ public class Info {
     private String mUpdatedAt;
     @SerializedName("scale")
     private String mScale;
+    @SerializedName("titleEn")
+    private String mTitleEn;
+
 
     public Advertisement getAdvertisement() {
         return mAdvertisement;
@@ -104,5 +107,13 @@ public class Info {
 
     public void setScale(String mScale) {
         this.mScale = mScale;
+    }
+
+    public String getTitleEn() {
+        return mTitleEn;
+    }
+
+    public void setTitleEn(String mTitleEn) {
+        this.mTitleEn = mTitleEn;
     }
 }

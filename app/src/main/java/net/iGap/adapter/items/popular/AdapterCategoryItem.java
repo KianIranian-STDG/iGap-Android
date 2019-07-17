@@ -73,7 +73,8 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
 
         public void bindChannel(Category category) {
             ImageLoadingService.load(category.getIcon(), channelImageGrid);
-            channelTitleGrid.setText(category.getTitle());
+            if (G.selectedLanguage.equals("fa"))
+                channelTitleGrid.setText(category.getTitle());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -81,6 +82,9 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
                         onClickedItemEventCallBack.onClickedItem(category);
                 }
             });
+            if (G.selectedLanguage.equals("en"))
+                channelTitleGrid.setText(category.getTitleEn());
+
         }
     }
 

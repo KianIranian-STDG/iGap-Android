@@ -6,6 +6,7 @@ public class Category {
     private String title;
     private String icon;
     private String slug;
+    private String titleEn;
 
     public String getId() {
         return id;
@@ -40,4 +41,11 @@ public class Category {
     }
 
 
+    public String getTitleEn() {
+        return titleEn;
+    }
+
+    public void setTitleEn(String titleEn) {
+        this.titleEn = titleEn;
+    }
 }

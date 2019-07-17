@@ -18,6 +18,8 @@ public class Advertisement {
     private List<Slide> mSlides;
     @SerializedName("title")
     private String mTitle;
+    @SerializedName("titleEn")
+    private String mTitleEn;
 
     public String getId() {
         return mId;
@@ -59,4 +61,11 @@ public class Advertisement {
         mTitle = title;
     }
 
+    public String getTitleEn() {
+        return mTitleEn;
+    }
+
+    public void setTitleEn(String mTitleEn) {
+        this.mTitleEn = mTitleEn;
+    }
 }

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,9 @@ public class FragmentPopularChannelChild extends BaseFragment {
     private View view;
     private String id;
     private AdapterChannelInfoItem adapterChannel;
+    private MainSliderAdapter mainSliderAdapter;
     private int page = 1;
+    private long totalPage;
 
     @NonNull
     @Override
@@ -53,15 +56,14 @@ public class FragmentPopularChannelChild extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_channel);
+
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                    Toast toast = Toast.makeText(getContext(), "scrollllinggg", Toast.LENGTH_SHORT);
-                    toast.show();
-                    page++;
-                    setupViews();
-
+                    Toast.makeText(getContext(), "scrollllinggg", Toast.LENGTH_SHORT).show();
+                    if (totalPage >= page)
+                        setupViews();
 
                 }
             }
@@ -76,49 +78,51 @@ public class FragmentPopularChannelChild extends BaseFragment {
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
                 progressBar.setVisibility(View.GONE);
                 LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
+                totalPage = response.body().getPagination().getTotalPages();
                 if (response.isSuccessful()) {
-                        if (page == 1) {
-                            Slider slider = new Slider(G.context);
-                            slider.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            Slider.init(new ImageLoadingService(G.context));
-                            slider.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MainSliderAdapter mainSliderAdapter = new MainSliderAdapter(G.context, response.body().getInfo().getAdvertisement().getSlides());
-                                    slider.setInterval(1000);
-                                    slider.setAdapter(mainSliderAdapter);
-                                    slider.setSelectedSlide(0);
-                                    slider.setLoopSlides(true);
-                                    slider.setAnimateIndicators(true);
-                                    slider.setIndicatorSize(12);
-                                }
-                            }, 0);
-                            linearLayoutItemContainerChild.addView(slider);
-                        }
+                    if (page == 1) {
+                        adapterChannel = new AdapterChannelInfoItem(getContext());
+                        mainSliderAdapter = new MainSliderAdapter(getContext(), response.body().getInfo().getAdvertisement().getSlides());
+                        Slider slider = new Slider(G.context);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        layoutParams.setMargins(0, 8, 0, 8);
+                        slider.setLayoutParams(layoutParams);
+                        Slider.init(new ImageLoadingService(G.context));
+                        slider.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                slider.setAdapter(mainSliderAdapter);
+                                slider.setSelectedSlide(0);
+                                slider.setLoopSlides(true);
+                                slider.setAnimateIndicators(true);
+                                slider.setIndicatorSize(12);
+                                slider.setInterval(1000);
+                            }
+                        }, 0);
+                        linearLayoutItemContainerChild.addView(slider);
+                        RecyclerView categoryRecyclerViewChild = new RecyclerView(G.context);
+                        categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
+                        LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        layoutParams1.setMargins(-4, 8, -4, 8);
+                        categoryRecyclerViewChild.setLayoutParams(layoutParams1);
+                        categoryRecyclerViewChild.setAdapter(adapterChannel);
+                        linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
+                    }
 
 
-                    RecyclerView categoryRecyclerViewChild = new RecyclerView(G.context);
-                    categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
-                    LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams1.setMargins(0, 8, 0, 8);
-                    categoryRecyclerViewChild.setLayoutParams(layoutParams1);
-                    adapterChannel = new AdapterChannelInfoItem(getContext(), response.body().getChannels());
                     if (page == 1) {
                         adapterChannel.setChannelList(response.body().getChannels());
                     }
                     if (page > 1) {
                         adapterChannel.addChannelList(response.body().getChannels());
                     }
-
-                    categoryRecyclerViewChild.setAdapter(adapterChannel);
-                    linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
                 }
                 page = page + 1;
-
             }
 
             @Override
             public void onFailure(Call<ChildChannel> call, Throwable t) {
+                Log.i("nazanin", "onFailure: " + t.getMessage());
                 Toast toast = Toast.makeText(getContext(), "No Response", Toast.LENGTH_SHORT);
                 toast.show();
             }

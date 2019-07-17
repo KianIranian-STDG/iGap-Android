@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +16,18 @@ import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PopularChannel.Channel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelInfoItem.ChannelInfoViewHolder> {
 
-    private List<Channel> channelList;
+    private List<Channel> channelList = new ArrayList<>();
     private Context context;
 
-    public AdapterChannelInfoItem(Context context, List<Channel> channelList) {
+    public AdapterChannelInfoItem(Context context) {
         this.context = context;
-        this.channelList = channelList;
     }
 
     public void setChannelList(List<Channel> channelList) {
@@ -37,9 +36,6 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     }
 
     public void addChannelList(List<Channel> channelList) {
-        this.channelList = channelList;
-        Log.i("QQQ", "addChannelList: " + channelList);
-        Log.i("QQQ", "this.channelList: " + this.channelList);
         this.channelList.addAll(channelList);
         notifyDataSetChanged();
     }
@@ -82,7 +78,11 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
 
         public void bindChannel(Channel channel) {
             ImageLoadingService.load(channel.getIcon(), circleImageView);
-            textView.setText(channel.getTitle());
+            if (G.selectedLanguage.equals("fa"))
+                textView.setText(channel.getTitle());
+            if (G.selectedLanguage.equals("en"))
+                textView.setText(channel.getTitleEn());
+
 
         }
     }

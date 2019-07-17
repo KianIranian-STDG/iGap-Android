@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -35,7 +36,6 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
         View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_row, viewGroup, false);
 
 
-
         return new ChannelViewHolder(view);
     }
 
@@ -52,14 +52,14 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
     public class ChannelViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView channelImage;
         private TextView channelTitle;
-        private CardView root ;
+        private CardView root;
 
         public ChannelViewHolder(@NonNull View itemView) {
             super(itemView);
             channelImage = itemView.findViewById(R.id.circle_item_popular_rv_linear);
             channelTitle = itemView.findViewById(R.id.tv_item_popular_rv_linear);
             root = itemView.findViewById(R.id.card_item_pop_row);
-            Utils.setCardsBackground(root , R.color.white , R.color.navigation_dark_mode_bg);
+            Utils.setCardsBackground(root, R.color.white, R.color.navigation_dark_mode_bg);
 
         }
 
@@ -67,8 +67,10 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
         public void bindChannel(Channel channel) {
 
             ImageLoadingService.load(channel.getIcon(), channelImage);
-            channelTitle.setText(channel.getTitle());
-
+            if (G.selectedLanguage.equals("fa"))
+                channelTitle.setText(channel.getTitle());
+            if (G.selectedLanguage.equals("en"))
+                channelTitle.setText(channel.getTitleEn());
         }
     }
 }
