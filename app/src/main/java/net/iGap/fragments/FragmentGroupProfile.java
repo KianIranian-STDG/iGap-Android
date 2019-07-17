@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -112,19 +113,25 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(FragmentGroupProfileViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.activity_group_profile, container, false);
         long roomId = 0;
         boolean isNotJoin = true;
         if (getArguments() != null) {
             roomId = getArguments().getLong(ROOM_ID);
             isNotJoin = getArguments().getBoolean(IS_NOT_JOIN);
         }
-        viewModel = new FragmentGroupProfileViewModel(this ,roomId, isNotJoin);
+        viewModel.init(this, roomId, isNotJoin);
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_group_profile, container, false);
         binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         return attachToSwipeBack(binding.getRoot());
     }
 
@@ -144,49 +151,38 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.groupName.observe(this, s -> {
+        viewModel.groupName.observe(getViewLifecycleOwner(), s -> {
             binding.toolbarTxtNameCollapsed.setText(s);
             binding.toolbarTxtNameExpanded.setText(s);
         });
 
-        viewModel.groupNumber.observe(this, s -> binding.toolbarTxtStatusExpanded.setText(String.format("%s %s", s, getString(R.string.member))));
+        viewModel.groupNumber.observe(getViewLifecycleOwner(), s -> binding.toolbarTxtStatusExpanded.setText(String.format("%s %s", s, getString(R.string.member))));
 
-        viewModel.showMoreMenu.observe(this, isShow -> {
+        viewModel.showMoreMenu.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null) {
                 binding.toolbarMore.setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
 
-        viewModel.showEditButton.observe(this, isShow -> {
+        viewModel.showEditButton.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null) {
                 binding.toolbarEdit.setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
 
-        viewModel.showNotificationDialog.observe(this, isShow -> {
-            if (getActivity() != null && isShow != null && isShow) {
-                new MaterialDialog.Builder(getActivity()).title(R.string.st_popupNotification).items(R.array.notifications_notification).negativeText(R.string.B_cancel).itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        viewModel.setNotificationState(which);
-                    }
-                }).show();
-            }
-        });
-
-        viewModel.goToShearedMediaPage.observe(this, model -> {
+        viewModel.goToShearedMediaPage.observe(getViewLifecycleOwner(), model -> {
             if (getActivity() != null && model != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(model)).setReplace(false).load();
             }
         });
 
-        viewModel.goToShowAvatarPage.observe(this, roomId -> {
+        viewModel.goToShowAvatarPage.observe(getViewLifecycleOwner(), roomId -> {
             if (getActivity() != null && roomId != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group)).setReplace(false).load();
             }
         });
 
-        viewModel.showMenu.observe(this, menuList -> {
+        viewModel.showMenu.observe(getViewLifecycleOwner(), menuList -> {
             if (getActivity() != null && menuList != null) {
                 new TopSheetDialog(getActivity()).setListDataWithResourceId(menuList, -1, position -> {
                     if (menuList.get(position).equals(getString(R.string.clear_history))) {
@@ -205,14 +201,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.goToShowMemberPage.observe(this, type -> {
+        viewModel.goToShowMemberPage.observe(getViewLifecycleOwner(), type -> {
             if (getActivity() != null && type != null) {
-                FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, type, viewModel.isNeedgetContactlist , true);
+                FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, type, viewModel.isNeedgetContactlist, true);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
 
-        viewModel.showDialogConvertToPublic.observe(this, isShow -> {
+        viewModel.showDialogConvertToPublic.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
                 new MaterialDialog.Builder(getActivity()).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -224,7 +220,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.showDialogConvertToPrivate.observe(this, isShow -> {
+        viewModel.showDialogConvertToPrivate.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.group_title_convert_to_private).content(R.string.group_text_convert_to_private).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -235,13 +231,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.showRequestError.observe(this, errorMessage -> {
+        viewModel.showRequestError.observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null) {
                 HelperError.showSnackMessage(getString(errorMessage), false);
             }
         });
 
-        viewModel.goToShowCustomListPage.observe(this, listItem -> {
+        viewModel.goToShowCustomListPage.observe(getViewLifecycleOwner(), listItem -> {
             if (getActivity() != null && listItem != null) {
                 Fragment fragment = ShowCustomList.newInstance(listItem, (result, message, countForShowLastMessage, list) -> {
                     for (int i = 0; i < list.size(); i++) {
@@ -258,13 +254,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.goBack.observe(this, isGoBack -> {
+        viewModel.goBack.observe(getViewLifecycleOwner(), isGoBack -> {
             if (isGoBack != null && isGoBack) {
                 popBackStackFragment();
             }
         });
 
-        viewModel.groupDescription.observe(this, groupDescription -> {
+        viewModel.groupDescription.observe(getViewLifecycleOwner(), groupDescription -> {
             if (getActivity() != null && groupDescription != null) {
                 binding.description.setText(HelperUrl.setUrlLink(getActivity(), groupDescription, true, false, null, true));
             }
@@ -272,13 +268,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         viewModel.goToRoomListPage.observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() instanceof ActivityMain && isGo != null) {
-                Log.wtf(this.getClass().getName(),"goToRoomListPage observe");
+                Log.wtf(this.getClass().getName(), "goToRoomListPage observe");
                 ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                 /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(2);*/
             }
         });
 
-        viewModel.showDialogCopyLink.observe(this, link -> {
+        viewModel.showDialogCopyLink.observe(getViewLifecycleOwner(), link -> {
             if (getActivity() != null && link != null) {
 
                 LinearLayout layoutGroupLink = new LinearLayout(getActivity());
@@ -328,6 +324,16 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
+        viewModel.goToCustomNotificationPage.observe(this, roomId -> {
+            if (getActivity() != null && roomId != null) {
+                FragmentNotification fragmentNotification = new FragmentNotification();
+                Bundle bundle = new Bundle();
+                bundle.putLong("ID", roomId);
+                fragmentNotification.setArguments(bundle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentNotification).setReplace(false).load();
+            }
+        });
+
         initComponent();
 
         attachFile = new AttachFile(getActivity());
@@ -363,11 +369,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         initialToolbar();
     }
 
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
-    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
     private void initialToolbar() {
@@ -387,7 +393,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
-            if(!mIsTheTitleVisible) {
+            if (!mIsTheTitleVisible) {
                 startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
@@ -403,7 +409,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if(mIsTheTitleContainerVisible) {
+            if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(binding.toolbarLayoutExpTitles, 100, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }
@@ -417,7 +423,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         }
     }
 
-    public static void startAlphaAnimation (View v, long duration, int visibility) {
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);
@@ -425,14 +431,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         alphaAnimation.setDuration(duration);
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.onResume();
-        //ToDo: change code. this code is so bad
-
     }
 
     /*Change group avatar result*/
@@ -847,6 +845,17 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         countWaitTimer.start();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.wtf(this.getClass().getName(), "onDestroyView");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.wtf(this.getClass().getName(), "onDestroy");
+    }
 
     /**
      * ************************************** Callbacks **************************************
