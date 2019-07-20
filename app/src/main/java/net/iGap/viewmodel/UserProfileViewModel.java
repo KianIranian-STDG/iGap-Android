@@ -367,10 +367,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 G.onChatGetRoom = new OnChatGetRoom() {
                     @Override
                     public void onChatGetRoom(ProtoGlobal.Room room) {
+                        RealmRoom.putOrUpdate(room);
                         G.onChatGetRoom = null;
                         G.handler.post(() -> {
                             showLoading.set(View.GONE);
-                            goToChatPage.postValue(new GoToChatModel(room.getId(),userInfo.getUserId()));
+                            goToChatPage.postValue(new GoToChatModel(room.getId(), userInfo.getUserId()));
                         });
                     }
 
@@ -943,7 +944,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         private long peerId;
 
         public GoToChatModel(long roomId, long peerId) {
-            this.roomId = userId;
+            this.roomId = roomId;
             this.peerId = peerId;
         }
 
