@@ -252,62 +252,57 @@ public class RealmRoomMessage extends RealmObject {
         });
     }
 
-    public static void fetchMessages(final Realm realm, final long roomId, final OnActivityChatStart callback) {
+    public static void fetchMessages(final Realm oldRealm, final long roomId, final OnActivityChatStart callback) {
+        if (oldRealm.isClosed()) {
+            return;
+        }
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                if (realm.isClosed()) {
-                    return;
-                }
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    RealmResults<RealmRoomMessage> realmRoomMessages =
+                            realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                    RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
-                        RealmResults<RealmRoomMessage> realmRoomMessages =
-                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                    int count = 0;
+                    if (realmClientCondition != null) {
+                        for (RealmRoomMessage roomMessage : realmRoomMessages) {
+                            if (roomMessage != null) {
+                                /**
+                                 * don't send seen for own message
+                                 */
+                                if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
+                                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                    RealmClientCondition.addOfflineSeen(realm1, realmClientCondition, roomMessage.getMessageId());
 
-                        int count = 0;
-                        if (realmClientCondition != null) {
-                            for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                                if (roomMessage != null) {
-                                    /**
-                                     * don't send seen for own message
-                                     */
-                                    if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
-                                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-                                        RealmClientCondition.addOfflineSeen(realm, realmClientCondition, roomMessage.getMessageId());
-
-                                        if (G.userLogin) {
-                                            callback.sendSeenStatus(roomMessage);
-                                            count++;
-                                            if (count >= 100) { // do this block for 100 item, (client need to send all status in one request, wait for server change...)
-                                                break;
-                                            }
+                                    if (G.userLogin) {
+                                        callback.sendSeenStatus(roomMessage);
+                                        count++;
+                                        if (count >= 100) { // do this block for 100 item, (client need to send all status in one request, wait for server change...)
+                                            break;
                                         }
+                                    }
 
-                                    } else {
-                                        if (G.userLogin) {
+                                } else {
+                                    if (G.userLogin) {
 
-                                            /**
-                                             * check timeout, because when forward message to room ,message state is sending
-                                             * and add forward message to Realm from here and finally client have duplicated message
-                                             */
-                                            if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
-                                                if (roomMessage.getAttachment() != null) {
-                                                    if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-                                                        if (compressingFiles != null && compressingFiles.containsKey(roomMessage.messageId)) {
-                                                            return;
-                                                        }
-                                                        if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
-                                                            callback.resendMessageNeedsUpload(roomMessage, roomMessage.getMessageId());
-                                                        }
+                                        /**
+                                         * check timeout, because when forward message to room ,message state is sending
+                                         * and add forward message to Realm from here and finally client have duplicated message
+                                         */
+                                        if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
+                                            if (roomMessage.getAttachment() != null) {
+                                                if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+                                                    if (compressingFiles != null && compressingFiles.containsKey(roomMessage.messageId)) {
+                                                        return;
                                                     }
-                                                } else {
-                                                    if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING || ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.FAILED) {
-                                                        callback.resendMessage(roomMessage);
+                                                    if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
+                                                        callback.resendMessageNeedsUpload(roomMessage, roomMessage.getMessageId());
                                                     }
+                                                }
+                                            } else {
+                                                if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING || ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.FAILED) {
+                                                    callback.resendMessage(roomMessage);
                                                 }
                                             }
                                         }
@@ -316,19 +311,9 @@ public class RealmRoomMessage extends RealmObject {
                             }
                         }
                     }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        //realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        //realm.close();
-                    }
                 });
             }
-        });
+        }).start();
     }
 
     public static RealmRoomMessage putOrUpdate(Realm realm, long roomId, ProtoGlobal.RoomMessage input, StructMessageOption messageOption) {
