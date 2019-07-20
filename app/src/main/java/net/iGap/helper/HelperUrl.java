@@ -1177,17 +1177,10 @@ public class HelperUrl {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-
                         goToActivity(activity, roomId, user.getId(), user.getBot() ? ChatEntry.chat : chatEntery, 0);
-
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
                     }
                 });
+                realm.close();
             }
         });
     }
@@ -1246,7 +1239,6 @@ public class HelperUrl {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        realm.refresh();
                         if (room.getId() != FragmentChat.lastChatRoomId) {
                             new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
                         } else {
@@ -1260,14 +1252,10 @@ public class HelperUrl {
                                 e.printStackTrace();
                             }
                         }
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
                     }
                 });
+
+                realm.close();
             }
         });
     }

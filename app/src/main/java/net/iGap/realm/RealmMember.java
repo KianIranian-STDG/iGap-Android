@@ -251,17 +251,12 @@ public class RealmMember extends RealmObject {
                     @Override
                     public void onSuccess() {
 
-                        realm.close();
                         if (G.onChannelGetMemberList != null) {
                             G.onChannelGetMemberList.onChannelGetMemberList(members);
                         }
                     }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
                 });
+                realm.close();
             }
         });
     }
@@ -274,7 +269,7 @@ public class RealmMember extends RealmObject {
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
-                final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
+                final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members = new ArrayList<>();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -301,17 +296,13 @@ public class RealmMember extends RealmObject {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        realm.close();
                         if (G.onGroupGetMemberList != null) {
                             G.onGroupGetMemberList.onGroupGetMemberList(members);
                         }
                     }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
                 });
+
+                realm.close();
             }
         });
     }

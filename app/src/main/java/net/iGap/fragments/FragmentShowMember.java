@@ -283,15 +283,11 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                 @Override
                                 public void onSuccess() {
                                     fillItem();
-                                    realm.close();
 
                                 }
-                            }, new Realm.Transaction.OnError() {
-                                @Override
-                                public void onError(Throwable error) {
-                                    realm.close();
-                                }
                             });
+
+                            realm.close();
                         }
                     });
                 } else {
