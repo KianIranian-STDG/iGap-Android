@@ -1,6 +1,8 @@
 package net.iGap.fragments.beepTunes.album;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.SharedPreferences;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.downloader.Error;
@@ -8,8 +10,10 @@ import com.downloader.Progress;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.fragments.beepTunes.downloadQuality.DownloadQualityFragment;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.interfaces.OnSongDownload;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.DownloadSong;
@@ -25,19 +29,16 @@ import retrofit2.Response;
 
 public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
-    public static final int NOT_PURCHASED = 0;
-    public static final int PURCHASED = 1;
-    public static final int FREE = 1;
-    public static final int PURCHESED_NOT_DOWNLOAD = 2;
-    public static final int PURCHESED_AND_DOWNLOAD = 3;
-    public static final int PURCHESED_UNSUCCESSFUL = 4;
-
     private static final String TAG = "aabolfazlAlbum";
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Integer> albumStatus = new MutableLiveData<>();
+
+    @Override
+    public void onStart() {
+
+    }
 
     public void getAlbumSong(long id) {
         progressMutableLiveData.postValue(true);
@@ -75,36 +76,50 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         });
     }
 
-    public void onSongActionButtonClick(Track track, String path) {
+    public void startDownload(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {
         File file = new File(path + "/" + track.getName());
         if (file.exists()) {
             // TODO: 7/20/19 file exists
-            Log.i(TAG, "File Exists in: " + path);
+            Log.i(TAG, "file exist " + track.getName());
         } else {
-            DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH360(), track.getId(), track.getName());
-            downLoadTrack(downloadSong, path);
+            if (!sharedPreferences.getBoolean(SHP_SETTING.KEY_BBEP_TUNES_DOWNLOAD, false)) {
+                DownloadQualityFragment fragment = new DownloadQualityFragment();
+                fragment.setDownloadDialog(quality -> {
+                    if (quality == 128) {
+                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName());
+                        downLoadTrack(downloadSong, path);
+                    } else {
+                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH360(), track.getId(), track.getName());
+                        downLoadTrack(downloadSong, path);
+                    }
+                });
+                fragment.show(fragmentManager, null);
+            } else {
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_BBEP_TUNES_DOWNLOAD_QUALITY, 128) == 128) {
+                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName());
+                    downLoadTrack(downloadSong, path);
+                } else {
+                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH360(), track.getId(), track.getName());
+                    downLoadTrack(downloadSong, path);
+                }
+            }
         }
     }
-
 
     private void downLoadTrack(DownloadSong song, String path) {
         HelperDownloadFile.startDownloadManager(path, song, this);
     }
 
-    public MutableLiveData<List<Track>> getTrackMutableLiveData() {
+    MutableLiveData<List<Track>> getTrackMutableLiveData() {
         return trackMutableLiveData;
     }
 
-    public MutableLiveData<Albums> getAlbumMutableLiveData() {
+    MutableLiveData<Albums> getAlbumMutableLiveData() {
         return albumMutableLiveData;
     }
 
-    public MutableLiveData<Boolean> getProgressMutableLiveData() {
+    MutableLiveData<Boolean> getProgressMutableLiveData() {
         return progressMutableLiveData;
-    }
-
-    public MutableLiveData<Integer> getAlbumStatus() {
-        return albumStatus;
     }
 
     @Override

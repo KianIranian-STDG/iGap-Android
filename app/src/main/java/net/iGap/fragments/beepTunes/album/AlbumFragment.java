@@ -1,5 +1,7 @@
 package net.iGap.fragments.beepTunes.album;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import net.iGap.adapter.beepTunes.ItemAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.Track;
 
@@ -29,7 +32,7 @@ import java.util.List;
 
 public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
-
+    private static String PATH;
     private View rootView;
     private ImageView albumAvatarIv;
     private ViewGroup actionButton;
@@ -42,13 +45,12 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private RecyclerView otherAlbumRecyclerView;
     private AppBarLayout appBarLayout;
     private NestedScrollView scrollView;
-
     private AlbumViewModel viewModel;
     private AlbumTrackAdapter trackAdapter;
     private ItemAdapter albumAdapter;
     private Album album;
     private List<Track> tracks;
-    private OnProgress onProgress;
+    private SharedPreferences sharedPreferences;
 
     public AlbumFragment getInstance(Album album) {
         AlbumFragment albumFragment = new AlbumFragment();
@@ -64,6 +66,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         trackAdapter = new AlbumTrackAdapter();
         albumAdapter = new ItemAdapter();
         tracks = new ArrayList<>();
+        PATH = getContext().getFilesDir().getPath() + "beepTunes";
+        sharedPreferences = getContext().getSharedPreferences(SHP_SETTING.KEY_BEEP_TUNES, Context.MODE_PRIVATE);
         return rootView;
     }
 
@@ -109,12 +113,15 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         });
 
         actionButton.setOnClickListener(v -> {
-
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(SHP_SETTING.KEY_BBEP_TUNES_DOWNLOAD, false);
+            editor.apply();
         });
 
         trackAdapter.setOnclick(track -> {
-            viewModel.onSongActionButtonClick(track, getContext().getFilesDir().getPath() + "beepTunes");
+            viewModel.startDownload(track, PATH, getFragmentManager(), sharedPreferences);
         });
+
     }
 
     private void setUpViews() {
@@ -152,8 +159,13 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             getActivity().onBackPressed();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.onStart();
+    }
+
     public interface OnProgress {
         void progress(boolean visibility);
     }
-
 }

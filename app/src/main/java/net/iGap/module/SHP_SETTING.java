@@ -68,6 +68,7 @@ public class SHP_SETTING {
     public static final String KEY_AD_ROAMING_FILE = "ROAMING_FILE";
     public static final String KEY_AD_ROAMING_MUSIC = "ROAMING_MUSIC";
     public static final String KEY_AD_ROAMING_GIF = "ROAMING_GIF";
+    public static final String KEY_BEEP_TUNES = "BEEP_TUNES";
 
 
     // ========================================================================================== notification and sound
@@ -187,6 +188,9 @@ public class SHP_SETTING {
 
     // ========================================================================================== Popular
     public static final String KEY_CLEAR_CALL_LOG = "KEY_CLEAR_CALL_LOG"; // changed struct of "RealmCallLog" so for schema version 33 should clear realm data for "RealmCallLog"
+
+    public static final String KEY_BBEP_TUNES_DOWNLOAD_QUALITY = "KEY_BEEP_TUNES_DOWNLOAD_QUALITY";
+    public static final String KEY_BBEP_TUNES_DOWNLOAD = "KEY_BEEP_TUNES_DOWNLOAD";
 
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;
