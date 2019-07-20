@@ -11,11 +11,18 @@
     tools:ignore="MissingPrefix">
 
     <RelativeLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/chl_img_view_chat"
             style="?backgroundColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
@@ -34,16 +41,8 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/chl_img_view_chat"
-                        style="?backgroundColorSettingTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
