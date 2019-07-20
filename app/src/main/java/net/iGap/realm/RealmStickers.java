@@ -350,37 +350,36 @@ public class RealmStickers extends RealmObject {
     }
 
     public static void updateStickers(List<StructGroupSticker> mData) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                HashSet<String> hashedData = new HashSet<>();
-                ArrayList<RealmStickers> itemToDelete = new ArrayList<>();
-                HashSet<String> itemNotNeedToAdd = new HashSet<>();
-                for (StructGroupSticker structGroupSticker: mData) {
-                    hashedData.add(structGroupSticker.getId());
-                }
-
-                RealmResults<RealmStickers> allStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, true).findAll();
-                for (RealmStickers realmStickers: allStickers) {
-                    if (!hashedData.contains(realmStickers.st_id)) {
-                        itemToDelete.add(realmStickers);
-                    } else {
-                        itemNotNeedToAdd.add(realmStickers.st_id);
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
+                    HashSet<String> hashedData = new HashSet<>();
+                    ArrayList<RealmStickers> itemToDelete = new ArrayList<>();
+                    HashSet<String> itemNotNeedToAdd = new HashSet<>();
+                    for (StructGroupSticker structGroupSticker: mData) {
+                        hashedData.add(structGroupSticker.getId());
                     }
-                }
 
-                for (RealmStickers realmStickers: itemToDelete) {
-                    realmStickers.removeFromRealm();
-                }
-
-                for (StructGroupSticker item: mData) {
-                    if (!itemNotNeedToAdd.contains(item.getId())) {
-                        RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                    RealmResults<RealmStickers> allStickers = realm1.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, true).findAll();
+                    for (RealmStickers realmStickers: allStickers) {
+                        if (!hashedData.contains(realmStickers.st_id)) {
+                            itemToDelete.add(realmStickers);
+                        } else {
+                            itemNotNeedToAdd.add(realmStickers.st_id);
+                        }
                     }
-                }
+
+                    for (RealmStickers realmStickers: itemToDelete) {
+                        realmStickers.removeFromRealm();
+                    }
+
+                    for (StructGroupSticker item: mData) {
+                        if (!itemNotNeedToAdd.contains(item.getId())) {
+                            RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                        }
+                    }
+                });
             }
-        });
-        realm.close();
+        }).start();
     }
 }

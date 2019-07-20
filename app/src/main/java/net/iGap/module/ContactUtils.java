@@ -315,48 +315,32 @@ public final class ContactUtils {
             HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(final Realm realm) {
+                    new Thread(() -> {
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            realm.executeTransaction(realm1 -> {
 
-                            final RealmResults<RealmContacts> realmContacts = realm.where(RealmContacts.class).findAll();
-                            final int contactsSize = realmContacts.size();
-                            final MaterialDialog[] dialog = new MaterialDialog[1];
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog[0] = new MaterialDialog.Builder(G.currentActivity)
-                                            .title(R.string.sync_contact)
-                                            .content(R.string.just_wait_en)
-                                            .progress(false, contactsSize, true)
-                                            .show();
-                                }
-                            });
+                                final RealmResults<RealmContacts> realmContacts = realm1.where(RealmContacts.class).findAll();
+                                final int contactsSize = realmContacts.size();
+                                final MaterialDialog[] dialog = new MaterialDialog[1];
+                                G.handler.post(() -> dialog[0] = new MaterialDialog.Builder(G.currentActivity)
+                                        .title(R.string.sync_contact)
+                                        .content(R.string.just_wait_en)
+                                        .progress(false, contactsSize, true)
+                                        .show());
 
-                            for (RealmContacts realmContacts1 : realmContacts) {
-                                addContactToPhoneBook(realmContacts1);
-                                if (dialog[0].isCancelled()) {
-                                    break;
-                                }
-
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog[0].incrementProgress(1);
+                                for (RealmContacts realmContacts1 : realmContacts) {
+                                    addContactToPhoneBook(realmContacts1);
+                                    if (dialog[0].isCancelled()) {
+                                        break;
                                     }
-                                });
-                            }
 
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog[0].dismiss();
+                                    G.handler.post(() -> dialog[0].incrementProgress(1));
                                 }
-                            }, 500);
+
+                                G.handler.postDelayed(() -> dialog[0].dismiss(), 500);
+                            });
                         }
-                    });
-                    realm.close();
+                    }).start();
                 }
 
                 @Override

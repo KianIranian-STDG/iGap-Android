@@ -64,29 +64,14 @@ public class RealmCallLog extends RealmObject {
     }
 
     public static void clearCallLog(final long clearId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
-            }
-        });
-        realm.close();
-    }
-
-    public static void clearCallLogById(final long logId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                try {
-                    realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, logId).findFirst().deleteFromRealm();
-                }catch (Exception e){
-                    e.printStackTrace();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     /**

@@ -324,13 +324,15 @@ public class EditGroupViewModel extends ViewModel {
 
     public void setChatHistoryStatus(int status) {
         //ToDo: move this code to repository
-        realmGroupProfile.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(@NotNull Realm realm) {
-                //ToDo: improve this code
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().getGroupRoom().setStartFrom(status);
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
+                    //ToDo: improve this code
+                    realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().getGroupRoom().setStartFrom(status);
+                });
             }
-        });
+        }).start();
+
         int t;
         switch (status) {
             case 0:

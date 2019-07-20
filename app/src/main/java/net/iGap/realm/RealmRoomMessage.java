@@ -919,20 +919,20 @@ public class RealmRoomMessage extends RealmObject {
      * check SEEN and LISTENED for avoid from duplicate send status request in enter to chat because in
      * send status again enter ro chat fetchMessage method will be send status so client shouldn't
      */
-    public static void setStatusSeenInChatAsync(final long messageId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
-                if (realmRoomMessage != null) {
-                    if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                        realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+    public static void setStatusSeenInChat(final long messageId) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
+                    if (realmRoomMessage != null) {
+                        if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                            realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                        }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void setStatusFailedInChat(Realm realm, long messageId) {

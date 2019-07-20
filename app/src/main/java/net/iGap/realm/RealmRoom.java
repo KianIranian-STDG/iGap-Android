@@ -890,19 +890,17 @@ public class RealmRoom extends RealmObject {
     }
 
     public static void setLastScrollPosition(final long roomId, final long messageId, final int offset) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setLastScrollPositionMessageId(messageId);
-                    realmRoom.setLastScrollPositionOffset(offset);
-                }
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
+                    RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.setLastScrollPositionMessageId(messageId);
+                        realmRoom.setLastScrollPositionOffset(offset);
+                    }
+                });
             }
-        });
-
-        realm.close();
+        }).start();
     }
 
     public static void clearAllScrollPositions() {
@@ -961,37 +959,36 @@ public class RealmRoom extends RealmObject {
     }
 
     public static void clearDraft(final long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null && realmRoom.getLastMessage() != null) {
-                    if (realmRoom.getLastMessage().getUpdateTime() == 0) {
-                        realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
-                    } else {
-                        realmRoom.setUpdatedTime(realmRoom.getLastMessage().getUpdateTime());
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
+                    RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null && realmRoom.getLastMessage() != null) {
+                        if (realmRoom.getLastMessage().getUpdateTime() == 0) {
+                            realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
+                        } else {
+                            realmRoom.setUpdatedTime(realmRoom.getLastMessage().getUpdateTime());
+                        }
                     }
-                }
+                });
             }
-        });
-        realm.close();
+        }).start();
+
     }
 
     /**
      * clear all actions from RealmRoom for all rooms
      */
     public static void clearAllActions() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                    realmRoom.setActionState(null, 0);
-                }
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
+                    for (RealmRoom realmRoom : realm1.where(RealmRoom.class).findAll()) {
+                        realmRoom.setActionState(null, 0);
+                    }
+                });
             }
-        });
-        realm.close();
+        }).start();
     }
 
     public static void joinRoom(final long roomId) {
@@ -1626,42 +1623,6 @@ public class RealmRoom extends RealmObject {
         }
         realm.close();
         return ar;
-    }
-
-
-    public static void setPromote(Long id, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type type) {
-
-        if (type == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
-
-                    if (realmRoom != null) {
-                        realmRoom.setFromPromote(true);
-                    }
-                }
-
-            });
-            realm.close();
-        } else {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.setFromPromote(true);
-                    } else {
-                        realmRoom.setFromPromote(false);
-                    }
-
-                }
-            });
-            realm.close();
-        }
-
     }
 
     public static boolean isPromote(Long id) {

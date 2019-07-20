@@ -113,39 +113,38 @@ public final class StartupActions {
         new Thread(HelperUploadFile::new).start();
 
         if (realmConfiguration()) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(@NotNull Realm realm) {
-                    try {
-                        long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
-                        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
+            new Thread(() -> {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(realm1 -> {
+                        try {
+                            long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
+                            RealmResults<RealmRoom> realmRooms = realm1.where(RealmRoom.class).findAll();
+                            RealmQuery<RealmRoomMessage> roomMessages = realm1.where(RealmRoomMessage.class);
 
-                        for (RealmRoom room : realmRooms) {
-                            if (room.getLastMessage() != null) {
-                                roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                            for (RealmRoom room : realmRooms) {
+                                if (room.getLastMessage() != null) {
+                                    roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                                }
                             }
+
+                            RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                                    .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
+                                    .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                    .limit(100).findAll();
+
+                            for (RealmRoomMessage var : realmRoomMessages)
+                                var.removeFromRealm(realm1);
+
+                        } catch (OutOfMemoryError error) {
+                            error.printStackTrace();
+                            HelperLog.setErrorLog(new Exception(error.getMessage()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            HelperLog.setErrorLog(e);
                         }
-
-                        RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
-                                .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
-                                .limit(100).findAll();
-
-                        for (RealmRoomMessage var : realmRoomMessages)
-                            var.removeFromRealm(realm);
-
-                    } catch (OutOfMemoryError error) {
-                        error.printStackTrace();
-                        HelperLog.setErrorLog(new Exception(error.getMessage()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        HelperLog.setErrorLog(e);
-                    }
+                    });
                 }
-            });
-            realm.close();
+            }).start();
 
             new Thread(() -> checkDataUsage()).start();
             new Thread(() -> mainUserInfo()).start();

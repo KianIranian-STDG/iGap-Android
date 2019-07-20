@@ -12,6 +12,9 @@ package net.iGap.response;
 
 import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.realm.RealmCallLog;
+import net.iGap.realm.RealmCallLogFields;
+
+import io.realm.Realm;
 
 public class SignalingClearLogResponse extends MessageHandler {
 
@@ -37,8 +40,19 @@ public class SignalingClearLogResponse extends MessageHandler {
         if (builderRequest.getClearId() != 0 ){
             RealmCallLog.clearCallLog(builder.getClearId());
         }else {
-            for (int i= 0 ; i< builder.getLogIdCount() ; i++){
-                RealmCallLog.clearCallLogById(builderRequest.getLogIdList().get(i));
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        for (int i= 0 ; i< builder.getLogIdCount() ; i++){
+                            try {
+                                realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, builderRequest.getLogIdList().get(i)).findFirst().deleteFromRealm();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
             }
         }
 

@@ -65,14 +65,11 @@ public class HelperDataUsage {
     public static int numUploadOthersD = 0;
 
     public static void insertDataUsage(ProtoGlobal.RoomMessageType type, boolean conectivityType, boolean isDownloaded) {
-        Realm realm = Realm.getDefaultInstance();
+        new Thread(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
 
-
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).equalTo("connectivityType", conectivityType).findAll();
+                RealmResults<RealmDataUsage> realmDataUsage = realm1.where(RealmDataUsage.class).equalTo("connectivityType", conectivityType).findAll();
 
                 if (conectivityType) {
 
@@ -206,10 +203,11 @@ public class HelperDataUsage {
                     }
                 }
 
-            }
-        });
+            });
+            realm.close();
 
-        realm.close();
+        }).start();
+
         clearStatics();
     }
 

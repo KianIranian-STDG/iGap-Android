@@ -1135,14 +1135,11 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom.setCount(realm, mRoomId, 0);
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> RealmRoom.setCount(realm1, mRoomId, 0));
             }
-        });
-        realm.close();
+        }).start();
 
     }
 
@@ -4383,10 +4380,16 @@ public class FragmentChat extends BaseFragment
              */
             messageInfo.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
 
-            RealmClientCondition.addOfflineSeenAsync(mRoomId, Long.parseLong(messageInfo.messageID));
-            RealmRoomMessage.setStatusSeenInChatAsync(parseLong(messageInfo.messageID));
             if (!isPaused)
                 G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, parseLong(messageInfo.messageID), ProtoGlobal.RoomMessageStatus.SEEN);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RealmClientCondition.addOfflineSeen(mRoomId, Long.parseLong(messageInfo.messageID));
+                    RealmRoomMessage.setStatusSeenInChat(parseLong(messageInfo.messageID));
+                }
+            }).start();
         }
     }
 

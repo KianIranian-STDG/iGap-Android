@@ -788,35 +788,35 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         long finalAuthorRoomId = authorRoomId;
         long finalMessageId = messageId;
+        new Thread(() -> {
+            try (Realm realm1 = Realm.getDefaultInstance()) {
+                realm1.executeTransaction(realm -> {
 
-        getRealmChat().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
+                    if (realmRoomMessage != null) {
+                        /**
+                         * userId != 0 means that this message is from channel
+                         * because for chat and group userId will be set
+                         */
 
-                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
-                if (realmRoomMessage != null) {
-                    /**
-                     * userId != 0 means that this message is from channel
-                     * because for chat and group userId will be set
-                     */
-
-                    if ((mMessage.forwardedFrom != null)) {
-                        ProtoGlobal.Room.Type roomType = null;
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, finalAuthorRoomId).findFirst();
-                        if (realmRoom != null) {
-                            roomType = realmRoom.getType();
-                        }
-                        if ((roomType == ProtoGlobal.Room.Type.CHANNEL)) {
-                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReactionForward(finalAuthorRoomId, Long.parseLong(mMessage.messageID), reaction, finalMessageId));
+                        if ((mMessage.forwardedFrom != null)) {
+                            ProtoGlobal.Room.Type roomType = null;
+                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, finalAuthorRoomId).findFirst();
+                            if (realmRoom != null) {
+                                roomType = realmRoom.getType();
+                            }
+                            if ((roomType == ProtoGlobal.Room.Type.CHANNEL)) {
+                                G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReactionForward(finalAuthorRoomId, Long.parseLong(mMessage.messageID), reaction, finalMessageId));
+                            } else {
+                                G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
+                            }
                         } else {
                             G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
                         }
-                    } else {
-                        G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
                     }
-                }
+                });
             }
-        });
+        }).start();
     }
 
     @CallSuper
