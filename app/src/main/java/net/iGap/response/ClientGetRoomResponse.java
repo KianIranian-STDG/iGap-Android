@@ -129,10 +129,6 @@ public class ClientGetRoomResponse extends MessageHandler {
                                                     }
                                                 });
                                             }
-                                        }, new Realm.Transaction.OnError() {
-                                            @Override
-                                            public void onError(Throwable error) {
-                                            }
                                         });
 
                                         realm.close();

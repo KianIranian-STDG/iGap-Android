@@ -8209,13 +8209,6 @@ public class FragmentChat extends BaseFragment
                                 chatSendMessageUtil.buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
                             }
                         }
-
-                        //realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        //realm.close();
                     }
                 });
             }
