@@ -22,6 +22,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
+import net.iGap.module.api.beepTunes.DownloadLinks;
 import net.iGap.module.api.beepTunes.Track;
 
 import java.util.ArrayList;
@@ -109,7 +110,13 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
         actionButton.setOnClickListener(v -> {
             if (album.getFinalPrice() == 0) {
-                viewModel.onActionButtonClick(tracks);
+                Track track = new Track();
+                track.setId((long) 65431541);
+                track.setName("aabolfazl.mp3");
+                DownloadLinks downloadLinks = new DownloadLinks();
+                downloadLinks.setH360("http://192.168.10.156:7000/v1.0/files/download/track/12162208/L64/Farzad_Askari_Bi_Hoviat.mp3");
+                track.setDownloadLinks(downloadLinks);
+                viewModel.onActionButtonClick(track, getContext().getFilesDir().getPath() + "aabolfazl");
             }
         });
 

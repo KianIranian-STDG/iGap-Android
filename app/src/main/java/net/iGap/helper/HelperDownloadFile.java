@@ -12,7 +12,6 @@ package net.iGap.helper;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -26,7 +25,9 @@ import com.downloader.utils.Utils;
 
 import net.iGap.G;
 import net.iGap.interfaces.OnFileDownloadResponse;
+import net.iGap.interfaces.OnSongDownload;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -453,33 +454,31 @@ public class HelperDownloadFile {
                 });
     }
 
-    public static int startDownloadManager(String path, String url, String name) {
-
-       return PRDownloader.download(url, path, name)
+    public static void startDownloadManager(String path, DownloadSong song, OnSongDownload onSongDownload) {
+        PRDownloader.download(song.getUrl(), path, song.getName())
                 .build()
                 .setOnStartOrResumeListener(() -> {
-
+                    onSongDownload.startOrResume(song);
                 })
                 .setOnPauseListener(() -> {
-
+                    onSongDownload.pauseDownload(song);
                 })
                 .setOnCancelListener(() -> {
-
+                    onSongDownload.cancelDownload(song);
                 })
                 .setOnProgressListener(progress -> {
-
+                    onSongDownload.progressDownload(song, progress);
                 }).start(new OnDownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
+            @Override
+            public void onDownloadComplete() {
+                onSongDownload.completeDownload(song);
+            }
 
-                    }
-
-                    @Override
-                    public void onError(Error error) {
-
-                    }
-                });
-
+            @Override
+            public void onError(Error error) {
+                onSongDownload.downloadError(song, error);
+            }
+        });
     }
 
     private void requestDownloadFile(final StructDownLoad item) {
