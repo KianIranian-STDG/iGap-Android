@@ -634,14 +634,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     @Override
     public void onContactsGetList() {
 
-        G.handler.postDelayed(() -> {
-
-            if (results == null || results.size() == 0 ){
-                results = ContactManager.getContactList(ContactManager.FIRST);
-                realmRecyclerView.getAdapter().notifyDataSetChanged();
-            }
-
-        } , 920);
+        if (results == null || results.size() == 0) {
+            results = getRealm().where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            realmRecyclerView.setAdapter(new ContactListAdapter(results));
+        }
 
     }
 
