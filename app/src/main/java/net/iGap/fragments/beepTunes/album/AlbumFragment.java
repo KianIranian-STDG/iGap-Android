@@ -22,6 +22,10 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
+import net.iGap.module.api.beepTunes.Track;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
@@ -43,6 +47,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private AlbumTrackAdapter adapter;
     private ItemAdapter albumAdapter;
     private Album album;
+    private List<Track> tracks;
 
     public AlbumFragment getInstance(Album album) {
         AlbumFragment albumFragment = new AlbumFragment();
@@ -57,6 +62,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         viewModel = new AlbumViewModel();
         adapter = new AlbumTrackAdapter();
         albumAdapter = new ItemAdapter();
+        tracks = new ArrayList<>();
         return rootView;
     }
 
@@ -72,6 +78,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             adapter.setTracks(tracks);
             otherAlbumTv.setVisibility(View.VISIBLE);
             otherAlbumRecyclerView.setVisibility(View.VISIBLE);
+            this.tracks = tracks;
         });
 
         viewModel.getAlbumMutableLiveData().observe(this, albums -> {
@@ -100,7 +107,11 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             }
         });
 
-        actionButton.setOnClickListener(v -> viewModel.onActionButtonClick(album));
+        actionButton.setOnClickListener(v -> {
+            if (album.getFinalPrice() == 0) {
+                viewModel.onActionButtonClick(tracks);
+            }
+        });
 
     }
 
@@ -138,4 +149,5 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         if (getActivity() != null)
             getActivity().onBackPressed();
     }
+
 }

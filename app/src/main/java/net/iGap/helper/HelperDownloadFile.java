@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -40,6 +41,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HelperDownloadFile {
 
+
+    private static final String TAG = "aabolfazl";
 
     public interface UpdateListener {
         void OnProgress(String path, int progress);
@@ -450,9 +453,9 @@ public class HelperDownloadFile {
                 });
     }
 
-    public static void startDownloadManager(String path, String url, String name) {
+    public static int startDownloadManager(String path, String url, String name) {
 
-        int downId = PRDownloader.download(url, path, name)
+       return PRDownloader.download(url, path, name)
                 .build()
                 .setOnStartOrResumeListener(() -> {
 
@@ -465,8 +468,7 @@ public class HelperDownloadFile {
                 })
                 .setOnProgressListener(progress -> {
 
-                })
-                .start(new OnDownloadListener() {
+                }).start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
 
@@ -474,8 +476,10 @@ public class HelperDownloadFile {
 
                     @Override
                     public void onError(Error error) {
+
                     }
                 });
+
     }
 
     private void requestDownloadFile(final StructDownLoad item) {

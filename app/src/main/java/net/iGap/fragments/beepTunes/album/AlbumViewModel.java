@@ -1,10 +1,11 @@
 package net.iGap.fragments.beepTunes.album;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.os.Environment;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;
-import net.iGap.module.api.beepTunes.Album;
+import net.iGap.helper.HelperDownloadFile;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.Track;
@@ -24,6 +25,7 @@ public class AlbumViewModel extends BaseViewModel {
     public static final int PURCHESED_NOT_DOWNLOAD = 2;
     public static final int PURCHESED_AND_DOWNLOAD = 3;
     public static final int PURCHESED_UNSUCCESSFUL = 4;
+    private static final String PATH = Environment.getExternalStorageDirectory().toString();
 
     private static final String TAG = "aabolfazlAlbum";
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
@@ -68,8 +70,13 @@ public class AlbumViewModel extends BaseViewModel {
         });
     }
 
-    public void onActionButtonClick(Album album) {
+    public void onActionButtonClick(List<Track> tracks) {
 
+    }
+
+
+    private void downLoadTrack(String url, String name, String path) {
+        int DownloadId = HelperDownloadFile.startDownloadManager(path, url, name);
     }
 
     public MutableLiveData<List<Track>> getTrackMutableLiveData() {
