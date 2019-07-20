@@ -1793,7 +1793,7 @@
     <string name="change_language_title">تغییر زبان برنامه</string>
     <string name="terms_condition_title">قوانین و مقررات</string>
     <string name="welcome_title">به آیگپ خوش آمدید</string>
-    <string name="add_modereator">افزودن مدیر</string>
+    <string name="add_modereator">افزودن ناظر</string>
     <string name="add_admin">اضافه کردن مدیریت</string>
     <string name="subscribers_title">مشترک</string>
     <string name="invite_link_title">لینک دعوت</string>
@@ -1868,8 +1868,8 @@
     <string name="nine_number">۹</string>
     <string name="star_number">*</string>
     <string name="zero_number">۰</string>
-    <string name="administrators_title">سرپرست</string>
-    <string name="moderators_title">مدیر</string>
+    <string name="administrators_title">مدیران</string>
+    <string name="moderators_title">ناظرین</string>
     <string name="view_contact">نمایش مخاطب</string>
     <string name="new_group_call">تماس گروهی جدید</string>
     <string name="dial_number">صفحه تماس</string>
