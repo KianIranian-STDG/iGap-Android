@@ -7,17 +7,16 @@
     android:orientation="vertical">
 
     <LinearLayout
-        style="?backgroundSubChatTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp4"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/dp4">
 
             <TextView
                 style="?textTitleColorSettingTheme"
@@ -25,8 +24,8 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@string/pined_message"
-                android:textColor="@color/md_blue_700"
-                android:textSize="@dimen/dp14" />
+                android:textColor="@color/shared_media_music_list_icon_color"
+                android:textSize="@dimen/smallTextSize" />
 
             <TextView
                 android:id="@+id/pl_txt_pined_Message"
@@ -35,13 +34,13 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text=""
-                android:textSize="@dimen/dp12" />
+                android:textSize="@dimen/smallTextSize" />
 
         </LinearLayout>
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/pl_btn_close"
-            style="@style/myIconToolbarStyle"
+            style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp8"
