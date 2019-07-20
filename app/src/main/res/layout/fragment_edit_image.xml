@@ -151,10 +151,12 @@
                 android:hint="@string/type_message"
                 android:imeOptions="flagNoExtractUi"
                 android:maxLines="4"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
                 android:textColor="@color/white"
                 android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/dp16"
-                app:emojiSize="@dimen/dp22" />
+                android:textSize="@dimen/standardTextSize"
+                app:emojiSize="@dimen/largeTextSize" />
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_ok_message"
