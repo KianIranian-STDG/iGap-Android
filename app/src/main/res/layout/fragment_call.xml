@@ -146,7 +146,7 @@
                     android:paddingRight="@dimen/round_buttons_large_padding"
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
-                    android:text="@string/canceled"
+                    android:text="@string/un_answered"
                     android:textColor="@color/gray_4c"
                     android:textSize="@dimen/smallTextSize" />
 

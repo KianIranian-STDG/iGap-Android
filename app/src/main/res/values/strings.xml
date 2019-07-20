@@ -1021,6 +1021,7 @@
     <string name="who_is_allowed_to_video_call">Who can video call me?</string>
     <string name="miss">Missed Call</string>
     <string name="not_answer">Unanswered Call</string>
+    <string name="un_answered">Unanswered</string>
 
     <string name="nothing">Nothing</string>
     <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all calls?</string>

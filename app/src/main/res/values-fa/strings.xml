@@ -981,6 +981,7 @@
     <string name="who_is_allowed_to_video_call">افراد مجاز برای تماس تصویری</string>
     <string name="miss">از دست رفته</string>
     <string name="not_answer">بدون پاسخ</string>
+    <string name="un_answered">بدون پاسخ</string>
     <string name="e_906_1">شما اجازه تماس با این مخاطب را ندارید.</string>
 
     <string name="iGap_has_crashed">آیگپ با خطای پیش بینی نشده برخورد کرده است!</string>
