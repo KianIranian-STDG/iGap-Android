@@ -237,4 +237,8 @@
     <string name="unlock_icon">Å</string>
     <string name="lock_icon">€</string>
     <string name="coin_icon">2</string>
+  <string name="folder_icon">Õ</string>
+  <string name="photo_icon">W</string>
+  <string name="file_icon">Ò</string>
+  <string name="arrow_up_icon">þ</string>
 </resources>
