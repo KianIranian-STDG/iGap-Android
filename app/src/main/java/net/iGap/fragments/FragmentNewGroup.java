@@ -28,6 +28,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -745,6 +746,14 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             }
 
             public void bindData(final StructContactInfo data) {
+
+                if (G.selectedLanguage.equals("en")){
+                    txtName.setGravity(Gravity.LEFT);
+                    txtPhone.setGravity(Gravity.LEFT);
+                }else {
+                    txtName.setGravity(Gravity.RIGHT);
+                    txtPhone.setGravity(Gravity.RIGHT);
+                }
 
                 if (G.isDarkTheme) {
                     txtName.setTextColor(context.getResources().getColor(R.color.gray_300));
