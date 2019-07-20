@@ -1,6 +1,5 @@
 package net.iGap.igasht;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -10,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtProvinceBinding;
@@ -34,6 +35,7 @@ public class IGashtProvinceFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_province, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+        /*getView().setSoftIn*/
         return binding.getRoot();
     }
 
@@ -56,24 +58,66 @@ public class IGashtProvinceFragment extends Fragment {
 
                     @Override
                     public void onRightIconClickListener(View view) {
-                        if (getActivity()!=null){
-                            new HelperFragment(getActivity().getSupportFragmentManager(),new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
                         }
                     }
 
                     @Override
                     public void onSecondRightIconClickListener(View view) {
-                        if (getActivity()!=null){
-                            new HelperFragment(getActivity().getSupportFragmentManager(),new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
                     }
                 }).getView());
 
-        viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), go -> {
-            if (getActivity() != null && go != null && go) {
+        /*binding.provinceSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                viewModel.setSelectedLocation(position);
+            }
+        });*/
+
+        /*binding.provinceSearchText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                viewModel.setSelectedLocation(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });*/
+
+        viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), province -> {
+            if (getActivity() != null && province != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtLocationListFragment()).setReplace(false).load(true);
             }
         });
 
+        viewModel.getProvinceListResult().observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                binding.provinceSearchText.setAdapter(new ProvinceSuggestionListAdapter(getContext(), data));
+            }
+        });
+
+        viewModel.requestErrorMessage.observe(getViewLifecycleOwner(), message -> {
+            if (getContext() != null && message != null) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewModel.getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
+            if (isClear != null && isClear) {
+                binding.provinceSearchText.setText("");
+            }
+        });
+
+        viewModel.getShowErrorSelectProvince().observe(getViewLifecycleOwner(), messageRes -> {
+            if (getContext() != null && messageRes != null) {
+                Toast.makeText(getContext(), messageRes, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
