@@ -22,7 +22,6 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
-import net.iGap.module.api.beepTunes.DownloadLinks;
 import net.iGap.module.api.beepTunes.Track;
 
 import java.util.ArrayList;
@@ -45,10 +44,11 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private NestedScrollView scrollView;
 
     private AlbumViewModel viewModel;
-    private AlbumTrackAdapter adapter;
+    private AlbumTrackAdapter trackAdapter;
     private ItemAdapter albumAdapter;
     private Album album;
     private List<Track> tracks;
+    private OnProgress onProgress;
 
     public AlbumFragment getInstance(Album album) {
         AlbumFragment albumFragment = new AlbumFragment();
@@ -61,7 +61,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_beeptunes_album, container, false);
         viewModel = new AlbumViewModel();
-        adapter = new AlbumTrackAdapter();
+        trackAdapter = new AlbumTrackAdapter();
         albumAdapter = new ItemAdapter();
         tracks = new ArrayList<>();
         return rootView;
@@ -76,7 +76,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         viewModel.getArtistOtherAlbum(album.getArtists().get(0).getId());
 
         viewModel.getTrackMutableLiveData().observe(this, tracks -> {
-            adapter.setTracks(tracks);
+            trackAdapter.setTracks(tracks);
             otherAlbumTv.setVisibility(View.VISIBLE);
             otherAlbumRecyclerView.setVisibility(View.VISIBLE);
             this.tracks = tracks;
@@ -109,17 +109,12 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         });
 
         actionButton.setOnClickListener(v -> {
-            if (album.getFinalPrice() == 0) {
-                Track track = new Track();
-                track.setId((long) 65431541);
-                track.setName("aabolfazl.mp3");
-                DownloadLinks downloadLinks = new DownloadLinks();
-                downloadLinks.setH360("http://192.168.10.156:7000/v1.0/files/download/track/12162208/L64/Farzad_Askari_Bi_Hoviat.mp3");
-                track.setDownloadLinks(downloadLinks);
-                viewModel.onActionButtonClick(track, getContext().getFilesDir().getPath() + "aabolfazl");
-            }
+
         });
 
+        trackAdapter.setOnclick(track -> {
+            viewModel.onSongActionButtonClick(track, getContext().getFilesDir().getPath() + "beepTunes");
+        });
     }
 
     private void setUpViews() {
@@ -140,7 +135,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         otherAlbumRecyclerView.setNestedScrollingEnabled(false);
         otherAlbumRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         songRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        songRecyclerView.setAdapter(adapter);
+        songRecyclerView.setAdapter(trackAdapter);
         otherAlbumRecyclerView.setAdapter(albumAdapter);
     }
 
@@ -155,6 +150,10 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     public void onLeftIconClickListener(View view) {
         if (getActivity() != null)
             getActivity().onBackPressed();
+    }
+
+    public interface OnProgress {
+        void progress(boolean visibility);
     }
 
 }

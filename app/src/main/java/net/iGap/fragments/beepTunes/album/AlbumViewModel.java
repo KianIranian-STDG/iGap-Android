@@ -16,6 +16,7 @@ import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.viewmodel.BaseViewModel;
 
+import java.io.File;
 import java.util.List;
 
 import retrofit2.Call;
@@ -74,9 +75,15 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         });
     }
 
-    public void onActionButtonClick(Track track, String path) {
-        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH360(), track.getId(), track.getName());
-        downLoadTrack(downloadSong, path);
+    public void onSongActionButtonClick(Track track, String path) {
+        File file = new File(path + "/" + track.getName());
+        if (file.exists()) {
+            // TODO: 7/20/19 file exists
+            Log.i(TAG, "File Exists in: " + path);
+        } else {
+            DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH360(), track.getId(), track.getName());
+            downLoadTrack(downloadSong, path);
+        }
     }
 
 
@@ -102,7 +109,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     @Override
     public void progressDownload(DownloadSong downloadSong, Progress progress) {
-        Log.i(TAG, "progressDownload: " + downloadSong.getId() + " " + progress.currentBytes + " " + progress.totalBytes);
+//        Log.i(TAG, "progressDownload: " + downloadSong.getId() + " " + progress.currentBytes + " " + progress.totalBytes);
     }
 
     @Override

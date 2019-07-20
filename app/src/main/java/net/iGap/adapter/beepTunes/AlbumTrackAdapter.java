@@ -3,17 +3,18 @@ package net.iGap.adapter.beepTunes;
 import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.beepTunes.album.AlbumFragment;
+import net.iGap.interfaces.TrackOnclick;
+import net.iGap.module.api.beepTunes.DownloadLinks;
 import net.iGap.module.api.beepTunes.Track;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +22,15 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
     private List<Track> tracks = new ArrayList<>();
     private boolean isPlaying = false;
     private MediaPlayer mp = new MediaPlayer();
+    private TrackOnclick onclick;
 
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
         notifyDataSetChanged();
+    }
+
+    public void setOnclick(TrackOnclick onclick) {
+        this.onclick = onclick;
     }
 
     @NonNull
@@ -44,11 +50,12 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         return tracks.size();
     }
 
-    class TrackViewHolder extends RecyclerView.ViewHolder {
+    class TrackViewHolder extends RecyclerView.ViewHolder implements AlbumFragment.OnProgress {
         private TextView songNameTv;
         private TextView songPriceTv;
         private TextView songActionTv;
         private TextView songPrwTv;
+        private ProgressBar progressBar;
 
         TrackViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -56,43 +63,27 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
             songPriceTv = itemView.findViewById(R.id.tv_itemSong_price);
             songActionTv = itemView.findViewById(R.id.tv_itemSong_action);
             songPrwTv = itemView.findViewById(R.id.tv_itemSong_prw);
+            progressBar = itemView.findViewById(R.id.pb_itemSong);
         }
 
         void bindTracks(Track track) {
-            if (G.isAppRtl) {
-                songNameTv.setText(track.getName());
+            Track track1 = new Track();
+            track1.setId((long) 65431541);
+//            track1.setName(Calendar.getInstance().getTime() + ".mp3");
+            track1.setName("abolfazl.mp3");
+            DownloadLinks downloadLinks = new DownloadLinks();
+            downloadLinks.setH360("http://192.168.10.156:7000/v1.0/files/download/track/12162208/L64/Farzad_Askari_Bi_Hoviat.mp3");
+            track1.setDownloadLinks(downloadLinks);
 
-                if (track.getPrice() != 0)
-                    songPriceTv.setText(track.getPrice().toString() + itemView.getContext().getResources().getString(R.string.toman));
-
-                songActionTv.setText("ï");
-                songPrwTv.setText(itemView.getContext().getResources().getString(R.string.play_icon));
-            }
-
-
-            itemView.setOnClickListener(v -> {
-                if (!mp.isPlaying()) {
-                    songPrwTv.setText("Ä");
-                    try {
-                        mp.setDataSource(track.getPreviewUrl());
-                        mp.prepare();
-                        mp.start();
-                    } catch (IOException e) {
-                        Log.e("beepTunes song player", e.getMessage());
-                    }
-                }else {
-                    stopPlaying();
-                    isPlaying = false;
-                    songPrwTv.setText(itemView.getContext().getResources().getString(R.string.play_icon));
-                }
-
-            });
-
+            songActionTv.setOnClickListener(v -> onclick.onClick(track1));
         }
 
-        private void stopPlaying() {
-            mp.stop();
-            mp.reset();
+        @Override
+        public void progress(boolean visibility) {
+            if (visibility)
+                progressBar.setVisibility(View.VISIBLE);
+            else
+                progressBar.setVisibility(View.GONE);
         }
     }
 }

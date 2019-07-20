@@ -1908,4 +1908,5 @@
     <string name="str_frag_sync_contactWelcome">Welcome to IGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
     <string name="download_icon">ï</string>
+    <string name="icon_sync">ÿ</string>
 </resources>
