@@ -230,9 +230,7 @@ public class AvatarHandler {
                         RealmAvatar.deleteAvatar(realm, avatarOwnerId);
                     }
                 }, () -> {
-                    G.refreshRealmUi();
                     getAvatar(baseParam);
-                }, error -> {
                 });
                 realm.close();
             }
