@@ -1279,11 +1279,18 @@ public class HelperToolbar {
                 //contain : buttons , logo
                 mainConstraint = new ConstraintLayout(getContext());
                 mainConstraint.setId(R.id.view_toolbar_main_constraint);
-                if (isDark)
-                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-                else
-                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
 
+                if (isRoundBackground){
+                    if (isDark)
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
+                    else
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
+                }else {
+                    if (isDark)
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect_dark);
+                    else
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect);
+                }
                 setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));
                 setRoot.constrainWidth(mainConstraint.getId(), MATCH_CONSTRAINT);
                 setRoot.connect(mainConstraint.getId(), START, PARENT_ID, START);
