@@ -2,6 +2,8 @@ package net.iGap.adapter.items.popular;
 
 
 import android.content.Context;
+import android.view.View;
+import android.widget.ImageView;
 
 import net.iGap.model.PopularChannel.Slide;
 
@@ -14,10 +16,11 @@ public class MainSliderAdapter extends SliderAdapter {
     private List<Slide> sliderList;
     private Context context;
 
-    public MainSliderAdapter(Context context,List<Slide> sliderList) {
+    public MainSliderAdapter(Context context, List<Slide> sliderList) {
         this.sliderList = sliderList;
         this.context = context;
     }
+
 
     @Override
     public int getItemCount() {
@@ -26,9 +29,7 @@ public class MainSliderAdapter extends SliderAdapter {
 
     @Override
     public void onBindImageSlide(int position, ImageSlideViewHolder imageSlideViewHolder) {
-
         imageSlideViewHolder.bindImageSlide(sliderList.get(position).getImageUrl());
     }
-
 
 }

@@ -5,6 +5,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import ir.radsense.raadcore.widget.RoundedCornersTransform;
+
 public class ImageLoadingService implements ss.com.bannerslider.ImageLoadingService {
     public Context context;
 
@@ -14,7 +16,9 @@ public class ImageLoadingService implements ss.com.bannerslider.ImageLoadingServ
 
     @Override
     public void loadImage(String url, ImageView imageView) {
-        Picasso.get().load(url).into(imageView);
+        Picasso.get().load(url)
+                .transform(new RoundedCornersTransform(16, 0))
+                .into(imageView);
     }
 
     @Override

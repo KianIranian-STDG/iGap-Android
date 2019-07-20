@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -25,6 +26,7 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
 
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
+    private OnClickedChannelInfoEventCallBack onClickedChannelInfoEventCallBack;
 
     public AdapterChannelInfoItem(Context context) {
         this.context = context;
@@ -73,7 +75,12 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
             }
             root = itemView.findViewById(R.id.card_item_pop_category);
             Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickedChannelInfoEventCallBack.onClickChannelInfo();
+                }
+            });
         }
 
         public void bindChannel(Channel channel) {
@@ -85,5 +92,13 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
 
 
         }
+    }
+
+    public void setOnClickedChannelEventCallBack(OnClickedChannelInfoEventCallBack onClickedChannelInfoEventCallBack) {
+        this.onClickedChannelInfoEventCallBack = onClickedChannelInfoEventCallBack;
+    }
+
+    public interface OnClickedChannelInfoEventCallBack {
+        void onClickChannelInfo();
     }
 }

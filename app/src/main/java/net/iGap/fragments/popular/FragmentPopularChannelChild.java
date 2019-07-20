@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterChannelInfoItem;
 import net.iGap.adapter.items.popular.ImageLoadingService;
@@ -22,6 +21,7 @@ import net.iGap.adapter.items.popular.MainSliderAdapter;
 import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperUrl;
 import net.iGap.model.PopularChannel.ChildChannel;
 
 import retrofit2.Call;
@@ -61,7 +61,6 @@ public class FragmentPopularChannelChild extends BaseFragment {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                    Toast.makeText(getContext(), "scrollllinggg", Toast.LENGTH_SHORT).show();
                     if (totalPage >= page)
                         setupViews();
 
@@ -83,11 +82,11 @@ public class FragmentPopularChannelChild extends BaseFragment {
                     if (page == 1) {
                         adapterChannel = new AdapterChannelInfoItem(getContext());
                         mainSliderAdapter = new MainSliderAdapter(getContext(), response.body().getInfo().getAdvertisement().getSlides());
-                        Slider slider = new Slider(G.context);
+                        Slider slider = new Slider(getContext());
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         layoutParams.setMargins(0, 8, 0, 8);
                         slider.setLayoutParams(layoutParams);
-                        Slider.init(new ImageLoadingService(G.context));
+                        Slider.init(new ImageLoadingService(getContext()));
                         slider.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -96,16 +95,24 @@ public class FragmentPopularChannelChild extends BaseFragment {
                                 slider.setLoopSlides(true);
                                 slider.setAnimateIndicators(true);
                                 slider.setIndicatorSize(12);
-                                slider.setInterval(1000);
+                                slider.setInterval(2000);
                             }
                         }, 0);
                         linearLayoutItemContainerChild.addView(slider);
-                        RecyclerView categoryRecyclerViewChild = new RecyclerView(G.context);
-                        categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
+
+                        RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
+                        categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         layoutParams1.setMargins(-4, 8, -4, 8);
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
+                        adapterChannel.setOnClickedChannelEventCallBack(new AdapterChannelInfoItem.OnClickedChannelInfoEventCallBack() {
+                            @Override
+                            public void onClickChannelInfo() {
+//                                HelperUrl.checkAndJoinToRoom(getActivity(),"tMzDiVRNf74CGbneQeS5AVfA5");
+                                HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+                            }
+                        });
                         linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
                     }
 

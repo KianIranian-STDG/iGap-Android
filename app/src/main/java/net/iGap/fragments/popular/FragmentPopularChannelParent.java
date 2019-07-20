@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,20 +28,27 @@ import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.PopularChannel.Category;
 import net.iGap.model.PopularChannel.ParentChannel;
+
+import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ss.com.bannerslider.Slider;
+import ss.com.bannerslider.event.OnSlideClickListener;
 
 
 public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
     private HelperToolbar toolbar;
     private PopularChannelApi api;
     private View rootView;
+    private AdapterChannelItem adapterChannelItem;
+    private MainSliderAdapter mainSliderAdapter;
+    private Timer timer;
 
     @NonNull
     @Override
@@ -48,6 +56,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_parent, container, false);
         api = ApiServiceProvider.getChannelApi();
         LinearLayout toolbarContainer = rootView.findViewById(R.id.ll_popular_parent_toolbar);
+
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setListener(this)
@@ -65,31 +74,40 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
                 Log.i("nazanin", "onResponse: " + response.isSuccessful());
+
                 LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
-                            Slider slider = new Slider(getContext());
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            layoutParams.setMargins(0, 8, 0, 8);
-
-//                            layoutParams.height = (layoutParams.width * response.body().getData().get(i).getInfo().getScale().length());
-                            slider.setLayoutParams(layoutParams);
                             Slider.init(new ImageLoadingService(getContext()));
+                            Slider slider = new Slider(getContext());
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (ViewGroup.LayoutParams.MATCH_PARENT * response.body().getData().get(i).getInfo().getScale().length()));
+                            layoutParams.setMargins(0, 8, 0, 8);
+                            slider.setLayoutParams(layoutParams);
                             int finalI = i;
                             slider.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MainSliderAdapter adapterMain = new MainSliderAdapter(getContext(), response.body().getData().get(finalI).getSlides());
-                                    slider.setAdapter(adapterMain);
+                                    mainSliderAdapter = new MainSliderAdapter(getContext(), response.body().getData().get(finalI).getSlides());
+                                    slider.setAdapter(mainSliderAdapter);
                                     slider.setSelectedSlide(0);
                                     slider.setLoopSlides(true);
                                     slider.setAnimateIndicators(true);
                                     slider.setIndicatorSize(12);
-                                    slider.setInterval(1000);
+                                    slider.setInterval(2000);
+                                    slider.setOnSlideClickListener(new OnSlideClickListener() {
+                                        @Override
+                                        public void onSlideClick(int position) {
+                                            HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
+                                            HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+
+                                        }
+                                    });
                                 }
                             }, 0);
+
                             linearLayoutItemContainer.addView(slider);
+
                             break;
 
                         case ParentChannel.TYPE_CHANNEL:
@@ -114,6 +132,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                                     fragmentTransition.addToBackStack(null);
                                     fragmentTransition.commit();
                                 }
+
                             });
 
                             TextView textViewTitle = channelView.findViewById(R.id.tv_item_popular_title);
@@ -128,7 +147,15 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             layoutParams1.setMargins(0, 8, 0, 8);
                             channelView.setLayoutParams(layoutParams1);
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-                            channelsRecyclerView.setAdapter(new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels()));
+                            adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
+                            channelsRecyclerView.setAdapter(adapterChannelItem);
+                            adapterChannelItem.setOnClickedChannelEventCallBack(new AdapterChannelItem.OnClickedChannelEventCallBack() {
+                                @Override
+                                public void onClickedChannel() {
+                                    HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
+//                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(),"testttd", HelperUrl.ChatEntry.chat);
+                                }
+                            });
                             linearLayoutItemContainer.addView(channelView);
                             break;
                         case ParentChannel.TYPE_CATEGORY:

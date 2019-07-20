@@ -23,6 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.ChannelViewHolder> {
     private List<Channel> channelList;
     private Context context;
+    private OnClickedChannelEventCallBack onClickedChannelEventCallBack;
 
     public AdapterChannelItem(Context context, List<Channel> channelList) {
         this.context = context;
@@ -60,6 +61,12 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
             channelTitle = itemView.findViewById(R.id.tv_item_popular_rv_linear);
             root = itemView.findViewById(R.id.card_item_pop_row);
             Utils.setCardsBackground(root, R.color.white, R.color.navigation_dark_mode_bg);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickedChannelEventCallBack.onClickedChannel();
+                }
+            });
 
         }
 
@@ -72,5 +79,13 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
             if (G.selectedLanguage.equals("en"))
                 channelTitle.setText(channel.getTitleEn());
         }
+    }
+
+    public void setOnClickedChannelEventCallBack(OnClickedChannelEventCallBack onClickedChannelEventCallBack) {
+        this.onClickedChannelEventCallBack = onClickedChannelEventCallBack;
+    }
+
+    public interface OnClickedChannelEventCallBack {
+        void onClickedChannel();
     }
 }
