@@ -224,7 +224,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
-        android:text="@string/md_room"
+        android:text="@string/location_pin_icon"
         app:layout_constraintBottom_toBottomOf="@id/txtFile"
         app:layout_constraintLeft_toRightOf="@id/txtContact"
         app:layout_constraintRight_toLeftOf="@id/txtSend"

@@ -181,7 +181,7 @@
     <string name="score_star_icon">1</string>
     <string name="invite_icon">i</string>
     <string name="scan_qr_code_icon">$</string>
-    <string name="location_pin_icon">{</string>
+    <string name="location_pin_icon">Ç</string>
     <string name="dark_mode_icon">z</string>
     <string name="faq_icon">`</string>
     <string name="setting_icon">µ</string>
@@ -199,7 +199,7 @@
     <string name="voice_call_received_icon">U</string>
     <string name="group_icon">;</string>
     <string name="channel_icon">:</string>
-    <string name="secret_chat_icon">}</string>
+    <string name="secret_chat_icon">€</string>
     <string name="dial_number_icon">/</string>
     <string name="delete_icon">x</string>
     <string name="share_icon">À</string>
@@ -235,6 +235,6 @@
     <string name="voice_icon">G</string>
     <string name="down_arrow_icon">È</string>
     <string name="unlock_icon">Å</string>
-    <string name="lock_icon">}</string>
+    <string name="lock_icon">€</string>
     <string name="coin_icon">2</string>
 </resources>
