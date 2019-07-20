@@ -1278,7 +1278,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             });
         }
 
-        private void setRoleStarColor(MaterialDesignTextView view, StructContactInfo mContact) {
+        private void setRoleStarColor(TextView view, StructContactInfo mContact) {
 
             view.setVisibility(View.GONE);
 
@@ -1323,19 +1323,19 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             protected CustomTextViewMedium subtitle;
             protected View topLine;
             protected TextView txtNumberOfSharedMedia;
-            protected MaterialDesignTextView roleStar;
-            protected MaterialDesignTextView btnMenu;
+            protected TextView roleStar;
+            protected TextView btnMenu;
 
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                image = (CircleImageView) itemView.findViewById(R.id.cigp_imv_contact_avatar);
-                title = (CustomTextViewMedium) itemView.findViewById(R.id.cigp_txt_contact_name);
-                subtitle = (CustomTextViewMedium) itemView.findViewById(R.id.cigp_txt_contact_lastseen);
+                image =  itemView.findViewById(R.id.cigp_imv_contact_avatar);
+                title =  itemView.findViewById(R.id.cigp_txt_contact_name);
+                subtitle =  itemView.findViewById(R.id.cigp_txt_contact_lastseen);
                 topLine = itemView.findViewById(R.id.cigp_view_topLine);
-                txtNumberOfSharedMedia = (TextView) itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
-                roleStar = (MaterialDesignTextView) itemView.findViewById(R.id.cigp_txt_member_role);
-                btnMenu = (MaterialDesignTextView) itemView.findViewById(R.id.cigp_moreButton);
+                txtNumberOfSharedMedia =  itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
+                roleStar =  itemView.findViewById(R.id.cigp_txt_member_role);
+                btnMenu =  itemView.findViewById(R.id.cigp_moreButton);
             }
         }
     }

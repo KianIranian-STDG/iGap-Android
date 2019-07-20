@@ -49,14 +49,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <net.iGap.module.MaterialDesignTextView
+            <TextView
               android:id="@+id/cigp_txt_member_role"
               style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginRight="@dimen/dp4"
               android:text="@string/md_rate_star"
-              android:textAppearance="@style/TextIconAppearance.all"
               android:textSize="@dimen/standardTextSize" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -88,13 +87,12 @@
           android:textSize="@dimen/smallTextSize" />
       </RelativeLayout>
 
-      <net.iGap.module.MaterialDesignTextView
+      <TextView
         android:id="@+id/cigp_moreButton"
         android:layout_width="@dimen/dp48"
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/more_icon"
-        android:textAppearance="@style/TextIconAppearance.all"
         style="@style/myIconTextViewStyle"
         android:textSize="@dimen/dp18" />
 
