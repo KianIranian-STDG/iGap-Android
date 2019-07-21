@@ -16,7 +16,8 @@
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layoutDirection="locale">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/root"
