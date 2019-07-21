@@ -37,6 +37,16 @@ public class Track {
     @Expose
     private String type;
 
+    private int downloadStatus = DownloadSong.STATUS_STOP;
+
+    public int getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(int downloadStatus) {
+        this.downloadStatus = downloadStatus;
+    }
+
     public Long getAlbumId() {
         return albumId;
     }

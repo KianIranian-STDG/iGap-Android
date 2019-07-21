@@ -133,6 +133,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         viewModel.getDownloadStatusMutableLiveData().observe(this, downloadSong -> {
             switch (downloadSong.getDownloadStatus()) {
                 case STATUS_START:
+                    trackAdapter.startDownload(downloadSong.getId());
                     Log.i(TAG, "start: " + downloadSong.getId());
                     break;
                 case STATUS_STOP:
@@ -143,6 +144,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                     break;
                 case STATUS_COMPLETE:
                     Log.i(TAG, "complete: " + downloadSong.getId());
+                    trackAdapter.stopDownload(downloadSong.getId());
                     break;
                 case STATUS_ERROR:
                     Log.i(TAG, "error: " + downloadSong.getId());
