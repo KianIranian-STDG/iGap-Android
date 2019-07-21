@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/amr_layout_root">
 
     <HorizontalScrollView
-        android:id="@+id/v0"
+        android:id="@+id/amr_layout_selected_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_search"
@@ -108,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/v0" />
+        app:layout_constraintTop_toBottomOf="@id/amr_layout_selected_root" />
 
     <LinearLayout
         android:id="@+id/amr_layout_toolbar"
