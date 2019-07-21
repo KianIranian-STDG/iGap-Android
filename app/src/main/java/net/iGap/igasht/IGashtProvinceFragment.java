@@ -35,7 +35,6 @@ public class IGashtProvinceFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_province, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
-        /*getView().setSoftIn*/
         return binding.getRoot();
     }
 
@@ -71,24 +70,7 @@ public class IGashtProvinceFragment extends Fragment {
                     }
                 }).getView());
 
-        /*binding.provinceSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                viewModel.setSelectedLocation(position);
-            }
-        });*/
-
-        /*binding.provinceSearchText.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                viewModel.setSelectedLocation(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
+        binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> viewModel.setSelectedLocation(position));
 
         viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), province -> {
             if (getActivity() != null && province != null) {
