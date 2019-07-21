@@ -459,28 +459,21 @@ public class HelperDownloadFile {
         PRDownloader.download(song.getUrl(), path, song.getName())
                 .setHeader("Authorization", ApiStatic.USER_TOKEN)
                 .build()
-                .setOnStartOrResumeListener(() -> {
-                    onSongDownload.startOrResume(song);
-                })
-                .setOnPauseListener(() -> {
-                    onSongDownload.pauseDownload(song);
-                })
-                .setOnCancelListener(() -> {
-                    onSongDownload.cancelDownload(song);
-                })
-                .setOnProgressListener(progress -> {
-                    onSongDownload.progressDownload(song, progress);
-                }).start(new OnDownloadListener() {
-            @Override
-            public void onDownloadComplete() {
-                onSongDownload.completeDownload(song);
-            }
+                .setOnStartOrResumeListener(() -> onSongDownload.startOrResume(song))
+                .setOnPauseListener(() -> onSongDownload.pauseDownload(song))
+                .setOnCancelListener(() -> onSongDownload.cancelDownload(song))
+                .setOnProgressListener(progress -> onSongDownload.progressDownload(song, progress))
+                .start(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        onSongDownload.completeDownload(song);
+                    }
 
-            @Override
-            public void onError(Error error) {
-                onSongDownload.downloadError(song, error);
-            }
-        });
+                    @Override
+                    public void onError(Error error) {
+                        onSongDownload.downloadError(song, error);
+                    }
+                });
     }
 
     private void requestDownloadFile(final StructDownLoad item) {

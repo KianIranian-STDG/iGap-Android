@@ -110,7 +110,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
 
         private void stopDownload() {
             rotate.cancel();
-            songActionTv.setText("ò");
         }
 
         private void startDownload() {

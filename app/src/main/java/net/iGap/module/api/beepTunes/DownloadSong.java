@@ -12,11 +12,20 @@ public class DownloadSong {
     private Long id;
     private String name;
     private int downloadStatus;
+    private int downloadProgress;
 
     public DownloadSong(String url, Long id, String name) {
         this.url = url;
         this.id = id;
         this.name = name;
+    }
+
+    public int getDownloadProgress() {
+        return downloadProgress;
+    }
+
+    public void setDownloadProgress(int downloadProgress) {
+        this.downloadProgress = downloadProgress;
     }
 
     public int getDownloadStatus() {

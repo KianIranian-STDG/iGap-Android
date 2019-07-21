@@ -33,15 +33,15 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
-    private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> LoadingProgressMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
 
     void getAlbumSong(long id) {
-        progressMutableLiveData.postValue(true);
+        LoadingProgressMutableLiveData.postValue(true);
         apiService.getAlbumTrack(id).enqueue(new Callback<AlbumTrack>() {
             @Override
             public void onResponse(Call<AlbumTrack> call, Response<AlbumTrack> response) {
-                progressMutableLiveData.postValue(false);
+                LoadingProgressMutableLiveData.postValue(false);
                 if (response.isSuccessful()) {
                     trackMutableLiveData.postValue(response.body().getData());
                 }
@@ -49,17 +49,17 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
             @Override
             public void onFailure(Call<AlbumTrack> call, Throwable t) {
-                progressMutableLiveData.postValue(false);
+                LoadingProgressMutableLiveData.postValue(false);
             }
         });
     }
 
     void getArtistOtherAlbum(long id) {
-        progressMutableLiveData.postValue(true);
+        LoadingProgressMutableLiveData.postValue(true);
         apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
             @Override
             public void onResponse(Call<Albums> call, Response<Albums> response) {
-                progressMutableLiveData.postValue(false);
+                LoadingProgressMutableLiveData.postValue(false);
                 if (response.isSuccessful()) {
                     albumMutableLiveData.postValue(response.body());
                 }
@@ -67,7 +67,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
             @Override
             public void onFailure(Call<Albums> call, Throwable t) {
-                progressMutableLiveData.postValue(false);
+                LoadingProgressMutableLiveData.postValue(false);
             }
         });
     }
@@ -110,6 +110,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     @Override
     public void progressDownload(DownloadSong downloadSong, Progress progress) {
+        downloadSong.setDownloadProgress((int) ((progress.currentBytes * 100) / progress.totalBytes));
         downloadSong.setDownloadStatus(DownloadSong.STATUS_DOWNLOADING);
         downloadStatusMutableLiveData.postValue(downloadSong);
     }
@@ -152,8 +153,8 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         return albumMutableLiveData;
     }
 
-    MutableLiveData<Boolean> getProgressMutableLiveData() {
-        return progressMutableLiveData;
+    MutableLiveData<Boolean> getLoadingProgressMutableLiveData() {
+        return LoadingProgressMutableLiveData;
     }
 
     MutableLiveData<DownloadSong> getDownloadStatusMutableLiveData() {

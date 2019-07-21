@@ -110,7 +110,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             }
         });
 
-        viewModel.getProgressMutableLiveData().observe(this, visibility -> {
+        viewModel.getLoadingProgressMutableLiveData().observe(this, visibility -> {
             if (visibility != null && visibility) {
                 progressBar.setVisibility(View.VISIBLE);
                 statusTv.setVisibility(View.GONE);
@@ -150,7 +150,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                     Log.i(TAG, "error: " + downloadSong.getId());
                     break;
                 case STATUS_DOWNLOADING:
-                    Log.i(TAG, "downloading: " + downloadSong.getId());
+                    Log.i(TAG, "downloading: " + downloadSong.getId() + " " + downloadSong.getDownloadProgress());
                     break;
             }
         });
