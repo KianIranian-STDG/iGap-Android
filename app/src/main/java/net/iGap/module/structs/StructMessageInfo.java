@@ -37,17 +37,6 @@ import static net.iGap.G.userId;
  * used for chat messages
  */
 public class StructMessageInfo implements Parcelable {
-    public static final Parcelable.Creator<StructMessageInfo> CREATOR = new Parcelable.Creator<StructMessageInfo>() {
-        @Override
-        public StructMessageInfo createFromParcel(Parcel source) {
-            return new StructMessageInfo(source);
-        }
-
-        @Override
-        public StructMessageInfo[] newArray(int size) {
-            return new StructMessageInfo[size];
-        }
-    };
 
     public boolean isSelected = false;
     public long roomId;
@@ -88,87 +77,57 @@ public class StructMessageInfo implements Parcelable {
     public StructAdditionalData additionalData;
 
 
-    public StructMessageInfo() {
-    }
-
-    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String messageText, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time) {
-        this.roomId = roomId;
-        this.messageID = messageID;
-
-        //+Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
-        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
-        //realm.close();
-
-
-        this.senderID = senderID;
-        this.status = status;
-        this.messageType = messageType;
-        this.sendType = sendType;
-        this.fileMime = fileMime;
-        this.filePic = filePic;
-        this.filePath = localThumbnailPath;
-        this.messageText = messageText;
-        if (this.attachment == null) {
-            this.attachment = new StructMessageAttachment();
-        }
-
-        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
-        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
-        this.fileHash = fileHash;
-        this.time = time;
-    }
-
-    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time, long replayToMessageId) {
-        this.roomId = roomId;
-        this.messageID = messageID;
-        //+Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
-        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
-
-        this.senderID = senderID;
-        this.status = status;
-        this.messageType = messageType;
-        this.sendType = sendType;
-        this.fileMime = fileMime;
-        this.filePic = filePic;
-        this.filePath = localThumbnailPath;
-        if (this.attachment == null) {
-            this.attachment = new StructMessageAttachment();
-        }
-        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
-        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
-        this.fileHash = fileHash;
-        this.time = time;
-        this.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
-
-
-        //realm.close();
+    private StructMessageInfo() {
     }
 
     public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time) {
+        this(realmChat, roomId, messageID, "", senderID, status, messageType, sendType, localThumbnailPath, localFilePath, time);
+    }
+
+    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time) {
+        this(realmChat, roomId, messageID, messageText, senderID, status, messageType, sendType, localThumbnailPath, localFilePath, time, null);
+    }
+
+    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time, long replayToMessageId) {
+        this(realmChat, roomId, messageID, "", senderID, status, messageType, sendType, localThumbnailPath, localFilePath, time, replayToMessageId);
+    }
+
+    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time, Long replayToMessageId) {
+        this(realmChat, roomId, messageID, "", senderID, status, messageType, sendType, fileMime, filePic, localThumbnailPath, localFilePath, fileHash, time, replayToMessageId);
+    }
+
+    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String messageText, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time) {
+        this(realmChat, roomId, messageID, messageText, senderID, status, messageType, sendType, fileMime, filePic, localThumbnailPath, localFilePath, fileHash, time, null);
+    }
+
+    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time, Long replayToMessageId) {
         this.roomId = roomId;
         this.messageID = messageID;
-
         //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
         this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
-        //realm.close();
 
         this.senderID = senderID;
         this.status = status;
         this.messageType = messageType;
         this.sendType = sendType;
+        this.fileMime = fileMime;
+        this.filePic = filePic;
+        this.messageText = messageText;
         this.filePath = localThumbnailPath;
         if (this.attachment == null) {
             this.attachment = new StructMessageAttachment();
         }
         this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
         this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
+        this.fileHash = fileHash;
         this.time = time;
+        if (replayToMessageId != null)
+            this.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
+        //realm.close();
     }
 
-    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time) {
+    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time, Long replayToMessageId) {
         this.roomId = roomId;
         this.messageID = messageID;
 
@@ -189,63 +148,11 @@ public class StructMessageInfo implements Parcelable {
         this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
         this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
         this.time = time;
-    }
-
-    public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time, long replayToMessageId) {
-        this.roomId = roomId;
-        this.messageID = messageID;
-
-        //+Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
-        this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
-
-        this.senderID = senderID;
-        this.status = status;
-        this.messageType = messageType;
-        this.sendType = sendType;
-        this.filePath = localThumbnailPath;
-        if (this.attachment == null) {
-            this.attachment = new StructMessageAttachment();
+        if (replayToMessageId != null) {
+            this.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
         }
-        this.attachment.setLocalThumbnailPath(Long.parseLong(messageID), localThumbnailPath);
-        this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
-        this.time = time;
-        this.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
-        //realm.close();
     }
 
-    protected StructMessageInfo(Parcel in) {
-        //this.view = in.readParcelable(View.class.getClassLoader());
-        this.roomId = in.readLong();
-        this.messageID = in.readString();
-        this.senderID = in.readString();
-        this.senderColor = in.readString();
-        this.isEdited = in.readByte() != 0;
-        this.status = in.readString();
-        this.initials = in.readString();
-        int tmpMessageType = in.readInt();
-        this.messageType = tmpMessageType == -1 ? null : ProtoGlobal.RoomMessageType.values()[tmpMessageType];
-        int tmpSendType = in.readInt();
-        this.sendType = tmpSendType == -1 ? null : MyType.SendType.values()[tmpSendType];
-        this.replayTo = Parcels.unwrap(in.readParcelable(RealmRoomMessage.class.getClassLoader()));
-        this.forwardedFrom = Parcels.unwrap(in.readParcelable(RealmRoomMessage.class.getClassLoader()));
-        this.songArtist = in.readString();
-        this.songLength = in.readLong();
-        this.messageText = in.readString();
-        this.fileMime = in.readString();
-        this.filePic = in.readString();
-        this.filePath = in.readString();
-        this.fileHash = in.createByteArray();
-        this.uploadProgress = in.readInt();
-        this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());
-        this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
-        this.senderAvatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
-        this.time = in.readLong();
-        /*this.voteUp = in.readInt();
-        this.voteDown = in.readInt();
-        this.viewsLabel = in.readInt();*/
-        this.channelExtra = Parcels.unwrap(in.readParcelable(StructChannelExtra.class.getClassLoader()));
-    }
 
     public static StructMessageInfo buildForAudio(Realm realmChat, long roomId, long messageID, long senderID, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, long time, String messageText, String localThumbnailPath, String localFilePath, String songArtist, long songLength, long replayToMessageId) {
         StructMessageInfo info = new StructMessageInfo();
@@ -435,6 +342,39 @@ public class StructMessageInfo implements Parcelable {
         return 0;
     }
 
+    protected StructMessageInfo(Parcel in) {
+        //this.view = in.readParcelable(View.class.getClassLoader());
+        this.roomId = in.readLong();
+        this.messageID = in.readString();
+        this.senderID = in.readString();
+        this.senderColor = in.readString();
+        this.isEdited = in.readByte() != 0;
+        this.status = in.readString();
+        this.initials = in.readString();
+        int tmpMessageType = in.readInt();
+        this.messageType = tmpMessageType == -1 ? null : ProtoGlobal.RoomMessageType.values()[tmpMessageType];
+        int tmpSendType = in.readInt();
+        this.sendType = tmpSendType == -1 ? null : MyType.SendType.values()[tmpSendType];
+        this.replayTo = Parcels.unwrap(in.readParcelable(RealmRoomMessage.class.getClassLoader()));
+        this.forwardedFrom = Parcels.unwrap(in.readParcelable(RealmRoomMessage.class.getClassLoader()));
+        this.songArtist = in.readString();
+        this.songLength = in.readLong();
+        this.messageText = in.readString();
+        this.fileMime = in.readString();
+        this.filePic = in.readString();
+        this.filePath = in.readString();
+        this.fileHash = in.createByteArray();
+        this.uploadProgress = in.readInt();
+        this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());
+        this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
+        this.senderAvatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
+        this.time = in.readLong();
+        /*this.voteUp = in.readInt();
+        this.voteDown = in.readInt();
+        this.viewsLabel = in.readInt();*/
+        this.channelExtra = Parcels.unwrap(in.readParcelable(StructChannelExtra.class.getClassLoader()));
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         //dest.writeParcelable(this.view, flags);
@@ -466,4 +406,16 @@ public class StructMessageInfo implements Parcelable {
         dest.writeInt(this.viewsLabel);*/
         dest.writeParcelable(Parcels.wrap(this.channelExtra), flags);
     }
+
+    public static final Parcelable.Creator<StructMessageInfo> CREATOR = new Parcelable.Creator<StructMessageInfo>() {
+        @Override
+        public StructMessageInfo createFromParcel(Parcel source) {
+            return new StructMessageInfo(source);
+        }
+
+        @Override
+        public StructMessageInfo[] newArray(int size) {
+            return new StructMessageInfo[size];
+        }
+    };
 }
