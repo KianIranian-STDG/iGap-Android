@@ -72,7 +72,6 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
 
 
         public void bindChannel(Channel channel) {
-
             ImageLoadingService.load(channel.getIcon(), channelImage);
             if (G.selectedLanguage.equals("fa"))
                 channelTitle.setText(channel.getTitle());

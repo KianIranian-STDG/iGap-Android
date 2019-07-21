@@ -5,10 +5,15 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import net.iGap.R;
+import net.iGap.model.PopularChannel.ParentChannel;
+
 import ir.radsense.raadcore.widget.RoundedCornersTransform;
 
 public class ImageLoadingService implements ss.com.bannerslider.ImageLoadingService {
-    public Context context;
+    private Context context;
+    private ParentChannel parentChannel;
+    private int i;
 
     public ImageLoadingService(Context context) {
         this.context = context;
@@ -16,18 +21,24 @@ public class ImageLoadingService implements ss.com.bannerslider.ImageLoadingServ
 
     @Override
     public void loadImage(String url, ImageView imageView) {
+
         Picasso.get().load(url)
-                .transform(new RoundedCornersTransform(16, 0))
+                .transform(new RoundedCornersTransform(12, 0))
+                .placeholder(R.drawable.error_slider)
                 .into(imageView);
     }
 
     @Override
     public void loadImage(int resource, ImageView imageView) {
-        Picasso.get().load(resource).into(imageView);
+        Picasso.get().load(resource)
+                .transform(new RoundedCornersTransform(12, 0))
+                .into(imageView);
     }
 
     @Override
     public void loadImage(String url, int placeHolder, int errorDrawable, ImageView imageView) {
-        Picasso.get().load(url).placeholder(placeHolder).error(errorDrawable).into(imageView);
+        Picasso.get().load(url).placeholder(placeHolder).error(errorDrawable)
+                .transform(new RoundedCornersTransform(12, 0))
+                .into(imageView);
     }
 }

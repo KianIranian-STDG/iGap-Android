@@ -1,6 +1,8 @@
 package net.iGap.fragments.popular;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.print.PrintAttributes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +34,6 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.PopularChannel.Category;
 import net.iGap.model.PopularChannel.ParentChannel;
 
-import java.util.Timer;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,8 +47,6 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
     private View rootView;
     private AdapterChannelItem adapterChannelItem;
     private MainSliderAdapter mainSliderAdapter;
-    private Timer timer;
-
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
@@ -81,8 +78,8 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                         case ParentChannel.TYPE_SLIDE:
                             Slider.init(new ImageLoadingService(getContext()));
                             Slider slider = new Slider(getContext());
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (ViewGroup.LayoutParams.MATCH_PARENT * response.body().getData().get(i).getInfo().getScale().length()));
-                            layoutParams.setMargins(0, 8, 0, 8);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            layoutParams.setMargins(0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density), 0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density));
                             slider.setLayoutParams(layoutParams);
                             int finalI = i;
                             slider.postDelayed(new Runnable() {
@@ -144,7 +141,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
                             RecyclerView channelsRecyclerView = channelView.findViewById(R.id.rv_item_popular_row);
                             LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams1.setMargins(0, 8, 0, 8);
+                            layoutParams1.setMargins( 0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density), 0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density));
                             channelView.setLayoutParams(layoutParams1);
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
                             adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
@@ -161,7 +158,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                         case ParentChannel.TYPE_CATEGORY:
                             RecyclerView categoryRecyclerView = new RecyclerView(getContext());
                             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams2.setMargins(-4, 8, -4, 8);
+                            layoutParams2.setMargins(0, (int) (8 / Resources.getSystem().getDisplayMetrics().density),0, (int) (8 / Resources.getSystem().getDisplayMetrics().density));
                             categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, LinearLayoutManager.VERTICAL, false));
                             categoryRecyclerView.setLayoutParams(layoutParams2);
                             AdapterCategoryItem gridItem = new AdapterCategoryItem(getContext(), true, response.body().getData().get(i).getCategories());

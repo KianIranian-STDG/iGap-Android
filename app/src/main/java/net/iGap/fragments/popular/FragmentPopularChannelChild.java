@@ -1,5 +1,6 @@
 package net.iGap.fragments.popular;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ss.com.bannerslider.Slider;
+import ss.com.bannerslider.event.OnSlideClickListener;
 
 
 public class FragmentPopularChannelChild extends BaseFragment {
@@ -84,7 +86,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                         mainSliderAdapter = new MainSliderAdapter(getContext(), response.body().getInfo().getAdvertisement().getSlides());
                         Slider slider = new Slider(getContext());
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        layoutParams.setMargins(0, 8, 0, 8);
+                        layoutParams.setMargins(0, (int) (8 / Resources.getSystem().getDisplayMetrics().density), 0, (int) (8 / Resources.getSystem().getDisplayMetrics().density));
                         slider.setLayoutParams(layoutParams);
                         Slider.init(new ImageLoadingService(getContext()));
                         slider.postDelayed(new Runnable() {
@@ -96,6 +98,14 @@ public class FragmentPopularChannelChild extends BaseFragment {
                                 slider.setAnimateIndicators(true);
                                 slider.setIndicatorSize(12);
                                 slider.setInterval(2000);
+                                slider.setOnSlideClickListener(new OnSlideClickListener() {
+                                    @Override
+                                    public void onSlideClick(int position) {
+                                        HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+
+                                    }
+                                });
                             }
                         }, 0);
                         linearLayoutItemContainerChild.addView(slider);
@@ -103,7 +113,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                         RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
                         categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        layoutParams1.setMargins(-4, 8, -4, 8);
+                        layoutParams1.setMargins(0, (int) (8 / Resources.getSystem().getDisplayMetrics().density),0, (int) (8 / Resources.getSystem().getDisplayMetrics().density));
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
                         adapterChannel.setOnClickedChannelEventCallBack(new AdapterChannelInfoItem.OnClickedChannelInfoEventCallBack() {

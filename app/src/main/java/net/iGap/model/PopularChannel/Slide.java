@@ -1,22 +1,20 @@
 
 package net.iGap.model.PopularChannel;
 
+
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class Slide {
 
     @SerializedName("action_type")
     private Long mActionType;
-    @SerializedName("height")
-    private Long mHeight;
     @SerializedName("id")
     private String mId;
     @SerializedName("image_url")
     private String mImageUrl;
     @SerializedName("title")
     private String mTitle;
-    @SerializedName("width")
-    private Long mWidth;
     @SerializedName("titleEn")
     private String mTitleEn;
 
@@ -26,14 +24,6 @@ public class Slide {
 
     public void setActionType(Long actionType) {
         mActionType = actionType;
-    }
-
-    public Long getHeight() {
-        return mHeight;
-    }
-
-    public void setHeight(Long height) {
-        mHeight = height;
     }
 
     public String getId() {
@@ -60,19 +50,12 @@ public class Slide {
         mTitle = title;
     }
 
-    public Long getWidth() {
-        return mWidth;
-    }
-
-    public void setWidth(Long width) {
-        mWidth = width;
-    }
-
-    public String getmTitleEn() {
+    public String getTitleEn() {
         return mTitleEn;
     }
 
-    public void setmTitleEn(String mTitleEn) {
-        this.mTitleEn = mTitleEn;
+    public void setTitleEn(String titleEn) {
+        mTitleEn = titleEn;
     }
+
 }

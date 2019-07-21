@@ -30,6 +30,7 @@ public class MainSliderAdapter extends SliderAdapter {
     @Override
     public void onBindImageSlide(int position, ImageSlideViewHolder imageSlideViewHolder) {
         imageSlideViewHolder.bindImageSlide(sliderList.get(position).getImageUrl());
+
     }
 
 }

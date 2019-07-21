@@ -20,7 +20,8 @@ public class Advertisement {
     private String mTitle;
     @SerializedName("titleEn")
     private String mTitleEn;
-
+    @SerializedName("scale")
+    private String mScale;
     public String getId() {
         return mId;
     }
@@ -37,13 +38,7 @@ public class Advertisement {
         mLooped = looped;
     }
 
-    public Long getPlaybackTime() {
-        return mPlaybackTime;
-    }
 
-    public void setPlaybackTime(Long playbackTime) {
-        mPlaybackTime = playbackTime;
-    }
 
     public List<Slide> getSlides() {
         return mSlides;
@@ -67,5 +62,21 @@ public class Advertisement {
 
     public void setTitleEn(String mTitleEn) {
         this.mTitleEn = mTitleEn;
+    }
+
+    public String getmScale() {
+        return mScale;
+    }
+
+    public void setmScale(String mScale) {
+        this.mScale = mScale;
+    }
+
+    public Long getmPlaybackTime() {
+        return mPlaybackTime;
+    }
+
+    public void setmPlaybackTime(Long mPlaybackTime) {
+        this.mPlaybackTime = mPlaybackTime;
     }
 }

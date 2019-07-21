@@ -5,10 +5,10 @@
     android:id="@+id/card_item_pop_category"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp2"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardCornerRadius="@dimen/dp4"
+    app:cardPreventCornerOverlap="false"
     app:cardElevation="@dimen/dp2">
 
     <LinearLayout
