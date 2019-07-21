@@ -55,24 +55,17 @@ public class RealmChannelExtra extends RealmObject {
         return realmChannelExtra;
     }
 
-    public static void putDefault(final long roomId, final long messageId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
-                realmChannelExtra.setMessageId(messageId);
-                realmChannelExtra.setThumbsUp("0");
-                realmChannelExtra.setThumbsDown("0");
-                if (RealmRoom.showSignature(roomId)) {
-                    realmChannelExtra.setSignature(G.displayName);
-                } else {
-                    realmChannelExtra.setSignature("");
-                }
-                realmChannelExtra.setViewsLabel("1");
-            }
-        });
-        realm.close();
+    public static void putDefault(final Realm realm, final long roomId, final long messageId) {
+        RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+        realmChannelExtra.setMessageId(messageId);
+        realmChannelExtra.setThumbsUp("0");
+        realmChannelExtra.setThumbsDown("0");
+        if (RealmRoom.showSignature(roomId)) {
+            realmChannelExtra.setSignature(G.displayName);
+        } else {
+            realmChannelExtra.setSignature("");
+        }
+        realmChannelExtra.setViewsLabel("1");
     }
 
     public static void setVote(final long messageId, final ProtoGlobal.RoomMessageReaction messageReaction, final String counterLabel) {

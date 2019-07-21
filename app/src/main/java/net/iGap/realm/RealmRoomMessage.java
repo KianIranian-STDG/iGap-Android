@@ -1032,42 +1032,40 @@ public class RealmRoomMessage extends RealmObject {
 
         final long messageId = AppUtils.makeRandomId();
         final long currentTime = TimeUtils.currentLocalTime();
-
-        getRealmChat().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
-
-                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                roomMessage.setMessage(message);
-                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
-                RealmRoomMessage.isEmojiInText(roomMessage, message);
-                roomMessage.setRoomId(roomId);
-                roomMessage.setShowMessage(true);
-                roomMessage.setUserId(G.userId);
-                roomMessage.setAuthorHash(G.authorHash);
-                roomMessage.setCreateTime(currentTime);
-
-                /**
-                 *  user wants to replay to a message
-                 */
-                if (replyMessageId > 0) {
-                    RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
-                    if (messageToReplay != null) {
-                        roomMessage.setReplyTo(messageToReplay);
-                    }
-                }
-
+        RealmRoomMessage roomMessage = new RealmRoomMessage();
+        roomMessage.setMessageId(messageId);
+        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        roomMessage.setMessage(message);
+        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+        RealmRoomMessage.addTimeIfNeed(roomMessage, getRealmChat());
+        RealmRoomMessage.isEmojiInText(roomMessage, message);
+        roomMessage.setRoomId(roomId);
+        roomMessage.setShowMessage(true);
+        roomMessage.setUserId(G.userId);
+        roomMessage.setAuthorHash(G.authorHash);
+        roomMessage.setCreateTime(currentTime);
+        /**
+         *  user wants to replay to a message
+         */
+        if (replyMessageId > 0) {
+            RealmRoomMessage messageToReplay = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
+            if (messageToReplay != null) {
+                roomMessage.setReplyTo(messageToReplay);
             }
-        });
-
-        RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-        RealmRoom.setLastMessageWithRoomMessage(roomId, roomMessage);
-
-        if (RealmRoom.detectType(roomId) == CHANNEL) {
-            RealmChannelExtra.putDefault(roomId, messageId);
         }
+
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                G.checkTransction("146");
+                realm.executeTransaction(realm1 -> {
+                    RealmRoomMessage managedRoomMessage = realm1.copyToRealm(roomMessage);
+                    RealmRoom.setLastMessageWithRoomMessage(realm, roomId, managedRoomMessage);
+                    if (RealmRoom.detectType(roomId) == CHANNEL) {
+                        RealmChannelExtra.putDefault(realm, roomId, messageId);
+                    }
+                });
+            }
+        }).start();
 
         return roomMessage;
     }

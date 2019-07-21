@@ -5822,32 +5822,61 @@ public class FragmentChat extends BaseFragment
                     public void onItemSticker(StructItemSticker st) {
 
                         String additional = new Gson().toJson(new StructSendSticker(st.getId(), st.getName(), st.getGroupId(), st.getToken()));
-
-                        final RealmRoomMessage[] rm = new RealmRoomMessage[1];
-                        Long identity = AppUtils.makeRandomId();
-
+                        long identity = AppUtils.makeRandomId();
                         int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
-                        getRealmChat().executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                rm[0] = RealmRoomMessage.makeAdditionalData(mRoomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.STICKER);
-                                rm[0].setAttachment(identity, st.getUri(), imageSize[0], imageSize[1], new File(st.getUri()).length(), new File(st.getUri()).getName(), 0, LocalFileType.FILE);
-                                rm[0].getAttachment().setToken(st.getToken());
-                                rm[0].setAuthorHash(G.authorHash);
-                                rm[0].setShowMessage(true);
-                                rm[0].setCreateTime(TimeUtils.currentLocalTime());
+                        RealmRoomMessage roomMessage = new RealmRoomMessage();
+                        roomMessage.setMessageId(identity);
+                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+                        roomMessage.setRoomId(mRoomId);
+                        roomMessage.setMessage(st.getName());
+                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                        roomMessage.setUserId(G.userId);
+                        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
-                                if (isReply()) {
-                                    rm[0].setReplyTo(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst());
-                                }
+                        RealmAdditional realmAdditional = new RealmAdditional();
+                        realmAdditional.setId(AppUtils.makeRandomId());
+                        realmAdditional.setAdditionalType(AdditionalType.STICKER);
+                        realmAdditional.setAdditionalData(additional);
+
+                        roomMessage.setRealmAdditional(realmAdditional);
+
+                        RealmAttachment realmAttachment = new RealmAttachment();
+                        realmAttachment.setId(identity);
+                        realmAttachment.setLocalFilePath(st.getUri());
+                        realmAttachment.setWidth(imageSize[0]);
+                        realmAttachment.setHeight(imageSize[1]);
+                        realmAttachment.setSize(new File(st.getUri()).length());
+                        realmAttachment.setName(new File(st.getUri()).getName());
+                        realmAttachment.setDuration(0);
+
+                        roomMessage.setAttachment(realmAttachment);
+
+                        roomMessage.getAttachment().setToken(st.getToken());
+                        roomMessage.setAuthorHash(G.authorHash);
+                        roomMessage.setShowMessage(true);
+                        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+                        if (isReply()) {
+                            roomMessage.setReplyTo(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst());
+                        }
+
+                        new Thread(() -> {
+                            try (Realm realm = Realm.getDefaultInstance()) {
+                                realm.executeTransaction(realm1 -> {
+                                    realm1.copyToRealmOrUpdate(realmAdditional);
+                                    realm1.copyToRealmOrUpdate(realmAttachment);
+                                    realm1.copyToRealmOrUpdate(roomMessage);
+                                });
                             }
-                        });
+                        }).start();
 
-                        StructMessageInfo sm = StructMessageInfo.convert(getRealmChat(), rm[0]);
+
+
+                        StructMessageInfo sm = StructMessageInfo.convert(getRealmChat(), roomMessage);
                         mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
-                        new ChatSendMessageUtil().build(chatType, mRoomId, rm[0]).sendMessage(identity + "");
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage).sendMessage(identity + "");
 
                         if (isReply()) {
                             mReplayLayout.setTag(null);
