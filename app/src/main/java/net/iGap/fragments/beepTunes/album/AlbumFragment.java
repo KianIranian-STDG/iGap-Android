@@ -196,8 +196,4 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         super.onStart();
         viewModel.onStart();
     }
-
-    public interface OnProgress {
-        void progress(boolean visibility);
-    }
 }

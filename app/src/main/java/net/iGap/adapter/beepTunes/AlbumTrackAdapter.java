@@ -1,6 +1,5 @@
 package net.iGap.adapter.beepTunes;
 
-import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.fragments.beepTunes.album.AlbumFragment;
 import net.iGap.interfaces.TrackOnclick;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
@@ -22,10 +20,7 @@ import java.util.List;
 
 public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.TrackViewHolder> {
     private List<Track> tracks = new ArrayList<>();
-    private boolean isPlaying = false;
-    private MediaPlayer mp = new MediaPlayer();
     private TrackOnclick onclick;
-    private TrackViewHolder viewHolder;
 
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
@@ -63,7 +58,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
 
     @Override
     public void onBindViewHolder(@NonNull TrackViewHolder trackViewHolder, int i) {
-        this.viewHolder = trackViewHolder;
         trackViewHolder.bindTracks(tracks.get(i));
     }
 
@@ -72,7 +66,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         return tracks.size();
     }
 
-    class TrackViewHolder extends RecyclerView.ViewHolder implements AlbumFragment.OnProgress {
+    class TrackViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameTv;
         private TextView songPriceTv;
         private TextView songActionTv;
@@ -116,14 +110,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
             rotate.setDuration(1000);
             rotate.setRepeatCount(Animation.INFINITE);
             songActionTv.startAnimation(rotate);
-        }
-
-        @Override
-        public void progress(boolean visibility) {
-            if (visibility)
-                progressBar.setVisibility(View.VISIBLE);
-            else
-                progressBar.setVisibility(View.GONE);
         }
     }
 }
