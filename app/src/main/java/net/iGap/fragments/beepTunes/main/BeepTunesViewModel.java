@@ -46,7 +46,7 @@ public class BeepTunesViewModel extends BaseViewModel {
             @Override
             public void onFailure(Call<FirstPage> call, Throwable t) {
                 progressMutableLiveData.postValue(false);
-                Log.i(TAG, "onFailure: " + t.getMessage());
+                Log.i(TAG, "get first page: " + t.getMessage());
             }
         });
     }

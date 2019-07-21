@@ -34,13 +34,9 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
 
-    @Override
-    public void onStart() {
-
-    }
-
-    public void getAlbumSong(long id) {
+    void getAlbumSong(long id) {
         progressMutableLiveData.postValue(true);
         apiService.getAlbumTrack(id).enqueue(new Callback<AlbumTrack>() {
             @Override
@@ -58,7 +54,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         });
     }
 
-    public void getArtistOtherAlbum(long id) {
+    void getArtistOtherAlbum(long id) {
         progressMutableLiveData.postValue(true);
         apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
             @Override
@@ -76,7 +72,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         });
     }
 
-    public void startDownload(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {
+    void onDownloadClick(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {
         File file = new File(path + "/" + track.getName());
         if (file.exists()) {
             // TODO: 7/20/19 file exists
@@ -89,7 +85,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
                         DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName());
                         downLoadTrack(downloadSong, path);
                     } else {
-                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH360(), track.getId(), track.getName());
+                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName());
                         downLoadTrack(downloadSong, path);
                     }
                 });
@@ -99,7 +95,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
                     DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName());
                     downLoadTrack(downloadSong, path);
                 } else {
-                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH360(), track.getId(), track.getName());
+                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName());
                     downLoadTrack(downloadSong, path);
                 }
             }
@@ -107,7 +103,45 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     }
 
     private void downLoadTrack(DownloadSong song, String path) {
+        Log.i(TAG, "\n downLoad url: " + song.getUrl() + "\n song path: " + path + "\n song name: " + song.getName() + "\n download id: " + song.getId());
         HelperDownloadFile.startDownloadManager(path, song, this);
+    }
+
+
+    @Override
+    public void progressDownload(DownloadSong downloadSong, Progress progress) {
+        downloadSong.setDownloadStatus(DownloadSong.STATUS_DOWNLOADING);
+        downloadStatusMutableLiveData.postValue(downloadSong);
+    }
+
+    @Override
+    public void completeDownload(DownloadSong downloadSong) {
+        downloadSong.setDownloadStatus(DownloadSong.STATUS_COMPLETE);
+        downloadStatusMutableLiveData.postValue(downloadSong);
+    }
+
+    @Override
+    public void downloadError(DownloadSong downloadSong, Error error) {
+        downloadSong.setDownloadStatus(DownloadSong.STATUS_ERROR);
+        downloadStatusMutableLiveData.postValue(downloadSong);
+    }
+
+    @Override
+    public void pauseDownload(DownloadSong downloadSong) {
+        downloadSong.setDownloadStatus(DownloadSong.STATUS_PAUSE);
+        downloadStatusMutableLiveData.postValue(downloadSong);
+    }
+
+    @Override
+    public void startOrResume(DownloadSong downloadSong) {
+        downloadSong.setDownloadStatus(DownloadSong.STATUS_START);
+        downloadStatusMutableLiveData.postValue(downloadSong);
+    }
+
+    @Override
+    public void cancelDownload(DownloadSong downloadSong) {
+        downloadSong.setDownloadStatus(DownloadSong.STATUS_STOP);
+        downloadStatusMutableLiveData.postValue(downloadSong);
     }
 
     MutableLiveData<List<Track>> getTrackMutableLiveData() {
@@ -122,33 +156,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         return progressMutableLiveData;
     }
 
-    @Override
-    public void progressDownload(DownloadSong downloadSong, Progress progress) {
-//        Log.i(TAG, "progressDownload: " + downloadSong.getId() + " " + progress.currentBytes + " " + progress.totalBytes);
-    }
-
-    @Override
-    public void completeDownload(DownloadSong downloadSong) {
-        Log.i(TAG, "completeDownload: " + downloadSong.getName());
-    }
-
-    @Override
-    public void downloadError(DownloadSong downloadSong, Error error) {
-        Log.i(TAG, "downloadError: " + downloadSong.getId() + error.getConnectionException().getMessage());
-    }
-
-    @Override
-    public void pauseDownload(DownloadSong downloadSong) {
-        Log.i(TAG, "pauseDownload: " + downloadSong.getId());
-    }
-
-    @Override
-    public void startOrResume(DownloadSong downloadSong) {
-        Log.i(TAG, "startOrResume: " + downloadSong.getId());
-    }
-
-    @Override
-    public void cancelDownload(DownloadSong downloadSong) {
-        Log.i(TAG, "cancelDownload: " + downloadSong.getId());
+    MutableLiveData<DownloadSong> getDownloadStatusMutableLiveData() {
+        return downloadStatusMutableLiveData;
     }
 }

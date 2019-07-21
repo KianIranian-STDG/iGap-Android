@@ -3,7 +3,6 @@ package net.iGap.adapter.beepTunes;
 import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,16 +66,10 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         }
 
         void bindTracks(Track track) {
-//            Track track1 = new Track();
-//            track1.setId((long) 65431541);
-//            track1.setName(Calendar.getInstance().getTime() + ".mp3");
-////            track1.setName("majid.mp3");
-//            DownloadLinks downloadLinks = new DownloadLinks();
-//            downloadLinks.setH360("http://192.168.10.156:7000/v1.0/files/download/track/12162208/H320/Farzad_Askari_Bi_Hoviat.mp3");
-//            downloadLinks.setL128("http://192.168.10.156:7000/v1.0/files/download/track/12162208/L128/Farzad_Askari_Bi_Hoviat.mp3");
-//            track1.setDownloadLinks(downloadLinks);
-            Log.i("aabolfazl", "bindTracks: " + track.getName() + "" + track.getDownloadLinks().getH360() + " " + track.getDownloadLinks().getL128());
-            songActionTv.setOnClickListener(v -> onclick.onClick(track));
+            songActionTv.setOnClickListener(v -> {
+                track.setName(track.getId() + ".mp3");
+                onclick.onClick(track);
+            });
         }
 
         @Override

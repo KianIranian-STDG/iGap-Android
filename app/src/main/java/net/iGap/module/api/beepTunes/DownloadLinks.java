@@ -12,7 +12,7 @@ public class DownloadLinks {
     @SerializedName("L64")
     private String l64;
 
-    public String getH360() {
+    public String getH320() {
         return h360;
     }
 

@@ -24,6 +24,7 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
+import net.iGap.api.apiService.ApiStatic;
 import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.interfaces.OnSongDownload;
 import net.iGap.module.AndroidUtils;
@@ -456,6 +457,7 @@ public class HelperDownloadFile {
 
     public static void startDownloadManager(String path, DownloadSong song, OnSongDownload onSongDownload) {
         PRDownloader.download(song.getUrl(), path, song.getName())
+                .setHeader("Authorization", ApiStatic.USER_TOKEN)
                 .build()
                 .setOnStartOrResumeListener(() -> {
                     onSongDownload.startOrResume(song);

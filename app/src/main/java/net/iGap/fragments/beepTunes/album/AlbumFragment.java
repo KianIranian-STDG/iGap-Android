@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,13 @@ import net.iGap.module.api.beepTunes.Track;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_ERROR;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_PAUSE;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_START;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_STOP;
 
 public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
@@ -119,9 +127,31 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         });
 
         trackAdapter.setOnclick(track -> {
-            viewModel.startDownload(track, PATH, getFragmentManager(), sharedPreferences);
+            viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
         });
 
+        viewModel.getDownloadStatusMutableLiveData().observe(this, downloadSong -> {
+            switch (downloadSong.getDownloadStatus()) {
+                case STATUS_START:
+                    Log.i(TAG, "start: " + downloadSong.getId());
+                    break;
+                case STATUS_STOP:
+                    Log.i(TAG, "stop: " + downloadSong.getId());
+                    break;
+                case STATUS_PAUSE:
+                    Log.i(TAG, "pause: " + downloadSong.getId());
+                    break;
+                case STATUS_COMPLETE:
+                    Log.i(TAG, "complete: " + downloadSong.getId());
+                    break;
+                case STATUS_ERROR:
+                    Log.i(TAG, "error: " + downloadSong.getId());
+                    break;
+                case STATUS_DOWNLOADING:
+                    Log.i(TAG, "downloading: " + downloadSong.getId());
+                    break;
+            }
+        });
     }
 
     private void setUpViews() {
