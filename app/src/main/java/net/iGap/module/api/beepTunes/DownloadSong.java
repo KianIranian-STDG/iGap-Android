@@ -13,11 +13,17 @@ public class DownloadSong {
     private String name;
     private int downloadStatus;
     private int downloadProgress;
+    private String path;
 
-    public DownloadSong(String url, Long id, String name) {
+    public DownloadSong(String url, Long id, String name, String path) {
         this.url = url;
         this.id = id;
         this.name = name;
+        this.path = path;
+    }
+
+    public DownloadSong() {
+
     }
 
     public int getDownloadProgress() {
@@ -58,5 +64,13 @@ public class DownloadSong {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

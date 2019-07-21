@@ -18,11 +18,13 @@ import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
+import net.iGap.realm.RealmDownloadSong;
 import net.iGap.viewmodel.BaseViewModel;
 
 import java.io.File;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +37,15 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private MutableLiveData<Boolean> LoadingProgressMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
+    private List<RealmDownloadSong> downloadSongs;
+    private Realm realm;
+
+    @Override
+    public void onCreateViewModel() {
+        super.onCreateViewModel();
+        realm = Realm.getDefaultInstance();
+        downloadSongs = realm.where(RealmDownloadSong.class).findAll();
+    }
 
     void getAlbumSong(long id) {
         LoadingProgressMutableLiveData.postValue(true);
@@ -43,6 +54,12 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
             public void onResponse(Call<AlbumTrack> call, Response<AlbumTrack> response) {
                 LoadingProgressMutableLiveData.postValue(false);
                 if (response.isSuccessful()) {
+//                    for (int i = 0; i < downloadSongs.size(); i++) {
+//                        for (int j = 0; j < response.body().getData().size(); j++) {
+//                            if (downloadSongs.get(i).getId().equals(response.body().getData().get(j).getId()))
+//                                response.body().getData().get(j).setInStorage(true);
+//                        }
+//                    }
                     trackMutableLiveData.postValue(response.body().getData());
                 }
             }
@@ -74,37 +91,36 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     void onDownloadClick(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {
         File file = new File(path + "/" + track.getName());
-        if (file.exists()) {
-            // TODO: 7/20/19 file exists
-            Log.i(TAG, "file exist " + track.getName());
-        } else {
+        if (!file.exists()) {
             if (!sharedPreferences.getBoolean(SHP_SETTING.KEY_BBEP_TUNES_DOWNLOAD, false)) {
                 DownloadQualityFragment fragment = new DownloadQualityFragment();
                 fragment.setDownloadDialog(quality -> {
                     if (quality == 128) {
-                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName());
-                        downLoadTrack(downloadSong, path);
+                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName(), path);
+                        downLoadTrack(downloadSong);
                     } else {
-                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName());
-                        downLoadTrack(downloadSong, path);
+                        DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName(), path);
+                        downLoadTrack(downloadSong);
                     }
                 });
                 fragment.show(fragmentManager, null);
             } else {
                 if (sharedPreferences.getInt(SHP_SETTING.KEY_BBEP_TUNES_DOWNLOAD_QUALITY, 128) == 128) {
-                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName());
-                    downLoadTrack(downloadSong, path);
+                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName(), path);
+                    downLoadTrack(downloadSong);
                 } else {
-                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName());
-                    downLoadTrack(downloadSong, path);
+                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName(), path);
+                    downLoadTrack(downloadSong);
                 }
             }
         }
     }
 
-    private void downLoadTrack(DownloadSong song, String path) {
-        Log.i(TAG, "\n downLoad url: " + song.getUrl() + "\n song path: " + path + "\n song name: " + song.getName() + "\n download id: " + song.getId());
-        HelperDownloadFile.startDownloadManager(path, song, this);
+    private void downLoadTrack(DownloadSong downloadSong) {
+        Log.i(TAG, "\n downLoad url: " + downloadSong.getUrl() + "\n song path: "
+                + downloadSong.getPath() + "\n song name: " + downloadSong.getName() + "\n download id: " + downloadSong.getId());
+
+        HelperDownloadFile.startDownloadManager(downloadSong, this);
     }
 
 
@@ -118,6 +134,14 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     @Override
     public void completeDownload(DownloadSong downloadSong) {
         downloadSong.setDownloadStatus(DownloadSong.STATUS_COMPLETE);
+
+        RealmDownloadSong song = new RealmDownloadSong();
+        song.setId(downloadSong.getId());
+        song.setPath(downloadSong.getPath());
+        realm.executeTransactionAsync(realm -> {
+            realm.copyToRealmOrUpdate(song);
+        });
+
         downloadStatusMutableLiveData.postValue(downloadSong);
     }
 
@@ -159,5 +183,12 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     MutableLiveData<DownloadSong> getDownloadStatusMutableLiveData() {
         return downloadStatusMutableLiveData;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
+        Log.i(TAG, "onDestroy: ");
     }
 }

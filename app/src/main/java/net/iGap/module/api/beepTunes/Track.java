@@ -39,6 +39,16 @@ public class Track {
 
     private int downloadStatus = DownloadSong.STATUS_STOP;
 
+    private boolean inStorage = false;
+
+    public boolean isInStorage() {
+        return inStorage;
+    }
+
+    public void setInStorage(boolean inStorage) {
+        this.inStorage = inStorage;
+    }
+
     public int getDownloadStatus() {
         return downloadStatus;
     }

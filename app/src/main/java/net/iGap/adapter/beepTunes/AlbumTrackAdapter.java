@@ -11,24 +11,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.interfaces.TrackOnclick;
+import net.iGap.interfaces.OnTrackClick;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
+import net.iGap.realm.RealmDownloadSong;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.TrackViewHolder> {
     private List<Track> tracks = new ArrayList<>();
-    private TrackOnclick onclick;
+    private OnTrackClick onTrackClick;
+    private Realm realm;
+
 
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
         notifyDataSetChanged();
     }
 
-    public void setOnclick(TrackOnclick onclick) {
-        this.onclick = onclick;
+    public void setOnTrackClick(OnTrackClick onTrackClick) {
+        this.onTrackClick = onTrackClick;
     }
 
     public void startDownload(Long id) {
@@ -43,6 +48,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
     public void stopDownload(Long id) {
         for (int i = 0; i < tracks.size(); i++) {
             if (tracks.get(i).getId().equals(id)) {
+                tracks.get(i).setInStorage(true);
                 tracks.get(i).setDownloadStatus(DownloadSong.STATUS_STOP);
                 notifyItemChanged(i);
             }
@@ -53,6 +59,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
     @Override
     public TrackViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_beeptunes_song, viewGroup, false);
+        realm = Realm.getDefaultInstance();
         return new TrackViewHolder(view);
     }
 
@@ -64,6 +71,10 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
     @Override
     public int getItemCount() {
         return tracks.size();
+    }
+
+    public void onDestroy() {
+        realm.close();
     }
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
@@ -90,9 +101,33 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         }
 
         void bindTracks(Track track) {
+            if (realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst() != null) {
+                track.setInStorage(true);
+            }
+
+            if (track.isInStorage()) {
+                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+            } else {
+                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_sync));
+            }
+
             songActionTv.setOnClickListener(v -> {
-                track.setName(track.getId() + ".mp3");
-                onclick.onClick(track);
+                if (track.isInStorage()) {
+
+                    onTrackClick.onPlayClick();
+                } else {
+                    track.setName(track.getId() + ".mp3");
+                    onTrackClick.onDownloadClick(track);
+                }
+            });
+
+            songActionTv.setOnLongClickListener(v -> {
+                realm.executeTransactionAsync(realm -> {
+                    RealmDownloadSong downloadSong = new RealmDownloadSong();
+                    downloadSong.setId(track.getId());
+                    realm.copyToRealmOrUpdate(downloadSong);
+                });
+                return false;
             });
 
             if (track.getDownloadStatus() == DownloadSong.STATUS_START) {

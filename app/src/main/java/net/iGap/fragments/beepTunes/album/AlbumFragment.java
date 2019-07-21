@@ -23,13 +23,11 @@ import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.adapter.beepTunes.ItemAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
+import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.Track;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
@@ -57,7 +55,6 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private AlbumTrackAdapter trackAdapter;
     private ItemAdapter albumAdapter;
     private Album album;
-    private List<Track> tracks;
     private SharedPreferences sharedPreferences;
 
     public AlbumFragment getInstance(Album album) {
@@ -73,7 +70,6 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         viewModel = new AlbumViewModel();
         trackAdapter = new AlbumTrackAdapter();
         albumAdapter = new ItemAdapter();
-        tracks = new ArrayList<>();
         PATH = getContext().getFilesDir().getPath() + "beepTunes";
         sharedPreferences = getContext().getSharedPreferences(SHP_SETTING.KEY_BEEP_TUNES, Context.MODE_PRIVATE);
         return rootView;
@@ -91,7 +87,6 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             trackAdapter.setTracks(tracks);
             otherAlbumTv.setVisibility(View.VISIBLE);
             otherAlbumRecyclerView.setVisibility(View.VISIBLE);
-            this.tracks = tracks;
         });
 
         viewModel.getAlbumMutableLiveData().observe(this, albums -> {
@@ -126,8 +121,16 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             editor.apply();
         });
 
-        trackAdapter.setOnclick(track -> {
-            viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
+        trackAdapter.setOnTrackClick(new OnTrackClick() {
+            @Override
+            public void onDownloadClick(Track track) {
+                viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
+            }
+
+            @Override
+            public void onPlayClick() {
+                Log.i(TAG, "onPlayClick: ");
+            }
         });
 
         viewModel.getDownloadStatusMutableLiveData().observe(this, downloadSong -> {
@@ -195,5 +198,11 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     public void onStart() {
         super.onStart();
         viewModel.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        trackAdapter.onDestroy();
     }
 }
