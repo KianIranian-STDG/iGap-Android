@@ -1,8 +1,6 @@
 package net.iGap.fragments.popular;
 
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.print.PrintAttributes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,7 +29,9 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PopularChannel.Category;
+import net.iGap.model.PopularChannel.Channel;
 import net.iGap.model.PopularChannel.ParentChannel;
 
 import retrofit2.Call;
@@ -47,6 +47,9 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
     private View rootView;
     private AdapterChannelItem adapterChannelItem;
     private MainSliderAdapter mainSliderAdapter;
+    private int playBackTime;
+    private String scale;
+
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
@@ -76,32 +79,39 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
-                            Slider.init(new ImageLoadingService(getContext()));
+                            Slider.init(new ImageLoadingService());
                             Slider slider = new Slider(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            layoutParams.setMargins(0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density), 0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density));
+                            scale = response.body().getData().get(i).getInfo().getScale();
+                            layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
+//                            String[] scales = scale.split(":");
+//                            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+//                            layoutParams.height=height;
                             slider.setLayoutParams(layoutParams);
                             int finalI = i;
+                            playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
                             slider.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mainSliderAdapter = new MainSliderAdapter(getContext(), response.body().getData().get(finalI).getSlides());
+                                    mainSliderAdapter = new MainSliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
                                     slider.setAdapter(mainSliderAdapter);
                                     slider.setSelectedSlide(0);
                                     slider.setLoopSlides(true);
                                     slider.setAnimateIndicators(true);
                                     slider.setIndicatorSize(12);
-                                    slider.setInterval(2000);
+                                    slider.setInterval(playBackTime);
                                     slider.setOnSlideClickListener(new OnSlideClickListener() {
                                         @Override
                                         public void onSlideClick(int position) {
-                                            HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
-                                            HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+                                            if (response.body().getData().get(position).getSlides().get(position).getActionType() > 0)
+
+                                                HelperUrl.checkAndJoinToRoom(getActivity(), response.body().getData().get(position).getSlides().get(position).getmActionLink());
+                                            if (response.body().getData().get(position).getSlides().get(position).getActionType() == 0);
 
                                         }
                                     });
                                 }
-                            }, 0);
+                            }, 1000);
 
                             linearLayoutItemContainer.addView(slider);
 
@@ -141,16 +151,20 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
                             RecyclerView channelsRecyclerView = channelView.findViewById(R.id.rv_item_popular_row);
                             LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams1.setMargins( 0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density), 0,  (int) (8 / Resources.getSystem().getDisplayMetrics().density));
+                            layoutParams1.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
                             channelView.setLayoutParams(layoutParams1);
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
                             adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
                             channelsRecyclerView.setAdapter(adapterChannelItem);
+                            int finalI1 = i;
                             adapterChannelItem.setOnClickedChannelEventCallBack(new AdapterChannelItem.OnClickedChannelEventCallBack() {
                                 @Override
                                 public void onClickedChannel() {
-                                    HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
-//                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(),"testttd", HelperUrl.ChatEntry.chat);
+                                    if (response.body().getData().get(finalI1).getChannels().get(finalI1).getmType().equals(Channel.TYPE_PRIVATE))
+                                        HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
+                                    if (response.body().getData().get(finalI1).getChannels().get(finalI1).getmType().equals(Channel.TYPE_PUBLIC))
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+
                                 }
                             });
                             linearLayoutItemContainer.addView(channelView);
@@ -158,7 +172,6 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                         case ParentChannel.TYPE_CATEGORY:
                             RecyclerView categoryRecyclerView = new RecyclerView(getContext());
                             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams2.setMargins(0, (int) (8 / Resources.getSystem().getDisplayMetrics().density),0, (int) (8 / Resources.getSystem().getDisplayMetrics().density));
                             categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, LinearLayoutManager.VERTICAL, false));
                             categoryRecyclerView.setLayoutParams(layoutParams2);
                             AdapterCategoryItem gridItem = new AdapterCategoryItem(getContext(), true, response.body().getData().get(i).getCategories());

@@ -7,6 +7,8 @@ import java.util.List;
 
 
 public class Channel {
+    public static final String TYPE_PRIVATE = "PRIVATE";
+    public static final String TYPE_PUBLIC = "PUBLIC";
 
     @SerializedName("categories")
     private List<String> mCategories;
@@ -20,6 +22,8 @@ public class Channel {
     private String mTitle;
     @SerializedName("titleEn")
     private String mTitleEn;
+    @SerializedName("type")
+    private String mType;
 
     public List<String> getCategories() {
         return mCategories;
@@ -69,4 +73,11 @@ public class Channel {
         mTitleEn = titleEn;
     }
 
+    public String getmType() {
+        return mType;
+    }
+
+    public void setmType(String mType) {
+        this.mType = mType;
+    }
 }

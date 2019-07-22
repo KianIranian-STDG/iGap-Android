@@ -13,7 +13,7 @@ public class Advertisement {
     @SerializedName("looped")
     private Boolean mLooped;
     @SerializedName("playback_time")
-    private Long mPlaybackTime;
+    private int mPlaybackTime;
     @SerializedName("slides")
     private List<Slide> mSlides;
     @SerializedName("title")
@@ -72,11 +72,11 @@ public class Advertisement {
         this.mScale = mScale;
     }
 
-    public Long getmPlaybackTime() {
+    public int getmPlaybackTime() {
         return mPlaybackTime;
     }
 
-    public void setmPlaybackTime(Long mPlaybackTime) {
+    public void setmPlaybackTime(int mPlaybackTime) {
         this.mPlaybackTime = mPlaybackTime;
     }
 }

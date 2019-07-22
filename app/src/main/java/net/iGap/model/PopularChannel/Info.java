@@ -27,7 +27,10 @@ public class Info {
     private String mScale;
     @SerializedName("titleEn")
     private String mTitleEn;
-
+    @SerializedName("looped")
+    private Boolean mLooped;
+    @SerializedName("playback_time")
+    private int mPlaybackTime;
 
     public Advertisement getAdvertisement() {
         return mAdvertisement;
@@ -115,5 +118,21 @@ public class Info {
 
     public void setTitleEn(String mTitleEn) {
         this.mTitleEn = mTitleEn;
+    }
+
+    public Boolean getLooped() {
+        return mLooped;
+    }
+
+    public void setLooped(Boolean looped) {
+        mLooped = looped;
+    }
+
+    public int getPlaybackTime() {
+        return mPlaybackTime;
+    }
+
+    public void setPlaybackTime(int playbackTime) {
+        mPlaybackTime = playbackTime;
     }
 }

@@ -1,9 +1,7 @@
 package net.iGap.adapter.items.popular;
 
 
-import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
+import android.content.res.Resources;
 
 import net.iGap.model.PopularChannel.Slide;
 
@@ -14,11 +12,11 @@ import ss.com.bannerslider.viewholder.ImageSlideViewHolder;
 
 public class MainSliderAdapter extends SliderAdapter {
     private List<Slide> sliderList;
-    private Context context;
+    private String scale;
 
-    public MainSliderAdapter(Context context, List<Slide> sliderList) {
+    public MainSliderAdapter(List<Slide> sliderList, String scale) {
         this.sliderList = sliderList;
-        this.context = context;
+        this.scale = scale;
     }
 
 
@@ -29,8 +27,10 @@ public class MainSliderAdapter extends SliderAdapter {
 
     @Override
     public void onBindImageSlide(int position, ImageSlideViewHolder imageSlideViewHolder) {
+        String[] scales = scale.split(":");
+        float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+        imageSlideViewHolder.itemView.getLayoutParams().height = Math.round(height);
         imageSlideViewHolder.bindImageSlide(sliderList.get(position).getImageUrl());
-
     }
 
 }

@@ -4,9 +4,10 @@ package net.iGap.model.PopularChannel;
 
 import com.google.gson.annotations.SerializedName;
 
-@SuppressWarnings("unused")
 public class Slide {
 
+    @SerializedName("action_link")
+    private String mActionLink;
     @SerializedName("action_type")
     private Long mActionType;
     @SerializedName("id")
@@ -24,6 +25,14 @@ public class Slide {
 
     public void setActionType(Long actionType) {
         mActionType = actionType;
+    }
+
+    public void setmActionLink(String mActionLink) {
+        this.mActionLink = mActionLink;
+    }
+
+    public String getmActionLink() {
+        return mActionLink;
     }
 
     public String getId() {

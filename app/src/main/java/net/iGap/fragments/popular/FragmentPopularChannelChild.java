@@ -1,6 +1,5 @@
 package net.iGap.fragments.popular;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,13 +22,14 @@ import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperUrl;
+import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.model.PopularChannel.Channel;
 import net.iGap.model.PopularChannel.ChildChannel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ss.com.bannerslider.Slider;
-import ss.com.bannerslider.event.OnSlideClickListener;
 
 
 public class FragmentPopularChannelChild extends BaseFragment {
@@ -41,6 +41,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
     private MainSliderAdapter mainSliderAdapter;
     private int page = 1;
     private long totalPage;
+    private int playBackTime;
 
     @NonNull
     @Override
@@ -53,7 +54,6 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -65,68 +65,66 @@ public class FragmentPopularChannelChild extends BaseFragment {
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     if (totalPage >= page)
                         setupViews();
-
                 }
             }
         });
-
     }
-
 
     private void setupViews() {
         popularChannelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
-                progressBar.setVisibility(View.GONE);
                 LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
                 totalPage = response.body().getPagination().getTotalPages();
                 if (response.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
+
                     if (page == 1) {
-                        adapterChannel = new AdapterChannelInfoItem(getContext());
-                        mainSliderAdapter = new MainSliderAdapter(getContext(), response.body().getInfo().getAdvertisement().getSlides());
-                        Slider slider = new Slider(getContext());
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        layoutParams.setMargins(0, (int) (8 / Resources.getSystem().getDisplayMetrics().density), 0, (int) (8 / Resources.getSystem().getDisplayMetrics().density));
-                        slider.setLayoutParams(layoutParams);
-                        Slider.init(new ImageLoadingService(getContext()));
-                        slider.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
+                        if (response.body().getInfo().getAdvertisement() != null) {
+                            mainSliderAdapter = new MainSliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
+                            Slider slider = new Slider(getContext());
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
+                            slider.setLayoutParams(layoutParams);
+                            Slider.init(new ImageLoadingService());
+                            playBackTime = response.body().getInfo().getAdvertisement().getmPlaybackTime();
+                            slider.postDelayed(() -> {
                                 slider.setAdapter(mainSliderAdapter);
                                 slider.setSelectedSlide(0);
                                 slider.setLoopSlides(true);
                                 slider.setAnimateIndicators(true);
                                 slider.setIndicatorSize(12);
-                                slider.setInterval(2000);
-                                slider.setOnSlideClickListener(new OnSlideClickListener() {
-                                    @Override
-                                    public void onSlideClick(int position) {
-                                        HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
-                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
-
-                                    }
+                                slider.setInterval(playBackTime);
+                                slider.setOnSlideClickListener(position -> {
+                                    HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
+                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
                                 });
-                            }
-                        }, 0);
-                        linearLayoutItemContainerChild.addView(slider);
+                            }, 1000);
+                            linearLayoutItemContainerChild.addView(slider);
+                        }
+
+                        adapterChannel = new AdapterChannelInfoItem(getContext());
 
                         RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
                         categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        layoutParams1.setMargins(0, (int) (8 / Resources.getSystem().getDisplayMetrics().density),0, (int) (8 / Resources.getSystem().getDisplayMetrics().density));
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
                         adapterChannel.setOnClickedChannelEventCallBack(new AdapterChannelInfoItem.OnClickedChannelInfoEventCallBack() {
+                            private int i;
+
                             @Override
                             public void onClickChannelInfo() {
-//                                HelperUrl.checkAndJoinToRoom(getActivity(),"tMzDiVRNf74CGbneQeS5AVfA5");
-                                HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+                                if (response.body().getChannels().get(i).getmType().equals(Channel.TYPE_PRIVATE))
+                                    HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
+                                if (response.body().getChannels().get(i).getmType().equals(Channel.TYPE_PUBLIC))
+                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
                             }
                         });
                         linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
+                        if (response.body().getInfo().getAdvertisement() == null && response.body().getChannels() == null)
+                            Toast.makeText(getContext(), "This Page Is Empty", Toast.LENGTH_SHORT).show();
                     }
-
-
                     if (page == 1) {
                         adapterChannel.setChannelList(response.body().getChannels());
                     }
