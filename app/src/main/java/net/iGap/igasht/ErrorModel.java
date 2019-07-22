@@ -9,6 +9,11 @@ public class ErrorModel {
     @SerializedName("message")
     private String message;
 
+    public ErrorModel(String name, String message) {
+        this.name = name;
+        this.message = message;
+    }
+
     public String getName() {
         return name;
     }

@@ -4,6 +4,9 @@ import com.google.gson.GsonBuilder;
 
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.igasht.locationdetail.buyticket.IGashtLocationService;
+import net.iGap.igasht.provinceselect.IGashtProvince;
+import net.iGap.igasht.locationlist.IGashtLocationItem;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,10 +33,10 @@ public class IGashtRepository {
         igashtApi = ApiServiceProvider.getIgashtClient();
     }
 
-    public void getProvinceList(ResponseCallback<ProvinceListResponse> callback) {
-        igashtApi.requestGetProvinceList().enqueue(new Callback<ProvinceListResponse>() {
+    public void getProvinceList(ResponseCallback<BaseIGashtResponse<IGashtProvince>> callback) {
+        igashtApi.requestGetProvinceList().enqueue(new Callback<BaseIGashtResponse<IGashtProvince>>() {
             @Override
-            public void onResponse(@NotNull Call<ProvinceListResponse> call, @NotNull Response<ProvinceListResponse> response) {
+            public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtProvince>> call, @NotNull Response<BaseIGashtResponse<IGashtProvince>> response) {
                 if (response.code() == 200) {
                     callback.onSuccess(response.body());
                 } else {
@@ -46,7 +49,53 @@ public class IGashtRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<ProvinceListResponse> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtProvince>> call, @NotNull Throwable t) {
+                t.printStackTrace();
+                callback.onFailed();
+            }
+        });
+    }
+
+    public void getLocationListWithProvince(int provinceId, ResponseCallback<BaseIGashtResponse<IGashtLocationItem>> callback) {
+        igashtApi.requestGetLocationList(provinceId).enqueue(new Callback<BaseIGashtResponse<IGashtLocationItem>>() {
+            @Override
+            public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtLocationItem>> call, @NotNull Response<BaseIGashtResponse<IGashtLocationItem>> response) {
+                if (response.code() == 200) {
+                    callback.onSuccess(response.body());
+                } else {
+                    try {
+                        callback.onError(getError(response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationItem>> call, @NotNull Throwable t) {
+                t.printStackTrace();
+                callback.onFailed();
+            }
+        });
+    }
+
+    public void getServiceList(int locationId, ResponseCallback<BaseIGashtResponse<IGashtLocationService>> callback) {
+        igashtApi.requestGetServiceList(locationId).enqueue(new Callback<BaseIGashtResponse<IGashtLocationService>>() {
+            @Override
+            public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Response<BaseIGashtResponse<IGashtLocationService>> response) {
+                if (response.code() == 200) {
+                    callback.onSuccess(response.body());
+                } else {
+                    try {
+                        callback.onError(getError(response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Throwable t) {
                 t.printStackTrace();
                 callback.onFailed();
             }
@@ -62,6 +111,10 @@ public class IGashtRepository {
     }
 
     private ErrorModel getError(String error) {
-        return new GsonBuilder().create().fromJson(error, ErrorModel.class);
+        if (error != null) {
+            return new GsonBuilder().create().fromJson(error, ErrorModel.class);
+        } else {
+            return new ErrorModel("empty error", "error message is null");
+        }
     }
 }
