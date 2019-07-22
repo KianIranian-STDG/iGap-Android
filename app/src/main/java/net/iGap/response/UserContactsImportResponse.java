@@ -60,7 +60,7 @@ public class UserContactsImportResponse extends MessageHandler {
 
         if (getContactList) {
             Log.i("import_contact", "contact import response");
-            G.isContactImortingInProcess = false ;
+
             G.serverHashContact = G.localHashContact ;
             new RequestUserContactsGetList().userContactGetList();
         }

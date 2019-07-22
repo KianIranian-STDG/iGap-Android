@@ -27,6 +27,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentSyncRegisteredContactsBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.helper.ContactManager;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
@@ -143,25 +144,18 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
         // Load all of the data
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                    return;
 
-                //contactListAdapter = new FragmentSyncRegisteredContacts.ContactListAdapter(results);
-                contactListAdapter2 = new ContactListAdapter2(results);
+        //contactListAdapter = new FragmentSyncRegisteredContacts.ContactListAdapter(results);
+        contactListAdapter2 = new ContactListAdapter2(results);
 
-                //realmRecyclerView.setAdapter(contactListAdapter);
-                realmRecyclerView.setAdapter(contactListAdapter2);
-                realmRecyclerView.setVisibility(View.VISIBLE);
-                realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
-                realmRecyclerView.setNestedScrollingEnabled(false);
-                FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
-                fastScroller.setRecyclerView(realmRecyclerView);
+        //realmRecyclerView.setAdapter(contactListAdapter);
+        realmRecyclerView.setAdapter(contactListAdapter2);
+        realmRecyclerView.setVisibility(View.VISIBLE);
+        realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
+        realmRecyclerView.setNestedScrollingEnabled(false);
+        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+        fastScroller.setRecyclerView(realmRecyclerView);
 
-            }
-        }, 500);
 
         // going to app directly
         skipBtn = view.findViewById(R.id.frag_sync_skipbtn);
@@ -208,7 +202,6 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                         if (results.size() == 0) {
                             LoginActions.importContact();
                         }
-                        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
 
                     @Override
@@ -224,11 +217,13 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                     new RequestUserContactsGetList().userContactGetList();
                 }
 
-                if (HelperPermission.grantedContactPermission()) {
+                hideProgress();
+
+                /*if (HelperPermission.grantedContactPermission()) {
                     new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 } else {
                     hideProgress();
-                }
+                }*/
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -286,21 +281,25 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
     @Override
     public void onContactsGetList() {
-        if (results.size() == 0) {
-            // No Contacts Exist Go to Main
-            if (getActivity() == null || getActivity().isFinishing()) {
-                return;
-            }
 
-            Intent intent = new Intent(getContext(), ActivityMain.class);
-            intent.putExtra(ARG_USER_ID, userID);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.context.startActivity(intent);
-            G.fragmentActivity.finish();
+        if (results == null || results.size() == 0) {
+            results = getRealm().where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            contactListAdapter2 = new ContactListAdapter2(results);
+            realmRecyclerView.setAdapter(contactListAdapter2);
+            if (results.size() == 0) {
+                // No Contacts Exist Go to Main
+                if (getActivity() == null || getActivity().isFinishing()) {
+                    return;
+                }
+
+                Intent intent = new Intent(getContext(), ActivityMain.class);
+                intent.putExtra(ARG_USER_ID, userID);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.context.startActivity(intent);
+                G.fragmentActivity.finish();
+            }
         }
-        else {
-            realmRecyclerView.getAdapter().notifyDataSetChanged();
-        }
+        hideProgress();
     }
 
     private class AddAsync extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {

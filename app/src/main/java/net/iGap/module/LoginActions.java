@@ -157,12 +157,6 @@ public class LoginActions {
          */
         //Log.i("import_contact", "start");
 
-        if (G.isContactImortingInProcess) {
-            return;
-        }
-
-        G.isContactImortingInProcess = true ;
-
         G.onContactFetchForServer = new OnContactFetchForServer() {
             @Override
             public void onFetch(List<StructListOfContact> contacts, boolean getContactList) {
@@ -175,7 +169,7 @@ public class LoginActions {
                 if (G.serverHashContact != null && G.serverHashContact.equals(md5Local)) {
                     //request get list
                     //Log.i("tag", "importContact: " + G.localHashContact);
-                    G.isContactImortingInProcess = false ;
+
                     //Log.i("import_contact", "contact are equal with server");
                     new RequestUserContactsGetList().userContactGetList();
                     return;

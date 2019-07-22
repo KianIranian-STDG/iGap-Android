@@ -63,7 +63,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                 }
             });
             realm.close();
-            G.isContactImortingInProcess = false ;
+
             G.refreshRealmUi();
             G.handler.post(new Runnable() {
                 @Override
