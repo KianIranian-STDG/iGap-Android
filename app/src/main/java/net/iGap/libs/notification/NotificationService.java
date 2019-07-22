@@ -32,6 +32,13 @@ public class NotificationService extends FirebaseMessagingService {
         super.onNewToken(mToken);
         if (G.ISOK) {
             RealmUserInfo.setPushNotification(mToken);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onNewToken(mToken);
+                }
+            }, 1000);
         }
     }
 

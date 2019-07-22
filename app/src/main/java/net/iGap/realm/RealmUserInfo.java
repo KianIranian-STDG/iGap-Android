@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
@@ -95,6 +96,8 @@ public class RealmUserInfo extends RealmObject {
             String token = realmUserInfo.getPushNotificationToken();
             if (token != null && token.length() > 0) {
                 new RequestClientRegisterDevice().clientRegisterDevice(token);
+            } else {
+                HelperLog.setErrorLog(new Exception("FCM Token is Empty!" + token));
             }
         }
         realm.close();
