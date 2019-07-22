@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -132,6 +134,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     private ViewGroup mLayoutMultiSelectedActions;
     private TextView mBtnRemoveSelected;
     private RealmResults<RealmRoom> results;
+    private ConstraintLayout root ;
+    private ConstraintSet constraintSet ;
+    private ViewGroup selectLayoutRoot ;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -160,6 +165,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
         tagId = System.currentTimeMillis();
+
+        selectLayoutRoot = view.findViewById(R.id.amr_layout_selected_root);
+        root = view.findViewById(R.id.amr_layout_root);
+        constraintSet = new ConstraintSet();
+        constraintSet.clone(root);
 
         progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
@@ -280,12 +290,27 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         try {
             if (mRecyclerView != null) {
+
+                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable){
+                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
+                    return;
+                }
+
+                if (G.isInCall && isChatMultiSelectEnable){
+                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
+                    return;
+                }
+
+                setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_search);
+
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
                 } else if (G.isInCall) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
                 }else if (isChatMultiSelectEnable){
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp10), 0, 0);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
                 }else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
                 }
@@ -940,6 +965,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
 
         }
+    }
+
+    private void setMargin(int mTop){
+        constraintSet.setMargin(selectLayoutRoot.getId() , ConstraintSet.TOP , i_Dp(mTop));
+        constraintSet.applyTo(root);
     }
 
     private void markAsRead(ProtoGlobal.Room.Type chatType, long roomId) {

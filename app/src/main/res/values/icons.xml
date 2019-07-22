@@ -133,8 +133,8 @@
     <string name="md_igap_alert">\uf026</string> <!-- igap_eye_off  -->
     <string name="md_igap_map_marker_multiple">\uf350</string>
     <string name="md_igap_map_marker_off">\uf351</string>
-    <string name="md_igap_lock">\}</string>
-    <string name="md_igap_lock_open_outline">\}</string>
+    <string name="md_igap_lock">@string/lock_icon</string>
+    <string name="md_igap_lock_open_outline">@string/lock_icon</string>
     <string name="md_igap_fingerprint">\uf237</string>
     <string name="md_igap_account_alert">\uf005</string>
     <string name="md_igap_alert_box">\uf027</string>

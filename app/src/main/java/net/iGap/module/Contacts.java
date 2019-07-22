@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -121,8 +122,7 @@ public class Contacts {
             e1.printStackTrace();
         }
     }
-
-
+    /*
     private static void getPhoneContactForServer() { //get List Of Contact
         if (!HelperPermission.grantedContactPermission()) {
             return;
@@ -220,7 +220,7 @@ public class Contacts {
             e.printStackTrace();
         }
     }
-
+    */
     public static void getPhoneContactForClient() { //get List Of Contact
         if (!HelperPermission.grantedContactPermission()) {
             return;
@@ -305,6 +305,105 @@ public class Contacts {
         }
     }
 
+    private static void getAllPhoneContactForServer(){
+        Log.i("fetch_contact","start" );
+
+        if (!HelperPermission.grantedContactPermission()) {
+            return;
+        }
+
+        if (RealmUserInfo.isLimitImportContacts()) {
+            showLimitDialog();
+            return;
+        }
+
+        String[] projectionPhones = {
+                ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY,
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                ContactsContract.CommonDataKinds.Phone.TYPE,
+                ContactsContract.CommonDataKinds.Phone.LABEL,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.RawContacts.ACCOUNT_TYPE,
+        };
+
+        ArrayList<StructListOfContact> contactList = new ArrayList<>();
+        ContentResolver cr = G.context.getContentResolver();
+
+        try{
+            Cursor pCur = null ;
+            pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projectionPhones, null, null, null);
+
+            if (pCur != null){
+                int count = pCur.getCount();
+
+                if (count > PHONE_CONTACT_MAX_COUNT_LIMIT) {
+                    pCur.close();
+                    showLimitDialog();
+                    return;
+                }
+
+                if (count > 0){
+                    StructListOfContact contact = null ;
+                    String displayName;
+                    String number;
+
+                    while (pCur.moveToNext()){
+                        number = pCur.getString(1);
+                        displayName = pCur.getString(4);
+                        // Log.i("fetch_contact" , number + " --- " + displayName);
+                        contact = new StructListOfContact();
+                        checkContactsData(displayName , number , contact , contactList);
+                    }
+                }
+                pCur.close();
+                Log.i("fetch_contact",contactList.size() + "" );
+                Log.i("import_contact",contactList.size() + "" );
+            }
+
+            if (G.onContactFetchForServer != null) {
+                G.onContactFetchForServer.onFetch(contactList, true);
+            }
+
+        }catch (Exception e){
+            //nothing
+        }
+        Log.i("fetch_contact","end" );
+
+    }
+
+    private static void checkContactsData(String name , String phone , StructListOfContact itemContact , List<StructListOfContact> list ){
+
+        try {
+            if (phone != null && name != null) {
+                String[] sp = name.split(" ");
+                if (sp.length == 1) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName("");
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                } else if (sp.length == 2) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName(sp[1]);
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                } else if (sp.length == 3) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName(sp[1] + " " + sp[2]);
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                } else if (sp.length >= 3) {
+                    itemContact.setFirstName(name);
+                    itemContact.setLastName("");
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                }
+
+                list.add(itemContact);
+            }
+        }catch (Exception e){
+            //nothing
+        }
+    }
 
     /**
      * ******************************************** Inner Classes ********************************************
@@ -320,7 +419,7 @@ public class Contacts {
     public static class FetchContactForServer extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
         @Override
         protected ArrayList<StructListOfContact> doInBackground(Void... params) {
-            Contacts.getPhoneContactForServer();
+            Contacts.getAllPhoneContactForServer();
             return null;
         }
     }
