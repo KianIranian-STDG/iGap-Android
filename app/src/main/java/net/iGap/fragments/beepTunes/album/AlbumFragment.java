@@ -1,5 +1,6 @@
 package net.iGap.fragments.beepTunes.album;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -24,10 +25,12 @@ import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.adapter.beepTunes.ItemAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
+import net.iGap.interfaces.OnSongProgress;
 import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
+import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
 
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_CANCEL;
@@ -57,6 +60,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private ItemAdapter albumAdapter;
     private Album album;
     private SharedPreferences sharedPreferences;
+    private MutableLiveData<DownloadSong> downloadingIntegerMutableLiveData = new MutableLiveData<>();
 
     public AlbumFragment getInstance(Album album) {
         AlbumFragment albumFragment = new AlbumFragment();
@@ -125,13 +129,14 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
         trackAdapter.setOnTrackClick(new OnTrackClick() {
             @Override
-            public void onDownloadClick(Track track) {
+            public void onDownloadClick(Track track, OnSongProgress onSongProgress) {
                 viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
+                downloadingIntegerMutableLiveData.observe(getViewLifecycleOwner(), onSongProgress::progress);
             }
 
             @Override
             public void onPlayClick() {
-                Log.i(TAG, "onPlayClick: ");
+
             }
         });
 
@@ -156,7 +161,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                         Log.i(TAG, "error: " + downloadSong.getId());
                         break;
                     case STATUS_DOWNLOADING:
-                        Log.i(TAG, "downloading: " + downloadSong.getId() + " " + downloadSong.getDownloadId() + " " + downloadSong.getDownloadProgress());
+                        downloadingIntegerMutableLiveData.postValue(downloadSong);
+//                        Log.i(TAG, "downloading: " + downloadSong.getId() + " " + downloadSong.getDownloadId() + " " + downloadSong.getDownloadProgress());
                         break;
                 }
 

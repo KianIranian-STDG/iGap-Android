@@ -119,7 +119,10 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                     onTrackClick.onPlayClick();
                 } else {
                     track.setName(track.getId() + ".mp3");
-                    onTrackClick.onDownloadClick(track);
+                    onTrackClick.onDownloadClick(track, downloadSong -> {
+                        if (downloadSong.getId().equals(track.getId()))
+                            progressBar.setProgress(downloadSong.getDownloadProgress());
+                    });
                     startDownload();
                 }
             });
