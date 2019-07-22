@@ -40,6 +40,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
     private DownloadSong downloadingSong;
     private List<DownloadSong> downloadQueue = new ArrayList<>();
+    private MutableLiveData<DownloadSong> downloadSongMutableLiveData = new MutableLiveData<>();
 
     private Realm realm;
 
@@ -124,7 +125,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private void addToDownloadQueue(DownloadSong downloadSong) {
         if (downloadQueue.size() == 0) {
             downloadQueue.add(downloadSong);
-            Log.i(TAG, "addToDownloadQueue: " + downloadSong.getId());
+            downLoadTrack(downloadSong);
         } else {
             boolean isQueue = false;
             for (int i = 0; i < downloadQueue.size(); i++) {
@@ -133,11 +134,16 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
                 else
                     isQueue = true;
             }
-            if (isQueue){
+            if (isQueue) {
                 downloadQueue.add(downloadSong);
-                Log.i(TAG, "addToDownloadQueue: " + downloadSong.getId());
             }
         }
+    }
+
+    private void removeFromQueue(DownloadSong downloadSong) {
+        downloadQueue.remove(downloadSong);
+        if (downloadQueue.size() > 0)
+            downLoadTrack(downloadQueue.get(0));
     }
 
     private void downLoadTrack(DownloadSong downloadSong) {
@@ -162,7 +168,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         realm.executeTransactionAsync(realm -> {
             realm.copyToRealmOrUpdate(song);
         });
-
+        removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);
     }
 
