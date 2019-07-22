@@ -88,6 +88,7 @@ public class G extends Application {
     public static boolean ISOK = true;
     public static Context context;
     public static Handler handler;
+    public static boolean isContactImortingInProcess = false ;
     public static boolean isCalling = false;
     public static boolean isVideoCallRinging = false;
     //public static OnRejectCallStatus onRejectCallStatus;

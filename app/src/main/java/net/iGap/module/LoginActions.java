@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -153,83 +155,73 @@ public class LoginActions {
          * just import contact in each enter to app
          * when user login was done
          */
-        //if (isSendContact) {
-        //    return;
-        //}
-        //Log.i("tag", "importContact:start ");
-        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        //Log.i("import_contact", "start");
 
-        G.onPhoneContact = (contacts, isEnd) -> {
+        if (G.isContactImortingInProcess) {
+            return;
+        }
 
-            String md5Local = createMd5FromContacts(contacts);
-            G.localHashContact = md5Local;
-            //Log.i("tag", "importContact: " + G.localHashContact);
+        G.isContactImortingInProcess = true ;
 
-            if (G.serverHashContact != null && G.serverHashContact.equals(md5Local) ){
-                //request get list
-                //Log.i("tag", "importContact: " + G.localHashContact);
-                //Log.i("tag", "importContact: " + G.serverHashContact);
-                new RequestUserContactsGetList().userContactGetList();
-                return;
-            }
+        G.onContactFetchForServer = new OnContactFetchForServer() {
+            @Override
+            public void onFetch(List<StructListOfContact> contacts, boolean getContactList) {
 
+                String md5Local = md5(new Gson().toJson(contacts));
+                G.localHashContact = md5Local;
+                //Log.i("import_contact", "l: " + G.localHashContact);
+                //Log.i("import_contact", "s: " + G.serverHashContact);
 
-            G.onContactFetchForServer = new OnContactFetchForServer() {
-                @Override
-                public void onFetch(List<StructListOfContact> contacts, boolean getContactList) {
-                    RealmPhoneContacts.sendContactList(contacts, false, getContactList);
+                if (G.serverHashContact != null && G.serverHashContact.equals(md5Local)) {
+                    //request get list
+                    //Log.i("tag", "importContact: " + G.localHashContact);
+                    G.isContactImortingInProcess = false ;
+                    //Log.i("import_contact", "contact are equal with server");
+                    new RequestUserContactsGetList().userContactGetList();
+                    return;
                 }
-            };
 
-            if (G.userLogin) {
-                /**
-                 * this can be go in the activity for check permission in api 6+
-                 */
-
-                try {
-                    if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.isSendContact = true;
-                                new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            }
-                        });
-                    } else {
-                        new RequestUserContactsGetList().userContactGetList();
-                    }
-
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        importContact();
-                    }
-                }, 2000);
+                //Log.i("import_contact", "start send contact to server ,, size = " + contacts.size());
+                RealmPhoneContacts.sendContactList(contacts, false, getContactList);
             }
         };
 
-    }
+        if (G.userLogin) {
+            /**
+             * this can be go in the activity for check permission in api 6+
+             */
 
+            try {
+                if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            G.isSendContact = true;
+                            //Log.i("import_contact", "request");
+                            new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        }
+                    });
+                } else {
+                    new RequestUserContactsGetList().userContactGetList();
+                }
 
-    private static String createMd5FromContacts(ArrayList<StructListOfContact> phoneContactsList) {
-
-        String[] contactsArray = new String[phoneContactsList.size()];
-        for (int i = 0 ; i< phoneContactsList.size() ; i++){
-
-            contactsArray[i] = phoneContactsList.get(i).displayName + "," + phoneContactsList.get(i).phone ;
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    importContact();
+                }
+            }, 2000);
         }
-
-        //Log.i("tag", "importContact: "+ Arrays.toString(contactsArray));
-
-        return md5(Arrays.toString(contactsArray));
 
     }
 
     private static String md5(String s) {
+        //Log.i("import_contact", "array " + s);
+
         try {
             // Create MD5 Hash
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");

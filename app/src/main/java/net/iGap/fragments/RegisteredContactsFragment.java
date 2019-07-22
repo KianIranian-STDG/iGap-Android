@@ -105,7 +105,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private Group vgInviteFriend;
     private EditText edtSearch;
     private HelperToolbar mHelperToolbar;
-    private ProgressBar prgWaitingLoadList;
+    private ProgressBar prgWaitingLoadList , prgMainLoader;
     private ViewGroup mLayoutMultiSelected;
     private TextView mTxtSelectedCount;
     private Realm realm;
@@ -196,6 +196,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             results = ContactManager.getContactList(ContactManager.FIRST);
         }
 
+        prgMainLoader = view.findViewById(R.id.fc_loader_main);
         prgWaitingLoadList = view.findViewById(R.id.prgWaiting_loadList);
         realmRecyclerView.setAdapter(new ContactListAdapter(results));
 
@@ -291,6 +292,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                          */
                         if (results.size() == 0) {
                             LoginActions.importContact();
+                        }else {
+                            prgMainLoader.setVisibility(View.GONE);
                         }
                     }
 
@@ -299,15 +302,18 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         if (results.size() == 0) {
                             new RequestUserContactsGetList().userContactGetList();
                         }
+                        prgMainLoader.setVisibility(View.GONE);
                     }
                 });
             } else {
                 if (results.size() == 0) {
                     new RequestUserContactsGetList().userContactGetList();
                 }
+                prgMainLoader.setVisibility(View.GONE);
             }
         } catch (IOException e) {
             e.printStackTrace();
+            prgMainLoader.setVisibility(View.GONE);
         }
 
         // remove contact paging for fixed bug
@@ -633,11 +639,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
     @Override
     public void onContactsGetList() {
-
+        G.isContactImortingInProcess = false ;
+        //Log.i("import_contact", "response received in contact fragment");
         if (results == null || results.size() == 0) {
             results = getRealm().where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
             realmRecyclerView.setAdapter(new ContactListAdapter(results));
+            // Log.i("import_contact", "contact list updated igapi ha " + results.size());
         }
+        prgMainLoader.setVisibility(View.GONE);
 
     }
 
