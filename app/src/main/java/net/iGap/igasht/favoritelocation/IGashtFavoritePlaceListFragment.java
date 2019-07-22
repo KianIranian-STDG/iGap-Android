@@ -1,4 +1,4 @@
-package net.iGap.igasht;
+package net.iGap.igasht.favoritelocation;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;

@@ -1,4 +1,4 @@
-package net.iGap.igasht;
+package net.iGap.igasht.historylocation;
 
 import android.support.v4.app.Fragment;
 
