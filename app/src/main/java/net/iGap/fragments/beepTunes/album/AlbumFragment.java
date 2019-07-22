@@ -27,7 +27,11 @@ import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
+import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
@@ -134,28 +138,29 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         });
 
         viewModel.getDownloadStatusMutableLiveData().observe(this, downloadSong -> {
-            switch (downloadSong.getDownloadStatus()) {
-                case STATUS_START:
-                    trackAdapter.startDownload(downloadSong.getId());
-                    Log.i(TAG, "start: " + downloadSong.getId());
-                    break;
-                case STATUS_STOP:
-                    Log.i(TAG, "stop: " + downloadSong.getId());
-                    break;
-                case STATUS_PAUSE:
-                    Log.i(TAG, "pause: " + downloadSong.getId());
-                    break;
-                case STATUS_COMPLETE:
-                    Log.i(TAG, "complete: " + downloadSong.getId());
-                    trackAdapter.stopDownload(downloadSong.getId());
-                    break;
-                case STATUS_ERROR:
-                    Log.i(TAG, "error: " + downloadSong.getId());
-                    break;
-                case STATUS_DOWNLOADING:
-                    Log.i(TAG, "downloading: " + downloadSong.getId() + " " + downloadSong.getDownloadProgress());
-                    break;
-            }
+            if (downloadSong != null)
+                switch (downloadSong.getDownloadStatus()) {
+                    case STATUS_START:
+                        trackAdapter.startDownload(downloadSong.getId());
+                        Log.i(TAG, "start: " + downloadSong.getDownloadId());
+                        break;
+                    case STATUS_STOP:
+                        Log.i(TAG, "stop: " + downloadSong.getId());
+                        break;
+                    case STATUS_PAUSE:
+                        Log.i(TAG, "pause: " + downloadSong.getId());
+                        break;
+                    case STATUS_COMPLETE:
+                        Log.i(TAG, "complete: " + downloadSong.getDownloadId());
+                        trackAdapter.stopDownload(downloadSong.getId());
+                        break;
+                    case STATUS_ERROR:
+                        Log.i(TAG, "error: " + downloadSong.getId());
+                        break;
+                    case STATUS_DOWNLOADING:
+                        Log.i(TAG, "downloading: " + downloadSong.getId() + " " + downloadSong.getDownloadId() + " " + downloadSong.getDownloadProgress());
+                        break;
+                }
         });
     }
 

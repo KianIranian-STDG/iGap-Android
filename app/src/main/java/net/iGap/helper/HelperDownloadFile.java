@@ -456,7 +456,7 @@ public class HelperDownloadFile {
     }
 
     public static void startDownloadManager(DownloadSong song, OnSongDownload onSongDownload) {
-        PRDownloader.download(song.getUrl(), song.getPath(), song.getName())
+        song.setDownloadId(PRDownloader.download(song.getUrl(), song.getPath(), song.getName())
                 .setHeader("Authorization", ApiStatic.USER_TOKEN)
                 .build()
                 .setOnStartOrResumeListener(() -> onSongDownload.startOrResume(song))
@@ -473,7 +473,7 @@ public class HelperDownloadFile {
                     public void onError(Error error) {
                         onSongDownload.downloadError(song, error);
                     }
-                });
+                }));
     }
 
     private void requestDownloadFile(final StructDownLoad item) {

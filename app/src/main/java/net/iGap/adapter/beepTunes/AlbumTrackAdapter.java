@@ -111,9 +111,10 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_sync));
             }
 
+            songNameTv.setText(track.getEnglishName());
+
             songActionTv.setOnClickListener(v -> {
                 if (track.isInStorage()) {
-
                     onTrackClick.onPlayClick();
                 } else {
                     track.setName(track.getId() + ".mp3");

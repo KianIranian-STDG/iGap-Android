@@ -10,6 +10,7 @@ public class DownloadSong {
 
     private String url;
     private Long id;
+    private int downloadId;
     private String name;
     private int downloadStatus;
     private int downloadProgress;
@@ -24,6 +25,14 @@ public class DownloadSong {
 
     public DownloadSong() {
 
+    }
+
+    public int getDownloadId() {
+        return downloadId;
+    }
+
+    public void setDownloadId(int downloadId) {
+        this.downloadId = downloadId;
     }
 
     public int getDownloadProgress() {
