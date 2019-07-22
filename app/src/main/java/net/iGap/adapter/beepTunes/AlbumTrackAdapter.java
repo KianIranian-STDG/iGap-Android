@@ -26,7 +26,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
     private OnTrackClick onTrackClick;
     private Realm realm;
 
-
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
         notifyDataSetChanged();
@@ -49,7 +48,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         for (int i = 0; i < tracks.size(); i++) {
             if (tracks.get(i).getId().equals(id)) {
                 tracks.get(i).setInStorage(true);
-                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_STOP);
+                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_CANCEL);
                 notifyItemChanged(i);
             }
         }
@@ -84,6 +83,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         private TextView songPrwTv;
         private ProgressBar progressBar;
         private RotateAnimation rotate;
+        private Long itemId;
 
         TrackViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -101,6 +101,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         }
 
         void bindTracks(Track track) {
+            itemId = track.getId();
             if (realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst() != null) {
                 track.setInStorage(true);
             }
@@ -119,20 +120,10 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                 } else {
                     track.setName(track.getId() + ".mp3");
                     onTrackClick.onDownloadClick(track);
+                    startDownload();
                 }
             });
-
-            songActionTv.setOnLongClickListener(v -> {
-                realm.executeTransactionAsync(realm -> {
-                    RealmDownloadSong downloadSong = new RealmDownloadSong();
-                    downloadSong.setId(track.getId());
-                    realm.copyToRealmOrUpdate(downloadSong);
-                });
-                return false;
-            });
-
             if (track.getDownloadStatus() == DownloadSong.STATUS_START) {
-                startDownload();
             } else {
                 stopDownload();
             }

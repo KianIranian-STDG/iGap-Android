@@ -3,9 +3,9 @@ package net.iGap.fragments.beepTunes.album;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 
 import com.downloader.Error;
+import com.downloader.PRDownloader;
 import com.downloader.Progress;
 
 import net.iGap.api.BeepTunesApi;
@@ -18,7 +18,6 @@ import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
-import net.iGap.realm.RealmDownloadSong;
 import net.iGap.viewmodel.BaseViewModel;
 
 import java.io.File;
@@ -40,7 +39,6 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
     private DownloadSong downloadingSong;
     private List<DownloadSong> downloadQueue = new ArrayList<>();
-    private MutableLiveData<DownloadSong> downloadSongMutableLiveData = new MutableLiveData<>();
 
     private Realm realm;
 
@@ -89,7 +87,15 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     void onDownloadClick(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {
         File file = new File(path + "/" + track.getName());
         if (!file.exists()) {
-            startDownload(track, path, fragmentManager, sharedPreferences);
+            if (downloadingSong != null) {
+                if (!track.getId().equals(downloadingSong.getId()))
+                    startDownload(track, path, fragmentManager, sharedPreferences);
+                else {
+                    pauseDownloadSong(downloadingSong);
+                }
+            } else {
+                startDownload(track, path, fragmentManager, sharedPreferences);
+            }
         } else {
 
         }
@@ -117,9 +123,11 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
                 addToDownloadQueue(downloadSong);
             }
         }
+    }
 
-        Log.i(TAG, "startDownload: " + downloadQueue.size());
-
+    private void pauseDownloadSong(DownloadSong downloadSong) {
+        PRDownloader.pause(downloadSong.getDownloadId());
+        removeFromQueue(downloadSong);
     }
 
     private void addToDownloadQueue(DownloadSong downloadSong) {
@@ -129,7 +137,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         } else {
             boolean isQueue = false;
             for (int i = 0; i < downloadQueue.size(); i++) {
-                if (downloadQueue.get(i).getId() == downloadSong.getId())
+                if (downloadQueue.get(i).getId().equals(downloadSong.getId()))
                     return;
                 else
                     isQueue = true;
@@ -154,7 +162,8 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     @Override
     public void progressDownload(DownloadSong downloadSong, Progress progress) {
         downloadSong.setDownloadProgress((int) ((progress.currentBytes * 100) / progress.totalBytes));
-        downloadSong.setDownloadStatus(DownloadSong.STATUS_DOWNLOADING);
+        if (downloadSong.getDownloadStatus() == DownloadSong.STATUS_START)
+            downloadSong.setDownloadStatus(DownloadSong.STATUS_DOWNLOADING);
         downloadStatusMutableLiveData.postValue(downloadSong);
     }
 
@@ -162,12 +171,13 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     public void completeDownload(DownloadSong downloadSong) {
         downloadSong.setDownloadStatus(DownloadSong.STATUS_COMPLETE);
 
-        RealmDownloadSong song = new RealmDownloadSong();
-        song.setId(downloadSong.getId());
-        song.setPath(downloadSong.getPath());
-        realm.executeTransactionAsync(realm -> {
-            realm.copyToRealmOrUpdate(song);
-        });
+//        RealmDownloadSong song = new RealmDownloadSong();
+//        song.setId(downloadSong.getId());
+//        song.setPath(downloadSong.getPath());
+//        realm.executeTransactionAsync(realm -> {
+//            realm.copyToRealmOrUpdate(song);
+//        });
+
         removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);
     }
@@ -193,7 +203,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     @Override
     public void cancelDownload(DownloadSong downloadSong) {
-        downloadSong.setDownloadStatus(DownloadSong.STATUS_STOP);
+        downloadSong.setDownloadStatus(DownloadSong.STATUS_CANCEL);
         downloadStatusMutableLiveData.postValue(downloadSong);
     }
 

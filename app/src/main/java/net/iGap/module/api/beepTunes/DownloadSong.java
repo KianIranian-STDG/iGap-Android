@@ -2,7 +2,7 @@ package net.iGap.module.api.beepTunes;
 
 public class DownloadSong {
     public static final int STATUS_START = 0;
-    public static final int STATUS_STOP = 1;
+    public static final int STATUS_CANCEL = 1;
     public static final int STATUS_PAUSE = 2;
     public static final int STATUS_COMPLETE = 3;
     public static final int STATUS_ERROR = 4;
@@ -12,7 +12,7 @@ public class DownloadSong {
     private Long id;
     private int downloadId;
     private String name;
-    private int downloadStatus;
+    private int downloadStatus = STATUS_START;
     private int downloadProgress;
     private String path;
 

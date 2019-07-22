@@ -37,7 +37,7 @@ public class Track {
     @Expose
     private String type;
 
-    private int downloadStatus = DownloadSong.STATUS_STOP;
+    private int downloadStatus = DownloadSong.STATUS_CANCEL;
 
     private boolean inStorage = false;
 

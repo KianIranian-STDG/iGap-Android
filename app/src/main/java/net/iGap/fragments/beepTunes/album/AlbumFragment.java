@@ -27,18 +27,14 @@ import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
-import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_CANCEL;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_ERROR;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_PAUSE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_START;
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_STOP;
 
 public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
@@ -137,14 +133,14 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             }
         });
 
-        viewModel.getDownloadStatusMutableLiveData().observe(this, downloadSong -> {
+        viewModel.getDownloadStatusMutableLiveData().observe(getViewLifecycleOwner(), downloadSong -> {
             if (downloadSong != null)
                 switch (downloadSong.getDownloadStatus()) {
                     case STATUS_START:
                         trackAdapter.startDownload(downloadSong.getId());
                         Log.i(TAG, "start: " + downloadSong.getDownloadId());
                         break;
-                    case STATUS_STOP:
+                    case STATUS_CANCEL:
                         Log.i(TAG, "stop: " + downloadSong.getId());
                         break;
                     case STATUS_PAUSE:
@@ -161,6 +157,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                         Log.i(TAG, "downloading: " + downloadSong.getId() + " " + downloadSong.getDownloadId() + " " + downloadSong.getDownloadProgress());
                         break;
                 }
+
         });
     }
 
