@@ -35,7 +35,7 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_beep_tunes, container, false);
         viewModel = new BeepTunesViewModel();
-        adapter = new BeepTunesAdapter();
+        adapter = new BeepTunesAdapter(rootView.getWidth());
         return rootView;
     }
 

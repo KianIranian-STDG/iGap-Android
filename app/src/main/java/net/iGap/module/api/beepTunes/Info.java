@@ -12,6 +12,8 @@ public class Info {
     private Long playbackTime;
     @Expose
     private String title;
+    @Expose
+    private String scale;
 
     public Boolean getLooped() {
         return looped;
@@ -37,4 +39,11 @@ public class Info {
         this.title = title;
     }
 
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getScale() {
+        return scale;
+    }
 }
