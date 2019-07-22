@@ -14,12 +14,14 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentSyncRegisteredContacts;
 import net.iGap.fragments.RegisteredContactsFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -122,7 +124,13 @@ public class FastScroller extends LinearLayout {
                 proportion = y / (float) height;
             }
             int targetPos = getValueInRange(0, recyclerView.getAdapter().getItemCount() - 1, (int) (proportion * (float) recyclerView.getAdapter().getItemCount()));
-            handle.setText(((RegisteredContactsFragment.ContactListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
+            if (recyclerView.getAdapter() instanceof RegisteredContactsFragment.ContactListAdapter) {
+                handle.setText(((RegisteredContactsFragment.ContactListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
+            }
+            else if(recyclerView.getAdapter() instanceof FragmentSyncRegisteredContacts.ContactListAdapter2) {
+                handle.setText(((FragmentSyncRegisteredContacts.ContactListAdapter2) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
+            }
+
             recyclerView.scrollToPosition(targetPos);
         }
     }

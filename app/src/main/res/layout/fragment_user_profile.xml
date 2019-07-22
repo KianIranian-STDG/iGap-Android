@@ -61,6 +61,7 @@
                 android:layout_marginLeft="@dimen/dp36"
                 android:layout_marginRight="@dimen/dp36"
                 android:onClick="@{()->viewModel.onAvatarClick()}"
+                android:src="@drawable/avatar"
                 app:layout_constraintBottom_toBottomOf="@id/fup_avatar_box"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_avatar_box" />

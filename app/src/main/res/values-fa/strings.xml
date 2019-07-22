@@ -1910,5 +1910,6 @@
 
     <string name="str_frag_sync_contactTitle">به دوستان خود سلام کنید و بهشون بگید که در آی گپ هستید.</string>
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
-    <string name="str_frag_sync_skipBtn">شروع برنامه</string>
+    <string name="str_frag_sync_skipBtn">شروع</string>
+    <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
 </resources>

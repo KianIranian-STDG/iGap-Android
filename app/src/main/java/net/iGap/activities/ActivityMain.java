@@ -356,6 +356,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             realm.close();
 
+            initTabStrip();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -514,8 +515,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             isOpenChatBeforeSheare = false;
             checkIntent(getIntent());
-
-            initTabStrip();
 
             initComponent();
 

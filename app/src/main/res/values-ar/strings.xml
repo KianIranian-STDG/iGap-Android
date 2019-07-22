@@ -2856,4 +2856,5 @@
     <string name="str_frag_sync_contactTitle">قل مرحبا لأصدقائك</string>
     <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
     <string name="str_frag_sync_skipBtn">البدء</string>
+    <string name="str_frag_sync_error">هناك خطأ ما. حاول مرة اخرى.</string>
 </resources>

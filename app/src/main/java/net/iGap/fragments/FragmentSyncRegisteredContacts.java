@@ -1,101 +1,84 @@
 package net.iGap.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArrayMap;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.daimajia.swipe.SwipeLayout;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.FragmentSyncRegisteredContactsBinding;
-import net.iGap.helper.HelperCalander;
+import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPhoneContact;
+import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
-import net.iGap.module.CustomTextViewMedium;
+import net.iGap.module.EmojiTextViewE;
+import net.iGap.module.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
+import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
-import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
+import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
-public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPhoneContact, OnContactsGetList {
-
+public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPhoneContact, OnContactsGetList, ToolbarListener {
 
     private static boolean getPermission = true;
-    StickyRecyclerHeadersDecoration decoration;
     RealmResults<RealmContacts> results;
-    private TextView menu_txt_titleToolbar;
     private Button skipBtn;
     private RecyclerView realmRecyclerView;
     private Realm realm;
     private ProgressBar prgWaiting;
     private boolean isCallAction = false;
-    private ActionMode mActionMode;
-    protected ArrayMap<Long, Boolean> selectedList = new ArrayMap<>();
     boolean isMultiSelect = false;
-    private FragmentSyncRegisteredContacts.ContactListAdapter contactListAdapter;
-    private AppBarLayout toolbar;
+    private ContactListAdapter2 contactListAdapter2;
     public FragmentSyncRegisteredContacts.onClickRecyclerView onCliclRecyclerView;
-    public FragmentSyncRegisteredContacts.onLongClickRecyclerView onLongClickRecyclerView;
-    public boolean isLongClick = false;
 
     public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
     private FragmentSyncRegisteredContactsBinding fragmentSyncRegisteredContactsBinding;
     public LinearLayoutManager layoutManager;
+    public final static String ARG_USER_ID = "arg_user_id";
+    private HelperToolbar mHelperToolbar;
+    private long userID;
 
     public static FragmentSyncRegisteredContacts newInstance() {
         return new FragmentSyncRegisteredContacts();
@@ -124,6 +107,19 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         Contacts.localPhoneContactId = 0;
         Contacts.getContact = true;
 
+        userID = this.getArguments().getLong(ARG_USER_ID);
+
+        //Toolbar Initial
+        LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
+        Utils.darkModeHandler(toolbarLayout);
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setSearchBoxShown(true)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.str_frag_sync_contactWelcome));
+        toolbarLayout.addView(mHelperToolbar.getView());
+        mHelperToolbar.setListener(this);
+
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
 
@@ -134,24 +130,13 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
             isCallAction = bundle.getBoolean("ACTION");
         }
 
-        toolbar = view.findViewById(R.id.fc_layot_title);
-        toolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
-        menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
-        Typeface titleTypeface;
-        if (!HelperCalander.isPersianUnicode) {
-            titleTypeface = G.typeface_neuropolitical;
-        } else {
-            titleTypeface = G.typeface_IRANSansMobile;
-        }
-        menu_txt_titleToolbar.setTypeface(titleTypeface);
-
         // My Code H.Amini
         //ContactUtils.syncContacts();
 
         realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
-        layoutManager = new LinearLayoutManager(G.fragmentActivity);
+        layoutManager = new LinearLayoutManager(realmRecyclerView.getContext());
         realmRecyclerView.setLayoutManager(layoutManager);
 
         // get all the contacts from realm
@@ -164,9 +149,17 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 if (getActivity() == null || getActivity().isFinishing() || !isAdded())
                     return;
 
-                contactListAdapter = new FragmentSyncRegisteredContacts.ContactListAdapter(results);
-                realmRecyclerView.setAdapter(contactListAdapter);
+                //contactListAdapter = new FragmentSyncRegisteredContacts.ContactListAdapter(results);
+                contactListAdapter2 = new ContactListAdapter2(results);
+
+                //realmRecyclerView.setAdapter(contactListAdapter);
+                realmRecyclerView.setAdapter(contactListAdapter2);
                 realmRecyclerView.setVisibility(View.VISIBLE);
+                realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
+                realmRecyclerView.setNestedScrollingEnabled(false);
+                FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+                fastScroller.setRecyclerView(realmRecyclerView);
+
             }
         }, 500);
 
@@ -181,6 +174,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 }
 
                 Intent intent = new Intent(getContext(), ActivityMain.class);
+                intent.putExtra(ARG_USER_ID, userID);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(intent);
                 G.fragmentActivity.finish();
@@ -188,15 +182,14 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
             }
         });
 
-        FragmentSyncRegisteredContacts.StickyHeader stickyHeader = new FragmentSyncRegisteredContacts.StickyHeader(results);
+        /*FragmentSyncRegisteredContacts.StickyHeader stickyHeader = new FragmentSyncRegisteredContacts.StickyHeader(results);
         decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
-        realmRecyclerView.addItemDecoration(decoration);
+        realmRecyclerView.addItemDecoration(decoration);*/
 
         onCliclRecyclerView = new FragmentSyncRegisteredContacts.onClickRecyclerView() {
             @Override
             public void onClick(View view, int position) {
                 if (isMultiSelect) {
-                    multi_select(position);
                 }
             }
         };
@@ -300,232 +293,13 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
             }
 
             Intent intent = new Intent(getContext(), ActivityMain.class);
+            intent.putExtra(ARG_USER_ID, userID);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
             G.fragmentActivity.finish();
         }
-    }
-
-    /**
-     * **********************************************************************************
-     * ********************************** RealmAdapter **********************************
-     * **********************************************************************************
-     */
-
-    public class ContactListAdapter extends RealmRecyclerViewAdapter<RealmContacts, FragmentSyncRegisteredContacts.ContactListAdapter.ViewHolder> {
-
-        String lastHeader = "";
-        int count;
-        private boolean isSwipe = false;
-        RealmResults<RealmContacts> usersList;
-
-
-        ContactListAdapter(RealmResults<RealmContacts> realmResults) {
-            super(realmResults, true);
-            count = realmResults.size();
-            usersList = realmResults;
-        }
-
-        @Override
-        public FragmentSyncRegisteredContacts.ContactListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            // View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
-
-            View v = ViewMaker.getViewRegisteredContacts();
-
-            if (getData() != null && count != getData().size()) {
-                count = getData().size();
-
-                realmRecyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        realmRecyclerView.removeItemDecoration(decoration);
-                        decoration = new StickyRecyclerHeadersDecoration(new FragmentSyncRegisteredContacts.StickyHeader(getData().sort(RealmContactsFields.DISPLAY_NAME)));
-                        realmRecyclerView.addItemDecoration(decoration);
-                    }
-                });
-            }
-
-            return new FragmentSyncRegisteredContacts.ContactListAdapter.ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(final FragmentSyncRegisteredContacts.ContactListAdapter.ViewHolder viewHolder, int i) {
-
-            if (i == 0) {
-                hideProgress();
-            }
-
-            final RealmContacts contact = viewHolder.realmContacts = getItem(i);
-            if (contact == null) {
-                return;
-            }
-
-            String header = contact.getDisplay_name();
-            if (!isMultiSelect) {
-                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
-                    viewHolder.topLine.setVisibility(View.VISIBLE);
-                } else {
-                    viewHolder.topLine.setVisibility(View.GONE);
-                }
-            }
-            lastHeader = header;
-
-            viewHolder.title.setText(contact.getDisplay_name());
-
-            final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());
-            if (realmRegisteredInfo != null) {
-                viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
-                if (realmRegisteredInfo.getStatus() != null) {
-                    if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                        viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), realmRegisteredInfo.getLastSeen(), false));
-                    } else {
-                        if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
-                        }
-                        viewHolder.subtitle.setText(realmRegisteredInfo.getStatus());
-                    }
-                }
-
-                if (HelperCalander.isPersianUnicode) {
-                    viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
-                }
-            }
-
-            viewHolder.swipeLayout.setSwipeEnabled(false);
-
-
-            viewHolder.txtDelete.setOnClickListener((View v) -> {
-                MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        new RequestUserContactsDelete().contactsDelete(realmRegisteredInfo.getPhoneNumber());
-                    }
-                }).negativeText(R.string.B_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        viewHolder.swipeLayout.close();
-                    }
-                }).build();
-
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        viewHolder.swipeLayout.close();
-                    }
-                });
-                dialog.show();
-
-            });
-
-            viewHolder.txtEdit.setOnClickListener(v -> {
-
-
-            });
-
-
-            if (selectedList.containsKey(usersList.get(i).getPhone())) {
-                viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                //  viewHolder.animateCheckBox.setChecked(true);
-                //  viewHolder.animateCheckBox.setLineColor(G.context.getResources().getColor(R.color.white));
-                viewHolder.animateCheckBox.setChecked(true);
-
-//                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.gray_9d));
-            } else {
-                //    viewHolder.animateCheckBox.setCircleColor(G.context.getResources().getColor(R.color.green));
-                if (isLongClick) {
-                    viewHolder.animateCheckBox.setChecked(false);
-                    viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                } else {
-                    viewHolder.animateCheckBox.setChecked(false);
-                    viewHolder.animateCheckBox.setVisibility(View.INVISIBLE);
-                }
-//                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.white));
-            }
-
-            setAvatar(viewHolder, contact.getId());
-        }
-
-        private void setAvatar(final FragmentSyncRegisteredContacts.ContactListAdapter.ViewHolder holder, final long userId) {
-            avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            private CircleImageView image;
-            private TextView title;
-            private TextView subtitle;
-            private ViewGroup txtDelete;
-            private ViewGroup txtEdit;
-            protected View topLine;
-            private RealmContacts realmContacts;
-            private SwipeLayout swipeLayout;
-            private LinearLayout root;
-            private CheckBox animateCheckBox;
-
-            public ViewHolder(View view) {
-                super(view);
-
-                root = (LinearLayout) view.findViewById(R.id.mainContainer);
-                animateCheckBox = (CheckBox) view.findViewById(R.id.animateCheckBoxContact);
-                image = (CircleImageView) view.findViewById(R.id.imageView);
-                title = (TextView) view.findViewById(R.id.title);
-                txtDelete = (ViewGroup) view.findViewById(R.id.swipeDelete);
-                txtEdit = (ViewGroup) view.findViewById(R.id.swipeEdit);
-                subtitle = (TextView) view.findViewById(R.id.subtitle);
-                topLine = (View) view.findViewById(R.id.topLine);
-                swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
-                swipeLayout.setSwipeEnabled(false);
-
-                root.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (onLongClickRecyclerView != null) {
-                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
-                            isLongClick = true;
-                            ;
-                        }
-
-                        return false;
-                    }
-                });
-            }
-        }
-    }
-
-    /**
-     * ************************************* show all phone contact *************************************
-     */
-    private class StickyHeader implements StickyRecyclerHeadersAdapter {
-
-        RealmResults<RealmContacts> realmResults;
-
-        StickyHeader(RealmResults<RealmContacts> realmResults) {
-            this.realmResults = realmResults;
-        }
-
-        @Override
-        public long getHeaderId(int position) {
-            return realmResults.get(position).getDisplay_name().toUpperCase().charAt(0);
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
-            return new RecyclerView.ViewHolder(view) {
-            };
-        }
-
-        @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
-            textView.setText(realmResults.get(position).getDisplay_name().toUpperCase().substring(0, 1));
-        }
-
-        @Override
-        public int getItemCount() {
-            return realmResults.size();
+        else {
+            realmRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -586,99 +360,202 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         }
     }
 
-    // Add/Remove the item from/to the list
-
-    public void multi_select(int position) {
-        if (mActionMode != null) {
-
-            if (results.get(position) == null) {
-                return;
-            }
-
-            if (selectedList.containsKey(results.get(position).getPhone())) {
-                selectedList.remove(results.get(position).getPhone());
-            } else {
-                selectedList.put(results.get(position).getPhone(), true);
-            }
-
-            if (selectedList.size() > 0) {
-                mActionMode.setTitle("" + selectedList.size());
-            } else {
-                mActionMode.setTitle("");
-            }
-            refreshAdapter(position, false);
-        }
-    }
-
-    public void refreshAdapter(int position, boolean isAllRefresh) {
-        contactListAdapter.usersList = results;
-        if (isAllRefresh) {
-            contactListAdapter.notifyDataSetChanged();
-        } else {
-            contactListAdapter.notifyItemChanged(position);
-        }
-    }
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.menu_multi_select, menu);
-            toolbar.setVisibility(View.GONE);
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_delete:
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
-                                new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
-                            }
-
-                            mActionMode.finish();
-                            refreshAdapter(0, true);
-
-                        }
-                    }).negativeText(R.string.B_cancel).show();
-
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-            isMultiSelect = false;
-            isLongClick = false;
-            selectedList.clear();
-            refreshAdapter(0, true);
-            toolbar.setVisibility(View.VISIBLE);
-        }
-    };
-
     private interface onClickRecyclerView {
         void onClick(View view, int position);
     }
 
-    private interface onLongClickRecyclerView {
-        void onClick(View view, int position);
+    @Override
+    public void onSearchClickListener(View view) {
+        openKeyBoard();
     }
-    
-    
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+        if (text.length() > 0) {
+            results = getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        } else {
+            results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        }
+//        contactListAdapter.usersList = results;
+//        contactListAdapter.notify();
+//        contactListAdapter = new FragmentSyncRegisteredContacts.ContactListAdapter(results);
+//        realmRecyclerView.setAdapter(contactListAdapter);
+        contactListAdapter2 = new ContactListAdapter2(results);
+        realmRecyclerView.setAdapter(contactListAdapter2);
+        /*FragmentSyncRegisteredContacts.StickyHeader stickyHeader = new FragmentSyncRegisteredContacts.StickyHeader(results);
+        decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
+        realmRecyclerView.addItemDecoration(decoration);*/
+    }
+
+
+    public class ContactListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private List<RealmContacts> usersList;
+        private int count;
+        private LayoutInflater inflater;
+
+
+        ContactListAdapter2(List<RealmContacts> contacts) {
+            inflater = LayoutInflater.from(G.context);
+            count = contacts.size();
+            usersList = contacts;
+        }
+
+        public String getBubbleText(int position) {
+            if (usersList.size() == 0 || position > (usersList.size()-1) || position == -1)
+                return "-";
+            else {
+                return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
+            }
+        }
+
+        @NotNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
+
+            View v = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int i) {
+
+            if (holder instanceof ViewHolder) {
+
+                if (i == 0) {
+                    hideProgress();
+                }
+
+                ViewHolder viewHolder = (ViewHolder) holder;
+
+                final RealmContacts contact = viewHolder.realmContacts = usersList.get(i);
+                if (contact == null) {
+                    return;
+                }
+
+                viewHolder.title.setTextColor(getResources().getColor(R.color.black));
+                viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
+
+                viewHolder.title.setText(contact.getDisplay_name());
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
+
+                setAvatar(viewHolder, contact.getId());
+
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return usersList.size();
+        }
+
+        private void setAvatar(final RecyclerView.ViewHolder viewHolder, final long userId) {
+            if (viewHolder instanceof ViewHolder) {
+                ViewHolder holder = (ViewHolder) viewHolder;
+                avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
+            }
+        }
+
+        public String getItemCharacter(int position) {
+            return String.valueOf(usersList.get(position).getDisplay_name().toUpperCase().charAt(0));
+        }
+
+        public boolean showCharacter(int position) {
+            if (position > 0) {
+                return usersList.get(position).getDisplay_name().toUpperCase().charAt(0) != usersList.get(position - 1).getDisplay_name().toUpperCase().charAt(0);
+            } else {
+                return true;
+            }
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            private de.hdodenhof.circleimageview.CircleImageView image;
+            private EmojiTextViewE title;
+            private TextView subtitle;
+            private RealmContacts realmContacts;
+            private ConstraintLayout root;
+            private CheckBox animateCheckBox;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                root = view.findViewById(R.id.iv_itemContactChat_root);
+                animateCheckBox = view.findViewById(R.id.iv_itemContactChat_checkBox);
+                animateCheckBox.setVisibility(View.GONE);
+                image = view.findViewById(R.id.iv_itemContactChat_profileImage);
+                title = view.findViewById(R.id.tv_itemContactChat_userName);
+                subtitle = view.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
+
+                if (G.isAppRtl) {
+                    title.setGravity(Gravity.RIGHT);
+                    subtitle.setGravity(Gravity.RIGHT);
+                } else {
+                    title.setGravity(Gravity.LEFT);
+                    subtitle.setGravity(Gravity.LEFT);
+                }
+
+                root.setOnClickListener(v -> {
+
+                    if (!isMultiSelect) {
+                        if (isCallAction) {
+                            long userId = realmContacts.getId();
+                            if (userId != 134 && G.userId != userId) {
+
+
+                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
+
+                                        switch (which) {
+                                            case 0:
+                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                popBackStackFragment();
+                                                break;
+                                            case 1:
+                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+
+                                                popBackStackFragment();
+                                                break;
+                                        }
+
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                            }
+
+                        }
+                        else {
+                            showProgress();
+
+                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                                @Override
+                                public void complete() {
+                                    hideProgress();
+                                    popBackStackFragment();
+                                    G.fragmentActivity.finish();
+                                }
+                            }, new HelperPublicMethod.OnError() {
+                                @Override
+                                public void error() {
+                                    hideProgress();
+                                    new DefaultRoundDialog(getContext())
+                                            .setTitle(R.string.warning)
+                                            .setMessage(R.string.str_frag_sync_error)
+                                            // Specifying a listener allows you to take an action before dismissing the dialog.
+                                            // The dialog is automatically dismissed when a dialog button is clicked.
+                                            .setPositiveButton(R.string.dialog_ok, null)
+                                            .show();
+                                }
+                            });
+                        }
+                    } else {
+                        /*if (onClickRecyclerView != null)
+                            onClickRecyclerView.onClick(v, getAdapterPosition());*/
+                    }
+                });
+            }
+        }
+
+    }
 }
