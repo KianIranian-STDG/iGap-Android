@@ -1909,4 +1909,10 @@
     <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
     <string name="igasht_add_to_favorite_title">به لیست علاقمندی ها اضافه کن</string>
     <string name="igasht_buy_ticket_title">خرید بلیط</string>
+    <string name="detail_title">جزئیات</string>
+    <string name="igasht_place_of_visit_title">محل بازدید</string>
+    <string name="igasht_add_new_place_title">اضافه کردن بازدید جدید</string>
+    <string name="igasht_ticket_type_title">Specify the type of ticket</string>
+    <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
+    <string name="igasht_add_ticket_count_button_title">ثبت</string>
 </resources>

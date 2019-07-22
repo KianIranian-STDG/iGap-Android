@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.igasht.IGashtProvinceViewModel" />
+            type="net.iGap.igasht.provinceselect.IGashtProvinceViewModel" />
     </data>
 
     <LinearLayout
@@ -73,7 +73,7 @@
                 android:fontFamily="@font/main_font"
                 android:text="@string/igasht_choose_province_title"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dp20"
+                android:textSize="@dimen/largeTextSize"
                 android:visibility="@{viewModel.showMainView}"
                 app:layout_constraintBottom_toTopOf="@id/v"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +88,7 @@
                 app:cardCornerRadius="@dimen/dp20"
                 app:cardUseCompatPadding="true"
                 app:contentPadding="@dimen/dp8"
-                app:layout_constraintBottom_toTopOf="@id/searchButton"
+                app:layout_constraintBottom_toTopOf="@id/loadingView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/chooseProvinceTitle"
@@ -100,7 +100,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/clearProvinceSearch"
-                        style="@style/myIconTextViewStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -128,7 +128,7 @@
                         android:background="@color/gray" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/myIconTextViewStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -137,12 +137,21 @@
                 </LinearLayout>
             </android.support.design.card.MaterialCardView>
 
+            <ProgressBar
+                android:id="@+id/loadingView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.showLoadingView}"
+                app:layout_constraintBottom_toTopOf="@id/searchButton"
+                app:layout_constraintTop_toBottomOf="@id/v"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <android.support.design.button.MaterialButton
                 android:id="@+id/searchButton"
                 style="@style/BaseIGapButtonStyle"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
                 android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
                 android:text="@string/igasht_search_by_location"
                 android:visibility="@{viewModel.showMainView}"
@@ -153,16 +162,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/v"
-                app:layout_constraintWidth_percent=".6" />
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="@{viewModel.showLoadingView}"
-                app:layout_constraintBottom_toTopOf="@id/searchButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/loadingView" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/myIconTextViewStyle"
