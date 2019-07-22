@@ -2,6 +2,7 @@ package net.iGap.fragments.beepTunes.album;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -80,6 +81,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         setUpViews();
         setUpAlbumInfo(album);
 
+        progressBar.getIndeterminateDrawable().setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
         viewModel.getAlbumSong(album.getId());
         viewModel.getArtistOtherAlbum(album.getArtists().get(0).getId());
 

@@ -18,6 +18,7 @@ import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
+import net.iGap.realm.RealmDownloadSong;
 import net.iGap.viewmodel.BaseViewModel;
 
 import java.io.File;
@@ -171,12 +172,12 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     public void completeDownload(DownloadSong downloadSong) {
         downloadSong.setDownloadStatus(DownloadSong.STATUS_COMPLETE);
 
-//        RealmDownloadSong song = new RealmDownloadSong();
-//        song.setId(downloadSong.getId());
-//        song.setPath(downloadSong.getPath());
-//        realm.executeTransactionAsync(realm -> {
-//            realm.copyToRealmOrUpdate(song);
-//        });
+        RealmDownloadSong song = new RealmDownloadSong();
+        song.setId(downloadSong.getId());
+        song.setPath(downloadSong.getPath());
+        realm.executeTransactionAsync(realm -> {
+            realm.copyToRealmOrUpdate(song);
+        });
 
         removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);

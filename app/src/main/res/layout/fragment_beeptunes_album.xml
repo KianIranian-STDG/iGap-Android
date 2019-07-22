@@ -167,7 +167,7 @@
             android:layout_gravity="center"
             android:text="@string/download_icon"
             android:textColor="@color/white"
-            android:textSize="40dp"
+            android:textSize="42dp"
             android:visibility="invisible" />
 
         <ProgressBar
