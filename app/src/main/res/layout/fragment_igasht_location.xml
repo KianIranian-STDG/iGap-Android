@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.igasht.IGashtLocationViewModel" />
+            type="net.iGap.igasht.locationlist.IGashtLocationViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
