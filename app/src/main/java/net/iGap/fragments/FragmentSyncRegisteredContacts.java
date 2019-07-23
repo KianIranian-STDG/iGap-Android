@@ -59,6 +59,7 @@ import java.util.List;
 
 import io.realm.Case;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPhoneContact, OnContactsGetList, ToolbarListener {
@@ -143,6 +144,12 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         // get all the contacts from realm
         results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
+        results.addChangeListener(new RealmChangeListener<RealmResults<RealmContacts>>() {
+            @Override
+            public void onChange(RealmResults<RealmContacts> realmContacts) {
+                contactListAdapter2.notifyDataSetChanged();
+            }
+        });
         // Load all of the data
 
         //contactListAdapter = new FragmentSyncRegisteredContacts.ContactListAdapter(results);
@@ -206,9 +213,18 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
                     @Override
                     public void deny() {
-                        if (results.size() == 0) {
+                        /*if (results.size() == 0) {
                             new RequestUserContactsGetList().userContactGetList();
+                        }*/
+                        if (getActivity() == null || getActivity().isFinishing()) {
+                            return;
                         }
+
+                        Intent intent = new Intent(getContext(), ActivityMain.class);
+                        intent.putExtra(ARG_USER_ID, userID);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        G.context.startActivity(intent);
+                        G.fragmentActivity.finish();
                     }
                 });
             }
@@ -216,8 +232,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 if (results.size() == 0) {
                     new RequestUserContactsGetList().userContactGetList();
                 }
-
-                hideProgress();
+                else {
+                    hideProgress();
+                }
 
                 /*if (HelperPermission.grantedContactPermission()) {
                     new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -526,28 +543,30 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                         }
                         else {
                             showProgress();
+                            HelperPublicMethod.goToChatRoomFromFirstContact(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                                        @Override
+                                        public void complete() {
+                                            hideProgress();
+                                            popBackStackFragment();
+                                            G.fragmentActivity.finish();
+                                        }
+                                    }, new HelperPublicMethod.OnError() {
+                                        @Override
+                                        public void error() {
+                                            hideProgress();
+                                            G.handler.post(()->{
+                                                new DefaultRoundDialog(getContext())
+                                                        .setTitle(R.string.warning)
+                                                        .setMessage(R.string.str_frag_sync_error)
+                                                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                                                        // The dialog is automatically dismissed when a dialog button is clicked.
+                                                        .setPositiveButton(R.string.dialog_ok, null)
+                                                        .show();
+                                            });
+                                        }
+                                    });
 
-                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
-                                @Override
-                                public void complete() {
-                                    hideProgress();
-                                    popBackStackFragment();
-                                    G.fragmentActivity.finish();
                                 }
-                            }, new HelperPublicMethod.OnError() {
-                                @Override
-                                public void error() {
-                                    hideProgress();
-                                    new DefaultRoundDialog(getContext())
-                                            .setTitle(R.string.warning)
-                                            .setMessage(R.string.str_frag_sync_error)
-                                            // Specifying a listener allows you to take an action before dismissing the dialog.
-                                            // The dialog is automatically dismissed when a dialog button is clicked.
-                                            .setPositiveButton(R.string.dialog_ok, null)
-                                            .show();
-                                }
-                            });
-                        }
                     } else {
                         /*if (onClickRecyclerView != null)
                             onClickRecyclerView.onClick(v, getAdapterPosition());*/
