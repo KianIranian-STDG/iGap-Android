@@ -70,6 +70,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateResources(getBaseContext());
         makeDirectoriesIfNotExist();
         G.currentActivity = this;
     }

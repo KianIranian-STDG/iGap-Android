@@ -42,6 +42,7 @@ import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.ContactManager;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
@@ -707,21 +708,36 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             notifyItemInserted(i);
         }
 
-        @NotNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
+        public int getItemViewType(int position) {
 
-            View v;
-            if (mPageMode == CALL) {//call mode
-                v = inflater.inflate(R.layout.item_contact_call, viewGroup, false);
-            } else { //new chat and contact
-                v = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
+            if (position != count){
+                return 0;
+            }else {
+                return 1;
             }
 
-            if (mPageMode == CALL)
+        }
+
+        @NotNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int type) {
+
+            View v;
+
+            if (type == 1) {
+                v = inflater.inflate(R.layout.row_contact_counter, viewGroup, false);
+                return new ViewHolderCounter(v);
+            }
+
+            if (mPageMode == CALL) {//call mode
+                v = inflater.inflate(R.layout.item_contact_call, viewGroup, false);
                 return new ViewHolderCall(v);
-            else
+            } else { //new chat and contact
+                v = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
                 return new ViewHolder(v);
+            }
+
         }
 
         @Override
@@ -762,7 +778,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
                 setAvatar(viewHolder, contact.getId());
 
-            } else if (holder instanceof ViewHolderCall) {
+            }
+            else if (holder instanceof ViewHolderCall) {
 
 
                 ViewHolderCall viewHolder = (ViewHolderCall) holder;
@@ -802,11 +819,14 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 setAvatar(viewHolder, contact.getId());
 
             }
+            else if (holder instanceof ViewHolderCounter){
+                ((ViewHolderCounter) holder).setCount(count);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return usersList.size();
+            return usersList.size() + 1; // +1 because add counter below of list
         }
 
         private void setAvatar(final RecyclerView.ViewHolder viewHolder, final long userId) {
@@ -962,6 +982,28 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                             onClickRecyclerView.onClick(v, getAdapterPosition());
                     }
                 });
+            }
+        }
+
+        public class ViewHolderCounter extends RecyclerView.ViewHolder{
+
+            TextView txtCounter ;
+
+            public ViewHolderCounter(@NonNull View itemView) {
+                super(itemView);
+
+                txtCounter = itemView.findViewById(R.id.row_contact_counter_txt);
+            }
+
+            public void setCount(int count){
+
+                String countStr = String.valueOf(count);
+
+                if (HelperCalander.isPersianUnicode){
+                    countStr = HelperCalander.convertToUnicodeFarsiNumber(countStr);
+                }
+
+                txtCounter.setText(countStr + " " + getString(R.string.am_contact) + (G.selectedLanguage.equals("en") ? "s" : ""));
             }
         }
     }

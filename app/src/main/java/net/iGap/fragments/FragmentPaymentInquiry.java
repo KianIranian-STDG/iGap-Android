@@ -80,6 +80,9 @@ public class FragmentPaymentInquiry extends BaseFragment {
 
         fragmentPaymentInquiryBinding.fpiLayoutToolbar.addView(toolbar.getView());
 
+        IBackHandler iBackHandler = this::popBackStackFragment;
+        fragmentPaymentInquiryBinding.setBackHandler(iBackHandler);
+
     }
 
 

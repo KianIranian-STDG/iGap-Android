@@ -76,6 +76,9 @@ public class FragmentPaymentBill extends BaseFragment {
         String PID = getArguments().getString("PID");
         String BID = getArguments().getString("BID");
 
+        IBackHandler iBackHandler = this::popBackStackFragment;
+        fragmentPaymentBillBinding.setBackHandler(iBackHandler);
+
         FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId, PID, BID);
         fragmentPaymentBillBinding.setFragmentPaymentBillViewModel(fragmentPaymentBillViewModel);
 
