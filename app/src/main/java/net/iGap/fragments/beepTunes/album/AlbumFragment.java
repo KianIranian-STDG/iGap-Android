@@ -75,7 +75,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
         viewModel = new AlbumViewModel();
         trackAdapter = new AlbumTrackAdapter();
         albumAdapter = new ItemAdapter();
-        PATH = getContext().getFilesDir().getPath() + "beepTunes";
+        PATH = getContext().getFilesDir().getAbsolutePath() + "beepTunes";
         sharedPreferences = getContext().getSharedPreferences(SHP_SETTING.KEY_BEEP_TUNES, Context.MODE_PRIVATE);
         return rootView;
     }
@@ -136,7 +136,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
             @Override
             public void onPlayClick(RealmDownloadSong realmDownloadSong) {
-                Log.i(TAG, "onPlayClick: " + realmDownloadSong.getPath());
+
             }
         });
 
