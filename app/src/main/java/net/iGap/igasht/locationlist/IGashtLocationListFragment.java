@@ -17,6 +17,8 @@ import net.iGap.databinding.FragmentIgashtLocationBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
+import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.provinceselect.IGashtProvince;
 import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
@@ -60,7 +62,6 @@ public class IGashtLocationListFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -80,12 +81,16 @@ public class IGashtLocationListFragment extends Fragment {
 
                     @Override
                     public void onRightIconClickListener(View view) {
-
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
+                        }
                     }
 
                     @Override
                     public void onSecondRightIconClickListener(View view) {
-
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+                        }
                     }
                 }).getView());
 

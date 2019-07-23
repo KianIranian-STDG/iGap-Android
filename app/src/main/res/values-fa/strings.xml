@@ -1917,5 +1917,7 @@
     <string name="igasht_ticket_type_title">نوع بلیط را مشخص کنید</string>
     <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
     <string name="igasht_add_ticket_count_button_title">ثبت</string>
-
+    <string name="igasht_order_ticket_title">%s برای %d نفر</string>
+    <string name="igasht_favorites_title">علاقه مندی ها</string>
+    <string name="igasht_history_title">تاریخچه</string>
 </resources>

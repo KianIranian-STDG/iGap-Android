@@ -26,11 +26,11 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/itemTitle"
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@{title}"
-            android:textColor="@color/bottom_sheet_dialog_list_item_text"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

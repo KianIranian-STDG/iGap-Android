@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,9 @@ public class IGashtEnterTicketCountBottomSheetFragment extends BottomSheetDialog
 
     private IGashtEnterTicketCountBottomViewModel viewModel;
     private FragmentIgashtTicketCountBottomSheetDialogBinding binding;
-    private SetTicketCountCallBack callBack;
+    private AddBottomSheetListener<Integer> callBack;
 
-    public IGashtEnterTicketCountBottomSheetFragment setCallBack(SetTicketCountCallBack callBack) {
+    public IGashtEnterTicketCountBottomSheetFragment setCallBack(AddBottomSheetListener<Integer> callBack) {
         this.callBack = callBack;
         return this;
     }
@@ -80,16 +79,9 @@ public class IGashtEnterTicketCountBottomSheetFragment extends BottomSheetDialog
         return new BottomSheetDialog(requireContext(), getTheme()) {
             @Override
             public void onBackPressed() {
-                Log.wtf(this.getClass().getName(), "onBackPressed");
                 callBack.onBackPressed();
-                dismiss();
+                super.onBackPressed();
             }
         };
-    }
-
-    public interface SetTicketCountCallBack {
-        void setTicketCount(int ticketCount);
-
-        void onBackPressed();
     }
 }

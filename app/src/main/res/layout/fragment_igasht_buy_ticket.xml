@@ -34,6 +34,7 @@
             android:layout_height="0dp"
             android:padding="@dimen/dp8"
             android:visibility="@{viewModel.showMainView}"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/totalPrice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

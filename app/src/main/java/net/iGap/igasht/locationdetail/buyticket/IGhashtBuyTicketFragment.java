@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtBuyTicketBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperLog;
+
+import java.util.ArrayList;
 
 public class IGhashtBuyTicketFragment extends Fragment {
 
@@ -59,6 +62,12 @@ public class IGhashtBuyTicketFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.addedPlaceList.setAdapter(new OrderedTicketListAdapter(new ArrayList<>(), position -> {
+            //call when remove item click
+            viewModel.removeOrderedTicket(position);
+            ((OrderedTicketListAdapter)binding.addedPlaceList.getAdapter()).removeItem(position);
+        }));
+
         viewModel.getShowDialogSelectService().observe(getViewLifecycleOwner(), serviceList -> {
             if (getFragmentManager() != null && serviceList != null) {
                 new BottomSheetFragment().setData(serviceList, -1, position -> viewModel.selectedService(position)).setTitle(getString(R.string.igasht_place_of_visit_title))
@@ -68,17 +77,26 @@ public class IGhashtBuyTicketFragment extends Fragment {
 
         viewModel.getShowDialogSelectTicketType().observe(getViewLifecycleOwner(), amountType -> {
             if (getFragmentManager() != null && amountType != null) {
-                new BottomSheetFragment().setData(amountType, -1, position -> viewModel.selectedTicketType(position)).setTitle(getString(R.string.igasht_ticket_type_title))
-                        .show(getFragmentManager(), "selectTicketType");
+                new SelectTicketTypeBottomSheetFragment().setData(amountType, new AddBottomSheetListener<IGashtServiceAmount>() {
+                    @Override
+                    public void setTicketCount(IGashtServiceAmount data) {
+                        viewModel.selectedTicketType(data);
+                    }
+
+                    @Override
+                    public void onBackPressed() {
+                        viewModel.onAddPlaceClick();
+                    }
+                }).show(getFragmentManager(), "selectTicketType");
             }
         });
 
         viewModel.getShowDialogEnterCount().observe(getViewLifecycleOwner(), isShow -> {
             if (getFragmentManager() != null && isShow != null) {
-                new IGashtEnterTicketCountBottomSheetFragment().setCallBack(new IGashtEnterTicketCountBottomSheetFragment.SetTicketCountCallBack() {
+                new IGashtEnterTicketCountBottomSheetFragment().setCallBack(new AddBottomSheetListener<Integer>() {
                     @Override
-                    public void setTicketCount(int ticketCount) {
-
+                    public void setTicketCount(Integer ticketCount) {
+                        viewModel.setTicketCount(ticketCount);
                     }
 
                     @Override
@@ -87,6 +105,12 @@ public class IGhashtBuyTicketFragment extends Fragment {
                         viewModel.selectedService();
                     }
                 }).show(getFragmentManager(), "setTicketCount");
+            }
+        });
+
+        viewModel.getAddToTicketList().observe(getViewLifecycleOwner(),data->{
+            if (binding.addedPlaceList.getAdapter() instanceof OrderedTicketListAdapter && data != null) {
+                ((OrderedTicketListAdapter) binding.addedPlaceList.getAdapter()).addNewItem(data);
             }
         });
     }

@@ -1,5 +1,6 @@
 package net.iGap.igasht.locationdetail.buyticket;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 import android.util.Log;
 import android.view.View;
@@ -16,11 +17,14 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
 
     private ObservableField<String> totalPrice = new ObservableField<>("0");
     private SingleLiveEvent<List<String>> showDialogSelectService = new SingleLiveEvent<>();
-    private SingleLiveEvent<List<String>> showDialogSelectTicketType = new SingleLiveEvent<>();
+    private SingleLiveEvent<List<IGashtServiceAmount>> showDialogSelectTicketType = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> showDialogEnterCount = new SingleLiveEvent<>();
+    private MutableLiveData<IGashtServiceAmount> addToTicketList = new MutableLiveData<>();
     private int locationId;
+    private int totalPriceValue;
     private List<IGashtLocationService> serviceList;
     private List<IGashtVouchers> selectedServiceList;
+    private List<IGashtServiceAmount> orderedTickets;
     private int selectedServicePosition = -1;
     private IGashtServiceAmount selectedAmount;
     private IGashtRepository repository;
@@ -28,6 +32,7 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     public IGashtBuyTicketViewModel() {
         repository = IGashtRepository.getInstance();
         selectedServiceList = new ArrayList<>();
+        orderedTickets = new ArrayList<>();
     }
 
     public void setLocationId(int locationId) {
@@ -46,12 +51,16 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         return showDialogSelectService;
     }
 
-    public SingleLiveEvent<List<String>> getShowDialogSelectTicketType() {
+    public SingleLiveEvent<List<IGashtServiceAmount>> getShowDialogSelectTicketType() {
         return showDialogSelectTicketType;
     }
 
     public SingleLiveEvent<Boolean> getShowDialogEnterCount() {
         return showDialogEnterCount;
+    }
+
+    public MutableLiveData<IGashtServiceAmount> getAddToTicketList() {
+        return addToTicketList;
     }
 
     @Override
@@ -73,27 +82,36 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     public void selectedService(int position) {
         Log.wtf(this.getClass().getName(), "selected service: " + serviceList.get(position).getSeviceNameWithLanguage());
         selectedServicePosition = position;
-        setDataForShowDialogSelectTicketType();
+        showDialogSelectTicketType.setValue(serviceList.get(selectedServicePosition).getAmounts());
     }
 
     public void selectedService() {
         if (selectedServicePosition != -1) {
-            setDataForShowDialogSelectTicketType();
+            showDialogSelectTicketType.setValue(serviceList.get(selectedServicePosition).getAmounts());
         }
     }
 
-    private void setDataForShowDialogSelectTicketType() {
-        List<String> tmp = new ArrayList<>();
-        for (int i = 0; i < serviceList.get(selectedServicePosition).getAmounts().size(); i++) {
-            tmp.add(serviceList.get(selectedServicePosition).getAmounts().get(i).getVoucherType());
-        }
-        showDialogSelectTicketType.setValue(tmp);
-    }
-
-    public void selectedTicketType(int position) {
-        Log.wtf(this.getClass().getName(), "selected service: " + serviceList.get(selectedServicePosition).getAmounts().get(position).getVoucherType());
-        selectedAmount = serviceList.get(selectedServicePosition).getAmounts().get(position);
+    public void selectedTicketType(IGashtServiceAmount selectedAmount) {
+        Log.wtf(this.getClass().getName(), "selected service: " + selectedAmount.getVoucherType());
+        this.selectedAmount = selectedAmount;
         showDialogEnterCount.setValue(true);
+    }
+
+    public void setTicketCount(int ticketCount) {
+        selectedAmount.setCount(ticketCount);
+        selectedAmount.setTitle(serviceList.get(selectedServicePosition).getSeviceNameWithLanguage());
+        totalPriceValue = +totalPriceValue + (selectedAmount.getAmount() * ticketCount);
+        totalPrice.set(String.valueOf(totalPriceValue));
+        orderedTickets.add(selectedAmount);
+        addToTicketList.setValue(selectedAmount);
+        selectedServicePosition = 0;
+        selectedAmount = null;
+    }
+
+    public void removeOrderedTicket(int position) {
+        IGashtServiceAmount tmp = orderedTickets.remove(position);
+        totalPriceValue = totalPriceValue - (tmp.getAmount() * tmp.getCount());
+        totalPrice.set(String.valueOf(totalPriceValue));
     }
 
     public void onPayClick() {

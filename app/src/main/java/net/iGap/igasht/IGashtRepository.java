@@ -1,16 +1,21 @@
 package net.iGap.igasht;
 
+import android.os.Handler;
+import android.util.Log;
+
 import com.google.gson.GsonBuilder;
 
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.igasht.locationdetail.buyticket.IGashtLocationService;
-import net.iGap.igasht.provinceselect.IGashtProvince;
 import net.iGap.igasht.locationlist.IGashtLocationItem;
+import net.iGap.igasht.provinceselect.IGashtProvince;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -102,6 +107,66 @@ public class IGashtRepository {
         });
     }
 
+    public void getFavoriteList(ResponseCallback<List<String>> callback) {
+        /*igashtApi.requestGetServiceList(locationId).enqueue(new Callback<BaseIGashtResponse<IGashtLocationService>>() {
+            @Override
+            public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Response<BaseIGashtResponse<IGashtLocationService>> response) {
+                if (response.code() == 200) {
+                    callback.onSuccess(response.body());
+                } else {
+                    try {
+                        callback.onError(getError(response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Throwable t) {
+                t.printStackTrace();
+                callback.onFailed();
+            }
+        });*/
+        new Handler().postDelayed(() -> {
+            List<String> tmp = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                tmp.add("item:" + i);
+            }
+            callback.onSuccess(tmp);
+        }, 2000);
+    }
+
+    public void getHistoryList(ResponseCallback<List<String>> callback) {
+        /*igashtApi.requestGetServiceList(locationId).enqueue(new Callback<BaseIGashtResponse<IGashtLocationService>>() {
+            @Override
+            public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Response<BaseIGashtResponse<IGashtLocationService>> response) {
+                if (response.code() == 200) {
+                    callback.onSuccess(response.body());
+                } else {
+                    try {
+                        callback.onError(getError(response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Throwable t) {
+                t.printStackTrace();
+                callback.onFailed();
+            }
+        });*/
+        new Handler().postDelayed(() -> {
+            List<String> tmp = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                tmp.add("item:" + i);
+            }
+            callback.onSuccess(tmp);
+        }, 2000);
+    }
+
     public interface ResponseCallback<T> {
         void onSuccess(T data);
 
@@ -111,6 +176,7 @@ public class IGashtRepository {
     }
 
     private ErrorModel getError(String error) {
+        Log.wtf(this.getClass().getName(), "error: " + error);
         if (error != null) {
             return new GsonBuilder().create().fromJson(error, ErrorModel.class);
         } else {
