@@ -97,42 +97,6 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/cardFloatingTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/dp14"
-                        android:visibility="gone"
-                        app:cardCornerRadius="5dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:id="@+id/txtFloatingTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:background="@drawable/background_log_time"
-                                android:maxLines="1"
-                                android:paddingLeft="@dimen/dp16"
-                                android:paddingTop="@dimen/dp4"
-                                android:paddingRight="@dimen/dp16"
-                                android:paddingBottom="@dimen/dp4"
-                                android:singleLine="true"
-                                android:text="Today"
-                                android:textAllCaps="false"
-                                android:textColor="@color/text_log_time"
-                                android:textSize="@dimen/dp12"
-
-                                />
-
-
-                        </RelativeLayout>
-                    </android.support.v7.widget.CardView>
-
                 </RelativeLayout>
 
                 <FrameLayout
@@ -371,6 +335,7 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/fc_layout_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true">
@@ -540,6 +505,42 @@
 
         </RelativeLayout>
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardFloatingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/fc_layout_top"
+            android:layout_marginTop="@dimen/dp6"
+            android:visibility="gone"
+            app:cardCornerRadius="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtFloatingTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/background_log_time"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingBottom="@dimen/dp4"
+                    android:singleLine="true"
+                    android:text="Today"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_log_time"
+                    android:textSize="@dimen/dp12"
+
+                    />
+
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
         <include
             android:id="@+id/layout_mic_recorde"
