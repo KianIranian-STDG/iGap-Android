@@ -10,7 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,7 @@ public class KuknosLoginFrag extends BaseFragment {
         onErrorObserver();
         onNext();
         progressState();
+        onUserIDTextChange();
     }
 
     private void onErrorObserver() {
@@ -146,6 +148,25 @@ public class KuknosLoginFrag extends BaseFragment {
                     binding.fragKuknosIdUserID.setEnabled(true);
                     binding.fragKuknosLProgressV.setVisibility(View.GONE);
                 }
+            }
+        });
+    }
+
+    private void onUserIDTextChange() {
+        binding.fragKuknosIdUserID.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.fragKuknosIdUserIDHolder.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

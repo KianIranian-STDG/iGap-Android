@@ -81,6 +81,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         onGoNextPage();
         onCheckUsernameState();
         onCheckUsernameETFocus();
+        onEmailTextChange();
         progressSubmitVisibility();
     }
 
@@ -159,7 +160,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         binding.fragKuknosSIUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                binding.fragKuknosSIUsernameHolder.setErrorEnabled(false);
             }
 
             @Override
@@ -196,6 +197,25 @@ public class KuknosSignupInfoFrag extends BaseFragment {
                     kuknosSignupInfoVM.cancelUsernameServer();
                     usernameFocusState = true;
                 }*/
+            }
+        });
+    }
+
+    private void onEmailTextChange() {
+        binding.fragKuknosSIEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.fragKuknosSIEmailHolder.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

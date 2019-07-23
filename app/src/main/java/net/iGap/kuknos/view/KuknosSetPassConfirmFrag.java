@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,42 +20,41 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentKuknosLoginBinding;
 import net.iGap.databinding.FragmentKuknosSetpasswordBinding;
+import net.iGap.databinding.FragmentKuknosSetpasswordConfirmBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.viewmodel.KuknosLoginVM;
 import net.iGap.kuknos.viewmodel.KuknosSetPassConfirmVM;
 import net.iGap.kuknos.viewmodel.KuknosSetPassVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
-public class KuknosSetPassFrag extends BaseFragment {
+public class KuknosSetPassConfirmFrag extends BaseFragment {
 
-    private FragmentKuknosSetpasswordBinding binding;
-    private KuknosSetPassVM kuknosSetPassVM;
+    private FragmentKuknosSetpasswordConfirmBinding binding;
+    private KuknosSetPassConfirmVM kuknosSetPassConfirmVM;
     private HelperToolbar mHelperToolbar;
 
-    public static KuknosSetPassFrag newInstance() {
-        KuknosSetPassFrag kuknosLoginFrag = new KuknosSetPassFrag();
+    public static KuknosSetPassConfirmFrag newInstance() {
+        KuknosSetPassConfirmFrag kuknosLoginFrag = new KuknosSetPassConfirmFrag();
         return kuknosLoginFrag;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosSetPassVM = ViewModelProviders.of(this).get(KuknosSetPassVM.class);
+        kuknosSetPassConfirmVM = ViewModelProviders.of(this).get(KuknosSetPassConfirmVM.class);
+        kuknosSetPassConfirmVM.setSelectedPin(getArguments().getString("selectedPIN"));
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_setpassword, container, false);
-        binding.setViewmodel(kuknosSetPassVM);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_setpassword_confirm, container, false);
+        binding.setViewmodel(kuknosSetPassConfirmVM);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -87,23 +85,21 @@ public class KuknosSetPassFrag extends BaseFragment {
         onNext();
         onError();
         textInputManager();
+        progressState();
     }
 
     private void onNext() {
-        kuknosSetPassVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        kuknosSetPassConfirmVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean nextPage) {
                 if (nextPage == true) {
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosSetPassConfirmFrag.class.getName());
+                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
                     if (fragment == null) {
-                        fragment = KuknosSetPassConfirmFrag.newInstance();
+                        fragment = KuknosPanelFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    Bundle bundle = new Bundle();
-                    bundle.putString("selectedPIN", kuknosSetPassVM.getPIN());
-                    fragment.setArguments(bundle);
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 }
             }
@@ -111,7 +107,7 @@ public class KuknosSetPassFrag extends BaseFragment {
     }
 
     private void onError() {
-        kuknosSetPassVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
+        kuknosSetPassConfirmVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
@@ -208,6 +204,7 @@ public class KuknosSetPassFrag extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 if (s.length() == 1) {
                     binding.fragKuknosSPNum4.setEnabled(true);
                     binding.fragKuknosSPNum4.requestFocus();
@@ -218,7 +215,7 @@ public class KuknosSetPassFrag extends BaseFragment {
         // Pin 4
         binding.fragKuknosSPNum4.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
-                kuknosSetPassVM.setCompletePin(false);
+                kuknosSetPassConfirmVM.setCompletePin(false);
                 if (((AppCompatEditText) v).getEditableText().length() == 0) {
                     binding.fragKuknosSPNum3.requestFocus();
                     binding.fragKuknosSPNum4.setEnabled(false);
@@ -242,7 +239,23 @@ public class KuknosSetPassFrag extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 if (s.length() == 1) {
                     // build the Pin Code
-                    kuknosSetPassVM.setCompletePin(true);
+                    kuknosSetPassConfirmVM.setCompletePin(true);
+                }
+            }
+        });
+    }
+
+    private void progressState() {
+        kuknosSetPassConfirmVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean show) {
+                if (show == true) {
+                    binding.fragKuknosSPSubmit.setText(getString(R.string.kuknos_SignupInfo_submitConnecting));
+                    binding.fragKuknosSPProgressV.setVisibility(View.VISIBLE);
+                }
+                else {
+                    binding.fragKuknosSPSubmit.setText(getString(R.string.kuknos_SetPassConf_submit));
+                    binding.fragKuknosSPProgressV.setVisibility(View.GONE);
                 }
             }
         });

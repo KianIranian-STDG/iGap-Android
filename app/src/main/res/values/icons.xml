@@ -240,4 +240,5 @@
 
     <string name="error_icon">.</string>
     <string name="valid_icon">ß</string>
+    <string name="valid_wallet">4</string>
 </resources>

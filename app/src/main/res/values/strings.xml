@@ -1949,4 +1949,17 @@
     <string name="kuknos_SetPass_message">This 4 numeric PIN will be used to encrypt your secret keys. Please make sure you choose a PIN that is difficult to guess for others.</string>
     <string name="kuknos_SetPass_submit">Submit</string>
     <string name="kuknos_SetPass_error">Please enter your PIN code.</string>
+    <string name="kuknos_SetPassConf_title">Confirm your PIN code</string>
+    <string name="kuknos_SetPassConf_message">Please re-enter your selected PIN code.</string>
+    <string name="kuknos_SetPassConf_submit">Confirm</string>
+    <string name="kuknos_SetPassConf_error">Your PIN code does NOT match.</string>
+    <string name="kuknos_panelStr_balance">Balance</string>
+    <string name="kuknos_panelStr_recieve">Recieve</string>
+    <string name="kuknos_panelStr_send">Send</string>
+    <string name="kuknos_panelStr_history">History</string>
+    <string name="kuknos_panelStr_trading">Trading</string>
+    <string name="kuknos_panelStr_kyc">KYC</string>
+    <string name="kuknos_panelStr_buyPeyman">Buy Peyman</string>
+    <string name="kuknos_panelStr_setting">Setting</string>
+    <string name="kuknos_develop">developing</string>
 </resources>

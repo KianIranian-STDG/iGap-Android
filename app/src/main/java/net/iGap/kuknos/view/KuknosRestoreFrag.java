@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.LinearLayout;
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRestoreBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -104,14 +108,14 @@ public class KuknosRestoreFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable Boolean nextPage) {
                 if (nextPage == true) {
-                    /*FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosEntryOptionFrag.class.getName());
+                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
                     if (fragment == null) {
-                        fragment = KuknosEntryOptionFrag.newInstance();
+                        fragment = KuknosPanelFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();*/
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 }
             }
         });

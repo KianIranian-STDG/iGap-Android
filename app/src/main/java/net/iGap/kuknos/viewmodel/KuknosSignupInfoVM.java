@@ -93,7 +93,6 @@ public class KuknosSignupInfoVM extends ViewModel {
     }
 
     public void checkUsernameServer(boolean isCallFromBTN) {
-        Log.d("amini", "checkUsernameServer: start");
         checkUsernameState.setValue(0);
         // TODO check from server for avalibility
         Handler handler = new Handler();
@@ -109,7 +108,7 @@ public class KuknosSignupInfoVM extends ViewModel {
 //                checkUsernameState.setValue(2);
 //                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
             }
-        }, 2000);
+        }, 1000);
     }
 
     public void cancelUsernameServer() {
@@ -118,7 +117,6 @@ public class KuknosSignupInfoVM extends ViewModel {
     }
 
     public void sendDataServer() {
-        Log.d("amini", "sendDataServer: start");
         progressSendDServerState.setValue(true);
         // TODO: send data to server
         Handler handler = new Handler();
@@ -132,7 +130,7 @@ public class KuknosSignupInfoVM extends ViewModel {
                 //error
 
             }
-        }, 2000);
+        }, 1000);
     }
 
     //Setter and Getter

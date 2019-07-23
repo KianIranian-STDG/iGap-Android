@@ -53,11 +53,11 @@ public class KuknosRestoreVM extends ViewModel {
                 @Override
                 public void run() {
                     //success
-                    /*progressState.setValue(false);
-                    nextPage.setValue(true);*/
-                    //error
-                    error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
                     progressState.setValue(false);
+                    nextPage.setValue(true);
+                    //error
+                    /*error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
+                    progressState.setValue(false);*/
                 }
             }, 1000);
         }
