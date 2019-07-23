@@ -38,7 +38,6 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private MutableLiveData<Boolean> LoadingProgressMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
-    private DownloadSong downloadingSong;
     private List<DownloadSong> downloadQueue = new ArrayList<>();
 
     private Realm realm;
@@ -88,17 +87,9 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     void onDownloadClick(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {
         File file = new File(path + "/" + track.getName());
         if (!file.exists()) {
-            if (downloadingSong != null) {
-                if (!track.getId().equals(downloadingSong.getId()))
-                    startDownload(track, path, fragmentManager, sharedPreferences);
-                else {
-                    pauseDownloadSong(downloadingSong);
-                }
-            } else {
-                startDownload(track, path, fragmentManager, sharedPreferences);
-            }
+            startDownload(track, path, fragmentManager, sharedPreferences);
         } else {
-
+            // TODO: 7/23/19 player observer
         }
     }
 
@@ -197,7 +188,6 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     @Override
     public void startOrResume(DownloadSong downloadSong) {
-        downloadingSong = downloadSong;
         downloadSong.setDownloadStatus(DownloadSong.STATUS_START);
         downloadStatusMutableLiveData.postValue(downloadSong);
     }

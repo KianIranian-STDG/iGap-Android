@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,7 +19,15 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_CANCEL;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_ERROR;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_PAUSE;
+import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_START;
+
 public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.TrackViewHolder> {
+    private static final String TAG = "aabolfazlAdapter";
     private List<Track> tracks = new ArrayList<>();
     private OnTrackClick onTrackClick;
     private Realm realm;
@@ -35,24 +41,24 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         this.onTrackClick = onTrackClick;
     }
 
-    public void startDownload(Long id) {
-        for (int i = 0; i < tracks.size(); i++) {
-            if (tracks.get(i).getId().equals(id)) {
-                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_START);
-                notifyItemChanged(i);
-            }
-        }
-    }
-
-    public void stopDownload(Long id) {
-        for (int i = 0; i < tracks.size(); i++) {
-            if (tracks.get(i).getId().equals(id)) {
-                tracks.get(i).setInStorage(true);
-                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_CANCEL);
-                notifyItemChanged(i);
-            }
-        }
-    }
+//    public void startDownload(Long id) {
+//        for (int i = 0; i < tracks.size(); i++) {
+//            if (tracks.get(i).getId().equals(id)) {
+//                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_START);
+//                notifyItemChanged(i);
+//            }
+//        }
+//    }
+//
+//    public void stopDownload(Long id) {
+//        for (int i = 0; i < tracks.size(); i++) {
+//            if (tracks.get(i).getId().equals(id)) {
+//                tracks.get(i).setInStorage(true);
+//                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_CANCEL);
+//                notifyItemChanged(i);
+//            }
+//        }
+//    }
 
     @NonNull
     @Override
@@ -76,13 +82,18 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         realm.close();
     }
 
+    @FunctionalInterface
+    public interface OnSongProgress {
+        void progress(DownloadSong downloadSong);
+    }
+
     class TrackViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameTv;
         private TextView songPriceTv;
         private TextView songActionTv;
         private TextView songPrwTv;
         private ProgressBar progressBar;
-        private RotateAnimation rotate;
+        //        private RotateAnimation rotate;
         private Long itemId;
 
         TrackViewHolder(@NonNull View itemView) {
@@ -93,11 +104,11 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
             songPrwTv = itemView.findViewById(R.id.tv_itemSong_prw);
             progressBar = itemView.findViewById(R.id.pb_itemSong);
 
-            rotate = new RotateAnimation(
-                    0, 360,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF, 0.5f
-            );
+//            rotate = new RotateAnimation(
+//                    0, 360,
+//                    Animation.RELATIVE_TO_SELF, 0.5f,
+//                    Animation.RELATIVE_TO_SELF, 0.5f
+//            );
         }
 
         void bindTracks(Track track) {
@@ -120,26 +131,46 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                 } else {
                     track.setName(track.getId() + ".mp3");
                     onTrackClick.onDownloadClick(track, downloadSong -> {
-                        if (downloadSong.getId().equals(track.getId()))
-                            progressBar.setProgress(downloadSong.getDownloadProgress());
+                        if (downloadSong.getId().equals(track.getId())) {
+                            switch (downloadSong.getDownloadStatus()) {
+                                case STATUS_START:
+                                    break;
+                                case STATUS_CANCEL:
+                                    break;
+                                case STATUS_PAUSE:
+                                    break;
+                                case STATUS_COMPLETE:
+                                    progressBar.setVisibility(View.GONE);
+                                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                                    break;
+                                case STATUS_ERROR:
+                                    break;
+                                case STATUS_DOWNLOADING:
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    progressBar.setProgress(downloadSong.getDownloadProgress());
+                                    break;
+                            }
+                        }
                     });
-                    startDownload();
+
                 }
             });
-            if (track.getDownloadStatus() == DownloadSong.STATUS_START) {
-            } else {
-                stopDownload();
-            }
+
+//            if (track.getDownloadStatus() == DownloadSong.STATUS_START) {
+//                startDownload();
+//            } else {
+//                stopDownload();
+//            }
         }
 
-        private void stopDownload() {
-            rotate.cancel();
-        }
-
-        private void startDownload() {
-            rotate.setDuration(1000);
-            rotate.setRepeatCount(Animation.INFINITE);
-            songActionTv.startAnimation(rotate);
-        }
+//        private void stopDownload() {
+//            rotate.cancel();
+//        }
+//
+//        private void startDownload() {
+//            rotate.setDuration(1000);
+//            rotate.setRepeatCount(Animation.INFINITE);
+//            songActionTv.startAnimation(rotate);
+//        }
     }
 }

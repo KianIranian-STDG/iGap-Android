@@ -25,7 +25,6 @@ import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.adapter.beepTunes.ItemAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
-import net.iGap.interfaces.OnSongProgress;
 import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
@@ -60,7 +59,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private ItemAdapter albumAdapter;
     private Album album;
     private SharedPreferences sharedPreferences;
-    private MutableLiveData<DownloadSong> downloadingIntegerMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<DownloadSong> downloadingSongLiveData = new MutableLiveData<>();
 
     public AlbumFragment getInstance(Album album) {
         AlbumFragment albumFragment = new AlbumFragment();
@@ -129,9 +128,9 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
         trackAdapter.setOnTrackClick(new OnTrackClick() {
             @Override
-            public void onDownloadClick(Track track, OnSongProgress onSongProgress) {
+            public void onDownloadClick(Track track, AlbumTrackAdapter.OnSongProgress onSongProgress) {
                 viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
-                downloadingIntegerMutableLiveData.observe(getViewLifecycleOwner(), onSongProgress::progress);
+                downloadingSongLiveData.observe(getViewLifecycleOwner(), onSongProgress::progress);
             }
 
             @Override
@@ -144,28 +143,27 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             if (downloadSong != null)
                 switch (downloadSong.getDownloadStatus()) {
                     case STATUS_START:
-                        trackAdapter.startDownload(downloadSong.getId());
-                        Log.i(TAG, "start: " + downloadSong.getDownloadId());
+//                        trackAdapter.startDownload(downloadSong.getId());
+                        Log.i(TAG, "start ------> " + downloadSong.getId());
                         break;
                     case STATUS_CANCEL:
-                        Log.i(TAG, "stop: " + downloadSong.getId());
+                        Log.i(TAG, "stop  ------> " + downloadSong.getId());
                         break;
                     case STATUS_PAUSE:
-                        Log.i(TAG, "pause: " + downloadSong.getId());
+                        Log.i(TAG, "pause ------> " + downloadSong.getId());
                         break;
                     case STATUS_COMPLETE:
-                        Log.i(TAG, "complete: " + downloadSong.getDownloadId());
-                        trackAdapter.stopDownload(downloadSong.getId());
+                        Log.i(TAG, "complete----> " + downloadSong.getId());
+//                        trackAdapter.stopDownload(downloadSong.getId());
                         break;
                     case STATUS_ERROR:
-                        Log.i(TAG, "error: " + downloadSong.getId());
+                        Log.i(TAG, "error ------> " + downloadSong.getId());
                         break;
                     case STATUS_DOWNLOADING:
-                        downloadingIntegerMutableLiveData.postValue(downloadSong);
-//                        Log.i(TAG, "downloading: " + downloadSong.getId() + " " + downloadSong.getDownloadId() + " " + downloadSong.getDownloadProgress());
+                        Log.i(TAG, "downloading-> " + downloadSong.getId());
                         break;
                 }
-
+            downloadingSongLiveData.postValue(downloadSong);
         });
     }
 
