@@ -1473,7 +1473,7 @@
     <string name="terms_condition_title">Terms and Condition</string>
     <string name="warning">Warning</string>
     <string name="accept_terms_and_condition_error_message">forget to accept terms and conditions</string>
-    <string name="welcome_title">Welcome To IGap</string>
+    <string name="welcome_title">Welcome To iGap</string>
     <string name="increase_credit">Increase credit</string>
     <string name="your_rate">Your rate :</string>
     <string name="increase_score">Increase Score</string>
@@ -1905,8 +1905,8 @@
     <string name="maximum_poll">You Have Reached Your Vote Limit.</string>
     <string name="before_try">You have already registered your vote.</string>
     <string name="poll_ok">Your vote was successfully recorded.</string>
-    <string name="str_frag_sync_contactTitle">Say Hi to your friends and let them know you are on IGap</string>
-    <string name="str_frag_sync_contactWelcome">Welcome to IGap</string>
+    <string name="str_frag_sync_contactTitle">Say Hi to your friends and let them know you are on iGap</string>
+    <string name="str_frag_sync_contactWelcome">Welcome to iGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
     <string name="str_frag_sync_error">Something went wrong. Please try again.</string>
     <string name="download_icon">ï</string>
