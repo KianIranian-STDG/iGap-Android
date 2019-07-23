@@ -1,20 +1,19 @@
 package net.iGap.libs.notification;
 
 
+import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperNotification;
-import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestClientGetRoomMessage;
 
-import java.util.Map;
+import org.json.JSONArray;
 
 import io.realm.Realm;
 
@@ -24,8 +23,6 @@ public class NotificationService extends FirebaseMessagingService {
     private final static String ROOM_ID = "roomId";
     private final static String MESSAGE_ID = "messageId";
     private final static String MESSAGE_TYPE = "loc_key";
-    private static boolean isFirstMessage = true;
-
 
     @Override
     public void onNewToken(String mToken) {
@@ -45,38 +42,47 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         WebSocketClient.reconnect(false);
-//        if (isFirstMessage) {
-//            if (remoteMessage.getData().size() > 0) {
-//                Map<String, String> date = remoteMessage.getData();
-//                if (date.containsKey(ROOM_ID) && date.containsKey(MESSAGE_ID)) {
-//                    //   type of dataMap is     messageId roomId type loc_key loc_args
-//                    Long roomId = Long.parseLong(date.get(ROOM_ID));
-//                    Long messageId = Long.parseLong(date.get(MESSAGE_ID));
-//
-//                    G.handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, messageId, new OnClientGetRoomMessage() {
-//                                @Override
-//                                public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-//                                    if (date.containsKey(MESSAGE_TYPE)) {
-//                                        final Realm realm = Realm.getDefaultInstance();
-//                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-//                                        if (room != null) {
-//                                            HelperNotification.getInstance().addMessage(roomId, message, room.getType(), room, realm);
-//                                        }
-//                                        realm.close();
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    }, 2000);
-//
-//
-//                }
-//            }
-//            isFirstMessage = false;
-//        }
+        Log.d("bagi", "FCM" + remoteMessage.getData() + "");
+        if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(remoteMessage.getData().get(MESSAGE_ID))).findFirst();
+                    if (message == null) {
+                        try {
+
+                            long roomId = Long.valueOf(remoteMessage.getData().get(ROOM_ID));
+                            String loc_key = remoteMessage.getData().get(MESSAGE_TYPE);
+                            ProtoGlobal.Room.Type roomType;
+
+                            if (loc_key.contains("CHANNEL")) {
+                                roomType = ProtoGlobal.Room.Type.CHANNEL;
+                            } else if (loc_key.contains("GROUP")) {
+                                roomType = ProtoGlobal.Room.Type.GROUP;
+                            } else {
+                                roomType = ProtoGlobal.Room.Type.CHAT;
+                            }
+
+                            JSONArray loc_args = new JSONArray(remoteMessage.getData().get("loc_args"));
+                            String text = loc_args.getString(1);
+
+                            realm.createObject(RealmRoomMessage.class, Long.valueOf(remoteMessage.getData().get(MESSAGE_ID)));
+                            ProtoGlobal.RoomMessage roomMessage = ProtoGlobal.RoomMessage.newBuilder()
+                                    .setMessage(text)
+                                    .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
+                                    .build();
+
+                            Log.d("bagi", "FcmSHOWNOTIF" + remoteMessage.getData() + "");
+                            HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            realm.close();
+        }
     }
 
 
