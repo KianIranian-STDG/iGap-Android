@@ -165,7 +165,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
         RealmDownloadSong song = new RealmDownloadSong();
         song.setId(downloadSong.getId());
-        song.setPath(downloadSong.getPath());
+        song.setPath(downloadSong.getPath() + "/" + downloadSong.getName());
         realm.executeTransactionAsync(realm -> {
             realm.copyToRealmOrUpdate(song);
         });

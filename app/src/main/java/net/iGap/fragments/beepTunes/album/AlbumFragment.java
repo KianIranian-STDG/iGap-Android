@@ -31,6 +31,7 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
+import net.iGap.realm.RealmDownloadSong;
 
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_CANCEL;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
@@ -134,8 +135,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             }
 
             @Override
-            public void onPlayClick() {
-
+            public void onPlayClick(RealmDownloadSong realmDownloadSong) {
+                Log.i(TAG, "onPlayClick: " + realmDownloadSong.getPath());
             }
         });
 
@@ -143,7 +144,6 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             if (downloadSong != null)
                 switch (downloadSong.getDownloadStatus()) {
                     case STATUS_START:
-//                        trackAdapter.startDownload(downloadSong.getId());
                         Log.i(TAG, "start ------> " + downloadSong.getId());
                         break;
                     case STATUS_CANCEL:
@@ -154,13 +154,12 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                         break;
                     case STATUS_COMPLETE:
                         Log.i(TAG, "complete----> " + downloadSong.getId());
-//                        trackAdapter.stopDownload(downloadSong.getId());
                         break;
                     case STATUS_ERROR:
                         Log.i(TAG, "error ------> " + downloadSong.getId());
                         break;
                     case STATUS_DOWNLOADING:
-                        Log.i(TAG, "downloading-> " + downloadSong.getId());
+                        Log.i(TAG, "downloading-> " + downloadSong.getId() + " " + downloadSong.getDownloadProgress());
                         break;
                 }
             downloadingSongLiveData.postValue(downloadSong);

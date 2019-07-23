@@ -88,13 +88,13 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
     }
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
+        //        private RotateAnimation rotate;
+        private RealmDownloadSong realmDownloadSong;
         private TextView songNameTv;
         private TextView songPriceTv;
         private TextView songActionTv;
         private TextView songPrwTv;
         private ProgressBar progressBar;
-        //        private RotateAnimation rotate;
-        private Long itemId;
 
         TrackViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,10 +112,11 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         }
 
         void bindTracks(Track track) {
-            itemId = track.getId();
-            if (realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst() != null) {
+            realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
+            if (realmDownloadSong != null) {
                 track.setInStorage(true);
             }
+
 
             if (track.isInStorage()) {
                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
@@ -127,7 +128,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
 
             songActionTv.setOnClickListener(v -> {
                 if (track.isInStorage()) {
-                    onTrackClick.onPlayClick();
+                    onTrackClick.onPlayClick(realmDownloadSong);
                 } else {
                     track.setName(track.getId() + ".mp3");
                     onTrackClick.onDownloadClick(track, downloadSong -> {
@@ -141,6 +142,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                                     break;
                                 case STATUS_COMPLETE:
                                     progressBar.setVisibility(View.GONE);
+                                    track.setInStorage(true);
                                     songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
                                     break;
                                 case STATUS_ERROR:
@@ -155,12 +157,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
 
                 }
             });
-
-//            if (track.getDownloadStatus() == DownloadSong.STATUS_START) {
-//                startDownload();
-//            } else {
-//                stopDownload();
-//            }
+            realm.addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
         }
 
 //        private void stopDownload() {
