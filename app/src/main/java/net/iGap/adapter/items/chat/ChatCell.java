@@ -1,11 +1,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.NinePatchDrawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
@@ -21,7 +17,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.helper.NinePatchBitmapFactory;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
@@ -59,13 +54,9 @@ public class ChatCell extends ConstraintLayout {
         AppCompatImageView pinView = new AppCompatImageView(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
         if (isRtl) {
-            Bitmap bitmap = loadBitmapAsset("pinrtl.9.png", getContext());
-            NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
-            pinView.setBackground(drawable);
+            pinView.setBackgroundResource(R.drawable.pin_rtl);
         } else {
-            Bitmap bitmap = loadBitmapAsset("pin.9.png", getContext());
-            NinePatchDrawable drawable = NinePatchBitmapFactory.createNinePatchDrawable(getResources(), bitmap);
-            pinView.setBackground(drawable);
+            pinView.setBackgroundResource(R.drawable.pin);
         }
         addView(pinView);
 
@@ -393,21 +384,4 @@ public class ChatCell extends ConstraintLayout {
         v.setTypeface(G.typeface_IRANSansMobile);
     }
 
-    public static Bitmap loadBitmapAsset(String fileName, Context context) {
-        final AssetManager assetManager = context.getAssets();
-        BufferedInputStream bis = null;
-        try {
-            bis = new BufferedInputStream(assetManager.open(fileName));
-            return BitmapFactory.decodeStream(bis);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                bis.close();
-            } catch (Exception e) {
-
-            }
-        }
-        return null;
-    }
 }
