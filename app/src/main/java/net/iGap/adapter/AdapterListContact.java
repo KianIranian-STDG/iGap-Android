@@ -52,6 +52,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         private TextView title;
         private TextView subtitle;
         private ViewGroup rootView;
+        private View line ;
 
         public ViewHolder(View view) {
             super(view);
@@ -59,10 +60,17 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             rootView = view.findViewById(R.id.liContactItem);
             title = view.findViewById(R.id.title);
             subtitle = view.findViewById(R.id.subtitle);
+            line = view.findViewById(R.id.topLine);
 
         }
 
         void initView(StructListOfContact contact) {
+
+            if (getAdapterPosition() != 0 ) {
+                line.setVisibility(View.VISIBLE);
+            }else {
+                line.setVisibility(View.GONE);
+            }
             title.setText(contact.getDisplayName());
             subtitle.setText(contact.getPhone());
 
