@@ -85,7 +85,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     }
 
     void onDownloadClick(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {
-        File file = new File(path + "/" + track.getName());
+        File file = new File(path + "/" + track.getSavedName());
         if (!file.exists()) {
             startDownload(track, path, fragmentManager, sharedPreferences);
         } else {
@@ -98,20 +98,20 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
             DownloadQualityFragment fragment = new DownloadQualityFragment();
             fragment.setDownloadDialog(quality -> {
                 if (quality == 128) {
-                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName(), path);
+                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track, track.getSavedName(), path);
                     addToDownloadQueue(downloadSong);
                 } else {
-                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName(), path);
+                    DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track, track.getSavedName(), path);
                     addToDownloadQueue(downloadSong);
                 }
             });
             fragment.show(fragmentManager, null);
         } else {
             if (sharedPreferences.getInt(SHP_SETTING.KEY_BBEP_TUNES_DOWNLOAD_QUALITY, 128) == 128) {
-                DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track.getId(), track.getName(), path);
+                DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getL128(), track, track.getSavedName(), path);
                 addToDownloadQueue(downloadSong);
             } else {
-                DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track.getId(), track.getName(), path);
+                DownloadSong downloadSong = new DownloadSong(track.getDownloadLinks().getH320(), track, track.getSavedName(), path);
                 addToDownloadQueue(downloadSong);
             }
         }
@@ -165,7 +165,8 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
         RealmDownloadSong song = new RealmDownloadSong();
         song.setId(downloadSong.getId());
-        song.setPath(downloadSong.getPath() + "/" + downloadSong.getName());
+        song.setPath(downloadSong.getPath() + "/" + downloadSong.getSavedName());
+        song.setDisplayName(downloadSong.getTrack().getName());
         realm.executeTransactionAsync(realm -> {
             realm.copyToRealmOrUpdate(song);
         });

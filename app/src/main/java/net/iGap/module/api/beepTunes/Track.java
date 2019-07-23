@@ -37,6 +37,8 @@ public class Track {
     @Expose
     private String type;
 
+    private String savedName;
+
     private int downloadStatus = DownloadSong.STATUS_CANCEL;
 
     private boolean inStorage = false;
@@ -47,6 +49,14 @@ public class Track {
 
     public void setInStorage(boolean inStorage) {
         this.inStorage = inStorage;
+    }
+
+    public String getSavedName() {
+        return savedName;
+    }
+
+    public void setSavedName(String savedName) {
+        this.savedName = savedName;
     }
 
     public int getDownloadStatus() {

@@ -41,25 +41,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         this.onTrackClick = onTrackClick;
     }
 
-//    public void startDownload(Long id) {
-//        for (int i = 0; i < tracks.size(); i++) {
-//            if (tracks.get(i).getId().equals(id)) {
-//                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_START);
-//                notifyItemChanged(i);
-//            }
-//        }
-//    }
-//
-//    public void stopDownload(Long id) {
-//        for (int i = 0; i < tracks.size(); i++) {
-//            if (tracks.get(i).getId().equals(id)) {
-//                tracks.get(i).setInStorage(true);
-//                tracks.get(i).setDownloadStatus(DownloadSong.STATUS_CANCEL);
-//                notifyItemChanged(i);
-//            }
-//        }
-//    }
-
     @NonNull
     @Override
     public TrackViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -130,7 +111,8 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                 if (track.isInStorage()) {
                     onTrackClick.onPlayClick(realmDownloadSong);
                 } else {
-                    track.setName(track.getId() + ".mp3");
+                    track.setSavedName(track.getId() + ".mp3");
+
                     onTrackClick.onDownloadClick(track, downloadSong -> {
                         if (downloadSong.getId().equals(track.getId())) {
                             switch (downloadSong.getDownloadStatus()) {

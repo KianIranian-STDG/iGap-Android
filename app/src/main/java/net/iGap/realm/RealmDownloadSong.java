@@ -7,7 +7,9 @@ public class RealmDownloadSong extends RealmObject {
     @PrimaryKey
     private Long id;
     private String path;
-    private String imagePath;
+    private String displayName;
+    private String englishDisplayName;
+    private String savedName;
 
     public Long getId() {
         return id;
@@ -15,6 +17,14 @@ public class RealmDownloadSong extends RealmObject {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSavedName() {
+        return savedName + ".mp3";
+    }
+
+    public void setSavedName(String savedName) {
+        this.savedName = savedName;
     }
 
     public String getPath() {
@@ -25,11 +35,19 @@ public class RealmDownloadSong extends RealmObject {
         this.path = path;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getEnglishDisplayName() {
+        return englishDisplayName;
+    }
+
+    public void setEnglishDisplayName(String englishDisplayName) {
+        this.englishDisplayName = englishDisplayName;
     }
 }

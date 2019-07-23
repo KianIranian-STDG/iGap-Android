@@ -11,15 +11,17 @@ public class DownloadSong {
     private String url;
     private Long id;
     private int downloadId;
-    private String name;
+    private String savedName;
     private int downloadStatus = STATUS_START;
     private int downloadProgress;
     private String path;
+    private Track track;
 
-    public DownloadSong(String url, Long id, String name, String path) {
+    public DownloadSong(String url, Track track, String savedName, String path) {
         this.url = url;
-        this.id = id;
-        this.name = name;
+        this.id = track.getId();
+        this.track = track;
+        this.savedName = savedName;
         this.path = path;
     }
 
@@ -67,19 +69,27 @@ public class DownloadSong {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPath() {
         return path;
     }
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getSavedName() {
+        return savedName;
+    }
+
+    public void setSavedName(String savedName) {
+        this.savedName = savedName;
+    }
+
+    public Track getTrack() {
+        return track;
+    }
+
+    public void setTrack(Track track) {
+        this.track = track;
     }
 }

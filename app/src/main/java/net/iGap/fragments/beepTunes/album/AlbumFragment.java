@@ -11,7 +11,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,18 +26,12 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
-
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_CANCEL;
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_ERROR;
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_PAUSE;
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_START;
 
 public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
@@ -136,33 +129,33 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
             @Override
             public void onPlayClick(RealmDownloadSong realmDownloadSong) {
-
+                MusicPlayer.startPlayer(realmDownloadSong.getDisplayName(), realmDownloadSong.getPath(), "aaa", 15646455, false, "546546546");
             }
         });
 
         viewModel.getDownloadStatusMutableLiveData().observe(getViewLifecycleOwner(), downloadSong -> {
             if (downloadSong != null)
-                switch (downloadSong.getDownloadStatus()) {
-                    case STATUS_START:
-                        Log.i(TAG, "start ------> " + downloadSong.getId());
-                        break;
-                    case STATUS_CANCEL:
-                        Log.i(TAG, "stop  ------> " + downloadSong.getId());
-                        break;
-                    case STATUS_PAUSE:
-                        Log.i(TAG, "pause ------> " + downloadSong.getId());
-                        break;
-                    case STATUS_COMPLETE:
-                        Log.i(TAG, "complete----> " + downloadSong.getId());
-                        break;
-                    case STATUS_ERROR:
-                        Log.i(TAG, "error ------> " + downloadSong.getId());
-                        break;
-                    case STATUS_DOWNLOADING:
-                        Log.i(TAG, "downloading-> " + downloadSong.getId() + " " + downloadSong.getDownloadProgress());
-                        break;
-                }
-            downloadingSongLiveData.postValue(downloadSong);
+//                switch (downloadSong.getDownloadStatus()) {
+//                    case STATUS_START:
+//                        Log.i(TAG, "start ------> " + downloadSong.getId());
+//                        break;
+//                    case STATUS_CANCEL:
+//                        Log.i(TAG, "stop  ------> " + downloadSong.getId());
+//                        break;
+//                    case STATUS_PAUSE:
+//                        Log.i(TAG, "pause ------> " + downloadSong.getId());
+//                        break;
+//                    case STATUS_COMPLETE:
+//                        Log.i(TAG, "complete----> " + downloadSong.getId());
+//                        break;
+//                    case STATUS_ERROR:
+//                        Log.i(TAG, "error ------> " + downloadSong.getId());
+//                        break;
+//                    case STATUS_DOWNLOADING:
+//                        Log.i(TAG, "downloading-> " + downloadSong.getId() + " " + downloadSong.getDownloadProgress());
+//                        break;
+//                }
+                downloadingSongLiveData.postValue(downloadSong);
         });
     }
 

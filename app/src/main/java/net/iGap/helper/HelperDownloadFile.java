@@ -456,7 +456,7 @@ public class HelperDownloadFile {
     }
 
     public static void startDownloadManager(DownloadSong song, OnSongDownload onSongDownload) {
-        song.setDownloadId(PRDownloader.download(song.getUrl(), song.getPath(), song.getName())
+        song.setDownloadId(PRDownloader.download(song.getUrl(), song.getPath(), song.getSavedName())
                 .setHeader("Authorization", ApiStatic.USER_TOKEN)
                 .build()
                 .setOnStartOrResumeListener(() -> onSongDownload.startOrResume(song))
