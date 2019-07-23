@@ -40,9 +40,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityEnhanced;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
@@ -110,7 +110,7 @@ public class HelperUrl {
 
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(text);
 
-        if (withAtSign) strBuilder = analaysAtSign(activity,strBuilder);
+        if (withAtSign) strBuilder = analaysAtSign(activity, strBuilder);
 
         if (withHash) strBuilder = analaysHash(strBuilder, messageID);
 
@@ -520,7 +520,7 @@ public class HelperUrl {
 
     //*********************************************************************************************************
 
-    private static SpannableStringBuilder analaysAtSign(FragmentActivity activity,SpannableStringBuilder builder) {
+    private static SpannableStringBuilder analaysAtSign(FragmentActivity activity, SpannableStringBuilder builder) {
 
         if (builder == null) return builder;
 
@@ -552,7 +552,7 @@ public class HelperUrl {
                     //    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
                     //    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
                     if (tmp.length() > 0) {
-                        insertAtSignLink(activity,tmp, builder, start);
+                        insertAtSignLink(activity, tmp, builder, start);
                     }
 
                     tmp = "";
@@ -564,7 +564,7 @@ public class HelperUrl {
         }
 
         if (isAtSign) {
-            if (tmp.length() > 0) insertAtSignLink(activity,tmp, builder, start);
+            if (tmp.length() > 0) insertAtSignLink(activity, tmp, builder, start);
         }
 
         return builder;
@@ -623,7 +623,7 @@ public class HelperUrl {
                             insertHashLink(text.substring(start + 1, end), strBuilder, start, messageID);
                             break;
                         case "atSighn":
-                            insertAtSignLink(activity,text.substring(start + 1, end), strBuilder, start);
+                            insertAtSignLink(activity, text.substring(start + 1, end), strBuilder, start);
                             break;
                         case "igapLink":
                             insertIgapLink(activity, strBuilder, start, end);
@@ -734,9 +734,7 @@ public class HelperUrl {
     }
 
     public static void checkAndJoinToRoom(FragmentActivity activity, final String token) {
-
         if (token == null || token.length() < 0 || isInCurrentChat(token)) return;
-
         if (G.userLogin) {
             showIndeterminateProgressDialog(activity);
 
@@ -1290,7 +1288,7 @@ public class HelperUrl {
                 long messageId = Long.parseLong(matcher2.group(2));
                 checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
             } else {
-                getToRoom(activity,path);
+                getToRoom(activity, path);
             }
 
 
@@ -1364,7 +1362,7 @@ public class HelperUrl {
 
     //************************************  go to room by urlLink   *********************************************************************
 
-    private static void getToRoom(FragmentActivity activity,Uri path) {
+    private static void getToRoom(FragmentActivity activity, Uri path) {
 
         if (path != null) {
             if (isIgapLink(path.toString().toLowerCase())) {
@@ -1375,9 +1373,9 @@ public class HelperUrl {
                     String token = url.substring(index + 1);
 
                     if (url.toLowerCase().contains("join")) {
-                        checkAndJoinToRoom(activity,token);
+                        checkAndJoinToRoom(activity, token);
                     } else {
-                        checkUsernameAndGoToRoom(activity,token, ChatEntry.profile);
+                        checkUsernameAndGoToRoom(activity, token, ChatEntry.profile);
                     }
                 }
             } else {
@@ -1386,7 +1384,7 @@ public class HelperUrl {
                     String domain = path.getQueryParameter("domain");
 
                     if (domain != null && domain.length() > 0) {
-                        checkUsernameAndGoToRoom(activity,domain, ChatEntry.profile);
+                        checkUsernameAndGoToRoom(activity, domain, ChatEntry.profile);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

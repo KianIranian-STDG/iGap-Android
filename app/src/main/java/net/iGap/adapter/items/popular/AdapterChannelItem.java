@@ -61,12 +61,6 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
             channelTitle = itemView.findViewById(R.id.tv_item_popular_rv_linear);
             root = itemView.findViewById(R.id.card_item_pop_row);
             Utils.setCardsBackground(root, R.color.white, R.color.navigation_dark_mode_bg);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickedChannelEventCallBack.onClickedChannel();
-                }
-            });
 
         }
 
@@ -77,6 +71,9 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
                 channelTitle.setText(channel.getTitle());
             if (G.selectedLanguage.equals("en"))
                 channelTitle.setText(channel.getTitleEn());
+
+            itemView.setOnClickListener(v -> onClickedChannelEventCallBack.onClickedChannel(channel));
+
         }
     }
 
@@ -85,6 +82,6 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
     }
 
     public interface OnClickedChannelEventCallBack {
-        void onClickedChannel();
+        void onClickedChannel(Channel channel);
     }
 }

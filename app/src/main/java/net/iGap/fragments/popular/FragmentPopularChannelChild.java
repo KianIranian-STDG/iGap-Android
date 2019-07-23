@@ -1,5 +1,7 @@
 package net.iGap.fragments.popular;
 
+import android.content.res.Resources;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +44,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
     private int page = 1;
     private long totalPage;
     private int playBackTime;
+    private String scale;
 
     @NonNull
     @Override
@@ -82,11 +85,18 @@ public class FragmentPopularChannelChild extends BaseFragment {
                     if (page == 1) {
                         if (response.body().getInfo().getAdvertisement() != null) {
                             mainSliderAdapter = new MainSliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
-                            Slider slider = new Slider(getContext());
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
-                            slider.setLayoutParams(layoutParams);
                             Slider.init(new ImageLoadingService());
+                            Slider slider = new Slider(getContext());
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);                            scale = response.body().getInfo().getScale();
+                            scale = response.body().getInfo().getAdvertisement().getmScale();
+                            layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
+                            ProgressBar progressBar = new ProgressBar(getContext());
+                            ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
+                            progressBar.setVisibility(View.VISIBLE);
+                            String[] scales = scale.split(":");
+                            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+                            slider.setLayoutParams(layoutParams);
+                            slider.getLayoutParams().height = Math.round(height);
                             playBackTime = response.body().getInfo().getAdvertisement().getmPlaybackTime();
                             slider.postDelayed(() -> {
                                 slider.setAdapter(mainSliderAdapter);
@@ -96,8 +106,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                                 slider.setIndicatorSize(12);
                                 slider.setInterval(playBackTime);
                                 slider.setOnSlideClickListener(position -> {
-                                    HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
-                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+
                                 });
                             }, 1000);
                             linearLayoutItemContainerChild.addView(slider);
@@ -111,14 +120,13 @@ public class FragmentPopularChannelChild extends BaseFragment {
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
                         adapterChannel.setOnClickedChannelEventCallBack(new AdapterChannelInfoItem.OnClickedChannelInfoEventCallBack() {
-                            private int i;
 
                             @Override
-                            public void onClickChannelInfo() {
-                                if (response.body().getChannels().get(i).getmType().equals(Channel.TYPE_PRIVATE))
-                                    HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
-                                if (response.body().getChannels().get(i).getmType().equals(Channel.TYPE_PUBLIC))
-                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
+                            public void onClickChannelInfo(Channel channel) {
+                                if (channel.getmType().equals(Channel.TYPE_PRIVATE))
+                                    HelperUrl.checkAndJoinToRoom(getActivity(), channel.getSlug());
+                                if (channel.getmType().equals(Channel.TYPE_PUBLIC))
+                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), channel.getSlug(), HelperUrl.ChatEntry.chat);
                             }
                         });
                         linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);

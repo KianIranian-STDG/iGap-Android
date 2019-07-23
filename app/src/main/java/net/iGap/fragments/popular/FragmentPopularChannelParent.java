@@ -1,8 +1,10 @@
 package net.iGap.fragments.popular;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,15 +82,22 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
+                            CardView cardView = new CardView(getContext());
+                            cardView.setRadius(16);
                             Slider.init(new ImageLoadingService());
                             Slider slider = new Slider(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             scale = response.body().getData().get(i).getInfo().getScale();
                             layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
-//                            String[] scales = scale.split(":");
-//                            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-//                            layoutParams.height=height;
+                            String[] scales = scale.split(":");
+                            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
                             slider.setLayoutParams(layoutParams);
+                            slider.getLayoutParams().height = Math.round(height);
+                            slider.setBackground(getResources().getDrawable(R.drawable.shape_popular_channel_all));
+                            ProgressBar progressBar = new ProgressBar(getContext());
+                            ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
+                            progressBar.setVisibility(View.VISIBLE);
+                            cardView.addView(slider);
                             int finalI = i;
                             playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
                             slider.postDelayed(new Runnable() {
@@ -100,21 +110,19 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                                     slider.setAnimateIndicators(true);
                                     slider.setIndicatorSize(12);
                                     slider.setInterval(playBackTime);
-                                    slider.setOnSlideClickListener(new OnSlideClickListener() {
-                                        @Override
-                                        public void onSlideClick(int position) {
-                                            if (response.body().getData().get(position).getSlides().get(position).getActionType() > 0)
-
+                                    if (response.body().getData().get(finalI).getSlides().get(finalI).getActionType() > 0)
+                                        slider.setOnSlideClickListener(new OnSlideClickListener() {
+                                            @Override
+                                            public void onSlideClick(int position) {
                                                 HelperUrl.checkAndJoinToRoom(getActivity(), response.body().getData().get(position).getSlides().get(position).getmActionLink());
-                                            if (response.body().getData().get(position).getSlides().get(position).getActionType() == 0);
 
-                                        }
-                                    });
+
+                                            }
+                                        });
                                 }
                             }, 1000);
 
-                            linearLayoutItemContainer.addView(slider);
-
+                            linearLayoutItemContainer.addView(cardView);
                             break;
 
                         case ParentChannel.TYPE_CHANNEL:
@@ -151,21 +159,18 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
                             RecyclerView channelsRecyclerView = channelView.findViewById(R.id.rv_item_popular_row);
                             LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams1.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
+                            layoutParams1.setMargins(0, 8
+                                    , 0, Utils.pxToDp(8));
                             channelView.setLayoutParams(layoutParams1);
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
                             adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
                             channelsRecyclerView.setAdapter(adapterChannelItem);
-                            int finalI1 = i;
-                            adapterChannelItem.setOnClickedChannelEventCallBack(new AdapterChannelItem.OnClickedChannelEventCallBack() {
-                                @Override
-                                public void onClickedChannel() {
-                                    if (response.body().getData().get(finalI1).getChannels().get(finalI1).getmType().equals(Channel.TYPE_PRIVATE))
-                                        HelperUrl.checkAndJoinToRoom(getActivity(), "tMzDiVRNf74CGbneQeS5AVfA5");
-                                    if (response.body().getData().get(finalI1).getChannels().get(finalI1).getmType().equals(Channel.TYPE_PUBLIC))
-                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), "testttd", HelperUrl.ChatEntry.chat);
 
-                                }
+                            adapterChannelItem.setOnClickedChannelEventCallBack(channel -> {
+                                if (channel.getmType().equals(Channel.TYPE_PRIVATE))
+                                    HelperUrl.checkAndJoinToRoom(getActivity(), channel.getSlug());
+                                if (channel.getmType().equals(Channel.TYPE_PUBLIC))
+                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), channel.getSlug(), HelperUrl.ChatEntry.chat);
                             });
                             linearLayoutItemContainer.addView(channelView);
                             break;

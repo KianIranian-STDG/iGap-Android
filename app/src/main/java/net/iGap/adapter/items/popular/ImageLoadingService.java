@@ -6,6 +6,7 @@ import com.squareup.picasso.Picasso;
 
 public class ImageLoadingService implements ss.com.bannerslider.ImageLoadingService {
 
+
     @Override
     public void loadImage(String url, ImageView imageView) {
         Picasso.get().load(url).into(imageView);
