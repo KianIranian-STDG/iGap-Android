@@ -18,7 +18,7 @@ public class Advertisement {
     private List<Slide> mSlides;
     @SerializedName("title")
     private String mTitle;
-    @SerializedName("titleEn")
+    @SerializedName("title_en")
     private String mTitleEn;
     @SerializedName("scale")
     private String mScale;
@@ -56,13 +56,7 @@ public class Advertisement {
         mTitle = title;
     }
 
-    public String getTitleEn() {
-        return mTitleEn;
-    }
 
-    public void setTitleEn(String mTitleEn) {
-        this.mTitleEn = mTitleEn;
-    }
 
     public String getmScale() {
         return mScale;
@@ -78,5 +72,13 @@ public class Advertisement {
 
     public void setmPlaybackTime(int mPlaybackTime) {
         this.mPlaybackTime = mPlaybackTime;
+    }
+
+    public String getmTitleEn() {
+        return mTitleEn;
+    }
+
+    public void setmTitleEn(String mTitleEn) {
+        this.mTitleEn = mTitleEn;
     }
 }

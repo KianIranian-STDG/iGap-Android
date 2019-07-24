@@ -16,7 +16,7 @@ public class Slide {
     private String mImageUrl;
     @SerializedName("title")
     private String mTitle;
-    @SerializedName("titleEn")
+    @SerializedName("title_en")
     private String mTitleEn;
 
     public Long getActionType() {

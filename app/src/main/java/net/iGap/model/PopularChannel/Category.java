@@ -6,7 +6,7 @@ public class Category {
     private String title;
     private String icon;
     private String slug;
-    private String titleEn;
+    private String title_en;
 
     public String getId() {
         return id;
@@ -42,10 +42,10 @@ public class Category {
 
 
     public String getTitleEn() {
-        return titleEn;
+        return title_en;
     }
 
     public void setTitleEn(String titleEn) {
-        this.titleEn = titleEn;
+        this.title_en = titleEn;
     }
 }

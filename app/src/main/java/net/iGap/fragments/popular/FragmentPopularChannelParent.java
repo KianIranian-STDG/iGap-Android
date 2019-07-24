@@ -41,7 +41,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ss.com.bannerslider.Slider;
-import ss.com.bannerslider.event.OnSlideClickListener;
 
 
 public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
@@ -76,14 +75,13 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
-                Log.i("nazanin", "onResponse: " + response.isSuccessful());
-
                 LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
                             CardView cardView = new CardView(getContext());
                             cardView.setRadius(16);
+                            cardView.setUseCompatPadding(false);
                             Slider.init(new ImageLoadingService());
                             Slider slider = new Slider(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -100,26 +98,26 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             cardView.addView(slider);
                             int finalI = i;
                             playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
-                            slider.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mainSliderAdapter = new MainSliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
-                                    slider.setAdapter(mainSliderAdapter);
-                                    slider.setSelectedSlide(0);
-                                    slider.setLoopSlides(true);
-                                    slider.setAnimateIndicators(true);
-                                    slider.setIndicatorSize(12);
-                                    slider.setInterval(playBackTime);
-                                    if (response.body().getData().get(finalI).getSlides().get(finalI).getActionType() > 0)
-                                        slider.setOnSlideClickListener(new OnSlideClickListener() {
-                                            @Override
-                                            public void onSlideClick(int position) {
-                                                HelperUrl.checkAndJoinToRoom(getActivity(), response.body().getData().get(position).getSlides().get(position).getmActionLink());
+                            slider.postDelayed(() -> {
+                                mainSliderAdapter = new MainSliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
+                                slider.setAdapter(mainSliderAdapter);
+                                slider.setSelectedSlide(0);
+                                slider.setLoopSlides(true);
+                                slider.setAnimateIndicators(true);
+                                slider.setIndicatorSize(12);
+                                slider.setInterval(playBackTime);
+                                slider.setOnSlideClickListener(position -> {
+                                    if (response.body().getData().get(position).getSlides().get(finalI).getActionType() == 3) {
+                                        Log.i("nazanin", "onResponse: " + position);
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(position).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
+                                    } else if (response.body().getData().get(position).getSlides().get(finalI).getActionType() == 4) {
+                                        Log.i("nazanin", "onResponse: " + position);
+                                        Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
+                                    } else
+                                        Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
 
 
-                                            }
-                                        });
-                                }
+                                });
                             }, 1000);
 
                             linearLayoutItemContainer.addView(cardView);
@@ -165,7 +163,6 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
                             adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
                             channelsRecyclerView.setAdapter(adapterChannelItem);
-
                             adapterChannelItem.setOnClickedChannelEventCallBack(channel -> {
                                 if (channel.getmType().equals(Channel.TYPE_PRIVATE))
                                     HelperUrl.checkAndJoinToRoom(getActivity(), channel.getSlug());

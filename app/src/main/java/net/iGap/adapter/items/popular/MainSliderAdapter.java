@@ -32,5 +32,4 @@ public class MainSliderAdapter extends SliderAdapter {
         imageSlideViewHolder.itemView.getLayoutParams().height = Math.round(height);
         imageSlideViewHolder.bindImageSlide(sliderList.get(position).getImageUrl());
     }
-
 }

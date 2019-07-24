@@ -20,7 +20,7 @@ public class Channel {
     private String mSlug;
     @SerializedName("title")
     private String mTitle;
-    @SerializedName("titleEn")
+    @SerializedName("title_en")
     private String mTitleEn;
     @SerializedName("type")
     private String mType;

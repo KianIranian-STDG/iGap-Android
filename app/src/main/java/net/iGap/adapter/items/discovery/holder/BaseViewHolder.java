@@ -93,6 +93,8 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         handleDiscoveryFieldsClickStatic(discoveryField, activity);
     }
 
+
+
     public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity) {
         if (activity == null || activity.isFinishing()) {
             return;

@@ -25,7 +25,7 @@ public class Info {
     private String mUpdatedAt;
     @SerializedName("scale")
     private String mScale;
-    @SerializedName("titleEn")
+    @SerializedName("title_en")
     private String mTitleEn;
     @SerializedName("looped")
     private Boolean mLooped;

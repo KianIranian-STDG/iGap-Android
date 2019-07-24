@@ -1,7 +1,6 @@
 package net.iGap.fragments.popular;
 
 import android.content.res.Resources;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -75,6 +74,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
     private void setupViews() {
         popularChannelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
+
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
                 LinearLayout linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
@@ -87,7 +87,8 @@ public class FragmentPopularChannelChild extends BaseFragment {
                             mainSliderAdapter = new MainSliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
                             Slider.init(new ImageLoadingService());
                             Slider slider = new Slider(getContext());
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);                            scale = response.body().getInfo().getScale();
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            scale = response.body().getInfo().getScale();
                             scale = response.body().getInfo().getAdvertisement().getmScale();
                             layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
                             ProgressBar progressBar = new ProgressBar(getContext());
@@ -106,6 +107,11 @@ public class FragmentPopularChannelChild extends BaseFragment {
                                 slider.setIndicatorSize(12);
                                 slider.setInterval(playBackTime);
                                 slider.setOnSlideClickListener(position -> {
+                                    if (response.body().getInfo().getAdvertisement().getSlides().get(position).getActionType()== 0) {
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getInfo().getAdvertisement().getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
+                                    } else {
+                                        Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
+                                    }
 
                                 });
                             }, 1000);
