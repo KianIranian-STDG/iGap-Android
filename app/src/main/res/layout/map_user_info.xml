@@ -32,7 +32,7 @@
       android:layout_weight="1"
       android:gravity="right"
       android:text="@string/md_close_button"
-      android:textAppearance="@style/TextIconAppearance_toolbar"
+      style="@style/myIconTextViewStyle"
       android:textColor="@color/gray_5c"
       android:visibility="visible" />
   </LinearLayout>
