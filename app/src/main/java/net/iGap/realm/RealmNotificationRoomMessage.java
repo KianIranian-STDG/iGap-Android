@@ -22,7 +22,6 @@ public class RealmNotificationRoomMessage extends RealmObject {
     @PrimaryKey
     public long messageId;
     public long roomId;
-
     public long createTime;
 
     public static void putToDataBase(Realm realm, long messageId, long roomId) {

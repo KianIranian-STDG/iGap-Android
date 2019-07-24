@@ -560,11 +560,23 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 34
+        if (oldVersion == 34) {
             RealmObjectSchema realmCallLog = schema.get(RealmCallLog.class.getSimpleName());
             if (realmCallLog != null) {
                 realmCallLog.addField(RealmCallLogFields.LOG_ID, long.class, FieldAttribute.REQUIRED);
             }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 35
+
+            RealmObjectSchema realmNotificationRoomMessage = schema.create(RealmNotificationRoomMessage.class.getSimpleName())
+                    .addField("roomId", long.class, FieldAttribute.REQUIRED)
+                    .addField("messageId", long.class, FieldAttribute.REQUIRED)
+                    .addField("createTime", long.class, FieldAttribute.REQUIRED);
+
+            realmNotificationRoomMessage.addPrimaryKey("messageId");
 
             oldVersion++;
         }
