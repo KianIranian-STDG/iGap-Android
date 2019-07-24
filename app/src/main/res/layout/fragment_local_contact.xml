@@ -5,31 +5,28 @@
     style="?backgroundColorSettingTheme"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/ll_localContact_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height_root_with_search"
-        android:layoutDirection="ltr"
-        style="?backgroundColorSettingTheme"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_localContact"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
         android:clipToPadding="false"
-        android:paddingBottom="55dp"
+        android:paddingTop="@dimen/dp26"
+        android:paddingBottom="@dimen/dp20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_localContact_toolbar">
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/ll_localContact_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/toolbar_height"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ProgressBar
         android:id="@+id/pb_localContact"
