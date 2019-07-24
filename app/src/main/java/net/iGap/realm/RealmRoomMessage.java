@@ -649,9 +649,11 @@ public class RealmRoomMessage extends RealmObject {
      *
      * @param messageId messageId for checking
      */
-    public static boolean existMessage(long messageId) {
+    public static boolean existMessageInRoom(long messageId, long roomId) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                .findFirst();
         if (realmRoomMessage != null) {
             realm.close();
             return true;
