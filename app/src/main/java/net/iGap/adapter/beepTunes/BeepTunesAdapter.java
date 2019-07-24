@@ -10,9 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
+import net.iGap.fragments.beepTunes.main.BeepTunesMainFragment;
 import net.iGap.libs.bannerslider.BannerSlider;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.Datum;
 import net.iGap.module.api.beepTunes.Slide;
@@ -27,19 +26,14 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final String TYPE_AD = "advertisement";
     private static final String TYPE_ROW = "beepTunesCategory";
     private List<Datum> data = new ArrayList<>();
-    private BeepTunesFragment.OnItemClick onItemClick;
-    private int width;
-
-    public BeepTunesAdapter(int width) {
-        this.width = width;
-    }
+    private BeepTunesMainFragment.OnItemClick onItemClick;
 
     public void setData(List<Datum> data) {
         this.data = data;
         notifyDataSetChanged();
     }
 
-    public void setOnItemClick(BeepTunesFragment.OnItemClick onItemClick) {
+    public void setOnItemClick(BeepTunesMainFragment.OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
 
