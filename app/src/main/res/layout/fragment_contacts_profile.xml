@@ -619,7 +619,7 @@
             android:layout_marginLeft="@dimen/dp14"
             android:layout_marginTop="@dimen/dp80"
             android:scaleType="centerCrop"
-            android:src="@drawable/avatar"
+            android:background="@drawable/shape_background_profile_sample"
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />
 
