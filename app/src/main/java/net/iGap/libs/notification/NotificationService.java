@@ -9,8 +9,7 @@ import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperNotification;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 
 import org.json.JSONArray;
@@ -48,11 +47,12 @@ public class NotificationService extends FirebaseMessagingService {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(remoteMessage.getData().get(MESSAGE_ID))).findFirst();
-                    if (message == null) {
-                        try {
+                    try {
+                        final long messageId = Long.valueOf(remoteMessage.getData().get(MESSAGE_ID));
+                        final long roomId = Long.valueOf(remoteMessage.getData().get(ROOM_ID));
 
-                            long roomId = Long.valueOf(remoteMessage.getData().get(ROOM_ID));
+                        if (RealmNotificationRoomMessage.canShowNotif(realm, messageId, roomId)) {
+
                             String loc_key = remoteMessage.getData().get(MESSAGE_TYPE);
                             ProtoGlobal.Room.Type roomType;
 
@@ -67,7 +67,8 @@ public class NotificationService extends FirebaseMessagingService {
                             JSONArray loc_args = new JSONArray(remoteMessage.getData().get("loc_args"));
                             String text = loc_args.getString(1);
 
-                            realm.createObject(RealmRoomMessage.class, Long.valueOf(remoteMessage.getData().get(MESSAGE_ID)));
+                            RealmNotificationRoomMessage.putToDataBase(realm, messageId, roomId);
+
                             ProtoGlobal.RoomMessage roomMessage = ProtoGlobal.RoomMessage.newBuilder()
                                     .setMessage(text)
                                     .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
@@ -75,9 +76,10 @@ public class NotificationService extends FirebaseMessagingService {
 
                             Log.d("bagi", "FcmSHOWNOTIF" + remoteMessage.getData() + "");
                             HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
                         }
+                    }catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });

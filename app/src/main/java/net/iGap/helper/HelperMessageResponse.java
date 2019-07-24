@@ -10,17 +10,15 @@
 
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientGetRoom;
 
 import io.realm.Realm;
@@ -45,11 +43,6 @@ public class HelperMessageResponse {
                 /**
                  * put message to realm
                  */
-                boolean showNotif = true;
-                RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                if (message != null) {
-                    showNotif = false;
-                }
                 RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
                 final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 /**
@@ -100,7 +93,8 @@ public class HelperMessageResponse {
                     }
 
                     if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
-                        if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && showNotif) {
+                        if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && RealmNotificationRoomMessage.canShowNotif(realm, roomMessage.getMessageId(), roomId)) {
+                            RealmNotificationRoomMessage.putToDataBase(realm, roomMessage.getMessageId(), roomId);
                             HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);
                         }
                     }
