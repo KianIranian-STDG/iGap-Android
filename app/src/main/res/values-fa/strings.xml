@@ -1407,8 +1407,8 @@
     <string name="dont_show_again"> مجددا نمایش نده</string>
     <string name="invitation_message">سلام!
 از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم
-     https://www.igap.net
-    شناسه دعوت کننده هست :</string>
+     https://www.igap.net \n
+    شماره معرف :</string>
 
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>

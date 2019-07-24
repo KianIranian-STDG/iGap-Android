@@ -1410,7 +1410,7 @@
     <string name="ignore">Ignore</string>
     <string name="permission_auto_start">please select and active iGap from menu to receive messages when even app is not in background</string>
     <string name="dont_show_again">Do not show again</string>
-    <string name="invitation_message">\Hey Join iGap : https://www.igap.net/ I\'m waiting for you!\ \n Reagent ID is : </string>
+    <string name="invitation_message">\Hey Join iGap : https://www.igap.net/ I\'m waiting for you!\ \n Referred Number is : </string>
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">Please enter a valid folder name</string>
     <string name="This_folder_already_exists">"This folder already exists.\n Please provide another name for the folder"</string>
