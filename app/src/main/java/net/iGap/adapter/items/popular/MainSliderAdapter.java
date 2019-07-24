@@ -3,12 +3,12 @@ package net.iGap.adapter.items.popular;
 
 import android.content.res.Resources;
 
+import net.iGap.libs.bannerslider.adapters.SliderAdapter;
+import net.iGap.libs.bannerslider.viewholder.ImageSlideViewHolder;
 import net.iGap.model.PopularChannel.Slide;
 
 import java.util.List;
 
-import ss.com.bannerslider.adapters.SliderAdapter;
-import ss.com.bannerslider.viewholder.ImageSlideViewHolder;
 
 public class MainSliderAdapter extends SliderAdapter {
     private List<Slide> sliderList;

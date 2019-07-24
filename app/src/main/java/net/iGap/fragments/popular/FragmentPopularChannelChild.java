@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +24,7 @@ import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperUrl;
+import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PopularChannel.Channel;
 import net.iGap.model.PopularChannel.ChildChannel;
@@ -30,7 +32,6 @@ import net.iGap.model.PopularChannel.ChildChannel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ss.com.bannerslider.Slider;
 
 
 public class FragmentPopularChannelChild extends BaseFragment {
@@ -85,12 +86,14 @@ public class FragmentPopularChannelChild extends BaseFragment {
                     if (page == 1) {
                         if (response.body().getInfo().getAdvertisement() != null) {
                             mainSliderAdapter = new MainSliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
-                            Slider.init(new ImageLoadingService());
-                            Slider slider = new Slider(getContext());
+                            BannerSlider.init(new ImageLoadingService());
+                            BannerSlider slider = new BannerSlider(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            CardView cardView = new CardView(getContext());
+                            cardView.setRadius(Utils.dpToPx(12));
+                            cardView.setPreventCornerOverlap(false);
                             scale = response.body().getInfo().getScale();
                             scale = response.body().getInfo().getAdvertisement().getmScale();
-                            layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
                             ProgressBar progressBar = new ProgressBar(getContext());
                             ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
                             progressBar.setVisibility(View.VISIBLE);
@@ -99,6 +102,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                             slider.setLayoutParams(layoutParams);
                             slider.getLayoutParams().height = Math.round(height);
                             playBackTime = response.body().getInfo().getAdvertisement().getmPlaybackTime();
+                            cardView.addView(slider);
                             slider.postDelayed(() -> {
                                 slider.setAdapter(mainSliderAdapter);
                                 slider.setSelectedSlide(0);
@@ -107,15 +111,17 @@ public class FragmentPopularChannelChild extends BaseFragment {
                                 slider.setIndicatorSize(12);
                                 slider.setInterval(playBackTime);
                                 slider.setOnSlideClickListener(position -> {
-                                    if (response.body().getInfo().getAdvertisement().getSlides().get(position).getActionType()== 0) {
-                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getInfo().getAdvertisement().getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
+                                    if (response.body().getInfo().getAdvertisement().getSlides().get(position).getActionType() == 0) {
+                                        Log.i("nazanin", "onResponse: " + position);
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(),response.body().getInfo().getAdvertisement().getSlides().get(position).getmActionLink(),HelperUrl.ChatEntry.chat);
                                     } else {
+                                        Log.i("nazanin", "onResponse: " + position);
                                         Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
                                     }
 
                                 });
                             }, 1000);
-                            linearLayoutItemContainerChild.addView(slider);
+                            linearLayoutItemContainerChild.addView(cardView);
                         }
 
                         adapterChannel = new AdapterChannelInfoItem(getContext());

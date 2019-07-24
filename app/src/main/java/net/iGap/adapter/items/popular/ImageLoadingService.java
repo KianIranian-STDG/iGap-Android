@@ -4,7 +4,9 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-public class ImageLoadingService implements ss.com.bannerslider.ImageLoadingService {
+import net.iGap.libs.bannerslider.BannerImageLoadingService;
+
+public class ImageLoadingService implements BannerImageLoadingService {
 
 
     @Override

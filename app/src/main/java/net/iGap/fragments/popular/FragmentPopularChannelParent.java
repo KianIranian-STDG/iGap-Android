@@ -24,14 +24,15 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterCategoryItem;
 import net.iGap.adapter.items.popular.AdapterChannelItem;
-import net.iGap.adapter.items.popular.ImageLoadingService;
 import net.iGap.adapter.items.popular.MainSliderAdapter;
 import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PopularChannel.Category;
 import net.iGap.model.PopularChannel.Channel;
@@ -40,7 +41,6 @@ import net.iGap.model.PopularChannel.ParentChannel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ss.com.bannerslider.Slider;
 
 
 public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
@@ -75,27 +75,28 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
+                Log.i("nazanin", "onResponse: "+response.isSuccessful());
                 LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
                             CardView cardView = new CardView(getContext());
-                            cardView.setRadius(16);
-                            cardView.setUseCompatPadding(false);
-                            Slider.init(new ImageLoadingService());
-                            Slider slider = new Slider(getContext());
+                            cardView.setRadius(Utils.dpToPx(12));
+                            cardView.setPreventCornerOverlap(false);
+                            BannerSlider.init(new SliderBannerImageLoadingService());
+                            BannerSlider slider = new BannerSlider(getContext());
+                            slider.setIndex(i);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            layoutParams.setMargins(8,8,8,8);
                             scale = response.body().getData().get(i).getInfo().getScale();
-                            layoutParams.setMargins(0, Utils.pxToDp(8), 0, Utils.pxToDp(8));
                             String[] scales = scale.split(":");
                             float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-                            slider.setLayoutParams(layoutParams);
                             slider.getLayoutParams().height = Math.round(height);
-                            slider.setBackground(getResources().getDrawable(R.drawable.shape_popular_channel_all));
                             ProgressBar progressBar = new ProgressBar(getContext());
                             ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
                             progressBar.setVisibility(View.VISIBLE);
                             cardView.addView(slider);
+                            slider.setLayoutParams(layoutParams);
                             int finalI = i;
                             playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
                             slider.postDelayed(() -> {
@@ -107,14 +108,13 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                                 slider.setIndicatorSize(12);
                                 slider.setInterval(playBackTime);
                                 slider.setOnSlideClickListener(position -> {
-                                    if (response.body().getData().get(position).getSlides().get(position).getActionType() == 3) {
+                                    if (response.body().getData().get(slider.getIndex()).getSlides().get(position).getActionType() == 3) {
                                         Log.i("nazanin", "onResponse: " + position);
-                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(position).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
-                                    } else
-                                        Log.i("nazanin", "onResponse: "+position);
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(slider.getIndex()).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
+                                    } else {
+                                        Log.i("nazanin", "onResponse: " + position);
                                         Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
-
-
+                                    }
                                 });
                             }, 1000);
 
@@ -152,11 +152,9 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             if (G.selectedLanguage.equals("en"))
                                 textViewTitle.setText(response.body().getData().get(i).getInfo().getTitleEn());
 
-
                             RecyclerView channelsRecyclerView = channelView.findViewById(R.id.rv_item_popular_row);
                             LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams1.setMargins(0, 8
-                                    , 0, Utils.pxToDp(8));
+                            layoutParams1.setMargins(0, Utils.dpToPx(4), 0, 0);
                             channelView.setLayoutParams(layoutParams1);
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
                             adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
