@@ -103,7 +103,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
                     .setFragmentActivity(getActivity())
                     .setPassCodeVisibility(true, R.string.unlock_icon)
                     .setScannerVisibility(true, R.string.scan_qr_code_icon)
-                    .setSearchBoxShown(true, false)
+                  //  .setSearchBoxShown(true, false)
                     .setListener(this);
         }
 
@@ -126,7 +126,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
             }
         });
 
-        if (page == 0) {
+        /*if (page == 0) {
             rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -145,7 +145,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
                 }
             });
 
-        }
+        }*/
 
         pullToRefresh.setOnRefreshListener(() -> {
             setRefreshing(true);
