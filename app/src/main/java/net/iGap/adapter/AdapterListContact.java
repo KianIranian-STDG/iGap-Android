@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.module.structs.StructListOfContact;
 
 import java.util.List;
@@ -74,21 +75,14 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             title.setText(contact.getDisplayName());
             subtitle.setText(contact.getPhone());
 
-            rootView.setOnClickListener(v -> new MaterialDialog.Builder(G.fragmentActivity)
-                    .title(G.fragmentActivity.getResources()
-                            .getString(R.string.igap))
-                    .content(G.fragmentActivity.getResources().getString(R.string.invite_friend))
-                    .positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel))
-                    .onPositive((dialog, which) -> {
-
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra("address", phone);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, context.getResources().getString(R.string.invitation_message) + G.userId);
-                        sendIntent.setType("text/plain");
-                        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        G.context.startActivity(sendIntent);
-                    }).show());
+            rootView.setOnClickListener(v -> {
+                Intent smsIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                smsIntent.setType("vnd.android-dir/mms-sms");
+                smsIntent.putExtra("address", phone);
+                smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + ActivityMain.userPhoneNumber);
+                smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.context.startActivity(smsIntent);
+            });
         }
     }
 }

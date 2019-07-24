@@ -993,6 +993,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 super(itemView);
 
                 txtCounter = itemView.findViewById(R.id.row_contact_counter_txt);
+                Utils.darkModeHandler(txtCounter);
             }
 
             public void setCount(int count){
@@ -1002,6 +1003,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 if (HelperCalander.isPersianUnicode){
                     countStr = HelperCalander.convertToUnicodeFarsiNumber(countStr);
                 }
+
 
                 txtCounter.setText(countStr + " " + getString(R.string.am_contact) + (G.selectedLanguage.equals("en") ? "s" : ""));
             }
