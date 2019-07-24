@@ -10,43 +10,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtBuyTicketBinding;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperLog;
+import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 
 import java.util.ArrayList;
 
 public class IGhashtBuyTicketFragment extends Fragment {
 
-    private static String LocationId = "LocationId";
-
     private FragmentIgashtBuyTicketBinding binding;
     private IGashtBuyTicketViewModel viewModel;
-
-    public static IGhashtBuyTicketFragment getInstance(int locationId) {
-        IGhashtBuyTicketFragment fragment = new IGhashtBuyTicketFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(LocationId, locationId);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(IGashtBuyTicketViewModel.class);
-        //todo: create factory provider and remove init function;
-        if (getArguments() != null) {
-            viewModel.setLocationId(getArguments().getInt(LocationId));
-        } else {
-            HelperLog.setErrorLog(new Exception(this.getClass().getName() + ": selected location id not found"));
-            if (getActivity() != null) {
-                getActivity().onBackPressed();
-            }
-        }
     }
 
     @Nullable
@@ -111,6 +94,18 @@ public class IGhashtBuyTicketFragment extends Fragment {
         viewModel.getAddToTicketList().observe(getViewLifecycleOwner(),data->{
             if (binding.addedPlaceList.getAdapter() instanceof OrderedTicketListAdapter && data != null) {
                 ((OrderedTicketListAdapter) binding.addedPlaceList.getAdapter()).addNewItem(data);
+            }
+        });
+
+        viewModel.getRegisterVoucher().observe(getViewLifecycleOwner(),registerVoucher->{
+            if (registerVoucher != null){
+                if (registerVoucher){
+                    if (getParentFragment() instanceof IGashtLocationDetailFragment){
+                        ((IGashtLocationDetailFragment) getParentFragment()).registerVouchers();
+                    }
+                }else{
+                    Toast.makeText(getContext(), R.string.igasht_add_ticket_error, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

@@ -15,10 +15,8 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     private ObservableField<String> backgroundImageUrl = new ObservableField<>();
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
-    private MutableLiveData<IGashtProvince> goToShowLocationListPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goToShowLocationListPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
-    private MutableLiveData<Integer> showErrorSelectProvince = new MutableLiveData<>();
-    private IGashtProvince selectedProvince;
 
     private IGashtRepository repository;
 
@@ -31,7 +29,7 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         return backgroundImageUrl;
     }
 
-    public MutableLiveData<IGashtProvince> getGoToShowLocationListPage() {
+    public MutableLiveData<Boolean> getGoToShowLocationListPage() {
         return goToShowLocationListPage;
     }
 
@@ -43,25 +41,21 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         return clearEditText;
     }
 
-    public MutableLiveData<Integer> getShowErrorSelectProvince() {
-        return showErrorSelectProvince;
-    }
-
     public void onClearProVinceSearchClick() {
-        selectedProvince = null;
+        repository.setSelectedProvince(null);
         clearEditText.setValue(true);
     }
 
     public void onSearchPlaceButtonClick() {
-        if (selectedProvince != null) {
-            goToShowLocationListPage.setValue(selectedProvince);
+        if (repository.getSelectedProvince() != null) {
+            goToShowLocationListPage.setValue(true);
         } else {
-            showErrorSelectProvince.setValue(R.string.select_province);
+            goToShowLocationListPage.setValue(false);
         }
     }
 
     public void setSelectedLocation(int position) {
-        selectedProvince = provinceList.getValue().get(position);
+        repository.setSelectedProvince(provinceList.getValue().get(position));
     }
 
     public void onRetryClick() {
@@ -80,5 +74,11 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         provinceList.setValue(data.getData());
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        repository.clearInstance();
     }
 }

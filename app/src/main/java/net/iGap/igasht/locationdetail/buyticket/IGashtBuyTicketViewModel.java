@@ -1,7 +1,7 @@
 package net.iGap.igasht.locationdetail.buyticket;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.util.Log;
 import android.view.View;
 
@@ -15,35 +15,27 @@ import java.util.List;
 
 public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtLocationService>> {
 
-    private ObservableField<String> totalPrice = new ObservableField<>("0");
+    private ObservableInt totalPrice = new ObservableInt(0);
     private SingleLiveEvent<List<String>> showDialogSelectService = new SingleLiveEvent<>();
     private SingleLiveEvent<List<IGashtServiceAmount>> showDialogSelectTicketType = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> showDialogEnterCount = new SingleLiveEvent<>();
     private MutableLiveData<IGashtServiceAmount> addToTicketList = new MutableLiveData<>();
-    private int locationId;
-    private int totalPriceValue;
+    private SingleLiveEvent<Boolean> registerVoucher = new SingleLiveEvent<>();
+
+    private IGashtRepository repository;
+
     private List<IGashtLocationService> serviceList;
-    private List<IGashtVouchers> selectedServiceList;
     private List<IGashtServiceAmount> orderedTickets;
     private int selectedServicePosition = -1;
     private IGashtServiceAmount selectedAmount;
-    private IGashtRepository repository;
 
     public IGashtBuyTicketViewModel() {
         repository = IGashtRepository.getInstance();
-        selectedServiceList = new ArrayList<>();
         orderedTickets = new ArrayList<>();
+        getTicketData();
     }
 
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
-        showLoadingView.set(View.VISIBLE);
-        showMainView.set(View.GONE);
-        showViewRefresh.set(View.GONE);
-        repository.getServiceList(locationId, this);
-    }
-
-    public ObservableField<String> getTotalPrice() {
+    public ObservableInt getTotalPrice() {
         return totalPrice;
     }
 
@@ -63,6 +55,10 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         return addToTicketList;
     }
 
+    public SingleLiveEvent<Boolean> getRegisterVoucher() {
+        return registerVoucher;
+    }
+
     @Override
     public void onSuccess(BaseIGashtResponse<IGashtLocationService> data) {
         serviceList = data.getData();
@@ -77,6 +73,10 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
             tmp.add(serviceList.get(i).getSeviceNameWithLanguage());
         }
         showDialogSelectService.setValue(tmp);
+    }
+
+    public void onRetryClick() {
+        getTicketData();
     }
 
     public void selectedService(int position) {
@@ -100,21 +100,28 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     public void setTicketCount(int ticketCount) {
         selectedAmount.setCount(ticketCount);
         selectedAmount.setTitle(serviceList.get(selectedServicePosition).getSeviceNameWithLanguage());
-        totalPriceValue = +totalPriceValue + (selectedAmount.getAmount() * ticketCount);
-        totalPrice.set(String.valueOf(totalPriceValue));
+        totalPrice.set(totalPrice.get() + (selectedAmount.getAmount() * ticketCount));
         orderedTickets.add(selectedAmount);
         addToTicketList.setValue(selectedAmount);
-        selectedServicePosition = 0;
+        repository.addToVoucherList(selectedAmount);
+        selectedServicePosition = -1;
         selectedAmount = null;
     }
 
     public void removeOrderedTicket(int position) {
         IGashtServiceAmount tmp = orderedTickets.remove(position);
-        totalPriceValue = totalPriceValue - (tmp.getAmount() * tmp.getCount());
-        totalPrice.set(String.valueOf(totalPriceValue));
+        repository.removeFromVoucherList(tmp);
+        totalPrice.set(totalPrice.get() - (tmp.getAmount() * tmp.getCount()));
     }
 
     public void onPayClick() {
+        registerVoucher.setValue(repository.hasVoucher());
+    }
 
+    private void getTicketData() {
+        showLoadingView.set(View.VISIBLE);
+        showMainView.set(View.GONE);
+        showViewRefresh.set(View.GONE);
+        repository.getServiceList(this);
     }
 }

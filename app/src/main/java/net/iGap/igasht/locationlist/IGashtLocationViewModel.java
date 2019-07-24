@@ -6,24 +6,22 @@ import android.view.View;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
-import net.iGap.igasht.provinceselect.IGashtProvince;
 
 import java.util.List;
 
 public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtLocationItem>> {
 
     private MutableLiveData<List<IGashtLocationItem>> locationList = new MutableLiveData<>();
-    private MutableLiveData<IGashtLocationItem> goToLocationDetail = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goToLocationDetail = new MutableLiveData<>();
     private MutableLiveData<Boolean> addToFavorite = new MutableLiveData<>();
 
     private IGashtRepository repository;
-    private IGashtProvince province;
 
     public MutableLiveData<List<IGashtLocationItem>> getLocationList() {
         return locationList;
     }
 
-    public MutableLiveData<IGashtLocationItem> getGoToLocationDetail() {
+    public MutableLiveData<Boolean> getGoToLocationDetail() {
         return goToLocationDetail;
     }
 
@@ -31,12 +29,10 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         return addToFavorite;
     }
 
-    public void init(IGashtProvince province) {
-        this.province = province;
+    public IGashtLocationViewModel() {
         this.repository = IGashtRepository.getInstance();
         getLocationListOfProvince();
     }
-
 
     public void onRetryClick() {
         getLocationListOfProvince();
@@ -46,7 +42,7 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
-        repository.getLocationListWithProvince(province.getId(), this);
+        repository.getLocationListWithProvince(this);
     }
 
     @Override
@@ -62,7 +58,10 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     public void buyTicket(int position) {
         if (locationList.getValue() != null) {
-            goToLocationDetail.setValue(locationList.getValue().get(position));
+            repository.setSelectedLocation(locationList.getValue().get(position));
+            goToLocationDetail.setValue(true);
+        }else{
+            goToLocationDetail.setValue(false);
         }
     }
 }

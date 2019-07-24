@@ -1,6 +1,7 @@
 package net.iGap.igasht.provinceselect;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import net.iGap.R;
@@ -74,9 +76,14 @@ public class IGashtProvinceFragment extends Fragment {
 
         binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> viewModel.setSelectedLocation(position));
 
-        viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), province -> {
-            if (getActivity() != null && province != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), IGashtLocationListFragment.getInstance(province)).setReplace(false).load(true);
+        viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() != null && isGo != null) {
+                if (isGo) {
+                    ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtLocationListFragment()).setReplace(false).load(true);
+                } else {
+                    Toast.makeText(getContext(), R.string.select_province, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -95,12 +102,6 @@ public class IGashtProvinceFragment extends Fragment {
         viewModel.getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
             if (isClear != null && isClear) {
                 binding.provinceSearchText.setText("");
-            }
-        });
-
-        viewModel.getShowErrorSelectProvince().observe(getViewLifecycleOwner(), messageRes -> {
-            if (getContext() != null && messageRes != null) {
-                Toast.makeText(getContext(), messageRes, Toast.LENGTH_SHORT).show();
             }
         });
     }

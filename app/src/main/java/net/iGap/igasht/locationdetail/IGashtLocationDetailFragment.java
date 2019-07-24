@@ -11,17 +11,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtLocationDetailBinding;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
-import net.iGap.igasht.locationlist.IGashtLocationItem;
 import net.iGap.interfaces.ToolbarListener;
 
 public class IGashtLocationDetailFragment extends Fragment {
@@ -29,29 +28,10 @@ public class IGashtLocationDetailFragment extends Fragment {
     private FragmentIgashtLocationDetailBinding binding;
     private IGashtLocationDetailViewModel viewModel;
 
-    private static String LOCATION_ITEM = "locationItem";
-
-    public static IGashtLocationDetailFragment getInstance(IGashtLocationItem locationItem) {
-        IGashtLocationDetailFragment fragment = new IGashtLocationDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(LOCATION_ITEM, locationItem);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(IGashtLocationDetailViewModel.class);
-        //todo: create factory provider and remove init function;
-        if (getArguments() != null) {
-            viewModel.setLocationItem(getArguments().getParcelable(LOCATION_ITEM));
-        } else {
-            HelperLog.setErrorLog(new Exception(this.getClass().getName() + ": selected location data not found"));
-            if (getActivity() != null) {
-                getActivity().onBackPressed();
-            }
-        }
     }
 
     @Nullable
@@ -95,30 +75,36 @@ public class IGashtLocationDetailFragment extends Fragment {
                     }
                 }).getView());
 
-        viewModel.getLoadBuyTicketView().observe(getViewLifecycleOwner(), locationId -> {
-            if (locationId!=null){
+        viewModel.getLoadBuyTicketView().observe(getViewLifecycleOwner(), loadBuyTicketView -> {
+            if (loadBuyTicketView != null) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(IGhashtBuyTicketFragment.class.getName());
-                if (fragment == null) {
-                    fragment = IGhashtBuyTicketFragment.getInstance(locationId);
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                Fragment fragment;
+                if (loadBuyTicketView) {
+                    fragment = fragmentManager.findFragmentByTag(IGhashtBuyTicketFragment.class.getName());
+                    if (fragment == null) {
+                        fragment = new IGhashtBuyTicketFragment();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                } else {
+                    fragment = fragmentManager.findFragmentByTag(IGashtLocationSubDetailFragment.class.getName());
+                    if (fragment == null) {
+                        fragment = new IGashtLocationSubDetailFragment();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
                 }
                 fragmentTransaction.replace(R.id.detailFrame, fragment, fragment.getClass().getName()).commit();
             }
         });
 
-        viewModel.getLoadDetailSubView().observe(getViewLifecycleOwner(), locationDetail -> {
-            if (locationDetail != null) {
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(IGashtLocationSubDetailFragment.class.getName());
-                if (fragment == null) {
-                    fragment = IGashtLocationSubDetailFragment.getInstance(locationDetail);
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-                fragmentTransaction.replace(R.id.detailFrame, fragment, fragment.getClass().getName()).commit();
+        viewModel.getRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (getContext() != null && errorMessage != null) {
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void registerVouchers() {
+        viewModel.registerOrder();
     }
 }

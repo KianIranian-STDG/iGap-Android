@@ -1896,7 +1896,7 @@
     <string name="canceled">لغو شده</string>
     <string name="outgoing">خروجی</string>
     <string name="no_item_selected">موردی انتخاب نشده است.</string>
-    <string name="subscriber" >دنبال کنندگان</string>
+    <string name="subscriber">دنبال کنندگان</string>
     <string name="point"> امتیاز</string>
     <string name="rank">رتبه</string>
     <string name="tablet_empty_chat_description">Get Started  Welcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
@@ -1920,4 +1920,6 @@
     <string name="igasht_order_ticket_title">%s برای %d نفر</string>
     <string name="igasht_favorites_title">علاقه مندی ها</string>
     <string name="igasht_history_title">تاریخچه</string>
+    <string name="igasht_total_ticket_price">مبلغ نهایی: %d تومان</string>
+    <string name="igasht_add_ticket_error">لطفا بلیت خود را اضافه کنید.</string>
 </resources>

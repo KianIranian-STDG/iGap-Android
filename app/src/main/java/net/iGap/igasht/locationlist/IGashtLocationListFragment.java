@@ -15,11 +15,9 @@ import android.widget.Toast;
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtLocationBinding;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
-import net.iGap.igasht.provinceselect.IGashtProvince;
 import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -28,29 +26,10 @@ public class IGashtLocationListFragment extends Fragment {
     private FragmentIgashtLocationBinding binding;
     private IGashtLocationViewModel viewModel;
 
-    private static String SELECTED_PROVINCE = "selectedProvince";
-
-    public static IGashtLocationListFragment getInstance(IGashtProvince province) {
-        IGashtLocationListFragment fragment = new IGashtLocationListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(SELECTED_PROVINCE, province);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(IGashtLocationViewModel.class);
-        //todo: create factory provider and remove init function;
-        if (getArguments() != null) {
-            viewModel.init(getArguments().getParcelable(SELECTED_PROVINCE));
-        } else {
-            HelperLog.setErrorLog(new Exception(this.getClass().getName() + ": selected province data not found"));
-            if (getActivity() != null) {
-                getActivity().onBackPressed();
-            }
-        }
     }
 
     @Nullable
@@ -118,9 +97,13 @@ public class IGashtLocationListFragment extends Fragment {
             }
         });
 
-        viewModel.getGoToLocationDetail().observe(getViewLifecycleOwner(), data -> {
-            if (getActivity() != null && data != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(IGashtLocationDetailFragment.getInstance(data)).setReplace(false).load(true);
+        viewModel.getGoToLocationDetail().observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() != null && isGo != null) {
+                if (isGo) {
+                    new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(new IGashtLocationDetailFragment()).setReplace(false).load(true);
+                } else {
+                    Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

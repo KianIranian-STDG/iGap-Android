@@ -1,36 +1,32 @@
 package net.iGap.igasht.locationdetail;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
+import android.util.Log;
+import android.view.View;
 
+import net.iGap.igasht.BaseIGashtViewModel;
+import net.iGap.igasht.IGashtRepository;
 import net.iGap.igasht.locationlist.IGashtLocationItem;
-import net.iGap.igasht.locationlist.LocationDetail;
 
-public class IGashtLocationDetailViewModel extends ViewModel {
+public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterTicketResponse> {
 
     private ObservableBoolean showBuyTicketView = new ObservableBoolean(true);
 
-    private MutableLiveData<Integer> loadBuyTicketView = new MutableLiveData<>();
-    private MutableLiveData<LocationDetail> loadDetailSubView = new MutableLiveData<>();
+    private MutableLiveData<Boolean> loadBuyTicketView = new MutableLiveData<>();
+    private IGashtRepository repository;
 
-    private IGashtLocationItem locationItem;
+    public IGashtLocationDetailViewModel() {
+        repository = IGashtRepository.getInstance();
+        loadBuyTicketView.setValue(true);
+    }
 
     public IGashtLocationItem getLocationItem() {
-        return locationItem;
+        return repository.getSelectedLocation();
     }
 
-    public void setLocationItem(IGashtLocationItem locationItem) {
-        this.locationItem = locationItem;
-        loadBuyTicketView.setValue(locationItem.getId());
-    }
-
-    public MutableLiveData<Integer> getLoadBuyTicketView() {
+    public MutableLiveData<Boolean> getLoadBuyTicketView() {
         return loadBuyTicketView;
-    }
-
-    public MutableLiveData<LocationDetail> getLoadDetailSubView() {
-        return loadDetailSubView;
     }
 
     public ObservableBoolean getShowBuyTicketView() {
@@ -39,10 +35,26 @@ public class IGashtLocationDetailViewModel extends ViewModel {
 
     public void onTabItemClick(boolean loadBuyTicketView) {
         showBuyTicketView.set(loadBuyTicketView);
-        if (loadBuyTicketView) {
-            this.loadBuyTicketView.setValue(locationItem.getId());
-        } else {
-            loadDetailSubView.setValue(locationItem.getDetail());
+        this.loadBuyTicketView.setValue(loadBuyTicketView);
+    }
+
+    public void registerOrder() {
+        showLoadingView.set(View.VISIBLE);
+        repository.registeredOrder(this);
+    }
+
+    @Override
+    public void onSuccess(RegisterTicketResponse data) {
+        showLoadingView.set(View.GONE);
+        Log.wtf(this.getClass().getName(), "status: " + data.getStatus());
+        switch (data.getStatus()) {
+            case "SUCCESS":
+                break;
+            case "PROGRESS":
+
+                break;
+            default:
+
         }
     }
 }

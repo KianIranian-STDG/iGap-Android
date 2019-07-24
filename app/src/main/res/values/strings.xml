@@ -1918,4 +1918,6 @@
     <string name="igasht_order_ticket_title">%s for %d person</string>
     <string name="igasht_favorites_title">Favorites</string>
     <string name="igasht_history_title">History</string>
+    <string name="igasht_total_ticket_price">Total Price: %d Toman</string>
+    <string name="igasht_add_ticket_error">Please Add Ticket</string>
 </resources>

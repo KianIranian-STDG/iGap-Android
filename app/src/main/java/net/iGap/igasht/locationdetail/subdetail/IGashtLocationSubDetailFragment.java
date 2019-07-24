@@ -17,32 +17,13 @@ import net.iGap.igasht.locationlist.LocationDetail;
 
 public class IGashtLocationSubDetailFragment extends Fragment {
 
-    private static String LOCATION_DETAIL = "locationDetail";
-
     private FragmentIgashtLocationSubDetailBinding binding;
     private IGashtLocationSubDetailViewModel viewModel;
-
-    public static IGashtLocationSubDetailFragment getInstance(LocationDetail locationDetail) {
-        IGashtLocationSubDetailFragment fragment = new IGashtLocationSubDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(LOCATION_DETAIL, locationDetail);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(IGashtLocationSubDetailViewModel.class);
-        //todo: create factory provider and remove init function;
-        if (getArguments() != null) {
-            viewModel.setLocationDetail(getArguments().getParcelable(LOCATION_DETAIL));
-        } else {
-            HelperLog.setErrorLog(new Exception(this.getClass().getName() + ": selected location data not found"));
-            if (getActivity() != null) {
-                getActivity().onBackPressed();
-            }
-        }
     }
 
     @Nullable

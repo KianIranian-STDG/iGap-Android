@@ -2,17 +2,18 @@ package net.iGap.igasht.locationdetail.subdetail;
 
 import android.arch.lifecycle.ViewModel;
 
+import net.iGap.igasht.IGashtRepository;
 import net.iGap.igasht.locationlist.LocationDetail;
 
 public class IGashtLocationSubDetailViewModel extends ViewModel {
 
-    private LocationDetail locationDetail;
+    private IGashtRepository repository;
 
-    public LocationDetail getLocationDetail() {
-        return locationDetail;
+    public IGashtLocationSubDetailViewModel(){
+        repository = IGashtRepository.getInstance();
     }
 
-    public void setLocationDetail(LocationDetail locationDetail) {
-        this.locationDetail = locationDetail;
+    public LocationDetail getLocationDetail() {
+        return repository.getSelectedLocation().getDetail();
     }
 }
