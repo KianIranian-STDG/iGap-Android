@@ -58,11 +58,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="338dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="رگ خواب"
                 android:textSize="@dimen/largeTextSize"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_album_albumeCost"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

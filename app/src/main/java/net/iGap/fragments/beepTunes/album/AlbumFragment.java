@@ -135,26 +135,6 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
         viewModel.getDownloadStatusMutableLiveData().observe(getViewLifecycleOwner(), downloadSong -> {
             if (downloadSong != null)
-//                switch (downloadSong.getDownloadStatus()) {
-//                    case STATUS_START:
-//                        Log.i(TAG, "start ------> " + downloadSong.getId());
-//                        break;
-//                    case STATUS_CANCEL:
-//                        Log.i(TAG, "stop  ------> " + downloadSong.getId());
-//                        break;
-//                    case STATUS_PAUSE:
-//                        Log.i(TAG, "pause ------> " + downloadSong.getId());
-//                        break;
-//                    case STATUS_COMPLETE:
-//                        Log.i(TAG, "complete----> " + downloadSong.getId());
-//                        break;
-//                    case STATUS_ERROR:
-//                        Log.i(TAG, "error ------> " + downloadSong.getId());
-//                        break;
-//                    case STATUS_DOWNLOADING:
-//                        Log.i(TAG, "downloading-> " + downloadSong.getId() + " " + downloadSong.getDownloadProgress());
-//                        break;
-//                }
                 downloadingSongLiveData.postValue(downloadSong);
         });
     }
@@ -183,7 +163,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
     private void setUpAlbumInfo(Album album) {
         artistNameTv.setText(album.getArtists().get(0).getName());
-        albumNameTv.setText(album.getName());
+        albumNameTv.setText(album.getEnglishName());
         ImageLoadingService.load(album.getImage(), albumAvatarIv);
         albumPriceTv.setText(album.getFinalPrice().toString());
     }

@@ -68,7 +68,8 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     void getArtistOtherAlbum(long id) {
         LoadingProgressMutableLiveData.postValue(true);
-        apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
+        // TODO: 7/23/19 for fake data change id to homayon shajarian id
+        apiService.getArtistAlbums(3403927).enqueue(new Callback<Albums>() {
             @Override
             public void onResponse(Call<Albums> call, Response<Albums> response) {
                 LoadingProgressMutableLiveData.postValue(false);
@@ -167,9 +168,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         song.setId(downloadSong.getId());
         song.setPath(downloadSong.getPath() + "/" + downloadSong.getSavedName());
         song.setDisplayName(downloadSong.getTrack().getName());
-        realm.executeTransactionAsync(realm -> {
-            realm.copyToRealmOrUpdate(song);
-        });
+        realm.executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(song));
 
         removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);
