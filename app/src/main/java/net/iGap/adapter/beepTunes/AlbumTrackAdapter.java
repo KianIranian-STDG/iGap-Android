@@ -11,6 +11,7 @@ import android.widget.TextView;
 import net.iGap.R;
 import net.iGap.interfaces.OnTrackClick;
 import net.iGap.module.api.beepTunes.DownloadSong;
+import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
@@ -68,6 +69,11 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         void progress(DownloadSong downloadSong);
     }
 
+    @FunctionalInterface
+    public interface OnSongPlay {
+        void songStatus(PlayingSong playingSong);
+    }
+
     class TrackViewHolder extends RecyclerView.ViewHolder {
         //        private RotateAnimation rotate;
         private RealmDownloadSong realmDownloadSong;
@@ -84,7 +90,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
             songActionTv = itemView.findViewById(R.id.tv_itemSong_action);
             songPrwTv = itemView.findViewById(R.id.tv_itemSong_prw);
             progressBar = itemView.findViewById(R.id.pb_itemSong);
-
 //            rotate = new RotateAnimation(
 //                    0, 360,
 //                    Animation.RELATIVE_TO_SELF, 0.5f,
@@ -98,7 +103,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                 track.setInStorage(true);
             }
 
-
             if (track.isInStorage()) {
                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
             } else {
@@ -109,7 +113,15 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
 
             songActionTv.setOnClickListener(v -> {
                 if (track.isInStorage()) {
-                    onTrackClick.onPlayClick(realmDownloadSong, 1);
+
+                    onTrackClick.onPlayClick(realmDownloadSong, playingSong -> {
+                        if (playingSong.isPlay()) {
+                            songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));
+                        } else {
+                            songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                        }
+                    });
+
                 } else {
                     track.setSavedName(track.getId() + ".mp3");
 

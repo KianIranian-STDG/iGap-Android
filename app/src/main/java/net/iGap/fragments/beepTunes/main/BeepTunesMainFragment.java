@@ -1,10 +1,12 @@
 package net.iGap.fragments.beepTunes.main;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,17 +25,19 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
-import net.iGap.realm.RealmDownloadSong;
+import net.iGap.module.api.beepTunes.PlayingSong;
 
-public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener, AlbumFragment.OnSongPlayClick {
+public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener {
     private View rootView;
     private BeepTunesMainViewModel viewModel;
     private BeepTunesAdapter adapter;
-    private AlbumFragment.OnSongPlayClick onSongPlayClick;
+    private MutableLiveData<PlayingSong> playingSongStatusLiveData;
+    private MutableLiveData<PlayingSong> playChangeLiveData;
 
-    public BeepTunesMainFragment getInstance(AlbumFragment.OnSongPlayClick onSongPlayClick) {
+    public BeepTunesMainFragment getInstance(MutableLiveData<PlayingSong> playChangeLiveData, MutableLiveData<PlayingSong> playingSongStatusLiveData) {
         BeepTunesMainFragment fragment = new BeepTunesMainFragment();
-        fragment.onSongPlayClick = onSongPlayClick;
+        fragment.playChangeLiveData = playChangeLiveData;
+        fragment.playingSongStatusLiveData = playingSongStatusLiveData;
         return fragment;
     }
 
@@ -69,7 +73,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         });
 
         adapter.setOnItemClick(album -> {
-            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album, this))
+            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album, playingSongStatusLiveData, playChangeLiveData))
                     .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
         });
 
@@ -97,11 +101,6 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     public void onSmallAvatarClickListener(View view) {
         BeepTunesProfileFragment profileFragment = new BeepTunesProfileFragment();
         profileFragment.show(getChildFragmentManager(), null);
-    }
-
-    @Override
-    public void onSong(RealmDownloadSong song, int status) {
-        onSongPlayClick.onSong(song, status);
     }
 
     public interface OnItemClick {

@@ -23,12 +23,14 @@ import net.iGap.R;
 import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.adapter.beepTunes.ItemAdapter;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.beepTunes.main.BeepTunesMainFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.DownloadSong;
+import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
@@ -53,12 +55,15 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private Album album;
     private SharedPreferences sharedPreferences;
     private MutableLiveData<DownloadSong> downloadingSongLiveData = new MutableLiveData<>();
-    private OnSongPlayClick onSongPlayClick;
+    private MutableLiveData<PlayingSong> playingSongStatusLiveData;
+    private MutableLiveData<PlayingSong> playSongLiveData;
+    private PlayingSong playingSong;
 
-    public AlbumFragment getInstance(Album album, OnSongPlayClick onSongPlayClick) {
+    public AlbumFragment getInstance(Album album, MutableLiveData<PlayingSong> playingSongStatusLiveData, MutableLiveData<PlayingSong> playChangeLiveData) {
         AlbumFragment albumFragment = new AlbumFragment();
         albumFragment.album = album;
-        albumFragment.onSongPlayClick = onSongPlayClick;
+        albumFragment.playingSongStatusLiveData = playingSongStatusLiveData;
+        albumFragment.playSongLiveData = playChangeLiveData;
         return albumFragment;
     }
 
@@ -129,8 +134,11 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             }
 
             @Override
-            public void onPlayClick(RealmDownloadSong realmDownloadSong, int status) {
-                onSongPlayClick.onSong(realmDownloadSong, status);
+            public void onPlayClick(RealmDownloadSong realmDownloadSong, AlbumTrackAdapter.OnSongPlay onSongPlay) {
+                if (playingSong == null)
+                    playingSong = new PlayingSong();
+                playSongLiveData.postValue(playingSong);
+                playingSongStatusLiveData.observe(getViewLifecycleOwner(), onSongPlay::songStatus);
             }
         });
 
@@ -185,10 +193,5 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     public void onDestroy() {
         super.onDestroy();
         trackAdapter.onDestroy();
-    }
-
-    @FunctionalInterface
-    public interface OnSongPlayClick {
-        void onSong(RealmDownloadSong song, int status);
     }
 }
