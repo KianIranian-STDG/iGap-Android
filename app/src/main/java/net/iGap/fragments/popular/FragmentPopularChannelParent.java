@@ -107,13 +107,11 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                                 slider.setIndicatorSize(12);
                                 slider.setInterval(playBackTime);
                                 slider.setOnSlideClickListener(position -> {
-                                    if (response.body().getData().get(position).getSlides().get(finalI).getActionType() == 3) {
+                                    if (response.body().getData().get(position).getSlides().get(position).getActionType() == 3) {
                                         Log.i("nazanin", "onResponse: " + position);
                                         HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(position).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
-                                    } else if (response.body().getData().get(position).getSlides().get(finalI).getActionType() == 4) {
-                                        Log.i("nazanin", "onResponse: " + position);
-                                        Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
                                     } else
+                                        Log.i("nazanin", "onResponse: "+position);
                                         Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
 
 
