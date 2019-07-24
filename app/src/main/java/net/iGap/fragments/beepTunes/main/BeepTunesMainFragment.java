@@ -23,11 +23,19 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
+import net.iGap.realm.RealmDownloadSong;
 
-public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener {
+public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener, AlbumFragment.OnSongPlayClick {
     private View rootView;
     private BeepTunesMainViewModel viewModel;
     private BeepTunesAdapter adapter;
+    private AlbumFragment.OnSongPlayClick onSongPlayClick;
+
+    public BeepTunesMainFragment getInstance(AlbumFragment.OnSongPlayClick onSongPlayClick) {
+        BeepTunesMainFragment fragment = new BeepTunesMainFragment();
+        fragment.onSongPlayClick = onSongPlayClick;
+        return fragment;
+    }
 
     @Override
     public void onStart() {
@@ -61,7 +69,8 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         });
 
         adapter.setOnItemClick(album -> {
-            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album)).setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
+            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album, this))
+                    .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
         });
 
         viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), loadingProgress::setVisibility);
@@ -88,6 +97,11 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     public void onSmallAvatarClickListener(View view) {
         BeepTunesProfileFragment profileFragment = new BeepTunesProfileFragment();
         profileFragment.show(getChildFragmentManager(), null);
+    }
+
+    @Override
+    public void onSong(RealmDownloadSong song, int status) {
+        onSongPlayClick.onSong(song, status);
     }
 
     public interface OnItemClick {

@@ -7,5 +7,5 @@ import net.iGap.realm.RealmDownloadSong;
 public interface OnTrackClick {
     void onDownloadClick(Track track, AlbumTrackAdapter.OnSongProgress onSongProgress);
 
-    void onPlayClick(RealmDownloadSong realmDownloadSong);
+    void onPlayClick(RealmDownloadSong realmDownloadSong,int status);
 }

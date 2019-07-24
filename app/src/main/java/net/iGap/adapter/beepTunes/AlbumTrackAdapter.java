@@ -109,7 +109,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
 
             songActionTv.setOnClickListener(v -> {
                 if (track.isInStorage()) {
-                    onTrackClick.onPlayClick(realmDownloadSong);
+                    onTrackClick.onPlayClick(realmDownloadSong, 1);
                 } else {
                     track.setSavedName(track.getId() + ".mp3");
 

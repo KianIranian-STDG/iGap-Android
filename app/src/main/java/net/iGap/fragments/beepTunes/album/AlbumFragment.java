@@ -26,7 +26,6 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.DownloadSong;
@@ -54,10 +53,12 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private Album album;
     private SharedPreferences sharedPreferences;
     private MutableLiveData<DownloadSong> downloadingSongLiveData = new MutableLiveData<>();
+    private OnSongPlayClick onSongPlayClick;
 
-    public AlbumFragment getInstance(Album album) {
+    public AlbumFragment getInstance(Album album, OnSongPlayClick onSongPlayClick) {
         AlbumFragment albumFragment = new AlbumFragment();
         albumFragment.album = album;
+        albumFragment.onSongPlayClick = onSongPlayClick;
         return albumFragment;
     }
 
@@ -128,8 +129,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             }
 
             @Override
-            public void onPlayClick(RealmDownloadSong realmDownloadSong) {
-                MusicPlayer.startPlayer(realmDownloadSong.getDisplayName(), realmDownloadSong.getPath(), "aaa", 15646455, false, "546546546");
+            public void onPlayClick(RealmDownloadSong realmDownloadSong, int status) {
+                onSongPlayClick.onSong(realmDownloadSong, status);
             }
         });
 
@@ -184,5 +185,10 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     public void onDestroy() {
         super.onDestroy();
         trackAdapter.onDestroy();
+    }
+
+    @FunctionalInterface
+    public interface OnSongPlayClick {
+        void onSong(RealmDownloadSong song, int status);
     }
 }

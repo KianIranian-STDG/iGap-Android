@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.beepTunes.album.AlbumFragment;
 import net.iGap.helper.HelperFragment;
+import net.iGap.realm.RealmDownloadSong;
 
-public class BeepTunesFragment extends BaseFragment {
+public class BeepTunesFragment extends BaseFragment implements AlbumFragment.OnSongPlayClick {
     private static String TAG = "aabolfazlBeepTunes";
     private View rootView;
     private BeepTunesViewModel viewModel;
@@ -35,8 +37,10 @@ public class BeepTunesFragment extends BaseFragment {
         playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
 
-        new HelperFragment(getFragmentManager(), new BeepTunesMainFragment()).setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
+        new HelperFragment(getFragmentManager(), new BeepTunesMainFragment().getInstance(this))
+                .setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
 
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -70,8 +74,8 @@ public class BeepTunesFragment extends BaseFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        viewModel.onStart();
+    public void onSong(RealmDownloadSong song, int status) {
+        viewModel.onPlaySong(song, status);
     }
 }
+
