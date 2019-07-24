@@ -9,19 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.BeepTunesProfileFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.ToolbarListener;
 
-public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
+public class BeepTunesFragment extends BaseFragment {
     private static String TAG = "aabolfazlBeepTunes";
     private View rootView;
     private BeepTunesViewModel viewModel;
@@ -39,13 +32,11 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
         playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
 
         new HelperFragment(getFragmentManager(), new BeepTunesMainFragment()).setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
 
-        initToolBar(toolBar);
 
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -78,33 +69,9 @@ public class BeepTunesFragment extends BaseFragment implements ToolbarListener {
 
     }
 
-    private void initToolBar(ViewGroup viewGroup) {
-        HelperToolbar helperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setSearchBoxShown(true)
-                .setLogoShown(true)
-                .setListener(this)
-                .setRightSmallAvatarShown(true)
-                .setLeftIcon(R.string.back_icon);
-
-        viewGroup.addView(helperToolbar.getView());
-        avatarHandler.getAvatar(new ParamWithAvatarType(helperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         viewModel.onStart();
-    }
-
-    @Override
-    public void onLeftIconClickListener(View view) {
-        getActivity().onBackPressed();
-    }
-
-    @Override
-    public void onSmallAvatarClickListener(View view) {
-        BeepTunesProfileFragment profileFragment = new BeepTunesProfileFragment();
-        profileFragment.show(getChildFragmentManager(), null);
     }
 }
