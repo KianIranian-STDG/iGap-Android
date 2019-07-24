@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 public class FragmentIntroduce extends BaseFragment {
 
     private CustomCircleImage circleButton;
+    private final int INTRODUCE_SLIDE_COUNT = 4 ;
 
     @Nullable
     @Override
@@ -48,7 +49,7 @@ public class FragmentIntroduce extends BaseFragment {
         HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
 
         circleButton = view.findViewById(R.id.int_circleButton_introduce);
-        circleButton.circleButtonCount(3);
+        circleButton.circleButtonCount(INTRODUCE_SLIDE_COUNT);
 
         Button btnStart = view.findViewById(R.id.int_btnStart);
 
@@ -134,7 +135,7 @@ public class FragmentIntroduce extends BaseFragment {
 
         @Override
         public int getCount() {
-            return 3;
+            return INTRODUCE_SLIDE_COUNT;
         }
 
         @Override
@@ -172,39 +173,45 @@ public class FragmentIntroduce extends BaseFragment {
         private int getIntroImage(int position) {
             switch (position) {
                 case 0:
-                    return R.drawable.ic_int1;
+                    return R.drawable.ic_init_cominucation;
                 case 1:
-                    return R.drawable.ic_int2;
+                    return R.drawable.ic_init_nearby;
                 case 2:
-                    return R.drawable.ic_int3;
+                    return R.drawable.ic_init_iland;
+               case 3:
+                    return R.drawable.ic_init_security;
                 default:
-                    return R.drawable.ic_int1;
+                    return R.drawable.ic_init_cominucation;
             }
         }
 
         private int getTitle(int position) {
             switch (position) {
                 case 0:
-                    return R.string.text_line_1_introduce_page5;
+                    return R.string.text_line_1_introduce_page3;
                 case 1:
                     return R.string.text_line_1_introduce_page7;
                 case 2:
-                    return R.string.text_line_1_introduce_page3;
+                    return R.string.text_line_1_introduce_page4;
+                 case 3:
+                    return R.string.text_line_1_introduce_page2;
                 default:
-                    return R.string.text_line_1_introduce_page5;
+                    return R.string.text_line_1_introduce_page3;
             }
         }
 
         private int getDescription(int position) {
             switch (position) {
                 case 0:
-                    return R.string.text_line_2_introduce_page5;
+                    return R.string.text_line_2_introduce_page3;
                 case 1:
                     return R.string.text_line_2_introduce_page7;
                 case 2:
-                    return R.string.text_line_2_introduce_page3;
+                    return R.string.text_line_2_introduce_page4;
+                case 3:
+                    return R.string.text_line_2_introduce_page2;
                 default:
-                    return R.string.text_line_2_introduce_page5;
+                    return R.string.text_line_2_introduce_page3;
             }
         }
     }

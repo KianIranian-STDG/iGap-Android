@@ -6,9 +6,11 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/introImage"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/dp200"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/dp10"
+        android:scaleType="fitCenter"
+        android:padding="@dimen/dp10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toLeftOf="parent"
