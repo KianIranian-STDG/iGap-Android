@@ -221,7 +221,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         switch (mPageMode) {
             case CALL:
                 btnAddNewContact.setVisibility(View.VISIBLE);
-                btnDialNumber.setVisibility(View.VISIBLE);
+                btnDialNumber.setVisibility(View.GONE);
                 vgInviteFriend.setVisibility(View.GONE);
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 break;
