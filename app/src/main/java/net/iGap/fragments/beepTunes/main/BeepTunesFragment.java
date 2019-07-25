@@ -1,6 +1,7 @@
 package net.iGap.fragments.beepTunes.main;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.iGap.R;
@@ -23,9 +25,10 @@ public class BeepTunesFragment extends BaseFragment {
     private View rootView;
     private BeepTunesViewModel viewModel;
     private BottomSheetBehavior behavior;
+    private ProgressBar progressBar;
     private LinearLayout playerLayout;
     private MutableLiveData<PlayingSong> toAlbumAdapter = new MutableLiveData<>();
-    private MutableLiveData<PlayingSong> fromAlbumeAdpater = new MutableLiveData<>();
+    private MutableLiveData<PlayingSong> fromAlbumAdapter = new MutableLiveData<>();
 
 
     @Nullable
@@ -42,8 +45,12 @@ public class BeepTunesFragment extends BaseFragment {
         playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        progressBar = rootView.findViewById(R.id.pb_btPlayer_behavier);
 
-        new HelperFragment(getFragmentManager(), new BeepTunesMainFragment().getInstance(fromAlbumeAdpater, toAlbumAdapter))
+        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
+
+
+        new HelperFragment(getFragmentManager(), new BeepTunesMainFragment().getInstance(fromAlbumAdapter, toAlbumAdapter))
                 .setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
 
         TextView artistNameTv = rootView.findViewById(R.id.tv_btPlayer_artistName);
@@ -73,18 +80,25 @@ public class BeepTunesFragment extends BaseFragment {
             viewModel.onPlaySongClicked(viewModel.getPlayerStatusLiveData().getValue());
         });
 
-        fromAlbumeAdpater.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong));
+        fromAlbumAdapter.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong));
 
         viewModel.getBehaviorStatusLiveData().observe(getViewLifecycleOwner(), status -> {
-            if (status) {
-                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            } else {
-                behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
+            if (status != null)
+                if (status) {
+                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
         });
 
-        playerLayout.setOnClickListener(v -> {
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        playerLayout.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
+
+        viewModel.getSongProgressLiveData().observe(getViewLifecycleOwner(), progressDuration -> {
+            if (progressDuration != null) {
+                progressBar.setProgress(progressDuration.getCurrent());
+                progressBar.setMax(progressDuration.getTotal());
+
+            }
         });
     }
 }

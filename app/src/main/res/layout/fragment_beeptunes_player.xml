@@ -11,7 +11,7 @@
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/cl_btPlayer_behavior"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/gray_300"
@@ -71,12 +71,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pb_btPlayer_behavier" />
 
-        <SeekBar
+        <ProgressBar
             android:id="@+id/pb_btPlayer_behavier"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:progress="43"
+            android:layout_height="2dp"
+            android:max="100"
+            android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

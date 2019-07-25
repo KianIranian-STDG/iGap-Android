@@ -9,10 +9,13 @@ import android.util.Log;
 
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.module.api.beepTunes.PlayingSong;
+import net.iGap.module.api.beepTunes.ProgressDuration;
 import net.iGap.viewmodel.BaseViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static net.iGap.G.context;
 
@@ -22,6 +25,8 @@ public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnP
     private PlayingSong nowPlaySong;
     private MutableLiveData<PlayingSong> playerStatusLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> behaviorStatusLiveData = new MutableLiveData<>();
+    private MutableLiveData<ProgressDuration> songProgressLiveData = new MutableLiveData<>();
+    private ProgressDuration progressDuration = new ProgressDuration();
 
     @Override
     public void onCreateViewModel() {
@@ -57,6 +62,7 @@ public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnP
         playingSong.setPlay(true);
         getSongInfo(playingSong);
         nowPlaySong = playingSong;
+        progress(playingSong);
         playerStatusLiveData.postValue(playingSong);
         behaviorStatusLiveData.postValue(true);
     }
@@ -65,6 +71,21 @@ public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnP
         mediaPlayer.pause();
         playingSong.setPlay(false);
         playerStatusLiveData.postValue(playingSong);
+    }
+
+    private void progress(PlayingSong playingSong) {
+        Timer timer = new Timer();
+
+        progressDuration.setId(playingSong.getSongId());
+        progressDuration.setTotal(mediaPlayer.getDuration() / 1000);
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                progressDuration.setCurrent(mediaPlayer.getCurrentPosition() / 1000);
+                songProgressLiveData.postValue(progressDuration);
+            }
+        }, 0, 1000);
     }
 
     private void getSongInfo(PlayingSong song) {
@@ -81,7 +102,6 @@ public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnP
         }
     }
 
-
     public MutableLiveData<PlayingSong> getPlayerStatusLiveData() {
         return playerStatusLiveData;
     }
@@ -93,5 +113,9 @@ public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnP
 
     public MutableLiveData<Boolean> getBehaviorStatusLiveData() {
         return behaviorStatusLiveData;
+    }
+
+    public MutableLiveData<ProgressDuration> getSongProgressLiveData() {
+        return songProgressLiveData;
     }
 }
