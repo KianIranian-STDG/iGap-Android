@@ -52,7 +52,8 @@ public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnP
                 } else
                     play(playingSong);
             else {
-
+                Log.i(TAG, "play another song  " + playingSong.getSongId());
+                // TODO: 7/25/19 change mediaPlayer data resource with new play song
             }
         }
     }
@@ -65,11 +66,13 @@ public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnP
         progress(playingSong);
         playerStatusLiveData.postValue(playingSong);
         behaviorStatusLiveData.postValue(true);
+        Log.i(TAG, "play: " + playingSong.getSongId());
     }
 
     private void pause(PlayingSong playingSong) {
         mediaPlayer.pause();
         playingSong.setPlay(false);
+        nowPlaySong = playingSong;
         playerStatusLiveData.postValue(playingSong);
     }
 
