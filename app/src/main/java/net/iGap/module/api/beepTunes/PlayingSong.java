@@ -14,7 +14,7 @@ public class PlayingSong {
     private String title;
     private String songPath;
     private Bitmap bitmap;
-    private boolean play;
+    private boolean play = false;
 
     public boolean isPlay() {
         return play;

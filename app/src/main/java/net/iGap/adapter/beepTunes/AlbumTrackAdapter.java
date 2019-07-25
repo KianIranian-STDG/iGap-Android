@@ -113,7 +113,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
 
             songActionTv.setOnClickListener(v -> {
                 if (track.isInStorage()) {
-
                     onTrackClick.onPlayClick(realmDownloadSong, playingSong -> {
                         if (playingSong.isPlay()) {
                             songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));

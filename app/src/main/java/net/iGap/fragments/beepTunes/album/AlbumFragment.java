@@ -23,7 +23,6 @@ import net.iGap.R;
 import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.adapter.beepTunes.ItemAdapter;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.beepTunes.main.BeepTunesMainFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.OnTrackClick;
 import net.iGap.interfaces.ToolbarListener;
@@ -137,6 +136,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             public void onPlayClick(RealmDownloadSong realmDownloadSong, AlbumTrackAdapter.OnSongPlay onSongPlay) {
                 if (playingSong == null)
                     playingSong = new PlayingSong();
+                playingSong.setSongId(realmDownloadSong.getId());
+                playingSong.setSongPath(realmDownloadSong.getPath());
                 playSongLiveData.postValue(playingSong);
                 playingSongStatusLiveData.observe(getViewLifecycleOwner(), onSongPlay::songStatus);
             }

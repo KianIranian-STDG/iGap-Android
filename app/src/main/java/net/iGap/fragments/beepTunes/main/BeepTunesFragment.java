@@ -54,27 +54,38 @@ public class BeepTunesFragment extends BaseFragment {
 
         viewModel.getPlayerStatusLiveData().observe(getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {
-                switch (playingSong.getStatus()) {
-                    case PlayingSong.PLAY:
-                        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                        break;
-                    case PlayingSong.PAUSE:
-                        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                        break;
-                    case PlayingSong.STOP:
-                        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                        break;
+                toAlbumAdapter.postValue(playingSong);
 
-                }
                 artistNameTv.setText(playingSong.getArtistName());
                 songNameTv.setText(playingSong.getTitle());
                 songImageIv.setImageBitmap(playingSong.getBitmap());
 
+                if (playingSong.isPlay()) {
+                    playIconTv.setText(getContext().getResources().getString(R.string.pause_icon));
+                } else {
+                    playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
+                }
+
             }
+        });
+
+        playIconTv.setOnClickListener(v -> {
+            viewModel.onPlaySongClicked(viewModel.getPlayerStatusLiveData().getValue());
         });
 
         fromAlbumeAdpater.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong));
 
+        viewModel.getBehaviorStatusLiveData().observe(getViewLifecycleOwner(), status -> {
+            if (status) {
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+
+        playerLayout.setOnClickListener(v -> {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
     }
 }
 

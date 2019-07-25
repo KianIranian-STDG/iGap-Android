@@ -5,33 +5,60 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.viewmodel.BaseViewModel;
 
 import java.io.File;
+import java.io.IOException;
 
 import static net.iGap.G.context;
 
-public class BeepTunesViewModel extends BaseViewModel {
+public class BeepTunesViewModel extends BaseViewModel implements MediaPlayer.OnPreparedListener {
+    private static final String TAG = "aabolfazlMainViewModel";
     private MediaPlayer mediaPlayer;
+    private PlayingSong nowPlaySong;
     private MutableLiveData<PlayingSong> playerStatusLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> behaviorStatusLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
         mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnPreparedListener(this);
         BannerSlider.init(new SliderBannerImageLoadingService());
     }
 
     public void onPlaySongClicked(PlayingSong playingSong) {
+        if (nowPlaySong == null) {
+            try {
+                mediaPlayer.setDataSource(playingSong.getSongPath());
+                mediaPlayer.prepare();
+                play(playingSong);
+            } catch (IOException e) {
+                Log.e(TAG, "Player exception: " + e.getLocalizedMessage());
+                e.printStackTrace();
+            }
+        } else {
+            if (nowPlaySong.getSongId() == playingSong.getSongId())
+                if (playingSong.isPlay()) {
+                    pause(playingSong);
+                } else
+                    play(playingSong);
+            else {
 
+            }
+        }
     }
 
     private void play(PlayingSong playingSong) {
         mediaPlayer.start();
         playingSong.setPlay(true);
+        getSongInfo(playingSong);
+        nowPlaySong = playingSong;
         playerStatusLiveData.postValue(playingSong);
+        behaviorStatusLiveData.postValue(true);
     }
 
     private void pause(PlayingSong playingSong) {
@@ -57,5 +84,14 @@ public class BeepTunesViewModel extends BaseViewModel {
 
     public MutableLiveData<PlayingSong> getPlayerStatusLiveData() {
         return playerStatusLiveData;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+
+    }
+
+    public MutableLiveData<Boolean> getBehaviorStatusLiveData() {
+        return behaviorStatusLiveData;
     }
 }
