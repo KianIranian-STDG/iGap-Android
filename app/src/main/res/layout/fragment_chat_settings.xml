@@ -127,6 +127,40 @@
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
+
+                    <RelativeLayout
+                        android:id="@+id/fcs_layout_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp48"
+                        android:onClick="@{chatSettingsVM::onDateClick}"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            style="?textTitleColorSettingTheme"
+                            android:fontFamily="@font/main_font"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/date"
+                            android:textSize="@dimen/standardTextSize"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/fcs_txt_date"
+                            style="?textSubColorSettingTheme"
+                            android:fontFamily="@font/main_font"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@{chatSettingsVM.callbackDataShams , default=Miladi}"                            android:textSize="@dimen/smallTextSize"
+                            android:textColor="@color/setting_items_value_color"
+                            android:textStyle="normal" />
+
+                    </RelativeLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp52"

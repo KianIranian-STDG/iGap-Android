@@ -54,6 +54,11 @@ public class FragmentChatSettings extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChatBackground.newInstance()).setReplace(false).load();
             }
         });
+
+
+        fcsViewModel.goToDateFragment.observe(getViewLifecycleOwner() , go -> {
+            if (getActivity() != null && go != null && go) new HelperFragment(getActivity().getSupportFragmentManager() ,new FragmentData()).setReplace(false).load();
+        });
     }
 
     private void setupTextSizeSetting() {
