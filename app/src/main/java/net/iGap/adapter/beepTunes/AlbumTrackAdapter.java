@@ -9,7 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.interfaces.OnTrackClick;
+import net.iGap.interfaces.OnTrackAdapter;
+import net.iGap.module.BeepTunesPlayerService;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
@@ -30,7 +31,7 @@ import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_START;
 public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.TrackViewHolder> {
     private static final String TAG = "aabolfazlAdapter";
     private List<Track> tracks = new ArrayList<>();
-    private OnTrackClick onTrackClick;
+    private OnTrackAdapter onTrackAdapter;
     private Realm realm;
 
     public void setTracks(List<Track> tracks) {
@@ -38,8 +39,8 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
         notifyDataSetChanged();
     }
 
-    public void setOnTrackClick(OnTrackClick onTrackClick) {
-        this.onTrackClick = onTrackClick;
+    public void setOnTrackAdapter(OnTrackAdapter onTrackAdapter) {
+        this.onTrackAdapter = onTrackAdapter;
     }
 
     @NonNull
@@ -100,16 +101,21 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
             }
 
             if (track.isInStorage()) {
-                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                if (track.getId() == BeepTunesPlayerService.playingSongId) {
+                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));
+                } else {
+                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                }
             } else {
                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_sync));
             }
 
             songNameTv.setText(track.getEnglishName());
 
+
             songActionTv.setOnClickListener(v -> {
                 if (track.isInStorage()) {
-                    onTrackClick.onPlayClick(realmDownloadSong, playingSong -> {
+                    onTrackAdapter.onPlayClick(realmDownloadSong, playingSong -> {
                         if (playingSong.getSongId() == realmDownloadSong.getId())
                             if (playingSong.isPlay()) {
                                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));
@@ -121,7 +127,7 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                 } else {
                     track.setSavedName(track.getId() + ".mp3");
 
-                    onTrackClick.onDownloadClick(track, downloadSong -> {
+                    onTrackAdapter.onDownloadClick(track, downloadSong -> {
                         if (downloadSong.getId().equals(track.getId())) {
                             switch (downloadSong.getDownloadStatus()) {
                                 case STATUS_START:
@@ -144,7 +150,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                             }
                         }
                     });
-
                 }
             });
             realm.addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());

@@ -28,11 +28,11 @@ public class BeepTunesPlayerService extends Service {
     public static final String ACTION_PLAY_NEW = "play";
     public static final String ACTION_PAUSE = "pause";
     private static final String TAG = "aabolfazlService";
+    public static long playingSongId;
     private static boolean serviceRunning = false;
     private BeepTunesBinder binder = new BeepTunesBinder();
     private MediaPlayer mediaPlayer;
     private PlayingSong playingSong;
-
     private MutableLiveData<PlayingSong> playingSongMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData = new MutableLiveData<>();
 
@@ -88,6 +88,7 @@ public class BeepTunesPlayerService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        playingSongId = playingSong.getSongId();
         playingSongMutableLiveData.postValue(playingSong);
     }
 
@@ -125,6 +126,10 @@ public class BeepTunesPlayerService extends Service {
         }, 0, 1000);
     }
 
+    public MutableLiveData<ProgressDuration> getProgressDurationLiveData() {
+        return progressDurationLiveData;
+    }
+
     public interface ServiceUpdate {
         void playingSong(PlayingSong playingSong);
     }
@@ -133,9 +138,5 @@ public class BeepTunesPlayerService extends Service {
         public BeepTunesPlayerService getService() {
             return BeepTunesPlayerService.this;
         }
-    }
-
-    public MutableLiveData<ProgressDuration> getProgressDurationLiveData() {
-        return progressDurationLiveData;
     }
 }

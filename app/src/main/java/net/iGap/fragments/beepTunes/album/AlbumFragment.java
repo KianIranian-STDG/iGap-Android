@@ -24,7 +24,7 @@ import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.adapter.beepTunes.ItemAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
-import net.iGap.interfaces.OnTrackClick;
+import net.iGap.interfaces.OnTrackAdapter;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
@@ -125,7 +125,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
             editor.apply();
         });
 
-        trackAdapter.setOnTrackClick(new OnTrackClick() {
+        trackAdapter.setOnTrackAdapter(new OnTrackAdapter() {
             @Override
             public void onDownloadClick(Track track, AlbumTrackAdapter.OnSongProgress onSongProgress) {
                 viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
