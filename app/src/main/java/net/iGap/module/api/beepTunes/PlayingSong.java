@@ -20,10 +20,6 @@ public class PlayingSong {
         return play;
     }
 
-    public void setPlay(boolean play) {
-        this.play = play;
-    }
-
     public Bitmap getBitmap() {
         return bitmap;
     }
@@ -61,6 +57,7 @@ public class PlayingSong {
     }
 
     public void setStatus(int status) {
+        play = status == PLAY;
         this.status = status;
     }
 

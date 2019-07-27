@@ -58,11 +58,11 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private MutableLiveData<PlayingSong> toFragmentLiveData;
     private PlayingSong playingSong;
 
-    public AlbumFragment getInstance(Album album, MutableLiveData<PlayingSong> playingSongStatusLiveData, MutableLiveData<PlayingSong> playChangeLiveData) {
+    public AlbumFragment getInstance(Album album, MutableLiveData<PlayingSong> toAlbumAdapter, MutableLiveData<PlayingSong> fromAlbumAdapter) {
         AlbumFragment albumFragment = new AlbumFragment();
         albumFragment.album = album;
-        albumFragment.fromFragmentLiveData = playingSongStatusLiveData;
-        albumFragment.toFragmentLiveData = playChangeLiveData;
+        albumFragment.fromFragmentLiveData = toAlbumAdapter;
+        albumFragment.toFragmentLiveData = fromAlbumAdapter;
         return albumFragment;
     }
 

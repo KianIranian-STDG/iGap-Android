@@ -30,13 +30,13 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     private View rootView;
     private BeepTunesMainViewModel viewModel;
     private BeepTunesAdapter adapter;
-    private MutableLiveData<PlayingSong> playingSongStatusLiveData;
-    private MutableLiveData<PlayingSong> playChangeLiveData;
+    private MutableLiveData<PlayingSong> toAlbumAdapter;
+    private MutableLiveData<PlayingSong> fromAlbumAdapter;
 
-    public BeepTunesMainFragment getInstance(MutableLiveData<PlayingSong> playChangeLiveData, MutableLiveData<PlayingSong> playingSongStatusLiveData) {
+    public BeepTunesMainFragment getInstance(MutableLiveData<PlayingSong> fromAlbumAdapter, MutableLiveData<PlayingSong> toAlbumAdapter) {
         BeepTunesMainFragment fragment = new BeepTunesMainFragment();
-        fragment.playChangeLiveData = playChangeLiveData;
-        fragment.playingSongStatusLiveData = playingSongStatusLiveData;
+        fragment.fromAlbumAdapter = fromAlbumAdapter;
+        fragment.toAlbumAdapter = toAlbumAdapter;
         return fragment;
     }
 
@@ -72,7 +72,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         });
 
         adapter.setOnItemClick(album -> {
-            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album, playingSongStatusLiveData, playChangeLiveData))
+            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album, toAlbumAdapter, fromAlbumAdapter))
                     .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
         });
 

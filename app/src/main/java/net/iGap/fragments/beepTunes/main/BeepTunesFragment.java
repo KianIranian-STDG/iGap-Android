@@ -62,7 +62,7 @@ public class BeepTunesFragment extends BaseFragment {
 
         viewModel.getPlayingSongViewLiveData().observe(getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {
-//                toAlbumAdapter.postValue(playingSong);
+                toAlbumAdapter.postValue(playingSong);
                 artistNameTv.setText(playingSong.getArtistName());
                 songNameTv.setText(playingSong.getTitle());
                 songImageIv.setImageBitmap(playingSong.getBitmap());
