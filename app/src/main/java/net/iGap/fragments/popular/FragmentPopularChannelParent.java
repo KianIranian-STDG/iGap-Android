@@ -24,6 +24,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterCategoryItem;
 import net.iGap.adapter.items.popular.AdapterChannelItem;
+import net.iGap.adapter.items.popular.ImageLoadingService;
 import net.iGap.adapter.items.popular.MainSliderAdapter;
 import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
@@ -80,25 +81,25 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
                         case ParentChannel.TYPE_SLIDE:
+                            BannerSlider.init(new SliderBannerImageLoadingService());
+                            BannerSlider slider = new BannerSlider(getContext());
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             CardView cardView = new CardView(getContext());
                             cardView.setRadius(Utils.dpToPx(12));
                             cardView.setPreventCornerOverlap(false);
-                            BannerSlider.init(new SliderBannerImageLoadingService());
-                            BannerSlider slider = new BannerSlider(getContext());
-                            slider.setIndex(i);
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            layoutParams.setMargins(8,8,8,8);
                             scale = response.body().getData().get(i).getInfo().getScale();
-                            String[] scales = scale.split(":");
-                            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-                            slider.getLayoutParams().height = Math.round(height);
                             ProgressBar progressBar = new ProgressBar(getContext());
                             ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
                             progressBar.setVisibility(View.VISIBLE);
-                            cardView.addView(slider);
+                            String[] scales = scale.split(":");
+                            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+                            slider.setIndex(i);
                             slider.setLayoutParams(layoutParams);
+                            slider.getLayoutParams().height = Math.round(height);
+                            cardView.addView(slider);
                             int finalI = i;
                             playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
+                            mainSliderAdapter = new MainSliderAdapter(response.body().getData().get(i).getSlides(), response.body().getData().get(i).getInfo().getScale());
                             slider.postDelayed(() -> {
                                 mainSliderAdapter = new MainSliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
                                 slider.setAdapter(mainSliderAdapter);
