@@ -93,10 +93,11 @@ public class BeepTunesFragment extends BaseFragment {
         playerLayout.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         viewModel.getProgressDurationLiveData().observe(getViewLifecycleOwner(), progressDuration -> {
-            if (progressDuration != null) {
-                progressBar.setProgress(progressDuration.getCurrent());
-                progressBar.setMax(progressDuration.getTotal());
-
+            if (progressDuration != null && viewModel.getPlayingSongViewLiveData().getValue() != null) {
+                if (viewModel.getPlayingSongViewLiveData().getValue().getSongId() == progressDuration.getId()) {
+                    progressBar.setProgress(progressDuration.getCurrent());
+                    progressBar.setMax(progressDuration.getTotal());
+                }
             }
         });
     }
