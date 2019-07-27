@@ -215,8 +215,8 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
+    public void onDestroyViewModel() {
+        if (realm != null)
+            realm.close();
     }
 }

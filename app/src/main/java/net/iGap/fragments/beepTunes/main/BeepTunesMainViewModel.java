@@ -6,6 +6,7 @@ import android.view.View;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.module.api.beepTunes.FirstPage;
 import net.iGap.viewmodel.BaseViewModel;
 
@@ -19,11 +20,11 @@ public class BeepTunesMainViewModel extends BaseViewModel {
     private MutableLiveData<Integer> progressMutableLiveData = new MutableLiveData<>();
     private String TAG = "aabolfazlBeepTunes";
 
+
     @Override
-    public void onStart() {
+    public void onStartFragment(BaseFragment fragment) {
         getFirsPage();
     }
-
 
     private void getFirsPage() {
         progressMutableLiveData.postValue(View.VISIBLE);

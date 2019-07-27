@@ -61,7 +61,8 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
     }
 
     public void onDestroy() {
-        realm.close();
+        if (realm != null)
+            realm.close();
     }
 
     @FunctionalInterface
@@ -90,11 +91,6 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
             songActionTv = itemView.findViewById(R.id.tv_itemSong_action);
             songPrwTv = itemView.findViewById(R.id.tv_itemSong_prw);
             progressBar = itemView.findViewById(R.id.pb_itemSong);
-//            rotate = new RotateAnimation(
-//                    0, 360,
-//                    Animation.RELATIVE_TO_SELF, 0.5f,
-//                    Animation.RELATIVE_TO_SELF, 0.5f
-//            );
         }
 
         void bindTracks(Track track) {
@@ -153,15 +149,5 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
             });
             realm.addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
         }
-
-//        private void stopDownload() {
-//            rotate.cancel();
-//        }
-//
-//        private void startDownload() {
-//            rotate.setDuration(1000);
-//            rotate.setRepeatCount(Animation.INFINITE);
-//            songActionTv.startAnimation(rotate);
-//        }
     }
 }

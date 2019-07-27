@@ -54,15 +54,15 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private Album album;
     private SharedPreferences sharedPreferences;
     private MutableLiveData<DownloadSong> downloadingSongLiveData = new MutableLiveData<>();
-    private MutableLiveData<PlayingSong> playingSongStatusLiveData;
-    private MutableLiveData<PlayingSong> playSongLiveData;
+    private MutableLiveData<PlayingSong> fromFragmentLiveData;
+    private MutableLiveData<PlayingSong> toFragmentLiveData;
     private PlayingSong playingSong;
 
     public AlbumFragment getInstance(Album album, MutableLiveData<PlayingSong> playingSongStatusLiveData, MutableLiveData<PlayingSong> playChangeLiveData) {
         AlbumFragment albumFragment = new AlbumFragment();
         albumFragment.album = album;
-        albumFragment.playingSongStatusLiveData = playingSongStatusLiveData;
-        albumFragment.playSongLiveData = playChangeLiveData;
+        albumFragment.fromFragmentLiveData = playingSongStatusLiveData;
+        albumFragment.toFragmentLiveData = playChangeLiveData;
         return albumFragment;
     }
 
@@ -138,8 +138,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                     playingSong = new PlayingSong();
                 playingSong.setSongId(realmDownloadSong.getId());
                 playingSong.setSongPath(realmDownloadSong.getPath());
-                playSongLiveData.postValue(playingSong);
-                playingSongStatusLiveData.observe(getViewLifecycleOwner(), onSongPlay::songStatus);
+                toFragmentLiveData.postValue(playingSong);
+                fromFragmentLiveData.observe(getViewLifecycleOwner(), onSongPlay::songStatus);
             }
         });
 
@@ -187,7 +187,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.onStart();
+        viewModel.onStartFragment(this);
     }
 
     @Override
