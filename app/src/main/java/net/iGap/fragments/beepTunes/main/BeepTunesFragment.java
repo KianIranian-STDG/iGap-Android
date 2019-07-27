@@ -60,22 +60,20 @@ public class BeepTunesFragment extends BaseFragment {
         ImageView songImageIv = rootView.findViewById(R.id.iv_btPlayer_image);
 
 
-//        viewModel.getPlayerStatusLiveData().observe(getViewLifecycleOwner(), playingSong -> {
-//            if (playingSong != null) {
+        viewModel.getPlayingSongViewLiveData().observe(getViewLifecycleOwner(), playingSong -> {
+            if (playingSong != null) {
 //                toAlbumAdapter.postValue(playingSong);
-//
-//                artistNameTv.setText(playingSong.getArtistName());
-//                songNameTv.setText(playingSong.getTitle());
-//                songImageIv.setImageBitmap(playingSong.getBitmap());
-//
-//                if (playingSong.isPlay()) {
-//                    playIconTv.setText(getContext().getResources().getString(R.string.pause_icon));
-//                } else {
-//                    playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
-//                }
-//
-//            }
-//        });
+                artistNameTv.setText(playingSong.getArtistName());
+                songNameTv.setText(playingSong.getTitle());
+                songImageIv.setImageBitmap(playingSong.getBitmap());
+
+                if (playingSong.isPlay()) {
+                    playIconTv.setText(getContext().getResources().getString(R.string.pause_icon));
+                } else {
+                    playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
+                }
+            }
+        });
 
 //        playIconTv.setOnClickListener(v -> {
 //            viewModel.onPlaySongClicked(viewModel.getPlayerStatusLiveData().getValue(), getContext());

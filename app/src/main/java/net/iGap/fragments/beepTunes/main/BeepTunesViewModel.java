@@ -20,6 +20,7 @@ public class BeepTunesViewModel extends BaseViewModel {
     private MediaPlayer mediaPlayer;
     private ServiceConnection serviceConnection;
     private MutableLiveData<PlayingSong> serviceConnectionLiveData;
+    private MutableLiveData<PlayingSong> playingSongViewLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData;
     private MutableLiveData<ProgressDuration> progressViewLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> behaviorStatusLiveData = new MutableLiveData<>();
@@ -54,7 +55,7 @@ public class BeepTunesViewModel extends BaseViewModel {
 
         serviceConnectionLiveData.observe(fragment.getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {
-
+                playingSongViewLiveData.postValue(playingSong);
             }
         });
 
@@ -104,5 +105,9 @@ public class BeepTunesViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> getBehaviorStatusLiveData() {
         return behaviorStatusLiveData;
+    }
+
+    public MutableLiveData<PlayingSong> getPlayingSongViewLiveData() {
+        return playingSongViewLiveData;
     }
 }
