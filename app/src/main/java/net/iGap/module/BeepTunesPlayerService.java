@@ -25,7 +25,7 @@ public class BeepTunesPlayerService extends Service {
     public static final String SONG_PATH = "songUri";
     public static final String SONG_ID = "songId";
     public static final String ACTION_PLAY = "play";
-    public static final String ACTION_PLAY_NEW = "play";
+    public static final String ACTION_PLAY_NEW = "playNew";
     public static final String ACTION_PAUSE = "pause";
     private static final String TAG = "aabolfazlService";
     public static long playingSongId;
@@ -59,11 +59,40 @@ public class BeepTunesPlayerService extends Service {
             playingSong = new PlayingSong();
             playingSong.setSongPath(intent.getStringExtra(SONG_PATH));
             playingSong.setSongId(intent.getLongExtra(SONG_ID, 0));
+
+            if (playingSong != null) {
+                if (playingSongId == 0)
+                    setDataSource(playingSong);
+                else if (playingSong.getSongId() != playingSongId)
+                    setNewDataSource(playingSong);
+                if (mediaPlayer.isPlaying() && playingSongId == playingSong.getSongId())
+                    pause(playingSong);
+                else
+                    play(playingSong);
+
+            }
         }
-        if (playingSong != null) {
-            play(playingSong);
-        }
+
         return START_NOT_STICKY;
+    }
+
+    private void setNewDataSource(PlayingSong playingSong) {
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(playingSong.getSongPath());
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setDataSource(PlayingSong playingSong) {
+        try {
+            mediaPlayer.setDataSource(playingSong.getSongPath());
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -78,17 +107,19 @@ public class BeepTunesPlayerService extends Service {
     }
 
     private void play(PlayingSong playingSong) {
-        try {
-            mediaPlayer.setDataSource(playingSong.getSongPath());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            getSongInfo(playingSong);
-            progress(playingSong);
-            playingSong.setStatus(PlayingSong.PLAY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mediaPlayer.start();
+        getSongInfo(playingSong);
+        progress(playingSong);
+        playingSong.setStatus(PlayingSong.PLAY);
         playingSongId = playingSong.getSongId();
+        playingSongMutableLiveData.postValue(playingSong);
+    }
+
+    private void pause(PlayingSong playingSong) {
+        mediaPlayer.pause();
+        progress(playingSong);
+        getSongInfo(playingSong);
+        playingSong.setStatus(PlayingSong.PAUSE);
         playingSongMutableLiveData.postValue(playingSong);
     }
 

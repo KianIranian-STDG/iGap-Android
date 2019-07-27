@@ -68,17 +68,12 @@ public class BeepTunesViewModel extends BaseViewModel {
     }
 
     void onPlaySongClicked(PlayingSong playingSong, Context context) {
-        if (!BeepTunesPlayerService.isServiceRunning()) {
-            Intent intent = new Intent(context, BeepTunesPlayerService.class);
-            intent.putExtra(BeepTunesPlayerService.SONG_PATH, playingSong.getSongPath());
-            intent.putExtra(BeepTunesPlayerService.SONG_ID, playingSong.getSongId());
-            context.startService(intent);
-            context.bindService(new Intent(context, BeepTunesPlayerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-            behaviorStatusLiveData.postValue(true);
-        } else {
-
-        }
-
+        Intent intent = new Intent(context, BeepTunesPlayerService.class);
+        intent.putExtra(BeepTunesPlayerService.SONG_PATH, playingSong.getSongPath());
+        intent.putExtra(BeepTunesPlayerService.SONG_ID, playingSong.getSongId());
+        context.startService(intent);
+        context.bindService(new Intent(context, BeepTunesPlayerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        behaviorStatusLiveData.postValue(true);
     }
 
 

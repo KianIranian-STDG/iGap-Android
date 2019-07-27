@@ -122,6 +122,9 @@ public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.Tr
                             } else {
                                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
                             }
+                        else
+                            songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+
                     });
 
                 } else {
