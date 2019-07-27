@@ -1,9 +1,11 @@
 package net.iGap.fragments.popular;
 
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -57,18 +59,19 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_channel);
 
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                    if (totalPage >= page)
-                        setupViews();
-                }
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Toast.makeText(getContext(), "scroll", Toast.LENGTH_SHORT).show();
+                if (totalPage >= page)
+
+                setupViews();
             }
         });
     }
@@ -124,13 +127,14 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
                                 });
                             }, 1000);
+
                             linearLayoutItemContainerChild.addView(cardView);
                         }
 
                         adapterChannel = new AdapterChannelInfoItem(getContext());
 
                         RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
-                        categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
+                        categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);

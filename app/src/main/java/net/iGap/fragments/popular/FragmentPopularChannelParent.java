@@ -63,7 +63,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 .setContext(getContext())
                 .setListener(this)
                 .setLogoShown(true)
-                .setDefaultTitle("کانال های پر مخاطب")
+                .setDefaultTitle("کانال های پرمخاطب")
 //                .setSearchBoxShown(true)
                 .setLeftIcon(R.string.back_icon);
         if (G.selectedLanguage.equals("en")) {
