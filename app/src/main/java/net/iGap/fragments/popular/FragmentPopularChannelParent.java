@@ -24,7 +24,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popular.AdapterCategoryItem;
 import net.iGap.adapter.items.popular.AdapterChannelItem;
-import net.iGap.adapter.items.popular.ImageLoadingService;
 import net.iGap.adapter.items.popular.MainSliderAdapter;
 import net.iGap.api.PopularChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
@@ -65,6 +64,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 .setListener(this)
                 .setLogoShown(true)
                 .setDefaultTitle("کانال های پر مخاطب")
+                .setSearchBoxShown(true)
                 .setLeftIcon(R.string.back_icon);
         if (G.selectedLanguage.equals("en")) {
             toolbar.setDefaultTitle("Favorite Channel");
@@ -76,7 +76,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
-                Log.i("nazanin", "onResponse: "+response.isSuccessful());
+                Log.i("nazanin", "onResponse: " + response.isSuccessful());
                 LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
                 for (int i = 0; i < response.body().getData().size(); i++) {
                     switch (response.body().getData().get(i).getType()) {
@@ -87,6 +87,11 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             CardView cardView = new CardView(getContext());
                             cardView.setRadius(Utils.dpToPx(12));
                             cardView.setPreventCornerOverlap(false);
+                            cardView.setUseCompatPadding(false);
+                            cardView.setCardElevation(0);
+                            CardView.LayoutParams cardParamse = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            cardParamse.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
+                            cardView.setLayoutParams(cardParamse);
                             scale = response.body().getData().get(i).getInfo().getScale();
                             ProgressBar progressBar = new ProgressBar(getContext());
                             ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
@@ -155,7 +160,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
 
                             RecyclerView channelsRecyclerView = channelView.findViewById(R.id.rv_item_popular_row);
                             LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams1.setMargins(0, Utils.dpToPx(4), 0, 0);
+                            layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                             channelView.setLayoutParams(layoutParams1);
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
                             adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
@@ -171,6 +176,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                         case ParentChannel.TYPE_CATEGORY:
                             RecyclerView categoryRecyclerView = new RecyclerView(getContext());
                             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            layoutParams2.setMargins(Utils.dpToPx(4),Utils.dpToPx(4),Utils.dpToPx(4),Utils.dpToPx(4));
                             categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, LinearLayoutManager.VERTICAL, false));
                             categoryRecyclerView.setLayoutParams(layoutParams2);
                             AdapterCategoryItem gridItem = new AdapterCategoryItem(getContext(), true, response.body().getData().get(i).getCategories());
@@ -208,5 +214,20 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
     @Override
     public void onLeftIconClickListener(View view) {
         getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+
+    }
+
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+
+    }
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+
     }
 }

@@ -90,6 +90,9 @@ public class FragmentPopularChannelChild extends BaseFragment {
                             BannerSlider slider = new BannerSlider(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             CardView cardView = new CardView(getContext());
+                            CardView.LayoutParams params = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
+                            cardView.setLayoutParams(params);
                             cardView.setRadius(Utils.dpToPx(12));
                             cardView.setPreventCornerOverlap(false);
                             scale = response.body().getInfo().getScale();
@@ -113,7 +116,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                                 slider.setOnSlideClickListener(position -> {
                                     if (response.body().getInfo().getAdvertisement().getSlides().get(position).getActionType() == 0) {
                                         Log.i("nazanin", "onResponse: " + position);
-                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(),response.body().getInfo().getAdvertisement().getSlides().get(position).getmActionLink(),HelperUrl.ChatEntry.chat);
+                                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getInfo().getAdvertisement().getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
                                     } else {
                                         Log.i("nazanin", "onResponse: " + position);
                                         Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
@@ -129,6 +132,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                         RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
                         categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
                         adapterChannel.setOnClickedChannelEventCallBack(new AdapterChannelInfoItem.OnClickedChannelInfoEventCallBack() {

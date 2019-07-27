@@ -28,7 +28,7 @@
                 android:id="@+id/circle_item_popular_rv_grid"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"
-                android:layout_margin="@dimen/dp8"
+                android:layout_margin="@dimen/dp10"
                 tools:src="@drawable/image_sample" />
         </LinearLayout>
 

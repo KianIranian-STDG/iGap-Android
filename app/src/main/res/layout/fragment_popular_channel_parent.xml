@@ -6,43 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/ll_popular_parent_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ll_popular_parent_toolbar"
-        android:layout_marginStart="@dimen/dp4"
-        android:layout_marginTop="-2dp"
-        android:layout_marginEnd="@dimen/dp4">
-
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/dp24"
             android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/rl_fragmentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp4"
-                android:orientation="vertical"
-                android:padding="@dimen/dp4" />
+                android:layout_margin="@dimen/dp4"
+                android:orientation="vertical" />
         </ScrollView>
 
         <FrameLayout
             android:id="@+id/frame_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_popular_parent_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/toolbar_height"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </RelativeLayout>
