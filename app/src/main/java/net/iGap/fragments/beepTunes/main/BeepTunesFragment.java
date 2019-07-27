@@ -42,6 +42,7 @@ public class BeepTunesFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel.onCreateFragment(this);
         playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -59,26 +60,26 @@ public class BeepTunesFragment extends BaseFragment {
         ImageView songImageIv = rootView.findViewById(R.id.iv_btPlayer_image);
 
 
-        viewModel.getPlayerStatusLiveData().observe(getViewLifecycleOwner(), playingSong -> {
-            if (playingSong != null) {
-                toAlbumAdapter.postValue(playingSong);
+//        viewModel.getPlayerStatusLiveData().observe(getViewLifecycleOwner(), playingSong -> {
+//            if (playingSong != null) {
+//                toAlbumAdapter.postValue(playingSong);
+//
+//                artistNameTv.setText(playingSong.getArtistName());
+//                songNameTv.setText(playingSong.getTitle());
+//                songImageIv.setImageBitmap(playingSong.getBitmap());
+//
+//                if (playingSong.isPlay()) {
+//                    playIconTv.setText(getContext().getResources().getString(R.string.pause_icon));
+//                } else {
+//                    playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
+//                }
+//
+//            }
+//        });
 
-                artistNameTv.setText(playingSong.getArtistName());
-                songNameTv.setText(playingSong.getTitle());
-                songImageIv.setImageBitmap(playingSong.getBitmap());
-
-                if (playingSong.isPlay()) {
-                    playIconTv.setText(getContext().getResources().getString(R.string.pause_icon));
-                } else {
-                    playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
-                }
-
-            }
-        });
-
-        playIconTv.setOnClickListener(v -> {
-            viewModel.onPlaySongClicked(viewModel.getPlayerStatusLiveData().getValue(), getContext());
-        });
+//        playIconTv.setOnClickListener(v -> {
+//            viewModel.onPlaySongClicked(viewModel.getPlayerStatusLiveData().getValue(), getContext());
+//        });
 
         fromAlbumAdapter.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong, getContext()));
 
@@ -93,13 +94,25 @@ public class BeepTunesFragment extends BaseFragment {
 
         playerLayout.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
-        viewModel.getSongProgressLiveData().observe(getViewLifecycleOwner(), progressDuration -> {
+        viewModel.getProgressDurationLiveData().observe(getViewLifecycleOwner(), progressDuration -> {
             if (progressDuration != null) {
                 progressBar.setProgress(progressDuration.getCurrent());
                 progressBar.setMax(progressDuration.getTotal());
 
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.onStartFragment(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.onDestroyFragment(this);
     }
 }
 
