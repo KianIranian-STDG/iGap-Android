@@ -65,6 +65,9 @@ public class FileDownloadResponse extends MessageHandler {
             HelperDataUsage.progressDownload(connectivityType, builder.getBytes().size(), identityFileDownload.type);
         }
         long progress = (nextOffset * 100) / fileSize;
+        if (progress >= 100) {
+            RequestFileDownload.downloadPending.remove(cacheId + "" + identityFileDownload.offset);
+        }
 
         if (progress == 100 && (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE)) {
             HelperDataUsage.insertDataUsage(HelperDataUsage.convetredDownloadType, connectivityType, true);
@@ -106,6 +109,7 @@ public class FileDownloadResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
         type = identityFileDownload.typeDownload;
+        RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
 
         if (type == RequestFileDownload.TypeDownload.FILE) {
             if (G.onFileDownloadResponse != null) {

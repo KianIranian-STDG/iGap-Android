@@ -21,6 +21,8 @@ import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 
+import java.util.HashSet;
+
 public class RequestFileDownload {
 
     public static int maxLimitDownload = 0;
@@ -28,6 +30,8 @@ public class RequestFileDownload {
     private final int KB_30 = 30 * 1024;
     private final int KB_50 = 50 * 1024;
     private final int KB_100 = 100 * 1024;
+
+    public static HashSet<String> downloadPending = new HashSet<>();
 
     public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity) {
         ProtoFileDownload.FileDownload.Builder builder = ProtoFileDownload.FileDownload.newBuilder();
@@ -42,9 +46,16 @@ public class RequestFileDownload {
         builder.setMaxLimit(getMaxLimitDownload());
         builder.setSelector(selector);
 
+        if (downloadPending.contains(token + "" + offset)) {
+            return;
+        }
+
         try {
-            RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
-            RequestQueue.sendRequest(requestWrapper);
+            if (G.userLogin) {
+                RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
+                RequestQueue.sendRequest(requestWrapper);
+                downloadPending.add(token + "" + offset);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

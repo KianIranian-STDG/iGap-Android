@@ -76,7 +76,6 @@ public class AvatarHandler {
     private final Object mutex2;
     private static final Object mutex3 = new Object();
     private HashMap<Long, Boolean> mRepeatList = new HashMap<>();
-    private ArrayList<String> reDownloadFiles = new ArrayList<>();
 
     public AvatarHandler() {
         this.imageViewHashValue = new ConcurrentHashMap<>();
@@ -521,8 +520,12 @@ public class AvatarHandler {
                     filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, true);
                     fileSize = realmAttachment.getSmallThumbnail().getSize();
                 }
-                new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector,
-                        new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, realmAttachment.getToken(), filePath, selector, fileSize, 0, RequestFileDownload.TypeDownload.AVATAR));
+                long offset = 0;
+                if (new File(filePath).exists()) {
+                    offset = new File(filePath).length();
+                }
+                new RequestFileDownload().download(realmAttachment.getToken(), offset, (int) fileSize, selector,
+                        new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, realmAttachment.getToken(), filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR));
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -558,14 +561,6 @@ public class AvatarHandler {
 
         @Override
         public void onError(int major, Object identity) {
-            if (major == 5 && identity != null) { //if is time out reDownload once
-                RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
-                String token = identityFileDownload.cacheId;
-                if (!reDownloadFiles.contains(token)) {
-                    reDownloadFiles.add(token);
-                    new RequestFileDownload().download(token, 0, (int) identityFileDownload.size, identityFileDownload.selector, identity);
-                }
-            }
         }
     }
 }
