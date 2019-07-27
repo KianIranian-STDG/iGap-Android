@@ -29,6 +29,7 @@ public class BeepTunesFragment extends BaseFragment {
     private LinearLayout playerLayout;
     private MutableLiveData<PlayingSong> toAlbumAdapter = new MutableLiveData<>();
     private MutableLiveData<PlayingSong> fromAlbumAdapter = new MutableLiveData<>();
+    private BeepTunesPlayer beepTunesPlayer;
 
 
     @Nullable
@@ -43,6 +44,7 @@ public class BeepTunesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel.onCreateFragment(this);
+        beepTunesPlayer = BeepTunesPlayer.getInstance(toAlbumAdapter, viewModel.getProgressDurationLiveData());
         playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -72,25 +74,22 @@ public class BeepTunesFragment extends BaseFragment {
                 } else {
                     playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
                 }
+                behavior.setState(playingSong.getBehaviorStatus());
+
+                new HelperFragment(getFragmentManager(), beepTunesPlayer)
+                        .setResourceContainer(R.id.fl_btPlayer_container).setAddToBackStack(false).setReplace(true).load();
+
             }
         });
 
-        playIconTv.setOnClickListener(v -> viewModel.onPlaySongClicked(viewModel.getPlayingSongViewLiveData().getValue(), getContext()));
+        playIconTv.setOnClickListener(v -> {
+            if (viewModel.getPlayingSongViewLiveData().getValue() != null) {
+                viewModel.getPlayingSongViewLiveData().getValue().setFromPlayer(false);
+                viewModel.onPlaySongClicked(viewModel.getPlayingSongViewLiveData().getValue(), getContext());
+            }
+        });
 
         fromAlbumAdapter.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong, getContext()));
-
-        viewModel.getBehaviorStatusLiveData().observe(getViewLifecycleOwner(), status -> {
-            if (status != null) {
-                if (status) {
-                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                } else {
-                    behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-
-                new HelperFragment(getFragmentManager(), BeepTunesPlayer.getInstance(toAlbumAdapter))
-                        .setResourceContainer(R.id.fl_btPlayer_container).setAddToBackStack(false).setReplace(true).load();
-            }
-        });
 
         playerLayout.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
@@ -102,6 +101,12 @@ public class BeepTunesFragment extends BaseFragment {
                 }
             }
         });
+
+        beepTunesPlayer.getSongFromPlayerLiveData().observe(getViewLifecycleOwner(), playingSong -> {
+            viewModel.onPlaySongClicked(playingSong, getContext());
+        });
+
+
     }
 
     @Override

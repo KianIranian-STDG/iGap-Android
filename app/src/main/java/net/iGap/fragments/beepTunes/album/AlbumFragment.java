@@ -138,6 +138,7 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
                     playingSong = new PlayingSong();
                 playingSong.setSongId(realmDownloadSong.getId());
                 playingSong.setSongPath(realmDownloadSong.getPath());
+                playingSong.setFromPlayer(false);
                 toFragmentLiveData.postValue(playingSong);
                 fromFragmentLiveData.observe(getViewLifecycleOwner(), onSongPlay::songStatus);
             }

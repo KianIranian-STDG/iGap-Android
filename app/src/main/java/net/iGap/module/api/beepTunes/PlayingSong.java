@@ -1,6 +1,7 @@
 package net.iGap.module.api.beepTunes;
 
 import android.graphics.Bitmap;
+import android.support.design.widget.BottomSheetBehavior;
 
 public class PlayingSong {
     public static final int PLAY = 0;
@@ -14,7 +15,9 @@ public class PlayingSong {
     private String title;
     private String songPath;
     private Bitmap bitmap;
+    private int behaviorStatus = BottomSheetBehavior.STATE_HIDDEN;
     private boolean play = false;
+    private boolean fromPlayer = false;
 
     public boolean isPlay() {
         return play;
@@ -22,6 +25,10 @@ public class PlayingSong {
 
     public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     public void setImageData(Bitmap bitmap) {
@@ -79,5 +86,24 @@ public class PlayingSong {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getBehaviorStatus() {
+        if (fromPlayer)
+            return BottomSheetBehavior.STATE_EXPANDED;
+        else
+            return behaviorStatus;
+    }
+
+    public void setBehaviorStatus(int behaviorStatus) {
+        this.behaviorStatus = behaviorStatus;
+    }
+
+    public boolean isFromPlayer() {
+        return fromPlayer;
+    }
+
+    public void setFromPlayer(boolean fromPlayer) {
+        this.fromPlayer = fromPlayer;
     }
 }

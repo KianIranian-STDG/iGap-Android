@@ -23,7 +23,6 @@ public class BeepTunesViewModel extends BaseViewModel {
     private MutableLiveData<PlayingSong> playingSongViewLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData;
     private MutableLiveData<ProgressDuration> progressViewLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> behaviorStatusLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
@@ -73,7 +72,6 @@ public class BeepTunesViewModel extends BaseViewModel {
         intent.putExtra(BeepTunesPlayerService.SONG_ID, playingSong.getSongId());
         context.startService(intent);
         context.bindService(new Intent(context, BeepTunesPlayerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-        behaviorStatusLiveData.postValue(true);
     }
 
 
@@ -82,7 +80,6 @@ public class BeepTunesViewModel extends BaseViewModel {
         if (BeepTunesPlayerService.isServiceRunning()) {
             if (fragment.getContext() != null)
                 fragment.getContext().bindService(new Intent(fragment.getContext(), BeepTunesPlayerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-            behaviorStatusLiveData.postValue(true);
         }
     }
 
@@ -96,10 +93,6 @@ public class BeepTunesViewModel extends BaseViewModel {
 
     public MutableLiveData<ProgressDuration> getProgressDurationLiveData() {
         return progressViewLiveData;
-    }
-
-    public MutableLiveData<Boolean> getBehaviorStatusLiveData() {
-        return behaviorStatusLiveData;
     }
 
     public MutableLiveData<PlayingSong> getPlayingSongViewLiveData() {

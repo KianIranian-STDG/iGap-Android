@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.ProgressDuration;
@@ -50,15 +51,16 @@ public class BeepTunesPlayerService extends Service {
     public void onCreate() {
         serviceRunning = true;
         mediaPlayer = new MediaPlayer();
+        playingSong = new PlayingSong();
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            playingSong = new PlayingSong();
             playingSong.setSongPath(intent.getStringExtra(SONG_PATH));
             playingSong.setSongId(intent.getLongExtra(SONG_ID, 0));
+            playingSong.setBehaviorStatus(BottomSheetBehavior.STATE_COLLAPSED);
 
             if (playingSong != null) {
                 if (playingSongId == 0)
