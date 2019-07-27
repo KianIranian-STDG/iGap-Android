@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.payment.PaymentViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_3c">
+
+        <View
+            android:id="@+id/v"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/paymentType" />
+
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/retryView"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{()->viewModel.onRetryClick()}"
+            android:text="@string/retry_icon"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showRetryView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/cancelButton"
+            style="@style/BaseIGapButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp8"
+            android:onClick="@{()->viewModel.onCancelClick()}"
+            android:text="@string/cancel"
+            android:visibility="@{viewModel.showMainView}"
+            app:backgroundTint="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/acceptButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".3" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/acceptButton"
+            style="@style/BaseIGapButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp8"
+            android:onClick="@{()->viewModel.onAcceptClick()}"
+            android:text="@string/payment"
+            android:visibility="@{viewModel.showMainView}"
+            app:backgroundTint="@color/green"
+            app:layout_constraintBottom_toBottomOf="@id/cancelButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cancelButton"
+            app:layout_constraintTop_toTopOf="@id/cancelButton" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/price"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:gravity="center"
+            android:text="@{viewModel.orderDetail.info.price}"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/cancelButton"
+            app:layout_constraintEnd_toEndOf="@id/acceptButton"
+            app:layout_constraintStart_toStartOf="@id/cancelButton" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/priceTitle"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/description"
+            style="?textSubColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:text="@{viewModel.orderDetail.info.product.description}"
+            android:textSize="@dimen/standardTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/priceTitle"
+            app:layout_constraintEnd_toEndOf="@id/acceptButton"
+            app:layout_constraintStart_toStartOf="@id/cancelButton" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginBottom="@dimen/dp8"
+            android:background="?lineColorSettingTheme"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/title"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:gravity="center"
+            android:text="@{viewModel.orderDetail.info.product.title}"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintEnd_toEndOf="@id/acceptButton"
+            app:layout_constraintStart_toStartOf="@id/cancelButton" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentType"
+            style="?textSubColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp16"
+            android:textSize="@dimen/standardTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/title"
+            app:layout_constraintEnd_toEndOf="@id/acceptButton"
+            app:layout_constraintStart_toStartOf="@id/cancelButton" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
