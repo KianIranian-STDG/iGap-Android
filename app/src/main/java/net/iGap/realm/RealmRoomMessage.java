@@ -433,7 +433,7 @@ public class RealmRoomMessage extends RealmObject {
         }
 
         if (input.hasChannelExtra()) {
-            RealmChannelExtra.putOrUpdate(realm, input.getMessageId(), input.getChannelExtra());
+            message.channelExtra = RealmChannelExtra.putOrUpdate(realm, input.getMessageId(), input.getChannelExtra());
         }
 
         addTimeIfNeed(message, realm);

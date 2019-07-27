@@ -250,9 +250,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 } else if (messageInfo.mMessage.getMessageId() == messageId) {
                     int pos = items.indexOf(messageInfo);
                     //bagi may crash
-                    messageInfo.mMessage.getChannelExtra().setThumbsUp(voteUp);
-                    messageInfo.mMessage.getChannelExtra().setThumbsDown(voteDown);
-                    messageInfo.mMessage.getChannelExtra().setViewsLabel(viewsLabel);
+                    if (messageInfo.mMessage.getChannelExtra() != null) {
+                        messageInfo.mMessage.getChannelExtra().setThumbsUp(voteUp);
+                        messageInfo.mMessage.getChannelExtra().setThumbsDown(voteDown);
+                        messageInfo.mMessage.getChannelExtra().setViewsLabel(viewsLabel);
+                    }
                     set(pos, messageInfo);
                     break;
                 }
