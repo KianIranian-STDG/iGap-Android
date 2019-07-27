@@ -31,10 +31,10 @@
 
     <!-- Page 4 introduce app -->
 
+    <!--TODO:// translate-->
+    <string name="text_line_1_introduce_page4">"iLand"</string>
 
-    <string name="text_line_1_introduce_page4">"نقل الملفات في آي كب"</string>
-
-    <string name="text_line_2_introduce_page4">"يمكنك نقل الملفات المختلفة بالأنواع و الأحجام المتنوعة أو حفظها في الفضاء الاسفنجي. يمكنك اشتراك كلّما تحبّ مع الآخرين دون أية محدودية.."</string>
+    <string name="text_line_2_introduce_page4">"test"</string>
 
     <!-- Page 5 introduce app -->
 

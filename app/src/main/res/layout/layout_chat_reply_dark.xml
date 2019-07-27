@@ -13,6 +13,7 @@
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:textSize="@dimen/dp18"
+      style="@style/myIconToolbarStyle"
       android:text="@string/reply_icon" />
 
   <ImageView
