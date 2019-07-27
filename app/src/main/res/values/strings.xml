@@ -16,8 +16,9 @@
     <string name="text_line_2_introduce_page3">You can have one-on-one or group chats and even create your own channel and add members in order to share information with millions of people.</string>
 
     <!-- Page 4 introduce app -->
-    <string name="text_line_1_introduce_page4">File Transferring</string>
-    <string name="text_line_2_introduce_page4">You have an authority to transfer any file with any size and type or save them on your cloud storage; and then share anything you’d like to with anyone you’d want to.</string>
+    <!--TODO:// complete-->
+    <string name="text_line_1_introduce_page4">iLand</string>
+    <string name="text_line_2_introduce_page4">iGap\'s Smart World</string>
 
     <!-- Page 5 introduce app -->
     <string name="text_line_1_introduce_page5">Voice and video Call</string>

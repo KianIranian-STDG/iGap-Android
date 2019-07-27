@@ -175,7 +175,7 @@
                     android:layout_height="match_parent"
                     android:layoutDirection="locale">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <net.iGap.module.EmojiTextViewE
                         android:id="@+id/description"
                         style="?textTitleColorSettingTheme"
                         android:layout_width="0dp"
@@ -183,6 +183,7 @@
                         android:layout_marginTop="@dimen/dp16"
                         android:padding="8dp"
                         android:textSize="@dimen/standardTextSize"
+                        app:emojiSize="@dimen/standardTextSize"
                         android:visibility="@{viewModel.haveDescription}"
                         app:layout_constraintLeft_toLeftOf="@id/notification"
                         app:layout_constraintRight_toRightOf="@id/notification"

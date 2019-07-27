@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -207,6 +209,8 @@ public class FragmentChannelProfile extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel)).setReplace(false).load();
             }
         });
+
+        binding.description.setMovementMethod(LinkMovementMethod.getInstance());
 
         AppUtils.setProgresColler(binding.loading);
 

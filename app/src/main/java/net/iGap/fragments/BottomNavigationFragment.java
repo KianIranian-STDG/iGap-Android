@@ -179,18 +179,15 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public boolean isProfileEditMode() {
-        if (bottomNavigation.getSelectedItemPosition() == 4) {
-            Fragment page = getChildFragmentManager().findFragmentById(R.id.viewpager);
-            // based on the current position you can then cast the page to the correct
-            // class and call the method:
-            if (page instanceof FragmentUserProfile) {
-                return ((FragmentUserProfile) page).isEditMode();
-            } else {
-                return false;
-            }
+    public boolean isAllowToBackPressed() {
+        Fragment page = getChildFragmentManager().findFragmentById(R.id.viewpager);
+        // based on the current position you can then cast the page to the correct
+        // class and call the method:
+        if (page instanceof BaseMainFragments) {
+            return ((BaseMainFragments) page).isAllowToBackPressed();
         } else {
-            return false;
+            return true;
         }
+
     }
 }

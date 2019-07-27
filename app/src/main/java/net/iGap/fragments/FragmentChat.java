@@ -357,6 +357,7 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -981,6 +982,7 @@ public class FragmentChat extends BaseFragment
                                 txtName = mHelperToolbar.getTextViewChatUserName();
                             }
                             txtName.setText(room.getTitle());
+                            checkToolbarNameSize();
                         }
                     }
                 });
@@ -1078,6 +1080,20 @@ public class FragmentChat extends BaseFragment
         }
 
         registerListener();
+    }
+
+    private void checkToolbarNameSize() {
+
+        if (!mHelperToolbar.getRightButton().isShown()){
+            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width4));
+        }else if (!mHelperToolbar.getSecondRightButton().isShown()){
+            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width3));
+        }/*else if (mHelperToolbar.getThirdRightButton().isShown()){
+            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width2));
+        }*/ else {
+            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width));
+        }
+
     }
 
     private void initToolbar() {
@@ -1694,7 +1710,7 @@ public class FragmentChat extends BaseFragment
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         }
-
+        checkToolbarNameSize();
         manageExtraLayout();
     }
 

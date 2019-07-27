@@ -25,6 +25,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.BaseMainFragments;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -32,7 +33,7 @@ import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 
-public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
+public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
@@ -276,5 +277,10 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     @Override
     public void onSearchClickListener(View view) {
 
+    }
+
+    @Override
+    public boolean isAllowToBackPressed() {
+        return true;
     }
 }

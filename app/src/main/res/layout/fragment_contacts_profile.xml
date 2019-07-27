@@ -148,13 +148,15 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="locale">
 
-                <android.support.v7.widget.AppCompatTextView
+                <net.iGap.module.EmojiTextViewE
                     android:id="@+id/userBio"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp14"
                     android:paddingTop="@dimen/dp2"
+                    android:textSize="@dimen/standardTextSize"
+                    app:emojiSize="@dimen/standardTextSize"
                     android:text="@{viewModel.bio}"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/enableNotificationLyt"
@@ -646,17 +648,18 @@
                 android:layout_gravity="bottom"
                 android:layout_marginStart="@dimen/dp140"
                 android:layout_marginLeft="@dimen/dp140"
+                android:layout_marginEnd="@dimen/dp70"
+                android:layout_marginRight="@dimen/dp70"
                 android:layout_marginTop="@dimen/dp10"
                 android:orientation="vertical"
                 android:paddingRight="@dimen/dp10">
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/toolbar_txt_name_expanded"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:fontFamily="@font/main_font"
-                    android:gravity="bottom|center_horizontal"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/standardTextSize"
@@ -664,9 +667,9 @@
 
                 <TextView
                     android:id="@+id/toolbar_txt_status_expanded"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp1"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"
@@ -676,9 +679,9 @@
                 <TextView
                     android:id="@+id/toolbar_txt_username_expanded"
                     style="?textSubColorSettingTheme"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp10"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"
@@ -687,9 +690,9 @@
                 <TextView
                     android:id="@+id/toolbar_txt_tel_expanded"
                     style="?textSubColorSettingTheme"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp2"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"

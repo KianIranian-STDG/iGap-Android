@@ -18,6 +18,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -259,6 +260,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 popBackStackFragment();
             }
         });
+        
+        binding.description.setMovementMethod(LinkMovementMethod.getInstance());
 
         viewModel.groupDescription.observe(getViewLifecycleOwner(), groupDescription -> {
             if (getActivity() != null && groupDescription != null) {

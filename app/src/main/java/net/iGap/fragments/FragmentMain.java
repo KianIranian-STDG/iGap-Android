@@ -45,6 +45,7 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
@@ -113,7 +114,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
-public class FragmentMain extends BaseFragment implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -833,7 +834,6 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             /*ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_search), 0, 10);
             mRecyclerView.setLayoutParams(marginLayoutParams)*/
-            ;
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
             if (G.isLandscape && G.twoPaneMode) {
@@ -1002,6 +1002,16 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 realm.close();
             }, 250);
         }, 5);
+    }
+
+    @Override
+    public boolean isAllowToBackPressed() {
+        if (isChatMultiSelectEnable){
+            onLeftIconClickListener(null);
+            return false;
+        }else {
+            return true;
+        }
     }
 
     public enum MainType {

@@ -827,12 +827,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             if (isEditProfile.getValue()) {
                 isEditProfile.setValue(false);
                 getEditProfileIcon().set(R.string.edit_icon);
-                return true;
-            } else {
                 return false;
+            } else {
+                return true;
             }
         } else {
-            return false;
+            return true;
         }
     }
 
