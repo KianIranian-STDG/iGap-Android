@@ -2,7 +2,6 @@ package net.iGap.adapter.items.discovery.holder;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -11,67 +10,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
-import net.iGap.G;
-import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
-import net.iGap.fragments.FragmentIVandActivities;
-import net.iGap.fragments.FragmentPayment;
-import net.iGap.fragments.FragmentPaymentBill;
-import net.iGap.fragments.FragmentPaymentCharge;
-import net.iGap.fragments.FragmentPaymentInquiry;
-import net.iGap.fragments.FragmentUserScore;
-import net.iGap.fragments.FragmentWalletAgrement;
-import net.iGap.fragments.FragmentWebView;
-import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
-import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
-import net.iGap.fragments.popular.FragmentPopularChannelChild;
-import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.popular.FragmentPopularChannelParent;
-import net.iGap.helper.CardToCardHelper;
-import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.OnGeoGetConfiguration;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
-import net.iGap.request.RequestGeoGetConfiguration;
-import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.paygear.WalletActivity;
-
-import java.io.IOException;
-
-import io.realm.Realm;
-
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
-import static net.iGap.activities.ActivityMain.waitingForConfiguration;
-import static net.iGap.fragments.FragmentiGapMap.mapUrls;
-import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     private long mLastClickTime = 0;
     private FragmentActivity activity;
 
-    BaseViewHolder(@NonNull View itemView,FragmentActivity activity) {
+    BaseViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView);
         this.activity = activity;
     }
@@ -115,7 +72,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
 
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
-                        new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelParent()).setReplace(false).load();
+        new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelParent()).setReplace(false).load();
 
 //        switch (discoveryField.actionType) {
 //            case PAGE:/** tested **/
@@ -342,7 +299,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private static void actionPage(String value, FragmentActivity activity) {
-        new HelperFragment(activity.getSupportFragmentManager(),DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
+        new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
     }
 
     public static void dialPhoneNumber(Context context, String phoneNumber, FragmentActivity activity) {
