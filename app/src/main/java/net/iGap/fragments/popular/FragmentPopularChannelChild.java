@@ -130,7 +130,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                         adapterChannel = new AdapterChannelInfoItem(getContext());
 
                         RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
-                        categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
+                        categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);

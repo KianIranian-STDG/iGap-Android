@@ -64,7 +64,7 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                 .setListener(this)
                 .setLogoShown(true)
                 .setDefaultTitle("کانال های پر مخاطب")
-                .setSearchBoxShown(true)
+//                .setSearchBoxShown(true)
                 .setLeftIcon(R.string.back_icon);
         if (G.selectedLanguage.equals("en")) {
             toolbar.setDefaultTitle("Favorite Channel");
@@ -216,18 +216,18 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
         getActivity().onBackPressed();
     }
 
-    @Override
-    public void onSearchClickListener(View view) {
-
-    }
-
-    @Override
-    public void onBtnClearSearchClickListener(View view) {
-
-    }
-
-    @Override
-    public void onSearchTextChangeListener(View view, String text) {
-
-    }
+//    @Override
+//    public void onSearchClickListener(View view) {
+//
+//    }
+//
+//    @Override
+//    public void onBtnClearSearchClickListener(View view) {
+//
+//    }
+//
+//    @Override
+//    public void onSearchTextChangeListener(View view, String text) {
+//
+//    }
 }
