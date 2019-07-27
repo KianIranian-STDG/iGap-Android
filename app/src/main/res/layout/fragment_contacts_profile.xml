@@ -148,13 +148,15 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="locale">
 
-                <android.support.v7.widget.AppCompatTextView
+                <net.iGap.module.EmojiTextViewE
                     android:id="@+id/userBio"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp14"
                     android:paddingTop="@dimen/dp2"
+                    android:textSize="@dimen/standardTextSize"
+                    app:emojiSize="@dimen/standardTextSize"
                     android:text="@{viewModel.bio}"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/enableNotificationLyt"
