@@ -49,6 +49,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.interfaces.OnContactImport;
 import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGetPermission;
@@ -82,7 +83,7 @@ import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnContactImport, OnUserContactDelete, OnContactsGetList {
+public class RegisteredContactsFragment extends BaseMainFragments implements ToolbarListener, OnContactImport, OnUserContactDelete, OnContactsGetList {
 
     public static final int NEW_CHAT = 0;
     public static final int CONTACTS = 1;
@@ -393,12 +394,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
 
         mBtnCancelSelected.setOnClickListener(v -> {
-            setPageShowingMode(mPageMode);
-            mActionMode = null;
-            isMultiSelect = false;
-            isLongClick = false;
-            selectedList.clear();
-            refreshAdapter(0, true);
+           setMultiSelectState(isMultiSelect);
         });
 
         //todo: fixed it ,effect in load time
@@ -413,7 +409,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     }
 
     private void setPageShowingMode(int mode) {
-        Log.wtf(this.getClass().getName(),"setPageShowingMode mode: "+mode);
         if (mode == 0 || mode == 1) { //contact mode
             btnAddNewGroupCall.setVisibility(View.GONE);
             btnAddNewContact.setVisibility(View.GONE);
@@ -586,18 +581,34 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                         ContactUtils.syncContacts();
                     } else {
                         if (!isMultiSelect) {
-                            isMultiSelect = true;
-                            refreshAdapter(0, true);
 
-                            if (!mLayoutMultiSelected.isShown()) {
-                                setPageShowingMode(4);
-                            }
-                            isLongClick = true;
+                            setMultiSelectState(isMultiSelect);
 
                         }
                     }
                 }
             }).show(getFragmentManager(), "contactToolbar");
+        }
+    }
+
+    private void setMultiSelectState(boolean state) {
+
+        if (state){
+            setPageShowingMode(mPageMode);
+            mActionMode = null;
+            isMultiSelect = false;
+            isLongClick = false;
+            selectedList.clear();
+            mTxtSelectedCount.setText( "0 " + getString(R.string.item_selected));
+            refreshAdapter(0, true);
+        }else {
+            isMultiSelect = true;
+            refreshAdapter(0, true);
+
+            if (!mLayoutMultiSelected.isShown()) {
+                setPageShowingMode(4);
+            }
+            isLongClick = true;
         }
     }
 
@@ -649,6 +660,16 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         }
         prgMainLoader.setVisibility(View.GONE);
 
+    }
+
+    @Override
+    public boolean isAllowToBackPressed() {
+        if (isMultiSelect){
+            setMultiSelectState(true);
+            return false;
+        }else {
+            return true;
+        }
     }
 
     private interface onClickRecyclerView {

@@ -54,7 +54,7 @@ import io.realm.Realm;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class FragmentUserProfile extends BaseFragment {
+public class FragmentUserProfile extends BaseMainFragments {
 
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
@@ -410,7 +410,9 @@ public class FragmentUserProfile extends BaseFragment {
         }
     }
 
-    public boolean isEditMode() {
+
+    @Override
+    public boolean isAllowToBackPressed() {
         return viewModel.checkEditModeForOnBackPressed();
     }
 }

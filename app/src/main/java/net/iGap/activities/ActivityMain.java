@@ -1147,7 +1147,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                     if (fragment instanceof BottomNavigationFragment) {
-                        if (!((BottomNavigationFragment) fragment).isProfileEditMode()) {
+                        if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
                             if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
                                 finish();
                             }
