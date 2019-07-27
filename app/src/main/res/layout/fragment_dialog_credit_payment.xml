@@ -179,6 +179,34 @@
                             android:textColor="#2196f3"
                             android:textSize="14sp" />
                     </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:id="@+id/amount_to_pay_factor_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="16sp"
+                            android:text="@string/amount_to_pay_factor"
+                            android:textColor="#2196f3"
+                            android:visibility="gone"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/amount_to_pay_factor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="16sp"
+                            android:text="0"
+                            android:textColor="#2196f3"
+                            android:visibility="gone"
+                            android:textSize="14sp" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <View
@@ -340,10 +368,10 @@
         </LinearLayout>
 
         <ir.radsense.raadcore.widget.ProgressLayout
-        android:id="@+id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white" />
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white" />
 
 
     </FrameLayout>

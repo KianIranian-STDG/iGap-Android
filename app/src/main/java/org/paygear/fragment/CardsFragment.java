@@ -100,6 +100,9 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
     FragmentCardsBinding mBinding;
     private HelperToolbar mHelperToolbar;
 
+    boolean checkAfterGift=false;
+    String qrDataAccountId;
+
     public CardsFragment() {
     }
 
@@ -111,11 +114,23 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         return fragment;
     }
 
+    public static CardsFragment newInstance(boolean checkAfterGift,String qrDataAccountId) {
+        CardsFragment fragment = new CardsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("CheckAfterGift", checkAfterGift);
+        args.putSerializable("QrDataAccountId", qrDataAccountId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPayment = (Payment) getArguments().getSerializable("Payment");
+            checkAfterGift =  getArguments().getBoolean("CheckAfterGift");
+            qrDataAccountId = getArguments().getString("QrDataAccountId");
         }
     }
 
@@ -198,6 +213,11 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
 
         updateAppBar();
         mCards = RaadApp.cards;
+
+        if(checkAfterGift){
+            mCards = null;
+        }
+
         if (mCards != null) {
 
             setAdapter();
@@ -356,7 +376,21 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
                     }
 
                     //collapsedItem = -1;
-                    setAdapter();
+                    if(checkAfterGift){
+                        setAdapter();
+                        checkAfterGift = false;
+                        for (int i = 0; i < mCards.size(); i++) {
+                            if(qrDataAccountId.equals(mCards.get(i).clubId)){
+                                if(getActivity() != null)
+                                    ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                            CardFragment.newInstance(mPayment, mCards.get(i)), "CardFragment");
+
+                            }
+                        }
+
+                    }else {
+                        setAdapter();
+                    }
                 } else {
                     if (mCards == null || mCards.size() == 0)
                         progress.setStatus(-1, getString(R.string.error));
@@ -590,6 +624,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         }
         TextView balanceTitle = view.findViewById(R.id.balance_title);
         ImageView history = view.findViewById(R.id.history);
+        ImageView reload = view.findViewById(R.id.reload);
 
         TextView balance = view.findViewById(R.id.balance);
         TextView unit = view.findViewById(R.id.unit);
@@ -734,15 +769,60 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
             }
         });
 
-        balance.setText(RaadCommonUtils.formatPrice(card.balance, false));
-        cashableBalance.setText(RaadCommonUtils.formatPrice(card.cashOutBalance, false));
-        long giftPrice = card.balance - card.cashOutBalance;
-        giftBalance.setText(RaadCommonUtils.formatPrice(giftPrice, false));
 
-        if (giftPrice == 0) {
-            view.findViewById(R.id.bals_layout).setVisibility(View.GONE);
+
+        // get total of all card club...
+        long total= 0L;
+        long balance1 = 0L;
+        long balanceTotal = 0L;
+
+
+        for (Card item : RaadApp.cards) {
+
+
+            if (item.isRaadCard()) {
+
+                balance1 = item.balance;
+
+            }else{
+
+                if (item.type == 1 && (item.bankCode == 69 && item.clubId != null)) {
+                    total = total + item.balance;
+
+                }
+
+
+            }
+
+
+            balanceTotal =  card.balance + total ;
+            balance.setText(RaadCommonUtils.formatPrice(balanceTotal, false));
+
+
+
+        }
+
+        cashableBalance.setText(RaadCommonUtils.formatPrice(card.balance, false));
+        giftBalance.setText(RaadCommonUtils.formatPrice(total, false));
+
+        if (total == 0) {
+            view.findViewById(R.id.bals_layout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         }
+
+        /*reload page*/
+        reload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (selectedMerchant == null) {
+                    loadCards();
+                } else {
+                    ShowMerchantView(selectedMerchant);
+                }
+
+            }
+        });
     }
 
     private void addMyCardsTitle() {

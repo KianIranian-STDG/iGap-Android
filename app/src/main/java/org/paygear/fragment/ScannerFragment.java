@@ -609,7 +609,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         qrVoucherDialogBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.qr_voucher_dialog, null, false);
         qrVoucherDialog.setContentView(qrVoucherDialogBinding.getRoot());
         qrVoucherDialog.setCanceledOnTouchOutside(false);
-        String message = "اعتبار هدیه پیگیر به مبلغ *.\nمایل به دریافت آن هستید؟";
+        String message = getString(R.string.gift_message);
         try {
             message = message.replace("*", RaadCommonUtils.formatPrice(Long.parseLong(qrData.value), true));
         } catch (Exception e) {
@@ -654,11 +654,11 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
                             if (success) {
                                 try {
-                                    showSuccessfulDialog(response.body().message);
-                                    if (getActivity() instanceof NavigationBarActivity) {
+                                    showSuccessfulDialog(response.body().message,qrData);
+                              /*      if (getActivity() instanceof NavigationBarActivity) {
                                         ((NavigationBarActivity) getActivity()).broadcastMessage(
                                                 ScannerFragment.this, null, CardsFragment.class);
-                                    }
+                                    }*/
                                 } catch (Exception e) {
 
                                 }
@@ -695,7 +695,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
     }
 
-    private void showSuccessfulDialog(String message) {
+    private void showSuccessfulDialog(String message,QRResponse qrData) {
         isVisible = false;
         final Context context = getContext();
         if (context == null)
@@ -722,10 +722,27 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         successfulDialogBinding.confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "برای اعمال اعتبار هدیه چند لحظه صبر کنید.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, getString(R.string.toast_success_gift), Toast.LENGTH_LONG).show();
                 if (getActivity() instanceof NavigationBarActivity) {
-                    ((NavigationBarActivity) getActivity()).broadcastMessage(
-                            ScannerFragment.this, null, CardsFragment.class);
+                 /*     for (int i = 0; i < RaadApp.cards.size(); i++) {
+
+                          if (qrData.accountId.equals(RaadApp.cards.get(i).clubId)) {
+                              ((NavigationBarActivity) getActivity()).pushFullFragment(CardsFragment.newInstance(true,i),"CardsFragment");
+                              break;
+                          }else {
+
+                                  if (getActivity() instanceof NavigationBarActivity) {
+                                        ((NavigationBarActivity) getActivity()).broadcastMessage(
+                                                ScannerFragment.this, null, CardsFragment.class);
+                                    }
+
+                          }
+
+                      }*/
+
+                    ((NavigationBarActivity) getActivity()).pushFullFragment(CardsFragment.newInstance(true,qrData.accountId),"CardsFragment");
+
+
                 }
                 isVisible = true;
                 successfulDialog.dismiss();

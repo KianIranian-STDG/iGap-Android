@@ -734,6 +734,11 @@
     <string name="enter_the_code_here">Enter the code here</string>
     <string name="transfer_to">Transfer to</string>
     <string name="transfer_to_wallet">Transfer to wallet</string>
+    <string name="gift_message">Gift Amount *.
+Want to get it?</string>
+    <string name="toast_success_gift">Wait a few moments to apply gift credit.</string>
+
+    <string name="amount_to_pay_factor">Amount to pay factor (Rials) :</string>
     <string name="price">Price</string>
     <string name="amunt">Amount</string>
     <string name="email_optional">Email(optional)</string>

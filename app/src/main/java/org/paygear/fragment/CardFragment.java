@@ -122,6 +122,14 @@ public class CardFragment extends Fragment {
                 appBar.setTitle(mCard.cardNumber);
         }
 
+        appBar.addRightButton(R.drawable.qr_code, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((NavigationBarActivity) getActivity()).pushFullFragment(
+                        new ScannerFragment(), "ScannerFragment");
+            }
+        });
+
         cardView = view.findViewById(R.id.card_view);
         ViewGroup rootCarView = view.findViewById(R.id.rootCardView);
         rootCarView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));

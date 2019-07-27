@@ -1327,6 +1327,13 @@
 
     <string name="transfer_to_wallet">نقل إلى المحفظة</string>
 
+    <string name="gift_message">اعتبار هدیه به مبلغ *.
+مایل به دریافت آن هستید؟</string>
+
+    <string name="toast_success_gift">برای اعمال اعتبار هدیه چند لحظه صبر کنید.</string>
+
+    <string name="amount_to_pay_factor">مبلغ قابل پرداخت فاکتور (ریال) :</string>
+
     <string name="price">السعر </string>
 
     <string name="amunt">النسبة </string>

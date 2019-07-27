@@ -99,11 +99,11 @@ public class BankCardView extends CardView {
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardNumberTitleParams.weight = 1;
         mTopCardNumberText.setLayoutParams(cardNumberTitleParams);
-        //mTopCardNumberText.setGravity(Gravity.CENTER);
+        mTopCardNumberText.setGravity(Gravity.LEFT);
         mTopCardNumberText.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
-        mTopCardNumberText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        mTopCardNumberText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         mTopCardNumberText.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
-        //mTopCardNumberText.setPadding(dp8, 0, dp8, 0);
+        mTopCardNumberText.setPadding(dp8, 0, dp8, 120);
         logoLayout.addView(mTopCardNumberText);
 
         mTitleText = new AppCompatTextView(context);
@@ -228,11 +228,11 @@ public class BankCardView extends CardView {
                 centerCardNumberLayout.setText(mCard.cardNumber);
                 mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
                 mTitleText.setVisibility(GONE);
-                mTopCardNumberText.setVisibility(GONE);
-                centerCardNumberLayout.setVisibility(GONE);
+                mTopCardNumberText.setVisibility(VISIBLE);
+                centerCardNumberLayout.setVisibility(VISIBLE);
             } else {
                 mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
-                mTopCardNumberText.setVisibility(GONE);
+                mTopCardNumberText.setVisibility(VISIBLE);
                 mTitleText.setVisibility(GONE);
             }
 

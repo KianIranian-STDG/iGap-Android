@@ -716,6 +716,10 @@
     <string name="enter_the_code_here">کد را اینجا وارد کنید.</string>
     <string name="transfer_to">انتقال به</string>
     <string name="transfer_to_wallet">انتقال به کیف پول</string>
+    <string name="gift_message">اعتبار هدیه به مبلغ *.
+مایل به دریافت آن هستید؟</string>
+    <string name="toast_success_gift">برای اعمال اعتبار هدیه چند لحظه صبر کنید.</string>
+    <string name="amount_to_pay_factor">مبلغ قابل پرداخت فاکتور (ریال) :</string>
     <string name="price">قیمت</string>
     <string name="amunt">مقدار</string>
     <string name="email_optional">ایمیل (اختیاری)</string>
