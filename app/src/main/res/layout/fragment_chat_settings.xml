@@ -130,6 +130,40 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp52"
+                        android:onClick="@{chatSettingsVM::onClickTime}"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/dp16"
+                        android:gravity="center_vertical"
+                        android:paddingRight="@dimen/dp16">
+
+                        <TextView
+                            android:id="@+id/as_txt_24_time"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="@string/st_24_Clock"
+                            android:textSize="@dimen/standardTextSize"
+                            android:textStyle="normal" />
+
+                        <net.iGap.module.CustomToggleButton
+                            android:id="@+id/as_toggle_time"
+                            android:layout_width="@dimen/toggles_width"
+                            android:layout_height="@dimen/toggles_height"
+                            android:checked="@{safeUnbox(chatSettingsVM.isTime)}"
+                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedTime(checked)}"
+                            android:textOff=""
+                            android:textOn=""
+
+                            />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp52"
                         android:onClick="@{chatSettingsVM::onClickShowVote}"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/dp16"

@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.view.View;
 
 import net.iGap.G;
@@ -30,6 +31,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
     public ObservableBoolean isDefaultPlayer = new ObservableBoolean();
     public ObservableBoolean isCrop = new ObservableBoolean();
     public ObservableBoolean isCameraButtonSheet = new ObservableBoolean(true);
+    public ObservableField<Boolean> isTime = new ObservableField<>(false);
 
     public FragmentChatSettingViewModel() {
         getInfo();
@@ -74,6 +76,9 @@ public class FragmentChatSettingViewModel extends ViewModel {
         int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
         isDefaultPlayer.set(getBoolean(checkedEnableDefaultPlayer));
 
+        boolean checkedEnableTime = sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
+        isTime.set(checkedEnableTime);
+
     }
 
     public void onClickCompress(View view) {
@@ -92,6 +97,29 @@ public class FragmentChatSettingViewModel extends ViewModel {
             editor.apply();
         }
 
+    }
+
+    public void onClickTime(View view) {
+        isTime.set(!isTime.get());
+    }
+
+    public void onCheckedChangedTime(boolean isChecked) {
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+        if (isChecked) {
+            G.isTimeWhole = true;
+            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, true);
+            editor.apply();
+        } else {
+            G.isTimeWhole = false;
+            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
+            editor.apply();
+        }
+        if (G.onNotifyTime != null) {
+            G.onNotifyTime.notifyTime();
+        }
     }
 
     public void onClickTrim(View view) {
