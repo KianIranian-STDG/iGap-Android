@@ -75,9 +75,7 @@ public class BeepTunesFragment extends BaseFragment {
             }
         });
 
-//        playIconTv.setOnClickListener(v -> {
-//            viewModel.onPlaySongClicked(viewModel.getPlayerStatusLiveData().getValue(), getContext());
-//        });
+        playIconTv.setOnClickListener(v -> viewModel.onPlaySongClicked(viewModel.getPlayingSongViewLiveData().getValue(), getContext()));
 
         fromAlbumAdapter.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong, getContext()));
 
