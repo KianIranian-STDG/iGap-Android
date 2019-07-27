@@ -822,6 +822,20 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         });
     }
 
+    public boolean checkEditModeForOnBackPressed() {
+        if (isEditProfile.getValue() != null) {
+            if (isEditProfile.getValue()) {
+                isEditProfile.setValue(false);
+                getEditProfileIcon().set(R.string.edit_icon);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void onAvatarAdd(ProtoGlobal.Avatar avatar) {
         /**

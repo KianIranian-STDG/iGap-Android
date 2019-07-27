@@ -62,12 +62,12 @@ public class FragmentUserProfile extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
-        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
         viewModel.init(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
@@ -408,5 +408,9 @@ public class FragmentUserProfile extends BaseFragment {
                 Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public boolean isEditMode() {
+        return viewModel.checkEditModeForOnBackPressed();
     }
 }

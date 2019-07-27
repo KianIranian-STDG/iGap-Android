@@ -37,6 +37,7 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.popular.FragmentPopularChannelChild;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.popular.FragmentPopularChannelParent;
 import net.iGap.helper.CardToCardHelper;

@@ -2,13 +2,16 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="?backgroundColorSettingTheme_2"
+    android:id="@+id/card_item_pop_row"
     android:layout_width="@dimen/dp88"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/dp2"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardCornerRadius="@dimen/dp4"
-    app:cardElevation="@dimen/dp2">
+    app:cardElevation="@dimen/dp2"
+    app:cardUseCompatPadding="false"
+    app:contentPadding="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,8 +42,7 @@
             android:maxLength="20"
             android:maxLines="1"
             android:minLines="1"
-            android:textSize="@dimen/verySmallTextSize"
-            tools:text="باشگاه خبرنگاران جوان" />
+            android:textSize="@dimen/verySmallTextSize" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
