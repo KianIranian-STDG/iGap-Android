@@ -1910,4 +1910,7 @@
     <string name="download_icon">ï</string>
     <string name="icon_sync">ÿ</string>
     <string name="icon_play">ò</string>
+    <string name="icon_next">Ó</string>
+    <string name="icon_previous">Ô</string>
+    <string name="icon_like">Ö</string>
 </resources>

@@ -10,6 +10,6 @@
 
     </FrameLayout>
 
-    <include layout="@layout/fragment_beeptunes_player" />
+    <include layout="@layout/fragment_beeptunes_behavier" />
 
 </android.support.design.widget.CoordinatorLayout>

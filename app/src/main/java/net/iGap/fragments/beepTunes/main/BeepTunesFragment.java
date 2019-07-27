@@ -46,7 +46,7 @@ public class BeepTunesFragment extends BaseFragment {
         playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        progressBar = rootView.findViewById(R.id.pb_btPlayer_behavier);
+        progressBar = rootView.findViewById(R.id.pb_btBehavior_behavior);
 
         progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
@@ -54,10 +54,10 @@ public class BeepTunesFragment extends BaseFragment {
         new HelperFragment(getFragmentManager(), new BeepTunesMainFragment().getInstance(fromAlbumAdapter, toAlbumAdapter))
                 .setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
 
-        TextView artistNameTv = rootView.findViewById(R.id.tv_btPlayer_artistName);
-        TextView songNameTv = rootView.findViewById(R.id.tv_btPlayer_songName);
-        TextView playIconTv = rootView.findViewById(R.id.tv_btPlayer_playIcon);
-        ImageView songImageIv = rootView.findViewById(R.id.iv_btPlayer_image);
+        TextView artistNameTv = rootView.findViewById(R.id.tv_btBehavior_artistName);
+        TextView songNameTv = rootView.findViewById(R.id.tv_btBehavior_songName);
+        TextView playIconTv = rootView.findViewById(R.id.tv_btBehavior_playIcon);
+        ImageView songImageIv = rootView.findViewById(R.id.iv_btBehavior_image);
 
 
         viewModel.getPlayingSongViewLiveData().observe(getViewLifecycleOwner(), playingSong -> {
@@ -80,12 +80,16 @@ public class BeepTunesFragment extends BaseFragment {
         fromAlbumAdapter.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong, getContext()));
 
         viewModel.getBehaviorStatusLiveData().observe(getViewLifecycleOwner(), status -> {
-            if (status != null)
+            if (status != null) {
                 if (status) {
                     behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 } else {
                     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
+
+                new HelperFragment(getFragmentManager(), BeepTunesPlayer.getInstance(toAlbumAdapter))
+                        .setResourceContainer(R.id.fl_btPlayer_container).setAddToBackStack(false).setReplace(true).load();
+            }
         });
 
         playerLayout.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
