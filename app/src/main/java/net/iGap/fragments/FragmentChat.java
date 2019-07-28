@@ -905,7 +905,7 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initToolbar();
+
                 initLayoutHashNavigationCallback();
                 showSpamBar();
 
@@ -1094,21 +1094,6 @@ public class FragmentChat extends BaseFragment
             txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width));
         }
 
-    }
-
-    private void initToolbar() {
-
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
-                .setLogoShown(false)
-                .setChatRoom(true)
-                .setListener(this);
-
-        //just for skipping crash when name set to toolbar at onResume()
-        mHelperToolbar.getView();
     }
 
     @Override
