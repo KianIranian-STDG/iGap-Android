@@ -587,7 +587,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (binding.loading != null) {
+                if (binding.loading != null && getActivity() != null) {
                     binding.loading.setVisibility(View.VISIBLE);
                     getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }

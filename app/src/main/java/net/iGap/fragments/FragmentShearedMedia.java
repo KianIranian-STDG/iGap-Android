@@ -436,13 +436,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         btnGoToPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long messageId = SelectedList.get(0);
-                RealmRoomMessage.setGap(messageId);
-                goToPositionFromShardMedia.goToPosition(messageId);
-                goToPosition = true;
-                popBackStackFragment();
-                adapter.resetSelected();
-                popBackStackFragment();
+                if (SelectedList.size() == 1) {
+                    long messageId = SelectedList.get(0);
+                    RealmRoomMessage.setGap(messageId);
+                    goToPositionFromShardMedia.goToPosition(messageId);
+                    goToPosition = true;
+                    popBackStackFragment();
+                    adapter.resetSelected();
+                    popBackStackFragment();
+                }
             }
         });
 
