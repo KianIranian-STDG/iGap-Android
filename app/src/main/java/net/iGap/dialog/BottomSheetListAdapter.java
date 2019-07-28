@@ -47,7 +47,7 @@ public class BottomSheetListAdapter extends RecyclerView.Adapter<BottomSheetList
         return items == null ? 0 : items.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         final CustomListItemBottomSheetBinding binding;
 

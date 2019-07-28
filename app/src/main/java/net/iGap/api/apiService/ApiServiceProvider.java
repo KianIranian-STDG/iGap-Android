@@ -1,6 +1,7 @@
 package net.iGap.api.apiService;
 
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.IgashtApi;
 import net.iGap.api.KuknosApi;
 import net.iGap.api.PopularChannelApi;
 
@@ -10,6 +11,7 @@ public class ApiServiceProvider {
     private static BeepTunesApi beepTunesApi;
     private static PopularChannelApi channelApi;
     private static KuknosApi kuknosApi;
+    private static IgashtApi igashtApi;
 
     public static BeepTunesApi getBeepTunesClient() {
         if (beepTunesApi == null) {
@@ -30,6 +32,13 @@ public class ApiServiceProvider {
             kuknosApi = factory.getKuknosRetrofit().create(KuknosApi.class);
         }
         return kuknosApi;
+    }
+
+    public static IgashtApi getIgashtClient() {
+        if (igashtApi == null) {
+            igashtApi = factory.getIgasgtRetrofit().create(IgashtApi.class);
+        }
+        return igashtApi;
     }
 
 }

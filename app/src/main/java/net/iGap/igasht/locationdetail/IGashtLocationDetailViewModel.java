@@ -1,0 +1,60 @@
+package net.iGap.igasht.locationdetail;
+
+import android.arch.lifecycle.MutableLiveData;
+import android.databinding.ObservableBoolean;
+import android.util.Log;
+import android.view.View;
+
+import net.iGap.igasht.BaseIGashtViewModel;
+import net.iGap.igasht.IGashtRepository;
+import net.iGap.igasht.locationlist.IGashtLocationItem;
+
+public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterTicketResponse> {
+
+    private ObservableBoolean showBuyTicketView = new ObservableBoolean(true);
+
+    private MutableLiveData<Boolean> loadBuyTicketView = new MutableLiveData<>();
+    private IGashtRepository repository;
+
+    public IGashtLocationDetailViewModel() {
+        repository = IGashtRepository.getInstance();
+        loadBuyTicketView.setValue(true);
+    }
+
+    public IGashtLocationItem getLocationItem() {
+        return repository.getSelectedLocation();
+    }
+
+    public MutableLiveData<Boolean> getLoadBuyTicketView() {
+        return loadBuyTicketView;
+    }
+
+    public ObservableBoolean getShowBuyTicketView() {
+        return showBuyTicketView;
+    }
+
+    public void onTabItemClick(boolean loadBuyTicketView) {
+        showBuyTicketView.set(loadBuyTicketView);
+        this.loadBuyTicketView.setValue(loadBuyTicketView);
+    }
+
+    public void registerOrder() {
+        showLoadingView.set(View.VISIBLE);
+        repository.registeredOrder(this);
+    }
+
+    @Override
+    public void onSuccess(RegisterTicketResponse data) {
+        showLoadingView.set(View.GONE);
+        Log.wtf(this.getClass().getName(), "status: " + data.getStatus());
+        switch (data.getStatus()) {
+            case "SUCCESS":
+                break;
+            case "PROGRESS":
+
+                break;
+            default:
+
+        }
+    }
+}

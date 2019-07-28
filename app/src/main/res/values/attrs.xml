@@ -102,6 +102,7 @@
   <attr name="pageBackgroundTheme" format="reference" />
   <attr name="textColorTheme" format="reference" />
   <attr name="iGapButton" format="reference" />
+  <attr name="iGapButtonGray" format="reference"/>
 
   <!--Menu-->
   <attr name="textColorMenuTheme" format="reference" />

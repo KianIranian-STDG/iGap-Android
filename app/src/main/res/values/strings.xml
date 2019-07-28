@@ -1916,4 +1916,20 @@ Want to get it?</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
     <string name="str_frag_sync_error">Something went wrong. Please try again.</string>
     <string name="download_icon">ï</string>
+    <string name="igasht_title">آیگشت</string>
+    <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
+    <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
+    <string name="igasht_add_to_favorite_title">به لیست علاقمندی ها اضافه کن</string>
+    <string name="igasht_buy_ticket_title">خرید بلیط</string>
+    <string name="detail_title">جزئیات</string>
+    <string name="igasht_place_of_visit_title">محل بازدید</string>
+    <string name="igasht_add_new_place_title">اضافه کردن بازدید جدید</string>
+    <string name="igasht_ticket_type_title">Specify the type of ticket</string>
+    <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
+    <string name="igasht_add_ticket_count_button_title">ثبت</string>
+    <string name="igasht_order_ticket_title">%s for %d person</string>
+    <string name="igasht_favorites_title">Favorites</string>
+    <string name="igasht_history_title">History</string>
+    <string name="igasht_total_ticket_price">Total Price: %d Toman</string>
+    <string name="igasht_add_ticket_error">Please Add Ticket</string>
 </resources>

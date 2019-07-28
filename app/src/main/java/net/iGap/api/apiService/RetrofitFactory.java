@@ -3,8 +3,11 @@ package net.iGap.api.apiService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.iGap.BuildConfig;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -13,6 +16,11 @@ public class RetrofitFactory {
 
     public RetrofitFactory() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(httpLoggingInterceptor);
+        }
         builder.addInterceptor(chain -> {
             Request original = chain.request();
             Request request = original.newBuilder()
@@ -59,5 +67,14 @@ public class RetrofitFactory {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
+    }
+
+    Retrofit getIgasgtRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.ATI_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+        return retrofit;
     }
 }
