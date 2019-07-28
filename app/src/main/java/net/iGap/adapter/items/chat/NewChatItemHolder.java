@@ -102,7 +102,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         eyeIconTv = new FontIconTextView(getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
         eyeIconTv.setText("Ë");
-        eyeIconTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        setTextSize(eyeIconTv , R.dimen.standardTextSize);
 
         editedIndicatorTv = new AppCompatTextView(getContext());
         editedIndicatorTv.setId(R.id.tv_chatItem_edited);
@@ -143,13 +143,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteUpIv = new FontIconTextView(context);
         voteUpIv.setText("Ö");
         voteUpIv.setGravity(BOTTOM);
-        voteUpIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        setTextSize(voteUpIv , R.dimen.standardTextSize);
 
         voteDownIv = new FontIconTextView(context);
         voteDownIv.setText("Ü");
         voteDownIv.setGravity(BOTTOM);
         voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-
+        setTextSize(voteDownIv , R.dimen.standardTextSize);
 
         LinearLayout messageDetailContainer = new LinearLayout(getContext());
         messageDetailContainer.setOrientation(LinearLayout.HORIZONTAL);

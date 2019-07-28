@@ -7298,6 +7298,8 @@ public class FragmentChat extends BaseFragment
         });
 
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
+
+        if (G.isDarkTheme) ll_Search.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
         //btnCloseLayoutSearch = (Button)  rootView.findViewById(R.id.ac_btn_close_layout_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
