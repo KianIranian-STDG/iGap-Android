@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import net.iGap.R;
+import net.iGap.api.apiService.ApiStatic;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
 
 public class PaymentFragment extends Fragment {
@@ -68,7 +70,14 @@ public class PaymentFragment extends Fragment {
 
         viewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
             if (getActivity() != null && webLink != null) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webLink)));
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
+                Bundle bundle = new Bundle();
+                bundle.putString("Authorization", ApiStatic.USER_TOKEN);
+                browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
+                startActivity(browserIntent);
+
+                /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webLink)));*/
             }
         });
     }

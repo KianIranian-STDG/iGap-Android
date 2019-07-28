@@ -2,25 +2,35 @@ package net.iGap.payment;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableDouble;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
+
+import net.iGap.G;
+import net.iGap.R;
 
 public class PaymentViewModel extends ViewModel {
 
     private ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableInt showMainView = new ObservableInt(View.GONE);
-    private CheckOrderResponse orderDetail;
+    private ObservableInt background = new ObservableInt();
+    private ObservableField<String> title = new ObservableField<>();
+    private ObservableField<String> description = new ObservableField<>();
+    private ObservableDouble price = new ObservableDouble();
     private MutableLiveData<String> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
 
     private String token;
     private String orderId;
+    private CheckOrderResponse orderDetail;
     private PaymentRepository repository;
 
     public PaymentViewModel(String token) {
         repository = PaymentRepository.getInstance();
+        background.set(G.isDarkTheme ? R.drawable.bottom_sheet_background : R.drawable.bottom_sheet_light_background);
         this.token = token;
         if (token != null) {
             checkOrderToken();
@@ -41,8 +51,20 @@ public class PaymentViewModel extends ViewModel {
         return showMainView;
     }
 
-    public CheckOrderResponse getOrderDetail() {
-        return orderDetail;
+    public ObservableInt getBackground() {
+        return background;
+    }
+
+    public ObservableField<String> getTitle() {
+        return title;
+    }
+
+    public ObservableField<String> getDescription() {
+        return description;
+    }
+
+    public ObservableDouble getPrice() {
+        return price;
     }
 
     public MutableLiveData<String> getShowErrorMessage() {
@@ -87,7 +109,11 @@ public class PaymentViewModel extends ViewModel {
             public void onSuccess(CheckOrderResponse data) {
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
+                description.set(data.getInfo().getProduct().getDescription());
+                price.set(data.getInfo().getPrice());
+                title.set(data.getInfo().getProduct().getTitle());
                 orderDetail = data;
+
             }
 
             @Override
