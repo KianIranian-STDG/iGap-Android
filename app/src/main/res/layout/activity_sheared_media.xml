@@ -160,7 +160,7 @@
     android:layout_height="wrap_content"
     android:elevation="0dp"
     android:orientation="vertical"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <LinearLayout
 
@@ -188,7 +188,7 @@
           android:background="@null"
           android:gravity="center"
           android:text="@string/md_close_button"
-          android:textAppearance="@style/TextIconAppearance.all"
+          style="@style/myIconTextViewStyle"
           android:textColor="@color/gray"
           android:textSize="@dimen/dp26" />
 
@@ -213,8 +213,8 @@
         android:layout_height="match_parent"
         android:background="@null"
         android:gravity="center"
-        android:text="@string/md_right_arrow_forward"
-        android:textAppearance="@style/TextIconAppearance.all"
+        android:text="@string/go_icon"
+        style="@style/myIconTextViewStyle"
         android:textColor="@color/gray"
         android:textSize="@dimen/dp26"
 
@@ -224,11 +224,11 @@
       <net.iGap.module.MaterialDesignTextView
         android:id="@+id/asm_btn_forward_selected"
         android:layout_width="@dimen/dp60"
+          style="@style/myIconTextViewStyle"
         android:layout_height="match_parent"
         android:background="@null"
         android:gravity="center"
         android:text="@string/forward_icon"
-        android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/gray"
         android:paddingTop="@dimen/dp6"
         android:textSize="@dimen/dp26" />
@@ -248,8 +248,8 @@
           android:layout_height="match_parent"
           android:background="@null"
           android:gravity="center"
-          android:text="@string/md_rubbish_delete_file"
-          android:textAppearance="@style/TextIconAppearance.all"
+          android:text="@string/delete_icon"
+          style="@style/myIconTextViewStyle"
           android:textColor="@color/gray"
           android:textSize="@dimen/dp26" />
 
