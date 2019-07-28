@@ -2282,7 +2282,9 @@ public class FragmentChat extends BaseFragment
                 mAdapter.deselect();
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
-            } else {
+            }else if (ll_Search != null && ll_Search.isShown()){
+                goneSearchBox(edtSearchMessage);
+            }else {
                 stopSuperPress = false;
             }
         } catch (IllegalArgumentException e) {
@@ -7297,17 +7299,9 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View view) {
                 if (edtSearchMessage.getText().toString().length() == 0) {
-                    //  deSelectMessage(selectedPosition);
-                    edtSearchMessage.setText("");
-                    ll_Search.setVisibility(View.GONE);
-                    layoutToolbar.setVisibility(View.VISIBLE);
-                    //  ll_navigate_Message.setVisibility(View.GONE);
-                    // viewAttachFile.setVisibility(View.VISIBLE);
 
-                    btnHashLayoutClose.performClick();
+                    goneSearchBox(view);
 
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 } else {
                     // deSelectMessage(selectedPosition);
                     edtSearchMessage.setText("");
@@ -7367,6 +7361,17 @@ public class FragmentChat extends BaseFragment
 
             }
         });
+    }
+
+    private void goneSearchBox(View view) {
+
+        edtSearchMessage.setText("");
+        ll_Search.setVisibility(View.GONE);
+        layoutToolbar.setVisibility(View.VISIBLE);
+        btnHashLayoutClose.performClick();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
     }
 
     private void itemAdapterBottomSheetForward() {
