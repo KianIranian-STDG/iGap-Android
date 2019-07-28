@@ -13,11 +13,11 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_marginTop="@dimen/dp8">
+            android:layout_marginTop="@dimen/dp8"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/rl_fragmentContainer"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp4"
                 android:orientation="vertical" />
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </FrameLayout>
 

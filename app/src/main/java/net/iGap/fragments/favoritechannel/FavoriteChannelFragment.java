@@ -17,8 +17,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.larswerkman.holocolorpicker.SVBar;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -72,7 +75,6 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
         }
 
         toolbarContainer.addView(toolbar.getView());
-
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
@@ -176,7 +178,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                         case ParentChannel.TYPE_CATEGORY:
                             RecyclerView categoryRecyclerView = new RecyclerView(getContext());
                             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams2.setMargins(Utils.dpToPx(4),Utils.dpToPx(4),Utils.dpToPx(4),Utils.dpToPx(4));
+                            layoutParams2.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                             categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, LinearLayoutManager.VERTICAL, false));
                             categoryRecyclerView.setLayoutParams(layoutParams2);
                             CategoryItemAdapter gridItem = new CategoryItemAdapter(getContext(), true, response.body().getData().get(i).getCategories());
@@ -193,6 +195,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                 }
                             });
                             categoryRecyclerView.setAdapter(gridItem);
+                            categoryRecyclerView.setNestedScrollingEnabled(false);
                             linearLayoutItemContainer.addView(categoryRecyclerView);
                             break;
                     }
