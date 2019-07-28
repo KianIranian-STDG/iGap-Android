@@ -134,6 +134,7 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
+                        categoryRecyclerViewChild.setNestedScrollingEnabled(false);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
                         adapterChannel.setOnClickedChannelEventCallBack(new ChannelInfoItemAdapter.OnClickedChannelInfoEventCallBack() {
 
