@@ -96,7 +96,7 @@ public class KuknosPanelVM extends ViewModel {
     }
 
     public void sendW() {
-
+        openPage.setValue(1);
     }
 
     public void historyW() {

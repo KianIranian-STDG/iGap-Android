@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +22,15 @@ import android.widget.Spinner;
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
 import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
+import net.iGap.kuknos.viewmodel.KuknosRecieveVM;
+import net.iGap.kuknos.viewmodel.KuknosSendVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import java.util.ArrayList;
@@ -151,14 +157,29 @@ public class KuknosPanelFrag extends BaseFragment {
         kuknosPanelVM.getOpenPage().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer pageID) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = null;
                 switch (pageID) {
                     case 0:
-                        kuknosPanelVM.getDataFromServer();
+                        fragment = fragmentManager.findFragmentByTag(KuknosRecieveFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosRecieveFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
                         break;
                     case 1:
-                        Log.d(this.getClass().getName(), "amini onChanged: btn");
+                        fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosSendFrag.newInstance();
+                            Bundle b = new Bundle();
+                            b.putParcelable("balanceClientInfo", kuknosPanelVM.getKuknosWalletsM().getValue().getBalanceInfo().get(kuknosPanelVM.getPosition()));
+                            fragment.setArguments(b);
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
                         break;
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }

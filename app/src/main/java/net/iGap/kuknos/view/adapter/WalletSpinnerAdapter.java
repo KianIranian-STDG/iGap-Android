@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -58,14 +59,16 @@ public class WalletSpinnerAdapter extends BaseAdapter {
             walletName.setTypeface(null, Typeface.BOLD);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 
-            ConstraintLayout temp = layout.findViewById(R.id.fragKuknosPconstraint);
-            temp.setBackgroundResource(R.drawable.kuknos_s_last_item_style);
+            ConstraintLayout constraintLayout = layout.findViewById(R.id.fragKuknosPconstraint);
+            LinearLayout linearLayout = layout.findViewById(R.id.fragKuknosPLinear);
+
+            constraintLayout.setBackgroundResource(R.drawable.kuknos_s_last_item_style);
 
             ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(temp);
+            constraintSet.clone(constraintLayout);
             float biasedValue = 0.5f;
-            constraintSet.setHorizontalBias(walletPic.getId(), biasedValue);
-            constraintSet.applyTo(temp);
+            constraintSet.setHorizontalBias(linearLayout.getId(), biasedValue);
+            constraintSet.applyTo(constraintLayout);
         } else {
             walletName.setTypeface(null, Typeface.NORMAL);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);

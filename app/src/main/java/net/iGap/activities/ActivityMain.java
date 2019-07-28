@@ -98,6 +98,7 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.kuknos.view.KuknosSendFrag;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -148,6 +149,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodePaymentCharge = 198;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
+    public static final int kuknosRequestCodeQrCode = 202;
     public static final int requestCodeBarcode = 201;
     public static final int WALLET_REQUEST_CODE = 1024;
 
@@ -821,6 +823,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (result.getContents() != null) {
                     new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
+                }
+                break;
+            case kuknosRequestCodeQrCode:
+                IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
+                if (kuknosWID.getContents() != null) {
+                    KuknosSendFrag myFragment = (KuknosSendFrag)getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
+                    if (myFragment != null && myFragment.isVisible()) {
+                        myFragment.setWalletIDQrCode(kuknosWID.getContents());
+                    }
                 }
                 break;
             case WALLET_REQUEST_CODE:

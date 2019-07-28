@@ -1962,4 +1962,21 @@
     <string name="kuknos_panelStr_buyPeyman">Buy Peyman</string>
     <string name="kuknos_panelStr_setting">Setting</string>
     <string name="kuknos_develop">developing</string>
+    <string name="kuknos_recieve_title">For receiving credit from others, you must send your wallet ID to others.</string>
+    <string name="kuknos_recieve_walletID">Your wallet Address is:\n DERFDSJKLI...</string>
+    <string name="kuknos_recieve_copyBtn">Copy Wallet Address</string>
+    <string name="kuknos_recieve_copyToast">Wallet Address copied in clipboard.</string>
+    <string name="kuknos_send_walletAddress">Wallet Address* :</string>
+    <string name="kuknos_send_text">Memo ID or text</string>
+    <string name="kuknos_send_amount">Amount* :</string>
+    <string name="kuknos_send_sendBtn">Send</string>
+    <string name="kuknos_send_connectingServer">transferring...</string>
+    <string name="kuknos_send_successServer">Transfer is successfully done.</string>
+    <string name="kuknos_send_errorServer">Something went wrong. Please try again.</string>
+    <string name="kuknos_send_walletIDError">Wallet Address must not be empty.</string>
+    <string name="kuknos_send_AmountError">Amount must not be empty.</string>
+    <string name="kuknos_send_CreditError">NOT enough credit.</string>
+    <string name="kuknos_send_AmountFromatError">Amount format is wrong. please only use . and digits.</string>
+    <string name="kuknos_send_dialogTitle">Transfer Status</string>
+
 </resources>

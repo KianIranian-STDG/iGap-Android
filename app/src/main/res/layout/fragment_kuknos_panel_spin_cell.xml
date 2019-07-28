@@ -1,44 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    android:id="@+id/fragKuknosPconstraint"
-    style="?textTitleColorSettingTheme"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?textTitleColorSettingTheme"
+    android:id="@+id/fragKuknosPconstraint"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/dp48">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/fragKuknosPimgCell"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/dp4"
-        android:layout_marginLeft="@dimen/dp4"
-        android:padding="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/fragKuknosPtextCell"
-        app:layout_constraintTop_toTopOf="@+id/fragKuknosPtextCell"
-        app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPtextCell"
-        app:layout_constraintWidth_percent="0.1"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintHorizontal_bias="0.2"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/fragKuknosPtextCell"
+    <LinearLayout
+        android:id="@+id/fragKuknosPLinear"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="50dp"
-        android:text="test"
-        android:gravity="center|start"
-        android:textSize="16dp"
-        android:minHeight="38dp"
-        android:layout_marginTop="@dimen/dp4"
-        android:layout_marginStart="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp8"
-        app:layout_constraintStart_toEndOf="@+id/fragKuknosPimgCell"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.2">
 
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/fragKuknosPimgCell"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:padding="@dimen/dp4"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/fragKuknosPtextCell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp40"
+            android:minWidth="@dimen/dp40"
+            android:text="test"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textSize="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"/>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
