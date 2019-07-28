@@ -5762,7 +5762,7 @@ public class FragmentChat extends BaseFragment
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (getActivity() == null && getActivity().isFinishing() && !isAdded())
+                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
                                             return;
 
                                         if (progress == 100) {
@@ -5789,7 +5789,7 @@ public class FragmentChat extends BaseFragment
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (getActivity() == null && getActivity().isFinishing() && !isAdded())
+                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
                                             return;
 
                                         if (progress == 100) {
