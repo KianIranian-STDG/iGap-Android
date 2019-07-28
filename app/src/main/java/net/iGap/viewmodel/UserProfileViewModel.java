@@ -157,6 +157,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public UserProfileViewModel() {
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {
             userInfo.addChangeListener(realmModel -> {
                 Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
