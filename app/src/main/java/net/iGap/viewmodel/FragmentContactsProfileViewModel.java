@@ -207,6 +207,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
+                                G.refreshRealmUi();
                                 goToChatPage.setValue(room.getId());
                                 G.onChatGetRoom = null;
                             }
