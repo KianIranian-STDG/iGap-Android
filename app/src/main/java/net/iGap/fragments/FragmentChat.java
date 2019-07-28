@@ -2349,7 +2349,7 @@ public class FragmentChat extends BaseFragment
             }
         } else{
             if (G.themeColor == Theme.DARK) {
-                imgBackGround.setBackgroundColor(Color.parseColor(Theme.default_dark_background));
+                imgBackGround.setImageResource(R.drawable.chat_bg_dark);
             }
             else{
                 //todo: fixed load default background in light mode
