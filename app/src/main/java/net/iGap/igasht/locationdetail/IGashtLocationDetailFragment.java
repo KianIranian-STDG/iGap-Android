@@ -22,6 +22,7 @@ import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.payment.PaymentFragment;
 
 public class IGashtLocationDetailFragment extends Fragment {
 
@@ -100,6 +101,25 @@ public class IGashtLocationDetailFragment extends Fragment {
         viewModel.getRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (getContext() != null && errorMessage != null) {
                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
+            if (getActivity() != null && isGoBack != null && isGoBack) {
+                Toast.makeText(getActivity(), R.string.successful_payment, Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
+            }
+        });
+
+        viewModel.getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
+            if (getActivity() != null && orderToken != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(PaymentFragment.getInstance(orderToken)).setReplace(false).load(true);
+            }
+        });
+
+        viewModel.getPaymentError().observe(getViewLifecycleOwner(), isError -> {
+            if (getContext() != null && isError != null && isError) {
+                Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
             }
         });
     }

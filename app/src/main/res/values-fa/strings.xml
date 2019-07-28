@@ -1928,6 +1928,7 @@
     <string name="igasht_history_title">تاریخچه</string>
     <string name="igasht_total_ticket_price">مبلغ نهایی: %d تومان</string>
     <string name="igasht_add_ticket_error">لطفا بلیت خود را اضافه کنید.</string>
+    <string name="igasht_buy_ticket_successful">خرید با موفقیت انجام شد.</string>
 
     <string name="str_frag_sync_contactTitle">به دوستان خود سلام کنید و بهشون بگید که در آی گپ هستید.</string>
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>

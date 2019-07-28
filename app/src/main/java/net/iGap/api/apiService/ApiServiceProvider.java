@@ -11,7 +11,6 @@ public class ApiServiceProvider {
     private static BeepTunesApi beepTunesApi;
     private static PopularChannelApi channelApi;
     private static KuknosApi kuknosApi;
-    private static IgashtApi igashtApi;
 
     public static BeepTunesApi getBeepTunesClient() {
         if (beepTunesApi == null) {
@@ -33,12 +32,4 @@ public class ApiServiceProvider {
         }
         return kuknosApi;
     }
-
-    public static IgashtApi getIgashtClient() {
-        if (igashtApi == null) {
-            igashtApi = factory.getIgasgtRetrofit().create(IgashtApi.class);
-        }
-        return igashtApi;
-    }
-
 }

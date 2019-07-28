@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:gravity="center"
-            android:text="@{viewModel.orderDetail.info.price}"
+            android:text="@{String.valueOf(viewModel.orderDetail.info.price)}"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="@id/acceptButton"
@@ -126,10 +126,10 @@
 
         <View
             android:id="@+id/divider"
+            style="?lineColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp1"
             android:layout_marginBottom="@dimen/dp8"
-            android:background="?lineColorSettingTheme"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/description"
             app:layout_constraintEnd_toEndOf="parent"

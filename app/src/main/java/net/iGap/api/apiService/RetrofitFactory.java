@@ -61,7 +61,7 @@ public class RetrofitFactory {
         return retrofit;
     }
 
-    public Retrofit getPaymentRetrofit(){
+    public Retrofit getPaymentRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.PAYMENT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -69,12 +69,11 @@ public class RetrofitFactory {
                 .build();
     }
 
-    Retrofit getIgasgtRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
+    public Retrofit getIgashtRetrofit() {
+        return new Retrofit.Builder()
                 .baseUrl(ApiStatic.ATI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
-        return retrofit;
     }
 }

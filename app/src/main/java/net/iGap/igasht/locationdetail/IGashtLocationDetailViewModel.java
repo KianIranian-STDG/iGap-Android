@@ -14,11 +14,17 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
     private ObservableBoolean showBuyTicketView = new ObservableBoolean(true);
 
     private MutableLiveData<Boolean> loadBuyTicketView = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    private MutableLiveData<String> goPayment = new MutableLiveData<>();
+    private MutableLiveData<Boolean> paymentError = new MutableLiveData<>();
     private IGashtRepository repository;
 
     public IGashtLocationDetailViewModel() {
         repository = IGashtRepository.getInstance();
         loadBuyTicketView.setValue(true);
+        showLoadingView.set(View.GONE);
+        showMainView.set(View.VISIBLE);
+        showViewRefresh.set(View.GONE);
     }
 
     public IGashtLocationItem getLocationItem() {
@@ -31,6 +37,18 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
 
     public ObservableBoolean getShowBuyTicketView() {
         return showBuyTicketView;
+    }
+
+    public MutableLiveData<Boolean> getGoBack() {
+        return goBack;
+    }
+
+    public MutableLiveData<String> getGoPayment() {
+        return goPayment;
+    }
+
+    public MutableLiveData<Boolean> getPaymentError() {
+        return paymentError;
     }
 
     public void onTabItemClick(boolean loadBuyTicketView) {
@@ -49,12 +67,13 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
         Log.wtf(this.getClass().getName(), "status: " + data.getStatus());
         switch (data.getStatus()) {
             case "SUCCESS":
+                goBack.setValue(true);
                 break;
             case "PROGRESS":
-
+                goPayment.setValue(data.getToken());
                 break;
             default:
-
+                paymentError.setValue(true);
         }
     }
 }

@@ -6,7 +6,7 @@ import android.util.Log;
 import com.google.gson.GsonBuilder;
 
 import net.iGap.api.IgashtApi;
-import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.igasht.locationdetail.RegisterTicketResponse;
 import net.iGap.igasht.locationdetail.buyticket.IGashtLocationService;
 import net.iGap.igasht.locationdetail.buyticket.IGashtOrder;
@@ -51,7 +51,7 @@ public class IGashtRepository {
     }
 
     private IGashtRepository() {
-        igashtApi = ApiServiceProvider.getIgashtClient();
+        igashtApi = new RetrofitFactory().getIgashtRetrofit().create(IgashtApi.class);
         selectedServiceList = new ArrayList<>();
     }
 
@@ -79,7 +79,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.errorBody().string()));
+                        callback.onError(getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -102,7 +102,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.errorBody().string()));
+                        callback.onError(getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -125,7 +125,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.errorBody().string()));
+                        callback.onError(getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -214,7 +214,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.errorBody().string()));
+                        callback.onError(getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -250,9 +250,8 @@ public class IGashtRepository {
         void onFailed();
     }
 
-    private ErrorModel getError(String error) {
-        Log.wtf(this.getClass().getName(), "error: " + error);
-        if (error != null) {
+    private ErrorModel getError(int responseCode, String error) {
+        if (responseCode < 501 && error != null) {
             return new GsonBuilder().create().fromJson(error, ErrorModel.class);
         } else {
             return new ErrorModel("empty error", "error message is null");
