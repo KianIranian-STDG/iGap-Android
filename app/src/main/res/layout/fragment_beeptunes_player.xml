@@ -8,7 +8,12 @@
         android:id="@+id/iv_btPlayer_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_player"
         android:scaleType="centerCrop" />
 
     <net.iGap.module.CircleImageView
@@ -134,7 +139,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_btPlayer_otherSong"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="300dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_btPlayer_currentDuration">

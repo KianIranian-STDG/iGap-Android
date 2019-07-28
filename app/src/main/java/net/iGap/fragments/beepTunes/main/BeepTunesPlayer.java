@@ -75,7 +75,7 @@ public class BeepTunesPlayer extends BaseFragment {
                 artistNameTv.setText(playingSong.getArtistName());
                 songNameTv.setText(playingSong.getTitle());
                 songArtIv.setImageBitmap(playingSong.getBitmap());
-//                backgroundIv.setImageBitmap(playingSong.getBitmap());
+                backgroundIv.setImageBitmap(playingSong.getBitmap());
                 if (playingSong.isPlay()) {
                     playTv.setText(getContext().getResources().getString(R.string.pause_icon));
                 } else {
