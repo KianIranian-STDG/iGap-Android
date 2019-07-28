@@ -16,6 +16,7 @@ public class PaymentViewModel extends ViewModel {
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
 
     private String token;
+    private String orderId;
     private PaymentRepository repository;
 
     public PaymentViewModel(String token) {
@@ -57,7 +58,11 @@ public class PaymentViewModel extends ViewModel {
     }
 
     public void onRetryClick() {
-        checkOrderToken();
+        if (orderId == null) {
+            checkOrderToken();
+        } else {
+            checkOrderStatus();
+        }
     }
 
     public void onCancelClick() {
@@ -68,11 +73,16 @@ public class PaymentViewModel extends ViewModel {
         goToWebPage.setValue(orderDetail.getRedirectUrl());
     }
 
+    public void checkOrderStatus(String orderId) {
+        this.orderId = orderId;
+        checkOrderStatus();
+    }
+
     private void checkOrderToken() {
         showMainView.set(View.GONE);
         showRetryView.set(View.GONE);
         showLoadingView.set(View.VISIBLE);
-        repository.checkOrder(token, new PaymentRepository.PaymentCallback() {
+        repository.checkOrder(token, new PaymentRepository.PaymentCallback<CheckOrderResponse>() {
             @Override
             public void onSuccess(CheckOrderResponse data) {
                 showLoadingView.set(View.GONE);
@@ -95,4 +105,25 @@ public class PaymentViewModel extends ViewModel {
         });
     }
 
+    private void checkOrderStatus() {
+        showMainView.set(View.GONE);
+        showLoadingView.set(View.VISIBLE);
+        showRetryView.set(View.GONE);
+        repository.checkOrderStatus(orderId, new PaymentRepository.PaymentCallback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onError(ErrorModel error) {
+
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+        });
+    }
 }
