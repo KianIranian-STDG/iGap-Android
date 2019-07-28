@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitFactory {
     private OkHttpClient httpClient;
 
-    RetrofitFactory() {
+    public RetrofitFactory() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(chain -> {
             Request original = chain.request();
@@ -51,5 +51,13 @@ public class RetrofitFactory {
                 .client(httpClient)
                 .build();
         return retrofit;
+    }
+
+    public Retrofit getPaymentRetrofit(){
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.PAYMENT_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
     }
 }
