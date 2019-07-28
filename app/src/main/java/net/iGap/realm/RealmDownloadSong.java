@@ -10,14 +10,23 @@ public class RealmDownloadSong extends RealmObject {
     private String displayName;
     private String englishDisplayName;
     private String savedName;
-    private boolean playStatus = false;
+    private Long artistId;
+    private Long albumId;
 
-    public boolean isPlay() {
-        return playStatus;
+    public Long getArtistId() {
+        return artistId;
     }
 
-    public void setPlay(boolean playStatus) {
-        this.playStatus = playStatus;
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
+
+    public Long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
     }
 
     public Long getId() {

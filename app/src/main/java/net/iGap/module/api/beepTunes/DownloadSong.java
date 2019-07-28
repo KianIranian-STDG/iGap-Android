@@ -16,6 +16,8 @@ public class DownloadSong {
     private int downloadProgress;
     private String path;
     private Track track;
+    private Long artistId;
+    private Long albumId;
 
     public DownloadSong(String url, Track track, String savedName, String path) {
         this.url = url;
@@ -23,10 +25,28 @@ public class DownloadSong {
         this.track = track;
         this.savedName = savedName;
         this.path = path;
+        this.artistId = track.getArtists().get(0).getId();
+        this.albumId = track.getAlbumId();
     }
 
     public DownloadSong() {
 
+    }
+
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
+
+    public Long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
     }
 
     public int getDownloadId() {
