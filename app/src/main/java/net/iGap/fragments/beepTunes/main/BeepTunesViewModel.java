@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 
+import net.iGap.G;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.module.BeepTunesPlayerService;
@@ -76,6 +77,10 @@ public class BeepTunesViewModel extends BaseViewModel {
         context.bindService(new Intent(context, BeepTunesPlayerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
+    public void seekBarProgressChanged(int progress) {
+        if (mediaPlayer != null)
+            G.handler.postDelayed(() -> mediaPlayer.seekTo(progress), 100);
+    }
 
     @Override
     public void onStartFragment(BaseFragment fragment) {

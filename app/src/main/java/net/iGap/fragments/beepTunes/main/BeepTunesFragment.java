@@ -1,6 +1,7 @@
 package net.iGap.fragments.beepTunes.main;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,7 +28,6 @@ public class BeepTunesFragment extends BaseFragment {
     private BeepTunesViewModel viewModel;
     private BottomSheetBehavior behavior;
     private ProgressBar progressBar;
-    private LinearLayout playerLayout;
     private MutableLiveData<PlayingSong> toAlbumAdapter = new MutableLiveData<>();
     private MutableLiveData<PlayingSong> fromAlbumAdapter = new MutableLiveData<>();
     private BeepTunesPlayer beepTunesPlayer;
@@ -47,7 +47,7 @@ public class BeepTunesFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel.onCreateFragment(this);
         beepTunesPlayer = BeepTunesPlayer.getInstance(toAlbumAdapter, viewModel.getProgressDurationLiveData());
-        playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
+        LinearLayout playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         progressBar = rootView.findViewById(R.id.pb_btBehavior_behavior);
@@ -55,8 +55,7 @@ public class BeepTunesFragment extends BaseFragment {
         playerToolBarCl = rootView.findViewById(R.id.cl_btPlayer_toolBar);
         TextView playerToolBarPlayerTv = rootView.findViewById(R.id.tv_btPlayer_toolBarTitle);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-
+        progressBar.getProgressDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
 
         new HelperFragment(getFragmentManager(), new BeepTunesMainFragment().getInstance(fromAlbumAdapter, toAlbumAdapter))
                 .setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
@@ -146,6 +145,10 @@ public class BeepTunesFragment extends BaseFragment {
             if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                 behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
+        });
+
+        beepTunesPlayer.getPlayingSongSeekBarLiveData().observe(getViewLifecycleOwner(), integer -> {
+            viewModel.seekBarProgressChanged(integer * 1000);
         });
 
     }

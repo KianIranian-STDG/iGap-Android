@@ -1,6 +1,8 @@
 package net.iGap.fragments.beepTunes.main;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,6 +50,7 @@ public class BeepTunesPlayer extends BaseFragment {
 
     private MutableLiveData<PlayingSong> songMutableLiveData;
     private MutableLiveData<PlayingSong> songFromPlayerLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> seekBarLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData;
 
 
@@ -103,6 +106,9 @@ public class BeepTunesPlayer extends BaseFragment {
                 if (songMutableLiveData.getValue().getSongId() == progressDuration.getId()) {
                     seekBar.setProgress(progressDuration.getCurrent());
                     seekBar.setMax(progressDuration.getTotal());
+                    currentTimeTv.setText(getTimeString(progressDuration.getCurrent() * 1000));
+                    totalTimeTv.setText(getTimeString(progressDuration.getTotal() * 1000));
+
                 }
             }
         });
@@ -132,6 +138,25 @@ public class BeepTunesPlayer extends BaseFragment {
             songFromPlayerLiveData.postValue(playingSong);
         });
 
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    seekBarLiveData.postValue(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private void setUpViews() {
@@ -146,6 +171,7 @@ public class BeepTunesPlayer extends BaseFragment {
         songArtIv = rootView.findViewById(R.id.iv_btPlayer_songArt);
         backgroundIv = rootView.findViewById(R.id.iv_btPlayer_cover);
         recyclerView = rootView.findViewById(R.id.rv_btPlayer_otherSong);
+        seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#00D20E"), PorterDuff.Mode.SRC_IN);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
@@ -164,8 +190,21 @@ public class BeepTunesPlayer extends BaseFragment {
             realm.close();
     }
 
+    private String getTimeString(long millis) {
+
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+        String time = String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
+
+        return time;
+    }
+
     public MutableLiveData<PlayingSong> getSongFromPlayerLiveData() {
         return songFromPlayerLiveData;
+    }
+
+    public MutableLiveData<Integer> getPlayingSongSeekBarLiveData() {
+        return seekBarLiveData;
     }
 }
 
