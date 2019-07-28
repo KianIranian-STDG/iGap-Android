@@ -2,6 +2,7 @@ package net.iGap.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -76,9 +77,8 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             subtitle.setText(contact.getPhone());
 
             rootView.setOnClickListener(v -> {
-                Intent smsIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                smsIntent.setType("vnd.android-dir/mms-sms");
-                smsIntent.putExtra("address", phone);
+                Uri uri = Uri.parse("smsto:" + phone);
+                Intent smsIntent = new Intent(android.content.Intent.ACTION_SENDTO, uri);
                 smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + ActivityMain.userPhoneNumber);
                 smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(smsIntent);
