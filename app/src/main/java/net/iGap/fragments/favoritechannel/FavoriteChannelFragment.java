@@ -121,7 +121,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                         HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(slider.getIndex()).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
                                     } else {
                                         Log.i("nazanin", "onResponse: " + position);
-                                        Toast.makeText(getContext(), "nnnnnn", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "Empty", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }, 1000);

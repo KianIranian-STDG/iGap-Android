@@ -63,12 +63,14 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        NestedScrollView scrollView = view.findViewById(R.id.scroll_channel);
+        NestedScrollView nestedScrollView = view.findViewById(R.id.scroll_channel);
 
-        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView, i, i1, i2, i3) -> {
-            Toast.makeText(getContext(), "scroll", Toast.LENGTH_SHORT).show();
-            if (totalPage >= page)
-                setupViews();
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView nestedScrollView, int i, int i1, int i2, int i3) {
+                if (totalPage >= page)
+                    setupViews();
+            }
         });
     }
 
