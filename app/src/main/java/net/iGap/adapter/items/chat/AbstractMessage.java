@@ -638,8 +638,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (minWith < maxWith) {
                     minWith = maxWith;
                 }
-                holder.getChatBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
-                holder.getChatBloke().addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                holder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
+                holder.getContentBloke().addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
         }
     }
