@@ -18,10 +18,17 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.ProgressDuration;
+import net.iGap.realm.RealmDownloadSong;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 public class BeepTunesPlayer extends BaseFragment {
 
     private static final String TAG = "aabolfazlPlayer";
+    List<RealmDownloadSong> realmDownloadSongs;
     private View rootView;
     private TextView playTv;
     private TextView nextTv;
@@ -33,7 +40,7 @@ public class BeepTunesPlayer extends BaseFragment {
     private SeekBar seekBar;
     private CircleImageView songArtIv;
     private ImageView backgroundIv;
-
+    private Realm realm;
     private MutableLiveData<PlayingSong> songMutableLiveData;
     private MutableLiveData<PlayingSong> songFromPlayerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> seekBarLiveData = new MutableLiveData<>();
@@ -44,6 +51,7 @@ public class BeepTunesPlayer extends BaseFragment {
         BeepTunesPlayer beepTunesPlayer = new BeepTunesPlayer();
         beepTunesPlayer.songMutableLiveData = songMutableLiveData;
         beepTunesPlayer.progressDurationLiveData = progressDurationLiveData;
+        beepTunesPlayer.realmDownloadSongs = new ArrayList<>();
         return beepTunesPlayer;
     }
 
@@ -115,6 +123,30 @@ public class BeepTunesPlayer extends BaseFragment {
 
             }
         });
+
+        if (songMutableLiveData.getValue() != null)
+            realmDownloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
+                    .equalTo("artistId", songMutableLiveData.getValue().getArtistId()).findAll());
+
+
+        nextTv.setOnClickListener(v -> {
+           playNextSong(songMutableLiveData.getValue());
+        });
+
+
+    }
+
+    private void playNextSong(PlayingSong playingSong) {
+        for (int i = 0; i < realmDownloadSongs.size(); i++) {
+            if (realmDownloadSongs.get(i).getId() == playingSong.getSongId()) {
+                RealmDownloadSong realmDownloadSong = realmDownloadSongs.get(i + 1);
+                playingSong.setSongId(realmDownloadSong.getId());
+                playingSong.setSongPath(realmDownloadSong.getPath());
+                playingSong.setFromPlayer(true);
+                playingSong.setStatus(PlayingSong.PLAY);
+                songFromPlayerLiveData.postValue(playingSong);
+            }
+        }
     }
 
     private void setUpViews() {
@@ -131,6 +163,18 @@ public class BeepTunesPlayer extends BaseFragment {
         seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#00D20E"), PorterDuff.Mode.SRC_IN);
     }
 
+    private Realm getRealm() {
+        if (realm == null)
+            realm = Realm.getDefaultInstance();
+        return realm;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!realm.isClosed())
+            realm.close();
+    }
 
     public MutableLiveData<PlayingSong> getSongFromPlayerLiveData() {
         return songFromPlayerLiveData;
