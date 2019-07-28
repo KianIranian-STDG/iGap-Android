@@ -6,8 +6,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +14,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.adapter.beepTunes.DownloadSongAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.ProgressDuration;
-import net.iGap.realm.RealmDownloadSong;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
 
 public class BeepTunesPlayer extends BaseFragment {
 
@@ -40,13 +31,8 @@ public class BeepTunesPlayer extends BaseFragment {
     private TextView totalTimeTv;
     private TextView currentTimeTv;
     private SeekBar seekBar;
-    private RecyclerView recyclerView;
     private CircleImageView songArtIv;
     private ImageView backgroundIv;
-    private DownloadSongAdapter adapter;
-    private Realm realm;
-    private List<RealmDownloadSong> downloadedTracks = new ArrayList<>();
-
 
     private MutableLiveData<PlayingSong> songMutableLiveData;
     private MutableLiveData<PlayingSong> songFromPlayerLiveData = new MutableLiveData<>();
@@ -58,7 +44,6 @@ public class BeepTunesPlayer extends BaseFragment {
         BeepTunesPlayer beepTunesPlayer = new BeepTunesPlayer();
         beepTunesPlayer.songMutableLiveData = songMutableLiveData;
         beepTunesPlayer.progressDurationLiveData = progressDurationLiveData;
-        beepTunesPlayer.adapter = new DownloadSongAdapter();
         return beepTunesPlayer;
     }
 
@@ -84,10 +69,6 @@ public class BeepTunesPlayer extends BaseFragment {
                 } else {
                     playTv.setText(getContext().getResources().getString(R.string.play_icon));
                 }
-
-                downloadedTracks = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
-                        .equalTo("artistId", playingSong.getArtistId()).findAll());
-                adapter.setDownloadSongs(downloadedTracks);
             }
         });
 
@@ -126,19 +107,6 @@ public class BeepTunesPlayer extends BaseFragment {
 
         });
 
-
-        adapter.setCallBack((realmDownloadSong) -> {
-            PlayingSong playingSong = songMutableLiveData.getValue();
-            playingSong.setSongId(realmDownloadSong.getId());
-            playingSong.setSongPath(realmDownloadSong.getPath());
-            playingSong.setFromPlayer(true);
-            playingSong.setStatus(PlayingSong.PLAY);
-            playingSong.setArtistId(realmDownloadSong.getArtistId());
-            playingSong.setAlbumId(realmDownloadSong.getAlbumId());
-            songFromPlayerLiveData.postValue(playingSong);
-        });
-
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -170,24 +138,7 @@ public class BeepTunesPlayer extends BaseFragment {
         seekBar = rootView.findViewById(R.id.sb_ptPlayer);
         songArtIv = rootView.findViewById(R.id.iv_btPlayer_songArt);
         backgroundIv = rootView.findViewById(R.id.iv_btPlayer_cover);
-        recyclerView = rootView.findViewById(R.id.rv_btPlayer_otherSong);
         seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#00D20E"), PorterDuff.Mode.SRC_IN);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
-    }
-
-    public Realm getRealm() {
-        if (realm == null)
-            realm = Realm.getDefaultInstance();
-        return realm;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (!realm.isClosed())
-            realm.close();
     }
 
     private String getTimeString(long millis) {

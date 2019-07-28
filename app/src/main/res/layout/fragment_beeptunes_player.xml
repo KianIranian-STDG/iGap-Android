@@ -12,6 +12,7 @@
         android:scaleType="centerCrop" />
 
     <View
+        android:id="@+id/view7"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent_player"
@@ -19,19 +20,16 @@
 
     <net.iGap.module.CircleImageView
         android:id="@+id/iv_btPlayer_songArt"
-        android:layout_width="@dimen/dp200"
-        android:layout_height="@dimen/dp200"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="@dimen/dp300"
+        android:layout_height="@dimen/dp300"
         android:src="@drawable/beepslide"
-        app:civ_border_color="@color/gray_4c"
-        app:civ_border_width="3dp"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_artistName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <SeekBar
         android:id="@+id/sb_ptPlayer"
@@ -39,22 +37,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_currentDuration"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_btPlayer_play" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_btPlayer_currentDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:textColor="@color/white"
         android:textSize="@dimen/smallTextSize"
+        app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_play"
         app:layout_constraintStart_toStartOf="@+id/sb_ptPlayer"
-        app:layout_constraintTop_toBottomOf="@+id/sb_ptPlayer"
         tools:text="00:00" />
 
     <TextView
@@ -74,15 +73,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/play_icon"
         android:textColor="#00D20E"
         android:textSize="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_btPlayer_songName" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <net.iGap.module.FontIconTextView
         android:id="@+id/tv_btPlayer_nextSong"
@@ -123,6 +123,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_songName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_btPlayer_songArt"
@@ -132,22 +133,17 @@
         android:id="@+id/tv_btPlayer_songName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:gravity="center"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/tv_btPlayer_artistName"
-        app:layout_constraintStart_toStartOf="@+id/tv_btPlayer_artistName"
+        app:layout_constraintBottom_toTopOf="@+id/sb_ptPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_btPlayer_artistName"
         tools:text="Ahay KabarDar" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_btPlayer_otherSong"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp200"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_btPlayer_currentDuration">
-
-    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>
