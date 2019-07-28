@@ -29,4 +29,21 @@ public class ProgressDuration {
     public void setTotal(int total) {
         this.total = total;
     }
+
+    public String getCurrentTime() {
+        return getTimeString(current * 1000);
+    }
+
+    public String getTotalTime() {
+        return getTimeString(total * 1000);
+    }
+
+    private String getTimeString(long millis) {
+
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+        String time = String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
+
+        return time;
+    }
 }

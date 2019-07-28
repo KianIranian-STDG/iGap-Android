@@ -54,8 +54,9 @@ public class BeepTunesFragment extends BaseFragment {
         bottomPlayerCl = rootView.findViewById(R.id.cl_btPlayer_behavior);
         playerToolBarCl = rootView.findViewById(R.id.cl_btPlayer_toolBar);
         TextView playerToolBarPlayerTv = rootView.findViewById(R.id.tv_btPlayer_toolBarTitle);
+        TextView behaviorPlayerTime = rootView.findViewById(R.id.tv_btBehavior_timeDuration);
 
-        progressBar.getProgressDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        progressBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
         new HelperFragment(getFragmentManager(), new BeepTunesMainFragment().getInstance(fromAlbumAdapter, toAlbumAdapter))
                 .setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
@@ -103,6 +104,7 @@ public class BeepTunesFragment extends BaseFragment {
                 if (viewModel.getPlayingSongViewLiveData().getValue().getSongId() == progressDuration.getId()) {
                     progressBar.setProgress(progressDuration.getCurrent());
                     progressBar.setMax(progressDuration.getTotal());
+                    behaviorPlayerTime.setText(progressDuration.getCurrentTime() + " | " + progressDuration.getTotalTime());
                 }
             }
         });
@@ -148,7 +150,7 @@ public class BeepTunesFragment extends BaseFragment {
         });
 
         beepTunesPlayer.getPlayingSongSeekBarLiveData().observe(getViewLifecycleOwner(), integer -> {
-            viewModel.seekBarProgressChanged(integer * 1000);
+            viewModel.seekBarProgressChanged(integer);
         });
 
     }

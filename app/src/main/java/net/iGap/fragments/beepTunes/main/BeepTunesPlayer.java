@@ -72,23 +72,13 @@ public class BeepTunesPlayer extends BaseFragment {
             }
         });
 
-
-//        realmDownloadSong = getRealm().where(RealmDownloadSong.class).equalTo("artistId", songMutableLiveData.getValue().getArtistId()).findFirst();
-//
-//        realmDownloadSong.addChangeListener((RealmObjectChangeListener<RealmDownloadSong>) (realmDownloadSong, changeSet) -> {
-//            downloadedTracks = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
-//                    .equalTo("artistId", realmDownloadSong.getArtistId()).findAll());
-//            adapter.setDownloadSongs(downloadedTracks);
-//        });
-
-
         progressDurationLiveData.observe(getViewLifecycleOwner(), progressDuration -> {
             if (progressDuration != null && songMutableLiveData.getValue() != null) {
                 if (songMutableLiveData.getValue().getSongId() == progressDuration.getId()) {
                     seekBar.setProgress(progressDuration.getCurrent());
                     seekBar.setMax(progressDuration.getTotal());
-                    currentTimeTv.setText(getTimeString(progressDuration.getCurrent() * 1000));
-                    totalTimeTv.setText(getTimeString(progressDuration.getTotal() * 1000));
+                    currentTimeTv.setText(progressDuration.getCurrentTime());
+                    totalTimeTv.setText(progressDuration.getTotalTime());
 
                 }
             }
@@ -111,7 +101,7 @@ public class BeepTunesPlayer extends BaseFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    seekBarLiveData.postValue(progress);
+                    seekBarLiveData.postValue(progress * 1000);
                 }
             }
 
@@ -141,14 +131,6 @@ public class BeepTunesPlayer extends BaseFragment {
         seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#00D20E"), PorterDuff.Mode.SRC_IN);
     }
 
-    private String getTimeString(long millis) {
-
-        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
-        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
-        String time = String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
-
-        return time;
-    }
 
     public MutableLiveData<PlayingSong> getSongFromPlayerLiveData() {
         return songFromPlayerLiveData;

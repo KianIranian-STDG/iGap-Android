@@ -268,5 +268,6 @@
 
     <color name="default_indicator_color_selected">#eeee</color>
     <color name="default_indicator_color_unselected">#66eeeeee</color>
+    <color name="beeptunes_primary">#00D20E</color>
 
 </resources>
