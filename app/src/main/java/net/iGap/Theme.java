@@ -89,7 +89,7 @@ public class Theme {
     public static String default_dark_bubbleChatMusicColor = "#313131";//
     public static String default_dark_bubbleChatSendColor = "#394b4b";
     public static String default_dark_bubbleChatReceiveColor = "#4d5558";
-    public static String default_dark_backgroundThemeMsg = "#2c363f";
+    public static String default_dark_backgroundThemeMsg = "#2f2f2f";
     public static String default_dark_backgroundThemeMsgPined = "#3314191c";
     public static String default_dark_textTitleTheme = "#cccccc";
     public static String default_dark_textSubTheme = "#aaaaaa";
@@ -103,7 +103,7 @@ public class Theme {
     public static String default_dark_roomSenderTextColor = default_dark_textSubTheme;
     public static String default_dark_SeenTickColor = default_dark_notificationColor;
 
-    public static String default_dark_background = "#2c363f";
+    public static String default_dark_background = "#2f2f2f";
 
     public static String default_red_appBarColor = "#F44336";
     public static String default_Pink_appBarColor = "#E91E63";

@@ -65,7 +65,7 @@ public class MyDialog {
                 items.add(activity.getString(R.string.left) + " " + activity.getString(R.string.group));
             }
         } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
-            items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.channel));
+            //items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.channel));
             if (role.equals("OWNER")) {
                 items.add(activity.getString(R.string.delete_item_dialog) + " " + activity.getString(R.string.channel));
             } else {

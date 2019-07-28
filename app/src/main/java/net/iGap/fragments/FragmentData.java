@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentDataBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentDataViewModel;
 
 
@@ -40,12 +42,21 @@ public class FragmentData extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding();
-        fragmentDataBinding.stnsRippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popBackStackFragment();
-            }
-        });
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.date))
+                .setLeftIcon(R.string.back_icon)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        fragmentDataBinding.fdLayoutToolbar.addView(toolbar.getView());
+
         onFragmentRemoveData = new OnFragmentRemoveData() {
             @Override
             public void removeFragment() {

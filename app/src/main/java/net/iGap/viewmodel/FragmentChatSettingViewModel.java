@@ -4,10 +4,15 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.view.View;
 
 import net.iGap.G;
+import net.iGap.R;
+import net.iGap.fragments.FragmentData;
+import net.iGap.fragments.FragmentSetting;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 
@@ -21,6 +26,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
 
     public MutableLiveData<String> callbackTextSize = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToChatBackgroundPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToDateFragment = new MutableLiveData<>();
     public ObservableBoolean isShowVote = new ObservableBoolean();
     public ObservableBoolean isSenderNameGroup = new ObservableBoolean();
     public ObservableBoolean isSendEnter = new ObservableBoolean();
@@ -30,6 +36,8 @@ public class FragmentChatSettingViewModel extends ViewModel {
     public ObservableBoolean isDefaultPlayer = new ObservableBoolean();
     public ObservableBoolean isCrop = new ObservableBoolean();
     public ObservableBoolean isCameraButtonSheet = new ObservableBoolean(true);
+    public ObservableField<Boolean> isTime = new ObservableField<>(false);
+    public ObservableField<String> callbackDataShams = new ObservableField<>("Miladi");
 
     public FragmentChatSettingViewModel() {
         getInfo();
@@ -74,6 +82,35 @@ public class FragmentChatSettingViewModel extends ViewModel {
         int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
         isDefaultPlayer.set(getBoolean(checkedEnableDefaultPlayer));
 
+        boolean checkedEnableTime = sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
+        isTime.set(checkedEnableTime);
+
+
+        int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
+        switch (typeData) {
+            case 0:
+                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.miladi));
+                break;
+            case 1:
+                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.shamsi));
+                break;
+            case 2:
+                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.ghamari));
+                break;
+        }
+
+        FragmentSetting.dateType = new FragmentSetting.DateType() {
+            @Override
+            public void dataName(String type) {
+                callbackDataShams.set(type);
+            }
+        };
+    }
+
+    public void onDateClick(View view) {
+
+        goToDateFragment.postValue(true);
+
     }
 
     public void onClickCompress(View view) {
@@ -92,6 +129,29 @@ public class FragmentChatSettingViewModel extends ViewModel {
             editor.apply();
         }
 
+    }
+
+    public void onClickTime(View view) {
+        isTime.set(!isTime.get());
+    }
+
+    public void onCheckedChangedTime(boolean isChecked) {
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+        if (isChecked) {
+            G.isTimeWhole = true;
+            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, true);
+            editor.apply();
+        } else {
+            G.isTimeWhole = false;
+            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
+            editor.apply();
+        }
+        if (G.onNotifyTime != null) {
+            G.onNotifyTime.notifyTime();
+        }
     }
 
     public void onClickTrim(View view) {

@@ -2267,7 +2267,11 @@ public class FragmentChat extends BaseFragment
                 mAdapter.deselect();
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
-            } else {
+            }else if (ll_Search != null && ll_Search.isShown()){
+                goneSearchBox(edtSearchMessage);
+            }else if (isEditMessage){
+                removeEditedMessage();
+            }else {
                 stopSuperPress = false;
             }
         } catch (IllegalArgumentException e) {
@@ -2334,7 +2338,7 @@ public class FragmentChat extends BaseFragment
             }
         } else{
             if (G.themeColor == Theme.DARK) {
-                imgBackGround.setBackgroundColor(Color.parseColor(Theme.default_dark_background));
+                imgBackGround.setImageResource(R.drawable.chat_bg_dark);
             }
             else{
                 //todo: fixed load default background in light mode
@@ -3035,11 +3039,7 @@ public class FragmentChat extends BaseFragment
                         /**
                          * should be null after requesting
                          */
-                        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        edtChat.setTag(null);
-                        clearReplyView();
-                        isEditMessage = false;
-                        edtChat.setText("");
+                        removeEditedMessage();
 
                         /**
                          * send edit message request
@@ -3052,11 +3052,7 @@ public class FragmentChat extends BaseFragment
                             new RequestChannelEditMessage().channelEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
                         }
                     } else {
-                        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        edtChat.setTag(null);
-                        clearReplyView();
-                        isEditMessage = false;
-                        edtChat.setText("");
+                        removeEditedMessage();
                     }
                 } else { // new message has written
                     sendNewMessage();
@@ -3211,6 +3207,14 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void removeEditedMessage() {
+        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+        edtChat.setTag(null);
+        clearReplyView();
+        isEditMessage = false;
+        edtChat.setText("");
     }
 
     private void cancelAllRequestFetchHistory() {
@@ -7282,17 +7286,9 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View view) {
                 if (edtSearchMessage.getText().toString().length() == 0) {
-                    //  deSelectMessage(selectedPosition);
-                    edtSearchMessage.setText("");
-                    ll_Search.setVisibility(View.GONE);
-                    layoutToolbar.setVisibility(View.VISIBLE);
-                    //  ll_navigate_Message.setVisibility(View.GONE);
-                    // viewAttachFile.setVisibility(View.VISIBLE);
 
-                    btnHashLayoutClose.performClick();
+                    goneSearchBox(view);
 
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 } else {
                     // deSelectMessage(selectedPosition);
                     edtSearchMessage.setText("");
@@ -7352,6 +7348,17 @@ public class FragmentChat extends BaseFragment
 
             }
         });
+    }
+
+    private void goneSearchBox(View view) {
+
+        edtSearchMessage.setText("");
+        ll_Search.setVisibility(View.GONE);
+        layoutToolbar.setVisibility(View.VISIBLE);
+        btnHashLayoutClose.performClick();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
     }
 
     private void itemAdapterBottomSheetForward() {

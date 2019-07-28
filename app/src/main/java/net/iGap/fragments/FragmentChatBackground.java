@@ -35,8 +35,10 @@ import net.iGap.adapter.AdapterSolidChatBackground;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnGetWallpaper;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
@@ -59,12 +61,9 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.DIR_CHAT_BACKGROUND;
 
-public class FragmentChatBackground extends BaseFragment {
+public class FragmentChatBackground extends BaseFragment implements ToolbarListener {
 
     private String savePath;
-    private RippleView rippleBack;
-    private RippleView rippleSet;
-    private RippleView rippleSetDefault;
     private RecyclerView mRecyclerView, rcvSolidColor;
     private ImageView imgFullImage;
     private AdapterChatBackground adapterChatBackgroundSetting;
@@ -74,7 +73,7 @@ public class FragmentChatBackground extends BaseFragment {
     private Fragment fragment;
     private RippleView chB_ripple_menu_button;
     private boolean isSolidColor = false;
-
+    private HelperToolbar toolbar;
     ArrayList<String> solidList = new ArrayList<>();
 
 
@@ -101,36 +100,19 @@ public class FragmentChatBackground extends BaseFragment {
         }
 
         fragment = this;
-        view.findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        rippleBack = (RippleView) view.findViewById(R.id.stcb_ripple_back);
+        toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon , R.string.check_icon, R.string.retry_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.st_title_Background))
+                .setListener(this);
 
-        chB_ripple_menu_button = (RippleView) view.findViewById(R.id.chB_ripple_menu_button);
+        ViewGroup layoutToolbar = view.findViewById(R.id.fcb_layout_toolbar);
+        layoutToolbar.addView(toolbar.getView());
 
-        chB_ripple_menu_button.setOnClickListener(view1 -> {
-
-            List<String> items = new ArrayList<>();
-            items.add(getString(R.string.solid_colors));
-            items.add(getString(R.string.wallpapers));
-
-            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-                if (items.get(position).equals(getString(R.string.solid_colors))) {
-                    mRecyclerView.setVisibility(View.GONE);
-                    rcvSolidColor.setVisibility(View.VISIBLE);
-                } else if (items.get(position).equals(getString(R.string.wallpapers))) {
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    rcvSolidColor.setVisibility(View.GONE);
-                }
-            }).show();
-        });
-
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
-        });
-
+        toolbar.getSecondRightButton().setVisibility(View.GONE);
         imgFullImage = (ImageView) view.findViewById(R.id.stchf_fullImage);
 
         SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -142,56 +124,6 @@ public class FragmentChatBackground extends BaseFragment {
             }
         }
 
-        rippleSetDefault = (RippleView) view.findViewById(R.id.stcbf_ripple_set_default);
-
-        rippleSetDefault.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView){
-                if (getActivity() != null) {
-                    HelperSaveFile.removeFromPrivateDirectory(getActivity());
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-                    editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
-                    editor.apply();
-                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
-                        G.onBackgroundChanged.onBackgroundChanged("");
-                    }
-                    popBackStackFragment();
-                }
-            }
-        });
-
-        rippleSet = (RippleView) view.findViewById(R.id.stcbf_ripple_set);
-        rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                if (getActivity() != null && savePath != null && savePath.length() > 0) {
-                    String finalPath = "";
-                    if (isSolidColor){
-                        finalPath = savePath;
-                        HelperSaveFile.removeFromPrivateDirectory(getActivity());
-                    } else {
-                        try {
-                            finalPath = HelperSaveFile.saveInPrivateDirectory(getActivity(), savePath);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
-                    editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, false);
-                    editor.apply();
-                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
-                        G.onBackgroundChanged.onBackgroundChanged(finalPath);
-                    }
-
-                    popBackStackFragment();
-                }
-            }
-        });
 
         fillList(true);
 
@@ -209,8 +141,8 @@ public class FragmentChatBackground extends BaseFragment {
 
                 savePath = imagePath;
 
-                rippleSet.setVisibility(View.VISIBLE);
-                rippleSetDefault.setVisibility(View.GONE);
+                toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+                toolbar.getThirdRightButton().setVisibility(View.GONE);
                 isSolidColor = false;
             }
         });
@@ -226,8 +158,8 @@ public class FragmentChatBackground extends BaseFragment {
 
                 savePath = imagePath;
 
-                rippleSet.setVisibility(View.VISIBLE);
-                rippleSetDefault.setVisibility(View.GONE);
+                toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+                toolbar.getThirdRightButton().setVisibility(View.GONE);
                 isSolidColor = true;
             }
         });
@@ -381,6 +313,74 @@ public class FragmentChatBackground extends BaseFragment {
         }
 
         realm.close();
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        popBackStackFragment();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.solid_colors));
+        items.add(getString(R.string.wallpapers));
+
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            if (items.get(position).equals(getString(R.string.solid_colors))) {
+                mRecyclerView.setVisibility(View.GONE);
+                rcvSolidColor.setVisibility(View.VISIBLE);
+            } else if (items.get(position).equals(getString(R.string.wallpapers))) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                rcvSolidColor.setVisibility(View.GONE);
+            }
+        }).show();
+    }
+
+    @Override
+    public void onSecondRightIconClickListener(View view) {
+        if (getActivity() != null && savePath != null && savePath.length() > 0) {
+            String finalPath = "";
+            if (isSolidColor){
+                finalPath = savePath;
+                HelperSaveFile.removeFromPrivateDirectory(getActivity());
+            } else {
+                try {
+                    finalPath = HelperSaveFile.saveInPrivateDirectory(getActivity(), savePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
+            editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, false);
+            editor.apply();
+            if (G.twoPaneMode && G.onBackgroundChanged != null) {
+                G.onBackgroundChanged.onBackgroundChanged(finalPath);
+            }
+
+            popBackStackFragment();
+        }
+    }
+
+    @Override
+    public void onThirdRightIconClickListener(View view) {
+
+        if (getActivity() != null) {
+            HelperSaveFile.removeFromPrivateDirectory(getActivity());
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+            editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
+            editor.apply();
+            if (G.twoPaneMode && G.onBackgroundChanged != null) {
+                G.onBackgroundChanged.onBackgroundChanged("");
+            }
+            popBackStackFragment();
+        }
     }
 
     public enum WallpaperType {

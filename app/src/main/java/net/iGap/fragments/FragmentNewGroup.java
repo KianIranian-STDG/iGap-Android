@@ -686,11 +686,17 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         RealmRoom.addOwnerToDatabase(roomId);
         RealmRoom.updateMemberCount(roomId, roomType, ContactGroupFragment.selectedContacts.size() + 1); // plus with 1 , for own account
         if (getActivity() != null && isAdded()) {
-            popBackStackFragment();
-            popBackStackFragment();
-            ContactGroupFragment.selectedContacts.clear();
-            removeFromBaseFragment(FragmentNewGroup.this);
-            new GoToChatActivity(roomId).startActivity(getActivity());
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    G.refreshRealmUi();
+                    popBackStackFragment();
+                    popBackStackFragment();
+                    ContactGroupFragment.selectedContacts.clear();
+                    removeFromBaseFragment(FragmentNewGroup.this);
+                    new GoToChatActivity(roomId).startActivity(getActivity());
+                }
+            });
         }
     }
 

@@ -29,66 +29,12 @@
 
     >
 
-    <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-      <android.support.v7.widget.Toolbar
-        android:id="@+id/asn_toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-        android:layoutDirection="ltr"
-        android:padding="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-
-        >
-
-        <RelativeLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="horizontal">
-
-          <net.iGap.libs.rippleeffect.RippleView
-            android:id="@+id/stns_ripple_back"
-            rv_centered="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:rv_alpha="200"
-            app:rv_centered="true"
-            app:rv_rippleDuration="0"
-            app:rv_ripplePadding="5dp">
-
-            <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/stns_txt_back"
-              android:layout_width="@dimen/dp52"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:text="@string/md_back_arrow"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
-              android:textColor="@color/whit_background" />
-          </net.iGap.libs.rippleeffect.RippleView>
-
-          <TextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/stns_ripple_back"
-            android:layout_toRightOf="@+id/stns_ripple_back"
-            android:gravity="center"
-            android:text="@string/date"
-            android:textColor="@color/whit_background"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal"
-            android:visibility="visible" />
-
-        </RelativeLayout>
-      </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/toolbar_height"
+        android:orientation="horizontal"
+        android:id="@+id/fd_layout_toolbar"/>
 
     <LinearLayout
       android:id="@+id/st_layout_miladi"
@@ -124,8 +70,8 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:text="@string/md_check_symbol"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/check_icon"
+        style="@style/myIconTextViewStyle"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
         android:visibility="@{fragmentDataViewModel.iconMiladi() ? View.VISIBLE : View.GONE}" />
@@ -169,8 +115,8 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:text="@string/md_check_symbol"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/check_icon"
+          style="@style/myIconTextViewStyle"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
         android:visibility="@{fragmentDataViewModel.iconShamsi() ? View.VISIBLE : View.GONE}" />
@@ -213,8 +159,8 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:text="@string/md_check_symbol"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/check_icon"
+          style="@style/myIconTextViewStyle"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
         android:visibility="@{fragmentDataViewModel.iconGhamari() ? View.VISIBLE : View.GONE}" />

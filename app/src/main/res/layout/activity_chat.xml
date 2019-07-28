@@ -201,13 +201,13 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_hash_up"
-                    style="?backgroundColorSettingTheme"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp48"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
-                    android:text="@string/md_expand_arrow"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:rotation="180"
+                    android:text="@string/down_arrow_icon"
                     android:textSize="@dimen/dp20" />
 
                 <TextView
@@ -225,13 +225,12 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_hash_down"
-                    style="?backgroundColorSettingTheme"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
-                    android:text="@string/md_downwards_arrow"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:text="@string/down_arrow_icon"
                     android:textSize="@dimen/dp20" />
 
                 <LinearLayout
@@ -246,8 +245,8 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
+                        style="@style/myIconTextViewStyle"
                         android:text="@string/md_close_button"
-                        android:textAppearance="@style/TextIconAppearance.all"
                         android:textColor="#dededd" />
 
 
