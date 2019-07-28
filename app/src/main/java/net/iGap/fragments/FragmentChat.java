@@ -2284,6 +2284,8 @@ public class FragmentChat extends BaseFragment
                 emojiPopup.dismiss();
             }else if (ll_Search != null && ll_Search.isShown()){
                 goneSearchBox(edtSearchMessage);
+            }else if (isEditMessage){
+                removeEditedMessage();
             }else {
                 stopSuperPress = false;
             }
@@ -3052,11 +3054,7 @@ public class FragmentChat extends BaseFragment
                         /**
                          * should be null after requesting
                          */
-                        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        edtChat.setTag(null);
-                        clearReplyView();
-                        isEditMessage = false;
-                        edtChat.setText("");
+                        removeEditedMessage();
 
                         /**
                          * send edit message request
@@ -3069,11 +3067,7 @@ public class FragmentChat extends BaseFragment
                             new RequestChannelEditMessage().channelEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
                         }
                     } else {
-                        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        edtChat.setTag(null);
-                        clearReplyView();
-                        isEditMessage = false;
-                        edtChat.setText("");
+                        removeEditedMessage();
                     }
                 } else { // new message has written
                     sendNewMessage();
@@ -3228,6 +3222,14 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void removeEditedMessage() {
+        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+        edtChat.setTag(null);
+        clearReplyView();
+        isEditMessage = false;
+        edtChat.setText("");
     }
 
     private void cancelAllRequestFetchHistory() {
