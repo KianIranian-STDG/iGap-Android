@@ -14,14 +14,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
 import net.iGap.adapter.beepTunes.DownloadSongAdapter;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.interfaces.OnTrackAdapter;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.ProgressDuration;
-import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
 import java.util.ArrayList;
@@ -114,26 +111,25 @@ public class BeepTunesPlayer extends BaseFragment {
             if (songMutableLiveData.getValue() != null && songMutableLiveData.getValue().isPlay()) {
                 songMutableLiveData.getValue().setStatus(PlayingSong.PAUSE);
                 songMutableLiveData.getValue().setFromPlayer(true);
-                getSongFromPlayerLiveData().postValue(songMutableLiveData.getValue());
+                songFromPlayerLiveData.postValue(songMutableLiveData.getValue());
             } else {
                 songMutableLiveData.getValue().setStatus(PlayingSong.PLAY);
                 songMutableLiveData.getValue().setFromPlayer(true);
-                getSongFromPlayerLiveData().postValue(songMutableLiveData.getValue());
+                songFromPlayerLiveData.postValue(songMutableLiveData.getValue());
             }
 
         });
 
 
-        adapter.setOnTrackAdapter(new OnTrackAdapter() {
-            @Override
-            public void onDownloadClick(Track track, AlbumTrackAdapter.OnSongProgress onSongProgress) {
-
-            }
-
-            @Override
-            public void onPlayClick(RealmDownloadSong realmDownloadSong, AlbumTrackAdapter.OnSongPlay onSongPlay) {
-
-            }
+        adapter.setCallBack((realmDownloadSong) -> {
+            PlayingSong playingSong = songMutableLiveData.getValue();
+            playingSong.setSongId(realmDownloadSong.getId());
+            playingSong.setSongPath(realmDownloadSong.getPath());
+            playingSong.setFromPlayer(true);
+            playingSong.setStatus(PlayingSong.PLAY);
+            playingSong.setArtistId(realmDownloadSong.getArtistId());
+            playingSong.setAlbumId(realmDownloadSong.getAlbumId());
+            songFromPlayerLiveData.postValue(playingSong);
         });
 
     }
