@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +14,24 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
+import net.iGap.adapter.beepTunes.DownloadSongAdapter;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.interfaces.OnTrackAdapter;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.ProgressDuration;
+import net.iGap.module.api.beepTunes.Track;
+import net.iGap.realm.RealmDownloadSong;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 public class BeepTunesPlayer extends BaseFragment {
 
+    private static final String TAG = "aabolfazlPlayer";
     private View rootView;
     private TextView playTv;
     private TextView nextTv;
@@ -32,6 +44,9 @@ public class BeepTunesPlayer extends BaseFragment {
     private RecyclerView recyclerView;
     private CircleImageView songArtIv;
     private ImageView backgroundIv;
+    private DownloadSongAdapter adapter;
+    private Realm realm;
+    private List<RealmDownloadSong> downloadedTracks = new ArrayList<>();
 
 
     private MutableLiveData<PlayingSong> songMutableLiveData;
@@ -43,6 +58,7 @@ public class BeepTunesPlayer extends BaseFragment {
         BeepTunesPlayer beepTunesPlayer = new BeepTunesPlayer();
         beepTunesPlayer.songMutableLiveData = songMutableLiveData;
         beepTunesPlayer.progressDurationLiveData = progressDurationLiveData;
+        beepTunesPlayer.adapter = new DownloadSongAdapter();
         return beepTunesPlayer;
     }
 
@@ -62,14 +78,28 @@ public class BeepTunesPlayer extends BaseFragment {
                 artistNameTv.setText(playingSong.getArtistName());
                 songNameTv.setText(playingSong.getTitle());
                 songArtIv.setImageBitmap(playingSong.getBitmap());
-                backgroundIv.setImageBitmap(playingSong.getBitmap());
+//                backgroundIv.setImageBitmap(playingSong.getBitmap());
                 if (playingSong.isPlay()) {
                     playTv.setText(getContext().getResources().getString(R.string.pause_icon));
                 } else {
                     playTv.setText(getContext().getResources().getString(R.string.play_icon));
                 }
+
+                downloadedTracks = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
+                        .equalTo("artistId", playingSong.getArtistId()).findAll());
+                adapter.setDownloadSongs(downloadedTracks);
             }
         });
+
+
+//        realmDownloadSong = getRealm().where(RealmDownloadSong.class).equalTo("artistId", songMutableLiveData.getValue().getArtistId()).findFirst();
+//
+//        realmDownloadSong.addChangeListener((RealmObjectChangeListener<RealmDownloadSong>) (realmDownloadSong, changeSet) -> {
+//            downloadedTracks = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
+//                    .equalTo("artistId", realmDownloadSong.getArtistId()).findAll());
+//            adapter.setDownloadSongs(downloadedTracks);
+//        });
+
 
         progressDurationLiveData.observe(getViewLifecycleOwner(), progressDuration -> {
             if (progressDuration != null && songMutableLiveData.getValue() != null) {
@@ -92,6 +122,20 @@ public class BeepTunesPlayer extends BaseFragment {
             }
 
         });
+
+
+        adapter.setOnTrackAdapter(new OnTrackAdapter() {
+            @Override
+            public void onDownloadClick(Track track, AlbumTrackAdapter.OnSongProgress onSongProgress) {
+
+            }
+
+            @Override
+            public void onPlayClick(RealmDownloadSong realmDownloadSong, AlbumTrackAdapter.OnSongPlay onSongPlay) {
+
+            }
+        });
+
     }
 
     private void setUpViews() {
@@ -105,6 +149,23 @@ public class BeepTunesPlayer extends BaseFragment {
         seekBar = rootView.findViewById(R.id.sb_ptPlayer);
         songArtIv = rootView.findViewById(R.id.iv_btPlayer_songArt);
         backgroundIv = rootView.findViewById(R.id.iv_btPlayer_cover);
+        recyclerView = rootView.findViewById(R.id.rv_btPlayer_otherSong);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(adapter);
+    }
+
+    public Realm getRealm() {
+        if (realm == null)
+            realm = Realm.getDefaultInstance();
+        return realm;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!realm.isClosed())
+            realm.close();
     }
 
     public MutableLiveData<PlayingSong> getSongFromPlayerLiveData() {

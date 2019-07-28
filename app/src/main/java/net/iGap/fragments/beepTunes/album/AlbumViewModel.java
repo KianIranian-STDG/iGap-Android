@@ -3,6 +3,7 @@ package net.iGap.fragments.beepTunes.album;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 
 import com.downloader.Error;
 import com.downloader.PRDownloader;
@@ -192,6 +193,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     public void startOrResume(DownloadSong downloadSong) {
         downloadSong.setDownloadStatus(DownloadSong.STATUS_START);
         downloadStatusMutableLiveData.postValue(downloadSong);
+        Log.i(TAG, "startOrResume: " + downloadSong.getId());
     }
 
     @Override

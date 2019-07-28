@@ -11,6 +11,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.util.Log;
 
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.ProgressDuration;
@@ -25,6 +26,8 @@ import static net.iGap.G.context;
 public class BeepTunesPlayerService extends Service {
     public static final String SONG_PATH = "songUri";
     public static final String SONG_ID = "songId";
+    public static final String SONG_ARTIST_ID = "songArtistId";
+    public static final String SONG_ALBUM_ID = "songAlbumId";
     public static final String ACTION_PLAY = "play";
     public static final String ACTION_PLAY_NEW = "playNew";
     public static final String ACTION_PAUSE = "pause";
@@ -52,6 +55,7 @@ public class BeepTunesPlayerService extends Service {
         serviceRunning = true;
         mediaPlayer = new MediaPlayer();
         playingSong = new PlayingSong();
+        Log.i(TAG, "Player Service Create ");
         super.onCreate();
     }
 
@@ -60,6 +64,8 @@ public class BeepTunesPlayerService extends Service {
         if (intent != null) {
             playingSong.setSongPath(intent.getStringExtra(SONG_PATH));
             playingSong.setSongId(intent.getLongExtra(SONG_ID, 0));
+            playingSong.setArtistId(intent.getLongExtra(SONG_ARTIST_ID, 0));
+            playingSong.setAlbumId(intent.getLongExtra(SONG_ALBUM_ID, 0));
             playingSong.setBehaviorStatus(BottomSheetBehavior.STATE_COLLAPSED);
 
             if (playingSong != null) {
@@ -101,6 +107,7 @@ public class BeepTunesPlayerService extends Service {
     public void onDestroy() {
         serviceRunning = false;
         mediaPlayer.release();
+        Log.i(TAG, "Player Service Destroy");
         super.onDestroy();
     }
 
@@ -115,6 +122,7 @@ public class BeepTunesPlayerService extends Service {
         playingSong.setStatus(PlayingSong.PLAY);
         playingSongId = playingSong.getSongId();
         playingSongMutableLiveData.postValue(playingSong);
+        Log.i(TAG, "play: " + playingSong.getSongId());
     }
 
     private void pause(PlayingSong playingSong) {
@@ -123,6 +131,7 @@ public class BeepTunesPlayerService extends Service {
         getSongInfo(playingSong);
         playingSong.setStatus(PlayingSong.PAUSE);
         playingSongMutableLiveData.postValue(playingSong);
+        Log.i(TAG, "pause: " + playingSong.getSongId());
     }
 
     private void getSongInfo(PlayingSong playingSong) {
@@ -153,8 +162,10 @@ public class BeepTunesPlayerService extends Service {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                progressDuration.setCurrent(mediaPlayer.getCurrentPosition() / 1000);
-                progressDurationLiveData.postValue(progressDuration);
+                if (mediaPlayer.isPlaying()) {
+                    progressDuration.setCurrent(mediaPlayer.getCurrentPosition() / 1000);
+                    progressDurationLiveData.postValue(progressDuration);
+                }
             }
         }, 0, 1000);
     }

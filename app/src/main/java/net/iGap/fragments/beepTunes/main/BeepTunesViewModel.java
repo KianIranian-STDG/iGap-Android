@@ -70,6 +70,8 @@ public class BeepTunesViewModel extends BaseViewModel {
         Intent intent = new Intent(context, BeepTunesPlayerService.class);
         intent.putExtra(BeepTunesPlayerService.SONG_PATH, playingSong.getSongPath());
         intent.putExtra(BeepTunesPlayerService.SONG_ID, playingSong.getSongId());
+        intent.putExtra(BeepTunesPlayerService.SONG_ARTIST_ID, playingSong.getArtistId());
+        intent.putExtra(BeepTunesPlayerService.SONG_ALBUM_ID, playingSong.getAlbumId());
         context.startService(intent);
         context.bindService(new Intent(context, BeepTunesPlayerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }

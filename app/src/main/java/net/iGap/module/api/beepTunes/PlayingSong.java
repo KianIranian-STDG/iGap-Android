@@ -18,6 +18,8 @@ public class PlayingSong {
     private int behaviorStatus = BottomSheetBehavior.STATE_HIDDEN;
     private boolean play = false;
     private boolean fromPlayer = false;
+    private Long artistId;
+    private Long albumId;
 
     public boolean isPlay() {
         return play;
@@ -105,5 +107,21 @@ public class PlayingSong {
 
     public void setFromPlayer(boolean fromPlayer) {
         this.fromPlayer = fromPlayer;
+    }
+
+    public Long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
+    }
+
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
     }
 }
