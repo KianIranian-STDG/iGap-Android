@@ -1,4 +1,4 @@
-package net.iGap.fragments.popular;
+package net.iGap.fragments.favoritechannel;
 
 import android.content.res.Resources;
 import android.os.Build;
@@ -19,10 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import net.iGap.R;
-import net.iGap.adapter.items.popular.AdapterChannelInfoItem;
-import net.iGap.adapter.items.popular.ImageLoadingService;
-import net.iGap.adapter.items.popular.MainSliderAdapter;
-import net.iGap.api.PopularChannelApi;
+import net.iGap.adapter.items.favoritechannel.ChannelInfoItemAdapter;
+import net.iGap.adapter.items.favoritechannel.ImageLoadingService;
+import net.iGap.adapter.items.favoritechannel.SliderAdapter;
+import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperUrl;
@@ -36,13 +36,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FragmentPopularChannelChild extends BaseFragment {
-    private PopularChannelApi popularChannelApi;
+public class FavoriteChannelInfoFragment extends BaseFragment {
+    private FavoriteChannelApi favoriteChannelApi;
     private ProgressBar progressBar;
     private View view;
     private String id;
-    private AdapterChannelInfoItem adapterChannel;
-    private MainSliderAdapter mainSliderAdapter;
+    private ChannelInfoItemAdapter adapterChannel;
+    private SliderAdapter sliderAdapter;
     private int page = 1;
     private long totalPage;
     private int playBackTime;
@@ -51,9 +51,9 @@ public class FragmentPopularChannelChild extends BaseFragment {
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
-        view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_child, container, false);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_favorite_channel_info, container, false);
         progressBar = view.findViewById(R.id.progress_popular);
-        popularChannelApi = ApiServiceProvider.getChannelApi();
+        favoriteChannelApi = ApiServiceProvider.getChannelApi();
         setupViews();
         return view;
 
@@ -65,19 +65,15 @@ public class FragmentPopularChannelChild extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         NestedScrollView scrollView = view.findViewById(R.id.scroll_channel);
 
-        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                Toast.makeText(getContext(), "scroll", Toast.LENGTH_SHORT).show();
-                if (totalPage >= page)
-
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView, i, i1, i2, i3) -> {
+            Toast.makeText(getContext(), "scroll", Toast.LENGTH_SHORT).show();
+            if (totalPage >= page)
                 setupViews();
-            }
         });
     }
 
     private void setupViews() {
-        popularChannelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
+        favoriteChannelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
 
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
@@ -88,7 +84,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
 
                     if (page == 1) {
                         if (response.body().getInfo().getAdvertisement() != null) {
-                            mainSliderAdapter = new MainSliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
+                            sliderAdapter = new SliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
                             BannerSlider.init(new ImageLoadingService());
                             BannerSlider slider = new BannerSlider(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -110,7 +106,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                             playBackTime = response.body().getInfo().getAdvertisement().getmPlaybackTime();
                             cardView.addView(slider);
                             slider.postDelayed(() -> {
-                                slider.setAdapter(mainSliderAdapter);
+                                slider.setAdapter(sliderAdapter);
                                 slider.setSelectedSlide(0);
                                 slider.setLoopSlides(true);
                                 slider.setAnimateIndicators(true);
@@ -131,7 +127,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                             linearLayoutItemContainerChild.addView(cardView);
                         }
 
-                        adapterChannel = new AdapterChannelInfoItem(getContext());
+                        adapterChannel = new ChannelInfoItemAdapter(getContext());
 
                         RecyclerView categoryRecyclerViewChild = new RecyclerView(getContext());
                         categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false));
@@ -139,7 +135,7 @@ public class FragmentPopularChannelChild extends BaseFragment {
                         layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
-                        adapterChannel.setOnClickedChannelEventCallBack(new AdapterChannelInfoItem.OnClickedChannelInfoEventCallBack() {
+                        adapterChannel.setOnClickedChannelEventCallBack(new ChannelInfoItemAdapter.OnClickedChannelInfoEventCallBack() {
 
                             @Override
                             public void onClickChannelInfo(Channel channel) {

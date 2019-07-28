@@ -1,4 +1,4 @@
-package net.iGap.adapter.items.popular;
+package net.iGap.adapter.items.favoritechannel;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -22,13 +21,13 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelInfoItem.ChannelInfoViewHolder> {
+public class ChannelInfoItemAdapter extends RecyclerView.Adapter<ChannelInfoItemAdapter.ChannelInfoViewHolder> {
 
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
     private OnClickedChannelInfoEventCallBack onClickedChannelInfoEventCallBack;
 
-    public AdapterChannelInfoItem(Context context) {
+    public ChannelInfoItemAdapter(Context context) {
         this.context = context;
     }
 
@@ -45,7 +44,7 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
     @NonNull
     @Override
     public ChannelInfoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_category, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
         return new ChannelInfoViewHolder(view);
     }
 
@@ -71,7 +70,7 @@ public class AdapterChannelInfoItem extends RecyclerView.Adapter<AdapterChannelI
             textView = itemView.findViewById(R.id.tv_item_popular_rv_grid);
             linearLayout = itemView.findViewById(R.id.ll_item_pop_card_category);
             if (G.isDarkTheme) {
-                linearLayout.setBackgroundResource(R.drawable.shape_popular_channel_dark_item_them);
+                linearLayout.setBackgroundResource(R.drawable.shape_favorite_channel_dark_item_them);
             }
             root = itemView.findViewById(R.id.card_item_pop_category);
             Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);

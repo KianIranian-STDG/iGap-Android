@@ -1,4 +1,4 @@
-package net.iGap.fragments.popular;
+package net.iGap.fragments.favoritechannel;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -22,10 +22,10 @@ import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.popular.AdapterCategoryItem;
-import net.iGap.adapter.items.popular.AdapterChannelItem;
-import net.iGap.adapter.items.popular.MainSliderAdapter;
-import net.iGap.api.PopularChannelApi;
+import net.iGap.adapter.items.favoritechannel.CategoryItemAdapter;
+import net.iGap.adapter.items.favoritechannel.ChannelItemAdapter;
+import net.iGap.adapter.items.favoritechannel.SliderAdapter;
+import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
@@ -43,19 +43,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FragmentPopularChannelParent extends BaseFragment implements ToolbarListener {
+public class FavoriteChannelFragment extends BaseFragment implements ToolbarListener {
     private HelperToolbar toolbar;
-    private PopularChannelApi api;
+    private FavoriteChannelApi api;
     private View rootView;
-    private AdapterChannelItem adapterChannelItem;
-    private MainSliderAdapter mainSliderAdapter;
+    private ChannelItemAdapter channelItemAdapter;
+    private SliderAdapter sliderAdapter;
     private int playBackTime;
     private String scale;
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
-        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_popular_channel_parent, container, false);
+        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_favorite_channel, container, false);
         api = ApiServiceProvider.getChannelApi();
         LinearLayout toolbarContainer = rootView.findViewById(R.id.ll_popular_parent_toolbar);
 
@@ -104,10 +104,10 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             cardView.addView(slider);
                             int finalI = i;
                             playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
-                            mainSliderAdapter = new MainSliderAdapter(response.body().getData().get(i).getSlides(), response.body().getData().get(i).getInfo().getScale());
+                            sliderAdapter = new SliderAdapter(response.body().getData().get(i).getSlides(), response.body().getData().get(i).getInfo().getScale());
                             slider.postDelayed(() -> {
-                                mainSliderAdapter = new MainSliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
-                                slider.setAdapter(mainSliderAdapter);
+                                sliderAdapter = new SliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
+                                slider.setAdapter(sliderAdapter);
                                 slider.setSelectedSlide(0);
                                 slider.setLoopSlides(true);
                                 slider.setAnimateIndicators(true);
@@ -128,13 +128,13 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             break;
 
                         case ParentChannel.TYPE_CHANNEL:
-                            View channelView = LayoutInflater.from(getContext()).inflate(R.layout.item_popular_channel_channel, null);
+                            View channelView = LayoutInflater.from(getContext()).inflate(R.layout.item_favorite_channel_channelcountainer, null);
                             RelativeLayout relativeLayoutRow = channelView.findViewById(R.id.rl_item_pop_rows);
                             LinearLayout linearLayoutRow = channelView.findViewById(R.id.ll_item_pop_rows);
                             ImageView imageViewMore = channelView.findViewById(R.id.iv_item_popular_more);
                             if (G.isDarkTheme) {
-                                relativeLayoutRow.setBackground(getResources().getDrawable(R.drawable.shape_popular_channel_all_them));
-                                linearLayoutRow.setBackground(getResources().getDrawable(R.drawable.shape_popular_channel_dark_them));
+                                relativeLayoutRow.setBackground(getResources().getDrawable(R.drawable.shape_favorite_channel_all_them));
+                                linearLayoutRow.setBackground(getResources().getDrawable(R.drawable.shape_favorite_channel_dark_them));
                                 imageViewMore.setColorFilter(getResources().getColor(R.color.navigation_dark_mode_bg));
                             }
                             FrameLayout frameLayout = channelView.findViewById(R.id.frame_more_one);
@@ -142,10 +142,10 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             frameLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    FragmentPopularChannelChild fragmentPopularChannelChild = new FragmentPopularChannelChild();
-                                    fragmentPopularChannelChild.setId(response.body().getData().get(finalId).getId());
+                                    FavoriteChannelInfoFragment favoriteChannelInfoFragment = new FavoriteChannelInfoFragment();
+                                    favoriteChannelInfoFragment.setId(response.body().getData().get(finalId).getId());
                                     FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
-                                    fragmentTransition.replace(R.id.frame_fragment_container, fragmentPopularChannelChild);
+                                    fragmentTransition.replace(R.id.frame_fragment_container, favoriteChannelInfoFragment);
                                     fragmentTransition.addToBackStack(null);
                                     fragmentTransition.commit();
                                 }
@@ -163,9 +163,9 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                             channelView.setLayoutParams(layoutParams1);
                             channelsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-                            adapterChannelItem = new AdapterChannelItem(getContext(), response.body().getData().get(i).getChannels());
-                            channelsRecyclerView.setAdapter(adapterChannelItem);
-                            adapterChannelItem.setOnClickedChannelEventCallBack(channel -> {
+                            channelItemAdapter = new ChannelItemAdapter(getContext(), response.body().getData().get(i).getChannels());
+                            channelsRecyclerView.setAdapter(channelItemAdapter);
+                            channelItemAdapter.setOnClickedChannelEventCallBack(channel -> {
                                 if (channel.getmType().equals(Channel.TYPE_PRIVATE))
                                     HelperUrl.checkAndJoinToRoom(getActivity(), channel.getSlug());
                                 if (channel.getmType().equals(Channel.TYPE_PUBLIC))
@@ -179,15 +179,15 @@ public class FragmentPopularChannelParent extends BaseFragment implements Toolba
                             layoutParams2.setMargins(Utils.dpToPx(4),Utils.dpToPx(4),Utils.dpToPx(4),Utils.dpToPx(4));
                             categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, LinearLayoutManager.VERTICAL, false));
                             categoryRecyclerView.setLayoutParams(layoutParams2);
-                            AdapterCategoryItem gridItem = new AdapterCategoryItem(getContext(), true, response.body().getData().get(i).getCategories());
-                            gridItem.setOnClickedItemEventCallBack(new AdapterCategoryItem.OnClickedItemEventCallBack() {
+                            CategoryItemAdapter gridItem = new CategoryItemAdapter(getContext(), true, response.body().getData().get(i).getCategories());
+                            gridItem.setOnClickedItemEventCallBack(new CategoryItemAdapter.OnClickedItemEventCallBack() {
                                 @Override
                                 public void onClickedItem(Category category) {
 
-                                    FragmentPopularChannelChild fragmentPopularChannelChild = new FragmentPopularChannelChild();
-                                    fragmentPopularChannelChild.setId(category.getId());
+                                    FavoriteChannelInfoFragment favoriteChannelInfoFragment = new FavoriteChannelInfoFragment();
+                                    favoriteChannelInfoFragment.setId(category.getId());
                                     FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
-                                    fragmentTransition.replace(R.id.frame_fragment_container, fragmentPopularChannelChild);
+                                    fragmentTransition.replace(R.id.frame_fragment_container, favoriteChannelInfoFragment);
                                     fragmentTransition.addToBackStack(null);
                                     fragmentTransition.commit();
                                 }

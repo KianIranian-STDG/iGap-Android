@@ -1,4 +1,4 @@
-package net.iGap.adapter.items.popular;
+package net.iGap.adapter.items.favoritechannel;
 
 import android.widget.ImageView;
 

@@ -1,4 +1,4 @@
-package net.iGap.adapter.items.popular;
+package net.iGap.adapter.items.favoritechannel;
 
 
 import android.content.Context;
@@ -20,12 +20,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.ChannelViewHolder> {
+public class ChannelItemAdapter extends RecyclerView.Adapter<ChannelItemAdapter.ChannelViewHolder> {
     private List<Channel> channelList;
     private Context context;
     private OnClickedChannelEventCallBack onClickedChannelEventCallBack;
 
-    public AdapterChannelItem(Context context, List<Channel> channelList) {
+    public ChannelItemAdapter(Context context, List<Channel> channelList) {
         this.context = context;
         this.channelList = channelList;
     }
@@ -34,7 +34,7 @@ public class AdapterChannelItem extends RecyclerView.Adapter<AdapterChannelItem.
     @NonNull
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_rv_row, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_favorite_channel_rv_row, viewGroup, false);
 
 
         return new ChannelViewHolder(view);
