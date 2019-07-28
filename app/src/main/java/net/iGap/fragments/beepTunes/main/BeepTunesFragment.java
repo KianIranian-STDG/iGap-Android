@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,8 @@ public class BeepTunesFragment extends BaseFragment {
     private MutableLiveData<PlayingSong> toAlbumAdapter = new MutableLiveData<>();
     private MutableLiveData<PlayingSong> fromAlbumAdapter = new MutableLiveData<>();
     private BeepTunesPlayer beepTunesPlayer;
-
+    private ConstraintLayout bottomPlayerCl;
+    private ConstraintLayout playerToolBarCl;
 
     @Nullable
     @Override
@@ -49,6 +51,9 @@ public class BeepTunesFragment extends BaseFragment {
         behavior = BottomSheetBehavior.from(playerLayout);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         progressBar = rootView.findViewById(R.id.pb_btBehavior_behavior);
+        bottomPlayerCl = rootView.findViewById(R.id.cl_btPlayer_behavior);
+        playerToolBarCl = rootView.findViewById(R.id.cl_btPlayer_toolBar);
+        TextView playerToolBarPlayerTv = rootView.findViewById(R.id.tv_btPlayer_toolBarTitle);
 
         progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
@@ -60,6 +65,7 @@ public class BeepTunesFragment extends BaseFragment {
         TextView songNameTv = rootView.findViewById(R.id.tv_btBehavior_songName);
         TextView playIconTv = rootView.findViewById(R.id.tv_btBehavior_playIcon);
         ImageView songImageIv = rootView.findViewById(R.id.iv_btBehavior_image);
+        ImageView hidePlayerIv = rootView.findViewById(R.id.iv_btPlayer_hide);
 
 
         viewModel.getPlayingSongViewLiveData().observe(getViewLifecycleOwner(), playingSong -> {
@@ -78,7 +84,7 @@ public class BeepTunesFragment extends BaseFragment {
 
                 new HelperFragment(getFragmentManager(), beepTunesPlayer)
                         .setResourceContainer(R.id.fl_btPlayer_container).setAddToBackStack(false).setReplace(true).load();
-
+                playerToolBarPlayerTv.setText(playingSong.getTitle());
             }
         });
 
@@ -106,6 +112,41 @@ public class BeepTunesFragment extends BaseFragment {
             viewModel.onPlaySongClicked(playingSong, getContext());
         });
 
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int status) {
+                switch (status) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        playerToolBarCl.setVisibility(View.GONE);
+                        bottomPlayerCl.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        playerToolBarCl.setVisibility(View.VISIBLE);
+                        bottomPlayerCl.setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        playerToolBarCl.setVisibility(View.GONE);
+                        bottomPlayerCl.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        playerToolBarCl.setVisibility(View.VISIBLE);
+                        bottomPlayerCl.setVisibility(View.GONE);
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
+
+        hidePlayerIv.setOnClickListener(v -> {
+            if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
 
     }
 
