@@ -70,8 +70,8 @@
 
     <net.iGap.module.FontIconTextView
         android:id="@+id/tv_btPlayer_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
@@ -87,10 +87,10 @@
 
     <net.iGap.module.FontIconTextView
         android:id="@+id/tv_btPlayer_nextSong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:text="@string/icon_next"
         android:textColor="@color/white"
         android:textSize="30dp"
@@ -100,10 +100,10 @@
 
     <net.iGap.module.FontIconTextView
         android:id="@+id/tv_ptPlayer_previous"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:text="@string/icon_previous"
         android:textColor="@color/white"
         android:textSize="30dp"
