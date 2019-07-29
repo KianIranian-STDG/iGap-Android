@@ -629,7 +629,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         TextView balance = view.findViewById(R.id.balance);
         TextView unit = view.findViewById(R.id.unit);
 
-        ImageView imgQrCode = view.findViewById(R.id.imgQrCode);
+        TextView imgQrCode = view.findViewById(R.id.imgQrCode);
 
 
         TextView cashableBalance = view.findViewById(R.id.chashable_balance);
@@ -639,6 +639,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
         TextView cashout = view.findViewById(R.id.cashout);
         TextView charge = view.findViewById(R.id.charge);
         TextView pin = view.findViewById(R.id.pin_title);
+        TextView plus = view.findViewById(R.id.plus);
         LinearLayout balanceLayout = view.findViewById(R.id.balance_layout);
 
         if (WalletActivity.isDarkTheme) {
@@ -653,6 +654,8 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
             balance.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
             balanceTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
             pin.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            plus.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            view.findViewById(R.id.bals_layout).setBackgroundColor(Color.parseColor("#4C5053"));
         }
 
         balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
