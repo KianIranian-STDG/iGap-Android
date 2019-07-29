@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,10 @@ public class BeepTunesPlayer extends BaseFragment {
                 } else {
                     playTv.setText(getContext().getResources().getString(R.string.play_icon));
                 }
+
+                realmDownloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
+                        .equalTo("artistId", songMutableLiveData.getValue().getArtistId()).findAll());
+
             }
         });
 
@@ -124,30 +129,41 @@ public class BeepTunesPlayer extends BaseFragment {
             }
         });
 
-        if (songMutableLiveData.getValue() != null)
-            realmDownloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
-                    .equalTo("artistId", songMutableLiveData.getValue().getArtistId()).findAll());
-
-
         nextTv.setOnClickListener(v -> {
-           playNextSong(songMutableLiveData.getValue());
+            playNextSong(songMutableLiveData.getValue());
         });
 
 
     }
 
     private void playNextSong(PlayingSong playingSong) {
-        for (int i = 0; i < realmDownloadSongs.size(); i++) {
-            if (realmDownloadSongs.get(i).getId() == playingSong.getSongId()) {
-                RealmDownloadSong realmDownloadSong = realmDownloadSongs.get(i + 1);
-                playingSong.setSongId(realmDownloadSong.getId());
-                playingSong.setSongPath(realmDownloadSong.getPath());
-                playingSong.setFromPlayer(true);
-                playingSong.setStatus(PlayingSong.PLAY);
-                songFromPlayerLiveData.postValue(playingSong);
+        Log.i(TAG, "for i run: ");
+        if (realmDownloadSongs.size() > 1) {
+            for (int i = 0; i < realmDownloadSongs.size(); i++) {
+                if (realmDownloadSongs.get(i).getId().equals(playingSong.getSongId())) {
+                    Log.i(TAG, "i: " + i);
+                    if (i != realmDownloadSongs.size()) {
+                        int index = i + 1;
+                        Log.i(TAG, "index: " + index);
+                        Log.i(TAG, "NextSong Id:) -> " + realmDownloadSongs.get(index).getId());
+                    } else {
+                        Log.i(TAG, "have not next song: " + i + realmDownloadSongs.size());
+                    }
+                }
             }
+        } else {
+            Log.i(TAG, "list just have 1 song: " + realmDownloadSongs.size());
         }
     }
+
+//                    if (realmDownloadSongs.get(i).getId() == playingSong.getSongId()) {
+//        RealmDownloadSong realmDownloadSong = realmDownloadSongs.get(i + 1);
+//        playingSong.setSongId(realmDownloadSong.getId());
+//        playingSong.setSongPath(realmDownloadSong.getPath());
+//        playingSong.setFromPlayer(true);
+//        playingSong.setStatus(PlayingSong.PLAY);
+//        songFromPlayerLiveData.postValue(playingSong);
+//    }
 
     private void setUpViews() {
         playTv = rootView.findViewById(R.id.tv_btPlayer_play);
