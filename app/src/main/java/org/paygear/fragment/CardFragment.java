@@ -28,6 +28,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
 import org.paygear.WalletActivity;
 import org.paygear.model.Card;
@@ -54,7 +56,6 @@ import retrofit2.Response;
 
 public class CardFragment extends Fragment {
 
-    private RaadToolBar appBar;
     private BankCardView cardView;
     private SwitchCompat defaultCardSwitch;
     private TextView button;
@@ -109,26 +110,38 @@ public class CardFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        appBar.showBack();
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.payment))
+                .setRightIcons(R.string.scan_qr_code_icon)
+                .setLeftIcon(R.string.back_icon)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                new ScannerFragment(), "ScannerFragment");
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
+        layoutToolbar.addView(toolbar.getView());
+
         if (mPayment != null) {
-            appBar.setTitle(getString(R.string.payment));
+            toolbar.setDefaultTitle(getString(R.string.payment));
         } else {
             if (mCard.bankCode != 69)
-                appBar.setTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName(getActivity()));
+                toolbar.setDefaultTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName(getActivity()));
             else
-                appBar.setTitle(mCard.cardNumber);
+                toolbar.setDefaultTitle(mCard.cardNumber);
         }
-
-        appBar.addRightButton(R.drawable.qr_code, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((NavigationBarActivity) getActivity()).pushFullFragment(
-                        new ScannerFragment(), "ScannerFragment");
-            }
-        });
 
         cardView = view.findViewById(R.id.card_view);
         ViewGroup rootCarView = view.findViewById(R.id.rootCardView);
