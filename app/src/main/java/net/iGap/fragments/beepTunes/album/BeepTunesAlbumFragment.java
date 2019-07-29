@@ -20,8 +20,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.adapter.beepTunes.BeepTunesTrackAdapter;
 import net.iGap.adapter.beepTunes.BeepTunesAlbumAdapter;
+import net.iGap.adapter.beepTunes.BeepTunesTrackAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.OnTrackAdapter;
@@ -32,6 +32,8 @@ import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
+
+import io.realm.Realm;
 
 public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
@@ -83,7 +85,7 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
         setUpViews();
         setUpAlbumInfo(album);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(getContext().getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
         viewModel.getAlbumSong(album.getId());
         viewModel.getArtistOtherAlbum(album.getArtists().get(0).getId());
 
@@ -120,9 +122,7 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
         });
 
         actionButton.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SHP_SETTING.KEY_BBEP_TUNES_DOWNLOAD, false);
-            editor.apply();
+
         });
 
         trackAdapter.setOnTrackAdapter(new OnTrackAdapter() {
@@ -160,7 +160,7 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
         albumNameTv = rootView.findViewById(R.id.tv_album_name);
         otherAlbumRecyclerView = rootView.findViewById(R.id.rv_album_artistAlbums);
         actionButton = rootView.findViewById(R.id.fl_album_actionButton);
-        statusTv = rootView.findViewById(R.id.tv_album_status);
+        statusTv = rootView.findViewById(R.id.tv_album_play);
         progressBar = rootView.findViewById(R.id.pb_album_progress);
         otherAlbumTv = rootView.findViewById(R.id.tv_album_artistOtherAlbum);
         appBarLayout = rootView.findViewById(R.id.ab_album);

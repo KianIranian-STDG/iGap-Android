@@ -120,6 +120,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5" />
 
+            <ProgressBar
+                android:id="@+id/pb_album_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="@+id/rv_album_songs"
+                app:layout_constraintLeft_toLeftOf="@+id/rv_album_songs"
+                app:layout_constraintRight_toRightOf="@+id/rv_album_songs"
+                app:layout_constraintTop_toTopOf="@+id/rv_album_songs" />
+
             <TextView
                 android:id="@+id/tv_album_artistOtherAlbum"
                 android:layout_width="wrap_content"
@@ -164,21 +174,15 @@
         app:layout_anchorGravity="bottom|end">
 
         <net.iGap.module.FontIconTextView
-            android:id="@+id/tv_album_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_album_play"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_gravity="center"
-            android:text="@string/download_icon"
+            android:gravity="center"
+            android:text="@string/play_icon"
             android:textColor="@color/white"
-            android:textSize="42dp"
+            android:textSize="45dp"
             android:visibility="invisible" />
 
-        <ProgressBar
-            android:id="@+id/pb_album_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
     </FrameLayout>
-
 </android.support.design.widget.CoordinatorLayout>

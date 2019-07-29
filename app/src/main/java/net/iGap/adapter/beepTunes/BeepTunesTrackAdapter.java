@@ -1,5 +1,6 @@
 package net.iGap.adapter.beepTunes;
 
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,11 +22,9 @@ import java.util.List;
 
 import io.realm.Realm;
 
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_CANCEL;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_ERROR;
-import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_PAUSE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_START;
 
 public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAdapter.TrackViewHolder> {
@@ -135,10 +134,6 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                             switch (downloadSong.getDownloadStatus()) {
                                 case STATUS_START:
                                     break;
-                                case STATUS_CANCEL:
-                                    break;
-                                case STATUS_PAUSE:
-                                    break;
                                 case STATUS_COMPLETE:
                                     progressBar.setVisibility(View.GONE);
                                     track.setInStorage(true);
@@ -147,8 +142,10 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                                 case STATUS_ERROR:
                                     break;
                                 case STATUS_DOWNLOADING:
-                                    progressBar.setVisibility(View.VISIBLE);
-                                    progressBar.setProgress(downloadSong.getDownloadProgress());
+                                    if (downloadSong.getId().equals(track.getId())) {
+                                        progressBar.setVisibility(View.VISIBLE);
+                                        progressBar.setProgress(downloadSong.getDownloadProgress());
+                                    }
                                     break;
                             }
                         }
@@ -156,6 +153,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                 }
             });
             realm.addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
+            progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
         }
     }
 }

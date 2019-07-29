@@ -140,7 +140,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (!realm.isClosed())
+        if (realm != null)
             realm.close();
     }
 
