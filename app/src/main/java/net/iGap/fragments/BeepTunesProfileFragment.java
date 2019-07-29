@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.beepTunes.PurchaseFragment;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 
@@ -34,12 +32,18 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TextView userName = rootView.findViewById(R.id.tv_userProfile_userName);
         userName.setText(G.displayName);
+
         profileImage = rootView.findViewById(R.id.iv_userProfile_userImage);
-        TextView perchesList = rootView.findViewById(R.id.tv_userProfile_downloads);
-        perchesList.setOnClickListener(v -> {
+        ViewGroup perchesSong = rootView.findViewById(R.id.cl_beepTunesProfile_perchesSong);
+        ViewGroup syncSong = rootView.findViewById(R.id.cl_beepTunesProfile_syncSong);
+
+        perchesSong.setOnClickListener(v -> {
 
         });
 
+        syncSong.setOnClickListener(v -> {
+
+        });
     }
 
     @Override
