@@ -1,4 +1,4 @@
-package net.iGap.fragments;
+package net.iGap.fragments.beepTunes;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,9 +16,16 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 
 public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
+    public static final String SYNC_FRAGMENT = "syncSong";
+    public static final String PERCHES_FRAGMENT = "perchesSong";
     public AvatarHandler avatarHandler;
     private View rootView;
     private ImageView profileImage;
+    private OnProfileCallBack callBack;
+
+    public void setCallBack(OnProfileCallBack callBack) {
+        this.callBack = callBack;
+    }
 
     @Nullable
     @Override
@@ -37,12 +44,15 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
         ViewGroup perchesSong = rootView.findViewById(R.id.cl_beepTunesProfile_perchesSong);
         ViewGroup syncSong = rootView.findViewById(R.id.cl_beepTunesProfile_syncSong);
 
-        perchesSong.setOnClickListener(v -> {
-
-        });
 
         syncSong.setOnClickListener(v -> {
+            callBack.onClick(SYNC_FRAGMENT);
+            dismiss();
+        });
 
+        perchesSong.setOnClickListener(v -> {
+            callBack.onClick(PERCHES_FRAGMENT);
+            dismiss();
         });
     }
 
@@ -66,5 +76,10 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
         } else {
             return R.style.BaseBottomSheetDialogLight;
         }
+    }
+
+    @FunctionalInterface
+    public interface OnProfileCallBack {
+        void onClick(String type);
     }
 }

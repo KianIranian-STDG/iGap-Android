@@ -16,7 +16,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesAdapter;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.BeepTunesProfileFragment;
+import net.iGap.fragments.beepTunes.BeepTunesLocalSongFragment;
+import net.iGap.fragments.beepTunes.BeepTunesProfileFragment;
 import net.iGap.fragments.beepTunes.album.AlbumFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -25,11 +26,20 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.PlayingSong;
+import net.iGap.realm.RealmDownloadSong;
+
+import java.util.List;
+
+import io.realm.Realm;
+
+import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.SYNC_FRAGMENT;
 
 public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener {
     private View rootView;
     private BeepTunesMainViewModel viewModel;
     private BeepTunesAdapter adapter;
+    private Realm realm;
+    private BeepTunesProfileFragment profileFragment;
     private MutableLiveData<PlayingSong> toAlbumAdapter;
     private MutableLiveData<PlayingSong> fromAlbumAdapter;
 
@@ -52,6 +62,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_beeptunes_main, container, false);
         viewModel = new BeepTunesMainViewModel();
         adapter = new BeepTunesAdapter();
+        profileFragment = new BeepTunesProfileFragment();
         return rootView;
     }
 
@@ -76,6 +87,15 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
                     .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
         });
 
+        profileFragment.setCallBack(type -> {
+            if (type.equals(SYNC_FRAGMENT)) {
+                List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class).findAll());
+                new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song"))
+                        .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
+            }
+
+        });
+
         viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), loadingProgress::setVisibility);
     }
 
@@ -98,8 +118,21 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
 
     @Override
     public void onSmallAvatarClickListener(View view) {
-        BeepTunesProfileFragment profileFragment = new BeepTunesProfileFragment();
         profileFragment.show(getChildFragmentManager(), null);
+    }
+
+
+    private Realm getRealm() {
+        if (realm == null)
+            realm = Realm.getDefaultInstance();
+        return realm;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!realm.isClosed())
+            realm.close();
     }
 
     public interface OnItemClick {
