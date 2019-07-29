@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_beepTunesPlayer"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
     app:behavior_hideable="true"
     app:behavior_peekHeight="56dp"
@@ -16,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:animateLayoutChanges="true"
-        android:background="#99D53B"
         android:visibility="gone">
 
         <ImageView
@@ -39,7 +38,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:textColor="@color/white"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:animateLayoutChanges="true"
-        android:background="#99D53B"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -72,6 +70,7 @@
 
         <TextView
             android:id="@+id/tv_btBehavior_artistName"
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -80,7 +79,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="abolfazl abbasi"
-            android:textColor="@color/black"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintEnd_toStartOf="@+id/tv_btBehavior_playIcon"
             app:layout_constraintStart_toEndOf="@+id/iv_btBehavior_image"
@@ -88,12 +86,12 @@
 
         <TextView
             android:id="@+id/tv_btBehavior_songName"
+            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="abolfazl"
-            android:textColor="@color/black"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintEnd_toStartOf="@+id/tv_btBehavior_timeDuration"
             app:layout_constraintStart_toStartOf="@+id/tv_btBehavior_artistName"
@@ -101,12 +99,12 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/tv_btBehavior_playIcon"
+            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/play_icon"
-            android:textColor="@color/black"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_behavior_favorite"
@@ -115,12 +113,12 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/tv_behavior_favorite"
+            style="@style/myIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/icon_like"
-            android:textColor="@color/black"
             android:textSize="30dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tv_btBehavior_playIcon"
@@ -141,14 +139,14 @@
 
         <TextView
             android:id="@+id/tv_btBehavior_timeDuration"
+            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:text="00:10 | 15:00"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintBottom_toBottomOf="@+id/tv_btBehavior_songName"
             app:layout_constraintEnd_toEndOf="@+id/tv_btBehavior_artistName"
-            app:layout_constraintTop_toTopOf="@+id/tv_btBehavior_songName"
-            android:text="00:10 | 15:00" />
+            app:layout_constraintTop_toTopOf="@+id/tv_btBehavior_songName" />
     </android.support.constraint.ConstraintLayout>
 
     <FrameLayout

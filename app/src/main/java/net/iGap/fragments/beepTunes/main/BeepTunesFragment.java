@@ -19,6 +19,7 @@ import android.widget.TextView;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.api.beepTunes.PlayingSong;
 
 public class BeepTunesFragment extends BaseFragment {
@@ -67,6 +68,9 @@ public class BeepTunesFragment extends BaseFragment {
         ImageView songImageIv = rootView.findViewById(R.id.iv_btBehavior_image);
         ImageView hidePlayerIv = rootView.findViewById(R.id.iv_btPlayer_hide);
 
+
+        Utils.setShapeBackground(bottomPlayerCl,R.color.beeptunes_primary,R.color.navigation_dark_mode_bg);
+        Utils.setShapeBackground(playerToolBarCl,R.color.beeptunes_primary,R.color.navigation_dark_mode_bg);
 
         viewModel.getPlayingSongViewLiveData().observe(getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {
