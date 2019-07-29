@@ -48,14 +48,14 @@ public class BeepTunesPlayer extends BaseFragment {
     private MutableLiveData<PlayingSong> songFromPlayerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> seekBarLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData;
-    private MutableLiveData<Integer> mediaplayerStatusLiveData;
+    private MutableLiveData<Integer> mediaPlayerStatusLiveData;
 
-    public static BeepTunesPlayer getInstance(MutableLiveData<PlayingSong> songMutableLiveData, MutableLiveData<ProgressDuration> progressDurationLiveData, MutableLiveData<Integer> mediaplayerStatusLiveData) {
+    public static BeepTunesPlayer getInstance(MutableLiveData<PlayingSong> songMutableLiveData, MutableLiveData<ProgressDuration> progressDurationLiveData, MutableLiveData<Integer> mediaPlayerStatusLiveData) {
         BeepTunesPlayer beepTunesPlayer = new BeepTunesPlayer();
         beepTunesPlayer.songMutableLiveData = songMutableLiveData;
         beepTunesPlayer.progressDurationLiveData = progressDurationLiveData;
         beepTunesPlayer.realmDownloadSongs = new ArrayList<>();
-        beepTunesPlayer.mediaplayerStatusLiveData = mediaplayerStatusLiveData;
+        beepTunesPlayer.mediaPlayerStatusLiveData = mediaPlayerStatusLiveData;
         return beepTunesPlayer;
     }
 
@@ -131,11 +131,10 @@ public class BeepTunesPlayer extends BaseFragment {
             }
         });
 
-        nextTv.setOnClickListener(v -> {
-            playNextSong(songMutableLiveData.getValue());
-        });
+        nextTv.setOnClickListener(v -> playNextSong(songMutableLiveData.getValue()));
+        previousTv.setOnClickListener(v -> playPreviousSong(songMutableLiveData.getValue()));
 
-        mediaplayerStatusLiveData.observe(getViewLifecycleOwner(), status -> {
+        mediaPlayerStatusLiveData.observe(getViewLifecycleOwner(), status -> {
             if (status != null)
                 if (status == MEDIA_PLAYER_STATUS_COMPLETE) {
                     playNextSong(songMutableLiveData.getValue());
@@ -166,6 +165,30 @@ public class BeepTunesPlayer extends BaseFragment {
         } else {
             Log.i(TAG, "list just have 1 song: " + realmDownloadSongs.size());
         }
+    }
+
+    private void playPreviousSong(PlayingSong playingSong) {
+        if (realmDownloadSongs.size() > 0) {
+            for (int i = 0; i < realmDownloadSongs.size(); i++) {
+                if (realmDownloadSongs.get(i).getId().equals(playingSong.getSongId())) {
+                    int index = i - 1;
+                    if (!(index < 0)) {
+                        PlayingSong nextSong = new PlayingSong();
+                        RealmDownloadSong realmDownloadSong = realmDownloadSongs.get(index);
+                        nextSong.setSongId(realmDownloadSong.getId());
+                        nextSong.setSongPath(realmDownloadSong.getPath());
+                        nextSong.setArtistId(realmDownloadSong.getArtistId());
+                        nextSong.setAlbumId(realmDownloadSong.getAlbumId());
+                        nextSong.setFromPlayer(true);
+                        songFromPlayerLiveData.postValue(nextSong);
+                    } else
+                        Log.i(TAG, "have not previous song: " + i);
+                }
+            }
+        } else {
+            Log.i(TAG, "list just have 1 song ");
+        }
+
     }
 
     private void setUpViews() {
