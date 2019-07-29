@@ -80,8 +80,7 @@ public class BeepTunesPlayer extends BaseFragment {
                 }
 
                 realmDownloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
-                        .equalTo("artistId", songMutableLiveData.getValue().getArtistId()).findAll());
-
+                        .equalTo("artistId", playingSong.getArtistId()).findAll());
             }
         });
 
@@ -137,17 +136,21 @@ public class BeepTunesPlayer extends BaseFragment {
     }
 
     private void playNextSong(PlayingSong playingSong) {
-        Log.i(TAG, "for i run: ");
-        if (realmDownloadSongs.size() > 1) {
+        if (realmDownloadSongs.size() > 0) {
             for (int i = 0; i < realmDownloadSongs.size(); i++) {
                 if (realmDownloadSongs.get(i).getId().equals(playingSong.getSongId())) {
-                    Log.i(TAG, "i: " + i);
-                    if (i != realmDownloadSongs.size()) {
-                        int index = i + 1;
-                        Log.i(TAG, "index: " + index);
-                        Log.i(TAG, "NextSong Id:) -> " + realmDownloadSongs.get(index).getId());
+                    int index = i + 1;
+                    if (index != realmDownloadSongs.size()) {
+                        PlayingSong nextSong = new PlayingSong();
+                        RealmDownloadSong realmDownloadSong = realmDownloadSongs.get(index);
+                        nextSong.setSongId(realmDownloadSong.getId());
+                        nextSong.setSongPath(realmDownloadSong.getPath());
+                        nextSong.setArtistId(realmDownloadSong.getArtistId());
+                        nextSong.setAlbumId(realmDownloadSong.getAlbumId());
+                        nextSong.setFromPlayer(true);
+                        songFromPlayerLiveData.postValue(nextSong);
                     } else {
-                        Log.i(TAG, "have not next song: " + i + realmDownloadSongs.size());
+                        Log.i(TAG, "have not next song: " + i + " " + realmDownloadSongs.size());
                     }
                 }
             }
@@ -155,15 +158,6 @@ public class BeepTunesPlayer extends BaseFragment {
             Log.i(TAG, "list just have 1 song: " + realmDownloadSongs.size());
         }
     }
-
-//                    if (realmDownloadSongs.get(i).getId() == playingSong.getSongId()) {
-//        RealmDownloadSong realmDownloadSong = realmDownloadSongs.get(i + 1);
-//        playingSong.setSongId(realmDownloadSong.getId());
-//        playingSong.setSongPath(realmDownloadSong.getPath());
-//        playingSong.setFromPlayer(true);
-//        playingSong.setStatus(PlayingSong.PLAY);
-//        songFromPlayerLiveData.postValue(playingSong);
-//    }
 
     private void setUpViews() {
         playTv = rootView.findViewById(R.id.tv_btPlayer_play);
