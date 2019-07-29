@@ -809,7 +809,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-                G.handler.post(() -> currentScore.set(String.valueOf(score.getScore())));
+                G.handler.post(() -> currentScore.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(score.getScore())) : String.valueOf(score.getScore())));
             }
 
             @Override
