@@ -29,8 +29,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 115
-        versionName "2.0.0.newUi1"
+        versionCode 117
+        versionName "2.0.0.newUi55"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -197,7 +197,7 @@ dependencies {
     implementation 'com.mindorks.android:prdownloader:0.5.0'
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
-    implementation('com.github.KianIranian-STDG:Compress:1.3.0') {
+    implementation('com.github.KianIranian-STDG:Compress:1.3.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
     implementation('com.github.KianIranian-STDG:VideoTrimmer:1.1.1') {
