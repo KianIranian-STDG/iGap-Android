@@ -4,6 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_beepTunes_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/dp24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/tb_beepTunes"
         android:layout_width="match_parent"
@@ -11,20 +24,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_beepTunes_main"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_beepTunes">
-
-    </android.support.v7.widget.RecyclerView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/pb_beepTunes_loading"
