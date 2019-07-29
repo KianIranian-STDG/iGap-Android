@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="56dp">
+    android:orientation="vertical">
 
     <View
         android:id="@+id/lineViewTop"
@@ -39,9 +38,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="Abolfazl Abbasi"
-            app:layout_constraintBottom_toTopOf="@+id/tv_userProfile_userScore"
-            app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage" />
+            app:layout_constraintBottom_toBottomOf="@+id/iv_userProfile_userImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage"
+            app:layout_constraintTop_toTopOf="@+id/iv_userProfile_userImage" />
 
         <TextView
             android:id="@+id/tv_userProfile_userScore"
@@ -127,6 +130,40 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fontIconTextView3"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_beepTunesProfile_favoriteSong"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <net.iGap.module.FontIconTextView
+            android:id="@+id/fontIconTextView4"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="@string/icon_like"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:text="Favorite Song"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fontIconTextView4"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

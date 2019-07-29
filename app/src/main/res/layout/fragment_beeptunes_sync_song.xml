@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/ll_syncSong_toolBar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/toolbar_height"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

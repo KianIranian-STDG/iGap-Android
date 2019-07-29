@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.FAVORITE_FRAGMENT;
 import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.SYNC_FRAGMENT;
 
 public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener, BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack {
@@ -94,6 +94,12 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
             if (type.equals(SYNC_FRAGMENT)) {
                 List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class).findAll());
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song", this))
+                        .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
+            } else if (type.equals(FAVORITE_FRAGMENT)) {
+                List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
+                        .equalTo("isFavorite", true).findAll());
+
+                new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Favorite Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
             }
 

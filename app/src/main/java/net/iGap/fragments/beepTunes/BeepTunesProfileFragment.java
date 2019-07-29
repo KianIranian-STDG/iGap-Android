@@ -18,6 +18,7 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
     public static final String SYNC_FRAGMENT = "syncSong";
     public static final String PERCHES_FRAGMENT = "perchesSong";
+    public static final String FAVORITE_FRAGMENT = "favoriteSong";
     public AvatarHandler avatarHandler;
     private View rootView;
     private ImageView profileImage;
@@ -43,6 +44,7 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
         profileImage = rootView.findViewById(R.id.iv_userProfile_userImage);
         ViewGroup perchesSong = rootView.findViewById(R.id.cl_beepTunesProfile_perchesSong);
         ViewGroup syncSong = rootView.findViewById(R.id.cl_beepTunesProfile_syncSong);
+        ViewGroup favoriteSong = rootView.findViewById(R.id.cl_beepTunesProfile_favoriteSong);
 
 
         syncSong.setOnClickListener(v -> {
@@ -52,6 +54,10 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
 
         perchesSong.setOnClickListener(v -> {
             callBack.onClick(PERCHES_FRAGMENT);
+        });
+
+        favoriteSong.setOnClickListener(v -> {
+            callBack.onClick(FAVORITE_FRAGMENT);
             dismiss();
         });
     }
