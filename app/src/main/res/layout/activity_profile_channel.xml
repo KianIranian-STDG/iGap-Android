@@ -291,7 +291,7 @@
                         android:layout_marginTop="@dimen/dp8"
                         android:background="?attr/selectableItemBackground"
                         android:fontFamily="@font/main_font"
-                        android:onClick="@{()-> viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
+                        android:onClick="@{()-> viewModel.onNotificationCheckChange()}"
                         android:padding="8dp"
                         android:text="@string/mute_notification"
                         android:textSize="@dimen/standardTextSize"
@@ -305,7 +305,6 @@
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:checked="@={viewModel.isMuteNotification}"
-                        android:onCheckedChanged="@{()->viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
                         app:layout_constraintBottom_toBottomOf="@id/notification"
                         app:layout_constraintEnd_toEndOf="@id/notification"
                         app:layout_constraintTop_toTopOf="@id/notification" />

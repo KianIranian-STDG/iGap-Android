@@ -1078,6 +1078,8 @@ public class FragmentChat extends BaseFragment
         if (mForwardMessages == null) {
             rootView.findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
 
         registerListener();
     }
@@ -2675,7 +2677,7 @@ public class FragmentChat extends BaseFragment
                     super.clearView(recyclerView, viewHolder);
                     try {
                         if (isRepley)
-                            replay((mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
+                            replay((mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage , false);
                     } catch (Exception ignored) {
                     }
                     isRepley = false;
@@ -3178,11 +3180,11 @@ public class FragmentChat extends BaseFragment
                 if (text.toString().endsWith(System.getProperty("line.separator"))) {
                     if (sendByEnter) imvSendButton.performClick();
                 }
-                if (text.toString().equals(messageEdit) && isEditMessage) {
+               /* if (text.toString().equals(messageEdit) && isEditMessage) {
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                 } else {
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                }
+                }*/
 
             }
 
@@ -3197,7 +3199,7 @@ public class FragmentChat extends BaseFragment
                         if (!isEditMessage) {
                             sendButtonVisibility(false);
                         } else {
-                            imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
+                            //imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                         }
                     }
                 }
@@ -4510,7 +4512,7 @@ public class FragmentChat extends BaseFragment
                 }
                 sendRequestPinMessage(_messageId);
             } else if (items.get(position).equals(getString(R.string.replay_item_dialog))) {
-                G.handler.postDelayed(() -> replay(message), 200);
+                G.handler.postDelayed(() -> replay(message , false), 200);
             } else if (items.get(position).equals(getString(R.string.copy_item_dialog))) {
                 ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
                 String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
@@ -4582,8 +4584,9 @@ public class FragmentChat extends BaseFragment
                 }
                 edtChat.setTag(message);
                 isEditMessage = true;
-                imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
+                //imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                 sendButtonVisibility(true);
+                replay(message , true);
             } else if (items.get(position).equals(getString(R.string.save_to_gallery))) {
                 String filename;
                 String filepath;
@@ -5213,11 +5216,11 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void replay(StructMessageInfo item) {
+    private void replay(StructMessageInfo item , boolean isEdit) {
         if (mAdapter != null) {
             Set<AbstractMessage> messages = mAdapter.getSelectedItems();
             // replay works if only one message selected
-            inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().mMessage : item);
+            inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().mMessage : item , isEdit);
 
             ll_AppBarSelected.setVisibility(View.GONE);
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
@@ -6996,7 +6999,7 @@ public class FragmentChat extends BaseFragment
     }
 
     @SuppressLint("RestrictedApi")
-    private void inflateReplayLayoutIntoStub(StructMessageInfo chatItem) {
+    private void inflateReplayLayoutIntoStub(StructMessageInfo chatItem , boolean isEdit) {
         if (rootView.findViewById(R.id.replayLayoutAboveEditText) == null) {
             ViewStubCompat stubView = rootView.findViewById(R.id.replayLayoutStub);
             stubView.setInflatedId(R.id.replayLayoutAboveEditText);
@@ -7006,7 +7009,7 @@ public class FragmentChat extends BaseFragment
                 stubView.setLayoutResource(R.layout.layout_chat_reply);
             stubView.inflate();
 
-            inflateReplayLayoutIntoStub(chatItem);
+            inflateReplayLayoutIntoStub(chatItem , isEdit);
         } else {
             mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
@@ -7018,13 +7021,23 @@ public class FragmentChat extends BaseFragment
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
             Utils.darkModeHandler(replayIcon);
+            if (isEdit)
+                replayIcon.setText(getString(R.string.edit_icon));
+            else
+                replayIcon.setText(getString(R.string.reply_icon));
 
             ImageView thumbnail = mReplayLayout.findViewById(R.id.thumbnail);
             TextView closeReplay = mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    clearReplyView();
+                    //clearReplyView();
+
+                    if (isEdit)
+                        removeEditedMessage();
+                    else
+                        clearReplyView();
+
                 }
             });
             //+Realm realm = Realm.getDefaultInstance();
@@ -7047,16 +7060,21 @@ public class FragmentChat extends BaseFragment
                     ReplySetText(replayTo, chatItem.messageText);
                 }
             }
-            if (chatType == CHANNEL) {
-                RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();
-                if (realmRoom != null) {
-                    replayFrom.setText(realmRoom.getTitle());
+
+            if (!isEdit){
+                if (chatType == CHANNEL) {
+                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();
+                    if (realmRoom != null) {
+                        replayFrom.setText(realmRoom.getTitle());
+                    }
+                } else {
+                    RealmRegisteredInfo userInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), parseLong(chatItem.senderID));
+                    if (userInfo != null) {
+                        replayFrom.setText(userInfo.getDisplayName());
+                    }
                 }
-            } else {
-                RealmRegisteredInfo userInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), parseLong(chatItem.senderID));
-                if (userInfo != null) {
-                    replayFrom.setText(userInfo.getDisplayName());
-                }
+            }else {
+                replayFrom.setText(getString(R.string.edit));
             }
 
             //realm.close();
@@ -7120,7 +7138,7 @@ public class FragmentChat extends BaseFragment
         }
         mBtnReplySelected.setOnClickListener(v -> {
             if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
-                replay(mAdapter.getSelectedItems().iterator().next().mMessage);
+                replay(mAdapter.getSelectedItems().iterator().next().mMessage , false);
             }
         });
         mBtnCopySelected.setOnClickListener(v -> {
