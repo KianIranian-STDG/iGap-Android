@@ -20,8 +20,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.adapter.beepTunes.AlbumTrackAdapter;
-import net.iGap.adapter.beepTunes.ItemAdapter;
+import net.iGap.adapter.beepTunes.BeepTunesTrackAdapter;
+import net.iGap.adapter.beepTunes.BeepTunesAlbumAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.interfaces.OnTrackAdapter;
@@ -33,7 +33,7 @@ import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
-public class AlbumFragment extends BaseFragment implements ToolbarListener {
+public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
     private static String PATH;
     private View rootView;
@@ -49,8 +49,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private AppBarLayout appBarLayout;
     private NestedScrollView scrollView;
     private AlbumViewModel viewModel;
-    private AlbumTrackAdapter trackAdapter;
-    private ItemAdapter albumAdapter;
+    private BeepTunesTrackAdapter trackAdapter;
+    private BeepTunesAlbumAdapter albumAdapter;
     private Album album;
     private SharedPreferences sharedPreferences;
     private MutableLiveData<DownloadSong> downloadingSongLiveData = new MutableLiveData<>();
@@ -58,12 +58,12 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     private MutableLiveData<PlayingSong> toFragmentLiveData;
     private PlayingSong playingSong;
 
-    public AlbumFragment getInstance(Album album, MutableLiveData<PlayingSong> toAlbumAdapter, MutableLiveData<PlayingSong> fromAlbumAdapter) {
-        AlbumFragment albumFragment = new AlbumFragment();
-        albumFragment.album = album;
-        albumFragment.fromFragmentLiveData = toAlbumAdapter;
-        albumFragment.toFragmentLiveData = fromAlbumAdapter;
-        return albumFragment;
+    public BeepTunesAlbumFragment getInstance(Album album, MutableLiveData<PlayingSong> toAlbumAdapter, MutableLiveData<PlayingSong> fromAlbumAdapter) {
+        BeepTunesAlbumFragment beepTunesAlbumFragment = new BeepTunesAlbumFragment();
+        beepTunesAlbumFragment.album = album;
+        beepTunesAlbumFragment.fromFragmentLiveData = toAlbumAdapter;
+        beepTunesAlbumFragment.toFragmentLiveData = fromAlbumAdapter;
+        return beepTunesAlbumFragment;
     }
 
     @Nullable
@@ -71,8 +71,8 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_beeptunes_album, container, false);
         viewModel = new AlbumViewModel();
-        trackAdapter = new AlbumTrackAdapter();
-        albumAdapter = new ItemAdapter();
+        trackAdapter = new BeepTunesTrackAdapter();
+        albumAdapter = new BeepTunesAlbumAdapter();
         PATH = getContext().getFilesDir().getAbsolutePath() + "beepTunes";
         sharedPreferences = getContext().getSharedPreferences(SHP_SETTING.KEY_BEEP_TUNES, Context.MODE_PRIVATE);
         return rootView;
@@ -127,13 +127,13 @@ public class AlbumFragment extends BaseFragment implements ToolbarListener {
 
         trackAdapter.setOnTrackAdapter(new OnTrackAdapter() {
             @Override
-            public void onDownloadClick(Track track, AlbumTrackAdapter.OnSongProgress onSongProgress) {
+            public void onDownloadClick(Track track, BeepTunesTrackAdapter.OnSongProgress onSongProgress) {
                 viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
                 downloadingSongLiveData.observe(getViewLifecycleOwner(), onSongProgress::progress);
             }
 
             @Override
-            public void onPlayClick(RealmDownloadSong realmDownloadSong, AlbumTrackAdapter.OnSongPlay onSongPlay) {
+            public void onPlayClick(RealmDownloadSong realmDownloadSong, BeepTunesTrackAdapter.OnSongPlay onSongPlay) {
                 if (playingSong == null)
                     playingSong = new PlayingSong();
                 playingSong.setSongId(realmDownloadSong.getId());

@@ -113,14 +113,14 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     class RowViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView recyclerView;
         private TextView headerTv;
-        private ItemAdapter adapter;
+        private BeepTunesAlbumAdapter adapter;
 
         RowViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.rv_rowItem);
             headerTv = itemView.findViewById(R.id.tv_rowItem_header);
             recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
-            adapter = new ItemAdapter();
+            adapter = new BeepTunesAlbumAdapter();
             recyclerView.setAdapter(adapter);
 
 

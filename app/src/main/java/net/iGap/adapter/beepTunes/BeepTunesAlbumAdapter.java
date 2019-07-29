@@ -16,7 +16,7 @@ import net.iGap.module.api.beepTunes.Album;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
+public class BeepTunesAlbumAdapter extends RecyclerView.Adapter<BeepTunesAlbumAdapter.ItemViewHolder> {
     private List<Album> albums = new ArrayList<>();
     private BeepTunesMainFragment.OnItemClick onItemClick;
 

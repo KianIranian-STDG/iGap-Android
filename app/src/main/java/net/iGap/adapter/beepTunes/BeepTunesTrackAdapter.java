@@ -28,7 +28,7 @@ import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_ERROR;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_PAUSE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_START;
 
-public class AlbumTrackAdapter extends RecyclerView.Adapter<AlbumTrackAdapter.TrackViewHolder> {
+public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAdapter.TrackViewHolder> {
     private static final String TAG = "aabolfazlAdapter";
     private List<Track> tracks = new ArrayList<>();
     private OnTrackAdapter onTrackAdapter;

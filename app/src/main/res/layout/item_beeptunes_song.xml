@@ -9,6 +9,7 @@
     android:layout_marginBottom="@dimen/dp2"
     android:background="@color/white"
     android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="4dp"
     app:cardElevation="1dp">
 
@@ -66,7 +67,6 @@
             android:id="@+id/tv_itemSong_action"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/icon_sync"
             android:textSize="@dimen/standardIconSize"
             app:layout_constraintBottom_toBottomOf="parent"

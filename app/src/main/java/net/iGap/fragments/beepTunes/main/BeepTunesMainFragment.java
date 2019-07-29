@@ -19,7 +19,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.BeepTunesLocalSongAdapter;
 import net.iGap.fragments.beepTunes.BeepTunesLocalSongFragment;
 import net.iGap.fragments.beepTunes.BeepTunesProfileFragment;
-import net.iGap.fragments.beepTunes.album.AlbumFragment;
+import net.iGap.fragments.beepTunes.album.BeepTunesAlbumFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -86,7 +86,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         });
 
         adapter.setOnItemClick(album -> {
-            new HelperFragment(getFragmentManager(), new AlbumFragment().getInstance(album, toAlbumAdapter, fromAlbumAdapter))
+            new HelperFragment(getFragmentManager(), new BeepTunesAlbumFragment().getInstance(album, toAlbumAdapter, fromAlbumAdapter))
                     .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
         });
 
