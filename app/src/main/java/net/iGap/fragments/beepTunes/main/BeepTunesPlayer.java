@@ -31,7 +31,7 @@ import static net.iGap.fragments.beepTunes.main.BeepTunesViewModel.MEDIA_PLAYER_
 public class BeepTunesPlayer extends BaseFragment {
 
     private static final String TAG = "aabolfazlPlayer";
-    List<RealmDownloadSong> realmDownloadSongs;
+    private List<RealmDownloadSong> realmDownloadSongs;
     private View rootView;
     private TextView playTv;
     private TextView nextTv;
@@ -39,11 +39,14 @@ public class BeepTunesPlayer extends BaseFragment {
     private TextView artistNameTv;
     private TextView songNameTv;
     private TextView totalTimeTv;
+    private TextView favoriteTv;
     private TextView currentTimeTv;
     private SeekBar seekBar;
     private CircleImageView songArtIv;
     private ImageView backgroundIv;
+    private RealmDownloadSong realmDownloadSong;
     private Realm realm;
+
     private MutableLiveData<PlayingSong> songMutableLiveData;
     private MutableLiveData<PlayingSong> songFromPlayerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> seekBarLiveData = new MutableLiveData<>();
@@ -84,6 +87,13 @@ public class BeepTunesPlayer extends BaseFragment {
 
                 realmDownloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
                         .equalTo("artistId", playingSong.getArtistId()).findAll());
+
+                realmDownloadSong = getRealm().copyFromRealm(getRealm()
+                        .where(RealmDownloadSong.class)
+                        .equalTo("id", playingSong.getSongId())
+                        .findFirst());
+
+                checkFavorite(realmDownloadSong);
             }
         });
 
@@ -141,6 +151,30 @@ public class BeepTunesPlayer extends BaseFragment {
                 }
         });
 
+        favoriteTv.setOnClickListener(v -> {
+            if (!realmDownloadSong.isFavorite()) {
+                getRealm().executeTransactionAsync(realm -> {
+                    realmDownloadSong.setFavorite(true);
+                    realm.copyToRealmOrUpdate(realmDownloadSong);
+                }, () -> checkFavorite(realmDownloadSong));
+            } else {
+                getRealm().executeTransactionAsync(realm -> {
+                    realmDownloadSong.setFavorite(false);
+                    realm.copyToRealmOrUpdate(realmDownloadSong);
+                }, () -> checkFavorite(realmDownloadSong));
+            }
+        });
+
+    }
+
+    private void checkFavorite(RealmDownloadSong realmDownloadSong) {
+        if (realmDownloadSong != null && realmDownloadSong.getId() == songMutableLiveData.getValue().getSongId()) {
+            if (realmDownloadSong.isFavorite()) {
+                favoriteTv.setTextColor(getContext().getResources().getColor(R.color.beeptunes_primary));
+            } else {
+                favoriteTv.setTextColor(getContext().getResources().getColor(R.color.gray));
+            }
+        }
     }
 
     private void playNextSong(PlayingSong playingSong) {
@@ -202,6 +236,7 @@ public class BeepTunesPlayer extends BaseFragment {
         seekBar = rootView.findViewById(R.id.sb_ptPlayer);
         songArtIv = rootView.findViewById(R.id.iv_btPlayer_songArt);
         backgroundIv = rootView.findViewById(R.id.iv_btPlayer_cover);
+        favoriteTv = rootView.findViewById(R.id.tv_btPlayer_isFavorite);
         seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#00D20E"), PorterDuff.Mode.SRC_IN);
     }
 

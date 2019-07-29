@@ -12,6 +12,7 @@ public class RealmDownloadSong extends RealmObject {
     private String savedName;
     private Long artistId;
     private Long albumId;
+    private boolean isFavorite = false;
 
     public Long getArtistId() {
         return artistId;
@@ -67,5 +68,13 @@ public class RealmDownloadSong extends RealmObject {
 
     public void setEnglishDisplayName(String englishDisplayName) {
         this.englishDisplayName = englishDisplayName;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }
