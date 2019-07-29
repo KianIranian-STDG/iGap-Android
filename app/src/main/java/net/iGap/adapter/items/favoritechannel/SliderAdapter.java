@@ -1,20 +1,19 @@
-package net.iGap.adapter.items.popular;
+package net.iGap.adapter.items.favoritechannel;
 
 
 import android.content.res.Resources;
 
+import net.iGap.libs.bannerslider.viewholder.ImageSlideViewHolder;
 import net.iGap.model.PopularChannel.Slide;
 
 import java.util.List;
 
-import ss.com.bannerslider.adapters.SliderAdapter;
-import ss.com.bannerslider.viewholder.ImageSlideViewHolder;
 
-public class MainSliderAdapter extends SliderAdapter {
+public class SliderAdapter extends net.iGap.libs.bannerslider.adapters.SliderAdapter {
     private List<Slide> sliderList;
     private String scale;
 
-    public MainSliderAdapter(List<Slide> sliderList, String scale) {
+    public SliderAdapter(List<Slide> sliderList, String scale) {
         this.sliderList = sliderList;
         this.scale = scale;
     }

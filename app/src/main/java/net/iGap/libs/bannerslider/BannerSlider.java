@@ -51,6 +51,7 @@ public class BannerSlider extends FrameLayout {
     public PositionController positionController;
     public static BannerImageLoadingService bannerImageLoadingService;
     private View emptyView;
+    private int index;
 
     public BannerSlider(@NonNull Context context) {
         super(context);
@@ -383,5 +384,13 @@ public class BannerSlider extends FrameLayout {
         }
 
         refreshIndicators();
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

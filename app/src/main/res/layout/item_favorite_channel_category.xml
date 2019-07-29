@@ -8,7 +8,7 @@
     android:clickable="true"
     android:layout_margin="@dimen/dp2"
     android:foreground="?attr/selectableItemBackgroundBorderless"
-    app:cardCornerRadius="@dimen/dp4"
+    app:cardCornerRadius="@dimen/dp12"
     app:cardPreventCornerOverlap="false"
     app:cardElevation="@dimen/dp2">
 
@@ -21,14 +21,14 @@
             android:id="@+id/ll_item_pop_card_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_popular_channel_dark_item"
+            android:background="@drawable/shape_favorite_channel_dark_item"
             android:gravity="center_horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circle_item_popular_rv_grid"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:layout_margin="@dimen/dp8"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:layout_margin="@dimen/dp10"
                 tools:src="@drawable/image_sample" />
         </LinearLayout>
 

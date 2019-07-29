@@ -15,15 +15,15 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_channel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/dp4"
-        android:scrollbars="none">
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginTop="@dimen/dp10">
 
         <LinearLayout
             android:id="@+id/ll_container_child"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dp4"
             android:orientation="vertical" />
     </android.support.v4.widget.NestedScrollView>
-
 </RelativeLayout>

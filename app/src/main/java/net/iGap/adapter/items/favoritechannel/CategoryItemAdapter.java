@@ -1,4 +1,4 @@
-package net.iGap.adapter.items.popular;
+package net.iGap.adapter.items.favoritechannel;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -20,13 +20,13 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryItem.FragmentGridViewHolder> {
+public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.FragmentGridViewHolder> {
     private List<Category> categoryList;
     private Context context;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
     public boolean clickable;
 
-    public AdapterCategoryItem(Context context, boolean clickable, List<Category> categoryList) {
+    public CategoryItemAdapter(Context context, boolean clickable, List<Category> categoryList) {
         this.context = context;
         this.clickable = clickable;
         this.categoryList = categoryList;
@@ -37,7 +37,7 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_popular_channel_category, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
         return new FragmentGridViewHolder(view);
 
     }
@@ -65,7 +65,7 @@ public class AdapterCategoryItem extends RecyclerView.Adapter<AdapterCategoryIte
 
             linearLayout = itemView.findViewById(R.id.ll_item_pop_card_category);
             if (G.isDarkTheme) {
-                linearLayout.setBackgroundResource(R.drawable.shape_popular_channel_dark_item_them);
+                linearLayout.setBackgroundResource(R.drawable.shape_favorite_channel_dark_item_them);
             }
             root = itemView.findViewById(R.id.card_item_pop_category);
             Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);

@@ -241,7 +241,6 @@ dependencies {
     implementation 'android.arch.lifecycle:common-java8:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.ss.bannerslider:bannerslider:2.0.0'
 }
 
 configurations.all {
