@@ -18,16 +18,19 @@ import net.iGap.realm.RealmDownloadSong;
 
 import java.util.List;
 
-public class BeepTunesLocalSongFragment extends BaseFragment implements ToolbarListener {
+public class BeepTunesLocalSongFragment extends BaseFragment implements ToolbarListener, BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack {
     private static final String TAG = "aabolfazlSyncSong";
     private View rootView;
     private String title;
     private List<RealmDownloadSong> downloadSongs;
+    private BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack onLocalSongAdapterCallBack;
 
-    public static BeepTunesLocalSongFragment getInstance(List<RealmDownloadSong> realmDownloadSongs, String title) {
+    public static BeepTunesLocalSongFragment getInstance(List<RealmDownloadSong> realmDownloadSongs, String title,
+                                                         BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack onLocalSongAdapterCallBack) {
         BeepTunesLocalSongFragment fragment = new BeepTunesLocalSongFragment();
         fragment.downloadSongs = realmDownloadSongs;
         fragment.title = title;
+        fragment.onLocalSongAdapterCallBack = onLocalSongAdapterCallBack;
         return fragment;
     }
 
@@ -43,7 +46,7 @@ public class BeepTunesLocalSongFragment extends BaseFragment implements ToolbarL
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_Song);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        recyclerView.setAdapter(new BeepTunesLocalSongAdapter(downloadSongs));
+        recyclerView.setAdapter(new BeepTunesLocalSongAdapter(downloadSongs, this));
 
         LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_syncSong_toolBar);
         HelperToolbar helperToolbar = HelperToolbar.create()
@@ -60,5 +63,12 @@ public class BeepTunesLocalSongFragment extends BaseFragment implements ToolbarL
     public void onLeftIconClickListener(View view) {
         if (getActivity() != null)
             getActivity().onBackPressed();
+    }
+
+    @Override
+    public void OnLocalSongClick(RealmDownloadSong realmDownloadSong) {
+        if (onLocalSongAdapterCallBack != null) {
+            onLocalSongAdapterCallBack.OnLocalSongClick(realmDownloadSong);
+        }
     }
 }

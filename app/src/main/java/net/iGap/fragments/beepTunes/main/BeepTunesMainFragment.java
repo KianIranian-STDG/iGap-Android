@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesAdapter;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.beepTunes.BeepTunesLocalSongAdapter;
 import net.iGap.fragments.beepTunes.BeepTunesLocalSongFragment;
 import net.iGap.fragments.beepTunes.BeepTunesProfileFragment;
 import net.iGap.fragments.beepTunes.album.AlbumFragment;
@@ -34,7 +36,8 @@ import io.realm.Realm;
 
 import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.SYNC_FRAGMENT;
 
-public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener {
+public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener, BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack {
+    private static final String TAG = "aabolfazlBtMainFragment";
     private View rootView;
     private BeepTunesMainViewModel viewModel;
     private BeepTunesAdapter adapter;
@@ -90,7 +93,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         profileFragment.setCallBack(type -> {
             if (type.equals(SYNC_FRAGMENT)) {
                 List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class).findAll());
-                new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song"))
+                new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
             }
 
@@ -133,6 +136,17 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         super.onDestroy();
         if (!realm.isClosed())
             realm.close();
+    }
+
+    @Override
+    public void OnLocalSongClick(RealmDownloadSong realmDownloadSong) {
+        PlayingSong playingSong = new PlayingSong();
+        playingSong.setSongId(realmDownloadSong.getId());
+        playingSong.setSongPath(realmDownloadSong.getPath());
+        playingSong.setAlbumId(realmDownloadSong.getAlbumId());
+        playingSong.setArtistId(realmDownloadSong.getArtistId());
+        playingSong.setFromPlayer(false);
+        fromAlbumAdapter.postValue(playingSong);
     }
 
     public interface OnItemClick {

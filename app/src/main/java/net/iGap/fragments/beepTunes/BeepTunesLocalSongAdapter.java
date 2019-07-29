@@ -21,9 +21,11 @@ import static net.iGap.G.context;
 
 public class BeepTunesLocalSongAdapter extends RecyclerView.Adapter<BeepTunesLocalSongAdapter.LocalSongViewHolder> {
     private List<RealmDownloadSong> downloadSongs;
+    private OnLocalSongAdapterCallBack callBack;
 
-    public BeepTunesLocalSongAdapter(List<RealmDownloadSong> downloadSongs) {
+    public BeepTunesLocalSongAdapter(List<RealmDownloadSong> downloadSongs, OnLocalSongAdapterCallBack callBack) {
         this.downloadSongs = downloadSongs;
+        this.callBack = callBack;
     }
 
     @NonNull
@@ -43,6 +45,11 @@ public class BeepTunesLocalSongAdapter extends RecyclerView.Adapter<BeepTunesLoc
         return downloadSongs.size();
     }
 
+    @FunctionalInterface
+    public interface OnLocalSongAdapterCallBack {
+        void OnLocalSongClick(RealmDownloadSong realmDownloadSong);
+    }
+
     class LocalSongViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView itemIv;
@@ -58,6 +65,7 @@ public class BeepTunesLocalSongAdapter extends RecyclerView.Adapter<BeepTunesLoc
 
         void bindSong(RealmDownloadSong realmDownloadSong) {
             getSongInfo(realmDownloadSong.getPath());
+            itemView.setOnClickListener(v -> callBack.OnLocalSongClick(realmDownloadSong));
         }
 
         private void getSongInfo(String path) {
