@@ -1567,8 +1567,8 @@ Want to get it?</string>
     <string name="destination_sheba_number">Destination IBAN Number</string>
     <string name="trace_no">Trace No</string>
     <string name="reference_code">Reference No</string>
-    <string name="has">دارد</string>
-    <string name="not_has">ندارد</string>
+    <string name="has">Has</string>
+    <string name="not_has">Has not</string>
     <string name="see_details">See Details</string>
     <string name="request_time">Request Time</string>
     <string name="settlement_time">Settlement Time</string>
@@ -1789,10 +1789,10 @@ Want to get it?</string>
     <string name="cash_out_two_wallet_hint">Enter Cash out amount then your merchant balance will transfer to your personal wallet</string>
     <string name="cash_to_wallet">to Personal wallet</string>
     <string name="person">person</string>
-    <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
+    <string name="club_balance_not_enough">This Card balance is not enough</string>
     <string name="enter_four_digit_code">Enter Six digits code</string>
     <string name="four_digit_code">Six digit code</string>
-    <string name="show_receipt">مشاهده رسید</string>
+    <string name="show_receipt">Show Receipt</string>
     <string name="reciever_name">Receiver</string>
     <string name="date_time">date and time</string>
     <string name="transaction_type">Transaction Type</string>
