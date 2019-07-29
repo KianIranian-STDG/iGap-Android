@@ -525,7 +525,7 @@ public class AvatarHandler {
                     offset = new File(filePath).length();
                 }
                 new RequestFileDownload().download(realmAttachment.getToken(), offset, (int) fileSize, selector,
-                        new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, realmAttachment.getToken(), filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR));
+                        new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, realmAttachment.getToken(), filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR), true);
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -552,7 +552,7 @@ public class AvatarHandler {
                  * don't use offset in getting thumbnail
                  */
                 try {
-                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR));
+                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR), true);
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }

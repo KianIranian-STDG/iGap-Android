@@ -65,7 +65,7 @@ public class RequestFileDownload {
     }
 
     public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity) {
-        download(token, offset, maxLimit, selector, identity, true);
+        download(token, offset, maxLimit, selector, identity, false);
     }
 
     /**
