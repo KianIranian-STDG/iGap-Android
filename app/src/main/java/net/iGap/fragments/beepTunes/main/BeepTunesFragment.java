@@ -46,7 +46,7 @@ public class BeepTunesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel.onCreateFragment(this);
-        beepTunesPlayer = BeepTunesPlayer.getInstance(toAlbumAdapter, viewModel.getProgressDurationLiveData());
+        beepTunesPlayer = BeepTunesPlayer.getInstance(toAlbumAdapter, viewModel.getProgressDurationLiveData(), viewModel.getMediaPlayerStatusLiveData());
         LinearLayout playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
         behavior = BottomSheetBehavior.from(playerLayout);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -149,8 +149,9 @@ public class BeepTunesFragment extends BaseFragment {
             }
         });
 
-        beepTunesPlayer.getPlayingSongSeekBarLiveData().observe(getViewLifecycleOwner(), integer -> {
-            viewModel.seekBarProgressChanged(integer);
+        beepTunesPlayer.getPlayingSongSeekBarLiveData().observe(getViewLifecycleOwner(), progress -> {
+            if (progress != null)
+                viewModel.seekBarProgressChanged(progress);
         });
 
     }

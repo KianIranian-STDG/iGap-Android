@@ -26,6 +26,8 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static net.iGap.fragments.beepTunes.main.BeepTunesViewModel.MEDIA_PLAYER_STATUS_COMPLETE;
+
 public class BeepTunesPlayer extends BaseFragment {
 
     private static final String TAG = "aabolfazlPlayer";
@@ -46,13 +48,14 @@ public class BeepTunesPlayer extends BaseFragment {
     private MutableLiveData<PlayingSong> songFromPlayerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> seekBarLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData;
+    private MutableLiveData<Integer> mediaplayerStatusLiveData;
 
-
-    public static BeepTunesPlayer getInstance(MutableLiveData<PlayingSong> songMutableLiveData, MutableLiveData<ProgressDuration> progressDurationLiveData) {
+    public static BeepTunesPlayer getInstance(MutableLiveData<PlayingSong> songMutableLiveData, MutableLiveData<ProgressDuration> progressDurationLiveData, MutableLiveData<Integer> mediaplayerStatusLiveData) {
         BeepTunesPlayer beepTunesPlayer = new BeepTunesPlayer();
         beepTunesPlayer.songMutableLiveData = songMutableLiveData;
         beepTunesPlayer.progressDurationLiveData = progressDurationLiveData;
         beepTunesPlayer.realmDownloadSongs = new ArrayList<>();
+        beepTunesPlayer.mediaplayerStatusLiveData = mediaplayerStatusLiveData;
         return beepTunesPlayer;
     }
 
@@ -132,6 +135,12 @@ public class BeepTunesPlayer extends BaseFragment {
             playNextSong(songMutableLiveData.getValue());
         });
 
+        mediaplayerStatusLiveData.observe(getViewLifecycleOwner(), status -> {
+            if (status != null)
+                if (status == MEDIA_PLAYER_STATUS_COMPLETE) {
+                    playNextSong(songMutableLiveData.getValue());
+                }
+        });
 
     }
 

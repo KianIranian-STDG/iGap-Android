@@ -16,6 +16,7 @@ import net.iGap.module.api.beepTunes.ProgressDuration;
 import net.iGap.viewmodel.BaseViewModel;
 
 public class BeepTunesViewModel extends BaseViewModel {
+    public static final int MEDIA_PLAYER_STATUS_COMPLETE = 1;
     private static final String TAG = "aabolfazlMainViewModel";
     private MediaPlayer mediaPlayer;
     private ServiceConnection serviceConnection;
@@ -23,6 +24,7 @@ public class BeepTunesViewModel extends BaseViewModel {
     private MutableLiveData<PlayingSong> playingSongViewLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData;
     private MutableLiveData<ProgressDuration> progressViewLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> mediaPlayerStatusLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
@@ -64,6 +66,7 @@ public class BeepTunesViewModel extends BaseViewModel {
             }
         });
 
+        mediaPlayer.setOnCompletionListener(mp -> mediaPlayerStatusLiveData.postValue(MEDIA_PLAYER_STATUS_COMPLETE));
     }
 
     void onPlaySongClicked(PlayingSong playingSong, Context context) {
@@ -103,5 +106,9 @@ public class BeepTunesViewModel extends BaseViewModel {
 
     public MutableLiveData<PlayingSong> getPlayingSongViewLiveData() {
         return playingSongViewLiveData;
+    }
+
+    public MutableLiveData<Integer> getMediaPlayerStatusLiveData() {
+        return mediaPlayerStatusLiveData;
     }
 }
