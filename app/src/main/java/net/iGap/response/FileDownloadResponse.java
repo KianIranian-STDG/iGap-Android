@@ -59,15 +59,15 @@ public class FileDownloadResponse extends MessageHandler {
                     connectivityType = false;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
-        ;
+
         if (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
             HelperDataUsage.progressDownload(connectivityType, builder.getBytes().size(), identityFileDownload.type);
         }
         long progress = (nextOffset * 100) / fileSize;
-        if (progress >= 100) {
-            RequestFileDownload.downloadPending.remove(cacheId + "" + identityFileDownload.offset);
-        }
+
+        RequestFileDownload.downloadPending.remove(cacheId + "" + identityFileDownload.offset);
 
         if (progress == 100 && (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE)) {
             HelperDataUsage.insertDataUsage(HelperDataUsage.convetredDownloadType, connectivityType, true);

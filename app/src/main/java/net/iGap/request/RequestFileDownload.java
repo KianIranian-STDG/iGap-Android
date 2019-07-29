@@ -33,7 +33,7 @@ public class RequestFileDownload {
 
     public static HashSet<String> downloadPending = new HashSet<>();
 
-    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity) {
+    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity, Boolean checkDuplicate) {
         ProtoFileDownload.FileDownload.Builder builder = ProtoFileDownload.FileDownload.newBuilder();
 
         if (token == null) {
@@ -46,19 +46,26 @@ public class RequestFileDownload {
         builder.setMaxLimit(getMaxLimitDownload());
         builder.setSelector(selector);
 
-        if (downloadPending.contains(token + "" + offset)) {
+        if (checkDuplicate && downloadPending.contains(token + "" + offset)) {
             return;
         }
 
         try {
-            if (G.userLogin) {
+            if (checkDuplicate && G.userLogin) {
                 RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
                 RequestQueue.sendRequest(requestWrapper);
                 downloadPending.add(token + "" + offset);
+            } else {
+                RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
+                RequestQueue.sendRequest(requestWrapper);
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity) {
+        download(token, offset, maxLimit, selector, identity, true);
     }
 
     /**
