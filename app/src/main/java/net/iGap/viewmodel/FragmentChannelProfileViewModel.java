@@ -158,7 +158,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
             isShowLink.set(View.VISIBLE);
         }
 
-        isMuteNotification.set(!mRoom.getMute());
+        isMuteNotification.set(mRoom.getMute());
 
         subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
         administratorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
