@@ -70,6 +70,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public ObservableInt isShowLink = new ObservableInt(View.GONE);
     public ObservableInt channelLinkTitle = new ObservableInt(R.string.invite_link_title);
     public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
+    public MutableLiveData<Boolean> muteNotifListener = new MutableLiveData<>();
     public ObservableField<String> subscribersCount = new ObservableField<>("0");
     public ObservableField<String> administratorsCount = new ObservableField<>("0");
     public ObservableField<String> moderatorsCount = new ObservableField<>("0");
@@ -179,9 +180,9 @@ public class FragmentChannelProfileViewModel extends ViewModel
         FragmentShearedMedia.getCountOfSharedMedia(roomId);
     }
 
-    public void onNotificationCheckChange(boolean isChecked) {
-        new RequestClientMuteRoom().muteRoom(roomId, !isChecked);
-        isMuteNotification.set(!isChecked);
+    public void onNotificationCheckChange() {
+        isMuteNotification.set(!isMuteNotification.get());
+        muteNotifListener.setValue(isMuteNotification.get());
     }
 
     public void onClickCircleImage() {

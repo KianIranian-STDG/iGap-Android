@@ -39,6 +39,7 @@ import net.iGap.module.MEditText;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -127,6 +128,11 @@ public class FragmentChannelProfile extends BaseFragment {
             if (goBack != null && goBack) {
                 popBackStackFragment();
             }
+        });
+
+        viewModel.muteNotifListener.observe(getViewLifecycleOwner() , isMute -> {
+            new RequestClientMuteRoom().muteRoom(viewModel.roomId, isMute);
+            binding.enableNotification.setChecked(isMute);
         });
 
         viewModel.goToRoomListPage.observe(this, isGo -> {
