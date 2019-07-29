@@ -157,6 +157,8 @@ public class KuknosPanelFrag extends BaseFragment {
         kuknosPanelVM.getOpenPage().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer pageID) {
+                if (pageID == -1)
+                    return;
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = null;
@@ -180,6 +182,7 @@ public class KuknosPanelFrag extends BaseFragment {
                         break;
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                kuknosPanelVM.getOpenPage().setValue(-1);
             }
         });
     }
