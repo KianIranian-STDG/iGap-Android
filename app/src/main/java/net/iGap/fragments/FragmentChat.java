@@ -9138,18 +9138,19 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showPaymentDialog() {
-        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom != null) {
-            chatType = realmRoom.getType();
-            if (chatType == CHAT) {
-                chatPeerId = realmRoom.getChatRoom().getPeerId();
-                if (imvUserPicture != null && txtName != null) {
-                    paymentDialog = PaymentFragment.newInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
-//                    paymentDialog.show(getFragmentManager(), "payment_dialog");
-                    new HelperFragment(getActivity().getSupportFragmentManager(), paymentDialog).setTag("PaymentFragment").setReplace(false).load();
-                }
-            }
-        }
+        showSelectItem();
+//        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+//        if (realmRoom != null) {
+//            chatType = realmRoom.getType();
+//            if (chatType == CHAT) {
+//                chatPeerId = realmRoom.getChatRoom().getPeerId();
+//                if (imvUserPicture != null && txtName != null) {
+//                    paymentDialog = PaymentFragment.newInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+////                    paymentDialog.show(getFragmentManager(), "payment_dialog");
+//                    new HelperFragment(getActivity().getSupportFragmentManager(), paymentDialog).setTag("PaymentFragment").setReplace(false).load();
+//                }
+//            }
+//        }
 
     }
 
