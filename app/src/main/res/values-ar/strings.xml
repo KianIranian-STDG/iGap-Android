@@ -2855,4 +2855,7 @@
     <string name="str_frag_sync_contactTitle">قل مرحبا لأصدقائك</string>
     <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
     <string name="str_frag_sync_skipBtn">البدء</string>
+    <string name="beeptunes_purchase_song">Purchase Song</string>
+    <string name="beeptunes_sync_song">Sync Song</string>
+    <string name="beeptunesـfavorite_song">Favorite Song</string>
 </resources>

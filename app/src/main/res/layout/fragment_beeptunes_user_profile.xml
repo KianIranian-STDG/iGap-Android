@@ -29,18 +29,23 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
+            android:layoutDirection="ltr"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_userProfile_userName"
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:layoutDirection="ltr"
             android:text="Abolfazl Abbasi"
+            android:textSize="@dimen/largeTextSize"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_userProfile_userImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage"
@@ -76,6 +81,7 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/fontIconTextView2"
+            style="?textTitleColorSettingTheme"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_music"
@@ -85,6 +91,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -92,7 +99,8 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:gravity="center_vertical"
-            android:text="Perches Song"
+            android:text="@string/beeptunes_purchase_song"
+            android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fontIconTextView2"
@@ -108,6 +116,7 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/fontIconTextView3"
+            style="?textTitleColorSettingTheme"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_sync"
@@ -117,6 +126,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -126,7 +136,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
-            android:text="Sync Song"
+            android:text="@string/beeptunes_sync_song"
+            android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fontIconTextView3"
@@ -142,6 +153,7 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/fontIconTextView4"
+            style="?textTitleColorSettingTheme"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_like"
@@ -151,6 +163,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -160,7 +173,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
-            android:text="Favorite Song"
+            android:text="@string/beeptunesـfavorite_song"
+            android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fontIconTextView4"

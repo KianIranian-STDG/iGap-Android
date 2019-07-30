@@ -1913,4 +1913,7 @@
     <string name="icon_next">Ó</string>
     <string name="icon_previous">Ô</string>
     <string name="icon_like">Ö</string>
+    <string name="beeptunes_purchase_song">Purchase Song</string>
+    <string name="beeptunes_sync_song">Sync Song</string>
+    <string name="beeptunesـfavorite_song">Favorite Song</string>
 </resources>
