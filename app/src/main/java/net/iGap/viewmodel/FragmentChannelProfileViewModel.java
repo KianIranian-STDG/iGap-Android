@@ -91,6 +91,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
     public ObservableInt showLoading = new ObservableInt(View.GONE);
+    public ObservableInt textGravity = new ObservableInt(Gravity.LEFT);
     //Ui event
     public MutableLiveData<String> channelName = new MutableLiveData<>();
     public MutableLiveData<String> channelSecondsTitle = new MutableLiveData<>();
@@ -175,6 +176,13 @@ public class FragmentChannelProfileViewModel extends ViewModel
             showMemberList.set(View.GONE);
             editButtonVisibility.setValue(View.GONE);
         }
+
+        if (G.selectedLanguage.equals("en")){
+            textGravity.set(Gravity.LEFT);
+        }else {
+            textGravity.set(Gravity.RIGHT);
+        }
+
         initRecycleView();
 
         FragmentShearedMedia.getCountOfSharedMedia(roomId);

@@ -245,6 +245,21 @@
                         app:layout_constraintTop_toTopOf="@id/channelVerify" />
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/channelLinkStatus"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginTop="@dimen/dp10"
+                        android:text="@{viewModel.channelLinkTitle}"
+                        android:textSize="@dimen/standardTextSize"
+                        android:visibility="@{viewModel.isShowLink}"
+                        app:layout_constraintLeft_toLeftOf="@id/notification"
+                        app:layout_constraintRight_toRightOf="@id/notification"
+                        app:layout_constraintTop_toBottomOf="@id/channelVerify" />
+
+
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/channelLink"
                         style="?textSubColorSettingTheme"
                         android:layout_width="0dp"
@@ -252,24 +267,12 @@
                         android:onClick="@{()->viewModel.onClickChannelLink()}"
                         android:padding="4dp"
                         android:text="@{viewModel.channelLink}"
+                        android:gravity="@{viewModel.textGravity}"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="@{viewModel.isShowLink}"
                         app:layout_constraintLeft_toLeftOf="@id/notification"
                         app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toBottomOf="@id/channelVerify" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/channelLinkStatus"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="4dp"
-                        android:text="@{viewModel.channelLinkTitle}"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.isShowLink}"
-                        app:layout_constraintLeft_toLeftOf="@id/notification"
-                        app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toBottomOf="@id/channelLink" />
+                        app:layout_constraintTop_toBottomOf="@id/channelLinkStatus" />
 
                     <View
                         android:id="@+id/divider1"
@@ -280,7 +283,7 @@
                         android:visibility="@{viewModel.isShowLink}"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/channelLinkStatus"
+                        app:layout_constraintTop_toBottomOf="@id/channelLink"
                         app:layout_constraintWidth_percent=".95" />
 
                     <android.support.v7.widget.AppCompatTextView
