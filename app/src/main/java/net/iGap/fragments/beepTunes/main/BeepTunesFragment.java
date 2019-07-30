@@ -69,8 +69,8 @@ public class BeepTunesFragment extends BaseFragment {
         ImageView hidePlayerIv = rootView.findViewById(R.id.iv_btPlayer_hide);
 
 
-        Utils.setShapeBackground(bottomPlayerCl,R.color.beeptunes_primary,R.color.navigation_dark_mode_bg);
-        Utils.setShapeBackground(playerToolBarCl,R.color.beeptunes_primary,R.color.navigation_dark_mode_bg);
+        Utils.setShapeBackground(bottomPlayerCl,R.color.gray_300,R.color.navigation_dark_mode_bg);
+        Utils.setShapeBackground(playerToolBarCl,R.color.gray_300,R.color.navigation_dark_mode_bg);
 
         viewModel.getPlayingSongViewLiveData().observe(getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {

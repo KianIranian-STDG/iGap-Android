@@ -26,8 +26,8 @@
         app:civ_border_color="@color/white"
         app:civ_border_width="1dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_artistName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
@@ -35,21 +35,20 @@
         android:id="@+id/sb_ptPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
+        android:layoutDirection="ltr"
         android:thumbTint="@color/beeptunes_primary"
         app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_currentDuration"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/tv_btPlayer_currentDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:textColor="@color/white"
         android:textSize="@dimen/smallTextSize"
@@ -62,6 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:textColor="@color/white"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintEnd_toEndOf="@+id/sb_ptPlayer"
@@ -95,7 +96,7 @@
         android:textColor="@color/white"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_btPlayer_play"
-        app:layout_constraintStart_toEndOf="@+id/tv_btPlayer_play"
+        app:layout_constraintLeft_toRightOf="@+id/tv_btPlayer_play"
         app:layout_constraintTop_toTopOf="@+id/tv_btPlayer_play" />
 
     <net.iGap.module.FontIconTextView
@@ -108,7 +109,7 @@
         android:textColor="@color/white"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_btPlayer_play"
-        app:layout_constraintEnd_toStartOf="@+id/tv_btPlayer_play"
+        app:layout_constraintRight_toLeftOf="@+id/tv_btPlayer_play"
         app:layout_constraintTop_toTopOf="@+id/tv_btPlayer_play" />
 
     <TextView
@@ -125,8 +126,8 @@
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_songName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_btPlayer_songArt"
         tools:text="Shajarian" />
 
@@ -142,8 +143,8 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/sb_ptPlayer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_btPlayer_artistName"
         tools:text="Ahay KabarDar" />
 
@@ -151,11 +152,12 @@
         android:id="@+id/tv_btPlayer_isFavorite"
         android:layout_width="56dp"
         android:layout_height="56dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/icon_like"
         android:textColor="@color/gray"
         android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/sb_ptPlayer"
-        app:layout_constraintStart_toStartOf="@+id/sb_ptPlayer" />
+        app:layout_constraintLeft_toLeftOf="@+id/sb_ptPlayer" />
 
 </android.support.constraint.ConstraintLayout>

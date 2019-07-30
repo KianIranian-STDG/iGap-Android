@@ -170,6 +170,7 @@
         android:layout_gravity="center"
         android:layout_margin="16dp"
         android:background="@drawable/shape_beeptunes_album_light"
+        android:visibility="invisible"
         app:layout_anchor="@id/ab_album"
         app:layout_anchorGravity="bottom|end">
 
