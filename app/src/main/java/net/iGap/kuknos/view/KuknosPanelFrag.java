@@ -21,6 +21,8 @@ import android.widget.Spinner;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -28,12 +30,15 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
 import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
+import net.iGap.kuknos.viewmodel.KuknosChangePassVM;
+import net.iGap.kuknos.viewmodel.KuknosLogoutVM;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.kuknos.viewmodel.KuknosRecieveVM;
 import net.iGap.kuknos.viewmodel.KuknosSendVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class KuknosPanelFrag extends BaseFragment {
 
@@ -110,11 +115,54 @@ public class KuknosPanelFrag extends BaseFragment {
 
             }
         });
+
         kuknosPanelVM.getDataFromServer();
         onErrorObserver();
         openPage();
         onDataChanged();
         onProgress();
+    }
+
+    private void initialSettingBS() {
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.kuknos_setting_changePin));
+        items.add(getString(R.string.kuknos_setting_viewRecoveryP));
+        items.add(getString(R.string.kuknos_setting_logout));
+
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = null;
+                switch (position) {
+                    case 0:
+                        fragment = fragmentManager.findFragmentByTag(KuknosChangePassFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosChangePassFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                        break;
+                    case 1:
+                        fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosViewRecoveryEPFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                        break;
+                    case 2:
+                        fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosLogoutFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                        break;
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+        });
+        bottomSheetFragment.setTitle(getResources().getString(R.string.kuknos_setting_title));
+        bottomSheetFragment.show(getFragmentManager(), "SettingBottomSheet");
     }
 
     private void onDataChanged() {
@@ -180,6 +228,16 @@ public class KuknosPanelFrag extends BaseFragment {
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         }
                         break;
+                    case 2:
+                        fragment = fragmentManager.findFragmentByTag(KuknosWHistoryFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosWHistoryFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                        break;
+                    case 3:
+                        initialSettingBS();
+                        return;
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 kuknosPanelVM.getOpenPage().setValue(-1);

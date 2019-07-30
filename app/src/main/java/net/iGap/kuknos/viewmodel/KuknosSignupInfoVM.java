@@ -214,4 +214,6 @@ public class KuknosSignupInfoVM extends ViewModel {
     public void setUsernameIsValid(boolean usernameIsValid) {
         this.usernameIsValid = usernameIsValid;
     }
+
+
 }

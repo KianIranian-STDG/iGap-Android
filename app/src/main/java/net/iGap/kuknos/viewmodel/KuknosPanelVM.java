@@ -81,7 +81,7 @@ public class KuknosPanelVM extends ViewModel {
 
                 progressState.setValue(false);
             }
-        }, 2000);
+        }, 1000);
     }
 
     public void spinnerSelect(int position) {
@@ -100,11 +100,11 @@ public class KuknosPanelVM extends ViewModel {
     }
 
     public void historyW() {
-
+        openPage.setValue(2);
     }
 
     public void goToSetting() {
-
+        openPage.setValue(3);
     }
 
     public void goToTrading() {

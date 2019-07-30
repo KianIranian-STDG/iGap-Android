@@ -268,4 +268,5 @@
     <color name="kuknos_dark_shade_green_spinner">#3b9f1c</color>
     <color name="kuknos_smooth_white_spinner">#9e9e9e</color>
     <color name="kuknos_gray">#99999797</color>
+    <color name="kuknos_WH_itembg">#F1F1F1</color>
 </resources>

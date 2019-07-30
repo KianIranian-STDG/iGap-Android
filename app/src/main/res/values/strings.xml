@@ -1978,5 +1978,45 @@
     <string name="kuknos_send_CreditError">NOT enough credit.</string>
     <string name="kuknos_send_AmountFromatError">Amount format is wrong. please only use . and digits.</string>
     <string name="kuknos_send_dialogTitle">Transfer Status</string>
+    <string name="kuknos_wHistory_date">Date</string>
+    <string name="kuknos_wHistory_desc">Description</string>
+    <string name="kuknos_wHistory_amount">Amount</string>
+    <string name="kuknos_wHistory_dialogTitle">Error</string>
+    <string name="kuknos_wHistory_error">The connection to server is lost. Please try again in a few moments.</string>
+    <string name="kuknos_setting_title">Setting</string>
+    <string name="kuknos_setting_changePin">Change PIN</string>
+    <string name="kuknos_setting_viewRecoveryP">View Recovery Phrase</string>
+    <string name="kuknos_setting_logout">Logout</string>
+    <string name="kuknos_changePIN_title">Change PIN code</string>
+    <string name="kuknos_changePIN_message">This 4-numeric PIN will used to encrypt your secret keys.
+        Please make sure you choose a PIN that is difficult to guess for others.</string>
+    <string name="kuknos_changePIN_oldP">Current PIN* :</string>
+    <string name="kuknos_changePIN_newP">New PIN* :</string>
+    <string name="kuknos_changePIN_rnewP">Confirm PIN* :</string>
+    <string name="kuknos_changePIN_submit">Submit</string>
+    <string name="kuknos_changePIN_emptyCP">Current PIN must NOT be empty.</string>
+    <string name="kuknos_changePIN_emptyNP">New PIN must NOT be empty.</string>
+    <string name="kuknos_changePIN_emptyRNP">Re-enter new PIN to verify it.</string>
+    <string name="kuknos_changePIN_wrongCP">Current PIN is a 4-digit number.</string>
+    <string name="kuknos_changePIN_wrongNP">New PIN must be 4-digit.</string>
+    <string name="kuknos_changePIN_wrongRNP">Confirm PIN ust be 4-digit.</string>
+    <string name="kuknos_changePIN_notEqual">New and confirm PIN does Not match.</string>
+    <string name="kuknos_changePIN_successTitle">Success</string>
+    <string name="kuknos_changePIN_failTitle">Fail</string>
+    <string name="kuknos_changePIN_successM">PIN code successfully changed.</string>
+    <string name="kuknos_changePIN_failM">The connection to server is lost. Please try again in a few moments.</string>
+    <string name="kuknos_viewRecoveryEP_title">Enter PIN Code</string>
+    <string name="kuknos_viewRecoveryEP_message">Please enter your PIN to view your recovery phrase.</string>
+    <string name="kuknos_viewRecoveryEP_pin">PIN</string>
+    <string name="kuknos_viewRecoveryEP_btn">View</string>
+    <string name="kuknos_viewRecoveryEP_emptyPIN">Current PIN must NOT be empty.</string>
+    <string name="kuknos_viewRecoveryEP_wrongPIN">Current PIN is a 4-digit number.</string>
+    <string name="kuknos_viewRecoveryEP_wrongPINE">PIN code is wrong. Please try again.</string>
+    <string name="kuknos_viewRecoveryEP_failTitle">Fail</string>
+    <string name="kuknos_logout_title">Logout</string>
+    <string name="kuknos_logout_message">Warning: loging out from your wallet will wipe the information from this machine.
+        To view your wallet, you will have to go through the restoration process again.</string>
+    <string name="kuknos_logout_pin">PIN</string>
+    <string name="kuknos_logout_btn">Logout</string>
 
 </resources>

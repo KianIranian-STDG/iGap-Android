@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="net.iGap.kuknos.viewmodel.KuknosWHistoryVM" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
+
+        <!-- TODO clean min height-->
+
+        <LinearLayout
+            android:id="@+id/fragKuknosWHToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:background="@color/sky_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/kuknos_wHistory_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="@dimen/dp10"
+            android:background="@drawable/kuknos_list_header_style"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosWHToolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_wHistory_recycler"
+            app:layout_constraintWidth_percent="0.9">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="38dp"
+                android:layout_weight="3"
+                android:text="@string/kuknos_wHistory_date"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/buttonTextColor"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="38dp"
+                android:layout_weight="2"
+                android:text="@string/kuknos_wHistory_amount"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/buttonTextColor"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="38dp"
+                android:layout_weight="4"
+                android:text="@string/kuknos_wHistory_desc"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/buttonTextColor"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/kuknos_wHistory_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_wHistory_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/kuknos_wHistory_ProgressV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:elevation="2dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHeight_percent="0.08"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

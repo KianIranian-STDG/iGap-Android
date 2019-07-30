@@ -352,6 +352,14 @@
     <item name="backgroundTint">@color/players_dark_background</item>
   </style>
 
+  <style name="iGapKuknosLogoutLight" parent="BaseIGapButtonStyle">
+    <item name="backgroundTint">@color/not_now_button_selected</item>
+  </style>
+
+  <style name="iGapKuknosLogoutDark" parent="BaseIGapButtonStyle">
+    <item name="backgroundTint">@color/players_dark_background</item>
+  </style>
+
   <style name="text_style_light">
     <item name="android:textColor">@color/black90</item>
   </style>
