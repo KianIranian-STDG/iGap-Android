@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,11 +113,11 @@ public class BeepTunesPlayer extends BaseFragment {
         playTv.setOnClickListener(v -> {
             if (songMutableLiveData.getValue() != null && songMutableLiveData.getValue().isPlay()) {
                 songMutableLiveData.getValue().setStatus(PlayingSong.PAUSE);
-                songMutableLiveData.getValue().setFromPlayer(true);
+                songMutableLiveData.getValue().setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                 songFromPlayerLiveData.postValue(songMutableLiveData.getValue());
             } else {
                 songMutableLiveData.getValue().setStatus(PlayingSong.PLAY);
-                songMutableLiveData.getValue().setFromPlayer(true);
+                songMutableLiveData.getValue().setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                 songFromPlayerLiveData.postValue(songMutableLiveData.getValue());
             }
 
@@ -189,7 +190,7 @@ public class BeepTunesPlayer extends BaseFragment {
                         nextSong.setSongPath(realmDownloadSong.getPath());
                         nextSong.setArtistId(realmDownloadSong.getArtistId());
                         nextSong.setAlbumId(realmDownloadSong.getAlbumId());
-                        nextSong.setFromPlayer(true);
+                        nextSong.setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                         songFromPlayerLiveData.postValue(nextSong);
                     } else {
                         Log.i(TAG, "have not next song: " + i + " " + realmDownloadSongs.size());
@@ -213,7 +214,7 @@ public class BeepTunesPlayer extends BaseFragment {
                         nextSong.setSongPath(realmDownloadSong.getPath());
                         nextSong.setArtistId(realmDownloadSong.getArtistId());
                         nextSong.setAlbumId(realmDownloadSong.getAlbumId());
-                        nextSong.setFromPlayer(true);
+                        nextSong.setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                         songFromPlayerLiveData.postValue(nextSong);
                     } else
                         Log.i(TAG, "have not previous song: " + i);

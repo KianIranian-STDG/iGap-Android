@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -151,7 +152,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         playingSong.setSongPath(realmDownloadSong.getPath());
         playingSong.setAlbumId(realmDownloadSong.getAlbumId());
         playingSong.setArtistId(realmDownloadSong.getArtistId());
-        playingSong.setFromPlayer(false);
+        playingSong.setBehaviorStatus(BottomSheetBehavior.STATE_COLLAPSED);
         fromAlbumAdapter.postValue(playingSong);
     }
 

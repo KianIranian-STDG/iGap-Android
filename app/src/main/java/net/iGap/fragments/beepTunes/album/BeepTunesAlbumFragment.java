@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -138,7 +139,7 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
                     playingSong = new PlayingSong();
                 playingSong.setSongId(realmDownloadSong.getId());
                 playingSong.setSongPath(realmDownloadSong.getPath());
-                playingSong.setFromPlayer(false);
+                playingSong.setBehaviorStatus(BottomSheetBehavior.STATE_COLLAPSED);
                 playingSong.setArtistId(realmDownloadSong.getArtistId());
                 playingSong.setAlbumId(realmDownloadSong.getAlbumId());
                 toFragmentLiveData.postValue(playingSong);

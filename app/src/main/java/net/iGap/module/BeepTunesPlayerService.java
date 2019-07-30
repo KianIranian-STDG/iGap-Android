@@ -66,7 +66,6 @@ public class BeepTunesPlayerService extends Service {
             playingSong.setSongId(intent.getLongExtra(SONG_ID, 0));
             playingSong.setArtistId(intent.getLongExtra(SONG_ARTIST_ID, 0));
             playingSong.setAlbumId(intent.getLongExtra(SONG_ALBUM_ID, 0));
-            playingSong.setBehaviorStatus(BottomSheetBehavior.STATE_COLLAPSED);
 
             if (playingSong != null) {
                 if (playingSongId == 0)

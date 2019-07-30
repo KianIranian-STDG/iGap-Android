@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnTrackAdapter;
 import net.iGap.module.BeepTunesPlayerService;
@@ -109,7 +110,10 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_sync));
             }
 
-            songNameTv.setText(track.getEnglishName());
+            if (G.isAppRtl)
+                songNameTv.setText(track.getName());
+            else
+                songNameTv.setText(track.getEnglishName());
 
 
             songActionTv.setOnClickListener(v -> {

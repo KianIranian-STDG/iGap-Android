@@ -15,9 +15,8 @@ public class PlayingSong {
     private String title;
     private String songPath;
     private Bitmap bitmap;
-    private int behaviorStatus = BottomSheetBehavior.STATE_HIDDEN;
+    private int behaviorStatus = BottomSheetBehavior.STATE_COLLAPSED;
     private boolean play = false;
-    private boolean fromPlayer = false;
     private Long artistId;
     private Long albumId;
 
@@ -91,22 +90,11 @@ public class PlayingSong {
     }
 
     public int getBehaviorStatus() {
-        if (fromPlayer)
-            return BottomSheetBehavior.STATE_EXPANDED;
-        else
-            return behaviorStatus;
+        return behaviorStatus;
     }
 
     public void setBehaviorStatus(int behaviorStatus) {
         this.behaviorStatus = behaviorStatus;
-    }
-
-    public boolean isFromPlayer() {
-        return fromPlayer;
-    }
-
-    public void setFromPlayer(boolean fromPlayer) {
-        this.fromPlayer = fromPlayer;
     }
 
     public Long getAlbumId() {

@@ -20,8 +20,8 @@
 
     <net.iGap.module.CircleImageView
         android:id="@+id/iv_btPlayer_songArt"
-        android:layout_width="@dimen/dp300"
-        android:layout_height="@dimen/dp300"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="@dimen/dp200"
         android:src="@drawable/beepslide"
         app:civ_border_color="@color/white"
         app:civ_border_width="1dp"
@@ -152,7 +152,7 @@
         android:id="@+id/tv_btPlayer_isFavorite"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/icon_like"
         android:textColor="@color/gray"
