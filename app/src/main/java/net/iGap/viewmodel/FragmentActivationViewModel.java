@@ -36,8 +36,8 @@ public class FragmentActivationViewModel extends ViewModel {
     private CountDownTimer countDownTimer;
     private int sendRequestRegister = 0;
 
-    public FragmentActivationViewModel(RegisterRepository repository) {
-        this.repository = repository;
+    public FragmentActivationViewModel() {
+        repository = RegisterRepository.getInstance();
         timerValue.set("1:00");
         counterTimer();
     }

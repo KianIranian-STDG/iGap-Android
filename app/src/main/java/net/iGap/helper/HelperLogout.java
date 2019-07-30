@@ -46,14 +46,13 @@ public final class HelperLogout {
                 resetStaticField();
 
                 AppUtils.cleanBadge();
+                new LoginActions();
                 Intent intent = new Intent(G.context, ActivityRegisteration.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                new LoginActions();
+                G.context.startActivity(intent);
                 if (G.currentActivity != null) {
                     G.currentActivity.finish();
                 }
-                G.context.startActivity(intent);
-
 
                 try {
                     NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);

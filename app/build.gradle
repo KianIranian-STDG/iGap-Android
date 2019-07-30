@@ -30,7 +30,7 @@ android {
         targetSdkVersion 28
         multiDexEnabled true
         versionCode 117
-        versionName "2.0.0.newUi55"
+        versionName "2.0.0.newUi56"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 

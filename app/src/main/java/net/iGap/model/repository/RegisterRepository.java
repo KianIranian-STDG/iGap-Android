@@ -2,6 +2,7 @@ package net.iGap.model.repository;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.os.Handler;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
@@ -41,6 +42,8 @@ import io.realm.Realm;
 
 public class RegisterRepository {
 
+    private static RegisterRepository instance;
+
     private String token;
     private String phoneNumber;
     private String userName;
@@ -59,9 +62,21 @@ public class RegisterRepository {
     public MutableLiveData<Long> goToWelcomePage = new MutableLiveData<>();
 
     //if need sharePreference pass it in constructor
-    /*public RegisterRepository() {
+    private RegisterRepository() {
 
-    }*/
+    }
+
+    public static RegisterRepository getInstance() {
+        if (instance == null) {
+            instance = new RegisterRepository();
+        }
+        return instance;
+    }
+
+    public void clearInstance() {
+        Log.wtf(this.getClass().getName(), "clearInstance");
+        instance = null;
+    }
 
     public int getCallingCode() {
         return callingCode;

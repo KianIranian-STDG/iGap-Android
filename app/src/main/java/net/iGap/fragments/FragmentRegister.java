@@ -12,6 +12,9 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -20,6 +23,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
@@ -69,11 +73,22 @@ public class FragmentRegister extends BaseFragment {
     private ActivityRegisterBinding fragmentRegisterBinding;
     private MaterialDialog dialogQrCode;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentRegisterViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentRegisterViewModel(new CountryReader().readFromAssetsTextFile("country.txt", getContext()));
+            }
+        }).get(FragmentRegisterViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentRegisterBinding = DataBindingUtil.inflate(inflater, R.layout.activity_register, container, false);
-        fragmentRegisterViewModel = new FragmentRegisterViewModel(((ActivityRegisteration) getActivity()).repository, new CountryReader().readFromAssetsTextFile("country.txt", getContext()));
         fragmentRegisterBinding.setFragmentRegisterViewModel(fragmentRegisterViewModel);
         fragmentRegisterBinding.setLifecycleOwner(this);
         return fragmentRegisterBinding.getRoot();
@@ -111,8 +126,7 @@ public class FragmentRegister extends BaseFragment {
 
         fragmentRegisterViewModel.goNextStep.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
-                FragmentActivation fragment = new FragmentActivation();
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentActivation()).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
             }
         });
 
