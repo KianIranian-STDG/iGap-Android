@@ -22,9 +22,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class ChatCell extends ConstraintLayout {
@@ -307,8 +304,8 @@ public class ChatCell extends ConstraintLayout {
             set.connect(verify.getId(), ConstraintSet.RIGHT, roomName.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
             set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp24));
 
-            set.connect(badgeView.getId(), ConstraintSet.LEFT, messageStatus.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
-            set.connect(badgeView.getId(), ConstraintSet.RIGHT, thirdTextView.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
+            set.connect(badgeView.getId(), ConstraintSet.LEFT, messageStatus.getId(), ConstraintSet.LEFT);
+            set.connect(badgeView.getId(), ConstraintSet.RIGHT, messageStatus.getId(), ConstraintSet.RIGHT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
             set.connect(badgeView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
 
@@ -330,7 +327,7 @@ public class ChatCell extends ConstraintLayout {
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
-            set.createHorizontalChainRtl(avatarImageView.getId(), ConstraintSet.END, messageStatus.getId(), ConstraintSet.START,
+            set.createHorizontalChainRtl(avatarImageView.getId(), ConstraintSet.END, mute.getId(), ConstraintSet.START,
                     chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
 
         } else {
@@ -339,8 +336,8 @@ public class ChatCell extends ConstraintLayout {
             set.connect(verify.getId(), ConstraintSet.LEFT, roomName.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
             set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp24));
 
-            set.connect(badgeView.getId(), ConstraintSet.LEFT, thirdTextView.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
-            set.connect(badgeView.getId(), ConstraintSet.RIGHT, messageStatus.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
+            set.connect(badgeView.getId(), ConstraintSet.LEFT, messageStatus.getId(), ConstraintSet.LEFT);
+            set.connect(badgeView.getId(), ConstraintSet.RIGHT, messageStatus.getId(), ConstraintSet.RIGHT);
             set.connect(badgeView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
             set.connect(badgeView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
 
@@ -362,7 +359,7 @@ public class ChatCell extends ConstraintLayout {
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
-            set.createHorizontalChain(avatarImageView.getId(), ConstraintSet.RIGHT, messageStatus.getId(), ConstraintSet.LEFT,
+            set.createHorizontalChain(avatarImageView.getId(), ConstraintSet.RIGHT, mute.getId(), ConstraintSet.LEFT,
                     chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
 
         }
