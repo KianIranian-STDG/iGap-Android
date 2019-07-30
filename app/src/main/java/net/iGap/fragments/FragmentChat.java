@@ -9175,7 +9175,10 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.Search));
         items.add(getString(R.string.clear_history));
         items.add(getString(R.string.delete_chat));
-        items.add(getString(R.string.mute_notification));
+        if (isMuteNotification)
+            items.add(getString(R.string.unmute_notification));
+        else
+            items.add(getString(R.string.mute_notification));
         items.add(getString(R.string.chat_to_group));
         items.add(getString(R.string.clean_up));
         items.add(getString(R.string.export_chat));
@@ -9283,7 +9286,7 @@ public class FragmentChat extends BaseFragment
                         onSelectRoomMenu("txtDeleteChat", mRoomId);
                     }
                 }).negativeText(R.string.no).show();
-            } else if (items.get(position).equals(getString(R.string.mute_notification))) {
+            } else if (items.get(position).equals(getString(R.string.mute_notification)) || items.get(position).equals(getString(R.string.unmute_notification)) ) {
                 onSelectRoomMenu("txtMuteNotification", mRoomId);
             } else if (items.get(position).equals(getString(R.string.chat_to_group))) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
