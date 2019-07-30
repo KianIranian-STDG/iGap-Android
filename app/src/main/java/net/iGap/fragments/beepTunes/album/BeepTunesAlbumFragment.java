@@ -39,6 +39,7 @@ import io.realm.Realm;
 public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
     private static String PATH;
+
     private View rootView;
     private ImageView albumAvatarIv;
     private ViewGroup actionButton;
@@ -51,15 +52,19 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
     private RecyclerView otherAlbumRecyclerView;
     private AppBarLayout appBarLayout;
     private NestedScrollView scrollView;
+
+    private Album album;
+    private PlayingSong playingSong;
+
     private AlbumViewModel viewModel;
     private BeepTunesTrackAdapter trackAdapter;
     private BeepTunesAlbumAdapter albumAdapter;
-    private Album album;
+
     private SharedPreferences sharedPreferences;
+
     private MutableLiveData<DownloadSong> downloadingSongLiveData = new MutableLiveData<>();
     private MutableLiveData<PlayingSong> fromFragmentLiveData;
     private MutableLiveData<PlayingSong> toFragmentLiveData;
-    private PlayingSong playingSong;
 
     public BeepTunesAlbumFragment getInstance(Album album, MutableLiveData<PlayingSong> toAlbumAdapter, MutableLiveData<PlayingSong> fromAlbumAdapter) {
         BeepTunesAlbumFragment beepTunesAlbumFragment = new BeepTunesAlbumFragment();
@@ -84,6 +89,7 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         setUpViews();
+
         setUpAlbumInfo(album);
 
         progressBar.getIndeterminateDrawable().setColorFilter(getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);

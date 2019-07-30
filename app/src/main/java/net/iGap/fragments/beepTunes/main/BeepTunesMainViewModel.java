@@ -15,11 +15,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BeepTunesMainViewModel extends BaseViewModel {
+    private static final String TAG = "aabolfazlBeepTunes";
+
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
+
     private MutableLiveData<FirstPage> firstPageMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> progressMutableLiveData = new MutableLiveData<>();
-    private String TAG = "aabolfazlBeepTunes";
-
 
     @Override
     public void onStartFragment(BaseFragment fragment) {

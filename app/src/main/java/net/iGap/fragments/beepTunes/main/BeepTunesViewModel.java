@@ -18,8 +18,10 @@ import net.iGap.viewmodel.BaseViewModel;
 public class BeepTunesViewModel extends BaseViewModel {
     public static final int MEDIA_PLAYER_STATUS_COMPLETE = 1;
     private static final String TAG = "aabolfazlMainViewModel";
+
     private MediaPlayer mediaPlayer;
     private ServiceConnection serviceConnection;
+
     private MutableLiveData<PlayingSong> serviceConnectionLiveData;
     private MutableLiveData<PlayingSong> playingSongViewLiveData = new MutableLiveData<>();
     private MutableLiveData<ProgressDuration> progressDurationLiveData;
@@ -53,7 +55,6 @@ public class BeepTunesViewModel extends BaseViewModel {
     }
 
     private void serviceConnected(BaseFragment fragment) {
-
         serviceConnectionLiveData.observe(fragment.getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {
                 playingSongViewLiveData.postValue(playingSong);

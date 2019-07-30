@@ -24,8 +24,10 @@ public class DownloadQualityFragment extends DialogFragment {
     private TextView confirmTv;
     private TextView cancelTv;
     private CheckBox checkBox;
+
     private SharedPreferences sharedPreferences;
     private OnDownloadDialog downloadDialog;
+
     private int quality;
 
     public void setDownloadDialog(OnDownloadDialog downloadDialog) {

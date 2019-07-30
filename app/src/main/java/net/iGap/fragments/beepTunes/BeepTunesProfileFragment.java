@@ -19,9 +19,12 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
     public static final String SYNC_FRAGMENT = "syncSong";
     public static final String PERCHES_FRAGMENT = "perchesSong";
     public static final String FAVORITE_FRAGMENT = "favoriteSong";
+
     public AvatarHandler avatarHandler;
+
     private View rootView;
     private ImageView profileImage;
+
     private OnProfileCallBack callBack;
 
     public void setCallBack(OnProfileCallBack callBack) {
@@ -39,13 +42,12 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TextView userName = rootView.findViewById(R.id.tv_userProfile_userName);
-        userName.setText(G.displayName);
-
         profileImage = rootView.findViewById(R.id.iv_userProfile_userImage);
         ViewGroup perchesSong = rootView.findViewById(R.id.cl_beepTunesProfile_perchesSong);
         ViewGroup syncSong = rootView.findViewById(R.id.cl_beepTunesProfile_syncSong);
         ViewGroup favoriteSong = rootView.findViewById(R.id.cl_beepTunesProfile_favoriteSong);
 
+        userName.setText(G.displayName);
 
         syncSong.setOnClickListener(v -> {
             callBack.onClick(SYNC_FRAGMENT);

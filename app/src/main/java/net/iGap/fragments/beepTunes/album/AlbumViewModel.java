@@ -32,16 +32,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
-
     private static final String TAG = "aabolfazlAlbum";
-    private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
+
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
-    private MutableLiveData<Boolean> LoadingProgressMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
     private List<DownloadSong> downloadQueue = new ArrayList<>();
 
     private Realm realm;
+
+    private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> LoadingProgressMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<DownloadSong> downloadStatusMutableLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
@@ -69,8 +70,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     void getArtistOtherAlbum(long id) {
         LoadingProgressMutableLiveData.postValue(true);
-        // TODO: 7/23/19 for fake data change id to homayon shajarian id
-        apiService.getArtistAlbums(3403927).enqueue(new Callback<Albums>() {
+        apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
             @Override
             public void onResponse(Call<Albums> call, Response<Albums> response) {
                 LoadingProgressMutableLiveData.postValue(false);
@@ -90,8 +90,6 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         File file = new File(path + "/" + track.getSavedName());
         if (!file.exists()) {
             startDownload(track, path, fragmentManager, sharedPreferences);
-        } else {
-            // TODO: 7/23/19 player observer
         }
     }
 

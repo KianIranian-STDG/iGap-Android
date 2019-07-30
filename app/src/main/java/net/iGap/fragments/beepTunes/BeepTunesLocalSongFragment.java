@@ -20,9 +20,12 @@ import java.util.List;
 
 public class BeepTunesLocalSongFragment extends BaseFragment implements ToolbarListener, BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack {
     private static final String TAG = "aabolfazlSyncSong";
+
     private View rootView;
+
     private String title;
     private List<RealmDownloadSong> downloadSongs;
+
     private BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack onLocalSongAdapterCallBack;
 
     public static BeepTunesLocalSongFragment getInstance(List<RealmDownloadSong> realmDownloadSongs, String title,
@@ -45,10 +48,11 @@ public class BeepTunesLocalSongFragment extends BaseFragment implements ToolbarL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_Song);
+        LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_syncSong_toolBar);
+
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
         recyclerView.setAdapter(new BeepTunesLocalSongAdapter(downloadSongs, this));
 
-        LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_syncSong_toolBar);
         HelperToolbar helperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)

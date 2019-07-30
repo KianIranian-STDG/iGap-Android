@@ -19,7 +19,7 @@ import net.iGap.module.api.beepTunes.Slide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BeepTunesMainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ROW = 0;
     private static final int AD = 1;
@@ -122,8 +122,6 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
             adapter = new BeepTunesAlbumAdapter();
             recyclerView.setAdapter(adapter);
-
-
         }
 
         void bindRow(List<Album> albums) {

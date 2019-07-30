@@ -30,9 +30,9 @@ import io.realm.Realm;
 import static net.iGap.fragments.beepTunes.main.BeepTunesViewModel.MEDIA_PLAYER_STATUS_COMPLETE;
 
 public class BeepTunesPlayer extends BaseFragment {
-
     private static final String TAG = "aabolfazlPlayer";
-    private List<RealmDownloadSong> realmDownloadSongs;
+
+
     private View rootView;
     private TextView playTv;
     private TextView nextTv;
@@ -45,7 +45,10 @@ public class BeepTunesPlayer extends BaseFragment {
     private SeekBar seekBar;
     private CircleImageView songArtIv;
     private ImageView backgroundIv;
+
     private RealmDownloadSong realmDownloadSong;
+    private List<RealmDownloadSong> realmDownloadSongs;
+
     private Realm realm;
 
     private MutableLiveData<PlayingSong> songMutableLiveData;

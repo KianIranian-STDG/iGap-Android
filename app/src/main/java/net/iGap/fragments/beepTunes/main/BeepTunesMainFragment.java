@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.beepTunes.BeepTunesAdapter;
+import net.iGap.adapter.beepTunes.BeepTunesMainAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.BeepTunesLocalSongAdapter;
 import net.iGap.fragments.beepTunes.BeepTunesLocalSongFragment;
@@ -39,10 +39,13 @@ import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.SYNC_FRAGMEN
 
 public class BeepTunesMainFragment extends BaseFragment implements ToolbarListener, BeepTunesLocalSongAdapter.OnLocalSongAdapterCallBack {
     private static final String TAG = "aabolfazlBtMainFragment";
+
     private View rootView;
+
     private BeepTunesMainViewModel viewModel;
-    private BeepTunesAdapter adapter;
+    private BeepTunesMainAdapter adapter;
     private Realm realm;
+
     private BeepTunesProfileFragment profileFragment;
     private MutableLiveData<PlayingSong> toAlbumAdapter;
     private MutableLiveData<PlayingSong> fromAlbumAdapter;
@@ -65,7 +68,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_beeptunes_main, container, false);
         viewModel = new BeepTunesMainViewModel();
-        adapter = new BeepTunesAdapter();
+        adapter = new BeepTunesMainAdapter();
         profileFragment = new BeepTunesProfileFragment();
         return rootView;
     }
