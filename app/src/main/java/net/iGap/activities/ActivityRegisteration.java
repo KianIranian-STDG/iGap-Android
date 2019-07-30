@@ -42,6 +42,8 @@ public class ActivityRegisteration extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registeration);
 
+        repository = RegisterRepository.getInstance();
+
         try {
             HelperPermission.getStoragePermision(this, new OnGetPermission() {
                 @Override
