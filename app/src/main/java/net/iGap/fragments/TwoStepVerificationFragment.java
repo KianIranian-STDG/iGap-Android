@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -39,13 +40,18 @@ public class TwoStepVerificationFragment extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(TwoStepVerificationViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewModel = new TwoStepVerificationViewModel(((ActivityRegisteration) getActivity()).repository);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_two_step_verification, container, false);
         binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(getActivity());
+        binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
 
@@ -68,13 +74,13 @@ public class TwoStepVerificationFragment extends BaseFragment {
 
         binding.toolbar.addView(toolbar.getView());
 
-        viewModel.showErrorMessage.observe(this, errorMessageRes -> {
+        viewModel.showErrorMessage.observe(getViewLifecycleOwner(), errorMessageRes -> {
             if (errorMessageRes != null) {
                 HelperError.showSnackMessage(getString(errorMessageRes), true);
             }
         });
 
-        viewModel.isHideKeyword.observe(this, isHide -> {
+        viewModel.isHideKeyword.observe(getViewLifecycleOwner(), isHide -> {
             if (isHide != null) {
                 if (isHide) {
                     hideKeyboard();
@@ -84,7 +90,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
             }
         });
 
-        viewModel.showDialogWaitTime.observe(this, time -> {
+        viewModel.showDialogWaitTime.observe(getViewLifecycleOwner(), time -> {
             if (getActivity() != null && time != null) {
                 MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -114,7 +120,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
             }
         });
 
-        viewModel.showDialogForgotPassword.observe(this, listResId -> {
+        viewModel.showDialogForgotPassword.observe(getViewLifecycleOwner(), listResId -> {
             if (getActivity() != null && listResId != null) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.set_recovery_dialog_title).items(listResId).itemsCallback((dialog, view1, which, text) -> {
                     viewModel.selectedRecoveryType(text.equals(getString(R.string.recovery_by_email_dialog)));
@@ -122,7 +128,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
             }
         });
 
-        viewModel.goToSecurityRecoveryPage.observe(this, data -> {
+        viewModel.goToSecurityRecoveryPage.observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
                 FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
                 Bundle bundle = new Bundle();

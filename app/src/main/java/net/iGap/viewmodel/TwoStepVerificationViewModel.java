@@ -34,8 +34,8 @@ public class TwoStepVerificationViewModel extends ViewModel {
     private String securityPaternEmail = "";
     private boolean forgetPassword = false;
 
-    public TwoStepVerificationViewModel(RegisterRepository repository) {
-        this.repository = repository;
+    public TwoStepVerificationViewModel() {
+        this.repository = RegisterRepository.getInstance();
 
         this.repository.getTwoStepVerificationPasswordDetail(new RegisterRepository.RepositoryCallback<UserPasswordDetail>() {
             @Override

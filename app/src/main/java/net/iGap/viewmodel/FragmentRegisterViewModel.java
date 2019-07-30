@@ -78,8 +78,8 @@ public class FragmentRegisterViewModel extends ViewModel {
 
     private RegisterRepository repository;
 
-    public FragmentRegisterViewModel(RegisterRepository repository, StringBuilder stringBuilder) {
-        this.repository = repository;
+    public FragmentRegisterViewModel(StringBuilder stringBuilder) {
+        this.repository = RegisterRepository.getInstance();
 
         String list = stringBuilder.toString();
         // Split line by line Into array

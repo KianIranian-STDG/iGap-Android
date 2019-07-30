@@ -24,6 +24,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByAnswersCallback;
 import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByToken;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByToken;
@@ -50,7 +51,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
     private TextView txtSetRecoveryQuestionPassOne;
     private TextView txtSetRecoveryQuestionPassTwo;
     private boolean isConfirmedRecoveryEmail;
-    private HelperToolbar mHelperToolbar ;
+    private HelperToolbar mHelperToolbar;
 
     public FragmentSecurityRecovery() {
         // Required empty public constructor
@@ -126,10 +127,11 @@ public class FragmentSecurityRecovery extends BaseFragment {
                                     @Override
                                     public void recoveryByQuestion(String tokenR) {
                                         //Todo:fixed it and move to repository
-                                        if (getActivity() instanceof ActivityRegisteration){
-                                            ((ActivityRegisteration) getActivity()).repository.setForgetTwoStepVerification(true);
-                                            ((ActivityRegisteration) getActivity()).repository.setToken(tokenR);
-                                            ((ActivityRegisteration) getActivity()).repository.userLogin(tokenR);
+                                        if (getActivity() instanceof ActivityRegisteration) {
+                                            RegisterRepository repository = RegisterRepository.getInstance();
+                                            repository.setForgetTwoStepVerification(true);
+                                            repository.setToken(tokenR);
+                                            repository.userLogin(tokenR);
                                         }
                                     }
 
