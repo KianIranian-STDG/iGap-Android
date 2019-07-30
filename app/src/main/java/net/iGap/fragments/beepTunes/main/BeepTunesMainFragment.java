@@ -17,7 +17,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesMainAdapter;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.beepTunes.BeepTunesLocalSongAdapter;
+import net.iGap.adapter.beepTunes.BeepTunesLocalSongAdapter;
 import net.iGap.fragments.beepTunes.BeepTunesLocalSongFragment;
 import net.iGap.fragments.beepTunes.BeepTunesProfileFragment;
 import net.iGap.fragments.beepTunes.album.BeepTunesAlbumFragment;

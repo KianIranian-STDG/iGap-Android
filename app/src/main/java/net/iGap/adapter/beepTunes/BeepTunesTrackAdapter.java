@@ -3,9 +3,12 @@ package net.iGap.adapter.beepTunes;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -77,7 +80,6 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
     }
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
-        //        private RotateAnimation rotate;
         private RealmDownloadSong realmDownloadSong;
         private TextView songNameTv;
         private TextView songPriceTv;
@@ -99,6 +101,12 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
             if (realmDownloadSong != null) {
                 track.setInStorage(true);
             }
+
+            RotateAnimation rotate = new RotateAnimation(
+                    0, 360,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f
+            );
 
             if (track.isInStorage()) {
                 if (track.getId() == BeepTunesPlayerService.playingSongId) {
@@ -137,8 +145,19 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                         if (downloadSong.getId().equals(track.getId())) {
                             switch (downloadSong.getDownloadStatus()) {
                                 case STATUS_START:
+                                    if (downloadSong.getId().equals(track.getId())) {
+                                        rotate.setDuration(1000);
+                                        rotate.setRepeatCount(Animation.INFINITE);
+                                        songActionTv.startAnimation(rotate);
+                                    }
                                     break;
                                 case STATUS_COMPLETE:
+
+                                    if (downloadSong.getId().equals(track.getId())) {
+                                        rotate.cancel();
+                                    }
+
+
                                     progressBar.setVisibility(View.GONE);
                                     track.setInStorage(true);
                                     songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
@@ -158,6 +177,14 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
             });
             realm.addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
             progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
+        }
+
+
+        private void stopDownload() {
+        }
+
+        private void startDownload() {
+
         }
     }
 }

@@ -1,4 +1,4 @@
-package net.iGap.fragments.beepTunes;
+package net.iGap.adapter.beepTunes;
 
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
