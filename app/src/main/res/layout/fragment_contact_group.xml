@@ -62,7 +62,7 @@
         android:layout_marginRight="24dp"
         android:text="@string/add_new_member"
         style="?textTitleColorSettingTheme"
-        android:textSize="18sp"
+        android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fcg_layout_search" />
@@ -91,7 +91,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fcg_splitter_add_member"
         android:paddingBottom="@dimen/dp8"
-        android:layout_marginTop="8dp"
         android:scrollbars="vertical" />
 
 
