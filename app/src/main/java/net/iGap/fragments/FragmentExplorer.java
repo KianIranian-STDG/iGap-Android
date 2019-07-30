@@ -26,8 +26,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterExplorer;
 import net.iGap.helper.HelperMimeType;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.interfaces.IPickFile;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.FileUtils;
 import net.iGap.module.MaterialDesignTextView;
@@ -44,8 +46,6 @@ public class FragmentExplorer extends BaseFragment {
     ArrayList<StructExplorerItem> item;
     ArrayList<String> node;          //path of the hierychical directory
     ArrayList<Integer> mscroll;
-    TextView txtCurentPath;
-    MaterialDesignTextView btnBack;
     StructExplorerItem x;
     RecyclerView recyclerView;
     String mode = "normal";
@@ -54,6 +54,8 @@ public class FragmentExplorer extends BaseFragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private IPickFile pickFile = null;
     List<String> storageList = null;
+
+    private HelperToolbar mHelperToolbar;
 
     @Nullable
     @Override
@@ -74,26 +76,29 @@ public class FragmentExplorer extends BaseFragment {
             mode = "normal";
         }
 
-        txtCurentPath = (TextView) view.findViewById(R.id.ae_txt_file_path);
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setDefaultTitle("root")
+                .setLeftIcon(R.string.back_icon)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        G.fragmentActivity.onBackPressed();
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.ae_toolbar) ;
+        layoutToolbar.addView(mHelperToolbar.getView());
+
         recyclerView = (RecyclerView) view.findViewById(R.id.ae_recycler_view_explorer);
         recyclerView.setItemViewCacheSize(100);
         mLayoutManager = new LinearLayoutManager(G.fragmentActivity);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        view.findViewById(R.id.ae_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
         item = new ArrayList<StructExplorerItem>();
         node = new ArrayList<String>();
         mscroll = new ArrayList<Integer>();
-
-        btnBack = (MaterialDesignTextView) view.findViewById(R.id.ae_btn_back);
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.ae_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
-            }
-        });
 
         firstfill();
     }
@@ -208,7 +213,7 @@ public class FragmentExplorer extends BaseFragment {
             rootcount++;
         }
 
-        txtCurentPath.setText("root");
+        mHelperToolbar.setDefaultTitle("root");
         recyclerView.setAdapter(new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
 
             @Override
@@ -301,7 +306,7 @@ public class FragmentExplorer extends BaseFragment {
                         onItemClickInernal(position);
                     }
                 }));
-                txtCurentPath.setText(nextnod);
+                mHelperToolbar.setDefaultTitle(nextnod);
 
                 node.add(nextnod);
             } else if (fileDir.isFile()) {

@@ -6,7 +6,7 @@
     <data>
 
         <import type="android.view.View" />
-
+        <import type="net.iGap.G" />
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.UserProfileViewModel" />
@@ -34,19 +34,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+
                 <net.iGap.module.RadiusImageView
                     android:id="@+id/fup_bg_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="-8dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/test_bg" />
+                    android:src="@{G.isDarkTheme ? @drawable/user_profile_bg_dark : @drawable/user_profile_bg , default= @drawable/user_profile_bg}" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp80"
+                    android:background="@{G.isDarkTheme ? @drawable/shape_gradiant_bottom_round_dark : @drawable/shape_gradiant_bottom_round , default = @drawable/shape_gradiant_bottom_round}"
+                    android:layout_alignParentBottom="true"/>
 
             </RelativeLayout>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/editProfile"
-                style="@style/myIconToolbarStyle"
+                style="@style/myIconTextViewStyle"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:layout_margin="8dp"
@@ -83,14 +90,14 @@
                 android:id="@+id/userFullName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp24"
-                android:layout_marginRight="@dimen/dp24"
+                android:layout_marginLeft="@dimen/dp14"
+                android:layout_marginRight="@dimen/dp14"
                 android:ellipsize="end"
                 android:fontFamily="@font/main_font"
                 android:gravity="@{viewModel.textsGravity}"
                 android:singleLine="true"
                 android:text="@{viewModel.name}"
-                android:textColor="@color/white"
+                android:textColor="@{G.isDarkTheme ? @color/black : @color/white , default= @color/white}"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/fup_user_name"
@@ -106,7 +113,7 @@
                 android:gravity="@{viewModel.textsGravity}"
                 android:singleLine="true"
                 android:text="@{viewModel.userName}"
-                android:textColor="@color/white"
+                android:textColor="@{G.isDarkTheme ? @color/black : @color/white , default= @color/white}"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/fup_user_tel"
