@@ -34,8 +34,6 @@ import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
-import io.realm.Realm;
-
 public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
     private static String PATH;
@@ -49,6 +47,8 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
     private TextView albumPriceTv;
     private TextView otherAlbumTv;
     private TextView statusTv;
+    private TextView toolBarTv;
+    private TextView backIcon;
     private RecyclerView otherAlbumRecyclerView;
     private AppBarLayout appBarLayout;
     private NestedScrollView scrollView;
@@ -157,6 +157,11 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
             if (downloadSong != null)
                 downloadingSongLiveData.postValue(downloadSong);
         });
+
+        backIcon.setOnClickListener(v -> {
+            if (getActivity() != null)
+                getActivity().onBackPressed();
+        });
     }
 
     private void setUpViews() {
@@ -172,6 +177,8 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
         otherAlbumTv = rootView.findViewById(R.id.tv_album_artistOtherAlbum);
         appBarLayout = rootView.findViewById(R.id.ab_album);
         scrollView = rootView.findViewById(R.id.ns_album);
+        toolBarTv = rootView.findViewById(R.id.tv_album_toolBarName);
+        backIcon = rootView.findViewById(R.id.tv_album_backIcon);
 
         songRecyclerView.setNestedScrollingEnabled(false);
         otherAlbumRecyclerView.setNestedScrollingEnabled(false);
@@ -186,6 +193,7 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
         albumNameTv.setText(album.getEnglishName());
         ImageLoadingService.load(album.getImage(), albumAvatarIv);
         albumPriceTv.setText(album.getFinalPrice().toString());
+        toolBarTv.setText(album.getArtists().get(0).getName() + " | " + album.getName());
     }
 
     @Override
