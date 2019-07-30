@@ -9222,14 +9222,20 @@ public class FragmentChat extends BaseFragment
         } else {
             items.remove(getString(R.string.clear_history));
             items.remove(getString(R.string.delete_chat));
-            items.remove(getString(R.string.mute_notification));
+            if (!isMuteNotification)
+                items.remove(getString(R.string.mute_notification));
+            else
+                items.remove(getString(R.string.unmute_notification));
             items.remove(getString(R.string.chat_to_group));
             items.remove(getString(R.string.clean_up));
         }
 
         if (isNotJoin) {
             items.remove(getString(R.string.clear_history));
-            items.remove(getString(R.string.mute_notification));
+            if (!isMuteNotification)
+                items.remove(getString(R.string.mute_notification));
+            else
+                items.remove(getString(R.string.unmute_notification));
             items.remove(getString(R.string.clean_up));
         }
 
@@ -9253,7 +9259,10 @@ public class FragmentChat extends BaseFragment
                 items.remove(getString(R.string.Search));
                 items.remove(getString(R.string.clear_history));
                 items.remove(getString(R.string.delete_chat));
-                items.remove(getString(R.string.mute_notification));
+                if (!isMuteNotification)
+                    items.remove(getString(R.string.mute_notification));
+                else
+                    items.remove(getString(R.string.unmute_notification));
                 items.remove(getString(R.string.chat_to_group));
                 items.remove(getString(R.string.clean_up));
                 items.remove(getString(R.string.SendMoney));
