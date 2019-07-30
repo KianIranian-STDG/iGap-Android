@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -25,15 +26,18 @@ import net.iGap.module.api.beepTunes.PlayingSong;
 public class BeepTunesFragment extends BaseFragment {
 
     private static String TAG = "aabolfazlBeepTunes";
+
     private View rootView;
-    private BeepTunesViewModel viewModel;
-    private BottomSheetBehavior behavior;
-    private ProgressBar progressBar;
-    private MutableLiveData<PlayingSong> toAlbumAdapter = new MutableLiveData<>();
-    private MutableLiveData<PlayingSong> fromAlbumAdapter = new MutableLiveData<>();
-    private BeepTunesPlayer beepTunesPlayer;
     private ConstraintLayout bottomPlayerCl;
     private ConstraintLayout playerToolBarCl;
+    private BottomSheetBehavior behavior;
+    private ProgressBar progressBar;
+
+    private BeepTunesPlayer beepTunesPlayer;
+    private BeepTunesViewModel viewModel;
+
+    private MutableLiveData<PlayingSong> toAlbumAdapter = new MutableLiveData<>();
+    private MutableLiveData<PlayingSong> fromAlbumAdapter = new MutableLiveData<>();
 
     @Nullable
     @Override
@@ -47,17 +51,6 @@ public class BeepTunesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel.onCreateFragment(this);
-        beepTunesPlayer = BeepTunesPlayer.getInstance(toAlbumAdapter, viewModel.getProgressDurationLiveData(), viewModel.getMediaPlayerStatusLiveData());
-        LinearLayout playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
-        behavior = BottomSheetBehavior.from(playerLayout);
-        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        progressBar = rootView.findViewById(R.id.pb_btBehavior_behavior);
-        bottomPlayerCl = rootView.findViewById(R.id.cl_btPlayer_behavior);
-        playerToolBarCl = rootView.findViewById(R.id.cl_btPlayer_toolBar);
-        TextView playerToolBarPlayerTv = rootView.findViewById(R.id.tv_btPlayer_toolBarTitle);
-        TextView behaviorPlayerTime = rootView.findViewById(R.id.tv_btBehavior_timeDuration);
-
-        progressBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
         new HelperFragment(getFragmentManager(), new BeepTunesMainFragment().getInstance(fromAlbumAdapter, toAlbumAdapter))
                 .setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
@@ -67,10 +60,16 @@ public class BeepTunesFragment extends BaseFragment {
         TextView playIconTv = rootView.findViewById(R.id.tv_btBehavior_playIcon);
         ImageView songImageIv = rootView.findViewById(R.id.iv_btBehavior_image);
         ImageView hidePlayerIv = rootView.findViewById(R.id.iv_btPlayer_hide);
+        TextView playerToolBarPlayerTv = rootView.findViewById(R.id.tv_btPlayer_toolBarTitle);
+        TextView behaviorPlayerTime = rootView.findViewById(R.id.tv_btBehavior_timeDuration);
+        LinearLayout playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
+        progressBar = rootView.findViewById(R.id.pb_btBehavior_behavior);
+        bottomPlayerCl = rootView.findViewById(R.id.cl_btPlayer_behavior);
+        playerToolBarCl = rootView.findViewById(R.id.cl_btPlayer_toolBar);
 
-
-        Utils.setShapeBackground(bottomPlayerCl,R.color.gray_300,R.color.navigation_dark_mode_bg);
-        Utils.setShapeBackground(playerToolBarCl,R.color.gray_300,R.color.navigation_dark_mode_bg);
+        beepTunesPlayer = BeepTunesPlayer.getInstance(toAlbumAdapter, viewModel.getProgressDurationLiveData(), viewModel.getMediaPlayerStatusLiveData());
+        behavior = BottomSheetBehavior.from(playerLayout);
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         viewModel.getPlayingSongViewLiveData().observe(getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {
@@ -84,6 +83,7 @@ public class BeepTunesFragment extends BaseFragment {
                 } else {
                     playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
                 }
+
                 behavior.setState(playingSong.getBehaviorStatus());
 
                 new HelperFragment(getFragmentManager(), beepTunesPlayer)
@@ -91,6 +91,8 @@ public class BeepTunesFragment extends BaseFragment {
                 playerToolBarPlayerTv.setText(playingSong.getTitle());
             }
         });
+
+        playerLayout.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         playIconTv.setOnClickListener(v -> {
             if (viewModel.getPlayingSongViewLiveData().getValue() != null) {
@@ -100,8 +102,6 @@ public class BeepTunesFragment extends BaseFragment {
         });
 
         fromAlbumAdapter.observe(getViewLifecycleOwner(), playingSong -> viewModel.onPlaySongClicked(playingSong, getContext()));
-
-        playerLayout.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         viewModel.getProgressDurationLiveData().observe(getViewLifecycleOwner(), progressDuration -> {
             if (progressDuration != null && viewModel.getPlayingSongViewLiveData().getValue() != null) {
@@ -113,9 +113,8 @@ public class BeepTunesFragment extends BaseFragment {
             }
         });
 
-        beepTunesPlayer.getSongFromPlayerLiveData().observe(getViewLifecycleOwner(), playingSong -> {
-            viewModel.onPlaySongClicked(playingSong, getContext());
-        });
+        beepTunesPlayer.getSongFromPlayerLiveData().observe(getViewLifecycleOwner(),
+                playingSong -> viewModel.onPlaySongClicked(playingSong, getContext()));
 
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -138,7 +137,6 @@ public class BeepTunesFragment extends BaseFragment {
                         bottomPlayerCl.setVisibility(View.GONE);
                         break;
                 }
-
             }
 
             @Override
@@ -157,6 +155,14 @@ public class BeepTunesFragment extends BaseFragment {
             if (progress != null)
                 viewModel.seekBarProgressChanged(progress);
         });
+
+        Utils.setShapeBackground(bottomPlayerCl, R.color.gray_300, R.color.navigation_dark_mode_bg);
+        Utils.setShapeBackground(playerToolBarCl, R.color.gray_300, R.color.navigation_dark_mode_bg);
+
+        if (G.isDarkTheme)
+            progressBar.getProgressDrawable().setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+        else
+            progressBar.getProgressDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_IN);
 
     }
 
