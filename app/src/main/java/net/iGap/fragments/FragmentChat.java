@@ -4405,7 +4405,6 @@ public class FragmentChat extends BaseFragment
                 break;
             case FILE:
             case IMAGE:
-            case STICKER:
             case VIDEO:
             case AUDIO:
             case GIF:
@@ -4414,6 +4413,7 @@ public class FragmentChat extends BaseFragment
             case VOICE:
             case LOCATION:
             case CONTACT:
+            case STICKER:
             case LOG:
                 break;
         }
