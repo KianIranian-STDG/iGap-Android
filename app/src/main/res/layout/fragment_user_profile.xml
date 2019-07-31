@@ -90,7 +90,7 @@
                 android:gravity="@{viewModel.textsGravity}"
                 android:singleLine="true"
                 android:text="@{viewModel.name}"
-                android:textColor="@{G.isDarkTheme ? @color/white : @color/black , default= @color/black}"
+                android:textColor="@color/white"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/fup_user_name"
