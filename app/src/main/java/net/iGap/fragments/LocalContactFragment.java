@@ -97,6 +97,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.share_icon)
                 .setSearchBoxShown(true)
+                .setDefaultTitle(getString(R.string.Invite_Friends))
                 .setLogoShown(true);
         mHelperToolbar.setListener(this);
 

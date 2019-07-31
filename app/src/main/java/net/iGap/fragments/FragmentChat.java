@@ -2280,6 +2280,8 @@ public class FragmentChat extends BaseFragment
                 goneSearchBox(edtSearchMessage);
             }else if (isEditMessage){
                 removeEditedMessage();
+            }else if(ll_navigateHash != null && btnHashLayoutClose != null && ll_navigateHash.isShown()){
+                btnHashLayoutClose.performClick();
             }else {
                 stopSuperPress = false;
             }
@@ -2570,12 +2572,6 @@ public class FragmentChat extends BaseFragment
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
         ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
-
-        if (G.isDarkTheme) {
-            ll_attach_text.setBackgroundColor(getContext().getResources().getColor(R.color.navigation_dark_mode_bg));
-        } else {
-            ll_attach_text.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
-        }
 
         txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
         btnCancelSendingFile = rootView.findViewById(R.id.ac_btn_cancel_sending_file);

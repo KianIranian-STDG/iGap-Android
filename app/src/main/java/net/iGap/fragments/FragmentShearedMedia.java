@@ -278,11 +278,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.sort_icon)
+                //.setRightIcons(R.string.sort_icon)
                 .setPlayerEnable(true)
                 .setIsSharedMedia(true)
-                .setSearchBoxShown(true)
+                //.setSearchBoxShown(true)
                 .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.shared_media))
                 .setListener(this);
 
         toolbarLayout.addView(mHelperToolbar.getView());
@@ -573,7 +574,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         TextView textView = new TextView(getContext());
         textView.setText(mSharedTypesList.get(pos));
-        Utils.setTextSize(textView,R.dimen.dp14);
+        Utils.setTextSize(textView,R.dimen.smallTextSize);
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setSingleLine(true);
 
