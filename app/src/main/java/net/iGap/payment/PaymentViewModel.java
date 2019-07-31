@@ -9,6 +9,7 @@ import android.view.View;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.errorhandler.ErrorModel;
 
 public class PaymentViewModel extends ViewModel {
 
@@ -77,6 +78,12 @@ public class PaymentViewModel extends ViewModel {
 
     public MutableLiveData<String> getGoToWebPage() {
         return goToWebPage;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        repository.clearRepository();
     }
 
     public void onRetryClick() {

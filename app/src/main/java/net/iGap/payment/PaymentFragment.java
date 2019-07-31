@@ -9,6 +9,7 @@ import android.provider.Browser;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,17 @@ public class PaymentFragment extends Fragment {
                 bundle.putString("Authorization", ApiStatic.USER_TOKEN);
                 browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
                 startActivity(browserIntent);
+
+
+                Intent intent = new Intent("net.iGap.payment");
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                Bundle b = new Bundle();
+                b.putString("message", "data of message");
+                b.putString("status","data of status");
+                intent.putExtras(b);
+
+                Log.wtf(this.getClass().getName(), intent.toUri(Intent.URI_INTENT_SCHEME));
 
                 /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webLink)));*/
             }

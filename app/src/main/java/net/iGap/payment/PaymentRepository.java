@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import net.iGap.api.PaymentApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.errorhandler.ErrorModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +29,7 @@ public class PaymentRepository {
         return instance;
     }
 
-    public static void clearRepository() {
+    public void clearRepository() {
         instance = null;
     }
 
