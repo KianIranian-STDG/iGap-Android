@@ -35,7 +35,7 @@ public class HelperError {
             case 2:
                 if (minorCode == 1) {
                     G.userLogin = false;
-                    error = G.fragmentActivity.getResources().getString(R.string.E_2);
+//                    error = G.fragmentActivity.getResources().getString(R.string.E_2);
                     LoginActions.login();
                 }
                 break;
