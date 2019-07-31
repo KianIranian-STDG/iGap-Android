@@ -14,11 +14,11 @@ import android.view.ViewGroup;
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtHistoryPlaceBinding;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.igasht.IGashtBaseView;
 import net.iGap.interfaces.ToolbarListener;
 
-public class IGashtHistoryPlaceListFragment extends Fragment {
+public class IGashtHistoryPlaceListFragment extends IGashtBaseView {
 
-    private IGashtHistoryPlaceViewModel viewModel;
     private FragmentIgashtHistoryPlaceBinding binding;
 
     @Override
@@ -31,7 +31,7 @@ public class IGashtHistoryPlaceListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_history_place, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel((IGashtHistoryPlaceViewModel) viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -54,10 +54,10 @@ public class IGashtHistoryPlaceListFragment extends Fragment {
                     }
                 }).getView());
 
-        binding.favoriteList.setAdapter(new PlaceHistoryAdapter(position -> viewModel.onClickHistoryItem(position)));
+        binding.favoriteList.setAdapter(new PlaceHistoryAdapter(position -> ((IGashtHistoryPlaceViewModel) viewModel).onClickHistoryItem(position)));
         binding.favoriteList.addItemDecoration(new DividerItemDecoration(binding.favoriteList.getContext(), DividerItemDecoration.VERTICAL));
 
-        viewModel.getHistoryList().observe(getViewLifecycleOwner(), data -> {
+        ((IGashtHistoryPlaceViewModel) viewModel).getHistoryList().observe(getViewLifecycleOwner(), data -> {
             if (data != null && binding.favoriteList.getAdapter() instanceof PlaceHistoryAdapter) {
                 ((PlaceHistoryAdapter) binding.favoriteList.getAdapter()).setItems(data);
             }

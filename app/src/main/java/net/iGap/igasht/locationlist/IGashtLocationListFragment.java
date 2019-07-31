@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +15,15 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtLocationBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
 
-public class IGashtLocationListFragment extends Fragment {
+public class IGashtLocationListFragment extends IGashtBaseView {
 
     private FragmentIgashtLocationBinding binding;
-    private IGashtLocationViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +35,7 @@ public class IGashtLocationListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_location, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel((IGashtLocationViewModel) viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -76,28 +75,28 @@ public class IGashtLocationListFragment extends Fragment {
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
         binding.locationListView.setAdapter(new IGashtLocationListAdapter());
 
-        viewModel.getLocationList().observe(getViewLifecycleOwner(), data -> {
+        ((IGashtLocationViewModel) viewModel).getLocationList().observe(getViewLifecycleOwner(), data -> {
             if (binding.locationListView.getAdapter() instanceof IGashtLocationListAdapter && data != null) {
                 ((IGashtLocationListAdapter) binding.locationListView.getAdapter()).setItems(data, new IGashtLocationListAdapter.onLocationItemClickListener() {
                     @Override
                     public void addToFavorite(int position) {
-                        viewModel.addToFavorite(position);
+                        ((IGashtLocationViewModel) viewModel).addToFavorite(position);
                     }
 
                     @Override
                     public void buyTicket(int position) {
-                        viewModel.buyTicket(position);
+                        ((IGashtLocationViewModel) viewModel).buyTicket(position);
                     }
 
                     @Override
                     public void onItem(int position) {
-                        viewModel.buyTicket(position);
+                        ((IGashtLocationViewModel) viewModel).buyTicket(position);
                     }
                 });
             }
         });
 
-        viewModel.getGoToLocationDetail().observe(getViewLifecycleOwner(), isGo -> {
+        ((IGashtLocationViewModel) viewModel).getGoToLocationDetail().observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null) {
                 if (isGo) {
                     new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(new IGashtLocationDetailFragment()).setReplace(false).load(true);
@@ -107,8 +106,6 @@ public class IGashtLocationListFragment extends Fragment {
             }
         });
 
-        viewModel.getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> {
-            Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show();
-        });
+        ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
     }
 }

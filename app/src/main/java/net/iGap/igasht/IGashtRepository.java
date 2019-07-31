@@ -3,10 +3,10 @@ package net.iGap.igasht;
 import android.os.Handler;
 import android.util.Log;
 
-import com.google.gson.GsonBuilder;
-
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.errorhandler.ErrorHandler;
+import net.iGap.api.errorhandler.ResponseCallback;
 import net.iGap.igasht.locationdetail.RegisterTicketResponse;
 import net.iGap.igasht.locationdetail.buyticket.IGashtLocationService;
 import net.iGap.igasht.locationdetail.buyticket.IGashtOrder;
@@ -79,7 +79,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.code(), response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -89,7 +89,7 @@ public class IGashtRepository {
             @Override
             public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtProvince>> call, @NotNull Throwable t) {
                 t.printStackTrace();
-                callback.onFailed();
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
         });
     }
@@ -102,7 +102,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.code(), response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -112,7 +112,7 @@ public class IGashtRepository {
             @Override
             public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationItem>> call, @NotNull Throwable t) {
                 t.printStackTrace();
-                callback.onFailed();
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
         });
     }
@@ -125,7 +125,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.code(), response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -135,7 +135,7 @@ public class IGashtRepository {
             @Override
             public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Throwable t) {
                 t.printStackTrace();
-                callback.onFailed();
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
         });
     }
@@ -214,7 +214,7 @@ public class IGashtRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.code(), response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -224,7 +224,7 @@ public class IGashtRepository {
             @Override
             public void onFailure(@NotNull Call<RegisterTicketResponse> call, @NotNull Throwable t) {
                 t.printStackTrace();
-                callback.onFailed();
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
         });
         realm.close();
@@ -240,21 +240,5 @@ public class IGashtRepository {
 
     public boolean hasVoucher() {
         return selectedServiceList.size() != 0;
-    }
-
-    public interface ResponseCallback<T> {
-        void onSuccess(T data);
-
-        void onError(ErrorModel error);
-
-        void onFailed();
-    }
-
-    private ErrorModel getError(int responseCode, String error) {
-        if (responseCode < 501 && error != null) {
-            return new GsonBuilder().create().fromJson(error, ErrorModel.class);
-        } else {
-            return new ErrorModel("empty error", "error message is null");
-        }
     }
 }

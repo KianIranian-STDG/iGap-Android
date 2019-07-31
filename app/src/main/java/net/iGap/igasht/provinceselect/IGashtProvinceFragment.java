@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +16,15 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtProvinceBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationlist.IGashtLocationListFragment;
 import net.iGap.interfaces.ToolbarListener;
 
-public class IGashtProvinceFragment extends Fragment {
+public class IGashtProvinceFragment extends IGashtBaseView {
 
     private FragmentIgashtProvinceBinding binding;
-    private IGashtProvinceViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class IGashtProvinceFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_province, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel((IGashtProvinceViewModel) viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -74,9 +73,9 @@ public class IGashtProvinceFragment extends Fragment {
                     }
                 }).getView());
 
-        binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> viewModel.setSelectedLocation(position));
+        binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> ((IGashtProvinceViewModel) viewModel).setSelectedLocation(position));
 
-        viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), isGo -> {
+        ((IGashtProvinceViewModel) viewModel).getGoToShowLocationListPage().observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null) {
                 if (isGo) {
                     ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -87,19 +86,13 @@ public class IGashtProvinceFragment extends Fragment {
             }
         });
 
-        viewModel.getProvinceListResult().observe(getViewLifecycleOwner(), data -> {
+        ((IGashtProvinceViewModel) viewModel).getProvinceListResult().observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 binding.provinceSearchText.setAdapter(new ProvinceSuggestionListAdapter(getContext(), data));
             }
         });
 
-        viewModel.getRequestErrorMessage().observe(getViewLifecycleOwner(), message -> {
-            if (getContext() != null && message != null) {
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
+        ((IGashtProvinceViewModel) viewModel).getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
             if (isClear != null && isClear) {
                 binding.provinceSearchText.setText("");
             }

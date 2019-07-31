@@ -17,6 +17,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtLocationDetailBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
@@ -24,10 +25,9 @@ import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.payment.PaymentFragment;
 
-public class IGashtLocationDetailFragment extends Fragment {
+public class IGashtLocationDetailFragment extends IGashtBaseView {
 
     private FragmentIgashtLocationDetailBinding binding;
-    private IGashtLocationDetailViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class IGashtLocationDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_location_detail, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel((IGashtLocationDetailViewModel) viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -76,7 +76,7 @@ public class IGashtLocationDetailFragment extends Fragment {
                     }
                 }).getView());
 
-        viewModel.getLoadBuyTicketView().observe(getViewLifecycleOwner(), loadBuyTicketView -> {
+        ((IGashtLocationDetailViewModel) viewModel).getLoadBuyTicketView().observe(getViewLifecycleOwner(), loadBuyTicketView -> {
             if (loadBuyTicketView != null) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -98,26 +98,20 @@ public class IGashtLocationDetailFragment extends Fragment {
             }
         });
 
-        viewModel.getRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
-            if (getContext() != null && errorMessage != null) {
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
+        ((IGashtLocationDetailViewModel) viewModel).getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getActivity() != null && isGoBack != null && isGoBack) {
                 Toast.makeText(getActivity(), R.string.successful_payment, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             }
         });
 
-        viewModel.getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
+        ((IGashtLocationDetailViewModel) viewModel).getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
             if (getActivity() != null && orderToken != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(PaymentFragment.getInstance(orderToken)).setReplace(false).load(true);
             }
         });
 
-        viewModel.getPaymentError().observe(getViewLifecycleOwner(), isError -> {
+        ((IGashtLocationDetailViewModel) viewModel).getPaymentError().observe(getViewLifecycleOwner(), isError -> {
             if (getContext() != null && isError != null && isError) {
                 Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
             }
@@ -125,6 +119,6 @@ public class IGashtLocationDetailFragment extends Fragment {
     }
 
     public void registerVouchers() {
-        viewModel.registerOrder();
+        ((IGashtLocationDetailViewModel) viewModel).registerOrder();
     }
 }
