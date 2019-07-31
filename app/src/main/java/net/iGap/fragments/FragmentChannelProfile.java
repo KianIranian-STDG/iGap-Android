@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -33,6 +34,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
@@ -46,6 +48,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.internal.Util;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -165,7 +169,7 @@ public class FragmentChannelProfile extends BaseFragment {
                 edtLink.setTypeface(G.typeface_IRANSansMobile);
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
+                Utils.darkModeHandler(edtLink);
                 edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLink.setPadding(0, 8, 0, 8);
                 edtLink.setEnabled(false);
@@ -175,7 +179,7 @@ public class FragmentChannelProfile extends BaseFragment {
 
                 TextView txtLink = new AppCompatTextView(getActivity());
                 txtLink.setText(Config.IGAP_LINK_PREFIX + link);
-                txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
+                Utils.darkModeHandlerGray(txtLink);
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
