@@ -26,6 +26,7 @@
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="textColorBottomSheet">@style/FabButton_dark</item>
         <item name="iGapButton">@style/iGapButtonDark</item>
+        <item name="iGapButtonGray">@style/iGapButtonGrayDark</item>
         <!--<item name="colorAccent">@color/colorOldBlack</item>-->
     </style>
 
@@ -53,6 +54,7 @@
         <item name="md_medium_font">IRANSansMobile.ttf</item>
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="iGapButton">@style/iGapButtonLight</item>
+        <item name="iGapButtonGray">@style/iGapButtonGrayLight</item>
         <!--<item name="colorAccent">@color/white</item>-->
     </style>
 

@@ -70,6 +70,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public ObservableInt isShowLink = new ObservableInt(View.GONE);
     public ObservableInt channelLinkTitle = new ObservableInt(R.string.invite_link_title);
     public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
+    public MutableLiveData<Boolean> muteNotifListener = new MutableLiveData<>();
     public ObservableField<String> subscribersCount = new ObservableField<>("0");
     public ObservableField<String> administratorsCount = new ObservableField<>("0");
     public ObservableField<String> moderatorsCount = new ObservableField<>("0");
@@ -90,6 +91,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
     public ObservableInt showLoading = new ObservableInt(View.GONE);
+    public ObservableInt textGravity = new ObservableInt(Gravity.LEFT);
     //Ui event
     public MutableLiveData<String> channelName = new MutableLiveData<>();
     public MutableLiveData<String> channelSecondsTitle = new MutableLiveData<>();
@@ -158,7 +160,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
             isShowLink.set(View.VISIBLE);
         }
 
-        isMuteNotification.set(!mRoom.getMute());
+        isMuteNotification.set(mRoom.getMute());
 
         subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
         administratorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
@@ -174,14 +176,21 @@ public class FragmentChannelProfileViewModel extends ViewModel
             showMemberList.set(View.GONE);
             editButtonVisibility.setValue(View.GONE);
         }
+
+        if (G.selectedLanguage.equals("en")){
+            textGravity.set(Gravity.LEFT);
+        }else {
+            textGravity.set(Gravity.RIGHT);
+        }
+
         initRecycleView();
 
         FragmentShearedMedia.getCountOfSharedMedia(roomId);
     }
 
-    public void onNotificationCheckChange(boolean isChecked) {
-        new RequestClientMuteRoom().muteRoom(roomId, !isChecked);
-        isMuteNotification.set(!isChecked);
+    public void onNotificationCheckChange() {
+        isMuteNotification.set(!isMuteNotification.get());
+        muteNotifListener.setValue(isMuteNotification.get());
     }
 
     public void onClickCircleImage() {
@@ -230,6 +239,10 @@ public class FragmentChannelProfileViewModel extends ViewModel
                                 if (((RealmRoom) element).isValid()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
                                     Log.wtf("group profile view model", "value: " + countText);
+
+                                    channelName.postValue(mRoom.getTitle());
+                                    channelDescription.postValue(mRoom.getChannelRoom().getDescription());
+
                                     if (HelperCalander.isPersianUnicode) {
                                         countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                                     }

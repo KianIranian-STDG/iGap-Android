@@ -29,8 +29,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 117
-        versionName "2.0.0.newUi55"
+        versionCode 118
+        versionName "2.0.0.newUi60"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -211,7 +211,7 @@ dependencies {
     release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta8'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -241,7 +241,6 @@ dependencies {
     implementation 'android.arch.lifecycle:common-java8:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.ss.bannerslider:bannerslider:2.0.0'
 }
 
 configurations.all {

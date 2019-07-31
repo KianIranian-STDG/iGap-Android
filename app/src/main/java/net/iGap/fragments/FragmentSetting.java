@@ -1,8 +1,12 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityManageSpace;
+import net.iGap.activities.ActivityRegisteration;
 import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
@@ -44,10 +49,21 @@ public class FragmentSetting extends BaseFragment {
     private FragmentSettingViewModel viewModel;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentSettingViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
+            }
+        }).get(FragmentSettingViewModel.class);
+    }
+
+    @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
-        viewModel = new FragmentSettingViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
@@ -78,19 +94,19 @@ public class FragmentSetting extends BaseFragment {
                 });
         binding.toolbar.addView(t.getView());
 
-        viewModel.showDialogDeleteAccount.observe(this, aBoolean -> {
+        viewModel.showDialogDeleteAccount.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDeleteAccountDialog();
             }
         });
 
-        viewModel.goToManageSpacePage.observe(this, aBoolean -> {
+        viewModel.goToManageSpacePage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 startActivity(new Intent(G.fragmentActivity, ActivityManageSpace.class));
             }
         });
 
-        viewModel.goToLanguagePage.observe(this, go -> {
+        viewModel.goToLanguagePage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(false).load();
             }
@@ -102,31 +118,31 @@ public class FragmentSetting extends BaseFragment {
             }
         });
 
-        viewModel.goToPrivacyAndSecurityPage.observe(this, go -> {
+        viewModel.goToPrivacyAndSecurityPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPrivacyAndSecurity()).setReplace(false).load();
             }
         });
 
-        viewModel.goToChatSettingsPage.observe(this, go -> {
+        viewModel.goToChatSettingsPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChatSettings()).setReplace(false).load();
             }
         });
 
-        viewModel.showDialogLogout.observe(this, aBoolean -> {
+        viewModel.showDialogLogout.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDialogLogout();
             }
         });
 
-        viewModel.showError.observe(this, aBoolean -> {
+        viewModel.showError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
             }
         });
 
-        viewModel.goBack.observe(this, aBoolean -> {
+        viewModel.goBack.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 getActivity().onBackPressed();
             }

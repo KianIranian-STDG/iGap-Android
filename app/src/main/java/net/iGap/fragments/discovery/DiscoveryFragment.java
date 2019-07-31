@@ -127,26 +127,26 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             }
         });
 
-        /*if (page == 0) {
-            rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
+//        /*if (page == 0) {
+//            rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                    super.onScrolled(recyclerView, dx, dy);
+//
+//                    int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+//
+//                    //check recycler scroll for search box animation
+//                    if (dy <= 0) {
+//                        // Scrolling up
+//                        mHelperToolbar.animateSearchBox(false, position, -2);
+//                    } else {
+//                        // Scrolling down
+//                        mHelperToolbar.animateSearchBox(true, position, -2);
+//                    }
+//                }
+//            });
 
-                    int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-                    //check recycler scroll for search box animation
-                    if (dy <= 0) {
-                        // Scrolling up
-                        mHelperToolbar.animateSearchBox(false, position, -2);
-                    } else {
-                        // Scrolling down
-                        mHelperToolbar.animateSearchBox(true, position, -2);
-                    }
-                }
-            });
-
-        }*/
+//       }
 
         pullToRefresh.setOnRefreshListener(() -> {
             setRefreshing(true);

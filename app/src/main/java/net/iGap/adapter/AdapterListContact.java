@@ -22,7 +22,6 @@ import java.util.List;
 public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.ViewHolder> {
 
     public String item;
-    public String phone;
     private List<StructListOfContact> mPhoneContactList;
     private Context context;
 
@@ -77,10 +76,8 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             subtitle.setText(contact.getPhone());
 
             rootView.setOnClickListener(v -> {
-                Uri uri = Uri.parse("smsto:" + phone);
-                Intent smsIntent = new Intent(android.content.Intent.ACTION_SENDTO, uri);
+                Intent smsIntent = new Intent(Intent.ACTION_SENDTO , Uri.parse("smsto:" + contact.getPhone()));
                 smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + ActivityMain.userPhoneNumber);
-                smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(smsIntent);
             });
         }

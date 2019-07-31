@@ -166,47 +166,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 updateUserInfoUI();
             });
         }
-        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-            @Override
-            public void onChangePhoto(final String imagePath) {
-                setUserAvatarPath.postValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
-            }
-
-            @Override
-            public void onChangeInitials(final String initials, final String color) {
-                setUserAvatarPath.postValue(new ChangeImageModel(null, initials, color));
-            }
-        };
-
-        FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
-            long mAvatarId = 0;
-            if (messageOne != null && !messageOne.equals("")) {
-                mAvatarId = Long.parseLong(messageOne);
-            }
-            long finalMAvatarId = mAvatarId;
-            deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
-        };
-
-        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
-            pathSaveImage = path;
-            long lastUploadedAvatarId = idAvatar + 1L;
-            showLoading.set(View.VISIBLE);
-            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress >= 100) {
-                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                    }
-                }
-
-                @Override
-                public void OnError() {
-                    G.handler.post(() -> showLoading.set(View.GONE));
-                }
-            });
-        };
-
-        G.onUserAvatarResponse = this;
     }
 
     public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
@@ -230,6 +189,48 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             getUserCredit();
         }
+
+        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
+            pathSaveImage = path;
+            long lastUploadedAvatarId = idAvatar + 1L;
+            showLoading.set(View.VISIBLE);
+            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress >= 100) {
+                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                    }
+                }
+
+                @Override
+                public void OnError() {
+                    G.handler.post(() -> showLoading.set(View.GONE));
+                }
+            });
+        };
+
+        FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
+            long mAvatarId = 0;
+            if (messageOne != null && !messageOne.equals("")) {
+                mAvatarId = Long.parseLong(messageOne);
+            }
+            long finalMAvatarId = mAvatarId;
+            deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
+        };
+
+        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
+            @Override
+            public void onChangePhoto(final String imagePath) {
+                setUserAvatarPath.postValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
+            }
+
+            @Override
+            public void onChangeInitials(final String initials, final String color) {
+                setUserAvatarPath.postValue(new ChangeImageModel(null, initials, color));
+            }
+        };
+
+        G.onUserAvatarResponse = this;
 
         getIVandScore();
         new RequestUserProfileGetGender().userProfileGetGender();
@@ -809,7 +810,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-                G.handler.post(() -> currentScore.set(String.valueOf(score.getScore())));
+                G.handler.post(() -> currentScore.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(score.getScore())) : String.valueOf(score.getScore())));
             }
 
             @Override

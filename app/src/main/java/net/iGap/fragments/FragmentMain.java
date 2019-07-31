@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -232,6 +234,32 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 }
                 onLeftIconClickListener(v);
             }
+        });
+
+        mBtnReadAllSelected.setOnClickListener(v -> {
+
+            RealmResults<RealmRoom> unreadList = getRealmFragmentMain().where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+
+            if (unreadList.size() == 0) {
+                Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                    .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                    .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                    .onPositive((dialog, which) -> {
+                        dialog.dismiss();
+
+                        for (RealmRoom room : unreadList){
+                            markAsRead(room.getType() , room.getId());
+                        }
+
+                        onLeftIconClickListener(v);
+                    })
+                    .onNegative((dialog, which) -> dialog.dismiss())
+                    .show();
+
         });
 
         if (G.isDarkTheme) {

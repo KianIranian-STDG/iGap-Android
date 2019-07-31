@@ -8,9 +8,12 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
+
 public class RadiusImageView extends AppCompatImageView {
 
-    public static float radius = 20.0f;
+    public static float radius = ViewMaker.i_Dp(R.dimen.dp10);
 
     public RadiusImageView(Context context) {
         super(context);

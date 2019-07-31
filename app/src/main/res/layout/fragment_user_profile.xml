@@ -6,7 +6,7 @@
     <data>
 
         <import type="android.view.View" />
-
+        <import type="net.iGap.G" />
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.UserProfileViewModel" />
@@ -90,7 +90,7 @@
                 android:gravity="@{viewModel.textsGravity}"
                 android:singleLine="true"
                 android:text="@{viewModel.name}"
-                android:textColor="@color/white"
+                android:textColor="@{G.isDarkTheme ? @color/white : @color/black , default= @color/black}"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/fup_user_name"

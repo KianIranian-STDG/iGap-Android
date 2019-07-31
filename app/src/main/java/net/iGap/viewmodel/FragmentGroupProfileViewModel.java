@@ -182,6 +182,10 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                     } else if (((RealmRoom) realmModel).isValid()) {
                         isUnMuteNotification.set(realmRoom.getMute());
                         String countText = ((RealmRoom) realmModel).getSharedMediaCount();
+
+                        groupName.postValue(realmRoom.getTitle());
+                        groupDescription.postValue(realmRoom.getGroupRoom().getDescription());
+
                         if (HelperCalander.isPersianUnicode) {
                             countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                         }

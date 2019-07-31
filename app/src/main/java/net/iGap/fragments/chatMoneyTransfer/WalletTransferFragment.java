@@ -159,13 +159,17 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                                         @Override
                                         public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                             dismissProgress();
-                                            if (!new HelperFragment(getFragmentManager()).isFragmentVisible("PaymentFragment"))
+                                            if (getActivity() == null || getActivity().isFinishing())
                                                 return;
                                             if (response.body() != null) {
                                                 selectedCard = null;
 
-                                                if (response.body().size() > 0)
-                                                    selectedCard = response.body().get(0);
+                                                for (Card card : response.body()) {
+                                                    if (card.isRaadCard()) {
+                                                        selectedCard = card;
+                                                        break;
+                                                    }
+                                                }
 
                                                 if (selectedCard != null) {
                                                     if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
@@ -194,6 +198,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                     dismissProgress();
                     HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                 }
+                break;
             case EventManager.ON_PAYMENT_RESULT_RECIEVED:
 
                 dismissProgress();
@@ -221,6 +226,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                         });
                         break;
                 }
+                break;
 
             case EventManager.ON_INIT_PAY_ERROR:
                 dismissProgress();

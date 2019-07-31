@@ -33,18 +33,16 @@ import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
-import net.iGap.fragments.popular.FragmentPopularChannelChild;
+import net.iGap.fragments.favoritechannel.FavoriteChannelFragment;
 import net.iGap.fragments.poll.PollFragment;
-import net.iGap.fragments.popular.FragmentPopularChannelParent;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.igasht.provinceselect.IGashtProvinceFragment;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
@@ -71,7 +69,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     private long mLastClickTime = 0;
     private FragmentActivity activity;
 
-    BaseViewHolder(@NonNull View itemView,FragmentActivity activity) {
+    BaseViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView);
         this.activity = activity;
     }
@@ -115,6 +113,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
 
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
+
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
                 actionPage(discoveryField.value, activity);
@@ -334,13 +333,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case UNRECOGNIZED:
                 break;
             case FAVORITE_CHANNEL:
-                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPopularChannelParent()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new FavoriteChannelFragment()).setReplace(false).load();
                 break;
         }
     }
 
     private static void actionPage(String value, FragmentActivity activity) {
-        new HelperFragment(activity.getSupportFragmentManager(),DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
+        new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
     }
 
     public static void dialPhoneNumber(Context context, String phoneNumber, FragmentActivity activity) {

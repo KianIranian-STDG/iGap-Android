@@ -80,7 +80,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_alignParentBottom="true"
-          android:gravity="center_vertical|start"
+          android:gravity="start"
           android:singleLine="true"
           android:tag="menu"
           android:text="@string/last_seen_recently"

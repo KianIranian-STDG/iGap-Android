@@ -94,27 +94,27 @@ public class HelperGetAction {
                 }
             } else if (count < Config.GROUP_SHOW_ACTIONS_COUNT) {
 
-                String concatenatedNames = "";
+                StringBuilder concatenatedNames = new StringBuilder();
 
                 Realm realm = Realm.getDefaultInstance();
 
                 Iterator<StructAction> iterator = structActions.iterator();
                 while (iterator.hasNext()) {
                     StructAction struct = iterator.next();
-                    if (struct.action == latestAction) {
+                    if (struct.roomId == roomId && struct.action == latestAction) {
                         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, struct.userId);
                         if (realmRegisteredInfo != null) {
-                            concatenatedNames += realmRegisteredInfo.getDisplayName() + ",";
+                            concatenatedNames.append(realmRegisteredInfo.getDisplayName()).append(",");
                         }
                     }
                 }
 
                 realm.close();
 
-                if (concatenatedNames.isEmpty() || concatenatedNames.length() == 0) {
+                if ((concatenatedNames.length() == 0) || concatenatedNames.length() == 0) {
                     return null;
                 }
-                concatenatedNames = concatenatedNames.substring(0, concatenatedNames.length() - 1);
+                concatenatedNames = new StringBuilder(concatenatedNames.substring(0, concatenatedNames.length() - 1));
 
                 if (HelperCalander.isPersianUnicode) {
 

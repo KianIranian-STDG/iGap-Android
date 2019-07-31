@@ -142,7 +142,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private Realm realmShearedMedia;
     private LinearLayout ll_AppBarSelected;
     private LinearLayout mediaLayout;
-    private TextView txtSharedMedia;
     private TextView txtNumberOfSelected;
     private ProtoGlobal.Room.Type roomType;
     private int numberOfSelected = 0;
@@ -294,26 +293,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         mediaTypesLayout = view.findViewById(R.id.asm_ll_media_types_buttons);
 
-        view.findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.asm_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
-        });
-
-        RippleView rippleMenu = (RippleView) view.findViewById(R.id.asm_ripple_menu);
-        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popUpMenuSharedMedia();
-            }
-        });
-
-        txtSharedMedia = (TextView) view.findViewById(R.id.asm_txt_sheared_media);
-
         complete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
@@ -361,14 +340,14 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         recyclerView.addOnScrollListener(onScrollListener);
 
         MusicPlayer.playerStateChangeListener.observe(this, isVisible -> {
-            checkMusicPlayerView();
+            //checkMusicPlayerView();
         });
 
         checkSelectedDefaultTab();
         initAppbarSelected(view);
         makeSharedTypesViews();
         checkSharedButtonsBackgrounds();
-        checkMusicPlayerView();
+        //checkMusicPlayerView();
     }
 
     private void checkSelectedDefaultTab() {
@@ -618,8 +597,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mSharedTypeButtonsList.add(new SharedButtons(textView, pos));
 
         textView.setOnClickListener(v -> {
+
+            if (isSelectedMode && mCurrentSharedMediaType != pos) adapter.resetSelected();
+
             mediaTypesClickHandler(pos);
             checkSharedButtonsBackgrounds();
+
         });
 
         mediaTypesLayout.addView(textView);
@@ -780,7 +763,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         isChangeSelectType = true;
 
-        txtSharedMedia.setText(R.string.shared_image);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE;
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.IMAGE);
         adapter = new ImageAdapter(fragmentActivity, mNewList);
@@ -794,7 +776,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mCurrentSharedMediaType = 2;
         isChangeSelectType = true;
 
-        txtSharedMedia.setText(R.string.shared_video);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO;
 
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.VIDEO);
@@ -809,7 +790,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mCurrentSharedMediaType = 3;
         isChangeSelectType = true;
 
-        txtSharedMedia.setText(R.string.shared_audio);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO;
 
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.AUDIO);
@@ -826,7 +806,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mCurrentSharedMediaType = 4;
         isChangeSelectType = true;
 
-        txtSharedMedia.setText(R.string.shared_voice);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE;
 
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.VOICE);
@@ -843,7 +822,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mCurrentSharedMediaType = 5;
         isChangeSelectType = true;
 
-        txtSharedMedia.setText(R.string.shared_gif);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF;
 
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.GIF);
@@ -859,7 +837,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mCurrentSharedMediaType = 6;
         isChangeSelectType = true;
 
-        txtSharedMedia.setText(R.string.shared_file);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE;
 
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.FILE);
@@ -876,7 +853,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mCurrentSharedMediaType = 7;
         isChangeSelectType = true;
 
-        txtSharedMedia.setText(R.string.shared_links);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
 
         if (mRealmList != null) {
@@ -1276,10 +1252,10 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     holder1.txtTime.setGravity(Gravity.RIGHT);
                     date = HelperCalander.convertToUnicodeFarsiNumber(mList.get(position).messageTime);
                 } else {
+                    holder1.txtTime.setGravity(Gravity.LEFT);
                     date = mList.get(position).messageTime;
                 }
                 //check if date was today set text to txtTime else set date
-                holder1.txtTime.setGravity(Gravity.LEFT);
                 holder1.txtTime.setText(
                         !mList.get(position).isToday ?
                                 date : context.getString(R.string.today)

@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -107,6 +108,8 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.payment.Payment;
+import net.iGap.payment.PaymentFragment;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -304,6 +307,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.isRestartActivity) {
             return;
+        }
+
+        if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
+            Log.wtf(this.getClass().getName(), "status: " + intent.getStringExtra("status"));
+            Log.wtf(this.getClass().getName(), "message: " + intent.getStringExtra("message"));
+            Log.wtf(this.getClass().getName(), "orderId: " + intent.getStringExtra("order_id"));
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentById(R.id.viewpager);
+            if (fragment instanceof PaymentFragment) {
+                ((PaymentFragment) fragment).setPaymentResult(new Payment(
+                        intent.getStringExtra("status"),
+                        intent.getStringExtra("message"),
+                        intent.getStringExtra("order_id")
+                ));
+            }
         }
 
         new HelperGetDataFromOtherApp(this, intent);
