@@ -2,6 +2,7 @@
 <resources>
 
     <style name="Material_blackCustom" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/green</item>
         <item name="pageBackgroundTheme">@style/page_background_black</item>
         <item name="textColorTheme">@style/text_style_black</item>
         <item name="textColorMenuTheme">@style/text_style_menu_dark</item>
@@ -30,6 +31,7 @@
     </style>
 
     <style name="Material_lightCustom" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/green</item>
         <item name="pageBackgroundTheme">@style/page_background_light</item>
         <item name="textColorTheme">@style/text_style_light</item>
         <item name="textColorMenuTheme">@style/text_style_menu_light</item>
