@@ -26,103 +26,52 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.proto.ProtoGlobal;
 
-import java.util.HashMap;
 import java.util.List;
-
-import static net.iGap.G.context;
 
 public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetForward, AdapterBottomSheetForward.ViewHolder> {
 
 
-    public StructBottomSheetForward mList;
-    public boolean isChecked = false;
+    public StructBottomSheetForward structBottomSheetForward;
     private AvatarHandler avatarHandler;
 
-    public AdapterBottomSheetForward(StructBottomSheetForward mList, AvatarHandler avatarHandler) {
-        this.mList = mList;
+    public AdapterBottomSheetForward(StructBottomSheetForward structBottomSheetForward, AvatarHandler avatarHandler) {
+        this.structBottomSheetForward = structBottomSheetForward;
         this.avatarHandler = avatarHandler;
     }
-
-//    @Override
-//    public AdapterBottomSheetForward.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-//        // View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
-//
-//        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_forward_bottom_sheet, viewGroup, false);
-//        return new AdapterBottomSheetForward.ViewHolder(v);
-//    }
 
     @Override
     public void bindView(final ViewHolder viewHolder, List payloads) {
         super.bindView(viewHolder, payloads);
 
-        if (mList.isContactList()) {
-            setAvatarContact(viewHolder, mList.getId());
+        if (structBottomSheetForward.isContactList()) {
+            setAvatarContact(viewHolder, structBottomSheetForward.getId());
         } else {
-            setAvatar(mList, viewHolder.imgSrc);
+            setAvatar(structBottomSheetForward, viewHolder.imgSrc);
         }
 
-        viewHolder.txtName.setText(mList.getDisplayName());
+        viewHolder.txtName.setText(structBottomSheetForward.getDisplayName());
 
-        //if (mList.isSelected) {
-        //    holder.checkBoxSelect.setChecked(false);
-        //} else {
-        //    holder.checkBoxSelect.setChecked(true);
-        //}
+        viewHolder.checkBoxSelect.setChecked(structBottomSheetForward.isChecked());
+
         viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
 
-        viewHolder.checkBoxSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        viewHolder.checkBoxSelect.setOnClickListener(v -> OnClick(viewHolder));
 
-                if (viewHolder.checkBoxSelect.isChecked()) {
-                    viewHolder.checkBoxSelect.setChecked(false);
-                    viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    //FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
-                    if (mList.isNotExistRoom()) {
-                        FragmentChat.onForwardBottomSheet.path(mList, false, true);
-                    } else {
-                        FragmentChat.onForwardBottomSheet.path(mList, false, false);
-                    }
-                    //mList.setSelected(true);
-                } else {
-                    viewHolder.checkBoxSelect.setChecked(true);
-                    viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    //FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
-                    if (mList.isNotExistRoom()) {
-                        FragmentChat.onForwardBottomSheet.path(mList, true, true);
-                    } else {
-                        FragmentChat.onForwardBottomSheet.path(mList, true, false);
-                    }
-                    //mList.setSelected(false);
-                }
-            }
-        });
+        viewHolder.itemView.setOnClickListener(v -> OnClick(viewHolder));
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewHolder.checkBoxSelect.isChecked()) {
-                    viewHolder.checkBoxSelect.setChecked(false);
-                    viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    if (mList.isNotExistRoom()) {
-                        FragmentChat.onForwardBottomSheet.path(mList, false, true);
-                    } else {
-                        FragmentChat.onForwardBottomSheet.path(mList, false, false);
-                    }
-                    //mList.setSelected(false);
-                } else {
-                    viewHolder.checkBoxSelect.setChecked(true);
-                    viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    if (mList.isNotExistRoom()) {
-                        FragmentChat.onForwardBottomSheet.path(mList, true, true);
-                    } else {
-                        FragmentChat.onForwardBottomSheet.path(mList, true, false);
-                    }
-                    //mList.setSelected(true);
-                }
-            }
-        });
+    }
 
+    private void OnClick(final ViewHolder viewHolder) {
+        if (structBottomSheetForward.isChecked()) {
+            structBottomSheetForward.setChecked(false);
+            viewHolder.checkBoxSelect.setChecked(false);
+            viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
+        } else {
+            structBottomSheetForward.setChecked(true);
+            viewHolder.checkBoxSelect.setChecked(true);
+            viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+        }
+        FragmentChat.onForwardBottomSheet.path(structBottomSheetForward);
     }
 
     private void setAvatar(final StructBottomSheetForward mInfo, CircleImageView imageView) {

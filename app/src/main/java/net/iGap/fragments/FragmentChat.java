@@ -6443,7 +6443,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AdapterBottomSheetForward>() {
             @Override
             public boolean filter(AdapterBottomSheetForward item, CharSequence constraint) {
-                return item.mList.getDisplayName().toLowerCase().contains(String.valueOf(constraint));
+                return item.structBottomSheetForward.getDisplayName().toLowerCase().contains(String.valueOf(constraint));
             }
         });
 
@@ -6489,19 +6489,19 @@ public class FragmentChat extends BaseFragment
 
         onForwardBottomSheet = new OnForwardBottomSheet() {
             @Override
-            public void path(StructBottomSheetForward path, boolean isCheck, boolean isNotExist) {
+            public void path(StructBottomSheetForward structBottomSheetForward) {
 
-                if (path.isNotExistRoom()) {
-                    if (isCheck) {
-                        mListForwardNotExict.add(path);
+                if (structBottomSheetForward.isNotExistRoom()) {
+                    if (structBottomSheetForward.isChecked()) {
+                        mListForwardNotExict.add(structBottomSheetForward);
                     } else {
-                        mListForwardNotExict.remove(path);
+                        mListForwardNotExict.remove(structBottomSheetForward);
                     }
                 } else {
-                    if (isCheck) {
-                        multiForwardList.add(path.getId());
+                    if (structBottomSheetForward.isChecked()) {
+                        multiForwardList.add(structBottomSheetForward.getId());
                     } else {
-                        multiForwardList.remove(path.getId());
+                        multiForwardList.remove(structBottomSheetForward.getId());
                     }
                 }
 

@@ -13,6 +13,6 @@ import net.iGap.module.structs.StructBottomSheetForward;
 
 public interface OnForwardBottomSheet {
 
-    void path(StructBottomSheetForward mList, boolean isCheck, boolean isNotExist);
+    void path(StructBottomSheetForward structBottomSheetForward);
 
 }
