@@ -114,6 +114,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layoutDirection="locale"
+            android:paddingTop="@dimen/dp4"
+            android:paddingBottom="@dimen/dp4"
             android:minHeight="@dimen/dp36"
             android:scrollbars="none">
 
