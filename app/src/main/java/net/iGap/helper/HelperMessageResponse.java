@@ -83,6 +83,7 @@ public class HelperMessageResponse {
                      */
                     new RequestClientGetRoom().clientGetRoom(roomId, null);
                 } else {
+                    room.setDeleted(false);
 
                     /**
                      * update unread count if new messageId that received is bigger than latest messageId that exist

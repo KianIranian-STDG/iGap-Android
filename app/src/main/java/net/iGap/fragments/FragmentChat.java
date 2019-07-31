@@ -7788,6 +7788,10 @@ public class FragmentChat extends BaseFragment
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                if (room != null) {
+                    room.setDeleted(false);
+                }
 
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, finalMessageId);
 

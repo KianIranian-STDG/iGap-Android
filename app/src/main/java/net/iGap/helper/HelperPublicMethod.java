@@ -52,7 +52,12 @@ public class HelperPublicMethod {
                     if (onError != null) {
                         onError.error();
                     }
-                    RealmRoom.putOrUpdate(room);
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(realm1 -> {
+                        RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                        room1.setDeleted(true);
+                    });
+                    realm.close();
                     getUserInfo(peerId, room.getId(), onComplete, onError);
 
                     G.onChatGetRoom = null;
@@ -103,7 +108,12 @@ public class HelperPublicMethod {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    RealmRoom.putOrUpdate(room);
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(realm1 -> {
+                        RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                        room1.setDeleted(true);
+                    });
+                    realm.close();
                     getUserInfo(peerId, room.getId(), onComplete, onError);
 
                     G.onChatGetRoom = null;
