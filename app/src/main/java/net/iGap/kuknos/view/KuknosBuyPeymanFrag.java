@@ -18,39 +18,41 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentKuknosViewRecoveryEpBinding;
+import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
+import net.iGap.databinding.FragmentKuknosLogoutBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.viewmodel.KuknosViewRecoveryEPVM;
+import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
+import net.iGap.kuknos.viewmodel.KuknosLogoutVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
-public class KuknosViewRecoveryEPFrag extends BaseFragment {
+public class KuknosBuyPeymanFrag extends BaseFragment {
 
-    private FragmentKuknosViewRecoveryEpBinding binding;
-    private KuknosViewRecoveryEPVM kuknosViewRecoveryEPVM;
+    private FragmentKuknosBuyPeymanBinding binding;
+    private KuknosBuyPeymanVM kuknosBuyPeymanVM;
     private HelperToolbar mHelperToolbar;
 
-    public static KuknosViewRecoveryEPFrag newInstance() {
-        KuknosViewRecoveryEPFrag kuknosLoginFrag = new KuknosViewRecoveryEPFrag();
+    public static KuknosBuyPeymanFrag newInstance() {
+        KuknosBuyPeymanFrag kuknosLoginFrag = new KuknosBuyPeymanFrag();
         return kuknosLoginFrag;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosViewRecoveryEPVM = ViewModelProviders.of(this).get(KuknosViewRecoveryEPVM.class);
+        kuknosBuyPeymanVM = ViewModelProviders.of(this).get(KuknosBuyPeymanVM.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_view_recovery_ep, container, false);
-        binding.setViewmodel(kuknosViewRecoveryEPVM);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_buy_peyman, container, false);
+        binding.setViewmodel(kuknosBuyPeymanVM);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -74,11 +76,12 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
                 })
                 .setLogoShown(true);
 
-        LinearLayout toolbarLayout = binding.fragKuknosVRToolbar;
+        LinearLayout toolbarLayout = binding.fragKuknosBuyPToolbar;
         Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        onNextPage();
+        onSumVisibility();
+        onBankPage();
         onError();
         onProgress();
         entryListener();
@@ -86,12 +89,12 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
 
 
     private void onError() {
-        kuknosViewRecoveryEPVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
+        kuknosBuyPeymanVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true && errorM.getMessage().equals("0")) {
-                    binding.fragKuknosVRPassHolder.setError(getResources().getString(errorM.getResID()));
-                    binding.fragKuknosVRPassHolder.requestFocus();
+                    binding.fragKuknosBuyPAmountHolder.setError(getResources().getString(errorM.getResID()));
+                    binding.fragKuknosBuyPAmountHolder.requestFocus();
                 }
                 else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
                     showDialog(errorM.getResID());
@@ -113,28 +116,43 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        kuknosViewRecoveryEPVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        kuknosBuyPeymanVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.fragKuknosVRProgressV.setVisibility(View.VISIBLE);
-                    binding.fragKuknosVRPass.setEnabled(false);
-                    binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_load));
+            public void onChanged(@Nullable Integer integer) {
+                if (integer == 0) {
+                    binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
+                    binding.fragKuknosBuyPAmount.setEnabled(true);
+                    binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
                 }
-                else {
-                    binding.fragKuknosVRProgressV.setVisibility(View.GONE);
-                    binding.fragKuknosVRPass.setEnabled(true);
-                    binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_btn));
+                else if (integer == 1) {
+                    binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
+                    binding.fragKuknosBuyPAmount.setEnabled(false);
+                    binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server));
+                }
+                else if (integer == 2) {
+                    binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server2));
                 }
             }
         });
     }
 
+    private void onSumVisibility() {
+        kuknosBuyPeymanVM.getSumState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean)
+                    binding.fragKuknosBuyPSumGroup.setVisibility(View.VISIBLE);
+                else
+                    binding.fragKuknosBuyPSumGroup.setVisibility(View.GONE);
+            }
+        });
+    }
+
     private void entryListener() {
-        binding.fragKuknosVRPass.addTextChangedListener(new TextWatcher() {
+        binding.fragKuknosBuyPAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                binding.fragKuknosVRPassHolder.setErrorEnabled(false);
+                binding.fragKuknosBuyPAmountHolder.setErrorEnabled(false);
             }
 
             @Override
@@ -144,25 +162,20 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (kuknosBuyPeymanVM.updateSum())
+                    binding.fragKuknosBuyPSumGroup.setVisibility(View.VISIBLE);
+                else
+                    binding.fragKuknosBuyPSumGroup.setVisibility(View.GONE);
             }
         });
     }
 
-    private void onNextPage() {
-        kuknosViewRecoveryEPVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+    private void onBankPage() {
+        kuknosBuyPeymanVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean == true) {
-                    popBackStackFragment();
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosShowRecoveryKeySFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                    // go to Bank
                 }
             }
         });

@@ -1966,6 +1966,7 @@
     <string name="kuknos_recieve_walletID">Your wallet Address is:\n DERFDSJKLI...</string>
     <string name="kuknos_recieve_copyBtn">Copy Wallet Address</string>
     <string name="kuknos_recieve_copyToast">Wallet Address copied in clipboard.</string>
+    <string name="kuknos_send_title">Send Token</string>
     <string name="kuknos_send_walletAddress">Wallet Address* :</string>
     <string name="kuknos_send_text">Memo ID or text</string>
     <string name="kuknos_send_amount">Amount* :</string>
@@ -1994,6 +1995,7 @@
     <string name="kuknos_changePIN_newP">New PIN* :</string>
     <string name="kuknos_changePIN_rnewP">Confirm PIN* :</string>
     <string name="kuknos_changePIN_submit">Submit</string>
+    <string name="kuknos_changePIN_load">changing...</string>
     <string name="kuknos_changePIN_emptyCP">Current PIN must NOT be empty.</string>
     <string name="kuknos_changePIN_emptyNP">New PIN must NOT be empty.</string>
     <string name="kuknos_changePIN_emptyRNP">Re-enter new PIN to verify it.</string>
@@ -2005,10 +2007,11 @@
     <string name="kuknos_changePIN_failTitle">Fail</string>
     <string name="kuknos_changePIN_successM">PIN code successfully changed.</string>
     <string name="kuknos_changePIN_failM">The connection to server is lost. Please try again in a few moments.</string>
-    <string name="kuknos_viewRecoveryEP_title">Enter PIN Code</string>
+    <string name="kuknos_viewRecoveryEP_title">Show Recovery Keys</string>
     <string name="kuknos_viewRecoveryEP_message">Please enter your PIN to view your recovery phrase.</string>
     <string name="kuknos_viewRecoveryEP_pin">PIN</string>
     <string name="kuknos_viewRecoveryEP_btn">View</string>
+    <string name="kuknos_viewRecoveryEP_load">Loading...</string>
     <string name="kuknos_viewRecoveryEP_emptyPIN">Current PIN must NOT be empty.</string>
     <string name="kuknos_viewRecoveryEP_wrongPIN">Current PIN is a 4-digit number.</string>
     <string name="kuknos_viewRecoveryEP_wrongPINE">PIN code is wrong. Please try again.</string>
@@ -2018,5 +2021,25 @@
         To view your wallet, you will have to go through the restoration process again.</string>
     <string name="kuknos_logout_pin">PIN</string>
     <string name="kuknos_logout_btn">Logout</string>
+    <string name="kuknos_logout_load">Loging out...</string>
+    <string name="kuknos_buyP_title">Buy Peyman</string>
+    <string name="kuknos_buyP_message">Kuknos is a multi-token platform that provides issues of any assets.
+        In Kuknos platform we have an assets called Paymon (PMN) which is the native assets for Kuknos.</string>
+    <string name="kuknos_buyP_amount">Number of Peymen (PMN)* :</string>
+    <string name="kuknos_buyP_btn">Buy</string>
+    <string name="kuknos_buyP_btn_server">Checking...</string>
+    <string name="kuknos_buyP_btn_server2">Finilizing...</string>
+    <string name="kuknos_buyP_desc">PS:\n
+        - Rest of the assets in kuknos is valuated by this Paymon\n
+        - Since Paymon has been backed by gold (one unit of PMN is equal to 30 mg 24-karat gold)\n
+        - will be used as transactions fee\n
+        - Consider as a gauge for assessing minimum balances\n</string>
+    <string name="kuknos_buyP_sumTitle">Sum: </string>
+    <string name="kuknos_buyP_sumCurrency">IRR</string>
+    <string name="kuknos_buyP_emptyAmount">Number of PMN can NOT be empty.</string>
+    <string name="kuknos_buyP_zeroAmount">Number of PMN can NOT be zero.</string>
+    <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
+    <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
+    <string name="kuknos_buyP_currency">IRR</string>
 
 </resources>

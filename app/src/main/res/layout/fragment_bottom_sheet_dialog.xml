@@ -28,15 +28,14 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/title"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
             android:layout_marginStart="@dimen/dp10"
-            android:layout_marginLeft="@dimen/dp10"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/dp10"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
 
         <android.support.v7.widget.RecyclerView

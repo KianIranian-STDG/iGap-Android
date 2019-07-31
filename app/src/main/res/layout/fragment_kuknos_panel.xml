@@ -31,15 +31,17 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosPToolbar">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="50dp">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:paddingBottom="@dimen/dp20">
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/fragKuknosPWalletSpinner"
@@ -61,7 +63,7 @@
                     android:layout_marginTop="20dp"
                     android:text="@string/kuknos_panelStr_balance"
                     android:gravity="center|start"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/dp16"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosPWalletSpinner"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +151,7 @@
                     android:layout_marginLeft="@dimen/dp8"
                     android:minHeight="48dp"
                     android:text="@string/kuknos_panelStr_recieve"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/dp16"
                     android:onClick="@{()->viewmodel.receiveW()}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPSend"
@@ -166,7 +168,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:text="@string/kuknos_panelStr_send"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/dp16"
                     android:onClick="@{()->viewmodel.sendW()}"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPHistory"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosPRecieve"
@@ -183,7 +185,7 @@
                     android:layout_marginEnd="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:text="@string/kuknos_panelStr_history"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:onClick="@{()->viewmodel.historyW()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosPSend"
@@ -197,7 +199,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="25dp"
                     android:layout_marginStart="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginEnd="5dp"
@@ -226,7 +228,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="15dp"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/dp16"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:maxLines="1"
@@ -273,7 +275,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="15dp"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/dp16"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:maxLines="1"
@@ -297,7 +299,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/kuknos_bottom_btn_style"
-                    android:onClick="@{()->viewmodel.goTOBuyPMN()}"
+                    android:onClick="@{()->viewmodel.goToTrading()}"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPSetting"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosPBuyPMN"
@@ -320,7 +322,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="15dp"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/dp16"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:maxLines="1"
@@ -344,13 +346,14 @@
                     android:layout_marginEnd="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:background="@drawable/kuknos_bottom_btn_style"
-                    android:onClick="@{()->viewmodel.goTOBuyPMN()}"
+                    android:onClick="@{()->viewmodel.goToKYC()}"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPSetting"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosPTrading"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintWidth_percent="0.2"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    android:visibility="gone">
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"

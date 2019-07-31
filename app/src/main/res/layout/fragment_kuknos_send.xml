@@ -32,26 +32,42 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosSToolbar">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="50dp">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:paddingBottom="@dimen/dp20">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/kuknos_send_title"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/dp18"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7" />
 
                 <android.support.design.widget.TextInputLayout
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSWalletAddressHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="20dp"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosSQRCode"
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosSTextHolder"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSTitle"
                     app:layout_constraintHorizontal_chainStyle="packed">
                     <android.support.v7.widget.AppCompatEditText
                         style="?textTitleColorSettingTheme"
@@ -62,7 +78,7 @@
                         android:ems="10"
                         android:hint="@string/kuknos_send_walletAddress"
                         android:text="@={viewmodel.walletID}"
-                        android:textSize="20dp"
+                        android:textSize="18dp"
                         android:gravity="start|center"
                         android:scrollbars="vertical"
                         android:scrollHorizontally="false"
@@ -79,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/scan_qr_code_icon"
                     android:gravity="center"
-                    android:textSize="@dimen/dp36"
+                    android:textSize="30dp"
                     android:onClick="@{()->viewmodel.QrcodeScan()}"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosSWalletAddressHolder"
@@ -110,7 +126,7 @@
                         android:enabled="false"
                         android:hint="@string/kuknos_send_text"
                         android:text="@={viewmodel.text}"
-                        android:textSize="20dp"
+                        android:textSize="@dimen/dp18"
                         android:gravity="start|center"
                         android:inputType="text"
                         android:imeOptions="actionNext" />
@@ -140,7 +156,7 @@
                         android:enabled="false"
                         android:hint="@string/kuknos_send_amount"
                         android:text="@={viewmodel.amount}"
-                        android:textSize="20dp"
+                        android:textSize="@dimen/dp18"
                         android:gravity="start|center"
                         android:inputType="numberDecimal"
                         android:digits="0123456789."
@@ -152,7 +168,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@={viewmodel.currency}"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/dp16"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosSAmountHolder"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSAmountHolder"
@@ -168,7 +184,7 @@
                     android:layout_marginTop="30dp"
                     android:minHeight="58dp"
                     android:text="@string/kuknos_send_sendBtn"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/dp16"
                     android:onClick="@{()->viewmodel.sendCredit()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -49,7 +49,8 @@
                 android:minHeight="38dp"
                 android:layout_weight="3"
                 android:text="@string/kuknos_wHistory_date"
-                android:textSize="16dp"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/buttonTextColor"/>
@@ -61,7 +62,8 @@
                 android:minHeight="38dp"
                 android:layout_weight="2"
                 android:text="@string/kuknos_wHistory_amount"
-                android:textSize="16dp"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/buttonTextColor"/>
@@ -73,7 +75,8 @@
                 android:minHeight="38dp"
                 android:layout_weight="4"
                 android:text="@string/kuknos_wHistory_desc"
-                android:textSize="16dp"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/buttonTextColor"/>

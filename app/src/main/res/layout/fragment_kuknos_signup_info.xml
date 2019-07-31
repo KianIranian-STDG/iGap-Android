@@ -32,15 +32,17 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIToolbar">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="50dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:paddingBottom="@dimen/dp20">
 
             <android.support.v7.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
@@ -50,7 +52,7 @@
                 android:layout_marginTop="50dp"
                 android:text="@string/kuknos_SignupInfo_title"
                 android:textStyle="bold"
-                android:textSize="22dp"
+                android:textSize="@dimen/dp18"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -63,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/kuknos_SignupInfo_desc"
-                android:textSize="18dp"
+                android:textSize="@dimen/dp16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosSITitle"
@@ -91,9 +93,10 @@
                     android:ems="10"
                     android:hint="@string/kuknos_SignupInfo_username"
                     android:text="@={viewmodel.username}"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/dp18"
                     android:gravity="start|center"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    android:imeOptions="actionDone"/>
             </android.support.design.widget.TextInputLayout>
 
             <ProgressBar
@@ -125,7 +128,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/kuknos_SignupInfo_checkUsername"
-                android:textSize="14dp"
+                android:textSize="@dimen/dp14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/fragKuknosSICheckIcon"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIUsernameHolder"
@@ -154,7 +157,7 @@
                     android:enabled="false"
                     android:hint="@string/kuknos_SignupInfo_name"
                     android:text="@={viewmodel.name}"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/dp18"
                     android:gravity="start|center"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
@@ -183,7 +186,7 @@
                     android:enabled="false"
                     android:hint="@string/kuknos_SignupInfo_family"
                     android:text="@={viewmodel.family}"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/dp18"
                     android:gravity="start|center"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
@@ -211,9 +214,10 @@
                     android:ems="10"
                     android:hint="@string/kuknos_SignupInfo_email"
                     android:text="@={viewmodel.email}"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/dp18"
                     android:gravity="start|center"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionDone" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.button.MaterialButton
@@ -224,7 +228,7 @@
                 android:layout_marginTop="20dp"
                 android:minHeight="58dp"
                 android:text="@string/kuknos_SignupInfo_submitBtn"
-                android:textSize="18dp"
+                android:textSize="@dimen/dp16"
                 android:onClick="@{()->viewmodel.onSubmitBtn()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -242,7 +246,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/fragKuknosSISubmit"
                 app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSISubmit"
                 app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintHeight_percent="0.08"/>
+                app:layout_constraintHeight_percent="0.06"/>
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

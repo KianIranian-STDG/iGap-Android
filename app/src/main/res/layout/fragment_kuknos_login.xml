@@ -30,14 +30,16 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdToolbar">
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdToolbar"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp20">
 
                 <android.support.v7.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
@@ -46,7 +48,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:text="@string/kuknos_login_messge_str"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:justificationMode="inter_word"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -73,7 +76,7 @@
                         android:enabled="false"
                         android:hint="@string/kuknos_login_tel_str"
                         android:text="@={viewmodel.userNum}"
-                        android:textSize="22dp"
+                        android:textSize="@dimen/dp18"
                         android:gravity="center"
                         android:inputType="numberDecimal" />
                 </android.support.design.widget.TextInputLayout>
@@ -83,7 +86,7 @@
                     android:id="@+id/fragKuknosIdUserIDHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="@dimen/dp10"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -101,10 +104,11 @@
                         android:ems="10"
                         android:hint="@string/kuknos_login_id_str"
                         android:text="@={viewmodel.ID}"
-                        android:textSize="22dp"
+                        android:textSize="@dimen/dp18"
                         android:gravity="center"
                         android:digits="0123456789"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionDone"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.button.MaterialButton
@@ -115,19 +119,19 @@
                     android:layout_marginTop="30dp"
                     android:minHeight="58dp"
                     android:text="@string/kuknos_login_submit_str"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/dp16"
                     android:onClick="@{()->viewmodel.onSubmit()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdUserIDHolder"
-                    app:layout_constraintWidth_percent="0.5"/>
+                    app:layout_constraintWidth_percent="0.6"/>
 
                 <ProgressBar
                     android:id="@+id/fragKuknosLProgressV"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:elevation="2dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit"
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"

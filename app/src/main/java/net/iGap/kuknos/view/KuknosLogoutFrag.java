@@ -119,10 +119,12 @@ public class KuknosLogoutFrag extends BaseFragment {
                 if (aBoolean == true) {
                     binding.fragKuknosLogoutProgressV.setVisibility(View.VISIBLE);
                     binding.fragKuknosLogoutPass.setEnabled(false);
+                    binding.fragKuknosLogoutSubmit.setText(getResources().getText(R.string.kuknos_logout_load));
                 }
                 else {
                     binding.fragKuknosLogoutProgressV.setVisibility(View.GONE);
                     binding.fragKuknosLogoutPass.setEnabled(true);
+                    binding.fragKuknosLogoutSubmit.setText(getResources().getText(R.string.kuknos_logout_btn));
                 }
             }
         });

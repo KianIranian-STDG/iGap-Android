@@ -238,6 +238,28 @@ public class KuknosPanelFrag extends BaseFragment {
                     case 3:
                         initialSettingBS();
                         return;
+                    case 4:
+                        fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosBuyPeymanFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                        break;
+                    case 5:
+                        /*fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosBuyPeymanFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }*/
+                        Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
+                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                        snackbar.show();
+                        break;
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 kuknosPanelVM.getOpenPage().setValue(-1);

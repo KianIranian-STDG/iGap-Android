@@ -108,11 +108,11 @@ public class KuknosPanelVM extends ViewModel {
     }
 
     public void goToTrading() {
-
+        openPage.setValue(5);
     }
 
     public void goTOBuyPMN() {
-
+        openPage.setValue(4);
     }
 
     public void goToKYC() {

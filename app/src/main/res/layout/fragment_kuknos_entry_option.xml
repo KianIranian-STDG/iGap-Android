@@ -42,7 +42,8 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dp20">
 
             <android.support.v7.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
@@ -51,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:text="@string/kuknos_Entry_Message"
-                android:textSize="20dp"
+                android:textSize="@dimen/dp18"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -65,7 +66,7 @@
                 android:minHeight="100dp"
                 android:onClick="@{()->viewmodel.onNewTokenClick()}"
                 android:text="@string/kuknos_Entry_NT_str"
-                android:textSize="18dp"
+                android:textSize="@dimen/dp16"
                 android:layout_marginTop="40dp"
                 app:layout_constraintBottom_toTopOf="@+id/fragKuknosERestoreToken"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +85,7 @@
                 android:minHeight="100dp"
                 android:onClick="@{()->viewmodel.onRestoreTokenClick()}"
                 android:text="@string/kuknos_Entry_RT_str"
-                android:textSize="18dp"
+                android:textSize="@dimen/dp16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

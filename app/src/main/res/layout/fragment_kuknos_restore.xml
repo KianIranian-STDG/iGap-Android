@@ -34,15 +34,17 @@
     <ScrollView
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragKuknosRToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/fragKuknosRToolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="50dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:paddingBottom="@dimen/dp20">
 
             <android.support.v7.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
@@ -52,7 +54,7 @@
                 android:layout_marginTop="50dp"
                 android:text="@string/kuknos_Restore_Title"
                 android:textStyle="bold"
-                android:textSize="22dp"
+                android:textSize="@dimen/dp18"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -65,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/kuknos_Restore_Message"
-                android:textSize="18dp"
+                android:textSize="@dimen/dp16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosRMessage"
@@ -84,7 +86,7 @@
                 android:ems="10"
                 android:hint="@string/kuknos_Restore_Hint"
                 android:text="@={viewmodel.keys}"
-                android:textSize="18dp"
+                android:textSize="@dimen/dp18"
                 android:padding="8dp"
                 android:gravity="top"
                 android:inputType="textMultiLine"
@@ -103,7 +105,7 @@
                 android:layout_marginTop="30dp"
                 android:minHeight="58dp"
                 android:text="@string/kuknos_Restore_Btn"
-                android:textSize="18dp"
+                android:textSize="@dimen/dp16"
                 android:onClick="@{()->viewmodel.onNext()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

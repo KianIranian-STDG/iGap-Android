@@ -127,12 +127,14 @@ public class KuknosChangePassFrag extends BaseFragment {
                     binding.fragKuknosCPNewP.setEnabled(false);
                     binding.fragKuknosCPENewP.setEnabled(false);
                     binding.fragKuknosCPOldP.setEnabled(false);
+                    binding.fragKuknosCPSubmit.setText(getResources().getText(R.string.kuknos_changePIN_load));
                 }
                 else {
                     binding.fragKuknosCPProgressV.setVisibility(View.GONE);
                     binding.fragKuknosCPNewP.setEnabled(true);
                     binding.fragKuknosCPENewP.setEnabled(true);
                     binding.fragKuknosCPOldP.setEnabled(true);
+                    binding.fragKuknosCPSubmit.setText(getResources().getText(R.string.kuknos_changePIN_submit));
                 }
             }
         });

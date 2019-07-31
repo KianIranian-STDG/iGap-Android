@@ -42,9 +42,9 @@ public class KuknosChangePassVM extends ViewModel {
                 progressState.setValue(false);
 
                 //success
-                //error.setValue(new ErrorM(false, "change success", "3", R.string.kuknos_changePIN_successM));;
+                error.setValue(new ErrorM(false, "change success", "3", R.string.kuknos_changePIN_successM));;
                 //error
-                error.setValue(new ErrorM(true, "failed success", "3", R.string.kuknos_changePIN_failM));
+                //error.setValue(new ErrorM(true, "failed success", "3", R.string.kuknos_changePIN_failM));
             }
         }, 1000);
     }

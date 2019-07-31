@@ -57,7 +57,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
         if (position == (wallets.size()-1) && position != 0) {
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
             walletName.setTypeface(null, Typeface.BOLD);
-            walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 
             ConstraintLayout constraintLayout = layout.findViewById(R.id.fragKuknosPconstraint);
             LinearLayout linearLayout = layout.findViewById(R.id.fragKuknosPLinear);
@@ -71,7 +71,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
             constraintSet.applyTo(constraintLayout);
         } else {
             walletName.setTypeface(null, Typeface.NORMAL);
-            walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         }
 
         return layout;
