@@ -42,6 +42,7 @@ import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.igasht.provinceselect.IGashtProvinceFragment;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
@@ -168,12 +169,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case TRAFFIC_BILL_MENU:/** tested **/
-                try {
+                new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load(true);
+                /*try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
                 } catch (JSONException e) {
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
-                }
+                }*/
                 break;
             case PHONE_BILL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();

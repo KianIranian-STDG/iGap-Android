@@ -211,7 +211,7 @@ dependencies {
     release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta8'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

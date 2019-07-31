@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="net.iGap.igasht.locationlist.LocationDetail" />
+
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/dp8">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/itemImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="332:83"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:imageUrl="@{viewModel.locationDetail.getTopText}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/subTitle"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:padding="@dimen/dp4"
+            android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemImage" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/subDetail"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
+            app:layout_constraintBottom_toTopOf="@id/addToFavoriteButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subTitle" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/addToFavoriteButton"
+            style="@style/BaseIGapButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dp8"
+            android:paddingEnd="@dimen/dp8"
+            android:text="@string/igasht_add_to_favorite_title"
+            app:backgroundTint="@color/md_blue_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

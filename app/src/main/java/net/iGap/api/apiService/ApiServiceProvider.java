@@ -1,6 +1,7 @@
 package net.iGap.api.apiService;
 
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.IgashtApi;
 import net.iGap.api.KuknosApi;
 import net.iGap.api.FavoriteChannelApi;
 
@@ -31,5 +32,4 @@ public class ApiServiceProvider {
         }
         return kuknosApi;
     }
-
 }
