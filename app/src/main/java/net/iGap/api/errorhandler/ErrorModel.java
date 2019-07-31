@@ -1,4 +1,4 @@
-package net.iGap.igasht;
+package net.iGap.api.errorhandler;
 
 import com.google.gson.annotations.SerializedName;
 
