@@ -3,6 +3,7 @@ package net.iGap.helper;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -68,7 +69,7 @@ public class CardToCardHelper {
         }
     }
 
-    public static void NewCallCardToCard(Activity activity, long to_UserId, String amount, String cardNumber) {
+    public static void NewCallCardToCard(Activity activity, long to_UserId, long amount, String cardNumber) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -85,8 +86,8 @@ public class CardToCardHelper {
                         if (!activity.isFinishing()) {
                             Intent intent = new Intent(G.context, CardToCardInitiator.class);
                             intent.putExtra("Token", token);
-                            intent.putExtra("destinationCard", amount);
-                            intent.putExtra("amount", cardNumber);
+                            intent.putExtra("destinationCard", cardNumber);
+                            intent.putExtra("amount", amount);
                             activity.startActivityForResult(intent , requestCodeCardToCard);
                             dialog.dismiss();
                         }

@@ -1884,8 +1884,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
                 JSONObject value = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                String cardNumber = value.getString("cardNumber");
-                String amount = value.getString("amount");
+                String cardNumber = value.getString("cardNumber".replace('-',' '));
+                long amount = value.getLong("amount".replace(',',' '));
                 long userId = value.getLong("userId");
                 CardToCardHelper.NewCallCardToCard(G.currentActivity, userId, amount, cardNumber);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {

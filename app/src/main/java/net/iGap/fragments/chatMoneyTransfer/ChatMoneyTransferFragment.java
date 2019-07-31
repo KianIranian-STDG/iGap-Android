@@ -27,7 +27,6 @@ import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentChat;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 
@@ -122,6 +121,7 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         walletTransferIv.setText("0");
         cardToCardIv.setText("4");
 
+
         walletTransferIv.setTypeface(G.typeface_FonticonNew);
         cardToCardIv.setTypeface(G.typeface_FonticonNew);
 
@@ -157,13 +157,12 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
                         cardToCardCallBack.onClick(cardNumberEtCard.getText().toString(), amountEtCard.getText().toString(), descEtCard.getText().toString());
                         dismiss();
                     } else {
-                        // TODO: 7/31/19  
+                        Toast.makeText(getContext(), "Card Number Is Empty", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // TODO: 7/31/19  
+                    Toast.makeText(getContext(), "Amount Is Empty", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                // TODO: 7/31/19  
             }
 
         });
@@ -203,13 +202,14 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (isSettingText) return;
+
                 isSettingText = true;
                 String s1 = null;
-                Log.d(TAG, "afterTextChanged: " + s);
+
                 try {
                     s1 = String.format(Locale.US, "%,d", Long.parseLong(mPrice[0]));
                 } catch (NumberFormatException e) {
-
+                    Log.i(TAG, "afterTextChanged: " + e.getMessage());
                 }
 
                 amountEtCard.setText(s1);

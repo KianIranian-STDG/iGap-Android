@@ -303,7 +303,7 @@
                     android:layout_marginTop="4dp"
                     android:background="@drawable/background_edittext_money_action"
                     android:hint="@string/amount_in_rial"
-                    android:inputType="numberDecimal"
+                    android:inputType="number"
                     android:lines="1"
                     android:maxLength="10"
                     android:maxLines="1"
