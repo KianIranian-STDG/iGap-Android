@@ -33,6 +33,7 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.audio.AudioWave;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FontIconTextView;
@@ -369,6 +370,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             txt_Timer.setTextColor(getColor(R.color.gray));
             setTextSize(txt_Timer, R.dimen.verySmallTextSize);
             setTypeFace(txt_Timer);
+            Utils.darkModeHandler(txt_Timer);
 
 
             rootView = new ConstraintLayout(getContext());

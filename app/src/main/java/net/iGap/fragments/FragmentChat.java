@@ -228,6 +228,7 @@ import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
@@ -4575,16 +4576,15 @@ public class FragmentChat extends BaseFragment
                 messageEdit = "";
                 if (message.messageText != null && !message.messageText.isEmpty()) {
                     edtChat.setText(message.messageText);
-                    edtChat.setSelection(0, edtChat.getText().length());
                     // put message object to edtChat's tag to obtain it later and
                     // found is user trying to edit a message
                     messageEdit = message.messageText;
                 }
                 edtChat.setTag(message);
                 isEditMessage = true;
-                //imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                 sendButtonVisibility(true);
                 replay(message , true);
+                G.handler.post(() -> editTextRequestFocus(edtChat));
             } else if (items.get(position).equals(getString(R.string.save_to_gallery))) {
                 String filename;
                 String filepath;
@@ -4760,6 +4760,12 @@ public class FragmentChat extends BaseFragment
             }
         });
         bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
+    }
+
+    private void editTextRequestFocus(EditText editText) {
+        editText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
     private void deleteMassage(Realm realm, final StructMessageInfo message, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
@@ -9277,7 +9283,7 @@ public class FragmentChat extends BaseFragment
                     initHash = true;
                     initHashView();
                 }
-                edtSearchMessage.requestFocus();
+                G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
             } else if (items.get(position).equals(getString(R.string.clear_history))) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
