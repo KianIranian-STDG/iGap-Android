@@ -2273,6 +2273,8 @@ public class FragmentChat extends BaseFragment
                 goneSearchBox(edtSearchMessage);
             }else if (isEditMessage){
                 removeEditedMessage();
+            }else if(ll_navigateHash != null && btnHashLayoutClose != null && ll_navigateHash.isShown()){
+                btnHashLayoutClose.performClick();
             }else {
                 stopSuperPress = false;
             }
