@@ -9283,7 +9283,7 @@ public class FragmentChat extends BaseFragment
                     initHash = true;
                     initHashView();
                 }
-                edtSearchMessage.requestFocus();
+                G.handler.post(() -> editTextRequestFocus(edtChat));
             } else if (items.get(position).equals(getString(R.string.clear_history))) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
