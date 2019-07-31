@@ -4762,7 +4762,7 @@ public class FragmentChat extends BaseFragment
         bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
     }
 
-    private void editTextRequestFocus(EmojiEditTextE editText) {
+    private void editTextRequestFocus(EditText editText) {
         editText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
@@ -9283,7 +9283,7 @@ public class FragmentChat extends BaseFragment
                     initHash = true;
                     initHashView();
                 }
-                G.handler.post(() -> editTextRequestFocus(edtChat));
+                G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
             } else if (items.get(position).equals(getString(R.string.clear_history))) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
