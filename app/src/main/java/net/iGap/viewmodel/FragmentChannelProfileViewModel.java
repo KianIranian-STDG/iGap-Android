@@ -239,6 +239,10 @@ public class FragmentChannelProfileViewModel extends ViewModel
                                 if (((RealmRoom) element).isValid()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
                                     Log.wtf("group profile view model", "value: " + countText);
+
+                                    channelName.postValue(mRoom.getTitle());
+                                    channelDescription.postValue(mRoom.getChannelRoom().getDescription());
+
                                     if (HelperCalander.isPersianUnicode) {
                                         countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
                                     }
