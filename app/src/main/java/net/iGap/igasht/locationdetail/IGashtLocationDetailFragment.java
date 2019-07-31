@@ -107,7 +107,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
 
         ((IGashtLocationDetailViewModel) viewModel).getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
             if (getActivity() != null && orderToken != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(PaymentFragment.getInstance(orderToken)).setReplace(false).load(true);
+                new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(PaymentFragment.getInstance(orderToken, getString(R.string.igasht_title))).setReplace(false).load(true);
             }
         });
 
