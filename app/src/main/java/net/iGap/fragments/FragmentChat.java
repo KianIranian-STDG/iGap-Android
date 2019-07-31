@@ -112,7 +112,7 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.MessagesAdapter;
-import net.iGap.adapter.items.AdapterBottomSheetForward;
+import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
@@ -239,7 +239,6 @@ import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MessageLoader;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.MyLinearLayoutManager;
 import net.iGap.module.MyType;
 import net.iGap.module.ResendMessage;
@@ -510,7 +509,6 @@ public class FragmentChat extends BaseFragment
     private boolean showVoteChannel = true;
     private RealmResults<RealmRoom> results = null;
     private RealmResults<RealmContacts> resultsContact = null;
-    private List<StructBottomSheetForward> mListBottomSheetForward = new ArrayList<>();
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
     private TextView txtSpamUser;
     private TextView txtSpamClose;
@@ -6440,9 +6438,9 @@ public class FragmentChat extends BaseFragment
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
 
-        fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AdapterBottomSheetForward>() {
+        fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ItemBottomSheetForward>() {
             @Override
-            public boolean filter(AdapterBottomSheetForward item, CharSequence constraint) {
+            public boolean filter(ItemBottomSheetForward item, CharSequence constraint) {
                 return item.structBottomSheetForward.getDisplayName().toLowerCase().contains(String.valueOf(constraint));
             }
         });
@@ -6487,41 +6485,34 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        onForwardBottomSheet = new OnForwardBottomSheet() {
-            @Override
-            public void path(StructBottomSheetForward structBottomSheetForward) {
+        onForwardBottomSheet = structBottomSheetForward -> {
 
-                if (structBottomSheetForward.isNotExistRoom()) {
-                    if (structBottomSheetForward.isChecked()) {
-                        mListForwardNotExict.add(structBottomSheetForward);
-                    } else {
-                        mListForwardNotExict.remove(structBottomSheetForward);
-                    }
+            if (structBottomSheetForward.isNotExistRoom()) {
+                if (structBottomSheetForward.isChecked()) {
+                    mListForwardNotExict.add(structBottomSheetForward);
                 } else {
-                    if (structBottomSheetForward.isChecked()) {
-                        multiForwardList.add(structBottomSheetForward.getId());
-                    } else {
-                        multiForwardList.remove(structBottomSheetForward.getId());
-                    }
+                    mListForwardNotExict.remove(structBottomSheetForward);
                 }
+            } else {
+                if (structBottomSheetForward.isChecked()) {
+                    multiForwardList.add(structBottomSheetForward.getId());
+                } else {
+                    multiForwardList.remove(structBottomSheetForward.getId());
+                }
+            }
 
-                if (mListForwardNotExict.size() + multiForwardList.size() > 0) {
-                    textSend.setVisibility(View.VISIBLE);
-                } else {
-                    textSend.setVisibility(View.INVISIBLE);
-                }
+            if (mListForwardNotExict.size() + multiForwardList.size() > 0) {
+                textSend.setVisibility(View.VISIBLE);
+            } else {
+                textSend.setVisibility(View.INVISIBLE);
             }
         };
 
         bottomSheetDialogForward.show();
 
-
-        bottomSheetDialogForward.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (canClearForwardList) {
-                    mForwardMessages = null;
-                }
+        bottomSheetDialogForward.setOnDismissListener(dialog -> {
+            if (canClearForwardList) {
+                mForwardMessages = null;
             }
         });
     }
@@ -7383,7 +7374,6 @@ public class FragmentChat extends BaseFragment
 
     private void itemAdapterBottomSheetForward() {
 
-        mListBottomSheetForward = new ArrayList<>();
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
         results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).
@@ -7393,7 +7383,7 @@ public class FragmentChat extends BaseFragment
 
         List<Long> te = new ArrayList<>();
         te.add(chatPeerId);
-
+        long identifier = 100L;
         for (RealmRoom r : results) {
             StructBottomSheetForward item = new StructBottomSheetForward();
             item.setId(r.getId());
@@ -7405,7 +7395,12 @@ public class FragmentChat extends BaseFragment
             item.setType(r.getType());
             item.setContactList(false);
             item.setNotExistRoom(false);
-            mListBottomSheetForward.add(item);
+            identifier = identifier + 1;
+            if (r.getChatRoom() != null && r.getChatRoom().getPeerId() > 0 && r.getChatRoom().getPeerId() == userId) {
+                fastItemAdapterForward.add(0, new ItemBottomSheetForward(item, avatarHandler).withIdentifier(identifier));
+            } else {
+                fastItemAdapterForward.add(new ItemBottomSheetForward(item, avatarHandler).withIdentifier(identifier));
+            }
         }
 
         for (RealmContacts r : resultsContact) {
@@ -7415,12 +7410,9 @@ public class FragmentChat extends BaseFragment
                 item.setDisplayName(r.getDisplay_name());
                 item.setContactList(true);
                 item.setNotExistRoom(true);
-                mListBottomSheetForward.add(item);
+                identifier = identifier + 1;
+                fastItemAdapterForward.add(new ItemBottomSheetForward(item, avatarHandler).withIdentifier(identifier));
             }
-        }
-
-        for (int i = 0; i < mListBottomSheetForward.size(); i++) {
-            fastItemAdapterForward.add(new AdapterBottomSheetForward(mListBottomSheetForward.get(i), avatarHandler).withIdentifier(100 + i));
         }
 
         G.handler.postDelayed(new Runnable() {

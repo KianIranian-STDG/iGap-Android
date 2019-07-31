@@ -28,13 +28,13 @@ import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
 
-public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetForward, AdapterBottomSheetForward.ViewHolder> {
+public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward, ItemBottomSheetForward.ViewHolder> {
 
 
     public StructBottomSheetForward structBottomSheetForward;
     private AvatarHandler avatarHandler;
 
-    public AdapterBottomSheetForward(StructBottomSheetForward structBottomSheetForward, AvatarHandler avatarHandler) {
+    public ItemBottomSheetForward(StructBottomSheetForward structBottomSheetForward, AvatarHandler avatarHandler) {
         this.structBottomSheetForward = structBottomSheetForward;
         this.avatarHandler = avatarHandler;
     }
@@ -85,7 +85,12 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
             avatarType = AvatarHandler.AvatarType.ROOM;
         }
 
-        avatarHandler.getAvatar(new ParamWithAvatarType(imageView, idForGetAvatar).avatarSize(R.dimen.dp52).avatarType(avatarType));
+        if (G.userId == mInfo.getPeer_id()) {
+            avatarHandler.removeImageViewFromHandler(imageView);
+            imageView.setImageResource(R.drawable.ic_cloud_space_blue);
+        } else {
+            avatarHandler.getAvatar(new ParamWithAvatarType(imageView, idForGetAvatar).avatarSize(R.dimen.dp52).avatarType(avatarType));
+        }
     }
 
     private void setAvatarContact(final ViewHolder holder, final long userId) {
