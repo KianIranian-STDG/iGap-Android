@@ -382,7 +382,6 @@ public class HelperToolbar {
 
     }
 
-
     public void resizeSearchBoxWithAnimation(final boolean bigView , final boolean isOpenKeyboard ) {
 
 
@@ -858,7 +857,7 @@ public class HelperToolbar {
 
             mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
+        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آي كب")) {
 
             Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
 
