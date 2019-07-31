@@ -3247,7 +3247,7 @@ public class FragmentChat extends BaseFragment
 
                     chatMoneyTransferFragment.setCardToCardCallBack((cardNum, amountNum, descriptionTv) -> {
 
-                        sendNewMessageCardToCard(cardNum, amountNum, descriptionTv);
+                        sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
 
                         ll_attach_text.setVisibility(View.GONE);
                         edtChat.setFilters(new InputFilter[]{});
@@ -3335,7 +3335,7 @@ public class FragmentChat extends BaseFragment
             JsonArray jsonArray2 = new JsonArray();
             JsonObject jsonObject=new JsonObject();
             jsonObject.addProperty("cardNumber",cardNumber);
-            jsonObject.addProperty("amount",amount);
+            jsonObject.addProperty("amount",amount.replace(",", ""));
             jsonObject.addProperty("userId",G.userId);
             jsonArray.add(jsonArray2);
             JsonObject json = new JsonObject();

@@ -1887,7 +1887,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 String cardNumber = value.getString("cardNumber");
                 String amount = value.getString("amount");
                 long userId = value.getLong("userId");
-                CardToCardHelper.CallCardToCard(G.currentActivity, userId, amount, cardNumber);
+                CardToCardHelper.NewCallCardToCard(G.currentActivity, userId, amount, cardNumber);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
                 try {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
