@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,11 +21,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 
@@ -54,12 +55,13 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
     private TextView amountTvCard;
     private TextView cardNumberTvCard;
     private EditText amountEtCard;
+    private EditText descEtCard;
     private MaskedEditText cardNumberEtCard;
+    private CardToCardCallBack cardToCardCallBack;
 
     private long userId;
     private MoneyTransferAction moneyTransferAction;
     private String userName;
-
 
     public static ChatMoneyTransferFragment getInstance(long userId, Drawable userPicture, String userName) {
         ChatMoneyTransferFragment transferAction = new ChatMoneyTransferFragment();
@@ -71,6 +73,10 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
 
     public void setMoneyTransferAction(MoneyTransferAction moneyTransferAction) {
         this.moneyTransferAction = moneyTransferAction;
+    }
+
+    public void setCardToCardCallBack(CardToCardCallBack cardTocartCallBack) {
+        this.cardToCardCallBack = cardTocartCallBack;
     }
 
     @Nullable
@@ -112,7 +118,7 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         cardNumberTvCard = view.findViewById(R.id.et_chat_card_cardNumberTv);
         amountEtCard = view.findViewById(R.id.et_chat_card_cardamount);
         cardNumberEtCard = view.findViewById(R.id.et_chat_card_cardNumber);
-
+        descEtCard = view.findViewById(R.id.et_chat_card_desc);
         walletTransferIv.setText("0");
         cardToCardIv.setText("4");
 
@@ -142,6 +148,25 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         fragmentTransaction.add(layoutContainer.getId(), sendMoneyFragment);
         fragmentTransaction.commit();
 
+
+        confirmBtnCard.setOnClickListener(v -> {
+
+            if (cardNumberEtCard.getText().toString().trim().length() > 0) {
+                if (amountEtCard.getText().toString().trim().length() > 0) {
+                    if (descEtCard.getText().toString().trim().length() > 0) {
+                        cardToCardCallBack.onClick(cardNumberEtCard.getText().toString(), amountEtCard.getText().toString(), descEtCard.getText().toString());
+                        dismiss();
+                    } else {
+                        // TODO: 7/31/19  
+                    }
+                } else {
+                    // TODO: 7/31/19  
+                }
+            } else {
+                // TODO: 7/31/19  
+            }
+
+        });
 
     }
 
@@ -195,39 +220,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
             }
         });
 
-
-//        cardNumberEtCard.addTextChangedListener(new TextWatcher() {
-//            private static final char space = '-';
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                if (s.length() > 0 && (s.length() % 5) == 0) {
-//                    final char c = s.charAt(s.length() - 1);
-//                    if (space == c) {
-//                        s.delete(s.length() - 1, s.length());
-//                    }
-//                }
-//                // Insert char where needed.
-//                if (s.length() > 0 && (s.length() % 5) == 0) {
-//                    char c = s.charAt(s.length() - 1);
-//                    // Only if its a digit where there should be a space we insert a space
-//                    if (Character.isDigit(c) && TextUtils.split(s.toString(), String.valueOf(space)).length <= 3) {
-//                        s.insert(s.length() - 1, String.valueOf(space));
-//                    }
-//                }
-//            }
-//
-//        });
     }
 
     private void transferActionInit() {
@@ -294,5 +286,9 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
 
     public interface MoneyTransferAction {
         void cardToCardClicked();
+    }
+
+    public interface CardToCardCallBack {
+        void onClick(String cardNum, String amountNum, String descriptionTv);
     }
 }

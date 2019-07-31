@@ -366,13 +366,13 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
                     android:text="@string/desc"
-                    app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardNumber2"
+                    app:layout_constraintBottom_toTopOf="@+id/et_chat_card_desc"
                     app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardNumber"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardNumber" />
 
                 <EditText
-                    android:id="@+id/et_chat_card_cardNumber2"
+                    android:id="@+id/et_chat_card_desc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"

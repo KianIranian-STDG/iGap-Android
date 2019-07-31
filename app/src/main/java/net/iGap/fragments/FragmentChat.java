@@ -239,7 +239,6 @@ import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MessageLoader;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.MyLinearLayoutManager;
 import net.iGap.module.MyType;
 import net.iGap.module.ResendMessage;
@@ -413,6 +412,13 @@ public class FragmentChat extends BaseFragment
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private EmojiPopup emojiPopup;
     private boolean isPaused;
+
+    private String cardNumber = "";
+    private String description = "";
+    private String amount = "";
+
+
+
 
     /**
      * *************************** common method ***************************
@@ -2985,7 +2991,6 @@ public class FragmentChat extends BaseFragment
                         return;
                     }
                 }
-
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     if (isCardToCardMessage) {
                         sendNewMessageForRequestCardToCard();
@@ -3237,7 +3242,20 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 chatPeerId = realmRoom.getChatRoom().getPeerId();
                 if (imvUserPicture != null && txtName != null) {
-                    transferAction = ChatMoneyTransferFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+                    ChatMoneyTransferFragment chatMoneyTransferFragment= ChatMoneyTransferFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+                    transferAction = chatMoneyTransferFragment;
+
+                    chatMoneyTransferFragment.setCardToCardCallBack((cardNum, amountNum, descriptionTv) -> {
+
+                        sendNewMessageCardToCard(cardNum, amountNum, descriptionTv);
+
+                        ll_attach_text.setVisibility(View.GONE);
+                        edtChat.setFilters(new InputFilter[]{});
+                        edtChat.setText("");
+
+                        clearReplyView();
+
+                    });
 
                     if (getFragmentManager() != null)
                         transferAction.show(getFragmentManager(), "PaymentFragment");
@@ -3265,6 +3283,7 @@ public class FragmentChat extends BaseFragment
                 if (roomMessage != null) {
                     JsonArray jsonArray = new JsonArray();
                     JsonArray jsonArray2 = new JsonArray();
+                    JsonObject jsonObject=new JsonObject();
                     jsonArray.add(jsonArray2);
                     JsonObject json = new JsonObject();
                     json.addProperty("label", "Card to Card");
@@ -3306,6 +3325,55 @@ public class FragmentChat extends BaseFragment
                     Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+
+    private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
+        final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, description, replyMessageId());
+        if (roomMessage != null) {
+            JsonArray jsonArray = new JsonArray();
+            JsonArray jsonArray2 = new JsonArray();
+            JsonObject jsonObject=new JsonObject();
+            jsonObject.addProperty("cardNumber",cardNumber);
+            jsonObject.addProperty("amount",amount);
+            jsonObject.addProperty("userId",G.userId);
+            jsonArray.add(jsonArray2);
+            JsonObject json = new JsonObject();
+            json.addProperty("label", "Card to Card");
+            json.addProperty("imageUrl", "");
+            json.addProperty("actionType", "27");
+            json.add("value", jsonObject);
+            jsonArray2.add(json);
+
+
+            getRealmChat().executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    roomMessage.setRealmAdditional(RealmAdditional.put(jsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON));
+                }
+            });
+
+            edtChat.setText("");
+            lastMessageId = roomMessage.getMessageId();
+            mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+            clearReplyView();
+            scrollToEnd();
+
+            /**
+             * send splitted message in every one second
+             */
+
+            if (!description.isEmpty()) {
+                G.handler.postDelayed(() -> {
+                    if (roomMessage.isValid() && !roomMessage.isDeleted()) {
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                    }
+                }, 1000);
+            } else {
+                new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+            }
+        } else {
+            Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
         }
     }
 

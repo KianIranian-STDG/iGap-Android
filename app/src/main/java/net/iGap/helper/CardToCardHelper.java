@@ -36,6 +36,7 @@ public class CardToCardHelper {
                         if (!activity.isFinishing()) {
                             Intent intent = new Intent(G.context, CardToCardInitiator.class);
                             intent.putExtra("Token", token);
+
                             activity.startActivityForResult(intent , requestCodeCardToCard);
                             dialog.dismiss();
                         }

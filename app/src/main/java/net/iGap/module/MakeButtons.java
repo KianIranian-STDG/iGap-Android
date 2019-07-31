@@ -233,7 +233,7 @@ public class MakeButtons {
 
         ArrayList<String> actions = new ArrayList<>();
         if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-            actions.add(entity.getLongValue().toString());
+            actions.add(entity.getValue().toString());
         } else {
             actions.add(entity.getValue().toString());
         }

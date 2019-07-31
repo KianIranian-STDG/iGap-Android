@@ -26,6 +26,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -415,11 +417,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         LinearLayout childLayout = MakeButtons.createLayout();
                         for (int j = 0; j < buttonList.get(i).length(); j++) {
                             try {
+
                                 JSONObject json = new JSONObject(buttonList.get(i).get(j).toString());
                                 ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                                 }.getType());
                                 if (btnEntery.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                                    btnEntery.setLongValue(json.getLong("value"));
+//                                    btnEntery.setLongValue(json.getLong("value"));
                                 }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
                                 childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
@@ -1880,7 +1883,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
+                JSONObject value = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                String cardNumber = value.getString("cardNumber");
+                String amount = value.getString("amount");
+                long userId = value.getLong("userId");
+                CardToCardHelper.CallCardToCard(G.currentActivity, userId, amount, cardNumber);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
                 try {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
