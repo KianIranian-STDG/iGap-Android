@@ -179,8 +179,8 @@
                     android:layout_marginTop="@dimen/dp16"
                     android:padding="8dp"
                     android:textSize="@dimen/standardTextSize"
-                    app:emojiSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.haveDescription}"
+                    app:emojiSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -549,6 +549,34 @@
                     app:layout_constraintEnd_toEndOf="@id/addMember"
                     app:layout_constraintStart_toStartOf="@id/addMember"
                     app:layout_constraintTop_toBottomOf="@id/addMember" />
+
+                <View
+                    android:id="@+id/divider3"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:visibility="@{viewModel.showLeaveGroup}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/showMemberList"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/leaveGroup"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onLeaveGroupClick()}"
+                    android:padding="@dimen/dp8"
+                    android:text="@string/Delete_and_leave_Group"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.showLeaveGroup}"
+                    app:layout_constraintEnd_toEndOf="@id/notificationTitle"
+                    app:layout_constraintStart_toStartOf="@id/notificationTitle"
+                    app:layout_constraintTop_toBottomOf="@id/divider3" />
 
                 <ProgressBar
                     android:id="@+id/loading"

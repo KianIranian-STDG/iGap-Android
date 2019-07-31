@@ -342,23 +342,27 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void groupLeft() {
-        String text;
-        int title;
-        if (viewModel.role == GroupChatRole.OWNER) {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_delete_this_group);
-            title = R.string.delete_group;
-        } else {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
-            title = R.string.left_group;
-        }
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
-                viewModel.leaveGroup();
-                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        if (getActivity() != null) {
+            int text;
+            int title;
+            if (viewModel.role == GroupChatRole.OWNER) {
+                text = R.string.do_you_want_to_delete_this_group;
+                title = R.string.delete_group;
+            } else {
+                text = R.string.do_you_want_to_leave_this_group;
+                title = R.string.left_group;
             }
-        }).show();
+
+            new MaterialDialog.Builder(getActivity()).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                    viewModel.leaveGroup();
+                    if (getActivity() != null) {
+                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                }
+            }).show();
+        }
     }
 
     @Override

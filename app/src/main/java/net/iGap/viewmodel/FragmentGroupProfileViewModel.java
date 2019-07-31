@@ -17,7 +17,9 @@ import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnGroupAddMember;
+import net.iGap.interfaces.OnGroupDelete;
 import net.iGap.interfaces.OnGroupKickMember;
+import net.iGap.interfaces.OnGroupLeft;
 import net.iGap.interfaces.OnGroupRemoveUsername;
 import net.iGap.interfaces.OnGroupRevokeLink;
 import net.iGap.interfaces.OnMenuClick;
@@ -40,6 +42,8 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddModerator;
+import net.iGap.request.RequestGroupDelete;
+import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestUserInfo;
@@ -76,6 +80,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public ObservableInt inviteLinkTitle = new ObservableInt(R.string.group_link);
     public ObservableInt showLoading = new ObservableInt(View.GONE);
     public ObservableInt showLink = new ObservableInt(View.GONE);
+    public ObservableInt showLeaveGroup = new ObservableInt(View.GONE);
 
     //ui Observable
     public MutableLiveData<String> groupName = new MutableLiveData<>();
@@ -95,6 +100,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public MutableLiveData<Boolean> showMoreMenu = new MutableLiveData<>();
     public MutableLiveData<Boolean> showEditButton = new MutableLiveData<>();
     public MutableLiveData<String> showDialogCopyLink = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogLeaveGroup = new MutableLiveData<>();
 
     private RealmRoom realmRoom;
     private boolean isNotJoin;
@@ -165,6 +171,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         //OWNER,ADMIN,MODERATOR,MEMBER can add member to group
         addMemberVisibility.set(View.VISIBLE);
         showEditButton.setValue(role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER);
+        showLeaveGroup.set(role != GroupChatRole.ADMIN && role != GroupChatRole.OWNER ? View.VISIBLE : View.GONE);
 
         showMoreMenu.setValue(!isNotJoin);
 
@@ -379,6 +386,10 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         goToShowCustomListPage.setValue(userList);
     }
 
+    public void onLeaveGroupClick() {
+        showDialogLeaveGroup.setValue(true);
+    }
+
     private Realm getRealm() {
         if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
             realmGroupProfile = Realm.getDefaultInstance();
@@ -406,6 +417,39 @@ public class FragmentGroupProfileViewModel extends ViewModel {
             realmGroupProfile.close();
         }
         super.onCleared();
+    }
+
+    public void leaveGroup() {
+        //ToDo:move this code to repository
+        showLoading.set(View.VISIBLE);
+        G.onGroupLeft = new OnGroupLeft() {
+            @Override
+            public void onGroupLeft(final long roomId, long memberId) {
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    showLoading.set(View.GONE);
+                    goToRoomListPage.setValue(true);
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    showLoading.set(View.GONE);
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    showLoading.set(View.GONE);
+                });
+            }
+        };
+        
+        new RequestGroupLeft().groupLeft(roomId);
     }
 
     private void showProgressBar() {

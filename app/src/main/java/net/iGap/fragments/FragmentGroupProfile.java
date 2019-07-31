@@ -63,6 +63,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MEditText;
 import net.iGap.module.SUID;
+import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCheckUsername;
@@ -327,13 +328,19 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         });
 
-        viewModel.goToCustomNotificationPage.observe(this, roomId -> {
+        viewModel.goToCustomNotificationPage.observe(getViewLifecycleOwner(), roomId -> {
             if (getActivity() != null && roomId != null) {
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragmentNotification).setReplace(false).load();
+            }
+        });
+
+        viewModel.showDialogLeaveGroup.observe(getViewLifecycleOwner(),isShow->{
+            if (isShow != null && isShow) {
+                groupLeft();
             }
         });
 
@@ -392,7 +399,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     }
 
-
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
@@ -434,6 +440,21 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         alphaAnimation.setDuration(duration);
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
+    }
+
+    private void groupLeft() {
+        String text;
+        int title;
+            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
+            title = R.string.left_group;
+
+        new MaterialDialog.Builder(G.fragmentActivity).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                viewModel.leaveGroup();
+                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        }).show();
     }
 
     /*Change group avatar result*/
