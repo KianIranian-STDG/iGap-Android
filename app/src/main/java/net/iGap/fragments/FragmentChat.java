@@ -1078,7 +1078,15 @@ public class FragmentChat extends BaseFragment
             rootView.findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom != null) iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
+        if (realmRoom != null)  {
+            if (realmRoom.getMute()) {
+                ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.unmute);
+                iconMute.setVisibility(View.VISIBLE);
+            } else {
+                ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.mute);
+                iconMute.setVisibility(View.GONE);
+            }
+        }
 
         registerListener();
     }
