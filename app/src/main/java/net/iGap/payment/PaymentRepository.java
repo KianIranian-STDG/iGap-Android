@@ -2,11 +2,10 @@ package net.iGap.payment;
 
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import net.iGap.api.PaymentApi;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.api.errorhandler.ErrorHandler;
+import net.iGap.api.errorhandler.ResponseCallback;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +36,7 @@ public class PaymentRepository {
         paymentApi = new RetrofitFactory().getPaymentRetrofit().create(PaymentApi.class);
     }
 
-    public void checkOrder(String orderToken, PaymentCallback<CheckOrderResponse> callBack) {
+    public void checkOrder(String orderToken, ResponseCallback<CheckOrderResponse> callBack) {
         paymentApi.requestCheckOrder(orderToken).enqueue(new Callback<CheckOrderResponse>() {
             @Override
             public void onResponse(@NonNull Call<CheckOrderResponse> call, @NonNull Response<CheckOrderResponse> response) {
@@ -45,7 +44,7 @@ public class PaymentRepository {
                     callBack.onSuccess(response.body());
                 } else {
                     try {
-                        callBack.onError(getError(response.errorBody().string()));
+                        callBack.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -55,12 +54,12 @@ public class PaymentRepository {
             @Override
             public void onFailure(@NonNull Call<CheckOrderResponse> call, @NonNull Throwable t) {
                 t.printStackTrace();
-                callBack.onFail();
+                callBack.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
         });
     }
 
-    public void checkOrderStatus(String orderId, PaymentCallback<Object> callback) {
+    public void checkOrderStatus(String orderId, ResponseCallback<Object> callback) {
         paymentApi.requestCheckOrderStatus(orderId).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(@NotNull Call<Object> call, @NotNull Response<Object> response) {
@@ -68,7 +67,7 @@ public class PaymentRepository {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -78,20 +77,8 @@ public class PaymentRepository {
             @Override
             public void onFailure(@NotNull Call<Object> call, @NotNull Throwable t) {
                 t.printStackTrace();
-                callback.onFail();
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
         });
-    }
-
-    private ErrorModel getError(String error) {
-        return new Gson().fromJson(error, ErrorModel.class);
-    }
-
-    public interface PaymentCallback<T> {
-        void onSuccess(T data);
-
-        void onError(ErrorModel error);
-
-        void onFail();
     }
 }

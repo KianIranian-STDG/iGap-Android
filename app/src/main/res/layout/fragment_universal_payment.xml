@@ -12,7 +12,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_3c">
+        android:background="@color/greenStatus">
 
         <View
             android:id="@+id/v"
@@ -159,10 +159,40 @@
             android:gravity="center"
             android:paddingTop="@dimen/dp16"
             android:textSize="@dimen/standardTextSize"
+            android:text="@{viewModel.paymentType}"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/title"
             app:layout_constraintEnd_toEndOf="@id/acceptButton"
             app:layout_constraintStart_toStartOf="@id/cancelButton" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/errorMessage"
+            style="?textSubColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@{viewModel.paymentErrorMessage}"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            app:layout_constraintBottom_toTopOf="@id/paymentOrderId"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/v"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentOrderId"
+            style="?textSubColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@{viewModel.paymentOrderId}"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/errorMessage" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

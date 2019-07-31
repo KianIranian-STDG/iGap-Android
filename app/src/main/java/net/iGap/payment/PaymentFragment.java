@@ -1,19 +1,28 @@
 package net.iGap.payment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiStatic;
@@ -22,14 +31,16 @@ import net.iGap.databinding.FragmentUniversalPaymentBinding;
 public class PaymentFragment extends Fragment {
 
     private static String TOKEN = "Payment_Token";
+    private static String TYPE = "Payment_Type";
 
     private PaymentViewModel viewModel;
     private FragmentUniversalPaymentBinding binding;
 
-    public static PaymentFragment getInstance(String token) {
+    public static PaymentFragment getInstance(String type, String token) {
         PaymentFragment fragment = new PaymentFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TOKEN, token);
+        bundle.putString(TYPE, type);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -39,7 +50,17 @@ public class PaymentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(
                 this,
-                new PaymentViewModelFactory(getArguments() != null ? getArguments().getString(TOKEN) : null)
+                new ViewModelProvider.Factory() {
+                    @NonNull
+                    @Override
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        if (getArguments() != null) {
+                            return (T) new PaymentViewModel(getArguments().getString(TOKEN), getArguments().getString(TYPE));
+                        } else {
+                            return (T) new PaymentViewModel(null, null);
+                        }
+                    }
+                }
         ).get(PaymentViewModel.class);
     }
 
@@ -71,26 +92,46 @@ public class PaymentFragment extends Fragment {
 
         viewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
             if (getActivity() != null && webLink != null) {
-
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
                 Bundle bundle = new Bundle();
                 bundle.putString("Authorization", ApiStatic.USER_TOKEN);
                 browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
                 startActivity(browserIntent);
-
-
-                Intent intent = new Intent("net.iGap.payment");
-                intent.addCategory(Intent.CATEGORY_DEFAULT);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                Bundle b = new Bundle();
-                b.putString("message", "data of message");
-                b.putString("status","data of status");
-                intent.putExtras(b);
-
-                Log.wtf(this.getClass().getName(), intent.toUri(Intent.URI_INTENT_SCHEME));
-
-                /*startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webLink)));*/
             }
         });
+
+        viewModel.getNeedUpdateGooglePlay().observe(getViewLifecycleOwner(), isNeed -> {
+            if (getActivity() != null && isNeed != null && isNeed) {
+                try {
+                    if (getActivity() != null) {
+                        ProviderInstaller.installIfNeeded(getActivity().getApplicationContext());
+                    }
+                } catch (GooglePlayServicesRepairableException e) {
+                    // Prompt the user to install/update/enable Google Play services.
+                    GoogleApiAvailability.getInstance().showErrorNotification(getActivity(), e.getConnectionStatusCode());
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // Indicates a non-recoverable error: let the user know.
+                    showDialogNeedGooglePlay();
+
+                }
+            }
+        });
+    }
+
+    public void setPaymentResult(Payment paymentModel) {
+        viewModel.setPaymentResult(paymentModel);
+    }
+
+    //ToDo: create base view for fragment with request
+    private void showDialogNeedGooglePlay() {
+        if (getActivity() != null) {
+            new MaterialDialog.Builder(getActivity())
+                    .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
+                    .titleGravity(GravityEnum.CENTER)
+                    .buttonsGravity(GravityEnum.CENTER)
+                    .content("برای استفاده از این بخش نیاز به گوگل سرویس است.").contentGravity(GravityEnum.CENTER)
+                    .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
+                    .show();
+        }
     }
 }
