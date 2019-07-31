@@ -92,7 +92,6 @@ public class ChatCell extends ConstraintLayout {
         EmojiTextViewE roomName = new EmojiTextViewE(G.context);
         roomName.setId(R.id.tv_chatCell_roomName);
         setTypeFace(roomName);
-        roomName.setEllipsize(TextUtils.TruncateAt.END);
         setTextSize(roomName, R.dimen.standardTextSize);
         roomName.setSingleLine(true);
         roomName.setEmojiSize(i_Dp(R.dimen.dp16));
@@ -214,16 +213,20 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
-         * force gravity in message preview
+         * force gravity in message preview because we use constraint layout chain
          * */
         if (isRtl) {
             firstTextView.setGravity(Gravity.RIGHT);
             secondTextView.setGravity(Gravity.RIGHT);
             thirdTextView.setGravity(Gravity.RIGHT);
+            roomName.setGravity(Gravity.RIGHT);
+            roomName.setEllipsize(TextUtils.TruncateAt.START);
         } else {
             firstTextView.setGravity(Gravity.LEFT);
             secondTextView.setGravity(Gravity.LEFT);
             thirdTextView.setGravity(Gravity.LEFT);
+            roomName.setGravity(Gravity.LEFT);
+            roomName.setEllipsize(TextUtils.TruncateAt.END);
         }
 
         /**
@@ -249,7 +252,7 @@ public class ChatCell extends ConstraintLayout {
         set.constrainWidth(chatIcon.getId(), i_Dp(R.dimen.dp18));
 
         set.constrainHeight(roomName.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(roomName.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(roomName.getId(), ConstraintSet.MATCH_CONSTRAINT);
 
         set.constrainHeight(verify.getId(), i_Dp(R.dimen.dp18));
         set.constrainWidth(verify.getId(), i_Dp(R.dimen.dp18));
@@ -299,9 +302,12 @@ public class ChatCell extends ConstraintLayout {
 
 
         if (isRtl) {
-            set.connect(chatIcon.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.LEFT);
-            set.connect(roomName.getId(), ConstraintSet.RIGHT, chatIcon.getId(), ConstraintSet.LEFT);
-            set.connect(verify.getId(), ConstraintSet.RIGHT, roomName.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
+
+            int[] topViews = {chatIcon.getId(), roomName.getId(), verify.getId()};
+            float[] tioChainWeights = {0, 0, 0};
+            set.createHorizontalChainRtl(avatarImageView.getId(), ConstraintSet.END, mute.getId(), ConstraintSet.START,
+                    topViews, tioChainWeights, ConstraintSet.CHAIN_PACKED);
+
             set.connect(messageData.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp24));
 
             set.connect(badgeView.getId(), ConstraintSet.LEFT, messageStatus.getId(), ConstraintSet.LEFT);
@@ -331,9 +337,12 @@ public class ChatCell extends ConstraintLayout {
                     chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
 
         } else {
-            set.connect(chatIcon.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
-            set.connect(roomName.getId(), ConstraintSet.LEFT, chatIcon.getId(), ConstraintSet.RIGHT);
-            set.connect(verify.getId(), ConstraintSet.LEFT, roomName.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
+
+            int[] topViews = {chatIcon.getId(), roomName.getId(), verify.getId()};
+            float[] tioChainWeights = {0, 0, 0};
+            set.createHorizontalChain(avatarImageView.getId(), ConstraintSet.RIGHT, mute.getId(), ConstraintSet.LEFT,
+                    topViews, tioChainWeights, ConstraintSet.CHAIN_PACKED);
+
             set.connect(messageData.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp24));
 
             set.connect(badgeView.getId(), ConstraintSet.LEFT, messageStatus.getId(), ConstraintSet.LEFT);
