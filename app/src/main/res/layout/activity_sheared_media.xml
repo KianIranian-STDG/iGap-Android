@@ -113,7 +113,6 @@
             style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutDirection="locale"
             android:paddingTop="@dimen/dp4"
             android:paddingBottom="@dimen/dp4"
             android:minHeight="@dimen/dp36"
@@ -123,8 +122,7 @@
                 android:id="@+id/asm_ll_media_types_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layoutDirection="locale"
+                android:layout_gravity="center_vertical|start"
                 android:orientation="horizontal">
 
             </LinearLayout>
