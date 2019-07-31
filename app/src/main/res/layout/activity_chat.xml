@@ -165,6 +165,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
+                style="?backgroundColorSettingTheme"
                 android:visibility="gone">
 
 
@@ -175,18 +176,17 @@
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:text="New Text"
-                    android:textSize="@dimen/dp13" />
+                    style="?textTitleColorSettingTheme"
+                    android:textSize="@dimen/standardTextSize" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_cancel_sending_file"
-                    style="@style/myIconToolbarStyle"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/dp8"
                     android:background="@null"
-                    android:gravity="center_vertical"
-                    android:text="@string/md_close_button"
-                    android:textColor="@color/red" />
+                    android:text="@string/md_close_button" />
             </LinearLayout>
 
             <LinearLayout

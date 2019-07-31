@@ -2564,12 +2564,6 @@ public class FragmentChat extends BaseFragment
 
         ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
 
-        if (G.isDarkTheme) {
-            ll_attach_text.setBackgroundColor(getContext().getResources().getColor(R.color.navigation_dark_mode_bg));
-        } else {
-            ll_attach_text.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
-        }
-
         txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
         btnCancelSendingFile = rootView.findViewById(R.id.ac_btn_cancel_sending_file);
         btnCancelSendingFile.setOnClickListener(new View.OnClickListener() {
