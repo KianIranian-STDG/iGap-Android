@@ -30,6 +30,8 @@ public class UserScoreViewModel extends ViewModel {
         of = "of ";
         if (G.selectedLanguage.equals("fa"))
             of = "از ";
+        else if (G.selectedLanguage.equals("ar"))
+            of = "فی ";
 
         userRank.setValue(checkPersianNumber("0"));
         totalRank.setValue(of + checkPersianNumber("0"));
