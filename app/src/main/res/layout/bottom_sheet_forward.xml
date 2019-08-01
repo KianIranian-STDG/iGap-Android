@@ -23,6 +23,7 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp28"
             android:layout_height="@dimen/dp28"
+            android:layout_gravity="center_vertical"
             android:layout_margin="@dimen/dp8"
             android:text="@string/search_icon" />
 
@@ -33,31 +34,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp8"
-            android:background="@color/transparent"
-            android:hint="@string/search" />
+            android:background="@drawable/bottom_sheet_button"
+            android:hint="@string/search"
+            android:padding="4dp" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcvBottomSheetForward"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/dp8"
         android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="@dimen/dp8"
         app:layout_constraintBottom_toTopOf="@id/divider1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edtSearch" />
-
-    <View
-        android:id="@+id/divider1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="@dimen/dp8"
-        android:layout_marginRight="@dimen/dp8"
-        android:background="@color/gray_5c"
-        app:layout_constraintBottom_toTopOf="@id/copyLink"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/copyLink"
@@ -76,15 +68,13 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/txtSend"
-        style="?textColorMenuTheme"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp8"
-        android:background="@drawable/bottom_sheet_button"
+        android:layout_height="52dp"
         android:gravity="center"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
         android:text="@string/send"
+        android:textColor="@color/white"
+        android:textSize="@dimen/standardTextSize"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

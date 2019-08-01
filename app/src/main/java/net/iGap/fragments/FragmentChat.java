@@ -6440,6 +6440,13 @@ public class FragmentChat extends BaseFragment
         rcvItem.setLayoutManager(new GridLayoutManager(rcvItem.getContext(), 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
         rcvItem.setAdapter(fastItemAdapterForward);
+
+        if (G.isDarkTheme){
+            textSend.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
+        }else {
+            textSend.setBackgroundColor(getContext().getResources().getColor(R.color.green));
+        }
+
         bottomSheetDialogForward = new BottomSheetDialog(getActivity(),G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
