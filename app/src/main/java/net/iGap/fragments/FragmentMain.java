@@ -954,6 +954,14 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .show();
     }
 
+    public void checkPassCodeIconVisibility(){
+
+        if (mHelperToolbar != null) {
+            mHelperToolbar.checkPassCodeVisibility();
+        }
+
+    }
+
     private void confirmActionForClearHistoryOfSelected() {
 
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
