@@ -10,16 +10,12 @@
 
 package net.iGap.fragments;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -37,11 +32,9 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.model.ChipInterface;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
@@ -52,7 +45,9 @@ import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
+import net.iGap.module.FastScroller;
 import net.iGap.module.LoginActions;
+import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -61,31 +56,22 @@ import net.iGap.request.RequestGroupAddMember;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ContactGroupFragment extends BaseFragment implements OnContactsGetList, ToolbarListener {
-    private static ProtoGlobal.Room.Type type;
+
     ItemAdapter itemAdapter;
     private FastAdapter fastAdapter;
-    private TextView txtStatus;
-    //private TextView txtNumberOfMember;
-    //private EditText edtSearch;
     private ChipsInput chipsInput;
-    private String textString = "";
-    private String participantsLimit = "5000";
     private long roomId;
     private int countAddMemberResponse = 0;
     private int countMember = 0;
     private int countAddMemberRequest = 0;
     private String typeCreate;
     private List<ContactChip> mContactList = new ArrayList<>();
-    private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts = new ArrayList<>();
     public static List<StructContactInfo> selectedContacts = new ArrayList<>();
     private boolean isRemove = true;
-
-    private HelperToolbar mHelperToolbar;
 
 
     public static ContactGroupFragment newInstance() {
@@ -112,10 +98,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         if (bundle != null) {
             roomId = bundle.getLong("RoomId");
             typeCreate = bundle.getString("TYPE");
-            if (bundle.getString("LIMIT") != null) participantsLimit = bundle.getString("LIMIT");
         }
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)
@@ -126,32 +111,26 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
         LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
         toolbarLayout.addView(mHelperToolbar.getView());
-//        mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_group));
-
-
-        //txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
-        //txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));
 
         if (typeCreate.equals("CHANNEL")) {
             mHelperToolbar.setDefaultTitle(G.context.getResources().getString(R.string.new_channel));
-            //mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_channel));
         }
 
-        //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
-        chipsInput = (ChipsInput) view.findViewById(R.id.chips_input);
-
-        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
-        final ItemAdapter headerAdapter = new ItemAdapter();
-        itemAdapter = new ItemAdapter();
-        fastAdapter = FastAdapter.with(Arrays.asList(headerAdapter, itemAdapter));
-        fastAdapter.withSelectable(true);
-        fastAdapter.setHasStableIds(true);
+        chipsInput = view.findViewById(R.id.chips_input);
 
         //get our recyclerView and do basic setup
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView rv = view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+        rv.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setAdapter(stickyHeaderAdapter.wrap(fastAdapter));
+        itemAdapter = new ItemAdapter();
+        fastAdapter = FastAdapter.with(itemAdapter);
+        fastAdapter.withSelectable(true);
+        fastAdapter.setHasStableIds(true);
+        rv.setAdapter(fastAdapter);
+        addItems();
+
+        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+        fastScroller.setRecyclerView(rv);
 
         itemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
             @Override
@@ -193,13 +172,6 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             }
         });
 
-        //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
-
-        rv.addItemDecoration(decoration);
-
-        addItems();
-
         chipsInput.addChipsListener(new ChipsInput.ChipsListener() {
             @Override
             public void onChipAdded(ChipInterface chip, int newSize) {
@@ -213,7 +185,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                         isRemove = false;
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -230,14 +202,6 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             @Override
             public void onTextChanged(CharSequence text) {
                 // text changed
-            }
-        });
-
-        //so the headers are aware of changes
-        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                decoration.invalidateHeaders();
             }
         });
 
@@ -302,7 +266,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId);
         RealmRoom.updateMemberCount(roomId, roomType, countMember + 1); // plus with 1 , for own account
-        if (getActivity()!=null&&isAdded()) {
+        if (getActivity() != null && isAdded()) {
             removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity(getActivity());
         }
@@ -311,34 +275,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private void notifyAdapter(ContactItemGroup item, int position) {
         item.mContact.isSelected = !item.mContact.isSelected;
         fastAdapter.notifyItemChanged(position);
-        refreshView();
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                isRemove = true;
-            }
-        }, 50);
+        G.handler.postDelayed(() -> isRemove = true, 50);
 
-    }
-
-    private void refreshView() {
-        int selectedNumber = 0;
-        textString = "";
-        int size = contacts.size();
-        for (int i = 0; i < size; i++) {
-            if (contacts.get(i).isSelected) {
-                textString += contacts.get(i).displayName + ",";
-                selectedNumber++;
-            }
-        }
-
-        /*if (typeCreate.equals("CHANNEL")) {
-            txtNumberOfMember.setVisibility(View.GONE);
-        }
-        //  sizeTextEditText = textString.length();
-        txtNumberOfMember.setText(selectedNumber + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));*/
-
-        //edtSearch.setText("");
     }
 
     private ArrayList<Long> getSelectedList() {
@@ -478,7 +416,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 }
             } else {
 
-                if (getActivity()!=null&&isAdded()) {
+                if (getActivity() != null && isAdded()) {
                     removeFromBaseFragment(ContactGroupFragment.this);
                     new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity(getActivity());
                 }
@@ -501,10 +439,10 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     public void onPause() {
 
         //this code added for close chips layout
-        if (chipsInput != null ) {
+        if (chipsInput != null) {
             try {
-                chipsInput.addChip("" , "" );
-            }catch (Exception e){
+                chipsInput.addChip("", "");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
