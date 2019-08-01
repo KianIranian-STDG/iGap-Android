@@ -109,7 +109,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         transferRootViewCard = rootView.findViewById(R.id.cl_cardToCard_transferRoot);
         userAvatarIvCard = rootView.findViewById(R.id.iv_cardToCard_userAvatar);
         userNameTvCard = rootView.findViewById(R.id.tv_cardToCard_userName);
-        creditTvCard = rootView.findViewById(R.id.tv_cardToCard_credit);
         cancelBtnCard = rootView.findViewById(R.id.btn_cardToCard_cancel);
         confirmBtnCard = rootView.findViewById(R.id.btn_cardToCard_confirm);
         TextView transferToTvCard = rootView.findViewById(R.id.tv_cardToCard_transferTo);
@@ -121,6 +120,8 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         walletTransferIv.setText("0");
         cardToCardIv.setText("4");
 
+        userAvatarIvCard.setImageDrawable(drawable);
+        userNameTvCard.setText(userName);
 
         walletTransferIv.setTypeface(G.typeface_FonticonNew);
         cardToCardIv.setTypeface(G.typeface_FonticonNew);
@@ -151,20 +152,29 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
 
         confirmBtnCard.setOnClickListener(v -> {
 
-            if (cardNumberEtCard.getText().toString().trim().length() > 0) {
-                if (amountEtCard.getText().toString().trim().length() > 0) {
+            if (cardNumberEtCard.getText().toString().trim().length() == 19) {
+                if (amountEtCard.getText().toString().trim().length() >= 6) {
                     if (descEtCard.getText().toString().trim().length() > 0) {
                         cardToCardCallBack.onClick(cardNumberEtCard.getText().toString(), amountEtCard.getText().toString(), descEtCard.getText().toString());
                         dismiss();
                     } else {
-                        Toast.makeText(getContext(), "Card Number Is Empty", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_descriotion_error), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "Amount Is Empty", Toast.LENGTH_SHORT).show();
+                    if (amountEtCard.getText().toString().trim().length() == 0) {
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_amount_empty_error), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_morethan_error), Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
-            }
+                if (cardNumberEtCard.getText().toString().trim().length() <= 19) {
+                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_cardnumber_error), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_cartnumber_error), Toast.LENGTH_SHORT).show();
+                }
 
+            }
         });
 
     }

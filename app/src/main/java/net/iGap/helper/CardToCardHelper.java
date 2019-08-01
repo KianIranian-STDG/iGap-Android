@@ -69,7 +69,7 @@ public class CardToCardHelper {
         }
     }
 
-    public static void NewCallCardToCard(Activity activity, long to_UserId, long amount, String cardNumber) {
+    public static void NewCallCardToCard(Activity activity, long to_UserId, int amount, String cardNumber) {
         if (activity == null || activity.isFinishing()) {
             return;
         }

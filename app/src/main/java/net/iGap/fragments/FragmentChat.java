@@ -112,8 +112,8 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.MessagesAdapter;
-import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.AdapterCamera;
+import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
 import net.iGap.adapter.items.chat.ContactItem;
@@ -228,7 +228,6 @@ import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
@@ -3339,13 +3338,16 @@ public class FragmentChat extends BaseFragment
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
+        String mplCardNumber = cardNumber.replace("-", "");
+        int mplAmount = Integer.parseInt(amount.replace(",", ""));
+
         final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, description, replyMessageId());
         if (roomMessage != null) {
             JsonArray jsonArray = new JsonArray();
             JsonArray jsonArray2 = new JsonArray();
             JsonObject jsonObject=new JsonObject();
-            jsonObject.addProperty("cardNumber",cardNumber);
-            jsonObject.addProperty("amount",amount.replace(",", ""));
+            jsonObject.addProperty("cardNumber",mplCardNumber);
+            jsonObject.addProperty("amount",mplAmount);
             jsonObject.addProperty("userId",G.userId);
             jsonArray.add(jsonArray2);
             JsonObject json = new JsonObject();
