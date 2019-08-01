@@ -100,6 +100,7 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -1694,5 +1695,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void removeAllFragmentFromMain() {
         getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+    }
+
+    /**
+     * base on main fragment structure that onResume just call one in main fragment
+     * we should get bottom nav fragment (contains all startup fragments) and after
+     * that get our fragment from bottom nav fragment and do our job
+     */
+    public void updatePassCodeState() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).checkPassCodeIconVisibility();
+        }
     }
 }

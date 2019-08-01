@@ -15,6 +15,7 @@ import com.andrognito.patternlockview.utils.ResourceUtils;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentPassCodeBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -96,6 +97,11 @@ public class FragmentPassCode extends BaseFragment {
             }
         });
 
+        fragmentPassCodeViewModel.passCodeStateChangeListener.observe(getViewLifecycleOwner() , aBoolean -> {
+            if (getActivity() != null){
+                ((ActivityMain) getActivity()).updatePassCodeState();
+            }
+        });
 
         boolean isLinePattern;
         if (isPattern){
