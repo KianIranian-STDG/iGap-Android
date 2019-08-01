@@ -228,7 +228,6 @@ import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
@@ -6443,8 +6442,13 @@ public class FragmentChat extends BaseFragment
 
         if (G.isDarkTheme){
             textSend.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
+            edtSearch.setTextColor(getContext().getResources().getColor(R.color.white));
+            edtSearch.setBackground(getContext().getDrawable(R.drawable.fast_sorward_dark));
         }else {
             textSend.setBackgroundColor(getContext().getResources().getColor(R.color.green));
+            edtSearch.setBackground(getContext().getDrawable(R.drawable.fast_sorward_light));
+            edtSearch.setTextColor(getContext().getResources().getColor(R.color.black));
+
         }
 
         bottomSheetDialogForward = new BottomSheetDialog(getActivity(),G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);

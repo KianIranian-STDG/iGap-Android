@@ -34,9 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp8"
-            android:background="@drawable/bottom_sheet_button"
             android:hint="@string/search"
-            android:padding="4dp" />
+            android:padding="6dp" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
