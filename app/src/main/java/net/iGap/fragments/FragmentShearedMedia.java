@@ -2326,7 +2326,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 if (G.selectedLanguage.equals("en")) {
                     vh.txtFileName.setGravity(Gravity.LEFT);
                 } else {
-                    vh.txtFileName.setGravity(Gravity.LEFT);
+                    vh.txtFileName.setGravity(Gravity.RIGHT);
                 }
 
                 /*File fileTemp = new File(vh.tempFilePath);
