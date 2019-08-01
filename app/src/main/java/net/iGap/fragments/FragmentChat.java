@@ -6443,10 +6443,10 @@ public class FragmentChat extends BaseFragment
         if (G.isDarkTheme){
             textSend.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
             edtSearch.setTextColor(getContext().getResources().getColor(R.color.white));
-            edtSearch.setBackground(getContext().getDrawable(R.drawable.fast_sorward_dark));
+            edtSearch.setBackground(getContext().getResources().getDrawable(R.drawable.fast_sorward_dark));
         }else {
             textSend.setBackgroundColor(getContext().getResources().getColor(R.color.green));
-            edtSearch.setBackground(getContext().getDrawable(R.drawable.fast_sorward_light));
+            edtSearch.setBackground(getContext().getResources().getDrawable(R.drawable.fast_sorward_light));
             edtSearch.setTextColor(getContext().getResources().getColor(R.color.black));
 
         }
