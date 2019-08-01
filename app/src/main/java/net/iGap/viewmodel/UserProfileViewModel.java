@@ -479,7 +479,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onFAQClick() {
-        goToFAQPage.setValue(HelperCalander.isPersianUnicode ? "https://blog.igap.net/fa" : "https://blog.igap.net");
+        goToFAQPage.setValue("https://blog.igap.net/fa/%d9%be%d8%b1%d8%b3%d8%b4%e2%80%8c%d9%87%d8%a7%db%8c-%d9%85%d8%aa%d8%af%d8%a7%d9%88%d9%84/");
     }
 
     public void onAvatarClick() {
