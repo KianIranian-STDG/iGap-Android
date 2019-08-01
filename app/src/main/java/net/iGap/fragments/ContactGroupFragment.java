@@ -47,6 +47,7 @@ import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
 import net.iGap.module.FastScroller;
 import net.iGap.module.LoginActions;
+import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -119,7 +120,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
         //get our recyclerView and do basic setup
         RecyclerView rv = view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         rv.setItemAnimator(new DefaultItemAnimator());
         itemAdapter = new ItemAdapter();
         fastAdapter = FastAdapter.with(itemAdapter);
