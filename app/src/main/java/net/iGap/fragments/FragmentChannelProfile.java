@@ -59,6 +59,13 @@ public class FragmentChannelProfile extends BaseFragment {
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
 
+    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
+    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private final int ALPHA_ANIMATIONS_DURATION              = 200;
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
     private FragmentChannelProfileViewModel viewModel;
     private ActivityProfileChannelBinding binding;
     private CircleImageView imvChannelAvatar;
@@ -228,13 +235,6 @@ public class FragmentChannelProfile extends BaseFragment {
 
         initialToolbar();
     }
-
-    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
-    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-    private final int ALPHA_ANIMATIONS_DURATION              = 200;
-
-    private boolean mIsTheTitleVisible          = false;
-    private boolean mIsTheTitleContainerVisible = true;
 
     private void initialToolbar() {
 

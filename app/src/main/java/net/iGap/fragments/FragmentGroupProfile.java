@@ -98,6 +98,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
 
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION = 200;
+
+    private boolean mIsTheTitleVisible = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
     private FragmentGroupProfileViewModel viewModel;
     private ActivityGroupProfileBinding binding;
 
@@ -378,13 +385,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         };
         initialToolbar();
     }
-
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
-    private static final int ALPHA_ANIMATIONS_DURATION = 200;
-
-    private boolean mIsTheTitleVisible = false;
-    private boolean mIsTheTitleContainerVisible = true;
 
     private void initialToolbar() {
 

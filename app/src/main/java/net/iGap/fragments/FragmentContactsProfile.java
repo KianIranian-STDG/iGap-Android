@@ -80,6 +80,13 @@ public class FragmentContactsProfile extends BaseFragment {
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
 
+    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
+    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private final int ALPHA_ANIMATIONS_DURATION              = 200;
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
     private String report;
     private FragmentContactsProfileBinding binding;
     private FragmentContactsProfileViewModel viewModel;
@@ -547,13 +554,6 @@ public class FragmentContactsProfile extends BaseFragment {
             binding.toolbarFabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
         }
     }
-
-    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
-    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-    private final int ALPHA_ANIMATIONS_DURATION              = 200;
-
-    private boolean mIsTheTitleVisible          = false;
-    private boolean mIsTheTitleContainerVisible = true;
 
     private void initialToolbar() {
 
