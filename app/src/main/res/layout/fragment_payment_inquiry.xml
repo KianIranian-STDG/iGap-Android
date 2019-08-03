@@ -148,7 +148,7 @@
                                 android:layout_width="@dimen/dp44"
                                 android:layout_height="@dimen/dp44"
                                 android:gravity="center"
-                                android:text="="
+                                android:text="@string/flag_icon"
                                 android:textAppearance="@style/TextIconAppearance.menu"
                                 android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                                 android:textSize="@dimen/dp22"
@@ -303,6 +303,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginEnd="@dimen/dp8"
                             android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?  View.GONE : View.VISIBLE }">
 
                             <LinearLayout
@@ -433,6 +435,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:layout_marginStart="@dimen/dp8"
                             android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ?  View.GONE : View.VISIBLE }">
 
                             <LinearLayout

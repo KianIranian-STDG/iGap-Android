@@ -80,8 +80,8 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         TextView cardToCardIv = rootView.findViewById(R.id.iv_moneyAction_cardToCard);
         TextView walletTransferIv = rootView.findViewById(R.id.iv_moneyAction_wallet);
 
-        walletTransferIv.setText("0");
-        cardToCardIv.setText("4");
+        walletTransferIv.setText(R.string.financial_send_money_icon);
+        cardToCardIv.setText(R.string.wallet_icon);
 
         walletTransferIv.setTypeface(G.typeface_FonticonNew);
         cardToCardIv.setTypeface(G.typeface_FonticonNew);
