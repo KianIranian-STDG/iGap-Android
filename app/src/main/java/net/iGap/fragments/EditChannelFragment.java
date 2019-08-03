@@ -555,6 +555,7 @@ public class EditChannelFragment extends BaseFragment {
         }).negativeText(R.string.no).show();
     }
 
+    //Todo: remove code of leave channel
     private void deleteChannel(boolean isOwner) {
         String deleteText = "";
         int title;
