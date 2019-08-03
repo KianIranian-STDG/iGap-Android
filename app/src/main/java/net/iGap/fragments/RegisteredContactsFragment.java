@@ -713,9 +713,9 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 if (usersList.get(i).getPhone() == num) {
                     usersList.remove(i);
                     notifyItemRemoved(i);
-                    G.handler.postDelayed(this::notifyDataSetChanged, 500);
                 }
             }
+            G.handler.postDelayed(this::notifyDataSetChanged, 500);
         }
 
         public String getBubbleText(int position) {
@@ -725,7 +725,10 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         void insertContact(RealmContacts realmContacts, int i) {
             usersList.add(i, realmContacts);
             notifyItemInserted(i);
-            G.handler.postDelayed( () -> notifyDataSetChanged(), 100);
+            G.handler.postDelayed( () -> {
+                notifyDataSetChanged();
+                mTxtSelectedCount.setText(0 + " " + getString(R.string.item_selected));
+            }, 100);
         }
 
         @Override
@@ -767,7 +770,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 ViewHolder viewHolder = (ViewHolder) holder;
 
-                final RealmContacts contact = viewHolder.realmContacts = usersList.get(viewHolder.getAdapterPosition());
+                final RealmContacts contact = viewHolder.realmContacts = usersList.get(i);
                 if (contact == null) {
                     return;
                 }
