@@ -425,15 +425,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 //                                    btnEntery.setLongValue(json.getLong("value"));
                                 }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (FragmentChat.isInSelectionMode) {
-                                            holder.itemView.performLongClick();
-                                            return;
-                                        }
-                                        onBotBtnClick(view);
+                                childLayout = MakeButtons.addButtons(btnEntery, (view, buttonEntity) -> {
+                                    if (FragmentChat.isInSelectionMode) {
+                                        holder.itemView.performLongClick();
+                                        return;
                                     }
+                                    onBotBtnClick(view,buttonEntity);
                                 }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -1805,7 +1802,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return "";
     }
 
-    public void onBotBtnClick(View v) {
+    public void onBotBtnClick(View v, ButtonEntity buttonEntity) {
         try (final Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
@@ -1883,11 +1880,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                JSONObject value = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                String cardNumber = value.getString("cardNumber");
-                int amount = value.getInt("amount");
-                long userId = value.getLong("userId");
+                JSONObject rootJsonObject = new JSONObject(buttonEntity.getJsonObject());
+                JSONObject valueObject = rootJsonObject.getJSONObject("value");
+
+                String cardNumber = valueObject.getString("cardNumber");
+                int amount = valueObject.getInt("amount");
+                long userId = valueObject.getLong("userId");
+
                 CardToCardHelper.NewCallCardToCard(G.currentActivity, userId, amount, cardNumber);
+
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
                 try {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
@@ -1909,6 +1910,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
 
+        /**
+         * The data was sent via the button via the view tag. Right now I only do this for the card due to lack of time with the new object
+         * */
     }
 
 }

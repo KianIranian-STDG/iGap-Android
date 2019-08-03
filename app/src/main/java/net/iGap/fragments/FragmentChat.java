@@ -3343,27 +3343,25 @@ public class FragmentChat extends BaseFragment
 
         final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, description, replyMessageId());
         if (roomMessage != null) {
-            JsonArray jsonArray = new JsonArray();
-            JsonArray jsonArray2 = new JsonArray();
-            JsonObject jsonObject=new JsonObject();
-            jsonObject.addProperty("cardNumber",mplCardNumber);
-            jsonObject.addProperty("amount",mplAmount);
-            jsonObject.addProperty("userId",G.userId);
-            jsonArray.add(jsonArray2);
-            JsonObject json = new JsonObject();
-            json.addProperty("label", "Card to Card");
-            json.addProperty("imageUrl", "");
-            json.addProperty("actionType", "27");
-            json.add("value", jsonObject);
-            jsonArray2.add(json);
 
+            JsonArray rootJsonArray = new JsonArray();
+            JsonArray dataJsonArray = new JsonArray();
 
-            getRealmChat().executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    roomMessage.setRealmAdditional(RealmAdditional.put(jsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON));
-                }
-            });
+            JsonObject valueObject = new JsonObject();
+            valueObject.addProperty("cardNumber", mplCardNumber);
+            valueObject.addProperty("amount", mplAmount);
+            valueObject.addProperty("userId", G.userId);
+
+            JsonObject rootObject = new JsonObject();
+            rootObject.addProperty("label", "Card to Card");
+            rootObject.addProperty("imageUrl", "");
+            rootObject.addProperty("actionType", "27");
+            rootObject.add("value", valueObject);
+
+            dataJsonArray.add(rootObject);
+            rootJsonArray.add(dataJsonArray);
+
+            getRealmChat().executeTransaction(realm -> roomMessage.setRealmAdditional(RealmAdditional.put(rootJsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON)));
 
             edtChat.setText("");
             lastMessageId = roomMessage.getMessageId();

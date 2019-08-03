@@ -99,7 +99,12 @@ public class MakeButtons {
         return linearLayout_179;
     }
 
-    public static LinearLayout addButtons(ButtonEntity entity, View.OnClickListener clickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
+    @FunctionalInterface
+    public interface OnClickListener{
+        void onClick(View view , ButtonEntity buttonEntity);
+    }
+
+    public static LinearLayout addButtons(ButtonEntity entity,OnClickListener onClickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
@@ -277,7 +282,9 @@ public class MakeButtons {
                                     }
                                 }
         );
-        card.setOnClickListener(clickListener);
+        card.setOnClickListener(v -> {
+            onClickListener.onClick(v,entity);
+        });
         mainLayout.addView(card);
         return mainLayout;
 

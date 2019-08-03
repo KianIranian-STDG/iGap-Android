@@ -156,6 +156,7 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
                 if (amountEtCard.getText().toString().trim().length() >= 6) {
                     if (descEtCard.getText().toString().trim().length() > 0) {
                         cardToCardCallBack.onClick(cardNumberEtCard.getText().toString(), amountEtCard.getText().toString(), descEtCard.getText().toString());
+//                       cardToCardCallBack.onClick("6221-0612-1741-0739","10,000","سلام من ابوالفضلم بهممممممم پول بزن :)");
                         dismiss();
                     } else {
                         Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_descriotion_error), Toast.LENGTH_SHORT).show();
