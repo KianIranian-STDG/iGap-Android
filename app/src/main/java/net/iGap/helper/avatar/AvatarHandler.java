@@ -54,10 +54,12 @@ public class AvatarHandler {
     private class CacheValue {
         public Bitmap bitmap;
         long fileId;
+        long avatarId;
 
-        CacheValue(Bitmap bitmap, Long fileId) {
+        CacheValue(Bitmap bitmap, Long fileId, Long avatarId) {
             this.bitmap = bitmap;
             this.fileId = fileId;
+            this.avatarId = avatarId;
         }
     }
 
@@ -96,26 +98,26 @@ public class AvatarHandler {
         }
     }
 
-    private void notifyAll(String avatarPath, long avatarId, boolean isMain, long fileId) {
+    private void notifyAll(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
         try {
-            notifyMe(avatarPath, avatarId, isMain, fileId);
-            notifyOther(avatarPath, avatarId, isMain, fileId);
+            notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId);
+            notifyOther(avatarPath, avatarOwnerId, isMain, fileId, avatarId);
         } catch (OutOfMemoryError e) {
             e.printStackTrace();
         }
     }
 
-    private void notifyOther(String avatarPath, long avatarId, boolean isMain, long fileId) {
+    private void notifyOther(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
         synchronized (mutex2) {
             for (AvatarHandler avatarHandler : allAvatarHandler) {
                 if (!avatarHandler.equals(this)) {
-                    avatarHandler.notifyMe(avatarPath, avatarId, isMain, fileId);
+                    avatarHandler.notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId);
                 }
             }
         }
     }
 
-    private void notifyMe(String avatarPath, long avatarId, boolean isMain, long fileId) {
+    private void notifyMe(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
         final Bitmap bmImg = BitmapFactory.decodeFile(avatarPath);
         if (bmImg != null) {
             synchronized (mutex3) {
@@ -132,24 +134,24 @@ public class AvatarHandler {
                     limit = 15;
                 }
 
-                myAvatarCache.put(avatarId, new CacheValue(bmImg, fileId));
-                int index = myLimitedList.indexOf(avatarId);
+                myAvatarCache.put(avatarOwnerId, new CacheValue(bmImg, fileId, avatarId));
+                int index = myLimitedList.indexOf(avatarOwnerId);
                 if (index < 0) {
                     if (myLimitedList.size() > limit) {
                         Long ss = myLimitedList.remove(0);
                         myAvatarCache.remove(ss);
                     }
-                    myLimitedList.add(avatarId);
+                    myLimitedList.add(avatarOwnerId);
                 } else if (myLimitedList.size() - 1 != index){
                     Collections.swap(myLimitedList, myLimitedList.size() - 1, index);
                 }
             }
         } else {
             if (avatarPath != null && new File(avatarPath).exists()) {
-                HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + "true" +
+                HelperLog.setErrorLog(new Exception("avatar " + avatarOwnerId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + "true" +
                         " FileSize=" + new File(avatarPath).length()));
             } else {
-                HelperLog.setErrorLog(new Exception("avatar " + avatarId + " is null with path: " + avatarPath + " and isMain:" + isMain + " file not exist"));
+                HelperLog.setErrorLog(new Exception("avatar " + avatarOwnerId + " is null with path: " + avatarPath + " and isMain:" + isMain + " file not exist"));
             }
         }
 
@@ -157,7 +159,7 @@ public class AvatarHandler {
             @Override
             public void run() {
                 synchronized (mutex) {
-                    HashSet<ImageView> imageViews = avatarHashImages.get(avatarId);
+                    HashSet<ImageView> imageViews = avatarHashImages.get(avatarOwnerId);
                     if (imageViews != null) {
                         for (ImageView imageView : imageViews) {
                             ImageHashValue imageHashValue = imageViewHashValue.get(imageView);
@@ -199,7 +201,7 @@ public class AvatarHandler {
                         if (onAvatarAdd != null && avatarPath != null) {
                             onAvatarAdd.onAvatarAdd(avatarPath);
                         }
-                        AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId());
+                        AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId(), a.getId());
                     }
                 });
                 realm.close();
@@ -207,7 +209,7 @@ public class AvatarHandler {
         });
     }
 
-    public void avatarDelete(BaseParam baseParam, long avatarId) {
+    public void avatarDelete(BaseParam baseParam, long avatarOwnerId) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -216,7 +218,7 @@ public class AvatarHandler {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmAvatar.deleteAvatar(realm, avatarId);
+                        RealmAvatar.deleteAvatar(realm, avatarOwnerId);
                     }
                 }, () -> {
                     G.refreshRealmUi();
@@ -257,17 +259,17 @@ public class AvatarHandler {
             return;
         }
 
-        if (baseParam.imageView == null || baseParam.avatarId == null) {
+        if (baseParam.imageView == null || baseParam.avatarOwnerId == null) {
             return;
         }
 
-        baseParam.imageView.setTag(baseParam.avatarId);
+        baseParam.imageView.setTag(baseParam.avatarOwnerId);
 
         synchronized (mutex) {
             Bitmap cacheValue = null;
             if (baseParam.useCache) {
-                CacheValue mainCache = avatarCacheMain.get(baseParam.avatarId);
-                CacheValue thumbnailCache = avatarCache.get(baseParam.avatarId);
+                CacheValue mainCache = avatarCacheMain.get(baseParam.avatarOwnerId);
+                CacheValue thumbnailCache = avatarCache.get(baseParam.avatarOwnerId);
 
                 if (baseParam.showMain) {
                     if (mainCache == null) {
@@ -278,7 +280,7 @@ public class AvatarHandler {
                         if (thumbnailCache == null) {
                             cacheValue = mainCache.bitmap;
                         } else {
-                            if (mainCache.fileId == thumbnailCache.fileId) {
+                            if (mainCache.avatarId >= thumbnailCache.avatarId) {
                                 cacheValue = mainCache.bitmap;
                             } else {
                                 cacheValue = thumbnailCache.bitmap;
@@ -292,7 +294,7 @@ public class AvatarHandler {
             }
             if (cacheValue == null) {
                 if (baseParam instanceof ParamWithAvatarType) {
-                    String[] initialsStart = showInitials(baseParam.avatarId, ((ParamWithAvatarType) baseParam).avatarType);
+                    String[] initialsStart = showInitials(baseParam.avatarOwnerId, ((ParamWithAvatarType) baseParam).avatarType);
                     if (initialsStart != null) {
                         cacheValue = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(((ParamWithAvatarType) baseParam).avatarSize), initialsStart[0], initialsStart[1]);
                     }
@@ -307,20 +309,20 @@ public class AvatarHandler {
 
             ImageHashValue imageHashValue = imageViewHashValue.get(baseParam.imageView);
             if (imageHashValue != null) {
-                HashSet<ImageView> imageViews = avatarHashImages.get(imageHashValue.avatarId);
+                HashSet<ImageView> imageViews = avatarHashImages.get(imageHashValue.avatarOwnerId);
                 if (imageViews != null) {
                     imageViews.remove(baseParam.imageView);
-                    avatarHashImages.put(imageHashValue.avatarId, imageViews);
+                    avatarHashImages.put(imageHashValue.avatarOwnerId, imageViews);
                 }
             }
 
-            imageViewHashValue.put(baseParam.imageView, new ImageHashValue(baseParam.avatarId, baseParam.onAvatarChange));
-            HashSet<ImageView> imageViews = avatarHashImages.get(baseParam.avatarId);
+            imageViewHashValue.put(baseParam.imageView, new ImageHashValue(baseParam.avatarOwnerId, baseParam.onAvatarChange));
+            HashSet<ImageView> imageViews = avatarHashImages.get(baseParam.avatarOwnerId);
             if (imageViews == null) {
                 imageViews = new HashSet<>();
             }
             imageViews.add(baseParam.imageView);
-            avatarHashImages.put(baseParam.avatarId, imageViews);
+            avatarHashImages.put(baseParam.avatarOwnerId, imageViews);
         }
 
         LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
@@ -337,21 +339,21 @@ public class AvatarHandler {
      * check avatar in Realm and download if needed
      */
     private void getAvatarImage(BaseParam baseParam, Realm _realm) {
-        RealmAvatar realmAvatar = getLastAvatar(baseParam.avatarId, _realm);
+        RealmAvatar realmAvatar = getLastAvatar(baseParam.avatarOwnerId, _realm);
 
         if (realmAvatar == null && baseParam instanceof ParamWithAvatarType && ((ParamWithAvatarType)baseParam).registeredUser != null) {
             insertRegisteredInfoToDB(((ParamWithAvatarType)baseParam).registeredUser, _realm);
-            realmAvatar = getLastAvatar(baseParam.avatarId, _realm);
+            realmAvatar = getLastAvatar(baseParam.avatarOwnerId, _realm);
         }
 
         if (realmAvatar != null) {
 
             if (baseParam.showMain && realmAvatar.getFile().isFileExistsOnLocal()) {
                 final String path = realmAvatar.getFile().getLocalFilePath();
-                notifyAll(path, baseParam.avatarId, true, realmAvatar.getFile().getId());
+                notifyAll(path, baseParam.avatarOwnerId, true, realmAvatar.getFile().getId(), realmAvatar.getId());
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 final String path = realmAvatar.getFile().getLocalThumbnailPath();
-                notifyAll(path, baseParam.avatarId, false, realmAvatar.getFile().getId());
+                notifyAll(path, baseParam.avatarOwnerId, false, realmAvatar.getFile().getId(), realmAvatar.getId());
             } else {
 
                 new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL, new OnDownload() {
@@ -363,6 +365,7 @@ public class AvatarHandler {
 
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
                         final ArrayList<Long> fileIdList = new ArrayList<>();
+                        final ArrayList<Long> avatarIdList = new ArrayList<>();
                         Realm realm = Realm.getDefaultInstance();
 
                         realm.executeTransaction(new Realm.Transaction() {
@@ -372,15 +375,18 @@ public class AvatarHandler {
                                     realmAvatar1.getFile().setLocalThumbnailPath(filepath);
                                     ownerIdList.add(realmAvatar1.getOwnerId());
                                     fileIdList.add(realmAvatar1.getFile().getId());
+                                    avatarIdList.add(realmAvatar1.getId());
                                 }
                             }
                         });
 
                         realm.close();
                         for (int i = 0; i < ownerIdList.size(); i++) {
-                            AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i));
+                            AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i), avatarIdList.get(i));
                         }
                         ownerIdList.clear();
+                        fileIdList.clear();
+                        avatarIdList.clear();
                     }
 
                     @Override
@@ -390,7 +396,7 @@ public class AvatarHandler {
                 });
             }
         } else if (baseParam instanceof ParamWithAvatarType) {
-            String[] initials = showInitials(baseParam.avatarId, ((ParamWithAvatarType) baseParam).avatarType);
+            String[] initials = showInitials(baseParam.avatarOwnerId, ((ParamWithAvatarType) baseParam).avatarType);
             if (initials == null) {
                 getAvatarAfterTime(baseParam);
             }
@@ -400,13 +406,13 @@ public class AvatarHandler {
     private void getAvatarAfterTime(BaseParam baseParam) {
 
         try {
-            if (mRepeatList.containsKey(baseParam.avatarId)) {
+            if (mRepeatList.containsKey(baseParam.avatarOwnerId)) {
                 return;
             }
             LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mRepeatList.put(baseParam.avatarId, true);
+                    mRepeatList.put(baseParam.avatarOwnerId, true);
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {

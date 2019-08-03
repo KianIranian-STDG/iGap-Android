@@ -4,16 +4,16 @@ import android.widget.ImageView;
 
 public class BaseParam {
     ImageView imageView;
-    Long avatarId;
+    Long avatarOwnerId;
     boolean useCache = true;
     boolean showMain = false;
     OnAvatarChange onAvatarChange = null;
     OnInitSet onInitSet = null;
 
 
-    BaseParam(ImageView imageView, Long avatarId) {
+    BaseParam(ImageView imageView, Long avatarOwnerId) {
         this.imageView = imageView;
-        this.avatarId = avatarId;
+        this.avatarOwnerId = avatarOwnerId;
     }
 
     public BaseParam turnOffCache() {
