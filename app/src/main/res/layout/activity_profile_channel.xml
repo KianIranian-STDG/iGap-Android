@@ -20,8 +20,8 @@
             android:id="@+id/toolbar_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
             android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default=@drawable/shape_toolbar_background}"
+            android:layoutDirection="ltr"
             app:elevation="0dp">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -64,18 +64,18 @@
                         android:layout_toRightOf="@id/toolbar_back" />
 
                     <net.iGap.module.EmojiTextViewE
-                        android:fontFamily="@font/main_font"
                         android:id="@+id/toolbar_txt_name_collapsed"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp8"
+                        android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginEnd="@dimen/dp8"
                         android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_marginStart="@dimen/dp8"
                         android:layout_toStartOf="@id/toolbar_edit"
                         android:layout_toLeftOf="@id/toolbar_edit"
                         android:layout_toEndOf="@id/toolbar_avatar_collapsed_target"
                         android:layout_toRightOf="@id/toolbar_avatar_collapsed_target"
+                        android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
                         android:textColor="@color/white"
@@ -127,11 +127,11 @@
                         android:paddingBottom="@dimen/dp10">
 
                         <net.iGap.module.EmojiTextViewE
-                            android:fontFamily="@font/main_font"
                             android:id="@+id/toolbar_txt_name_expanded"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="left"
+                            android:fontFamily="@font/main_font"
                             android:gravity="bottom|center_horizontal"
                             android:singleLine="true"
                             android:textColor="@color/white"
@@ -139,12 +139,12 @@
                             app:emojiSize="@dimen/largeTextSize" />
 
                         <TextView
-                            android:fontFamily="@font/main_font"
                             android:id="@+id/toolbar_txt_status_expanded"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="left"
                             android:layout_marginTop="@dimen/dp6"
+                            android:fontFamily="@font/main_font"
                             android:singleLine="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/standardTextSize" />
@@ -160,8 +160,8 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
             android:layoutDirection="locale"
+            android:scrollbars="none"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <android.support.v4.widget.NestedScrollView
@@ -183,8 +183,8 @@
                         android:layout_marginTop="@dimen/dp16"
                         android:padding="8dp"
                         android:textSize="@dimen/standardTextSize"
-                        app:emojiSize="@dimen/standardTextSize"
                         android:visibility="@{viewModel.haveDescription}"
+                        app:emojiSize="@dimen/standardTextSize"
                         app:layout_constraintLeft_toLeftOf="@id/notification"
                         app:layout_constraintRight_toRightOf="@id/notification"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -249,8 +249,8 @@
                         style="?textTitleColorSettingTheme"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:padding="4dp"
                         android:layout_marginTop="@dimen/dp10"
+                        android:padding="4dp"
                         android:text="@{viewModel.channelLinkTitle}"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="@{viewModel.isShowLink}"
@@ -264,10 +264,10 @@
                         style="?textSubColorSettingTheme"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:gravity="@{viewModel.textGravity}"
                         android:onClick="@{()->viewModel.onClickChannelLink()}"
                         android:padding="4dp"
                         android:text="@{viewModel.channelLink}"
-                        android:gravity="@{viewModel.textGravity}"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="@{viewModel.isShowLink}"
                         app:layout_constraintLeft_toLeftOf="@id/notification"
@@ -653,6 +653,34 @@
                         app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                         app:layout_constraintTop_toTopOf="@id/links" />
 
+                    <View
+                        android:id="@+id/divider4"
+                        style="?lineColorSettingTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:visibility="@{viewModel.showLeaveChannel}"
+                        app:layout_constraintLeft_toLeftOf="@id/divider1"
+                        app:layout_constraintRight_toRightOf="@id/divider1"
+                        app:layout_constraintTop_toBottomOf="@id/links" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/leaveChannel"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:background="?attr/selectableItemBackground"
+                        android:onClick="@{()->viewModel.onLeaveChannelClick()}"
+                        android:padding="@dimen/dp8"
+                        android:text="@string/leave_channel"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/largeTextSize"
+                        android:visibility="@{viewModel.showLeaveChannel}"
+                        app:layout_constraintLeft_toLeftOf="@id/notification"
+                        app:layout_constraintRight_toRightOf="@id/notification"
+                        app:layout_constraintTop_toBottomOf="@id/divider4" />
+
                     <ProgressBar
                         android:id="@+id/loading"
                         android:layout_width="wrap_content"
@@ -672,11 +700,11 @@
             android:id="@+id/toolbar_avatar"
             android:layout_width="@dimen/toolbar_profile_avatar_size_expanded"
             android:layout_height="@dimen/toolbar_profile_avatar_size_expanded"
-            android:layoutDirection="ltr"
             android:layout_gravity="top|left"
             android:layout_marginStart="@dimen/dp20"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp70"
+            android:layoutDirection="ltr"
             android:scaleType="centerCrop"
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />

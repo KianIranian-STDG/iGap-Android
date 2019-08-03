@@ -17,7 +17,6 @@ import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarDelete;
 import net.iGap.interfaces.OnChannelDelete;
 import net.iGap.interfaces.OnChannelEdit;
-import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
 import net.iGap.module.FileUploadStructure;
@@ -38,7 +37,7 @@ import io.realm.Realm;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 
-public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete, OnChannelLeft {
+public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
 
     public ObservableField<String> channelName = new ObservableField<>("");
     public ObservableField<String> channelDescription = new ObservableField<>("");
@@ -86,7 +85,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         /*G.onChannelAddModerator = this;*/
         /*G.onChannelKickModerator = this;*/
         G.onChannelDelete = this;
-        G.onChannelLeft = this;
         /*G.onChannelRevokeLink = this;*/
 
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
@@ -365,11 +363,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
     @Override
     public void onChannelDelete(long roomId) {
-        closeActivity();
-    }
-
-    @Override
-    public void onChannelLeft(long roomId, long memberId) {
         closeActivity();
     }
 

@@ -30,6 +30,7 @@ import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperUrl;
+import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnMenuClick;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.model.GoToShowMemberModel;
@@ -47,6 +48,7 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddModerator;
+import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestClientMuteRoom;
 
 import org.jetbrains.annotations.NotNull;
@@ -92,6 +94,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public ObservableInt sharedLinkCount = new ObservableInt(0);
     public ObservableInt showLoading = new ObservableInt(View.GONE);
     public ObservableInt textGravity = new ObservableInt(Gravity.LEFT);
+    public ObservableInt showLeaveChannel = new ObservableInt();
     //Ui event
     public MutableLiveData<String> channelName = new MutableLiveData<>();
     public MutableLiveData<String> channelSecondsTitle = new MutableLiveData<>();
@@ -104,6 +107,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
     public MutableLiveData<String> showDialogCopyLink = new MutableLiveData<>();
     public MutableLiveData<GoToSharedMediaModel> goToSharedMediaPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogLeaveChannel = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToChatRoom = new MutableLiveData<>();
 
     private ChannelChatRole role;
     public long roomId;
@@ -117,12 +122,30 @@ public class FragmentChannelProfileViewModel extends ViewModel
     private boolean isNeedGetMemberList = true;
     private RealmChangeListener<RealmModel> changeListener;
 
-    public FragmentChannelProfileViewModel( FragmentChannelProfile fragmentChannelProfile , long roomId, boolean isNotJoin) {
+    public FragmentChannelProfileViewModel(FragmentChannelProfile fragmentChannelProfile, long roomId, boolean isNotJoin) {
 
         this.fragment = fragmentChannelProfile;
 
         this.roomId = roomId;
         this.isNotJoin = isNotJoin;
+
+        G.onChannelLeft = new OnChannelLeft() {
+            @Override
+            public void onChannelLeft(long roomId, long memberId) {
+                G.handler.post(() -> showLoading.set(View.GONE));
+                goToChatRoom.postValue(true);
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                showLoading.set(View.GONE);
+            }
+
+            @Override
+            public void onTimeOut() {
+                showLoading.set(View.GONE);
+            }
+        };
 
         realmChannelProfile = Realm.getDefaultInstance();
 
@@ -171,15 +194,17 @@ public class FragmentChannelProfileViewModel extends ViewModel
             channelSecondsTitle.setValue(mRoom.getChannelRoom().isPrivate() ? G.currentActivity.getString(R.string.private_channel) : G.currentActivity.getString(R.string.public_channel));
             showMemberList.set(View.VISIBLE);
             editButtonVisibility.setValue(View.VISIBLE);
+            showLeaveChannel.set(View.GONE);
         } else {
             channelSecondsTitle.setValue(String.format("%s %s", mRoom.getChannelRoom().getParticipantsCountLabel(), G.currentActivity.getString(R.string.subscribers_title)));
             showMemberList.set(View.GONE);
             editButtonVisibility.setValue(View.GONE);
+            showLeaveChannel.set(View.VISIBLE);
         }
 
-        if (G.selectedLanguage.equals("en")){
+        if (G.selectedLanguage.equals("en")) {
             textGravity.set(Gravity.LEFT);
-        }else {
+        } else {
             textGravity.set(Gravity.RIGHT);
         }
 
@@ -224,6 +249,10 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
     public void onClickGroupShearedMedia(int type) {
         goToSharedMediaPage.setValue(new GoToSharedMediaModel(roomId, type));
+    }
+
+    public void onLeaveChannelClick() {
+        showDialogLeaveChannel.setValue(true);
     }
 
     public void onResume() {
@@ -331,6 +360,11 @@ public class FragmentChannelProfileViewModel extends ViewModel
         if (realmChannelProfile != null && !realmChannelProfile.isClosed()) {
             realmChannelProfile.close();
         }
+    }
+
+    public void leaveChannel() {
+        new RequestChannelLeft().channelLeft(roomId);
+        showLoading.set(View.VISIBLE);
     }
 
     private Realm getRealm() {
