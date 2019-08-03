@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="@color/gray_4c"
+    android:layout_height="@dimen/dp68"
     android:clickable="true"
+    android:paddingTop="@dimen/dp4"
+    android:paddingBottom="@dimen/dp4"
     android:orientation="horizontal"
     android:visibility="visible">
 
@@ -13,29 +14,28 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:paddingStart="@dimen/dp20"
         android:paddingLeft="@dimen/dp20"
         android:paddingEnd="@dimen/dp20"
         android:paddingRight="@dimen/dp20"
         android:text="@string/block_user"
-        android:textColor="@color/toolbar_background"
-        android:textSize="@dimen/dp16" />
+        style="?textTitleColorSettingTheme"
+        android:textColor="@color/red"
+        android:textSize="@dimen/standardTextSize" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/chat_txt_close"
-        style="@style/myIconToolbarStyle"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:paddingStart="@dimen/dp20"
         android:paddingLeft="@dimen/dp20"
         android:paddingEnd="@dimen/dp20"
         android:paddingRight="@dimen/dp20"
-        android:text="@string/md_close_button"
-        android:textColor="@color/red"
-        android:textSize="@dimen/dp22" />
+        android:text="@string/md_close_button"/>
 
 </RelativeLayout>
