@@ -6,7 +6,9 @@
     <data>
 
         <import type="android.view.View" />
+
         <import type="net.iGap.G" />
+
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.UserProfileViewModel" />
@@ -61,8 +63,8 @@
                 android:layout_height="@dimen/dp100"
                 android:layout_marginLeft="@dimen/dp36"
                 android:layout_marginRight="@dimen/dp36"
-                android:onClick="@{()->viewModel.onAvatarClick()}"
                 android:background="@drawable/shape_background_profile_sample"
+                android:onClick="@{()->viewModel.onAvatarClick()}"
                 app:layout_constraintBottom_toBottomOf="@id/fup_avatar_box"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_avatar_box" />
@@ -407,12 +409,9 @@
                 style="@style/myIconTextViewStyle"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="@dimen/dp32"
-                android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginTop="@dimen/dp8"
                 android:text="@string/invite_icon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fup_splitter_3" />
+                app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
+                app:layout_constraintTop_toTopOf="@id/fup_btn_invite_friends" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/inviteTitle"
@@ -421,14 +420,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginEnd="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32"
                 android:fontFamily="@font/main_font"
                 android:text="@string/Invite_Friends"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/inviteIcon"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
                 app:layout_constraintStart_toEndOf="@id/inviteIcon"
                 app:layout_constraintTop_toTopOf="@id/inviteIcon" />
 
@@ -436,12 +433,13 @@
                 android:id="@+id/fup_btn_invite_friends"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp8"
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{()->viewModel.onInviteFriendsClick()}"
                 app:layout_constraintBottom_toBottomOf="@id/inviteIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/inviteIcon"
+                app:layout_constraintTop_toBottomOf="@id/fup_splitter_3"
                 app:layout_constraintWidth_percent=".85" />
 
             <android.support.v7.widget.AppCompatTextView

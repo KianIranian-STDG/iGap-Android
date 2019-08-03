@@ -607,7 +607,7 @@
                     android:layout_marginBottom="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onBlockButtonClick()}"
-                    android:text="@string/block"
+                    android:text="@{viewModel.userBlockState}"
                     android:textColor="@color/red"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="parent"
