@@ -410,7 +410,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             try {
-                if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.CARD_TO_CARD_MESSAGE) {
                     HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
                     Gson gson = new GsonBuilder().create();
                     for (int i = 0; i < buttonList.size(); i++) {

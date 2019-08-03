@@ -3365,7 +3365,7 @@ public class FragmentChat extends BaseFragment
             dataJsonArray.add(rootObject);
             rootJsonArray.add(dataJsonArray);
 
-            getRealmChat().executeTransaction(realm -> roomMessage.setRealmAdditional(RealmAdditional.put(rootJsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON)));
+            getRealmChat().executeTransaction(realm -> roomMessage.setRealmAdditional(RealmAdditional.put(rootJsonArray.toString(), AdditionalType.CARD_TO_CARD_MESSAGE)));
 
             edtChat.setText("");
             lastMessageId = roomMessage.getMessageId();
