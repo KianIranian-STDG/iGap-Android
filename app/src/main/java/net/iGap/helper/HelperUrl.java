@@ -1062,7 +1062,19 @@ public class HelperUrl {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
                             public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                RealmRoom.putOrUpdate(room);
+                                Realm realm1 = Realm.getDefaultInstance();
+                                realm1.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                            realmRoom1.setDeleted(true);
+                                        } else {
+                                            RealmRoom.putOrUpdate(room, realm);
+                                        }
+                                    }
+                                });
+                                realm1.close();
                                 G.handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
