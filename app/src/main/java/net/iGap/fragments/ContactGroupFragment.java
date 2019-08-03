@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -111,6 +112,17 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
         LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
         toolbarLayout.addView(mHelperToolbar.getView());
+
+        /**
+         * for some problem in theme we created 2 layout and check theme then add at run time
+         * library does not support change text color or background color at run time until 1.0.8
+         */
+        ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
+        if (G.isDarkTheme){
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark , null));
+        }else {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout , null));
+        }
 
         if (typeCreate.equals("CHANNEL")) {
             mHelperToolbar.setDefaultTitle(G.context.getResources().getString(R.string.new_channel));

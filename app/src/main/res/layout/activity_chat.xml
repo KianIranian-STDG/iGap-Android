@@ -28,13 +28,6 @@
             android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/layout_add_contact"
-                layout="@layout/chat_sub_layout_block_user"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:visibility="gone" />
-
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -345,95 +338,110 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ac_toolbars_container"
                 android:background="@drawable/shape_multi_select_bg"
-                android:layout_marginTop="-10dp"
+                android:layout_marginTop="-14dp"
                 android:paddingTop="@dimen/dp10">
 
+                <RelativeLayout
+                    android:id="@+id/ac_p_s_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include
+                        android:id="@+id/ac_ll_strip_Pin"
+                        layout="@layout/chat_sub_layout_strip_pin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/ac_layout_selected_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp44"
+                        android:layoutDirection="ltr"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/ac_layout_selected_txt_counter"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="bottom"
+                            android:paddingBottom="5dp"
+                            android:text=""
+                            android:textSize="@dimen/standardTextSize"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <net.iGap.module.MaterialDesignTextView
+                            android:id="@+id/ac_layout_selected_btn_delete"
+                            style="@style/myIconTextViewStyle"
+                            android:layout_width="@dimen/multi_select_icon_height"
+                            android:layout_height="@dimen/multi_select_icon_height"
+                            android:layout_marginLeft="@dimen/multi_select_icon_margin"
+                            android:layout_marginRight="@dimen/multi_select_icon_margin"
+                            android:gravity="center"
+                            android:text="@string/delete_icon"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/multi_select_icon_size"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <net.iGap.module.MaterialDesignTextView
+                            android:id="@+id/ac_layout_selected_btn_forward"
+                            style="@style/myIconTextViewStyle"
+                            android:layout_width="@dimen/multi_select_icon_height"
+                            android:layout_height="@dimen/multi_select_icon_height"
+                            android:layout_marginLeft="@dimen/multi_select_icon_margin"
+                            android:layout_marginRight="@dimen/multi_select_icon_margin"
+                            android:gravity="center"
+                            android:text="@string/forward_icon"
+                            android:textSize="@dimen/multi_select_icon_size"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_delete" />
+
+
+                        <net.iGap.module.MaterialDesignTextView
+                            android:id="@+id/ac_layout_selected_btn_copy"
+                            style="@style/myIconTextViewStyle"
+                            android:layout_width="@dimen/multi_select_icon_height"
+                            android:layout_height="@dimen/multi_select_icon_height"
+                            android:layout_marginLeft="@dimen/multi_select_icon_margin"
+                            android:layout_marginRight="@dimen/multi_select_icon_margin"
+                            android:gravity="center"
+                            android:text="@string/copy_icon"
+                            android:textSize="@dimen/multi_select_icon_size"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_forward" />
+
+
+                        <net.iGap.module.MaterialDesignTextView
+                            android:id="@+id/ac_layout_selected_btn_reply"
+                            style="@style/myIconTextViewStyle"
+                            android:layout_width="@dimen/multi_select_icon_height"
+                            android:layout_height="@dimen/multi_select_icon_height"
+                            android:layout_marginLeft="@dimen/multi_select_icon_margin"
+                            android:layout_marginRight="@dimen/multi_select_icon_margin"
+                            android:gravity="center"
+                            android:text="@string/reply_icon"
+                            android:textSize="@dimen/multi_select_icon_size"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_copy" />
+
+
+                    </android.support.constraint.ConstraintLayout>
+
+                </RelativeLayout>
+
                 <include
-                    android:id="@+id/ac_ll_strip_Pin"
-                    layout="@layout/chat_sub_layout_strip_pin"
+                    android:id="@+id/layout_add_contact"
+                    layout="@layout/chat_sub_layout_block_user"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/ac_p_s_layout"
                     android:visibility="gone" />
-
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/ac_layout_selected_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp44"
-                    android:layoutDirection="ltr"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/ac_layout_selected_txt_counter"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="bottom"
-                        android:paddingBottom="5dp"
-                        android:text=""
-                        android:textSize="@dimen/standardTextSize"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/ac_layout_selected_btn_delete"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/multi_select_icon_height"
-                        android:layout_height="@dimen/multi_select_icon_height"
-                        android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                        android:layout_marginRight="@dimen/multi_select_icon_margin"
-                        android:gravity="center"
-                        android:text="@string/delete_icon"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/multi_select_icon_size"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/ac_layout_selected_btn_forward"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/multi_select_icon_height"
-                        android:layout_height="@dimen/multi_select_icon_height"
-                        android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                        android:layout_marginRight="@dimen/multi_select_icon_margin"
-                        android:gravity="center"
-                        android:text="@string/forward_icon"
-                        android:textSize="@dimen/multi_select_icon_size"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_delete" />
-
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/ac_layout_selected_btn_copy"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/multi_select_icon_height"
-                        android:layout_height="@dimen/multi_select_icon_height"
-                        android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                        android:layout_marginRight="@dimen/multi_select_icon_margin"
-                        android:gravity="center"
-                        android:text="@string/copy_icon"
-                        android:textSize="@dimen/multi_select_icon_size"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_forward" />
-
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/ac_layout_selected_btn_reply"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/multi_select_icon_height"
-                        android:layout_height="@dimen/multi_select_icon_height"
-                        android:layout_marginLeft="@dimen/multi_select_icon_margin"
-                        android:layout_marginRight="@dimen/multi_select_icon_margin"
-                        android:gravity="center"
-                        android:text="@string/reply_icon"
-                        android:textSize="@dimen/multi_select_icon_size"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_copy" />
-
-
-                </android.support.constraint.ConstraintLayout>
 
 
             </RelativeLayout>

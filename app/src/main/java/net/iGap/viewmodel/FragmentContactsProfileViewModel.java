@@ -108,6 +108,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> blockDialogListener = new MutableLiveData<>();
 
     public List<String> items;
     private Realm realm;
@@ -267,22 +268,10 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     }
 
     public void onBlockButtonClick() {
+
         //todo: move view code to fragment
-        if (isBlockUser) {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsUnblock().userContactsUnblock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-        } else {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsBlock().userContactsBlock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-        }
+        blockDialogListener.postValue(isBlockUser);
+
     }
 
     public void onSecretChatClick() {

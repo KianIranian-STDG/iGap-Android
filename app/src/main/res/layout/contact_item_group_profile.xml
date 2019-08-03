@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <TextView
+            <net.iGap.module.MaterialDesignTextView
               android:id="@+id/cigp_txt_member_role"
               style="@style/myIconTextViewStyle"
               android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
           android:textSize="@dimen/smallTextSize" />
       </RelativeLayout>
 
-      <TextView
+      <net.iGap.module.MaterialDesignTextView
         android:id="@+id/cigp_moreButton"
         android:layout_width="@dimen/dp48"
         android:layout_height="match_parent"

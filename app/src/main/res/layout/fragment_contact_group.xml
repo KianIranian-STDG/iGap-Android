@@ -36,19 +36,8 @@
         android:layoutDirection="ltr"
         android:orientation="vertical">
 
-        <com.pchmn.materialchips.ChipsInput
-            android:id="@+id/chips_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dp15"
-            style="?backgroundColorSettingTheme_2"
-            app:chip_backgroundColor="@color/white"
-            app:chip_deletable="true"
-            app:chip_deleteIconColor="@color/gray_5c"
-            app:deleteIconColor="@android:color/white"
-            app:hint="Enter a name"
-            app:hintColor="#7e7e7e"
-            app:showChipDetailed="false" />
+        <!--for some problem in theme we created 2 layout and check theme then add at run time-->
+        <!--library does not support change text color or background color at run time until 1.0.8-->
 
     </LinearLayout>
 

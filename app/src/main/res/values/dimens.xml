@@ -20,7 +20,7 @@
     <dimen name="toolbar_icon_size">@dimen/dp40</dimen>
     <dimen name="toolbar_icon_padding">@dimen/dp10</dimen>
     <dimen name="toolbar_icon_margin">@dimen/dp4</dimen>
-    <dimen name="toolbar_igap_icon_textSize">@dimen/dp28</dimen>
+    <dimen name="toolbar_igap_icon_textSize">@dimen/dp60</dimen>
 
     <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>
     <dimen name="ivand_profile_toolbar_txt_textSize">14sp</dimen>
