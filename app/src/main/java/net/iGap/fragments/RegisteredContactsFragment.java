@@ -690,24 +690,22 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     public class ContactListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<RealmContacts> usersList;
-        private int count;
         private LayoutInflater inflater;
 
 
         ContactListAdapter(List<RealmContacts> contacts) {
             inflater = LayoutInflater.from(G.context);
-            count = contacts.size();
             usersList = contacts;
             prgWaitingLoadList.setVisibility(View.INVISIBLE);
         }
 
         void addUserList(List<RealmContacts> usersList) {
-            this.usersList.addAll(count, usersList);
+            this.usersList.addAll(usersList);
             prgWaitingLoadList.setVisibility(View.INVISIBLE);
-            notifyItemChanged(count, count + ContactManager.LOAD_AVG);
-            count = count + ContactManager.LOAD_AVG;
-            if (count > this.usersList.size())
-                endPage = true;
+           // notifyItemChanged(count, count + ContactManager.LOAD_AVG);
+           // count = count + ContactManager.LOAD_AVG;
+           // if (count > this.usersList.size())
+            //    endPage = true;
         }
 
         public void remove(long num) {
@@ -715,7 +713,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 if (usersList.get(i).getPhone() == num) {
                     usersList.remove(i);
                     notifyItemRemoved(i);
-                    G.handler.postDelayed(this::notifyDataSetChanged, 1000);
+                    G.handler.postDelayed(this::notifyDataSetChanged, 500);
                 }
             }
         }
@@ -727,12 +725,13 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         void insertContact(RealmContacts realmContacts, int i) {
             usersList.add(i, realmContacts);
             notifyItemInserted(i);
+            G.handler.postDelayed( () -> notifyDataSetChanged(), 100);
         }
 
         @Override
         public int getItemViewType(int position) {
 
-            if (position != count){
+            if (position != usersList.size()){
                 return 0;
             }else {
                 return 1;
@@ -768,7 +767,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 ViewHolder viewHolder = (ViewHolder) holder;
 
-                final RealmContacts contact = viewHolder.realmContacts = usersList.get(i);
+                final RealmContacts contact = viewHolder.realmContacts = usersList.get(viewHolder.getAdapterPosition());
                 if (contact == null) {
                     return;
                 }
@@ -841,7 +840,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
             }
             else if (holder instanceof ViewHolderCounter){
-                ((ViewHolderCounter) holder).setCount(count);
+                ((ViewHolderCounter) holder).setCount(usersList.size());
             }
         }
 
