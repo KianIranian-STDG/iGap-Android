@@ -279,6 +279,10 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         textView.setTypeface(G.typeface_IRANSansMobile);
     }
 
+    protected void setTypeFace(TextView textView,int style) {
+        textView.setTypeface(G.typeface_IRANSansMobile,style);
+    }
+
     protected MessageProgress getProgressBar(int sizeSrc) {
         return ViewMaker.getProgressBar(sizeSrc);
     }

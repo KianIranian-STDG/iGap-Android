@@ -8275,10 +8275,14 @@ public class FragmentChat extends BaseFragment
 
                 switch (messageType) {
                     case TEXT:
-                        if (!addTop) {
-                            mAdapter.add(new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        if (messageInfo.additionalData!= null &&messageInfo.additionalData.AdditionalType == AdditionalType.CARD_TO_CARD_MESSAGE)
+                            mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(messageInfo).withIdentifier(identifier));
+                        else {
+                            if (!addTop) {
+                                mAdapter.add(new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                     case WALLET:

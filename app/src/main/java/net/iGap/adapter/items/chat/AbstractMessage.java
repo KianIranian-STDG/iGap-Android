@@ -26,7 +26,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -70,6 +68,7 @@ import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
+import net.iGap.model.CardToCardValue;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
@@ -383,6 +382,44 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 OnClickRow(mHolder, view);
             }
         });
+
+        if (holder instanceof CardToCardItem.ViewHolder) {
+            CardToCardItem.ViewHolder cardToCardHolder = (CardToCardItem.ViewHolder) holder;
+            cardToCardHolder.getRootView().setMinWidth(G.maxChatBox - i_Dp(R.dimen.dp100));
+            cardToCardHolder.getInnerLayout().setMinimumWidth(G.maxChatBox - i_Dp(R.dimen.dp100));
+
+            if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.CARD_TO_CARD_MESSAGE) {
+
+                CardToCardValue value = new CardToCardValue();
+                try {
+                    JSONArray rootJsonArray = new JSONArray(mMessage.additionalData.additionalData);
+                    for (int i = 0; i < rootJsonArray.length(); i++) {
+                        JSONArray valuJsonArray = rootJsonArray.getJSONArray(i);
+                        for (int j = 0; j < valuJsonArray.length(); j++) {
+
+                            JSONObject rootJsonObject = new JSONObject(valuJsonArray.getJSONObject(i).toString());
+                            JSONObject valueObject = rootJsonObject.getJSONObject("value");
+
+                            String cardNumber = valueObject.getString("cardNumber");
+                            int amount = valueObject.getInt("amount");
+                            long userId = valueObject.getLong("userId");
+
+                            value.setAmount(amount);
+                            value.setCardNumber(cardNumber);
+                            value.setUserId(userId);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                cardToCardHolder.setValue(value);
+            }
+
+            cardToCardHolder.setOnCardToCard(cardToCard -> {
+                CardToCardHelper.NewCallCardToCard(G.currentActivity, cardToCard.getUserId(), cardToCard.getAmount(), cardToCard.getCardNumber());
+            });
+        }
 
 
         if (holder instanceof ChatItemWithTextHolder) {
