@@ -838,6 +838,10 @@ public class FragmentChat extends BaseFragment
                 }
             }
         }, Config.LOW_START_PAGE_TIME);
+
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot){
+            sendMoney.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
