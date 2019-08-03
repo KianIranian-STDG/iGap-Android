@@ -202,7 +202,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     }
 
     public void onSurfaceViewRendererClick() {
-        if (G.isWebRtcConnected) {
+        if (isConnected) {
             if (!isHiddenButtons) {
                 showChatButton.set(View.INVISIBLE);
                 if (showUserAvatar.get() == View.VISIBLE) {
