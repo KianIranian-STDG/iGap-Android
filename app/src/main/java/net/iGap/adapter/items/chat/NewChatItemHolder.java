@@ -271,7 +271,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         ViewMaker.setLayoutDirection(view, direction);
     }
 
-    
+
     protected int i_Dp(int dpSrc) {
         return ViewMaker.i_Dp(dpSrc);
     }
