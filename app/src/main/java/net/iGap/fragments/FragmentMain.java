@@ -1453,10 +1453,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 chatIconTv.setText("");
             } else if (mInfo.getType() == GROUP) {
                 chatIconTv.setVisibility(View.VISIBLE);
-                chatIconTv.setText(";");
+                chatIconTv.setText(R.string.group_icon);
             } else if (mInfo.getType() == CHANNEL) {
                 chatIconTv.setVisibility(View.VISIBLE);
-                chatIconTv.setText(":");
+                chatIconTv.setText(R.string.channel_icon);
             } else {
                 chatIconTv.setVisibility(View.GONE);
             }

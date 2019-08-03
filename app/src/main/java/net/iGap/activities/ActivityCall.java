@@ -31,6 +31,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintSet;
@@ -482,17 +483,33 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     }
 
     private void screenOn() {
-        LayoutParams params = this.getWindow().getAttributes();
+
+        PowerManager.WakeLock wakeLock;
+        int field = 0x00000020;
+        wakeLock = ((PowerManager) getSystemService(POWER_SERVICE)).newWakeLock(field, getLocalClassName());
+
+        if(wakeLock.isHeld()) {
+            wakeLock.release();
+        }
+        /*LayoutParams params = this.getWindow().getAttributes();
         params.screenBrightness = 1;
-        this.getWindow().setAttributes(params);
+        this.getWindow().setAttributes(params);*/
         enableDisableViewGroup(binding.acLayoutCallRoot, true);
     }
 
     private void screenOff() {
         if (ActivityCallViewModel.isConnected) {
-            LayoutParams params = this.getWindow().getAttributes();
+            PowerManager.WakeLock wakeLock;
+            int field = 0x00000020;
+            wakeLock = ((PowerManager) getSystemService(POWER_SERVICE)).newWakeLock(field, getLocalClassName());
+
+            if(!wakeLock.isHeld()) {
+                wakeLock.acquire();
+            }
+
+            /*LayoutParams params = this.getWindow().getAttributes();
             params.screenBrightness = 0;
-            this.getWindow().setAttributes(params);
+            this.getWindow().setAttributes(params);*/
             enableDisableViewGroup(binding.acLayoutCallRoot, false);
         }
     }

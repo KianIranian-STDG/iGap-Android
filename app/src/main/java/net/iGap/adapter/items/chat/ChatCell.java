@@ -105,7 +105,7 @@ public class ChatCell extends ConstraintLayout {
         FontIconTextView verify = new FontIconTextView(G.context);
         verify.setId(R.id.tv_chatCell_verify);
         verify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
-        verify.setText("a");
+        verify.setText(R.string.verify_icon);
         setTextSize(verify, R.dimen.standardTextSize);
         addView(verify);
 
@@ -166,7 +166,7 @@ public class ChatCell extends ConstraintLayout {
          * */
         FontIconTextView mute = new FontIconTextView(G.context);
         mute.setId(R.id.iv_chatCell_mute);
-        mute.setText("K");
+        mute.setText(R.string.mute_icon);
         mute.setTextColor(Color.parseColor(G.textTitleTheme));
         setTextSize(mute, R.dimen.dp13);
         addView(mute);
