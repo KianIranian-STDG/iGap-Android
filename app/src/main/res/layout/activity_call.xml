@@ -98,7 +98,7 @@
 
         <LinearLayout
             android:id="@+id/callInfo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/fcr_btn_end"
@@ -111,6 +111,7 @@
                 style="@style/TextAppearance.AppCompat.Display1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:singleLine="true"
                 android:text="@{activityCallViewModel.callBackTxtName}"
                 android:visibility="@{activityCallViewModel.showChatButton}" />
@@ -173,8 +174,8 @@
             app:backgroundTint="@color/red"
             app:cornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
-            app:layout_constraintRight_toLeftOf="@id/fcr_btn_call"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_call"
             app:layout_constraintTop_toBottomOf="@id/callInfo"
             app:layout_constraintWidth_percent=".311" />
 
@@ -195,8 +196,8 @@
             app:backgroundTint="@color/notification_badge"
             app:cornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_end"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_end"
             app:layout_constraintWidth_percent=".311" />
 
@@ -215,6 +216,16 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_end" />
 
+        <View
+            android:id="@+id/fcr_btn_chatBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/call_button_background"
+            android:visibility="@{activityCallViewModel.showChatButton}"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintEnd_toEndOf="@id/fcr_btn_chat"
+            app:layout_constraintStart_toStartOf="@id/fcr_btn_chat"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_chat"
@@ -234,6 +245,17 @@
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_mic"
             app:layout_constraintTop_toBottomOf="@id/fcr_btn_end" />
 
+        <View
+            android:id="@+id/fcr_btn_micBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/call_button_background"
+            android:visibility="@{activityCallViewModel.showChatButton}"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_mic"
+            app:layout_constraintEnd_toEndOf="@id/fcr_btn_mic"
+            app:layout_constraintStart_toStartOf="@id/fcr_btn_mic"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_mic" />
+
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_mic"
             style="@style/baseFontIcon"
@@ -251,6 +273,17 @@
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_speaker"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
 
+        <View
+            android:id="@+id/fcr_btn_speakerBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/call_button_background"
+            android:visibility="@{activityCallViewModel.showChatButton}"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_speaker"
+            app:layout_constraintEnd_toEndOf="@id/fcr_btn_speaker"
+            app:layout_constraintStart_toStartOf="@id/fcr_btn_speaker"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_speaker" />
+
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_speaker"
             style="@style/baseFontIcon"
@@ -267,6 +300,17 @@
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_mic"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_swich_camera"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
+
+        <View
+            android:id="@+id/fcr_btn_swich_cameraBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/call_button_background"
+            android:visibility="@{activityCallViewModel.showSwitchCamera}"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_swich_camera"
+            app:layout_constraintEnd_toEndOf="@id/fcr_btn_swich_camera"
+            app:layout_constraintStart_toStartOf="@id/fcr_btn_swich_camera"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_swich_camera" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_swich_camera"
