@@ -244,6 +244,8 @@
     <string name="go_icon">\ue94b</string>
     <string name="heart_icon">\ue954</string>
     <string name="error_icon">\ue938</string>
+    <string name="dislike_icon">\ue929</string>
     <string name="delivery_icon">\ue925</string>
     <string name="financial_send_money_icon">\ue946</string>
+    <string name="eye_icon">\ue9a4</string>
 </resources>
