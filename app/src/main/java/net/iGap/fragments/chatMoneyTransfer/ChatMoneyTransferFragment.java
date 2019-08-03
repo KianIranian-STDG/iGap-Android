@@ -46,13 +46,7 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
     private Drawable drawable;
     private Button cancelBtn;
     private View transferRootViewCard;
-    private CircleImageView userAvatarIvCard;
-    private TextView userNameTvCard;
-    private TextView creditTvCard;
     private Button cancelBtnCard;
-    private Button confirmBtnCard;
-    private TextView amountTvCard;
-    private TextView cardNumberTvCard;
     private EditText amountEtCard;
     private EditText descEtCard;
     private MaskedEditText cardNumberEtCard;
@@ -107,13 +101,13 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         /** cardToCard **/
         TextView walletTransferIv = rootView.findViewById(R.id.iv_moneyAction_wallet);
         transferRootViewCard = rootView.findViewById(R.id.cl_cardToCard_transferRoot);
-        userAvatarIvCard = rootView.findViewById(R.id.iv_cardToCard_userAvatar);
-        userNameTvCard = rootView.findViewById(R.id.tv_cardToCard_userName);
+        CircleImageView userAvatarIvCard = rootView.findViewById(R.id.iv_cardToCard_userAvatar);
+        TextView userNameTvCard = rootView.findViewById(R.id.tv_cardToCard_userName);
         cancelBtnCard = rootView.findViewById(R.id.btn_cardToCard_cancel);
-        confirmBtnCard = rootView.findViewById(R.id.btn_cardToCard_confirm);
+        Button confirmBtnCard = rootView.findViewById(R.id.btn_cardToCard_confirm);
         TextView transferToTvCard = rootView.findViewById(R.id.tv_cardToCard_transferTo);
-        amountTvCard = view.findViewById(R.id.tv_chat_card_amountText);
-        cardNumberTvCard = view.findViewById(R.id.et_chat_card_cardNumberTv);
+        TextView amountTvCard = view.findViewById(R.id.tv_chat_card_amountText);
+        TextView cardNumberTvCard = view.findViewById(R.id.et_chat_card_cardNumberTv);
         amountEtCard = view.findViewById(R.id.et_chat_card_cardamount);
         cardNumberEtCard = view.findViewById(R.id.et_chat_card_cardNumber);
         descEtCard = view.findViewById(R.id.et_chat_card_desc);
