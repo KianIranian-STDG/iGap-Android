@@ -116,6 +116,7 @@ import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
+import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
 import net.iGap.adapter.items.chat.GifWithTextItem;
@@ -3369,7 +3370,7 @@ public class FragmentChat extends BaseFragment
 
             edtChat.setText("");
             lastMessageId = roomMessage.getMessageId();
-            mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+            mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
             clearReplyView();
             scrollToEnd();
 
