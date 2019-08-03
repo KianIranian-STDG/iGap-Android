@@ -60,6 +60,8 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestUserContactImport;
+import net.iGap.request.RequestUserContactsBlock;
+import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserReport;
 import net.iGap.viewmodel.FragmentContactsProfileViewModel;
 
@@ -91,6 +93,7 @@ public class FragmentContactsProfile extends BaseFragment {
     private FragmentContactsProfileBinding binding;
     private FragmentContactsProfileViewModel viewModel;
     private CircleImageView userAvatarImageView;
+    private boolean isCollapsed;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -545,7 +548,35 @@ public class FragmentContactsProfile extends BaseFragment {
             }
         });
 
+        viewModel.blockDialogListener.observe(getViewLifecycleOwner() , isBlockUser ->{
+            if (isBlockUser == null) return;
+
+            if (isBlockUser) {
+                new MaterialDialog.Builder(getContext()).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new RequestUserContactsUnblock().userContactsUnblock(viewModel.userId);
+                    }
+                }).negativeText(R.string.cancel)
+                        .dismissListener(dialog ->  checkViewsState())
+                        .showListener(dialog -> checkViewsState()).show();
+            } else {
+                new MaterialDialog.Builder(getContext()).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new RequestUserContactsBlock().userContactsBlock(viewModel.userId);
+                    }
+                }).negativeText(R.string.cancel)
+                        .dismissListener(dialog -> checkViewsState())
+                        .showListener(dialog -> checkViewsState()).show();
+            }
+        });
+
         initialToolbar();
+    }
+
+    private void checkViewsState(){
+        if (isCollapsed) startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
     }
 
     private void checkTheme() {
@@ -558,6 +589,9 @@ public class FragmentContactsProfile extends BaseFragment {
     private void initialToolbar() {
 
         binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
+
+            isCollapsed = offset != 0;
+
             int maxScroll = appBarLayout.getTotalScrollRange();
             float percentage = (float) Math.abs(offset) / (float) maxScroll;
 
@@ -606,6 +640,7 @@ public class FragmentContactsProfile extends BaseFragment {
     }
 
     public static void startAlphaAnimation (View v, long duration, int visibility) {
+
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);
@@ -617,13 +652,11 @@ public class FragmentContactsProfile extends BaseFragment {
 
     @Override
     public void onResume() {
-        super.onResume();
-        viewModel.onResume();
-
         if (binding != null && !mIsTheTitleContainerVisible){
             startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
         }
-
+        super.onResume();
+        viewModel.onResume();
     }
 
     @Override
