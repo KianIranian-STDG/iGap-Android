@@ -4,12 +4,12 @@
     <string name="text_i_introduce_page1">"گپ"</string>
     <string name="text_line_1_introduce_page1">"آی"</string>
     <string name="text_line_2_introduce_page1">"ارتباطی بی حد و مرز"</string>
-    <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آیگپ بسازید."</string>
-    <string name="text_line_4_introduce_page1">"فقط چند دقیقه زمان میبرد تا شما هم به جمع آیگپی ها بپیوندید."</string>
+    <string name="text_line_3_introduce_page1">" دنیای خود را با آیگپ بسازید."</string>
+    <string name="text_line_4_introduce_page1">"فقط چند دقیقه تا آیگپی شدن شما!."</string>
 
     <!-- Page 2 introduce app -->
     <string name="text_line_1_introduce_page2">"امنیت در آیگپ"</string>
-    <string name="text_line_2_introduce_page2">"آیگپ یک ارتباط امن و مطمئن را بین شما، دوستان و خانوادتان برقرار میکند. پیام رسانِ آیگپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
+    <string name="text_line_2_introduce_page2">"آیگپ یک ارتباط امن و مطمئن را برای شما برقرار میکند. پیام رسانِ آیگپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
 
 
     <!-- Page 3 introduce app -->
@@ -24,7 +24,7 @@
 
     <!-- Page 5 introduce app -->
     <string name="text_line_1_introduce_page5">"تماس صوتی و تصویری در آیگپ"</string>
-    <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آیگپ با سایر کاربرانِ آیگپ تماس صوتیِ و تصویری کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس ها در آیگپ P2P بوده و حتی سرور های آیگپ هم در جابجایی صدا و تصویر شما دخالت ندارند."</string>
+    <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آیگپ با سایر کاربرانِ تماس صوتیِ و تصویری کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس ها در آیگپ P2P بوده و حتی سرور های آیگپ هم در جابجایی صدا و تصویر شما دخالت ندارند."</string>
 
     <!-- Page 6 introduce app -->
     <string name="btn_start_page6">"همین حالا شروع کنید"</string>
@@ -37,18 +37,18 @@
 
 
     <!-- Fill Profile User  -->
-    <string name="pu_title_profileUser">"پروفایل خود را تکمیل کنید"</string>
-    <string name="pu_desc_profileUser">"نام خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
+    <string name="pu_title_profileUser">"اطلاعات خود را تکمیل کنید"</string>
+    <string name="pu_desc_profileUser">"نام خود را وارد کنید و در صورت تمایل عکس کاربری خود را انتخاب نمایید"</string>
     <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
     <string name="pu_nikname_profileUser">"نام"</string>
     <string name="pu_Lets_Go">"ادامه"</string>
 
     <!-- Register Page -->
     <string name="rg_title_register">"ثبت نام"</string>
-    <string name="rg_confirm_text_register">"لطفاً نام و کد کشور خود را تأیید کرده سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
+    <string name="rg_confirm_text_register">"لطفاً نام و کد کشور خود را تأیید و سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
     <string name="rg_Start">"بزن بریم..."</string>
     <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
-    <string name="rg_agreement_text_register">"تأیید نهایی شماره تلفن شما، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم."</string>
+    <string name="rg_agreement_text_register">"تأیید نهایی شماره تلفن شما، کد فعال سازی برای این شماره ارسال می شود."</string>
     <string name="rg_verify_register1">"در حال اتصال"</string>
     <string name="rg_verify_register2">"منتظر دریافت کد تأیید"</string>
     <string name="rg_verify_register3">"در حال تولید کلید امنیتی"</string>
@@ -56,9 +56,9 @@
     <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
     <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تأیید"</string>
     <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
-    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تأیید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
+    <string name="Re_dialog_verify_number_part2">"اگر شماره وارد شده صحیح است تأیید و در غیر اینصورت اصلاح نمایید"</string>
     <string name="Re_Enter_Verify_Code_Please">"لطفاً کد تأیید را دستی وارد کنید"</string>
-    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آیگپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد، لطفاً دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
+    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید، آیگپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به حساب شما ارسال  کرد، لطفاً دستگاه قبلی را چک کرده و کد را بصورت دستی وارد کنید.</string>
     ‬‬‬‬‬‬
     <string name="verify_time_out_message">"آیگپ بصورت خودکار پیام تأیید را تشخیص داده و وارد می کند، در غیر اینصورت شما آن را دریافت کرده و می توانید به صورت دستی وارد نمایید، در صورت عدم دریافت کد تأیید، درخواست ارسال مجدد را انتخاب کنید."</string>
     <string name="verify_invalid_code_message">متأسفیم، کد تأیید شما نامعتبر است، لطفاً کد صحیح را مجدد وارد نمایید.</string>
@@ -105,7 +105,7 @@
     <string name="sending_image">درحال ارسال تصویر…</string>
     <string name="capturing_image">درحال گرفتن تصویر…</string>
     <string name="sending_video">درحال ارسال ویدئو…</string>
-    <string name="capturing_video">درحال رکورد ویدئو…</string>
+    <string name="capturing_video">درحال ضبط ویدئو…</string>
     <string name="sending_audio">درحال ارسال صوت…</string>
     <string name="recording_voice">درحال ضبط صدا…</string>
     <string name="sending_voice">درحال ارسال صدا…</string>
@@ -218,21 +218,21 @@
     <string name="st_title_messageNotification">"اعلانات پیام"</string>
     <string name="st_alert">"هشدار"</string>
     <string name="st_messagePreview">"پیش نمایش پیام"</string>
-    <string name="st_led_color">"رنگ چراغ اِل ای دی"</string>
-    <string name="st_vibrate">"ویبره"</string>
+    <string name="st_led_color">"رنگ چراغ صفحه نمایش"</string>
+    <string name="st_vibrate">"لرزش"</string>
     <string name="st_popupNotification">"پنجره اعلان پیام"</string>
     <string name="st_sound">"صدا"</string>
     <string name="st_title_groupNotification">"اعلانات گروهی"</string>
     <string name="st_title_in_app_notification">"اعلانات درون برنامه‌ای"</string>
     <string name="st_in_app_sound">"صداهای درون برنامه‌ای"</string>
-    <string name="st_in_app_vibrate">"ویبرهٔ درون برنامه‌ای"</string>
+    <string name="st_in_app_vibrate">"لرزش درون برنامه‌ای"</string>
     <string name="st_in_app_preview">"پیش نمایش درون برنامه‌ای"</string>
     <string name="st_in_chat_sound">"صداهای درون گفتگو"</string>
     <string name="st_title_Events">"رویدادها"</string>
-    <string name="st_Contact_joined_igap">"مخاطبی اخیراً عضو آی‌‌گپ شده است."</string>
+    <string name="st_Contact_joined_igap">"مخاطبی اخیراً عضو آیگپ شده است."</string>
     <string name="st_pinned_message">"پیام‌های چسبیده شده"</string>
     <string name="st_title_other">"سایر"</string>
-    <string name="st_text_keep_alive_service">"اگر اپلیکیشن توسط کاربر یا سیستم از حالت اجرا خارج شده‌ بود، باید دوباره اجرا شود. این کار اطمینان می‌دهد که شما تمام اعلانات را خواهید دید."</string>
+    <string name="st_text_keep_alive_service">"اگر نرم افزار توسط کاربر یا سیستم از حالت اجرا خارج شده‌ بود، باید دوباره اجرا شود. این کار اطمینان می‌دهد که شما تمام اعلانات را خواهید دید."</string>
     <string name="st_keep_alive_service">"سرویس همیشه در حال اجرا"</string>
     <string name="st_background_connection">"اتصال پس زمینه"</string>
     <string name="st_text_background_connection"></string>
@@ -253,9 +253,9 @@
     <string name="Last_Seen">"آخرین مشاهده"</string>
     <string name="Groups">"گروه‌ها"</string>
     <string name="Security">"امنیت"</string>
-    <string name="Passcode_Lock">"رمز عبور به هنگام قفل بودن اپلیکیشن"</string>
+    <string name="Passcode_Lock">"رمز عبور به هنگام قفل بودن نرم افزار"</string>
     <string name="Two_Step_Verification">"تأیید دو مرحله‌ای"</string>
-    <string name="Active_Sessions">"جلسات فعال"</string>
+    <string name="Active_Sessions">"نشست های فعال"</string>
     <string name="Account_Self_destruction">"خودتخریبی حساب کاربری"</string>
 
     <!-- notification and sound group -->
@@ -281,7 +281,7 @@
     <string name="fac_Phone_Number">"شماره تلفن"</string>
     <string name="fac_Find_in_Page">"یافتن در صفحه"</string>
     <string name="fac_Open_in_Chrome">"باز کردن در مرورگر کروم"</string>
-    <string name="fac_Powered_by_iGap">"قدرت گرفته توسط آیگپ"</string>
+    <string name="fac_Powered_by_iGap">"ارائه شده توسط آیگپ"</string>
     <string name="menu_add_contact">"افزودن مخاطب"</string>
     <string name="shared_media">"رسانه‌های به اشتراک گذاشته شده"</string>
     <string name="shared_files">"فایل‌های به اشتراک گذاشته شده"</string>
@@ -575,7 +575,7 @@
     <string name="DISCARD">رد کردن</string>
     <string name="unknown">ناشناس</string>
     <string name="add_to_list_contact">افزودن به مخاطبین</string>
-    <string name="text_add_to_list_contact">آیا می‌خواهید این شماره تلفن را به مخاطبین خود بیفزایید؟</string>
+    <string name="text_add_to_list_contact">آیا می‌خواهید این شماره را به مخاطبین اضافه کنید؟</string>
 
     <string name="delete_account_text">آیا از حذف این حساب کاربری اطمینان دارید؟</string>
     <string name="text_kick_admin">آیا از اخراج این مدیر اطمینان دارید؟؟</string>
@@ -684,7 +684,7 @@
     <string name="TERMINATE">لغو</string>
     <string name="iGap_version">آیگپ اندروید نسخه</string>
     <string name="Bazzar">کافه بازار</string>
-    <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
+    <string name="do_you_want_left_this">آیا از ترک آیتم انتخاب شده اطمینان دارید؟</string>
 
     <string name="do_you_want_to_leave_this_group">آیا از ترک این گروه اطمینان دارید؟</string>
 
@@ -813,7 +813,7 @@
     <string name="permission_contact">لیست تماس ها را بدهید</string>
     <string name="permission_calender">تقویم را بدهید</string>
     <string name="permission_location">موقعیت یاب گوشی را بدهید</string>
-    <string name="permission_record_audio">ضبط صدا را بدهید</string>
+    <string name="permission_record_audio">میکروفن را بدهید</string>
     <string name="permission_phone">گوشی را بدهید</string>
     <string name="permission_sms">پیامک ها را بدهید</string>
     <string name="st_privacy_blog">بلاگ رسمی آیگپ</string>
@@ -867,8 +867,8 @@
     <string name="toggle_botton_color">رنگ دکمه های ضامنی</string>
     <string name="send_and_attach_botton_color">رنگ آیکن ارسال و پیوست ها</string>
     <string name="default_header_font_color">رنگ تیتر نوشته ها</string>
-    <string name="default_progress_color">رنگ پروگرس بار</string>
-    <string name="who_can_see_my_avatar">چه کسی آواتارهای من را ببیند؟</string>
+    <string name="default_progress_color">رنگ نوار پردازش</string>
+    <string name="who_can_see_my_avatar">چه کسی عکس های پروفایل من را ببیند؟</string>
     <string name="who_can_invite_you_to_channel_s">چه کسی من را به کانال دعوت کند ؟</string>
     <string name="who_can_invite_you_to_group_s">چه کسی من را به گروه دعوت کند ؟</string>
     <string name="no_body">هیچکس</string>
@@ -991,7 +991,7 @@
 
     <string name="iGap_has_crashed">آیگپ با خطای پیش بینی نشده برخورد کرده است!</string>
     <string name="iGap_has_crashed_reload">شروع مجدد</string>
-    <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، ‫ تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
+    <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
     <string name="nothing">چیزی نیست!</string>
     <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس ها اطمینان دارید؟</string>
@@ -1016,7 +1016,7 @@
     <string name="not_answered">پاسخی دریافت نشد</string>
     <string name="unavalable">در دسترس نیست</string>
     <string name="too_long">خیلی طولانی</string>
-    <string name="signaling">سیگنالینگ</string>
+    <string name="signaling">در حال برقراری تماس</string>
     <string name="incoming_call">تماس ورودی</string>
     <string name="ringing">در حال زنگ خوردن</string>
     <string name="connecting_call">در حال اتصال</string>
@@ -1045,7 +1045,7 @@
     <string name="crop_image_menu_flip_horizontally">برگرداندن افقی تصویر</string>
     <string name="crop_image_menu_flip_vertically">برگرداندن عمودی تصویر</string>
 
-    <string name="title_who_can_see_my_avatar">دیده شدن آواتارهای من توسط</string>
+    <string name="title_who_can_see_my_avatar">دیده شدن عکسهای پروفایل من توسط</string>
     <string name="title_who_can_invite_you_to_channel_s">دریافت لینک دعوت کانال از</string>
     <string name="title_who_can_invite_you_to_group_s">دریافت لینک دعوت گروه از</string>
     <string name="title_who_is_allowed_to_call">دریافت تماس از</string>
@@ -1076,7 +1076,7 @@
     <string name="name">نام</string>
 
 
-    <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
+    <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد. با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
     <string name="turn_off_map">خاموش</string>
     <string name="turn_on_map">روشن</string>
     <string name="positioning">تعیین وضعیت</string>
@@ -1225,7 +1225,7 @@
     <string name="payment">پرداخت</string>
     <string name="buy_charge">خرید شارژ تلفن همراه</string>
     <string name="pay_bills">پرداخت قبوض</string>
-    <string name="pay_bills_crime">پرداخت قبوض  راهنمایی و رانندگی</string>
+    <string name="pay_bills_crime">پرداخت قبوض راهنمایی و رانندگی</string>
     <string name="barcode_reader">بار کد خوان</string>
     <string name="billing_id">شناسه قبض</string>
     <string name="enter">وارد کنید</string>
@@ -1244,7 +1244,7 @@
     <string name="get_gifts">دریافت هدیه</string>
     <string name="congratulations">تبریک</string>
     <string name="unsuccessful">موفقیت آمیز نبود</string>
-    <string name="disabled_qr_voucher">متاسفانه این Qr قابل استفاده نیست یا قبلا استفاده شده است</string>
+    <string name="disabled_qr_voucher">متاسفانه این کیوآر قابل استفاده نیست یا قبلا استفاده شده است</string>
 
     <string name="charge_1"> 10.000 ریالی</string>
     <string name="charge_2"> 20.000 ریالی</string>
@@ -1408,7 +1408,7 @@
     <string name="ignore">نادیده گرفتن</string>
     <string name="hashtag">هشتگ</string>
     <string name="igap_update">بروزرسانی</string>
-    <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که ای گپ در پس زمینه فعال نیست ای گپ را از منو انتخاب و فعال نمایید</string>
+    <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که آیگپ در پس زمینه فعال نیست آیگپ را از منو انتخاب و فعال نمایید</string>
     <string name="dont_show_again"> مجددا نمایش نده</string>
     <string name="invitation_message">سلام!
 از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم
@@ -1418,7 +1418,7 @@
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>
     <string name="This_folder_already_exists">"این پوشه در حال حاضر وجود دارد لطفا نام دیگری انتخاب کنید"</string>
-    <string name="Select_directory">یک دایرکتوری را انتخاب کنید</string>
+    <string name="Select_directory">یک پوشه را انتخاب کنید</string>
     <string name="Select_Video_file">یک فایل ویدیویی را انتخاب کنید</string>
     <string name="Select_Image_file">> یک فایل تصویر را انتخاب کنید</string>
     <string name="Select_Audio_file">فایل صوتی را انتخاب کنید</string>
@@ -1427,7 +1427,7 @@
     <string name="Select">انتخاب</string>
     <string name="Create_new_Folder_here">در اینجا یک پوشه جدید ایجاد کنید</string>
     <string name="Powered_by_iGap">طراحی شده توسط آیگپ</string>
-    <string name="on_hold">تماس نگه داشته شده...</string>
+    <string name="on_hold">call on hold...</string>
     <string name="switchTo">switch To :</string>
     <string name="stop">توقف</string>
     <string name="stop_message_bot">آیا مطمئن هستید که میخواهید ربات را متوقف کنید؟</string>
@@ -1902,7 +1902,7 @@
     <string name="canceled">لغو شده</string>
     <string name="outgoing">خروجی</string>
     <string name="no_item_selected">موردی انتخاب نشده است.</string>
-    <string name="subscriber">دنبال کنندگان</string>
+    <string name="subscriber" >دنبال کنندگان</string>
     <string name="point"> امتیاز</string>
     <string name="rank">رتبه</string>
     <string name="tablet_empty_chat_description">Get Started  Welcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
