@@ -56,7 +56,6 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
         favoriteChannelApi = ApiServiceProvider.getChannelApi();
         setupViews();
         return view;
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -65,12 +64,9 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         NestedScrollView nestedScrollView = view.findViewById(R.id.scroll_channel);
 
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView nestedScrollView, int i, int i1, int i2, int i3) {
-                if (totalPage >= page)
-                    setupViews();
-            }
+        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
+            if (totalPage >= page)
+                setupViews();
         });
     }
 
@@ -138,15 +134,11 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
                         categoryRecyclerViewChild.setLayoutParams(layoutParams1);
                         categoryRecyclerViewChild.setNestedScrollingEnabled(false);
                         categoryRecyclerViewChild.setAdapter(adapterChannel);
-                        adapterChannel.setOnClickedChannelEventCallBack(new ChannelInfoItemAdapter.OnClickedChannelInfoEventCallBack() {
-
-                            @Override
-                            public void onClickChannelInfo(Channel channel) {
-                                if (channel.getmType().equals(Channel.TYPE_PRIVATE))
-                                    HelperUrl.checkAndJoinToRoom(getActivity(), channel.getSlug());
-                                if (channel.getmType().equals(Channel.TYPE_PUBLIC))
-                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), channel.getSlug(), HelperUrl.ChatEntry.chat);
-                            }
+                        adapterChannel.setOnClickedChannelEventCallBack(channel -> {
+                            if (channel.getmType().equals(Channel.TYPE_PRIVATE))
+                                HelperUrl.checkAndJoinToRoom(getActivity(), channel.getSlug());
+                            if (channel.getmType().equals(Channel.TYPE_PUBLIC))
+                                HelperUrl.checkUsernameAndGoToRoom(getActivity(), channel.getSlug(), HelperUrl.ChatEntry.chat);
                         });
                         linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
                         if (response.body().getInfo().getAdvertisement() == null && response.body().getChannels() == null)

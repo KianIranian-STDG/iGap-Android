@@ -22,15 +22,12 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChannelInfoItemAdapter extends RecyclerView.Adapter<ChannelInfoItemAdapter.ChannelInfoViewHolder> {
-
     private List<Channel> channelList = new ArrayList<>();
     private Context context;
     private OnClickedChannelInfoEventCallBack onClickedChannelInfoEventCallBack;
-
     public ChannelInfoItemAdapter(Context context) {
         this.context = context;
     }
-
     public void setChannelList(List<Channel> channelList) {
         this.channelList = channelList;
         notifyDataSetChanged();
@@ -83,12 +80,7 @@ public class ChannelInfoItemAdapter extends RecyclerView.Adapter<ChannelInfoItem
                 textView.setText(channel.getTitle());
             if (G.selectedLanguage.equals("en"))
                 textView.setText(channel.getTitleEn());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickedChannelInfoEventCallBack.onClickChannelInfo(channel);
-                }
-            });
+            itemView.setOnClickListener(v -> onClickedChannelInfoEventCallBack.onClickChannelInfo(channel));
 
         }
     }
