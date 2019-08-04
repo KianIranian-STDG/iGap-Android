@@ -28,4 +28,6 @@ public interface ToolbarListener {
 
     default void onSearchTextChangeListener(View view , String text){}
 
+    default void onSearchBoxClosed(){}
+
 }
