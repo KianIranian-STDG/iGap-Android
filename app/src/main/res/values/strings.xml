@@ -2062,5 +2062,21 @@
     <string name="kuknos_tradeDialogDelete_title">Delete Trade Transaction</string>
     <string name="kuknos_tradeDialogDelete_message">Are you sure you want to delete this trade?</string>
     <string name="kuknos_tradeDialogDelete_btn">OK</string>
+    <string name="kuknos_setting_copySeedKey">Copy Seed Key</string>
+    <string name="kuknos_setting_Directory">IGap - Kuknos</string>
+    <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
+    <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.
+        Do NOT share it with others.\n Seed Key: 2552SD4546854212313845JHJKHGGFGDGDETGJKLKMBBVGCGHFF</string>
+    <string name="kuknos_setting_copySKeyTitel">Save Seed Key</string>
+    <string name="kuknos_setting_copySKeyMessage">Be informed:\n -Your seed key is the only way to access your account.\n -Keep it Safe\n -Do NOT share it with others.\n it will be saved in your Download folder.</string>
+    <string name="kuknos_setting_copySKeyBtn">Save</string>
+    <string name="kuknos_setting_copySFailTitle">Fail</string>
+    <string name="kuknos_setting_copySFailBtn">OK</string>
+    <string name="kuknos_setting_copySFailReadM">Igap does not have READ permission.</string>
+    <string name="kuknos_setting_copySFailWriteM">Igap does not have WRITE permission.</string>
+    <string name="kuknos_setting_copySFailDir">Igap can not make necessary directory.</string>
+    <string name="kuknos_setting_copySFailWriteFile">Something went wrong. Please try again later.</string>
+    <string name="kuknos_setting_copySSuccessMessage">Your Seed key is ready and available in Download folder.</string>
+    <string name="kuknos_setting_copySSuccessTitle">Success</string>
 
 </resources>

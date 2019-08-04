@@ -2,8 +2,11 @@ package net.iGap.kuknos.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -21,6 +24,7 @@ import android.widget.Spinner;
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
 import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -32,6 +36,8 @@ import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +128,7 @@ public class KuknosPanelFrag extends BaseFragment {
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.kuknos_setting_changePin));
         items.add(getString(R.string.kuknos_setting_viewRecoveryP));
+        items.add(getString(R.string.kuknos_setting_copySeedKey));
         items.add(getString(R.string.kuknos_setting_logout));
 
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
@@ -146,6 +153,9 @@ public class KuknosPanelFrag extends BaseFragment {
                         }
                         break;
                     case 2:
+                        showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
+                        return;
+                    case 3:
                         fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosLogoutFrag.newInstance();
@@ -283,5 +293,73 @@ public class KuknosPanelFrag extends BaseFragment {
                 }
             }
         });
+    }
+
+    private void showDialog(int mode, int titleRes, int messageRes, int btnRes) {
+        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        defaultRoundDialog.setTitle(getResources().getString(titleRes));
+        defaultRoundDialog.setMessage(getResources().getString(messageRes));
+        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (mode == 1) {
+                    writeSeedKey();
+                }
+            }
+        });
+        defaultRoundDialog.show();
+    }
+
+    private void writeSeedKey() {
+        if (!isExternalStorageReadable()) {
+            showDialog(2, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailReadM, R.string.kuknos_setting_copySFailBtn);
+            return;
+        }
+        if (!isExternalStorageWritable()) {
+            showDialog(3, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailWriteM, R.string.kuknos_setting_copySFailBtn);
+            return;
+        }
+        File dir = getDownloadStorageDir(getString(R.string.kuknos_setting_Directory));
+        File myExternalFile = new File(dir, getString(R.string.kuknos_setting_fileName));
+        try {
+            FileOutputStream fos = new FileOutputStream(myExternalFile);
+            fos.write(getString(R.string.kuknos_setting_fileContent).getBytes());
+            fos.close();
+        }
+        catch (Exception e) {
+            showDialog(4, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailWriteFile, R.string.kuknos_setting_copySFailBtn);
+            return;
+        }
+        showDialog(5, R.string.kuknos_setting_copySSuccessTitle, R.string.kuknos_setting_copySSuccessMessage, R.string.kuknos_setting_copySFailBtn);
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public File getDownloadStorageDir(String fileName) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+        if (file.isDirectory())
+            return file;
+
+        if (!file.mkdirs()) {
+            showDialog(6, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailDir, R.string.kuknos_setting_copySFailBtn);
+        }
+        return file;
     }
 }

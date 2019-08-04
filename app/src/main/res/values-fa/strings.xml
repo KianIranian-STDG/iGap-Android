@@ -2061,4 +2061,20 @@
     <string name="kuknos_tradeDialogDelete_title">حذف مبادله</string>
     <string name="kuknos_tradeDialogDelete_message">آیا از حذف این مبادله اطمینان دارید؟</string>
     <string name="kuknos_tradeDialogDelete_btn">بله</string>
+    <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
+    <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
+    <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
+    <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.
+        Do NOT share it with others.\n Seed Key: 2552SD4546854212313845JHJKHGGFGDGDETGJKLKMBBVGCGHFF</string>
+    <string name="kuknos_setting_copySKeyTitel">ذخیره کلید مخفی</string>
+    <string name="kuknos_setting_copySKeyMessage">جهت آگاهی: \n - این کلید تنها راه ورود مجدد و مدیریت حساب شما میباشد. \n - در نگهداری از این کلید کوشا باشید. \n - از به اشتراک گذاری این کلید با دیگران پرهیز کنید. \n این کلید در فولدر دانلود های شما ذخیره خواهد شد.</string>
+    <string name="kuknos_setting_copySKeyBtn">ذخیره</string>
+    <string name="kuknos_setting_copySFailTitle">خطا</string>
+    <string name="kuknos_setting_copySFailBtn">باشه</string>
+    <string name="kuknos_setting_copySFailReadM">آیگپ اجازه خواندن فایل ها را ندارد.</string>
+    <string name="kuknos_setting_copySFailWriteM">آیگپ اجازه نوشتن فایل را ندارد.</string>
+    <string name="kuknos_setting_copySFailDir">آیگپ اجازه ایجاد مسیر مناسب را ندارد.</string>
+    <string name="kuknos_setting_copySFailWriteFile">خطایی رخ داده است. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
+    <string name="kuknos_setting_copySSuccessMessage">کلید مخفی شما آماده است. میتوانید در فولدر دانلود ها به کلید خود را مشاهده کنید.</string>
+    <string name="kuknos_setting_copySSuccessTitle">موفقیت</string>
 </resources>
