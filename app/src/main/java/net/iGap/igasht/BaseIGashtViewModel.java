@@ -47,8 +47,11 @@ public abstract class BaseIGashtViewModel<T> extends ViewModel implements Respon
 
     @Override
     public void onFailed(boolean isNeedUpdate) {
-        showViewRefresh.set(View.VISIBLE);
-        showLoadingView.set(View.GONE);
-        updateGooglePlay.setValue(isNeedUpdate);
+        if (isNeedUpdate) {
+            updateGooglePlay.setValue(true);
+        } else {
+            showViewRefresh.set(View.VISIBLE);
+            showLoadingView.set(View.GONE);
+        }
     }
 }
