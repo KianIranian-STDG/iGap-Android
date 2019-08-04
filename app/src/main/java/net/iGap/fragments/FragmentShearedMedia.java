@@ -1282,7 +1282,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 FrameLayout layout = holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
                 if (SelectedList.indexOf(mList.get(position).messageId) >= 0) {
-                    layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
+                    layout.setForeground(getContext().getResources().getDrawable(R.drawable.selected_item_foreground));
                 } else {
                     layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
                 }
