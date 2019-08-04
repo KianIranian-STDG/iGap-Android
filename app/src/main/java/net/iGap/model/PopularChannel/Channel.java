@@ -22,8 +22,13 @@ public class Channel {
     private String mTitle;
     @SerializedName("title_en")
     private String mTitleEn;
+    @SerializedName("titleEn")
+    private String TitleEn;
     @SerializedName("type")
     private String mType;
+
+    public Channel() {
+    }
 
     public List<String> getCategories() {
         return mCategories;
@@ -65,13 +70,6 @@ public class Channel {
         mTitle = title;
     }
 
-    public String getTitleEn() {
-        return mTitleEn;
-    }
-
-    public void setTitleEn(String titleEn) {
-        mTitleEn = titleEn;
-    }
 
     public String getmType() {
         return mType;
@@ -79,5 +77,21 @@ public class Channel {
 
     public void setmType(String mType) {
         this.mType = mType;
+    }
+
+    public String getmTitleEn() {
+        return mTitleEn;
+    }
+
+    public void setmTitleEn(String mTitleEn) {
+        this.mTitleEn = mTitleEn;
+    }
+
+    public String getTitleEn() {
+        return TitleEn;
+    }
+
+    public void setTitleEn(String titleEn) {
+        TitleEn = titleEn;
     }
 }

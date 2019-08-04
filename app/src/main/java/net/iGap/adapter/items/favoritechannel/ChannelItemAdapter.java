@@ -70,7 +70,7 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<ChannelItemAdapter.
             if (G.selectedLanguage.equals("fa"))
                 channelTitle.setText(channel.getTitle());
             if (G.selectedLanguage.equals("en"))
-                channelTitle.setText(channel.getTitleEn());
+                channelTitle.setText(channel.getmTitleEn());
 
             itemView.setOnClickListener(v -> onClickedChannelEventCallBack.onClickedChannel(channel));
 

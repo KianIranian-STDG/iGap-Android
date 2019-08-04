@@ -30,18 +30,13 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         this.context = context;
         this.clickable = clickable;
         this.categoryList = categoryList;
-
     }
-
-
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
         return new FragmentGridViewHolder(view);
-
     }
-
     @Override
     public void onBindViewHolder(@NonNull FragmentGridViewHolder holder, int i) {
         holder.bindChannel(categoryList.get(i));
@@ -75,19 +70,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
             ImageLoadingService.load(category.getIcon(), channelImageGrid);
             if (G.selectedLanguage.equals("fa"))
                 channelTitleGrid.setText(category.getTitle());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickable)
-                        onClickedItemEventCallBack.onClickedItem(category);
-                }
+            itemView.setOnClickListener(view -> {
+                if (clickable)
+                    onClickedItemEventCallBack.onClickedItem(category);
             });
             if (G.selectedLanguage.equals("en"))
                 channelTitleGrid.setText(category.getTitleEn());
 
         }
     }
-
     public void setOnClickedItemEventCallBack(OnClickedItemEventCallBack onClickedItemEventCallBack) {
         this.onClickedItemEventCallBack = onClickedItemEventCallBack;
     }
