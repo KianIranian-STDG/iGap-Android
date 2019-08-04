@@ -1,11 +1,5 @@
 package net.iGap.api.errorhandler;
 
-import android.util.Log;
-
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
 import com.google.gson.GsonBuilder;
 
 import javax.net.ssl.SSLHandshakeException;

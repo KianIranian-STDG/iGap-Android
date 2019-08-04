@@ -42,6 +42,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -146,7 +148,7 @@ import retrofit2.Response;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -155,6 +157,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
     public static final int WALLET_REQUEST_CODE = 1024;
+    private static final int ERROR_DIALOG_REQUEST_CODE = 1;
+
+    private boolean retryProviderInstall;
 
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
@@ -870,7 +875,70 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
                 break;
 
+            case ERROR_DIALOG_REQUEST_CODE:
+                // Adding a fragment via GoogleApiAvailability.showErrorDialogFragment
+                // before the instance state is restored throws an error. So instead,
+                // set a flag here, which will cause the fragment to delay until
+                // onPostResume.
+                retryProviderInstall = true;
+                break;
         }
+    }
+
+    /**
+     * This method is only called if the provider is successfully updated
+     * (or is already up-to-date).
+     */
+    @Override
+    public void onProviderInstalled() {
+        // Provider is up-to-date, app can make secure network calls.
+    }
+
+    /**
+     * This method is called if updating fails; the error code indicates
+     * whether the error is recoverable.
+     */
+    @Override
+    public void onProviderInstallFailed(int errorCode, Intent intent) {
+        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
+        if (availability.isUserResolvableError(errorCode)) {
+            // Recoverable error. Show a dialog prompting the user to
+            // install/update/enable Google Play services.
+            availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                // The user chose not to take the recovery action
+                onProviderInstallerNotAvailable();
+            });
+        } else {
+            // Google Play services is not available.
+            onProviderInstallerNotAvailable();
+        }
+    }
+
+    /**
+     * On resume, check to see if we flagged that we need to reinstall the
+     * provider.
+     */
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (retryProviderInstall) {
+            // We can now safely retry installation.
+            ProviderInstaller.installIfNeededAsync(this, this);
+        }
+        retryProviderInstall = false;
+    }
+
+    private void onProviderInstallerNotAvailable() {
+        // This is reached if the provider cannot be updated for some reason.
+        // App should consider all HTTP communication to be vulnerable, and take
+        // appropriate action.
+        new MaterialDialog.Builder(this)
+                .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
+                .titleGravity(GravityEnum.CENTER)
+                .buttonsGravity(GravityEnum.CENTER)
+                .content("برای استفاده از این بخش نیاز به گوگل سرویس است.").contentGravity(GravityEnum.CENTER)
+                .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void checkKeepMedia() {
@@ -953,6 +1021,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    public void checkGoogleUpdate() {
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        ProviderInstaller.installIfNeededAsync(this, this);
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+    }
 
     //*******************************************************************************************************************************************
 
