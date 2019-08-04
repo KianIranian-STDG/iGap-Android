@@ -103,7 +103,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     FragmentNewGroupViewModel fragmentNewGroupViewModel;
     ActivityNewGroupBinding fragmentNewGroupBinding;
     private CircleImageView imgCircleImageView;
-    private ImageView imgProfileHelper ;
+    private ImageView imgProfileHelper;
     private long groomId = 0;
     private EditText edtGroupName;
     private AppCompatEditText edtDescription;
@@ -186,7 +186,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         fragmentNewGroupViewModel.goToContactGroupPage.observe(this, data -> {
             if (getActivity() != null && data != null) {
                 if (!getActivity().isFinishing()) {
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    getActivity().onBackPressed();
                 }
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
@@ -198,9 +198,9 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 b.putString("TYPE", data.getType());
                 b.putBoolean("NewRoom", data.isNewRoom());
                 fragment.setArguments(b);
-                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                /*if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();*/
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
 
@@ -391,7 +391,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         //=======================set image for group
         imgCircleImageView = fragmentNewGroupBinding.ngProfileCircleImage;
-        imgProfileHelper = fragmentNewGroupBinding.ngProfileCircleImageHolder ;
+        imgProfileHelper = fragmentNewGroupBinding.ngProfileCircleImageHolder;
         //AndroidUtils.setBackgroundShapeColor(imgCircleImageView, Color.parseColor(G.appBarColor));
 
         RippleView rippleCircleImage = fragmentNewGroupBinding.ngRippleCircleImage;
@@ -527,9 +527,8 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
             bundle.putBoolean("NewRoom", true);
             fragment.setArguments(bundle);
-
-            popBackStackFragment();
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+            getActivity().onBackPressed();
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load(true);
         }
     }
 
@@ -753,10 +752,10 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
             public void bindData(final StructContactInfo data) {
 
-                if (G.selectedLanguage.equals("en")){
+                if (G.selectedLanguage.equals("en")) {
                     txtName.setGravity(Gravity.LEFT);
                     txtPhone.setGravity(Gravity.LEFT);
-                }else {
+                } else {
                     txtName.setGravity(Gravity.RIGHT);
                     txtPhone.setGravity(Gravity.RIGHT);
                 }
