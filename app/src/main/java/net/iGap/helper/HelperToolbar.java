@@ -943,6 +943,8 @@ public class HelperToolbar {
                 else if (isShowEditTextForSearch) {
                     closeKeyboard();
                     G.handler.postDelayed(() -> {
+                        if (mToolbarListener!=null)
+                            mToolbarListener.onSearchBoxClosed();
                         resizeSearchBoxWithAnimation(false , false);
                     } , 200);
                 }
