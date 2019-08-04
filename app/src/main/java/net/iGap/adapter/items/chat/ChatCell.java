@@ -94,6 +94,7 @@ public class ChatCell extends ConstraintLayout {
         setTypeFace(roomName);
         setTextSize(roomName, R.dimen.standardTextSize);
         roomName.setSingleLine(true);
+        roomName.setEllipsize(TextUtils.TruncateAt.END);
         roomName.setEmojiSize(i_Dp(R.dimen.dp16));
         roomName.setTextColor(isDarkTheme ? getResources().getColor(R.color.white) : G.context.getResources().getColor(R.color.black90));
         addView(roomName);
@@ -220,13 +221,11 @@ public class ChatCell extends ConstraintLayout {
             secondTextView.setGravity(Gravity.RIGHT);
             thirdTextView.setGravity(Gravity.RIGHT);
             roomName.setGravity(Gravity.RIGHT);
-            roomName.setEllipsize(TextUtils.TruncateAt.START);
         } else {
             firstTextView.setGravity(Gravity.LEFT);
             secondTextView.setGravity(Gravity.LEFT);
             thirdTextView.setGravity(Gravity.LEFT);
             roomName.setGravity(Gravity.LEFT);
-            roomName.setEllipsize(TextUtils.TruncateAt.END);
         }
 
         /**
@@ -333,7 +332,7 @@ public class ChatCell extends ConstraintLayout {
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
-            set.createHorizontalChainRtl(avatarImageView.getId(), ConstraintSet.END, mute.getId(), ConstraintSet.START,
+            set.createHorizontalChainRtl(avatarImageView.getId(), ConstraintSet.END, messageData.getId(), ConstraintSet.START,
                     chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
 
         } else {
@@ -368,7 +367,7 @@ public class ChatCell extends ConstraintLayout {
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
-            set.createHorizontalChain(avatarImageView.getId(), ConstraintSet.RIGHT, mute.getId(), ConstraintSet.LEFT,
+            set.createHorizontalChain(avatarImageView.getId(), ConstraintSet.RIGHT, messageData.getId(), ConstraintSet.LEFT,
                     chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
 
         }
