@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
@@ -30,11 +29,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
 import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
-import net.iGap.kuknos.viewmodel.KuknosChangePassVM;
-import net.iGap.kuknos.viewmodel.KuknosLogoutVM;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
-import net.iGap.kuknos.viewmodel.KuknosRecieveVM;
-import net.iGap.kuknos.viewmodel.KuknosSendVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import java.util.ArrayList;
@@ -237,6 +232,7 @@ public class KuknosPanelFrag extends BaseFragment {
                         break;
                     case 3:
                         initialSettingBS();
+                        kuknosPanelVM.getOpenPage().setValue(-1);
                         return;
                     case 4:
                         fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
@@ -246,11 +242,11 @@ public class KuknosPanelFrag extends BaseFragment {
                         }
                         break;
                     case 5:
-                        /*fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
+                        fragment = fragmentManager.findFragmentByTag(KuknosTradePagerFrag.class.getName());
                         if (fragment == null) {
-                            fragment = KuknosBuyPeymanFrag.newInstance();
+                            fragment = KuknosTradePagerFrag.newInstance();
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }*/
+                        }/*
                         Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
                         snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
                             @Override
@@ -258,7 +254,7 @@ public class KuknosPanelFrag extends BaseFragment {
                                 snackbar.dismiss();
                             }
                         });
-                        snackbar.show();
+                        snackbar.show();*/
                         break;
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

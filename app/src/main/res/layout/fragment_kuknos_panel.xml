@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="net.iGap.G" />
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosPanelVM" />
@@ -49,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:minHeight="38dp"
-                    android:background="@drawable/kuknos_spinner_style"
+                    android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -6,7 +6,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/kuknos_dark_shade_green_spinner" />
+                    <solid android:color="@color/kuknos_light_shade_black_spinner" />
                     <corners android:radius="10dp"/>
                 </shape>
             </item>
@@ -23,7 +23,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/kuknos_dark_shade_green_spinner" />
+                    <solid android:color="@color/kuknos_light_shade_black_spinner" />
                     <corners android:radius="10dp"/>
                 </shape>
             </item>
@@ -40,17 +40,17 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/buttonColor" />
+                    <solid android:color="@color/players_dark_background" />
                     <corners android:radius="10dp"/>
                 </shape>
             </item>
             <item>
                 <ripple
-                    android:color="@color/kuknos_dark_shade_green_spinner"
+                    android:color="@color/kuknos_light_shade_black_spinner"
                     tools:targetApi="LOLLIPOP">
                     <item android:id="@android:id/mask">
                         <shape android:shape="rectangle">
-                            <solid android:color="@color/buttonColor" />
+                            <solid android:color="@color/players_dark_background" />
                             <corners android:radius="10dp"/>
                         </shape>
                     </item>

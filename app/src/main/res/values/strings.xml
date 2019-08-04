@@ -2041,5 +2041,27 @@
     <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
     <string name="kuknos_buyP_currency">IRR</string>
+    <string name="kuknos_trade_origin">Selling*</string>
+    <string name="kuknos_trade_dest">Buying*</string>
+    <string name="kuknos_trade_btn">Submit</string>
+    <string name="kuknos_trade_server">Sending</string>
+    <string name="kuknos_trade_emptyOriginAmount">Selling Amount can NOT be empty.</string>
+    <string name="kuknos_trade_zeroOriginAmount">Selling Amount can NOT be zero.</string>
+    <string name="kuknos_trade_emptyDestAmount">Buying Amount can NOT be empty.</string>
+    <string name="kuknos_trade_zeroDestAmount">Buying Amount can NOT be zero.</string>
+    <string name="kuknos_trade_fail">The connection to server is lost. Please try again in a few moments.</string>
+    <string name="kuknos_trade_success">Trade request is successfully submitted.</string>
+
+    <string name="kuknos_trade_sell">Selling</string>
+    <string name="kuknos_trade_recieve">Receiving</string>
+    <string name="kuknos_trade_amount">Amount</string>
+    <string name="kuknos_trade_delete"></string>
+    <string name="kuknos_trade_date">Date</string>
+    <string name="kuknos_tradePager_trade">Trade</string>
+    <string name="kuknos_tradePager_active">Open Orders</string>
+    <string name="kuknos_tradePager_history">History</string>
+    <string name="kuknos_tradeDialogDelete_title">Delete Trade Transaction</string>
+    <string name="kuknos_tradeDialogDelete_message">Are you sure you want to delete this trade?</string>
+    <string name="kuknos_tradeDialogDelete_btn">OK</string>
 
 </resources>

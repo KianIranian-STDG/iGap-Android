@@ -2040,4 +2040,14 @@
     <string name="kuknos_buyP_failS">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_buyP_failB">ارتباط با سرور بانک برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_buyP_currency">ریال</string>
+    <string name="kuknos_trade_origin">میزان فروش*</string>
+    <string name="kuknos_trade_dest">میزان خرید*</string>
+    <string name="kuknos_trade_btn">ثبت</string>
+    <string name="kuknos_trade_server">ارسال...</string>
+    <string name="kuknos_trade_emptyOriginAmount">میزان فروش نباید خالی باشد.</string>
+    <string name="kuknos_trade_zeroOriginAmount">میزان فروش نباید صفر باشد.</string>
+    <string name="kuknos_trade_emptyDestAmount">میزان خرید نباید خالی باشد.</string>
+    <string name="kuknos_trade_zeroDestAmount">میزان خرید نباید صفر باشد.</string>
+    <string name="kuknos_trade_fail">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
+    <string name="kuknos_trade_success">درخواست مبادله با موفقیت در سیستم ثبت شد.</string>
 </resources>

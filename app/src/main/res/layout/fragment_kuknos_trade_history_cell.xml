@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/kuknos_tradeHistoryCell_holder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/kuknos_wh_list_item_style"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_tradeHistoryCell_sell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="38dp"
+            android:layout_weight="2"
+            android:text="20.000"
+            android:textSize="@dimen/dp12"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_tradeHistoryCell_receive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="38dp"
+            android:layout_weight="2"
+            android:text="10.000"
+            android:textSize="@dimen/dp12"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_tradeHistoryCell_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="38dp"
+            android:layout_weight="2"
+            android:text="1.000"
+            android:textSize="@dimen/dp12"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_tradeHistoryCell_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="38dp"
+            android:layout_weight="3"
+            android:text="2000/00/00"
+            android:textSize="@dimen/dp12"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/myIconTextViewStyleGray"
+            android:id="@+id/kuknos_tradeHistoryCell_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="38dp"
+            android:layout_weight="3"
+            android:text="@string/delete_icon"
+            android:textSize="@dimen/dp20"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+    
+</android.support.constraint.ConstraintLayout>

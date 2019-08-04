@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableField;
 import android.os.Handler;
+import android.util.Log;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.model.ErrorM;

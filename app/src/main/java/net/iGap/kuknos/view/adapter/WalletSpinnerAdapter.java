@@ -54,7 +54,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
                 .placeholder(R.drawable.ic_tab_wallet_normal)
                 .into(walletPic);
 
-        if (position == (wallets.size()-1) && position != 0) {
+        if (position == (wallets.size()-1) && position != 0 && wallets.get(position).getAssetCode().equals("Add Asset")) {
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
             walletName.setTypeface(null, Typeface.BOLD);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -64,11 +64,11 @@ public class WalletSpinnerAdapter extends BaseAdapter {
 
             constraintLayout.setBackgroundResource(R.drawable.kuknos_s_last_item_style);
 
-            ConstraintSet constraintSet = new ConstraintSet();
+            /*ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(constraintLayout);
             float biasedValue = 0.5f;
             constraintSet.setHorizontalBias(linearLayout.getId(), biasedValue);
-            constraintSet.applyTo(constraintLayout);
+            constraintSet.applyTo(constraintLayout);*/
         } else {
             walletName.setTypeface(null, Typeface.NORMAL);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);

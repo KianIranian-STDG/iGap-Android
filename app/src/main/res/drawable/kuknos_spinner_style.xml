@@ -11,8 +11,8 @@
                 </shape>
             </item>
             <item
-                android:right="@dimen/dp20"
-                android:left="@dimen/dp20">
+                android:right="@dimen/dp10"
+                android:left="@dimen/dp10">
                 <bitmap
                     android:gravity="center_vertical|right"
                     android:src="@mipmap/down_arrow" />
@@ -28,8 +28,8 @@
                 </shape>
             </item>
             <item
-                android:right="@dimen/dp20"
-                android:left="@dimen/dp20">
+                android:right="@dimen/dp10"
+                android:left="@dimen/dp10">
                 <bitmap
                     android:gravity="center_vertical|right"
                     android:src="@mipmap/down_arrow" />
