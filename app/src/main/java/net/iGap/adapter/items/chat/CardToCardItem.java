@@ -19,11 +19,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
@@ -84,7 +86,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             cardToCardAmountTv = new TextView(getContext());
             cardIcon = new FontIconTextView(getContext());
 
-            messageTv.setTextColor(getColor(R.color.black));
+            messageTv.setTextColor(Utils.darkModeHandler(getContext()));
             setTextSize(messageTv, R.dimen.smallTextSize);
             setTypeFace(messageTv);
 
@@ -92,21 +94,19 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             payButton.setId(R.id.cardToCard_button);
             payButton.setText(getResources().getString(R.string.pay));
             setTextSize(payButton, R.dimen.standardTextSize);
-            payButton.setTextColor(getColor(R.color.white));
-            payButton.setBackground(getDrawable(R.drawable.background_button_card_to_card));
             setTypeFace(payButton);
+            payButton.setTextColor(getColor(R.color.white));
 
 
-            cardToCardAmountTv.setTextColor(getColor(R.color.black));
+            cardToCardAmountTv.setTextColor(Utils.darkModeHandler(getContext()));
             cardToCardAmountTv.setGravity(Gravity.CENTER);
             setTextSize(cardToCardAmountTv, R.dimen.standardTextSize);
             setTypeFace(cardToCardAmountTv, Typeface.BOLD);
 
             cardIcon.setId(R.id.cardToCard_icon);
             cardIcon.setText(getResources().getString(R.string.icon_card_to_card));
-            setTextSize(cardIcon, R.dimen.dp24);
+            setTextSize(cardIcon, R.dimen.dp32);
             cardIcon.setTextColor(getColor(R.color.green));
-            cardIcon.setBackground(getDrawable(R.drawable.background_card_to_card_icon));
 
             lineView = new View(getContext());
             lineView.setBackgroundColor(getColor(R.color.gray_9d));
@@ -115,9 +115,15 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
             innerLayout.setId(R.id.cardToCard_innerLayout);
 
-
-            innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card));
-
+            if (G.isDarkTheme) {
+                innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card_dark));
+                payButton.setBackground(getDrawable(R.drawable.background_button_card_to_card_dark));
+                cardIcon.setBackground(getDrawable(R.drawable.background_card_to_card_icon_dark));
+            } else {
+                innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card));
+                payButton.setBackground(getDrawable(R.drawable.background_button_card_to_card));
+                cardIcon.setBackground(getDrawable(R.drawable.background_card_to_card_icon));
+            }
 
             innerLayout.addView(cardToCardAmountTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,
                     Gravity.CENTER, 8, 24, 8, 4));

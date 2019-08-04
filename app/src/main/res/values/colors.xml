@@ -269,5 +269,6 @@
     <color name="default_indicator_color_selected">#eeee</color>
     <color name="default_indicator_color_unselected">#66eeeeee</color>
     <color name="chat_bubble_color">#f5ffec</color>
+    <color name="chat_bubble_color_dark">#565656</color>
 
 </resources>
