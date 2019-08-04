@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.model.KuknosTradeHistoryM;
 import net.iGap.kuknos.service.model.KuknosWHistoryM;
 
@@ -71,9 +72,9 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
         }
 
         public void initView(KuknosTradeHistoryM model, int mode) {
-            sell.setText(model.getSell());
-            amount.setText(model.getAmount());
-            recieve.setText(model.getReceive());
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getSell()) : model.getSell());
+            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getAmount()) : model.getAmount());
+            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getReceive()) : model.getReceive());
             if (mode == 0) {
                 date.setText(model.getDate());
                 date.setVisibility(View.VISIBLE);
@@ -86,8 +87,9 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
                     @Override
                     public void onClick(View v) {
                         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(context);
-                        defaultRoundDialog.setTitle(R.string.kuknos_tradeDialogDelete_title).setMessage(R.string.kuknos_tradeDialogDelete_message);
-                        defaultRoundDialog.setPositiveButton(R.string.kuknos_tradeDialogDelete_btn, new DialogInterface.OnClickListener() {
+                        defaultRoundDialog.setTitle(context.getResources().getString(R.string.kuknos_tradeDialogDelete_title))
+                                .setMessage(context.getResources().getString(R.string.kuknos_tradeDialogDelete_message));
+                        defaultRoundDialog.setPositiveButton(context.getResources().getString(R.string.kuknos_tradeDialogDelete_btn), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 deleteCell(model);
                             }

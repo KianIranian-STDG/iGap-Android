@@ -7,7 +7,10 @@ import android.os.Handler;
 import android.util.Log;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.model.ErrorM;
+
+import java.text.DecimalFormat;
 
 public class KuknosBuyPeymanVM extends ViewModel {
 
@@ -49,8 +52,12 @@ public class KuknosBuyPeymanVM extends ViewModel {
         if (!checkEntry()) {
             return false;
         }
+        if (Integer.parseInt(amount.get()) > 10000) {
+            return false;
+        }
         int sumTemp = Integer.parseInt(amount.get()) * PMNprice;
-        sum.set("" + sumTemp);
+        DecimalFormat df = new DecimalFormat(",###");
+        sum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(sumTemp)) : df.format(sumTemp));
         return true;
     }
 

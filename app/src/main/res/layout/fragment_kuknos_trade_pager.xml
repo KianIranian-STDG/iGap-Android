@@ -27,10 +27,10 @@
         </LinearLayout>
 
         <android.support.design.widget.TabLayout
+            style="?backgroundColorSettingTheme"
             android:id="@+id/kuknos_trade_pager_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?backgroundColorSettingTheme"
             android:minHeight="@dimen/dp48"
             app:tabIndicatorColor="@color/green"
             app:layout_constraintEnd_toEndOf="parent"

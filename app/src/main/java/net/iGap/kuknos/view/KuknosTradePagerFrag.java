@@ -6,11 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosTradePagerBinding;
 import net.iGap.fragments.BaseFragment;
@@ -78,6 +81,29 @@ public class KuknosTradePagerFrag extends BaseFragment {
         adapter.addFragment(new KuknosTradeHistoryFrag(), getResources().getString(R.string.kuknos_tradePager_history));
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        updateFontTabLayout();
+    }
+
+    private void updateFontTabLayout() {
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if (tabLayout.getTabAt(i) == null) {
+                continue;
+            }
+
+            TextView tv = new TextView(getContext());
+            tv.setText(tabLayout.getTabAt(i).getText());
+            tv.setGravity(Gravity.CENTER);
+            tv.setTypeface(G.typeface_IRANSansMobile);
+
+            if (G.isDarkTheme){
+                tv.setTextColor(G.context.getResources().getColor(R.color.white));
+            }
+            else {
+                tv.setTextColor(G.context.getResources().getColor(R.color.black));
+            }
+            tabLayout.getTabAt(i).setCustomView(tv);
+        }
     }
 
 }

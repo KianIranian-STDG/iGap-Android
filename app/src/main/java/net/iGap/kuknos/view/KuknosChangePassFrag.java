@@ -105,11 +105,11 @@ public class KuknosChangePassFrag extends BaseFragment {
     private void showDialog(boolean state, int messageResource) {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
         if (state == false)
-            defaultRoundDialog.setTitle(R.string.kuknos_changePIN_successTitle);
+            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_changePIN_successTitle));
         else
-            defaultRoundDialog.setTitle(R.string.kuknos_changePIN_failTitle);
+            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_changePIN_failTitle));
         defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(R.string.kuknos_RecoverySK_Error_Snack, new DialogInterface.OnClickListener() {
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (state == false)
                     popBackStackFragment();

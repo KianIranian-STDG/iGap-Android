@@ -88,8 +88,9 @@ public class KuknosTradeActiveFrag extends BaseFragment {
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
                     DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-                    defaultRoundDialog.setTitle(R.string.kuknos_wHistory_dialogTitle).setMessage(R.string.kuknos_wHistory_error);
-                    defaultRoundDialog.setPositiveButton(R.string.kuknos_RecoverySK_Error_Snack, new DialogInterface.OnClickListener() {
+                    defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
+                            .setMessage(getResources().getString(R.string.kuknos_wHistory_error));
+                    defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             //close frag
                             popBackStackFragment();

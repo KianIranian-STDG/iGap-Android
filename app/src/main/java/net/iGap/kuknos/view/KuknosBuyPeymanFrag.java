@@ -7,9 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,15 +16,12 @@ import android.widget.LinearLayout;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
-import net.iGap.databinding.FragmentKuknosLogoutBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
-import net.iGap.kuknos.viewmodel.KuknosLogoutVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosBuyPeymanFrag extends BaseFragment {
@@ -105,9 +99,9 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
 
     private void showDialog(int messageResource) {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(R.string.kuknos_viewRecoveryEP_failTitle);
+        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
         defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(R.string.kuknos_RecoverySK_Error_Snack, new DialogInterface.OnClickListener() {
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
             }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.model.KuknosWHistoryM;
 
 import java.util.List;
@@ -56,9 +57,9 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
         }
 
         public void initView(KuknosWHistoryM model) {
-            date.setText(model.getDate());
-            amount.setText(model.getAmount());
-            desc.setText(model.getDesc());
+            date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getDate()) : model.getDate());
+            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getAmount()) : model.getAmount());
+            desc.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getDesc()) : model.getDesc());
         }
     }
 }

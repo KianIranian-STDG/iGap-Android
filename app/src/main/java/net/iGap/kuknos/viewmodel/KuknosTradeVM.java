@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosWalletBalanceInfoM;
 import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
@@ -95,7 +96,7 @@ public class KuknosTradeVM extends ViewModel {
         Log.d("amini", "originSpinnerSelect: " + position);
         this.position = position;
         KuknosWalletBalanceInfoM temp = kuknosOriginWalletsM.getValue().getBalanceInfo().get(position);
-        balance.set(temp.getBalance());
+        balance.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp.getBalance()) : temp.getBalance());
         currency.set(temp.getAssetCode());
         destSpinnerSelect(position);
     }

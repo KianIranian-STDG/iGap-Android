@@ -160,10 +160,11 @@ public class KuknosSendFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-                defaultRoundDialog.setTitle(R.string.kuknos_send_dialogTitle).setMessage(errorM.getResID());
+                defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle))
+                        .setMessage(getResources().getString(errorM.getResID()));
                 if (errorM.getState() == false) {
                     // success
-                    defaultRoundDialog.setPositiveButton(R.string.kuknos_RecoverySK_Error_Snack, new DialogInterface.OnClickListener() {
+                    defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             //close frag
                             popBackStackFragment();
@@ -172,7 +173,7 @@ public class KuknosSendFrag extends BaseFragment {
                 }
                 else {
                     // error
-                    defaultRoundDialog.setPositiveButton(R.string.kuknos_RecoverySK_Error_Snack, null);
+                    defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), null);
                 }
                 defaultRoundDialog.show();
             }

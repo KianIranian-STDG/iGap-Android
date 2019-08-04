@@ -2051,7 +2051,6 @@
     <string name="kuknos_trade_zeroDestAmount">Buying Amount can NOT be zero.</string>
     <string name="kuknos_trade_fail">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_trade_success">Trade request is successfully submitted.</string>
-
     <string name="kuknos_trade_sell">Selling</string>
     <string name="kuknos_trade_recieve">Receiving</string>
     <string name="kuknos_trade_amount">Amount</string>
