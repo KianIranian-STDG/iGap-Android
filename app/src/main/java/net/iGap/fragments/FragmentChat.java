@@ -812,6 +812,8 @@ public class FragmentChat extends BaseFragment
 
         cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
         txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
+        txtChannelMute = rootView.findViewById(R.id.chl_txt_mute_channel);
+        layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
 
         realmChat = Realm.getDefaultInstance();
         gongingRunnable = new Runnable() {
@@ -1076,12 +1078,15 @@ public class FragmentChat extends BaseFragment
         if (mForwardMessages == null) {
             rootView.findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
-        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom != null)  {
-            if (realmRoom.getMute()) {
-                ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.unmute);
-            } else {
-                ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.mute);
+
+        if (!isBot){
+            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            if (realmRoom != null)  {
+                if (realmRoom.getMute()) {
+                    txtChannelMute.setText(R.string.unmute);
+                } else {
+                    txtChannelMute.setText(R.string.mute);
+                }
             }
         }
 
@@ -1543,7 +1548,6 @@ public class FragmentChat extends BaseFragment
         txtVerifyRoomIcon = mHelperToolbar.getChatVerify();
         txtVerifyRoomIcon.setVisibility(View.GONE);
 
-
         //set layout direction to views
 
         //todo : set gravity right for arabic and persian
@@ -1572,9 +1576,8 @@ public class FragmentChat extends BaseFragment
                     if (isBot) {
 
                         if (getMessagesCount() == 0) {
-                            layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
                             layoutMute.setVisibility(View.VISIBLE);
-                            ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.start);
+                            txtChannelMute.setText(R.string.start);
 
                             View layoutAttach = rootView.findViewById(R.id.layout_attach_file);
                             layoutAttach.setVisibility(View.GONE);
@@ -1854,6 +1857,7 @@ public class FragmentChat extends BaseFragment
 
         if (isBot) {
             txtEmptyMessages.setText(G.fragmentActivity.getResources().getString(R.string.empty_text_dr_bot));
+            txtChannelMute.setText(R.string.start);
         }
 
         lastDateCalendar.clear();
@@ -2015,9 +2019,7 @@ public class FragmentChat extends BaseFragment
     private void manageExtraLayout() {
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
-            if (layoutMute == null) {
-                layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
-            }
+
             layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);
@@ -5491,10 +5493,10 @@ public class FragmentChat extends BaseFragment
         new RequestClientMuteRoom().muteRoom(roomId, isMuteNotification);
 
         if (isMuteNotification) {
-            ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.unmute);
+            txtChannelMute.setText(R.string.unmute);
             iconMute.setVisibility(View.VISIBLE);
         } else {
-            ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.mute);
+            txtChannelMute.setText(R.string.mute);
             iconMute.setVisibility(View.GONE);
         }
         //realm.close();
@@ -7101,9 +7103,6 @@ public class FragmentChat extends BaseFragment
 
     private void initLayoutChannelFooter() {
         ConstraintLayout layoutAttach = rootView.findViewById(R.id.layout_attach_file);
-        if (layoutMute == null) {
-            layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
-        }
 
 
         layoutAttach.setVisibility(View.GONE);
@@ -7117,9 +7116,8 @@ public class FragmentChat extends BaseFragment
                 onSelectRoomMenu("txtMuteNotification", mRoomId);
             }
         });
-        if (txtChannelMute == null)
-            txtChannelMute = rootView.findViewById(R.id.chl_txt_mute_channel);
-        if (G.isDarkTheme) txtChannelMute.setTextColor(Color.WHITE);
+
+
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
         } else {

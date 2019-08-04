@@ -91,6 +91,7 @@
                         android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
+                        android:visibility="gone"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
                         app:emojiSize="@dimen/standardTextSize" />

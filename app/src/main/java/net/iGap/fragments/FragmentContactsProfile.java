@@ -15,6 +15,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -81,7 +82,7 @@ public class FragmentContactsProfile extends BaseFragment {
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
 
-    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.6f;
+    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.7f;
     private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
     private final int ALPHA_ANIMATIONS_DURATION              = 200;
 
@@ -133,6 +134,8 @@ public class FragmentContactsProfile extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         checkTheme();
+        initialToolbar();
+
         userAvatarImageView = binding.toolbarAvatar ;
         userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
 
@@ -571,7 +574,6 @@ public class FragmentContactsProfile extends BaseFragment {
             }
         });
 
-        initialToolbar();
     }
 
     private void checkViewsState(){
@@ -586,6 +588,7 @@ public class FragmentContactsProfile extends BaseFragment {
     }
 
     private void initialToolbar() {
+        startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
 
         binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
 
@@ -598,7 +601,6 @@ public class FragmentContactsProfile extends BaseFragment {
             handleToolbarTitleVisibility(percentage);
 
         });
-        startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
 
     }
 
@@ -639,6 +641,8 @@ public class FragmentContactsProfile extends BaseFragment {
     }
 
     public static void startAlphaAnimation (View v, long duration, int visibility) {
+
+        if (visibility == View.VISIBLE) v.setVisibility(visibility);
 
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
@@ -844,6 +848,9 @@ public class FragmentContactsProfile extends BaseFragment {
                 DialogAnimation.animationDown(dialogReport);
 
                 dialogReport.show();
+
+                dialogReport.setOnShowListener(dialog -> checkViewsState());
+                dialogReport.setOnDismissListener(dialog -> checkViewsState());
             }
         }).show(getFragmentManager(), "bottom sheet");
 
@@ -861,7 +868,9 @@ public class FragmentContactsProfile extends BaseFragment {
                     FragmentChat.onComplete.complete(false, viewModel.roomId + "", "");
                 }
             }
-        }).negativeText(negative).show();
+        }).negativeText(negative)
+                .dismissListener(dialog -> checkViewsState())
+                .showListener(dialog -> checkViewsState()).show();
     }
 
     private void clearHistory() {
