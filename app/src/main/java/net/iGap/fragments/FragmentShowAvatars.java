@@ -32,6 +32,7 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.OnChannelAvatarDelete;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGroupAvatarDelete;
@@ -513,6 +514,7 @@ public class FragmentShowAvatars extends BaseFragment {
         G.onUserAvatarDelete = new OnUserAvatarDelete() {
             @Override
             public void onUserAvatarDelete(long avatarId, String token) {
+                AvatarHandler.clearCacheForOwnerId(avatarId);
                 if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
             }
 

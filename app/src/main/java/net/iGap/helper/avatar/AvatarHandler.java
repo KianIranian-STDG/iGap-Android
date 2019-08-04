@@ -86,6 +86,15 @@ public class AvatarHandler {
         this.mutex2 = new Object();
     }
 
+    public static void clearCacheForOwnerId(long avatarOwnerId) {
+        synchronized (mutex3) {
+            limitedListMain.remove(avatarOwnerId);
+            limitedList.remove(avatarOwnerId);
+            avatarCacheMain.remove(avatarOwnerId);
+            avatarCache.remove(avatarOwnerId);
+        }
+    }
+
     public void registerChangeFromOtherAvatarHandler() {
         synchronized (mutex2) {
             allAvatarHandler.add(this);

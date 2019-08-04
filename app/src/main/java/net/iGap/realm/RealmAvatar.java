@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 
@@ -79,6 +80,7 @@ public class RealmAvatar extends RealmObject {
      * @param ownerId use this id for delete from RealmAvatar
      */
     public static void deleteAllAvatars(final long ownerId, Realm realm) {
+        AvatarHandler.clearCacheForOwnerId(ownerId);
         RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
         if (ownerAvatars.size() > 0) {
             ownerAvatars.deleteAllFromRealm();
@@ -86,6 +88,7 @@ public class RealmAvatar extends RealmObject {
     }
 
     public static void deleteAvatar(Realm realm, final long avatarId) {
+        AvatarHandler.clearCacheForOwnerId(avatarId);
         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
         if (realmAvatar != null) {
             realmAvatar.deleteFromRealm();
@@ -93,6 +96,7 @@ public class RealmAvatar extends RealmObject {
     }
 
     public static void deleteAvatarWithOwnerId(final long ownerId) {
+        AvatarHandler.clearCacheForOwnerId(ownerId);
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
