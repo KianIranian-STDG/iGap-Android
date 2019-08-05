@@ -115,7 +115,7 @@
     <dimen name="coupon_qr_size">140dp</dimen>
     <dimen name="app_bar_card_view_elevation">0dp</dimen>
     <dimen name="image">64dp</dimen>
-    <dimen name="multi_select_icon_size">@dimen/standardTextSize</dimen>
+    <dimen name="multi_select_icon_size">@dimen/largeTextSize</dimen>
     <dimen name="multi_select_icon_margin">@dimen/dp4</dimen>
     <dimen name="multi_select_icon_height">@dimen/dp40</dimen>
     <dimen name="main_rooms_selected_action_padding">@dimen/dp8</dimen>
