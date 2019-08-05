@@ -20,7 +20,8 @@
         android:textSize="@dimen/dp20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/et_chatRoom_writeMessage"/>
 
 
     <net.iGap.module.EmojiEditTextE
@@ -28,7 +29,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"
         android:background="@drawable/backround_chatroom_edittext"
         android:gravity="bottom"
         android:hint="@string/type_message"
@@ -54,12 +54,12 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
         android:text="@string/md_bot"
-        android:textAppearance="@style/TextIconAppearance.all"
         android:textSize="@dimen/dp20"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_chatRoom_send"
+        app:layout_constraintEnd_toStartOf="@id/btn_chatRoom_send"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/et_chatRoom_writeMessage"
         app:layout_constraintVertical_bias="0.0" />
 
     <net.iGap.module.MaterialDesignTextView
@@ -70,9 +70,9 @@
         android:gravity="center"
         android:padding="@dimen/dp8"
         android:text="@string/md_send_button"
-        android:textAppearance="@style/TextIconAppearance.all"
         android:textSize="@dimen/dp20"
         android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/tv_chatRoom_botAction"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ll_chatRoom_send"
         app:layout_constraintTop_toTopOf="parent" />
@@ -84,6 +84,7 @@
         android:layout_height="match_parent"
         android:layout_marginRight="@dimen/dp4"
         android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/btn_chatRoom_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -96,7 +97,6 @@
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/financial_send_money_icon"
-            android:textAppearance="@style/TextIconAppearance.all"
             android:textSize="@dimen/dp20" />
 
         <net.iGap.module.MaterialDesignTextView
@@ -107,7 +107,6 @@
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/md_attachment_clip"
-            android:textAppearance="@style/TextIconAppearance.all"
             android:textSize="@dimen/dp20" />
 
         <net.iGap.module.MaterialDesignTextView
@@ -118,7 +117,6 @@
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/md_voice_message_microphone_button"
-            android:textAppearance="@style/TextIconAppearance.all"
             android:textSize="@dimen/dp20" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
