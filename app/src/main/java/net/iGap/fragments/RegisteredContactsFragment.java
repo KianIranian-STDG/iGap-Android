@@ -121,6 +121,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private boolean endPage = false;
     private boolean inSearchMode = false;
     private String searchText = "";
+    private boolean isSearchEnabled;
 
     public static RegisteredContactsFragment newInstance(boolean isSwipe, boolean isCallAction, int pageMode) {
         RegisteredContactsFragment contactsFragment = new RegisteredContactsFragment();
@@ -472,6 +473,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     public void onResume() {
         super.onResume();
 
+        if (isSearchEnabled && mHelperToolbar != null) mHelperToolbar.getmSearchBox().performClick();
         if (isContact && mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
     }
 
@@ -599,8 +601,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     @Override
     public void onSearchClickListener(View view) {
+        isSearchEnabled = true ;
         inSearchMode = true;
-        openKeyBoard();
     }
 
     @Override
@@ -629,9 +631,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     @Override
     public void onBtnClearSearchClickListener(View view) {
-        if (edtSearch.getText().length() > 0) {
-            edtSearch.setText("");
-        }
+        isSearchEnabled = false ;
     }
 
     @Override

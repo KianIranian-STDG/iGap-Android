@@ -76,8 +76,8 @@
               android:layout_width="@dimen/dp52"
               android:layout_height="match_parent"
               android:gravity="center"
-              android:text="@string/md_back_arrow"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:text="@string/back_icon"
+              style="@style/myIconToolbarStyle"
               android:textColor="@color/whit_background" />
           </net.iGap.libs.rippleeffect.RippleView>
 
@@ -111,7 +111,7 @@
               android:layout_gravity="right"
               android:gravity="center"
               android:text="@string/md_crop_button"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
+              style="@style/myIconToolbarStyle"
               android:textColor="@color/whit_background"
               android:textSize="@dimen/dp22" />
           </net.iGap.libs.rippleeffect.RippleView>

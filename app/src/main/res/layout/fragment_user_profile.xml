@@ -42,7 +42,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="-8dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/user_profile_top_holder" />
+                    android:src="@drawable/test_bg" />
 
             </RelativeLayout>
 

@@ -248,4 +248,5 @@
     <string name="delivery_icon">\ue925</string>
     <string name="financial_send_money_icon">\ue946</string>
     <string name="eye_icon">\ue9a4</string>
+    <string name="channel_main_icon">\ue916</string>
 </resources>

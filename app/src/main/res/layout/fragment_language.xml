@@ -129,8 +129,8 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:text="@string/md_check_symbol"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/check_icon"
+        style="@style/myIconTextViewStyle"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
         android:visibility="@{fragmentLanguageViewModel.isFarsi ? View.VISIBLE : View.GONE}" />
@@ -176,8 +176,8 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:text="@string/md_check_symbol"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/check_icon"
+        style="@style/myIconTextViewStyle"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
         android:visibility="@{fragmentLanguageViewModel.isEnglish ? View.VISIBLE : View.GONE}" />
@@ -222,11 +222,10 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:text="@string/md_check_symbol"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:text="@string/check_icon"
+        style="@style/myIconTextViewStyle"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
-
         android:visibility="@{fragmentLanguageViewModel.isArabi ? View.VISIBLE : View.GONE}"
 
         />

@@ -6515,7 +6515,7 @@ public class FragmentChat extends BaseFragment
 
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
         final AppCompatTextView textSend = viewBottomSheetForward.findViewById(R.id.txtSend);
-        textSend.setVisibility(View.INVISIBLE);
+        textSend.setVisibility(View.GONE);
         final RecyclerView rcvItem = viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
         rcvItem.setLayoutManager(new GridLayoutManager(rcvItem.getContext(), 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
@@ -6602,7 +6602,7 @@ public class FragmentChat extends BaseFragment
             if (mListForwardNotExict.size() + multiForwardList.size() > 0) {
                 textSend.setVisibility(View.VISIBLE);
             } else {
-                textSend.setVisibility(View.INVISIBLE);
+                textSend.setVisibility(View.GONE);
             }
         };
 
