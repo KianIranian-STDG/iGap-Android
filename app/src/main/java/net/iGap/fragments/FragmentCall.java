@@ -515,7 +515,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             }
         }
 
-        Toast.makeText(_mActivity, "resume", Toast.LENGTH_SHORT).show();
         if (mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
 
     }
