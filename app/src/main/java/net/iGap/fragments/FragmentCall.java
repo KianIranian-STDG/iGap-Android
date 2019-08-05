@@ -145,6 +145,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
 
+        mOffset = 0 ;
         getLogListWithOffset();
 
         mRecyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -514,6 +515,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             }
         }
 
+        Toast.makeText(_mActivity, "resume", Toast.LENGTH_SHORT).show();
         if (mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
 
     }
