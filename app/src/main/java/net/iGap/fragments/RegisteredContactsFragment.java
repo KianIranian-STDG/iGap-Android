@@ -161,25 +161,26 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
         Utils.darkModeHandler(toolbarLayout);
 
-        if (isContact) {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setLeftIcon(R.string.edit_icon)
-                    .setRightIcons(R.string.add_icon)
-                    .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true, R.string.unlock_icon)
-                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
-                    .setSearchBoxShown(true)
-                    .setLogoShown(true);
-        } else {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setLeftIcon(R.string.back_icon)
-                    .setRightIcons(R.string.add_icon)
-                    .setSearchBoxShown(true)
-                    .setLogoShown(true);
+        if (mHelperToolbar == null)
+            if (isContact) {
+                mHelperToolbar = HelperToolbar.create()
+                        .setContext(getContext())
+                        .setLeftIcon(R.string.edit_icon)
+                        .setRightIcons(R.string.add_icon)
+                        .setFragmentActivity(getActivity())
+                        .setPassCodeVisibility(true, R.string.unlock_icon)
+                        .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                        .setSearchBoxShown(true)
+                        .setLogoShown(true);
+            } else {
+                mHelperToolbar = HelperToolbar.create()
+                        .setContext(getContext())
+                        .setLeftIcon(R.string.back_icon)
+                        .setRightIcons(R.string.add_icon)
+                        .setSearchBoxShown(true)
+                        .setLogoShown(true);
 
-        }
+            }
 
         if (mPageMode == CALL) {
             mHelperToolbar.setDefaultTitle(getString(R.string.make_call));
@@ -220,7 +221,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
         realmRecyclerView.setAdapter(new ContactListAdapter());
 
-        loadContacts();
+        if (!inSearchMode)
+            loadContacts();
 
         switch (mPageMode) {
             case CALL:
@@ -697,7 +699,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         void insertContact(RealmContacts realmContacts, int i) {
             usersList.add(i, realmContacts);
             notifyItemInserted(i);
-            G.handler.postDelayed( () -> {
+            G.handler.postDelayed(() -> {
                 notifyDataSetChanged();
                 mTxtSelectedCount.setText(0 + " " + getString(R.string.item_selected));
             }, 100);
