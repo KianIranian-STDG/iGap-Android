@@ -27,6 +27,12 @@
             android:layout_margin="@dimen/dp8"
             android:text="@string/search_icon" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+
         <net.iGap.module.MEditText
             android:id="@+id/edtSearch"
             style="?hintColorSettingTheme"
@@ -35,7 +41,11 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp8"
             android:hint="@string/search"
-            android:padding="6dp" />
+            android:textSize="@dimen/largeTextSize"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingEnd="@dimen/dp14"
+            android:paddingStart="@dimen/dp14" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
