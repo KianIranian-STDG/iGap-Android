@@ -12,16 +12,17 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+      android:paddingRight="@dimen/dp6"
+      android:paddingLeft="@dimen/dp6">
 
     <net.iGap.module.MaterialDesignTextView
       android:id="@+id/txt_info_back_map"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:gravity="right"
-      android:text="@string/md_right_arrow"
-      android:textAppearance="@style/TextIconAppearance_toolbar"
+      android:gravity="center"
+      android:text="@string/close_icon"
+      style="@style/myIconTextViewStyle"
       android:textColor="@color/iGapColor"
       android:visibility="gone" />
 
@@ -29,8 +30,7 @@
       android:id="@+id/txt_close_map"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:gravity="right"
+      android:gravity="center"
       android:text="@string/md_close_button"
       style="@style/myIconTextViewStyle"
       android:textColor="@color/gray_5c"
