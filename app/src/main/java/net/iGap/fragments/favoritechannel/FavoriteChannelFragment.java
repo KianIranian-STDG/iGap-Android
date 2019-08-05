@@ -96,40 +96,41 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     CardView.LayoutParams cardParamse = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     cardParamse.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                                     cardView.setLayoutParams(cardParamse);
-                                    scale = response.body().getData().get(i).getInfo().getScale();
-                                    ProgressBar progressBar = new ProgressBar(getContext());
-                                    ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
-                                    progressBar.setVisibility(View.VISIBLE);
-                                    String[] scales = scale.split(":");
-                                    float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-                                    slider.setIndex(i);
-                                    slider.setLayoutParams(layoutParams);
-                                    slider.getLayoutParams().height = Math.round(height);
-                                    cardView.addView(slider);
-                                    int finalI = i;
-                                    playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
-                                    sliderAdapter = new SliderAdapter(response.body().getData().get(i).getSlides(), response.body().getData().get(i).getInfo().getScale());
-                                    slider.postDelayed(() -> {
-                                        sliderAdapter = new SliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
-                                        slider.setAdapter(sliderAdapter);
-                                        slider.setSelectedSlide(0);
-                                        slider.setLoopSlides(true);
-                                        slider.setAnimateIndicators(true);
-                                        slider.setIndicatorSize(12);
-                                        slider.setInterval(playBackTime);
-                                        slider.setOnSlideClickListener(position -> {
-                                            if (response.body().getData().get(slider.getIndex()).getSlides().get(position).getActionType() == 3) {
-                                                Log.i("nazanin", "onResponse: " + position);
-                                                HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(slider.getIndex()).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
-                                            } else {
-                                                Log.i("nazanin", "onResponse: " + position);
-                                                Toast.makeText(getContext(), "Empty", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }, 1000);
+                                    if(response.body().getData().get(i).getInfo().getScale()!=null) {
+                                        scale = response.body().getData().get(i).getInfo().getScale();
+                                        ProgressBar progressBar = new ProgressBar(getContext());
+                                        ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
+                                        progressBar.setVisibility(View.VISIBLE);
+                                        String[] scales = scale.split(":");
+                                        float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+                                        slider.setIndex(i);
+                                        slider.setLayoutParams(layoutParams);
+                                        slider.getLayoutParams().height = Math.round(height);
+                                        cardView.addView(slider);
+                                        int finalI = i;
+                                        playBackTime = response.body().getData().get(i).getInfo().getPlaybackTime();
+                                        sliderAdapter = new SliderAdapter(response.body().getData().get(i).getSlides(), response.body().getData().get(i).getInfo().getScale());
+                                        slider.postDelayed(() -> {
+                                            sliderAdapter = new SliderAdapter(response.body().getData().get(finalI).getSlides(), response.body().getData().get(finalI).getInfo().getScale());
+                                            slider.setAdapter(sliderAdapter);
+                                            slider.setSelectedSlide(0);
+                                            slider.setLoopSlides(true);
+                                            slider.setAnimateIndicators(true);
+                                            slider.setIndicatorSize(12);
+                                            slider.setInterval(playBackTime);
+                                            slider.setOnSlideClickListener(position -> {
+                                                if (response.body().getData().get(slider.getIndex()).getSlides().get(position).getActionType() == 3) {
+                                                    Log.i("nazanin", "onResponse: " + position);
+                                                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(slider.getIndex()).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
+                                                } else {
+                                                    Log.i("nazanin", "onResponse: " + position);
+                                                    Toast.makeText(getContext(), "Empty", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }, 1000);
 
-                                    linearLayoutItemContainer.addView(cardView);
-                                }
+                                        linearLayoutItemContainer.addView(cardView);
+                                    }  }
                                 break;
 
                             case ParentChannel.TYPE_CHANNEL:
@@ -146,6 +147,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     FrameLayout frameLayout = channelView.findViewById(R.id.frame_more_one);
                                     int finalId = i;
                                     frameLayout.setOnClickListener(v -> {
+
                                         FavoriteChannelInfoFragment favoriteChannelInfoFragment = new FavoriteChannelInfoFragment();
                                         favoriteChannelInfoFragment.setId(response.body().getData().get(finalId).getId());
                                         FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
