@@ -660,6 +660,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             if (getActivity() != null && isAdded()) {
                /* if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
                     FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();*/
+                G.refreshRealmUi();
                 popBackStackFragment();
                 popBackStackFragment();
                 removeFromBaseFragment(FragmentNewGroup.this);
