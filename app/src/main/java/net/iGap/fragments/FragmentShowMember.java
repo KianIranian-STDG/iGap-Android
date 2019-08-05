@@ -37,20 +37,11 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnChannelAddAdmin;
-import net.iGap.interfaces.OnChannelAddModerator;
 import net.iGap.interfaces.OnChannelGetMemberList;
-import net.iGap.interfaces.OnChannelKickAdmin;
-import net.iGap.interfaces.OnChannelKickMember;
-import net.iGap.interfaces.OnChannelKickModerator;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGroupAddAdmin;
-import net.iGap.interfaces.OnGroupAddModerator;
 import net.iGap.interfaces.OnGroupGetMemberList;
-import net.iGap.interfaces.OnGroupKickAdmin;
 import net.iGap.interfaces.OnGroupKickMember;
-import net.iGap.interfaces.OnGroupKickModerator;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -61,11 +52,9 @@ import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoChannelGetMemberList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
@@ -102,7 +91,7 @@ import static net.iGap.G.context;
 import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupAddAdmin, OnGroupKickAdmin, OnGroupAddModerator, OnGroupKickModerator, OnGroupKickMember, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelAddModerator, OnChannelKickModerator, OnChannelKickMember {
+public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupKickMember {
 
     public enum ShowMemberMode {
         NONE,
@@ -654,62 +643,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
      */
 
     @Override
-    public void onGroupAddAdmin(final long roomId, final long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onGroupAddModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onGroupKickAdmin(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onGroupKickModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
     public void onGroupKickMember(long roomId, long memberId) {
         removeMember(roomId, memberId);
     }
 
     @Override
-    public void onChannelAddAdmin(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelAddModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelKickAdmin(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelKickModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelKickMember(long roomId, long memberId) {
-        removeMember(roomId, memberId);
-    }
-
-    @Override
     public void onError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void timeOut() {
 
     }
 

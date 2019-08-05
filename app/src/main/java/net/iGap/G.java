@@ -246,13 +246,9 @@ public class G extends Application {
     public static OnUserProfileGetNickname onUserProfileGetNickname;
     public static OnGroupCreate onGroupCreate;
     public static OnGroupAddMember onGroupAddMember;
-    public static OnGroupAddAdmin onGroupAddAdmin;
-    public static OnGroupAddModerator onGroupAddModerator;
     //    public static OnGroupClearMessage onGroupClearMessage;
     /*public static OnGroupEdit onGroupEdit;*/
-    public static OnGroupKickAdmin onGroupKickAdmin;
     public static OnGroupKickMember onGroupKickMember;
-    public static OnGroupKickModerator onGroupKickModerator;
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
@@ -286,11 +282,6 @@ public class G extends Application {
     public static OnChannelDelete onChannelDelete;
     public static OnChannelLeft onChannelLeft;
     public static OnChannelAddMember onChannelAddMember;
-    public static OnChannelKickMember onChannelKickMember;
-    public static OnChannelAddAdmin onChannelAddAdmin;
-    public static OnChannelKickAdmin onChannelKickAdmin;
-    public static OnChannelAddModerator onChannelAddModerator;
-    public static OnChannelKickModerator onChannelKickModerator;
     public static OnChannelGetMemberList onChannelGetMemberList;
     /*public static OnChannelEdit onChannelEdit;*/
     public static OnChannelAvatarAdd onChannelAvatarAdd;

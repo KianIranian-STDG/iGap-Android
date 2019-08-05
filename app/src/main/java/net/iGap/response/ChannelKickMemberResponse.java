@@ -10,10 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.helper.HelperMember;
 import net.iGap.proto.ProtoChannelKickMember;
-import net.iGap.proto.ProtoError;
 
 public class ChannelKickMemberResponse extends MessageHandler {
 
@@ -35,30 +33,16 @@ public class ChannelKickMemberResponse extends MessageHandler {
         super.handler();
         ProtoChannelKickMember.ChannelKickMemberResponse.Builder builder = (ProtoChannelKickMember.ChannelKickMemberResponse.Builder) message;
         HelperMember.kickMember(builder.getRoomId(), builder.getMemberId());
-
-        if (G.onChannelKickMember != null) {
-            G.onChannelKickMember.onChannelKickMember(builder.getRoomId(), builder.getMemberId());
-        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (G.onChannelKickMember != null) {
-            G.onChannelKickMember.onTimeOut();
-        }
     }
 
     @Override
     public void error() {
         super.error();
-
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-        if (G.onChannelKickMember != null) {
-            G.onChannelKickMember.onError(majorCode, minorCode);
-        }
     }
 }
 
