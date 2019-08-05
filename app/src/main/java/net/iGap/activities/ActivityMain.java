@@ -892,6 +892,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onProviderInstalled() {
         // Provider is up-to-date, app can make secure network calls.
+        Log.wtf(this.getClass().getName(), "onProviderInstalled");
     }
 
     /**

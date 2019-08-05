@@ -22,11 +22,13 @@ import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.favoritechannel.CategoryItemAdapter;
 import net.iGap.adapter.items.favoritechannel.ChannelItemAdapter;
 import net.iGap.adapter.items.favoritechannel.SliderAdapter;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.helper.HelperToolbar;
@@ -203,9 +205,16 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
 
             @Override
             public void onFailure(Call<ParentChannel> call, Throwable t) {
-                Log.i("nazanin", "onFailure: " + t.getMessage());
+                t.printStackTrace();
+                if (new ErrorHandler().checkHandShakeFailure(t)){
+                    Log.wtf(this.getClass().getName(),"ssl handshake");
+                    if (getActivity() instanceof ActivityMain){
+                        ((ActivityMain) getActivity()).checkGoogleUpdate();
+                    }
+                }
+                /*Log.i("nazanin", "onFailure: " + t.getMessage());
                 Toast toast = Toast.makeText(getContext(), "No Response", Toast.LENGTH_SHORT);
-                toast.show();
+                toast.show();*/
             }
         });
 
