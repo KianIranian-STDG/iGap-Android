@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -121,9 +122,9 @@ public class ChatCell extends ConstraintLayout {
         firstTextView.setId(R.id.tv_chatCell_firstTextView);
         firstTextView.setSingleLine(true);
         setTypeFace(firstTextView);
-        setTextSize(firstTextView, R.dimen.dp14);
+        setTextSize(firstTextView, R.dimen.dp12);
         firstTextView.setEmojiSize(i_Dp(R.dimen.dp14));
-        addView(firstTextView);
+//        addView(firstTextView);
 
 
         /**
@@ -141,7 +142,7 @@ public class ChatCell extends ConstraintLayout {
         secondTextView.setTextColor(isDarkTheme ? getContext().getResources().getColor(R.color.gray_f2) : Color.parseColor("#FF616161"));
         setTextSize(secondTextView, G.twoPaneMode ? R.dimen.dp16 : R.dimen.dp12);
         secondTextView.setEmojiSize(i_Dp(R.dimen.dp14));
-        addView(secondTextView);
+//        addView(secondTextView);
 
 
         /**
@@ -157,9 +158,9 @@ public class ChatCell extends ConstraintLayout {
         thirdTextView.setSingleLine(true);
         setTypeFace(thirdTextView);
         thirdTextView.setTextColor(isDarkTheme ? getContext().getResources().getColor(R.color.gray_f2) : Color.parseColor("#FF616161"));
-        setTextSize(thirdTextView, R.dimen.dp14);
+        setTextSize(thirdTextView, R.dimen.dp12);
         thirdTextView.setEmojiSize(i_Dp(R.dimen.dp14));
-        addView(thirdTextView);
+//        addView(thirdTextView);
 
 
         /**
@@ -211,6 +212,10 @@ public class ChatCell extends ConstraintLayout {
         bottomView.setId(R.id.v_chatCell_bottomView);
         bottomView.setBackgroundColor(isDarkTheme ? getResources().getColor(R.color.gray_6c) : getResources().getColor(R.color.gray_300));
         addView(bottomView);
+
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setId(R.id.ll_chatCell_messageBox);
 
 
         /**
@@ -275,26 +280,29 @@ public class ChatCell extends ConstraintLayout {
         set.connect(messageData.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
 
 
-        set.constrainHeight(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
-
-        set.constrainHeight(secondTextView.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(secondTextView.getId(), ConstraintSet.MATCH_CONSTRAINT);
-
-        set.constrainHeight(thirdTextView.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(thirdTextView.getId(), ConstraintSet.MATCH_CONSTRAINT);
+//        set.constrainHeight(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
+//        set.constrainWidth(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
+//
+//        set.constrainHeight(secondTextView.getId(), ConstraintSet.WRAP_CONTENT);
+//        set.constrainWidth(secondTextView.getId(), ConstraintSet.MATCH_CONSTRAINT);
+//
+//        set.constrainHeight(thirdTextView.getId(), ConstraintSet.WRAP_CONTENT);
+//        set.constrainWidth(thirdTextView.getId(), ConstraintSet.MATCH_CONSTRAINT);
 
         set.constrainHeight(messageStatus.getId(), i_Dp(R.dimen.dp24));
         set.constrainWidth(messageStatus.getId(), i_Dp(R.dimen.dp24));
 
-        set.connect(firstTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
-        set.connect(firstTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
+//        set.connect(firstTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
+//        set.connect(firstTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
+//
+//        set.connect(thirdTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
+//        set.connect(thirdTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
+//
+//        set.connect(secondTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
+//        set.connect(secondTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
 
-        set.connect(thirdTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
-        set.connect(thirdTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
-
-        set.connect(secondTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
-        set.connect(secondTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
+        set.connect(linearLayout.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
+        set.connect(linearLayout.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
 
         set.constrainHeight(bottomView.getId(), i_Dp(R.dimen.dp1));
         set.constrainWidth(bottomView.getId(), ConstraintSet.MATCH_CONSTRAINT);
@@ -329,11 +337,13 @@ public class ChatCell extends ConstraintLayout {
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
             set.connect(mute.getId(), ConstraintSet.LEFT, messageData.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(4));
 
+            set.connect(linearLayout.getId(), ConstraintSet.END, mute.getId(), ConstraintSet.END);
+            set.connect(linearLayout.getId(), ConstraintSet.START, avatarImageView.getId(), ConstraintSet.END);
 
-            int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
-            float[] chainWeights = {0, 0, 1};
-            set.createHorizontalChainRtl(avatarImageView.getId(), ConstraintSet.END, messageData.getId(), ConstraintSet.START,
-                    chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
+            linearLayout.addView(firstTextView, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+            linearLayout.addView(secondTextView, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+            linearLayout.addView(thirdTextView, 2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+            addView(linearLayout);
 
         } else {
 
@@ -364,12 +374,15 @@ public class ChatCell extends ConstraintLayout {
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
             set.connect(mute.getId(), ConstraintSet.RIGHT, messageData.getId(), ConstraintSet.LEFT, LayoutCreator.dp(4));
 
+            set.connect(linearLayout.getId(), ConstraintSet.RIGHT, mute.getId(), ConstraintSet.RIGHT);
+            set.connect(linearLayout.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
 
-            int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
-            float[] chainWeights = {0, 0, 1};
-            set.createHorizontalChain(avatarImageView.getId(), ConstraintSet.RIGHT, messageData.getId(), ConstraintSet.LEFT,
-                    chainViews, chainWeights, ConstraintSet.CHAIN_PACKED);
+            thirdTextView.setGravity(Gravity.RIGHT);
 
+            linearLayout.addView(firstTextView, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+            linearLayout.addView(secondTextView, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+            linearLayout.addView(thirdTextView, 2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+            addView(linearLayout);
         }
 
 
