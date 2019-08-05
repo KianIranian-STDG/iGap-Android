@@ -77,8 +77,11 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChannelAddMember;
+import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelGetMemberList;
+import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddMember;
+import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
@@ -101,6 +104,12 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupAddAdmin, OnGroupKickAdmin, OnGroupAddModerator, OnGroupKickModerator, OnGroupKickMember, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelAddModerator, OnChannelKickModerator, OnChannelKickMember {
 
+    public enum ShowMemberMode {
+        NONE,
+        SELECT_FOR_ADD_ADMIN,
+        SELECT_FOR_ADD_MODERATOR
+    }
+
     public static final String ROOMIDARGUMENT = "ROOMID_ARGUMENT";
     public static final String MAINROOL = "MAIN_ROOL";
     public static final String USERID = "USER_ID";
@@ -108,8 +117,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     public static final String ISNEEDGETMEMBERLIST = "IS_NEED_GET_MEMBER_LIST";
     public static final String ISGROUP = "IS_GROUP";
     public static final String ISSHOWADDMEMBER = "IS_SHOW_ADD_MEMBER";
-    public static final String IS_MODE_SELECTED = "IS_MODE_SELECTED";
-    public static List<StructMessageInfo> lists = new ArrayList<>();
+    public static final String SHOW_MEMBER_MODE = "SHOW_MEMBER_MODE";
     private OnComplete infoUpdateListenerCount;
     private Fragment fragment;
     List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> listMembers = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
@@ -127,7 +135,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private int mMemberCount = 0;
     private int mCurrentUpdateCount = 0;
     private boolean isFirstFill = true;
-    private boolean isModeSelect = false;
+    private ShowMemberMode showMemberMode;
     private int offset = 0;
     private int limit = 30;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -151,10 +159,11 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     }
 
     public static FragmentShowMember newInstance3(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton) {
-        return newInstance4(frg, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, isGroup, isShowAddMemberButton, false);
+        return newInstance4(frg, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, isGroup, isShowAddMemberButton, ShowMemberMode.NONE);
     }
 
-    public static FragmentShowMember newInstance4(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton, boolean isModeSelect) {
+    public static FragmentShowMember newInstance4(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton, ShowMemberMode showMemberMode) {
+
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
         bundle.putString(MAINROOL, mainrool);
@@ -163,7 +172,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
         bundle.putBoolean(ISGROUP, isGroup);
         bundle.putBoolean(ISSHOWADDMEMBER, isShowAddMemberButton);
-        bundle.putBoolean(IS_MODE_SELECTED, isModeSelect);
+        bundle.putString(SHOW_MEMBER_MODE, showMemberMode.toString());
         FragmentShowMember fragmentShowMember = new FragmentShowMember();
         fragmentShowMember.setArguments(bundle);
         fragmentShowMember.fragment = frg;
@@ -204,7 +213,14 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             isNeedGetMemberList = true;
 
             isGroup = getArguments().getBoolean(ISGROUP);
-            isModeSelect = getArguments().getBoolean(IS_MODE_SELECTED, false);
+            if (!getArguments().getString(SHOW_MEMBER_MODE, "").equals("")) {
+                showMemberMode = ShowMemberMode.valueOf(getArguments().getString(SHOW_MEMBER_MODE, ""));
+            } else {
+                showMemberMode = ShowMemberMode.NONE;
+            }
+
+            Log.d("bagi", showMemberMode.toString());
+
             isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER , true);
 
             roomType = RealmRoom.detectType(mRoomID);
@@ -470,8 +486,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())
                     || selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
-
-                openFragmentForAdd(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
+                openFragmentForAdd(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString(), selectedRole);
 
             } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
@@ -496,7 +511,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             @Override
             public void afterTextChanged(final Editable s) {
-                RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRealm, mRoomID, s.toString());
+                RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRealm, mRoomID, s.toString(), getUnselectRow(), selectedRole);
                 mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -595,6 +610,23 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
     }
 
+    private ArrayList<String> getUnselectRow() {
+        ArrayList<String> result = new ArrayList<>();
+        switch (showMemberMode) {
+            case SELECT_FOR_ADD_ADMIN:
+                result.add(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+                result.add(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+                break;
+            case SELECT_FOR_ADD_MODERATOR:
+                result.add(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+                result.add(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+                result.add(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+                break;
+        }
+
+        return result;
+    }
+
     private void fillAdapter() {
 
         if (roomType == GROUP) {
@@ -603,9 +635,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             role = RealmChannelRoom.detectMineRole(mRoomID).toString();
         }
 
-        RealmResults<RealmMember> realmMembers = RealmMember.filterRole(mRealm, mRoomID, roomType, selectedRole);
+        RealmResults<RealmMember> realmMembers = RealmMember.filterMember(mRealm, mRoomID, "", getUnselectRow(), selectedRole);
 
-        if (realmMembers.size() > 0 && G.fragmentActivity != null) {
+        if (G.fragmentActivity != null) {
             mAdapter = new MemberAdapter(realmMembers, roomType, mMainRole, userID);
             mRecyclerView.setAdapter(mAdapter);
 
@@ -705,9 +737,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         mRecyclerView.setAdapter(mAdapter);
     }*/
 
-    private void openFragmentForAdd(String SelectedRole) {
+    private void openFragmentForAdd(String SelectedRole, String selectedRule) {
         if (getActivity() != null) {
-            FragmentShowMember fragment1 = FragmentShowMember.newInstance3(fragment, mRoomID, role, G.userId, SelectedRole, true , isGroup , false);
+            ShowMemberMode showMemberMode;
+            if (selectedRule.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
+                showMemberMode = ShowMemberMode.SELECT_FOR_ADD_ADMIN;
+            } else {
+                showMemberMode = ShowMemberMode.SELECT_FOR_ADD_MODERATOR;
+            }
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, G.userId, SelectedRole, true , isGroup , false, showMemberMode);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
         }
     }
@@ -798,11 +836,31 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                             HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
                                 @Override
                                 public void Allow() {
-                                    if (mContact.peerId == userID) {
-                                        // bagi:// dont uncomment below line it has some bug
-                                        //new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
-                                    } else {
-                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                    switch (showMemberMode) {
+                                        case NONE:
+                                            if (mContact.peerId == userID) {
+                                                // bagi:// dont uncomment below line it has some bug
+                                                //new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
+                                            } else {
+                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                            }
+                                            break;
+                                        case SELECT_FOR_ADD_MODERATOR:
+                                            if (isGroup) {
+                                                new RequestGroupAddModerator().groupAddModerator(mRoomID, mContact.peerId);
+                                            } else {
+                                                new RequestChannelAddModerator().channelAddModerator(mRoomID, mContact.peerId);
+                                            }
+                                            getActivity().onBackPressed();
+                                            break;
+                                        case SELECT_FOR_ADD_ADMIN:
+                                            if (isGroup) {
+                                                new RequestGroupAddAdmin().groupAddAdmin(mRoomID, mContact.peerId);
+                                            } else {
+                                                new RequestChannelAddMember().channelAddMember(mRoomID, mContact.peerId);
+                                            }
+                                            getActivity().onBackPressed();
+                                            break;
                                     }
                                 }
 
@@ -929,6 +987,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
              */
             if (mContact.peerId == mContact.userID) {
                 holder.btnMenu.setVisibility(View.INVISIBLE);
+            }
+
+            if (showMemberMode != ShowMemberMode.NONE) {
+                holder.btnMenu.setVisibility(View.GONE);
             }
         }
 

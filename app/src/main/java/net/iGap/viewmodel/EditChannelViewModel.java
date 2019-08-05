@@ -33,6 +33,8 @@ import net.iGap.request.RequestChannelEdit;
 import net.iGap.request.RequestChannelUpdateReactionStatus;
 import net.iGap.request.RequestChannelUpdateSignature;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -180,8 +182,8 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             e.getStackTrace();
         }*/
         subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
-        administratorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterRole(realmChannelProfile, roomId, CHANNEL, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
         if (role == ChannelChatRole.OWNER) {
             leaveChannelText.set(R.string.channel_delete);

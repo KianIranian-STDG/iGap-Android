@@ -308,20 +308,14 @@ public class RealmMember extends RealmObject {
         });
     }
 
-    public static RealmResults<RealmMember> filterMember(Realm realm, long roomId, @Nullable String filter) {
+    public static RealmResults<RealmMember> filterMember(Realm realm, long roomId, @Nullable String filter, ArrayList<String> unSelectedRule, String selectedRole) {
+
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null) {
             return emptyResult(realm);
         }
 
         RealmResults<RealmMember> searchMember = emptyResult(realm);
-        RealmResults<RealmRegisteredInfo> findMember;
-
-        if (filter != null && filter.length() > 0) {
-            findMember = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.DISPLAY_NAME, filter, Case.INSENSITIVE).findAll().sort(RealmRegisteredInfoFields.DISPLAY_NAME);
-        } else {
-            findMember = realm.where(RealmRegisteredInfo.class).equalTo(RealmRoomFields.ID, roomId).findAll().sort(RealmRegisteredInfoFields.DISPLAY_NAME);
-        }
         try {
             RealmQuery<RealmMember> query;
             if (realmRoom.getType() == GROUP) {
@@ -330,14 +324,37 @@ public class RealmMember extends RealmObject {
                 query = realmRoom.getChannelRoom().getMembers().where();
             }
 
-            for (int i = 0; i < findMember.size(); i++) {
-                if (i != 0) {
-                    query = query.or();
-                }
-                query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
+            if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
+                query = query.equalTo(RealmMemberFields.ROLE, selectedRole);
             }
-            if (findMember.size() > 0 || (filter == null || filter.length() == 0)) {
+
+            for (String role : unSelectedRule) {
+                query = query.notEqualTo(RealmMemberFields.ROLE, role);
+            }
+
+            if (filter == null || filter.length() == 0) {
                 searchMember = query.findAll();
+            } else {
+                RealmResults<RealmRegisteredInfo> findMember = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.DISPLAY_NAME, filter, Case.INSENSITIVE).findAll();
+                for (int i = 0; i < findMember.size(); i++) {
+                    if (i != 0 && i != (findMember.size() - 1)) {
+                        query = query.or();
+                    }
+
+                    if (i == 0) {
+                        query = query.beginGroup();
+                    }
+
+                    query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
+
+                    if (i == (findMember.size() - 1)) {
+                        query = query.endGroup();
+                    }
+                }
+
+                if (findMember.size() > 0) {
+                    searchMember = query.findAll();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -350,28 +367,6 @@ public class RealmMember extends RealmObject {
      */
     public static RealmResults<RealmMember> emptyResult(Realm realm) {
         return realm.where(RealmMember.class).equalTo(RealmMemberFields.ID, -1).findAll();
-    }
-
-    public static RealmResults<RealmMember> filterRole(Realm realm, long roomId, ProtoGlobal.Room.Type roomType, String role) {
-        RealmList<RealmMember> memberList = null;
-        RealmResults<RealmMember> mList = emptyResult(realm);
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                memberList = realmRoom.getGroupRoom().getMembers();
-            } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                memberList = realmRoom.getChannelRoom().getMembers();
-            }
-
-            if (memberList != null && memberList.size() > 0) {
-                if (role.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
-                    mList = memberList.where().findAll();
-                } else {
-                    mList = memberList.where().equalTo(RealmMemberFields.ROLE, role).findAll();
-                }
-            }
-        }
-        return mList;
     }
 
     public long getId() {
