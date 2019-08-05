@@ -4527,7 +4527,9 @@ public class FragmentChat extends BaseFragment
                             items.remove(getString(R.string.delete_item_dialog));
                         }
                     }
-                    items.remove(getString(R.string.edit_item_dialog));
+                    if (channelRole != ChannelChatRole.OWNER) {
+                        items.remove(getString(R.string.edit_item_dialog));
+                    }
                 }
             } else if (chatType == GROUP) {
 
