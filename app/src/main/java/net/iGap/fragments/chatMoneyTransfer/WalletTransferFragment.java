@@ -77,7 +77,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         descriptionEt = rootView.findViewById(R.id.et_moneyAction_description);
         TextView amountTextTv = rootView.findViewById(R.id.tv_moneyAction_amountText);
         TextView descriptionTv = rootView.findViewById(R.id.tv_moneyAction_description);
-
         amountEt.setTextColor(Utils.darkModeHandler(getContext()));
         descriptionEt.setTextColor(Utils.darkModeHandler(getContext()));
         amountTextTv.setTextColor(Utils.darkModeHandler(getContext()));
@@ -128,7 +127,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
 
             }
         });
-
     }
 
     @Override

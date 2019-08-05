@@ -68,6 +68,7 @@ import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
+import net.iGap.model.CardToCardValue;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
@@ -382,6 +383,44 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         });
 
+        if (holder instanceof CardToCardItem.ViewHolder) {
+            CardToCardItem.ViewHolder cardToCardHolder = (CardToCardItem.ViewHolder) holder;
+            cardToCardHolder.getRootView().setMinWidth(G.maxChatBox - i_Dp(R.dimen.dp100));
+            cardToCardHolder.getInnerLayout().setMinimumWidth(G.maxChatBox - i_Dp(R.dimen.dp100));
+
+            if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.CARD_TO_CARD_MESSAGE) {
+
+                CardToCardValue value = new CardToCardValue();
+                try {
+                    JSONArray rootJsonArray = new JSONArray(mMessage.additionalData.additionalData);
+                    for (int i = 0; i < rootJsonArray.length(); i++) {
+                        JSONArray valuJsonArray = rootJsonArray.getJSONArray(i);
+                        for (int j = 0; j < valuJsonArray.length(); j++) {
+
+                            JSONObject rootJsonObject = new JSONObject(valuJsonArray.getJSONObject(i).toString());
+                            JSONObject valueObject = rootJsonObject.getJSONObject("value");
+
+                            String cardNumber = valueObject.getString("cardNumber");
+                            int amount = valueObject.getInt("amount");
+                            long userId = valueObject.getLong("userId");
+
+                            value.setAmount(amount);
+                            value.setCardNumber(cardNumber);
+                            value.setUserId(userId);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                cardToCardHolder.setValue(value);
+            }
+
+            cardToCardHolder.setOnCardToCard(cardToCard -> {
+                CardToCardHelper.NewCallCardToCard(G.currentActivity, cardToCard.getUserId(), cardToCard.getAmount(), cardToCard.getCardNumber());
+            });
+        }
+
 
         if (holder instanceof ChatItemWithTextHolder) {
             ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
@@ -415,22 +454,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         LinearLayout childLayout = MakeButtons.createLayout();
                         for (int j = 0; j < buttonList.get(i).length(); j++) {
                             try {
+
                                 JSONObject json = new JSONObject(buttonList.get(i).get(j).toString());
                                 ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                                 }.getType());
                                 if (btnEntery.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                                    btnEntery.setLongValue(json.getLong("value"));
+//                                    btnEntery.setLongValue(json.getLong("value"));
                                 }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (FragmentChat.isInSelectionMode) {
-                                            holder.itemView.performLongClick();
-                                            return;
-                                        }
-                                        onBotBtnClick(view);
+                                childLayout = MakeButtons.addButtons(btnEntery, (view, buttonEntity) -> {
+                                    if (FragmentChat.isInSelectionMode) {
+                                        holder.itemView.performLongClick();
+                                        return;
                                     }
+                                    onBotBtnClick(view,buttonEntity);
                                 }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -1802,7 +1839,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return "";
     }
 
-    public void onBotBtnClick(View v) {
+    public void onBotBtnClick(View v, ButtonEntity buttonEntity) {
         try (final Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
@@ -1880,7 +1917,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
                 DirectPayHelper.directPayBot(jsonObject, peerId);
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
+                JSONObject rootJsonObject = new JSONObject(buttonEntity.getJsonObject());
+                JSONObject valueObject = rootJsonObject.getJSONObject("value");
+
+                String cardNumber = valueObject.getString("cardNumber");
+                int amount = valueObject.getInt("amount");
+                long userId = valueObject.getLong("userId");
+
+                CardToCardHelper.NewCallCardToCard(G.currentActivity, userId, amount, cardNumber);
+
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
                 try {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
@@ -1902,6 +1947,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
 
+        /**
+         * The data was sent via the button via the view tag. Right now I only do this for the card due to lack of time with the new object
+         * */
     }
 
 }

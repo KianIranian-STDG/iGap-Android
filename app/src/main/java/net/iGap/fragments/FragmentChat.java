@@ -112,10 +112,11 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.MessagesAdapter;
-import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.AdapterCamera;
+import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
+import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
 import net.iGap.adapter.items.chat.GifWithTextItem;
@@ -412,6 +413,13 @@ public class FragmentChat extends BaseFragment
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private EmojiPopup emojiPopup;
     private boolean isPaused;
+
+    private String cardNumber = "";
+    private String description = "";
+    private String amount = "";
+
+
+
 
     /**
      * *************************** common method ***************************
@@ -833,6 +841,10 @@ public class FragmentChat extends BaseFragment
                 }
             }
         }, Config.LOW_START_PAGE_TIME);
+
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot){
+            sendMoney.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -2989,7 +3001,6 @@ public class FragmentChat extends BaseFragment
                         return;
                     }
                 }
-
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     if (isCardToCardMessage) {
                         sendNewMessageForRequestCardToCard();
@@ -3241,7 +3252,20 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 chatPeerId = realmRoom.getChatRoom().getPeerId();
                 if (imvUserPicture != null && txtName != null) {
-                    transferAction = ChatMoneyTransferFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+                    ChatMoneyTransferFragment chatMoneyTransferFragment= ChatMoneyTransferFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+                    transferAction = chatMoneyTransferFragment;
+
+                    chatMoneyTransferFragment.setCardToCardCallBack((cardNum, amountNum, descriptionTv) -> {
+
+                        sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
+
+                        ll_attach_text.setVisibility(View.GONE);
+                        edtChat.setFilters(new InputFilter[]{});
+                        edtChat.setText("");
+
+                        clearReplyView();
+
+                    });
 
                     if (getFragmentManager() != null)
                         transferAction.show(getFragmentManager(), "PaymentFragment");
@@ -3269,6 +3293,7 @@ public class FragmentChat extends BaseFragment
                 if (roomMessage != null) {
                     JsonArray jsonArray = new JsonArray();
                     JsonArray jsonArray2 = new JsonArray();
+                    JsonObject jsonObject=new JsonObject();
                     jsonArray.add(jsonArray2);
                     JsonObject json = new JsonObject();
                     json.addProperty("label", "Card to Card");
@@ -3310,6 +3335,56 @@ public class FragmentChat extends BaseFragment
                     Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+
+    private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
+        String mplCardNumber = cardNumber.replace("-", "");
+        int mplAmount = Integer.parseInt(amount.replace(",", ""));
+
+        final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, description, replyMessageId());
+        if (roomMessage != null) {
+
+            JsonArray rootJsonArray = new JsonArray();
+            JsonArray dataJsonArray = new JsonArray();
+
+            JsonObject valueObject = new JsonObject();
+            valueObject.addProperty("cardNumber", mplCardNumber);
+            valueObject.addProperty("amount", mplAmount);
+            valueObject.addProperty("userId", G.userId);
+
+            JsonObject rootObject = new JsonObject();
+            rootObject.addProperty("label", "Card to Card");
+            rootObject.addProperty("imageUrl", "");
+            rootObject.addProperty("actionType", "27");
+            rootObject.add("value", valueObject);
+
+            dataJsonArray.add(rootObject);
+            rootJsonArray.add(dataJsonArray);
+
+            getRealmChat().executeTransaction(realm -> roomMessage.setRealmAdditional(RealmAdditional.put(rootJsonArray.toString(), AdditionalType.CARD_TO_CARD_MESSAGE)));
+
+            edtChat.setText("");
+            lastMessageId = roomMessage.getMessageId();
+            mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+            clearReplyView();
+            scrollToEnd();
+
+            /**
+             * send splitted message in every one second
+             */
+
+            if (!description.isEmpty()) {
+                G.handler.postDelayed(() -> {
+                    if (roomMessage.isValid() && !roomMessage.isDeleted()) {
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                    }
+                }, 1000);
+            } else {
+                new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+            }
+        } else {
+            Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -8204,10 +8279,14 @@ public class FragmentChat extends BaseFragment
 
                 switch (messageType) {
                     case TEXT:
-                        if (!addTop) {
-                            mAdapter.add(new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        if (messageInfo.additionalData!= null &&messageInfo.additionalData.AdditionalType == AdditionalType.CARD_TO_CARD_MESSAGE)
+                            mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(messageInfo).withIdentifier(identifier));
+                        else {
+                            if (!addTop) {
+                                mAdapter.add(new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                     case WALLET:

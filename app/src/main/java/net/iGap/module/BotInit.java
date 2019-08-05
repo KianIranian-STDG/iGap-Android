@@ -59,7 +59,7 @@ import static net.iGap.G.context;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
-public class BotInit implements View.OnClickListener {
+public class BotInit implements MakeButtons.OnClickListener {
 
     ProtoGlobal.RoomMessage newMessage;
     private ArrayList<StructRowBotAction> botActionList;
@@ -490,8 +490,53 @@ public class BotInit implements View.OnClickListener {
         layout.addView(MakeButtons.addButtons(null, this, 1, .75f, "start", "start", "", 0, "/start", childLayout, 0, 1));*/
     }
 
+    private void makeTxtList(View rootView) {
+
+        LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
+        layoutBot.removeAllViews();
+
+        for (int i = 0; i < botActionList.size(); i++) {
+
+            StructRowBotAction sb0 = botActionList.get(i);
+            if (sb0.name.length() > 0) {
+                addTxt(layoutBot, sb0.name, sb0.action);
+            }
+
+            layoutBot.addView(layoutBot);
+        }
+
+    }
+
+    private void addTxt(LinearLayout layout, String name, String action) {
+
+        ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+
+        TextView txt = new AppCompatTextView(G.context);
+        txt.setLayoutParams(param);
+        txt.setPadding(15, 6, 15, 6);
+        txt.setText(action);
+        txt.setTypeface(G.typeface_IRANSansMobile);
+        txt.setTextColor(Color.BLACK);
+        txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (G.onBotClick != null) {
+                    G.onBotClick.onBotCommandText(action, 0);
+                }
+                setLayoutBot(true, false);
+            }
+        });
+        layout.addView(txt);
+
+    }
+
+
+    public void close() {
+        setLayoutBot(true, false);
+    }
+
     @Override
-    public void onClick(View v) {
+    public void onClick(View v, ButtonEntity buttonEntity) {
         try (Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
@@ -584,51 +629,6 @@ public class BotInit implements View.OnClickListener {
         } catch (Exception e) {
             Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void makeTxtList(View rootView) {
-
-        LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
-        layoutBot.removeAllViews();
-
-        for (int i = 0; i < botActionList.size(); i++) {
-
-            StructRowBotAction sb0 = botActionList.get(i);
-            if (sb0.name.length() > 0) {
-                addTxt(layoutBot, sb0.name, sb0.action);
-            }
-
-            layoutBot.addView(layoutBot);
-        }
-
-    }
-
-    private void addTxt(LinearLayout layout, String name, String action) {
-
-        ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-
-        TextView txt = new AppCompatTextView(G.context);
-        txt.setLayoutParams(param);
-        txt.setPadding(15, 6, 15, 6);
-        txt.setText(action);
-        txt.setTypeface(G.typeface_IRANSansMobile);
-        txt.setTextColor(Color.BLACK);
-        txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(action, 0);
-                }
-                setLayoutBot(true, false);
-            }
-        });
-        layout.addView(txt);
-
-    }
-
-
-    public void close() {
-        setLayoutBot(true, false);
     }
 
     class StructRowBotAction {

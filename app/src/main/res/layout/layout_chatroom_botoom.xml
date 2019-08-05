@@ -95,6 +95,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:padding="@dimen/dp8"
+            android:visibility="gone"
             android:text="@string/financial_send_money_icon"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textSize="@dimen/dp20" />

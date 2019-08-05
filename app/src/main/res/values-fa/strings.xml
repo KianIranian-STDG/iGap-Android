@@ -81,7 +81,7 @@
     <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
     <string name="Toast_Minimum_Characters">تعداد کاراکترها کمتر از حد مجاز است</string>
     <string name="Toast_Enter_Phone_Number">"لطفاً شماره تلفن خود را بدون صفر ابتدای آن وارد کنید"</string>
-    <string name="Toast_Enter_Code">"لطفاً کد تأیید را وارد نمایید"</string>
+    <string name="Toast_Enter_Code">"لطفاً کد تأیید ارسالرا وارد نمایید"</string>
     <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
     <string name="Toast_Invalid_nickname">"نام نامعتبر است. لطفاً نام را تغییر دهید."</string>
     <string name="Toast_Write_NickName">"لطفاً نام خود را وارد کنید"</string>
@@ -1934,4 +1934,10 @@
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
     <string name="str_frag_sync_skipBtn">شروع</string>
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
+    <string name="money_request">درخواست پول به:</string>
+    <string name="cardtocard_descriotion_error">Description can not be empty</string>
+    <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
+    <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
+    <string name="cardtocard_cartnumber_error">Card number must be 4 digits</string>
+    <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
 </resources>

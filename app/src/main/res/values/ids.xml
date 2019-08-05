@@ -155,4 +155,9 @@
     <item name="view_toolbar_btn_scanner" type="id" />
     <item name="fcsl_check_box" type="id" />
 
+    <item name="cardToCard" type="id" />
+    <item name="cardToCard_icon" type="id" />
+    <item name="cardToCard_button" type="id" />
+    <item name="cardToCard_innerLayout" type="id" />
+
 </resources>
