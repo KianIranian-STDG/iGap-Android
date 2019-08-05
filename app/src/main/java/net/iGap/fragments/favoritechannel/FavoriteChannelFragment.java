@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,7 +51,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
     private SliderAdapter sliderAdapter;
     private int playBackTime;
     private String scale;
-    private ProgressBar progressBar;
+    private SwipeRefreshLayout refreshLayout;
 
     @NonNull
     @Override
@@ -58,7 +59,15 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_favorite_channel, container, false);
         api = ApiServiceProvider.getChannelApi();
         LinearLayout toolbarContainer = rootView.findViewById(R.id.ll_popular_parent_toolbar);
-        progressBar = rootView.findViewById(R.id.progress_parent);
+        refreshLayout = rootView.findViewById(R.id.refresh_channel);
+        refreshLayout.setRefreshing(true);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                FavoriteChannelFragment.this.sendChannelRequest();
+            }
+        });
+
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setListener(this)
@@ -68,15 +77,20 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                 .setLeftIcon(R.string.back_icon);
         if (G.selectedLanguage.equals("en")) {
             toolbar.setDefaultTitle("Favorite Channel");
-
         }
-
         toolbarContainer.addView(toolbar.getView());
+
+
+        sendChannelRequest();
+        return rootView;
+    }
+
+    public void sendChannelRequest() {
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
-                progressBar.setVisibility(View.GONE);
                 if (response.body().getData() != null) {
+                    refreshLayout.setRefreshing(false);
                     Log.i("nazanin", "onResponse: " + response.isSuccessful());
                     LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
                     for (int i = 0; i < response.body().getData().size(); i++) {
@@ -94,7 +108,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     CardView.LayoutParams cardParamse = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     cardParamse.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                                     cardView.setLayoutParams(cardParamse);
-                                    if(response.body().getData().get(i).getInfo().getScale()!=null) {
+                                    if (response.body().getData().get(i).getInfo().getScale() != null) {
                                         scale = response.body().getData().get(i).getInfo().getScale();
                                         ProgressBar progressBar = new ProgressBar(getContext());
                                         ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
@@ -128,7 +142,8 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                         }, 1000);
 
                                         linearLayoutItemContainer.addView(cardView);
-                                    }  }
+                                    }
+                                }
                                 break;
 
                             case ParentChannel.TYPE_CHANNEL:
@@ -210,9 +225,6 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                 toast.show();
             }
         });
-
-        return rootView;
-
     }
 
     @Override
