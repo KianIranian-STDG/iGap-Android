@@ -96,7 +96,8 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         switch (response.body().getData().get(i).getType()) {
                             case ParentChannel.TYPE_SLIDE:
-                                if (response.body().getData().get(i).getSlides() != null) {
+                                if (response.body().getData().get(i).getInfo().getScale() != null) {
+                                if (response.body().getData().get(i).getSlides()!= null) {
                                     BannerSlider.init(new SliderBannerImageLoadingService());
                                     BannerSlider slider = new BannerSlider(getContext());
                                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -108,7 +109,6 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     CardView.LayoutParams cardParamse = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     cardParamse.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                                     cardView.setLayoutParams(cardParamse);
-                                    if (response.body().getData().get(i).getInfo().getScale() != null) {
                                         scale = response.body().getData().get(i).getInfo().getScale();
                                         ProgressBar progressBar = new ProgressBar(getContext());
                                         ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
