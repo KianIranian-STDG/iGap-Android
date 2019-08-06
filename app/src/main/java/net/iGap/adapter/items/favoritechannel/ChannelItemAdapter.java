@@ -1,7 +1,6 @@
 package net.iGap.adapter.items.favoritechannel;
 
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.PopularChannel.Channel;
+import net.iGap.model.FavoriteChannel.Channel;
 
 import java.util.List;
 
@@ -22,11 +21,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChannelItemAdapter extends RecyclerView.Adapter<ChannelItemAdapter.ChannelViewHolder> {
     private List<Channel> channelList;
-    private Context context;
     private OnClickedChannelEventCallBack onClickedChannelEventCallBack;
 
-    public ChannelItemAdapter(Context context, List<Channel> channelList) {
-        this.context = context;
+    public ChannelItemAdapter(List<Channel> channelList) {
         this.channelList = channelList;
     }
 
@@ -34,9 +31,7 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<ChannelItemAdapter.
     @NonNull
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_favorite_channel_rv_row, viewGroup, false);
-
-
+        View view =LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_rv_row,viewGroup,false);
         return new ChannelViewHolder(view);
     }
 

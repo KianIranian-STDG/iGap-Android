@@ -64,6 +64,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
@@ -4608,6 +4609,9 @@ public class FragmentChat extends BaseFragment
                 shearedLinkDataToOtherProgram(message);
             } else if (items.get(position).equals(getString(R.string.forward_item_dialog))) {
                 mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+                if (getActivity() instanceof  ActivityMain){
+                    ((ActivityMain) getActivity()).setForwardMessage(true);
+                }
                 finishChat();
             } else if (items.get(position).equals(getString(R.string.delete_item_dialog))) {
                 boolean bothDelete = RealmRoomMessage.isBothDelete(message.time);
@@ -6514,6 +6518,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
+        edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         final AppCompatTextView textSend = viewBottomSheetForward.findViewById(R.id.txtSend);
         textSend.setVisibility(View.GONE);
         final RecyclerView rcvItem = viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
@@ -6610,6 +6615,7 @@ public class FragmentChat extends BaseFragment
 
         bottomSheetDialogForward.setOnDismissListener(dialog -> {
             if (canClearForwardList) {
+                removeForwardModeFromRoomList();
                 mForwardMessages = null;
             }
         });
@@ -8103,6 +8109,7 @@ public class FragmentChat extends BaseFragment
                     imvCancelForward.performClick();
                 } else {
                     multiForwardList.clear();
+                    removeForwardModeFromRoomList();
                     mForwardMessages = null;
                 }
 
@@ -8114,8 +8121,8 @@ public class FragmentChat extends BaseFragment
 
                         ll_Forward.setVisibility(View.GONE);
                         hasForward = false;
+                        removeForwardModeFromRoomList();
                         mForwardMessages = null;
-
                         if (edtChat.getText().length() == 0) {
 
                             sendButtonVisibility(false);
@@ -8145,6 +8152,12 @@ public class FragmentChat extends BaseFragment
                 hasForward = true;
                 ll_Forward.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    private void removeForwardModeFromRoomList() {
+        if (getActivity() instanceof ActivityMain){
+            ((ActivityMain) getActivity()).setForwardMessage(false);
         }
     }
 

@@ -4,7 +4,7 @@ package net.iGap.adapter.items.favoritechannel;
 import android.content.res.Resources;
 
 import net.iGap.libs.bannerslider.viewholder.ImageSlideViewHolder;
-import net.iGap.model.PopularChannel.Slide;
+import net.iGap.model.FavoriteChannel.Slide;
 
 import java.util.List;
 

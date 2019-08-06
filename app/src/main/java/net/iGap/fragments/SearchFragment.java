@@ -668,6 +668,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     public void goToRoomWithRealm(RealmRoom realmRoom, SearchType type, long id) {
 
         if (realmRoom != null) {
+            G.refreshRealmUi();
             removeFromBaseFragment(SearchFragment.this);
             if (type == SearchType.message) {
                 new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(getActivity());

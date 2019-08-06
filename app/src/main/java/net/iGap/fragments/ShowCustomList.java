@@ -363,6 +363,7 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     @Override
     public void onRightIconClickListener(View view) {
 
+        fixChipsLayoutShowingState();
         if (dialogShowing) {
             showDialog();
         } else {
@@ -376,14 +377,22 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     @Override
     public void onPause() {
 
+        fixChipsLayoutShowingState();
+        super.onPause();
+    }
+
+
+    private void fixChipsLayoutShowingState() {
+
         //this code added for close chips layout
-        if (chipsInput != null ) {
+        if (chipsInput != null) {
             try {
-                chipsInput.addChip("" , "" );
-            }catch (Exception e){
+                chipsInput.addChip("", "");
+                chipsInput.removeChipByLabel("");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        super.onPause();
+
     }
 }

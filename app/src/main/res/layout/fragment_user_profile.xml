@@ -761,6 +761,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/birth_date"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="@id/name"
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/email">
@@ -843,7 +844,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone"
-                app:constraint_referenced_ids="addAvatar,name,userName,bio,email,birthDate,gender,genderValue" />
+                app:constraint_referenced_ids="addAvatar,name,userName,bio,email,gender,genderValue" />
 
         </android.support.constraint.ConstraintLayout>
 
