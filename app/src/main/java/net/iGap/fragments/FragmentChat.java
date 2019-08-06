@@ -712,7 +712,7 @@ public class FragmentChat extends BaseFragment
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
-        ConstraintLayout chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
+        ViewGroup chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
 
         if (G.isDarkTheme)
             chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
@@ -7191,7 +7191,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initLayoutChannelFooter() {
-        ConstraintLayout layoutAttach = rootView.findViewById(R.id.layout_attach_file);
+        ViewGroup layoutAttach = rootView.findViewById(R.id.layout_attach_file);
 
 
         layoutAttach.setVisibility(View.GONE);
