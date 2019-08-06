@@ -1939,6 +1939,6 @@ Want to get it?</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
     <string name="cardtocard_cartnumber_error">Card number must be 16 digits</string>
     <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
-    <string name="insert_amount_in_rial">insert_amount_in_rial.</string>
+    <string name="insert_amount_in_rial">insert amount in rial.</string>
     <string name="enter_16_digit_card_number">Enter the 16-digit card number..</string>
 </resources>
