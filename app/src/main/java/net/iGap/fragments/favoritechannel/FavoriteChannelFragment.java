@@ -34,8 +34,8 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.PopularChannel.Channel;
-import net.iGap.model.PopularChannel.ParentChannel;
+import net.iGap.model.FavoriteChannel.Channel;
+import net.iGap.model.FavoriteChannel.ParentChannel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -201,7 +201,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     CategoryItemAdapter gridItem = new CategoryItemAdapter(true, response.body().getData().get(i).getCategories());
                                     gridItem.setOnClickedItemEventCallBack(category -> {
                                         FavoriteChannelInfoFragment favoriteChannelInfoFragment = new FavoriteChannelInfoFragment();
-                                        favoriteChannelInfoFragment.setId(category.getId());
+                                        favoriteChannelInfoFragment.setId(category.getmId());
                                         FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
                                         fragmentTransition.replace(R.id.frame_fragment_container, favoriteChannelInfoFragment);
                                         fragmentTransition.addToBackStack(null);

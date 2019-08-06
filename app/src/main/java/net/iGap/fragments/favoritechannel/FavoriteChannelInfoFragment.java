@@ -26,8 +26,8 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.PopularChannel.Channel;
-import net.iGap.model.PopularChannel.ChildChannel;
+import net.iGap.model.FavoriteChannel.Channel;
+import net.iGap.model.FavoriteChannel.ChildChannel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
