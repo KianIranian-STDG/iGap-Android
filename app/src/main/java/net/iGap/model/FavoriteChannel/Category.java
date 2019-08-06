@@ -1,57 +1,52 @@
 package net.iGap.model.FavoriteChannel;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Category {
-    @SerializedName("id")
-    private String mId;
-    @SerializedName("title")
-    private String mTitle;
-    @SerializedName("icon")
-    private String mIcon;
-    @SerializedName("slug")
-    private String mSlug;
-    @SerializedName("titleEn")
-    private String mTitleEn;
 
-
-    public String getmId() {
-        return mId;
+    public String getId() {
+        return id;
     }
 
-    public void setmId(String mId) {
-        this.mId = mId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getmTitle() {
-        return mTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getmIcon() {
-        return mIcon;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setmIcon(String mIcon) {
-        this.mIcon = mIcon;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
-    public String getmSlug() {
-        return mSlug;
+    public String getSlug() {
+        return slug;
     }
 
-    public void setmSlug(String mSlug) {
-        this.mSlug = mSlug;
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
-    public String getmTitleEn() {
-        return mTitleEn;
+    public String getTitleEn() {
+        return titleEn;
     }
 
-    public void setmTitleEn(String mTitleEn) {
-        this.mTitleEn = mTitleEn;
+    public void setTitleEn(String titleEn) {
+        this.titleEn = titleEn;
     }
+
+    private String id;
+    private String title;
+    private String icon;
+    private String slug;
+    private String titleEn;
+
+
 }

@@ -66,15 +66,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         }
 
         public void bindChannel(Category category) {
-            ImageLoadingService.load(category.getmIcon(), channelImageGrid);
+            ImageLoadingService.load(category.getIcon(), channelImageGrid);
             if (G.selectedLanguage.equals("fa"))
-                channelTitleGrid.setText(category.getmTitle());
+                channelTitleGrid.setText(category.getTitle());
             itemView.setOnClickListener(view -> {
                 if (clickable)
                     onClickedItemEventCallBack.onClickedItem(category);
             });
             if (G.selectedLanguage.equals("en"))
-                channelTitleGrid.setText(category.getmTitleEn());
+                channelTitleGrid.setText(category.getTitleEn());
 
         }
     }
