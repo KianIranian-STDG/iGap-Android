@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,13 +23,11 @@ import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.favoritechannel.CategoryItemAdapter;
 import net.iGap.adapter.items.favoritechannel.ChannelItemAdapter;
 import net.iGap.adapter.items.favoritechannel.SliderAdapter;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
-import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.helper.HelperToolbar;
@@ -52,7 +51,8 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
     private SliderAdapter sliderAdapter;
     private int playBackTime;
     private String scale;
-    private ProgressBar progressBar;
+    private SwipeRefreshLayout refreshLayout;
+    private TextView textView;
 
     @NonNull
     @Override
@@ -60,7 +60,18 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_favorite_channel, container, false);
         api = ApiServiceProvider.getChannelApi();
         LinearLayout toolbarContainer = rootView.findViewById(R.id.ll_popular_parent_toolbar);
-        progressBar = rootView.findViewById(R.id.progress_parent);
+
+        refreshLayout = rootView.findViewById(R.id.refresh_channel);
+        refreshLayout.setRefreshing(true);
+        refreshLayout.setOnRefreshListener(() -> FavoriteChannelFragment.this.sendChannelRequest());
+
+        textView = rootView.findViewById(R.id.empty_iv);
+        textView.setOnClickListener(v -> {
+            refreshLayout.setRefreshing(true);
+            textView.setVisibility(View.GONE);
+            sendChannelRequest();
+        });
+
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setListener(this)
@@ -70,33 +81,38 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                 .setLeftIcon(R.string.back_icon);
         if (G.selectedLanguage.equals("en")) {
             toolbar.setDefaultTitle("Favorite Channel");
-
         }
-
         toolbarContainer.addView(toolbar.getView());
+
+        sendChannelRequest();
+        return rootView;
+    }
+
+    public void sendChannelRequest() {
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
-                progressBar.setVisibility(View.GONE);
+                textView.setVisibility(View.INVISIBLE);
                 if (response.body().getData() != null) {
+                    refreshLayout.setRefreshing(false);
                     Log.i("nazanin", "onResponse: " + response.isSuccessful());
                     LinearLayout linearLayoutItemContainer = rootView.findViewById(R.id.rl_fragmentContainer);
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         switch (response.body().getData().get(i).getType()) {
                             case ParentChannel.TYPE_SLIDE:
-                                if (response.body().getData().get(i).getSlides() != null) {
-                                    BannerSlider.init(new SliderBannerImageLoadingService());
-                                    BannerSlider slider = new BannerSlider(getContext());
-                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    CardView cardView = new CardView(getContext());
-                                    cardView.setRadius(Utils.dpToPx(12));
-                                    cardView.setPreventCornerOverlap(false);
-                                    cardView.setUseCompatPadding(false);
-                                    cardView.setCardElevation(0);
-                                    CardView.LayoutParams cardParamse = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    cardParamse.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
-                                    cardView.setLayoutParams(cardParamse);
-                                    if(response.body().getData().get(i).getInfo().getScale()!=null) {
+                                if (response.body().getData().get(i).getInfo().getScale() != null) {
+                                    if (response.body().getData().get(i).getSlides() != null) {
+                                        BannerSlider.init(new SliderBannerImageLoadingService());
+                                        BannerSlider slider = new BannerSlider(getContext());
+                                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                        CardView cardView = new CardView(getContext());
+                                        cardView.setRadius(Utils.dpToPx(12));
+                                        cardView.setPreventCornerOverlap(false);
+                                        cardView.setUseCompatPadding(false);
+                                        cardView.setCardElevation(0);
+                                        CardView.LayoutParams cardParamse = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                        cardParamse.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
+                                        cardView.setLayoutParams(cardParamse);
                                         scale = response.body().getData().get(i).getInfo().getScale();
                                         ProgressBar progressBar = new ProgressBar(getContext());
                                         ProgressBar.inflate(getContext(), R.layout.progress_favorite_channel, slider);
@@ -130,7 +146,8 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                         }, 1000);
 
                                         linearLayoutItemContainer.addView(cardView);
-                                    }  }
+                                    }
+                                }
                                 break;
 
                             case ParentChannel.TYPE_CHANNEL:
@@ -147,7 +164,6 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     FrameLayout frameLayout = channelView.findViewById(R.id.frame_more_one);
                                     int finalId = i;
                                     frameLayout.setOnClickListener(v -> {
-
                                         FavoriteChannelInfoFragment favoriteChannelInfoFragment = new FavoriteChannelInfoFragment();
                                         favoriteChannelInfoFragment.setId(response.body().getData().get(finalId).getId());
                                         FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
@@ -155,13 +171,11 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                         fragmentTransition.addToBackStack(null);
                                         fragmentTransition.commit();
                                     });
-
                                     TextView textViewTitle = channelView.findViewById(R.id.tv_item_popular_title);
                                     if (G.selectedLanguage.equals("fa"))
                                         textViewTitle.setText(response.body().getData().get(i).getInfo().getTitle());
                                     if (G.selectedLanguage.equals("en"))
                                         textViewTitle.setText(response.body().getData().get(i).getInfo().getTitleEn());
-
                                     RecyclerView channelsRecyclerView = channelView.findViewById(R.id.rv_item_popular_row);
                                     LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                     layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
@@ -187,7 +201,6 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     categoryRecyclerView.setLayoutParams(layoutParams2);
                                     CategoryItemAdapter gridItem = new CategoryItemAdapter(getContext(), true, response.body().getData().get(i).getCategories());
                                     gridItem.setOnClickedItemEventCallBack(category -> {
-
                                         FavoriteChannelInfoFragment favoriteChannelInfoFragment = new FavoriteChannelInfoFragment();
                                         favoriteChannelInfoFragment.setId(category.getId());
                                         FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
@@ -207,28 +220,17 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
 
             @Override
             public void onFailure(Call<ParentChannel> call, Throwable t) {
-                t.printStackTrace();
-                if (new ErrorHandler().checkHandShakeFailure(t)){
-                    Log.wtf(this.getClass().getName(),"ssl handshake");
-                    if (getActivity() instanceof ActivityMain){
-                        ((ActivityMain) getActivity()).checkGoogleUpdate();
-                    }
-                }
-                /*Log.i("nazanin", "onFailure: " + t.getMessage());
-                Toast toast = Toast.makeText(getContext(), "No Response", Toast.LENGTH_SHORT);
-                toast.show();*/
+                refreshLayout.setRefreshing(false);
+                textView.setVisibility(View.VISIBLE);
+                Log.i("nazanin", "onFailure: " + t.getMessage());
             }
         });
-
-        return rootView;
-
     }
 
     @Override
     public void onLeftIconClickListener(View view) {
         getActivity().onBackPressed();
     }
-
 //    @Override
 //    public void onSearchClickListener(View view) {
 //
