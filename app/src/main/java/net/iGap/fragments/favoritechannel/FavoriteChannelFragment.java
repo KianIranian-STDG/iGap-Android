@@ -98,7 +98,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
                 emptyRefresh.setVisibility(View.INVISIBLE);
-                if (response.isSuccessful()) {
+                if (response.body().getData()!=null) {
                     swipeRefreshLayout.setRefreshing(false);
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         switch (response.body().getData().get(i).getType()) {
