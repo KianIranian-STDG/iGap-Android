@@ -1,6 +1,5 @@
 package net.iGap.adapter.items.favoritechannel;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -22,21 +21,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.FragmentGridViewHolder> {
     private List<Category> categoryList;
-    private Context context;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
     public boolean clickable;
 
-    public CategoryItemAdapter(Context context, boolean clickable, List<Category> categoryList) {
-        this.context = context;
+    public CategoryItemAdapter(boolean clickable, List<Category> categoryList) {
         this.clickable = clickable;
         this.categoryList = categoryList;
     }
+
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
+        View view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
         return new FragmentGridViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull FragmentGridViewHolder holder, int i) {
         holder.bindChannel(categoryList.get(i));
@@ -79,6 +78,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         }
     }
+
     public void setOnClickedItemEventCallBack(OnClickedItemEventCallBack onClickedItemEventCallBack) {
         this.onClickedItemEventCallBack = onClickedItemEventCallBack;
     }
