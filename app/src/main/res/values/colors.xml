@@ -270,4 +270,7 @@
     <color name="default_indicator_color_unselected">#66eeeeee</color>
     <color name="beeptunes_primary">#00D20E</color>
 
+    <color name="gray50">#FAFAFA</color>
+    <color name="gray100">#F5F5F5</color>
+
 </resources>
