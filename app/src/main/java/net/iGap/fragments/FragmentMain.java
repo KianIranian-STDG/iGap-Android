@@ -75,6 +75,7 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.proto.ProtoUserContactsBlock;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
@@ -309,6 +310,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mRecyclerView.setItemViewCacheSize(0);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         initRecycleView();
+
+        setForwardMessage(true);
+
 
         //just check at first time page loaded
         notifyChatRoomsList();
@@ -857,6 +861,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void onLeftIconClickListener(View view) {
 
+        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null){
+            revertToolbarFromForwardMode();
+            return;
+        }
+
         if (isChatMultiSelectEnable) {
             mLayoutMultiSelectedActions.setVisibility(View.GONE);
             /*ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
@@ -899,6 +908,15 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
 
         notifyChatRoomsList();
+    }
+
+    public void revertToolbarFromForwardMode() {
+        FragmentChat.mForwardMessages = null ;
+        mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+        mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+        mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
+        if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+        mHelperToolbar.setLeftIcon(R.string.edit_icon);
     }
 
     @Override
@@ -1044,6 +1062,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public boolean isAllowToBackPressed() {
         if (isChatMultiSelectEnable){
             onLeftIconClickListener(null);
+            return false;
+        }else if (FragmentChat.mForwardMessages != null){
+            revertToolbarFromForwardMode();
             return false;
         }else {
             return true;
@@ -1631,4 +1652,19 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
+    public void setForwardMessage(boolean enable){
+
+        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null){
+            if (enable){
+                mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
+                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+                if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                mHelperToolbar.setLeftIcon(R.string.back_icon);
+            }else {
+                revertToolbarFromForwardMode();
+            }
+        }
+
+    }
 }

@@ -1782,4 +1782,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             ((BottomNavigationFragment) fragment).checkPassCodeIconVisibility();
         }
     }
+
+    public void setForwardMessage(boolean enable){
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).setForwardMessage(enable);
+        }
+    }
 }
