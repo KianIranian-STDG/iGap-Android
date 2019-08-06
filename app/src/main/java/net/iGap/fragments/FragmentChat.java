@@ -4582,6 +4582,15 @@ public class FragmentChat extends BaseFragment
             items.remove(getString(R.string.report));
         }
 
+        if(message.additionalData.AdditionalType==AdditionalType.CARD_TO_CARD_MESSAGE){
+            items.clear();
+            items.add(getString(R.string.replay_item_dialog));
+            items.add(getString(R.string.delete_item_dialog));
+            items.add(getString(R.string.edit_item_dialog));
+            items.add(1, getString(R.string.copy_item_dialog));
+
+        }
+
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, position -> {
             if (items.get(position).equals(getString(R.string.PIN))) {
                 long _messageId = 0;
