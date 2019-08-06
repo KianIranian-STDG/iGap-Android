@@ -51,7 +51,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
     private int playBackTime;
     private String scale;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private TextView emptyReferesh;
+    private TextView emptyRefresh;
     private LinearLayout linearLayoutItemContainer;
     private LinearLayout linearToolbar;
 
@@ -69,10 +69,10 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             sendChannelRequest();
         });
 
-        emptyReferesh = rootView.findViewById(R.id.empty_iv);
-        emptyReferesh.setOnClickListener(v -> {
+        emptyRefresh = rootView.findViewById(R.id.empty_iv);
+        emptyRefresh.setOnClickListener(v -> {
             swipeRefreshLayout.setRefreshing(true);
-            emptyReferesh.setVisibility(View.GONE);
+            emptyRefresh.setVisibility(View.GONE);
             sendChannelRequest();
         });
 
@@ -97,7 +97,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
         api.getParentChannel().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
-                emptyReferesh.setVisibility(View.INVISIBLE);
+                emptyRefresh.setVisibility(View.INVISIBLE);
                 if (response.body().getData() != null) {
                     swipeRefreshLayout.setRefreshing(false);
                     for (int i = 0; i < response.body().getData().size(); i++) {
@@ -220,7 +220,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             @Override
             public void onFailure(Call<ParentChannel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                emptyReferesh.setVisibility(View.VISIBLE);
+                emptyRefresh.setVisibility(View.VISIBLE);
             }
         });
     }
