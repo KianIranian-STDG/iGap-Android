@@ -311,8 +311,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         initRecycleView();
 
+        //check is available forward message
         setForwardMessage(true);
-
 
         //just check at first time page loaded
         notifyChatRoomsList();
@@ -1652,6 +1652,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
+    //check state of forward message from chat room and show on toolbar
     public void setForwardMessage(boolean enable){
 
         if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null){

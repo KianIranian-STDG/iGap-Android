@@ -117,6 +117,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     private long createdRoomId = 0;
     private HelperToolbar mHelperToolbar;
+    private boolean isGroup = false;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -139,6 +140,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         Bundle bundle = getArguments();
 
         if (bundle.getString("TYPE") != null && bundle.getString("TYPE").equals("NewGroup")) {
+            isGroup = true;
             initGroupMembersRecycler();
         }
 
@@ -500,7 +502,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                         if (fragmentNewGroupViewModel.isChannel) {
                             startChannelRoom(roomId);
                         } else {
-                            startRoom(roomId);
+                            if (isGroup){
+                                createdRoomId = roomId ;
+                                addMembersToGroup();
+                            }else {
+                                startRoom(roomId);
+                            }
                         }
                     }
                 });
@@ -541,6 +548,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
             bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
             fragmentCreateChannel.setArguments(bundle);
+            popBackStackFragment();
             popBackStackFragment();
             new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
         }
