@@ -378,6 +378,8 @@ public class ChatCell extends ConstraintLayout {
             set.connect(linearLayout.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
 
             thirdTextView.setGravity(Gravity.RIGHT);
+            firstTextView.setGravity(Gravity.RIGHT);
+            secondTextView.setGravity(Gravity.RIGHT);
 
             linearLayout.addView(firstTextView, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
             linearLayout.addView(secondTextView, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
