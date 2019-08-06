@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +46,8 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
     private int playBackTime;
     private String scale;
     private LinearLayout linearLayoutItemContainerChild;
+    RecyclerView categoryRecyclerViewChild = new RecyclerView(G.fragmentActivity);
+    CardView cardView = new CardView(G.fragmentActivity);
 
     @NonNull
     @Override
@@ -54,12 +55,15 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
         view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.fragment_favorite_channel_info, container, false);
         favoriteChannelApi = ApiServiceProvider.getChannelApi();
         linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
-//        swipeRefreshLayout = view.findViewById(R.id.refresh_channelInfo);
-//        swipeRefreshLayout.setRefreshing(true);
-//        swipeRefreshLayout.setOnRefreshListener(() -> {
-//            linearLayoutItemContainerChild.removeAllViews();
-//            sendChannelRequest();
-//        });
+
+        swipeRefreshLayout = view.findViewById(R.id.refresh_channelInfo);
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            linearLayoutItemContainerChild.removeAllViews();
+            page = 1;
+            sendChannelRequest();
+
+        });
         NestedScrollView nestedScrollView = view.findViewById(R.id.scroll_channel);
         nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
             if (totalPage >= page)
@@ -76,14 +80,13 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
                 totalPage = response.body().getPagination().getTotalPages();
                 if (response.isSuccessful()) {
-//                    swipeRefreshLayout.setRefreshing(false);
                     if (page == 1) {
+                        swipeRefreshLayout.setRefreshing(false);
                         if (response.body().getInfo().getAdvertisement() != null) {
                             sliderAdapter = new SliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
                             BannerSlider.init(new ImageLoadingService());
                             BannerSlider slider = new BannerSlider(G.fragmentActivity);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            CardView cardView = new CardView(G.fragmentActivity);
                             CardView.LayoutParams params = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
                             cardView.setLayoutParams(params);
@@ -122,7 +125,6 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
 
                         adapterChannel = new ChannelInfoItemAdapter();
 
-                        RecyclerView categoryRecyclerViewChild = new RecyclerView(G.fragmentActivity);
                         categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         layoutParams1.setMargins(Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4), Utils.dpToPx(4));
@@ -151,7 +153,7 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<ChildChannel> call, Throwable t) {
-           }
+            }
         });
     }
 
