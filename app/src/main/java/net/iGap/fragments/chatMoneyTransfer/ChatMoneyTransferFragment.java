@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -112,6 +113,7 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         amountEtCard = view.findViewById(R.id.et_chat_card_cardamount);
         cardNumberEtCard = view.findViewById(R.id.et_chat_card_cardNumber);
         descEtCard = view.findViewById(R.id.et_chat_card_desc);
+        descEtCard.setImeOptions(EditorInfo.IME_ACTION_DONE);
         walletTransferIv.setText(R.string.financial_send_money_icon);
         cardToCardIv.setText(R.string.wallet_icon);
 
@@ -128,6 +130,7 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         Utils.darkModeHandler(userNameTv);
         Utils.darkModeHandler(cardToCardIv);
         Utils.darkModeHandler(walletTransferIv);
+        Utils.darkModeHandler(rootView);
 
         creditTv.setTextColor(Utils.darkModeHandler(getContext()));
 
@@ -307,9 +310,9 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
     @Override
     public int getTheme() {
         if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
+            return R.style.CardToCardBottomSheetDialog;
         } else {
-            return R.style.BaseBottomSheetDialogLight;
+            return R.style.CardToCardBottomSheetDialogLight;
         }
     }
 
