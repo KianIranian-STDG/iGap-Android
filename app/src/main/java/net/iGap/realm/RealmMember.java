@@ -65,7 +65,7 @@ public class RealmMember extends RealmObject {
         return realmMember;
     }
 
-    public static void deleteAllMembers(long roomId) {
+    public static void deleteAllMembers(long roomId, String selectedRole) {
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null) {
@@ -74,7 +74,11 @@ public class RealmMember extends RealmObject {
                     @Override
                     public void execute(Realm realm) {
                         if (realmRoom.getGroupRoom().getMembers() != null) {
-                            realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
+                            if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
+                                realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
+                            } else {
+                                realmRoom.getGroupRoom().getMembers().where().findAll().deleteAllFromRealm();
+                            }
                         }
                     }
                 });
@@ -83,7 +87,11 @@ public class RealmMember extends RealmObject {
                     @Override
                     public void execute(Realm realm) {
                         if (realmRoom.getChannelRoom().getMembers() != null) {
-                            realmRoom.getChannelRoom().getMembers().deleteAllFromRealm();
+                            if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
+                                realmRoom.getChannelRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
+                            } else {
+                                realmRoom.getChannelRoom().getMembers().where().findAll().deleteAllFromRealm();
+                            }
                         }
                     }
                 });

@@ -208,8 +208,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 showMemberMode = ShowMemberMode.NONE;
             }
 
-            Log.d("bagi", showMemberMode.toString());
-
             isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER , true);
 
             roomType = RealmRoom.detectType(mRoomID);
@@ -392,8 +390,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
-
-                RealmMember.deleteAllMembers(mRoomID);
+                RealmMember.deleteAllMembers(mRoomID, selectedRole);
                 if (roomType == GROUP) {
                     new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
                 } else {
