@@ -145,6 +145,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
 
+        mOffset = 0 ;
         getLogListWithOffset();
 
         mRecyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
