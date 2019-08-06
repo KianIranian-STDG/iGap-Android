@@ -13,7 +13,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.PopularChannel.Category;
+import net.iGap.model.FavoriteChannel.Category;
 
 import java.util.List;
 
@@ -66,15 +66,15 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         }
 
         public void bindChannel(Category category) {
-            ImageLoadingService.load(category.getIcon(), channelImageGrid);
+            ImageLoadingService.load(category.getmIcon(), channelImageGrid);
             if (G.selectedLanguage.equals("fa"))
-                channelTitleGrid.setText(category.getTitle());
+                channelTitleGrid.setText(category.getmTitle());
             itemView.setOnClickListener(view -> {
                 if (clickable)
                     onClickedItemEventCallBack.onClickedItem(category);
             });
             if (G.selectedLanguage.equals("en"))
-                channelTitleGrid.setText(category.getTitleEn());
+                channelTitleGrid.setText(category.getmTitle());
 
         }
     }

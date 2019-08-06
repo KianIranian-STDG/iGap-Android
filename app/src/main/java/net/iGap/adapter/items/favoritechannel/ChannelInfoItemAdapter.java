@@ -13,7 +13,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.PopularChannel.Channel;
+import net.iGap.model.FavoriteChannel.Channel;
 
 import java.util.ArrayList;
 import java.util.List;

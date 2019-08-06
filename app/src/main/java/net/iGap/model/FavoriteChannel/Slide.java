@@ -1,5 +1,5 @@
 
-package net.iGap.model.PopularChannel;
+package net.iGap.model.FavoriteChannel;
 
 
 import com.google.gson.annotations.SerializedName;
