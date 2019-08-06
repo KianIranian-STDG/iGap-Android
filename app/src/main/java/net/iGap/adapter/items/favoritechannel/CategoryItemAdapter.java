@@ -74,7 +74,7 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
                     onClickedItemEventCallBack.onClickedItem(category);
             });
             if (G.selectedLanguage.equals("en"))
-                channelTitleGrid.setText(category.getmTitle());
+                channelTitleGrid.setText(category.getmTitleEn());
 
         }
     }

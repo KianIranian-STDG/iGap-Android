@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.iGap.G;
@@ -48,14 +49,20 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
     private LinearLayout linearLayoutItemContainerChild;
     RecyclerView categoryRecyclerViewChild = new RecyclerView(G.fragmentActivity);
     CardView cardView = new CardView(G.fragmentActivity);
+    private TextView emptyImage;
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.fragment_favorite_channel_info, container, false);
-        favoriteChannelApi = ApiServiceProvider.getChannelApi();
         linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
 
+        emptyImage = view.findViewById(R.id.empty_iv_info);
+        emptyImage.setOnClickListener(v -> {
+            swipeRefreshLayout.setRefreshing(true);
+            emptyImage.setVisibility(View.GONE);
+            sendChannelRequest();
+        });
         swipeRefreshLayout = view.findViewById(R.id.refresh_channelInfo);
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -69,6 +76,7 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
             if (totalPage >= page)
                 sendChannelRequest();
         });
+        favoriteChannelApi = ApiServiceProvider.getChannelApi();
         sendChannelRequest();
         return view;
     }
@@ -82,6 +90,9 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
                 if (response.isSuccessful()) {
                     if (page == 1) {
                         swipeRefreshLayout.setRefreshing(false);
+                        emptyImage.setVisibility(View.INVISIBLE);
+
+
                         if (response.body().getInfo().getAdvertisement() != null) {
                             sliderAdapter = new SliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
                             BannerSlider.init(new ImageLoadingService());
@@ -153,6 +164,8 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<ChildChannel> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                emptyImage.setVisibility(View.VISIBLE);
             }
         });
     }
