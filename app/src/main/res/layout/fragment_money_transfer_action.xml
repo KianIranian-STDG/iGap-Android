@@ -215,7 +215,7 @@
             android:layout_height="65dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -242,161 +242,140 @@
             app:layout_constraintStart_toEndOf="@+id/tv_cardToCard_transferTo"
             app:layout_constraintTop_toTopOf="@+id/tv_cardToCard_transferTo" />
 
-        <View
-            android:id="@+id/view_cardToCard"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@color/gray_300"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_cardToCard_userAvatar" />
-
-        <FrameLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/fl_cardToCard_Container"
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@+id/view_cardToCard">
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/iv_cardToCard_userAvatar">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_chat_card_amountText"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/amount_in_rial"
+                app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardamount"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv_chat_card_amountText"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@string/amount_in_rial"
-                    app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardamount"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <EditText
+                android:id="@+id/et_chat_card_cardamount"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/background_edittext_money_action"
+                android:hint="@string/amount"
+                android:inputType="phone"
+                android:lines="1"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:singleLine="true"
+                android:textAllCaps="false"
+                android:textColor="@color/black_register"
+                android:textColorHint="@color/pu_edtHintText"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_chat_card_amountText"
+                app:layout_constraintStart_toStartOf="@+id/tv_chat_card_amountText"
+                app:layout_constraintTop_toBottomOf="@+id/tv_chat_card_amountText" />
 
-                <EditText
-                    android:id="@+id/et_chat_card_cardamount"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/background_edittext_money_action"
-                    android:hint="@string/amount"
-                    android:inputType="phone"
-                    android:lines="1"
-                    android:maxLength="10"
-                    android:maxLines="1"
-                    android:padding="6dp"
-                    android:singleLine="true"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black_register"
-                    android:textColorHint="@color/pu_edtHintText"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_chat_card_amountText"
-                    app:layout_constraintStart_toStartOf="@+id/tv_chat_card_amountText"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_chat_card_amountText" />
+            <TextView
+                android:id="@+id/et_chat_card_cardNumberTv"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/destination_card"
+                app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardNumber"
+                app:layout_constraintEnd_toStartOf="@+id/tv_chat_card_bankName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardamount"
+                android:layout_marginLeft="16dp" />
 
-                <TextView
-                    android:id="@+id/et_chat_card_cardNumberTv"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@string/destination_card"
-                    app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardNumber"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_chat_card_bankName"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardamount" />
+            <TextView
+                android:id="@+id/tv_chat_card_bankName"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/smallTextSize"
+                app:layout_constraintBottom_toBottomOf="@+id/et_chat_card_cardNumberTv"
+                app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardamount"
+                app:layout_constraintTop_toTopOf="@+id/et_chat_card_cardNumberTv"
+                tools:text="بانک پارسیان" />
 
-                <TextView
-                    android:id="@+id/tv_chat_card_bankName"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_chat_card_cardNumberTv"
-                    app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardamount"
-                    app:layout_constraintTop_toTopOf="@+id/et_chat_card_cardNumberTv"
-                    tools:text="بانک پارسیان" />
+            <com.vicmikhailau.maskededittext.MaskedEditText
+                android:id="@+id/et_chat_card_cardNumber"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/background_edittext_money_action"
+                android:hint="@string/destination_card_number"
+                android:inputType="phone"
+                android:lines="1"
+                android:maxLength="19"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:singleLine="true"
+                android:textAllCaps="false"
+                android:textColor="@color/black_register"
+                android:textColorHint="@color/pu_edtHintText"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardamount"
+                app:layout_constraintStart_toStartOf="@+id/et_chat_card_cardNumberTv"
+                app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardNumberTv"
+                app:mask="####-####-####-####" />
 
-                <com.vicmikhailau.maskededittext.MaskedEditText
-                    android:id="@+id/et_chat_card_cardNumber"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/background_edittext_money_action"
-                    android:hint="@string/destination_card_number"
-                    android:inputType="phone"
-                    android:lines="1"
-                    android:maxLength="19"
-                    android:maxLines="1"
-                    android:padding="6dp"
-                    android:singleLine="true"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black_register"
-                    android:textColorHint="@color/pu_edtHintText"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardamount"
-                    app:layout_constraintStart_toStartOf="@+id/et_chat_card_cardNumberTv"
-                    app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardNumberTv"
-                    app:mask="####-####-####-####" />
+            <TextView
+                android:id="@+id/tv_chat_card_desc"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/desc"
+                app:layout_constraintBottom_toTopOf="@+id/et_chat_card_desc"
+                app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardNumber"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardNumber"
+                android:layout_marginLeft="16dp" />
 
-                <TextView
-                    android:id="@+id/tv_chat_card_desc"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@string/desc"
-                    app:layout_constraintBottom_toTopOf="@+id/et_chat_card_desc"
-                    app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardNumber"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardNumber" />
-
-                <EditText
-                    android:id="@+id/et_chat_card_desc"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/background_edittext_money_action"
-                    android:gravity="top"
-                    android:hint="@string/desc"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:padding="6dp"
-                    android:singleLine="true"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black_register"
-                    android:textColorHint="@color/pu_edtHintText"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_chat_card_desc"
-                    app:layout_constraintStart_toStartOf="@+id/tv_chat_card_desc"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_chat_card_desc" />
+            <EditText
+                android:id="@+id/et_chat_card_desc"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/background_edittext_money_action"
+                android:gravity="top"
+                android:hint="@string/desc"
+                android:padding="6dp"
+                android:textAllCaps="false"
+                android:textColor="@color/black_register"
+                android:textColorHint="@color/pu_edtHintText"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_chat_card_desc"
+                app:layout_constraintStart_toStartOf="@+id/tv_chat_card_desc"
+                app:layout_constraintTop_toBottomOf="@+id/tv_chat_card_desc" />
 
 
-            </android.support.constraint.ConstraintLayout>
-        </FrameLayout>
+        </android.support.constraint.ConstraintLayout>
 
         <Button
             android:id="@+id/btn_cardToCard_confirm"

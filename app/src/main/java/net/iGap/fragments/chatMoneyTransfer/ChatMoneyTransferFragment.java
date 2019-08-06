@@ -315,51 +315,51 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
 
     private String bankName(String cardNumber) {
         if (cardNumber.startsWith("603799"))
-            return "بانک ملی ایران";
+            return getContext().getResources().getString(R.string.bank_melli);
         else if (cardNumber.startsWith("589210"))
-            return "بانک سپه";
+            return getContext().getResources().getString(R.string.bank_sepah);
         else if (cardNumber.startsWith("627648"))
-            return "بانک توسعه صادرات";
+            return getContext().getResources().getString(R.string.bank_tosee_saderat);
         else if (cardNumber.startsWith("627961"))
-            return "بانک صنعت و معدن";
+            return getContext().getResources().getString(R.string.bank_sanato_madan);
         else if (cardNumber.startsWith("603770"))
-            return "بانک کشاورزی";
+            return getContext().getResources().getString(R.string.bank_keshavarzi);
         else if (cardNumber.startsWith("628023"))
-            return "بانک مسکن";
+            return getContext().getResources().getString(R.string.bank_maskan);
         else if (cardNumber.startsWith("627760"))
-            return "پست بانک ایران";
+            return getContext().getResources().getString(R.string.bank_post_bank);
         else if (cardNumber.startsWith("502908"))
-            return "بانک توسعه تعاون";
+            return getContext().getResources().getString(R.string.bank_tosee_taavon);
         else if (cardNumber.startsWith("627412"))
-            return "بانک اقتصاد نوین";
+            return getContext().getResources().getString(R.string.bank_eghtesad_novin);
         else if (cardNumber.startsWith("622106"))
-            return "بانک پارسیان";
+            return getContext().getResources().getString(R.string.bank_parsian);
         else if (cardNumber.startsWith("502229"))
-            return "بانک پاسارگاد";
+            return getContext().getResources().getString(R.string.bank_pasargad);
         else if (cardNumber.startsWith("627488"))
-            return "بانک کارآفرین";
+            return getContext().getResources().getString(R.string.bank_karafarin);
         else if (cardNumber.startsWith("621986"))
-            return "بانک سامان";
+            return getContext().getResources().getString(R.string.bank_saman);
         else if (cardNumber.startsWith("639346"))
-            return "بانک سینا";
+            return getContext().getResources().getString(R.string.bank_sina);
         else if (cardNumber.startsWith("639607"))
-            return "بانک سرمایه";
+            return getContext().getResources().getString(R.string.bank_sarmayeh);
         else if (cardNumber.startsWith("502806"))
-            return "بانک شهر";
+            return getContext().getResources().getString(R.string.bank_shahr);
         else if (cardNumber.startsWith("502938"))
-            return "بانک دی";
+            return getContext().getResources().getString(R.string.bank_dey);
         else if (cardNumber.startsWith("603769"))
-            return "بانک صادرات";
+            return getContext().getResources().getString(R.string.bank_saderat);
         else if (cardNumber.startsWith("610433"))
-            return "بانک ملت";
+            return getContext().getResources().getString(R.string.bank_mellat);
         else if (cardNumber.startsWith("627353"))
-            return "بانک تجارت";
+            return getContext().getResources().getString(R.string.bank_tejarat);
         else if (cardNumber.startsWith("585983"))
-            return "بانک تجارت";
+            return getContext().getResources().getString(R.string.bank_tejarat);
         else if (cardNumber.startsWith("627381"))
-            return "بانک انصار";
+            return getContext().getResources().getString(R.string.bank_ansar);
         else if (cardNumber.startsWith("639370"))
-            return "بانک مهر اقتصاد";
+            return getContext().getResources().getString(R.string.bank_mehr_eghtesad);
         else
             return "";
     }
