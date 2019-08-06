@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_chatRoom_bottom_view"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
     android:clickable="true">
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"
         style="@style/myIconTextViewStyleGray"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:gravity="center"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
-        android:text="@string/md_emoticon_with_happy_face"
-        android:textAppearance="@style/TextIconAppearance.all"
-        android:textSize="@dimen/dp20"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/et_chatRoom_writeMessage"/>
+        android:text="@string/md_emoticon_with_happy_face" />
 
 
     <net.iGap.module.EmojiEditTextE
         android:id="@+id/et_chatRoom_writeMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:background="@drawable/backround_chatroom_edittext"
         android:gravity="bottom"
@@ -41,83 +36,68 @@
         style="?hintColorSettingTheme"
         android:textSize="@dimen/standardTextSize"
         app:emojiSize="@dimen/largeTextSize"
-        android:layout_margin="@dimen/dp8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_chatRoom_botAction"
-        app:layout_constraintStart_toEndOf="@+id/tv_chatRoom_emoji"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="@dimen/dp8"/>
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_botAction"
         style="@style/myIconTextViewStyleGray"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
         android:padding="@dimen/dp8"
         android:text="@string/md_bot"
-        android:textSize="@dimen/dp20"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_chatRoom_send"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/et_chatRoom_writeMessage"
-        app:layout_constraintVertical_bias="0.0" />
+        android:visibility="gone" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/btn_chatRoom_send"
         style="@style/myIconTextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
         android:gravity="center"
         android:padding="@dimen/dp8"
         android:text="@string/md_send_button"
-        android:textSize="@dimen/dp20"
         android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@id/tv_chatRoom_botAction"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ll_chatRoom_send"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
 
     <LinearLayout
         android:id="@+id/ll_chatRoom_send"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:minWidth="@dimen/dp88"
         android:layout_marginRight="@dimen/dp4"
         android:orientation="horizontal"
-        app:layout_constraintStart_toEndOf="@id/btn_chatRoom_send"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/et_chatRoom_writeMessage"
         app:layout_constraintTop_toTopOf="parent">
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_wallet"
             style="@style/myIconTextViewStyleGray"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
             android:padding="@dimen/dp8"
             android:visibility="gone"
-            android:text="@string/financial_send_money_icon"
-            android:textSize="@dimen/dp20" />
+            android:text="@string/financial_send_money_icon" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
             style="@style/myIconTextViewStyleGray"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
             android:padding="@dimen/dp8"
-            android:text="@string/md_attachment_clip"
-            android:textSize="@dimen/dp20" />
+            android:text="@string/md_attachment_clip" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_mic"
             style="@style/myIconTextViewStyleGray"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
             android:padding="@dimen/dp8"
-            android:text="@string/md_voice_message_microphone_button"
-            android:textSize="@dimen/dp20" />
+            android:text="@string/md_voice_message_microphone_button" />
+
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
