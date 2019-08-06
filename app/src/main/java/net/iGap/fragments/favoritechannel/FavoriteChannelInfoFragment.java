@@ -157,8 +157,6 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
             @Override
             public void onFailure(Call<ChildChannel> call, Throwable t) {
                 Log.i("nazanin", "onFailure: " + t.getMessage());
-                Toast toast = Toast.makeText(getContext(), "No Response From Server", Toast.LENGTH_SHORT);
-                toast.show();
             }
         });
     }
