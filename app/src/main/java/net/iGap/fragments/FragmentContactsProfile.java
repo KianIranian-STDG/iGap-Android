@@ -199,8 +199,14 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         if (viewModel.phone != null && (!viewModel.phone.get().equals("0") || viewModel.showNumber.get())) {
-            binding.toolbarTxtTelExpanded.setText(viewModel.phone.get());
-            binding.toolbarTxtTelExpanded.setOnClickListener(v -> viewModel.onPhoneNumberClick());
+
+            if (viewModel.phone.get().equals("0")) {
+                binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
+            }else {
+                binding.toolbarTxtTelExpanded.setText(viewModel.phone.get());
+                binding.toolbarTxtTelExpanded.setOnClickListener(v -> viewModel.onPhoneNumberClick());
+            }
+
         } else {
             binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
         }
