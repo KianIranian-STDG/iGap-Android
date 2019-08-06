@@ -242,7 +242,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
         G.onChatConvertToGroup = new OnChatConvertToGroup() {
             @Override
             public void onChatConvertToGroup(long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
-                getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
+                getRoom(roomId, ProtoGlobal.Room.Type.GROUP , false);
             }
 
             @Override
@@ -265,13 +265,12 @@ public class FragmentNewGroupViewModel extends ViewModel {
             @Override
             public void onGroupCreate(final long roomIdR) {
 
-                createdRoomId.postValue( roomIdR);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         roomId = roomIdR;
                         hideProgressBar();
-//                        getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP);
+                        getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP , true);
                     }
                 });
 
@@ -311,7 +310,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
         new RequestGroupCreate().groupCreate(edtSetNewGroup.get(), edtDescription.get());
     }
 
-    private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate) {
+    private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate , boolean isGroup) {
 
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
@@ -335,7 +334,11 @@ public class FragmentNewGroupViewModel extends ViewModel {
                                 }
                             } else {
                                 hideProgressBar();
-                                goToContactGroupPage.setValue(new ContactGroupFragmentModel(roomId,room.getGroupRoomExtra().getParticipantsCountLimitLabel(),typeCreate.toString(),true));
+                                if (isGroup) {
+                                    createdRoomId.postValue( roomId);
+                                }else {
+                                    goToContactGroupPage.setValue(new ContactGroupFragmentModel(roomId,room.getGroupRoomExtra().getParticipantsCountLimitLabel(),typeCreate.toString(),true));
+                                }
                             }
                         }
                     });
