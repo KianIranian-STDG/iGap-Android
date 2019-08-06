@@ -98,7 +98,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
                 emptyRefresh.setVisibility(View.INVISIBLE);
-                if (response.body().getData() != null) {
+                if (response.isSuccessful()) {
                     swipeRefreshLayout.setRefreshing(false);
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         switch (response.body().getData().get(i).getType()) {
@@ -201,7 +201,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                     CategoryItemAdapter gridItem = new CategoryItemAdapter(true, response.body().getData().get(i).getCategories());
                                     gridItem.setOnClickedItemEventCallBack(category -> {
                                         FavoriteChannelInfoFragment favoriteChannelInfoFragment = new FavoriteChannelInfoFragment();
-                                        favoriteChannelInfoFragment.setId(category.getmId());
+                                        favoriteChannelInfoFragment.setId(category.getId());
                                         FragmentTransaction fragmentTransition = getFragmentManager().beginTransaction();
                                         fragmentTransition.replace(R.id.frame_fragment_container, favoriteChannelInfoFragment);
                                         fragmentTransition.addToBackStack(null);
