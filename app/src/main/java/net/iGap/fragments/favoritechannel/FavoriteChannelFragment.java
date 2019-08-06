@@ -103,7 +103,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         switch (response.body().getData().get(i).getType()) {
                             case ParentChannel.TYPE_SLIDE:
-                                if (response.body().getData().get(i).getInfo().getScale() != null && response.body().getData().get(i).getSlides() != null) {
+                                if (response.body().getData().get(i).getInfo() != null && response.body().getData().get(i).getSlides() != null) {
                                     BannerSlider.init(new SliderBannerImageLoadingService());
                                     BannerSlider slider = new BannerSlider(G.fragmentActivity);
                                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

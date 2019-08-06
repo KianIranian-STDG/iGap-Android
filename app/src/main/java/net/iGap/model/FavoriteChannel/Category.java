@@ -2,6 +2,12 @@ package net.iGap.model.FavoriteChannel;
 
 public class Category {
 
+    private String id;
+    private String title;
+    private String icon;
+    private String slug;
+    private String titleEn;
+
     public String getId() {
         return id;
     }
@@ -41,12 +47,6 @@ public class Category {
     public void setTitleEn(String titleEn) {
         this.titleEn = titleEn;
     }
-
-    private String id;
-    private String title;
-    private String icon;
-    private String slug;
-    private String titleEn;
 
 
 }
