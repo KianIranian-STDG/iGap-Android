@@ -347,7 +347,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     @Override
     public void onRightIconClickListener(View view) {
 
-
+        fixChipsLayoutShowingState();
         if (typeCreate.equals("CHANNEL")) { // addMemberChannel
             G.onChannelAddMember = new OnChannelAddMember() {
                 @Override
@@ -450,16 +450,22 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     @Override
     public void onPause() {
 
+        fixChipsLayoutShowingState();
+        super.onPause();
+    }
+
+    private void fixChipsLayoutShowingState() {
+
         //this code added for close chips layout
         if (chipsInput != null) {
             try {
                 chipsInput.addChip("", "");
+                chipsInput.removeChipByLabel("");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        super.onPause();
     }
 
 }
