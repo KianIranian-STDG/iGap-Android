@@ -549,6 +549,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
             fragmentCreateChannel.setArguments(bundle);
             popBackStackFragment();
+            popBackStackFragment();
             new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
         }
     }
