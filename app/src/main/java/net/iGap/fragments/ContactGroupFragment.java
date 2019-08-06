@@ -159,8 +159,6 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                     selectedContacts.remove(item.mContact);
                 } else {
 
-                    selectedContacts.add(item.mContact);
-
                     Uri uri = null;
                     if (item.mContact.avatar != null && item.mContact.avatar.getFile() != null && item.mContact.avatar.getFile().getLocalThumbnailPath() != null) {
                         uri = Uri.fromFile(new File(item.mContact.avatar.getFile().getLocalThumbnailPath()));
@@ -193,7 +191,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 try {
 
                     if (chip != null) {
-                        notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
+                        ContactItemGroup contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId())));
+                        selectedContacts.add(contactInfo.mContact);
+                        notifyAdapter(contactInfo , fastAdapter.getPosition((Long) chip.getId()));
                         isRemove = false;
                     }
 
@@ -204,11 +204,12 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
             @Override
             public void onChipRemoved(ChipInterface chip, int newSize) {
-                notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
+
+                ContactItemGroup contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId())));
+                notifyAdapter(contactInfo , fastAdapter.getPosition((Long) chip.getId()));
                 isRemove = false;
 
-                StructContactInfo contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact;
-                selectedContacts.remove(contactInfo);
+                selectedContacts.remove(contactInfo.mContact);
             }
 
             @Override
