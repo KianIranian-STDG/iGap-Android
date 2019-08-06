@@ -120,6 +120,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
     private RealmRoom mRoom;
     private FragmentChannelProfile fragment;
 
+    private io.realm.RealmResults<RealmMember> admins;
+    private io.realm.RealmResults<RealmMember> moderators;
     public static OnMenuClick onMenuClick;
     private boolean isNeedGetMemberList = true;
     private RealmChangeListener<RealmModel> changeListener;
@@ -190,6 +192,12 @@ public class FragmentChannelProfileViewModel extends ViewModel
         subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
         administratorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
         moderatorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+
+        admins = RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderators = RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+
+        admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(realmMembers.size() + ""));
+        moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(realmMembers.size() + ""));
 
         if (role == ChannelChatRole.ADMIN || role == ChannelChatRole.OWNER) {
             //Todo : fixed it
@@ -359,6 +367,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
     }
 
     public void onDestroy() {
+        admins.removeAllChangeListeners();
+        moderators.removeAllChangeListeners();
         if (realmChannelProfile != null && !realmChannelProfile.isClosed()) {
             realmChannelProfile.close();
         }
