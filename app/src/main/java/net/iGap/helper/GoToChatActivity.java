@@ -125,6 +125,7 @@ public class GoToChatActivity {
             }).onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    disableForwardMessage(activity);
                     FragmentChat.mForwardMessages = null;
                 }
             }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -140,6 +141,12 @@ public class GoToChatActivity {
             loadChatFragment(activity);
         }
 
+    }
+
+    private void disableForwardMessage(FragmentActivity activity) {
+        if (activity instanceof ActivityMain){
+            ((ActivityMain) activity).setForwardMessage(false);
+        }
     }
 
     private void loadChatFragment(FragmentActivity activity){
