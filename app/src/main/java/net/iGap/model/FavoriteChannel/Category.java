@@ -1,11 +1,21 @@
 package net.iGap.model.FavoriteChannel;
 
-public class Category {
+import com.google.gson.annotations.SerializedName;
 
+public class Category {
+    @SerializedName("id")
     private String id;
+
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("icon")
     private String icon;
+
+    @SerializedName("slug")
     private String slug;
+
+    @SerializedName("titleEn")
     private String titleEn;
 
     public String getId() {
