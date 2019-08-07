@@ -18,7 +18,7 @@
 
 
 ########## My Tricks
--keep class net.iGap.model.PopularChannel.**
+-keep class net.iGap.model.FavoriteChannel.**
 -keep class net.iGap.proto.** , com.neovisionaries.ws.client.** { *; }
 -keep class net.iGap.helper.HelperFillLookUpClass { *; }
 -keep public class * extends net.iGap.response.MessageHandler
