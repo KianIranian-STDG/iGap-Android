@@ -27,6 +27,8 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.FontIconTextView;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -107,6 +109,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     }
 
     protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
+        protected FontIconTextView more;
         protected MessageProgress progress;
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
@@ -144,12 +147,33 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             layout_49.topMargin = dpToPx(7);
             duration.setLayoutParams(layout_49);
             frameLayout_642.addView(duration);
+
+            more = new FontIconTextView(G.context);
+            more.setId(R.id.more);
+            more.setBackgroundResource(R.drawable.bg_message_image_time);
+            more.setGravity(Gravity.CENTER);
+            more.setText(R.string.more_icon);
+            setTextSize(more , R.dimen.largeTextSize );
+            more.setTextColor(G.context.getResources().getColor(R.color.white));
+            more.setPadding(i_Dp(R.dimen.dp8), dpToPx(1), i_Dp(R.dimen.dp8), dpToPx(1));
+            FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout_50.gravity = Gravity.RIGHT | Gravity.TOP;
+            layout_50.bottomMargin = -dpToPx(2);
+            layout_50.rightMargin = dpToPx(5);
+            layout_50.topMargin = dpToPx(7);
+            more.setLayoutParams(layout_50);
+            frameLayout_642.addView(more);
+
             progress = getProgressBar(0);
             frameLayout_642.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
             getContentBloke().addView(frameLayout_642);
             if (withText) {
                 setLayoutMessageContainer();
             }
+        }
+
+        public FontIconTextView getMoreButton() {
+            return more;
         }
 
         @Override

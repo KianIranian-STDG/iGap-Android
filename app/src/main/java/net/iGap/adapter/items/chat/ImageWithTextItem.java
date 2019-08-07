@@ -25,6 +25,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -97,6 +98,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     }
 
     protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
+        protected FontIconTextView more;
         protected ReserveSpaceRoundedImageView image;
         protected MessageProgress progress;
 
@@ -117,8 +119,30 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
                 setLayoutMessageContainer();
             }
             frameLayout.addView(image);
+
+
+            more = new FontIconTextView(G.context);
+            more.setId(R.id.more);
+            more.setBackgroundResource(R.drawable.bg_message_image_time);
+            more.setGravity(Gravity.CENTER);
+            more.setText(R.string.more_icon);
+            setTextSize(more , R.dimen.largeTextSize );
+            more.setTextColor(G.context.getResources().getColor(R.color.white));
+            more.setPadding(i_Dp(R.dimen.dp8), dpToPx(1), i_Dp(R.dimen.dp8), dpToPx(1));
+            FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout_50.gravity = Gravity.RIGHT | Gravity.TOP;
+            layout_50.bottomMargin = -dpToPx(2);
+            layout_50.rightMargin = dpToPx(5);
+            layout_50.topMargin = dpToPx(7);
+            more.setLayoutParams(layout_50);
+            frameLayout.addView(more);
+
             progress = getProgressBar(0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+        }
+
+        public FontIconTextView getMoreButton() {
+            return more;
         }
 
         @Override

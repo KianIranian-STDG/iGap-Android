@@ -1347,6 +1347,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (setDefualtImage) {
                     imageViewReservedSpace.setImageResource(R.mipmap.difaultimage);
                 }
+
+                if (holder instanceof VideoWithTextItem.ViewHolder) {
+                    ((VideoWithTextItem.ViewHolder) holder).getMoreButton().setOnClickListener(v -> {
+                        OnClickRow(((VideoWithTextItem.ViewHolder) holder), v);
+                    });
+                }
+
+                if (holder instanceof ImageWithTextItem.ViewHolder) {
+                    ((ImageWithTextItem.ViewHolder) holder).getMoreButton().setOnClickListener(v -> {
+                        OnClickRow(((ImageWithTextItem.ViewHolder) holder), v);
+                    });
+                }
+
+
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) ((IThumbNailItem) holder).getThumbNailImageView();
                 int _with = attachment.getWidth();
