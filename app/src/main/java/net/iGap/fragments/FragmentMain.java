@@ -936,6 +936,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
+    public void onToolbarTitleClickListener(View view) {
+        mRecyclerView.smoothScrollToPosition(0);
+    }
+
+    @Override
     public void onRightIconClickListener(View view) {
         Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
         try {

@@ -345,6 +345,7 @@ public class HelperToolbar {
         }
 
         if (mTxtLogo != null){
+            mTxtLogo.setOnClickListener(v -> mToolbarListener.onToolbarTitleClickListener(v));
             toolBarTitleHandler();
             checkIGapFont();
         }
