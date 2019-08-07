@@ -53,6 +53,7 @@ import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.PreCachingLayoutManager;
+import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoChannelGetMemberList;
@@ -440,6 +441,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
 
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+
         //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
@@ -461,11 +464,32 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_admin));
             mBtnAdd.setText(context.getResources().getString(R.string.add_admin));
+            mBtnAdd.setVisibility(View.GONE);
+            if (realmRoom != null) {
+                if (realmRoom.getGroupRoom() != null && realmRoom.getGroupRoom().getRole() == GroupChatRole.OWNER) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+
+                if (realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+            }
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_modereator));
             mBtnAdd.setText(context.getResources().getString(R.string.add_modereator));
+
+            mBtnAdd.setVisibility(View.GONE);
+            if (realmRoom != null) {
+                if (realmRoom.getGroupRoom() != null && (realmRoom.getGroupRoom().getRole() == GroupChatRole.OWNER || realmRoom.getGroupRoom().getRole() == GroupChatRole.ADMIN)) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+
+                if (realmRoom.getChannelRoom() != null && (realmRoom.getChannelRoom().getRole() == ChannelChatRole.OWNER || realmRoom.getChannelRoom().getRole() == ChannelChatRole.ADMIN)) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+            }
 
         }
 
