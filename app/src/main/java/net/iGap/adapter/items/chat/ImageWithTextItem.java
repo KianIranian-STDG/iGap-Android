@@ -123,7 +123,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
             more = new FontIconTextView(G.context);
             more.setId(R.id.more);
-            more.setBackgroundResource(R.drawable.bg_message_image_time);
+            //more.setBackgroundResource(R.drawable.bg_message_image_time);
             more.setGravity(Gravity.CENTER);
             more.setText(R.string.more_icon);
             setTextSize(more , R.dimen.largeTextSize );
