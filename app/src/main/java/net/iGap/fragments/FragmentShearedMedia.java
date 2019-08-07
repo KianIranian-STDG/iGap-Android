@@ -445,6 +445,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();
                 if (getActivity() instanceof ActivityMain) {
+                    ((ActivityMain) getActivity()).setForwardMessage(true);
                     ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                     /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
                 }
