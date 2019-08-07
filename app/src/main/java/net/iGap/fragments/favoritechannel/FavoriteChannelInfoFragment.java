@@ -38,10 +38,9 @@ import retrofit2.Response;
 public class FavoriteChannelInfoFragment extends BaseFragment {
     private View view;
     private LinearLayout itemContainer;
+    private NestedScrollView scrollView;
     private FavoriteChannelApi favoriteChannelApi;
-    private SwipeRefreshLayout swipeRefreshLayout;
-
-
+    private SwipeRefreshLayout swipeRefresh;
     private String id;
     private ChannelInfoAdapter adapterChannel;
     private SliderAdapter sliderAdapter;
@@ -49,20 +48,16 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
     private long totalPage;
     private int playBackTime;
     private String scale;
-    RecyclerView categoryRecyclerViewChild = new RecyclerView(G.fragmentActivity);
-    CardView cardView = new CardView(G.fragmentActivity);
-    private TextView emptyImage;
-    private NestedScrollView nestedScrollView;
+    private TextView emptyRefresh;
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.fragment_favorite_channel_info, container, false);
         itemContainer = view.findViewById(R.id.ll_container_child);
-        nestedScrollView = view.findViewById(R.id.scroll_channel);
-        emptyImage = view.findViewById(R.id.empty_iv_info);
-        swipeRefreshLayout = view.findViewById(R.id.refresh_channelInfo);
-
+        scrollView = view.findViewById(R.id.scroll_channel);
+        emptyRefresh = view.findViewById(R.id.empty_iv_info);
+        swipeRefresh = view.findViewById(R.id.refresh_channelInfo);
         favoriteChannelApi = ApiServiceProvider.getChannelApi();
         setupViews();
         sendChannelRequest();
@@ -70,16 +65,16 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
     }
 
     public void setupViews() {
-        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
             if (totalPage >= page)
                 sendChannelRequest();
         });
-        emptyImage.setOnClickListener(v -> {
+        emptyRefresh.setOnClickListener(v -> {
             HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             sendChannelRequest();
         });
-        swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
+        swipeRefresh.setRefreshing(true);
+        swipeRefresh.setOnRefreshListener(() -> {
             itemContainer.removeAllViews();
             page = 1;
             sendChannelRequest();
@@ -93,12 +88,16 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
 
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
+                CardView cardView = new CardView(G.fragmentActivity);
+                RecyclerView categoryRecyclerViewChild = new RecyclerView(G.fragmentActivity);
                 totalPage = response.body().getPagination().getTotalPages();
                 if (response.isSuccessful()) {
                     if (page == 1) {
-                        swipeRefreshLayout.setRefreshing(false);
-                        emptyImage.setVisibility(View.INVISIBLE);
+                        swipeRefresh.setRefreshing(false);
+                        emptyRefresh.setVisibility(View.INVISIBLE);
                         if (response.body().getInfo().getAdvertisement() != null) {
+
+
                             sliderAdapter = new SliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
                             BannerSlider.init(new ImageLoadingService());
                             BannerSlider slider = new BannerSlider(G.fragmentActivity);
@@ -164,8 +163,8 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<ChildChannel> call, Throwable t) {
-                swipeRefreshLayout.setRefreshing(false);
-                emptyImage.setVisibility(View.VISIBLE);
+                swipeRefresh.setRefreshing(false);
+                emptyRefresh.setVisibility(View.VISIBLE);
                 HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
