@@ -14,11 +14,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.favoritechannel.ChannelInfoItemAdapter;
+import net.iGap.adapter.items.favoritechannel.ChannelInfoAdapter;
 import net.iGap.adapter.items.favoritechannel.ImageLoadingService;
 import net.iGap.adapter.items.favoritechannel.SliderAdapter;
 import net.iGap.api.FavoriteChannelApi;
@@ -37,48 +36,56 @@ import retrofit2.Response;
 
 
 public class FavoriteChannelInfoFragment extends BaseFragment {
+    private View view;
+    private LinearLayout itemContainer;
     private FavoriteChannelApi favoriteChannelApi;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private View view;
+
+
     private String id;
-    private ChannelInfoItemAdapter adapterChannel;
+    private ChannelInfoAdapter adapterChannel;
     private SliderAdapter sliderAdapter;
     private int page = 1;
     private long totalPage;
     private int playBackTime;
     private String scale;
-    private LinearLayout linearLayoutItemContainerChild;
     RecyclerView categoryRecyclerViewChild = new RecyclerView(G.fragmentActivity);
     CardView cardView = new CardView(G.fragmentActivity);
     private TextView emptyImage;
+    private NestedScrollView nestedScrollView;
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.fragment_favorite_channel_info, container, false);
-        linearLayoutItemContainerChild = view.findViewById(R.id.ll_container_child);
-
+        itemContainer = view.findViewById(R.id.ll_container_child);
+        nestedScrollView = view.findViewById(R.id.scroll_channel);
         emptyImage = view.findViewById(R.id.empty_iv_info);
-        emptyImage.setOnClickListener(v -> {
-            HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-            sendChannelRequest();
-        });
         swipeRefreshLayout = view.findViewById(R.id.refresh_channelInfo);
-        swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            linearLayoutItemContainerChild.removeAllViews();
-            page = 1;
-            sendChannelRequest();
 
-        });
-        NestedScrollView nestedScrollView = view.findViewById(R.id.scroll_channel);
+        favoriteChannelApi = ApiServiceProvider.getChannelApi();
+        setupViews();
+        sendChannelRequest();
+        return view;
+    }
+
+    public void setupViews() {
         nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
             if (totalPage >= page)
                 sendChannelRequest();
         });
-        favoriteChannelApi = ApiServiceProvider.getChannelApi();
-        sendChannelRequest();
-        return view;
+        emptyImage.setOnClickListener(v -> {
+            HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+            sendChannelRequest();
+        });
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            itemContainer.removeAllViews();
+            page = 1;
+            sendChannelRequest();
+
+        });
+
     }
 
     private void sendChannelRequest() {
@@ -91,8 +98,6 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
                     if (page == 1) {
                         swipeRefreshLayout.setRefreshing(false);
                         emptyImage.setVisibility(View.INVISIBLE);
-
-
                         if (response.body().getInfo().getAdvertisement() != null) {
                             sliderAdapter = new SliderAdapter(response.body().getInfo().getAdvertisement().getSlides(), response.body().getInfo().getAdvertisement().getmScale());
                             BannerSlider.init(new ImageLoadingService());
@@ -124,17 +129,14 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
                                 slider.setOnSlideClickListener(position -> {
                                     if (response.body().getInfo().getAdvertisement().getSlides().get(position).getActionType() == 0) {
                                         HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getInfo().getAdvertisement().getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
-                                    } else {
-                                        Toast.makeText(G.fragmentActivity, "No ActionType", Toast.LENGTH_SHORT).show();
                                     }
-
                                 });
                             }, 1000);
 
-                            linearLayoutItemContainerChild.addView(cardView);
+                            itemContainer.addView(cardView);
                         }
 
-                        adapterChannel = new ChannelInfoItemAdapter();
+                        adapterChannel = new ChannelInfoAdapter();
 
                         categoryRecyclerViewChild.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, RecyclerView.VERTICAL, false));
                         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -148,9 +150,7 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
                             if (channel.getmType().equals(Channel.TYPE_PUBLIC))
                                 HelperUrl.checkUsernameAndGoToRoom(getActivity(), channel.getSlug(), HelperUrl.ChatEntry.chat);
                         });
-                        linearLayoutItemContainerChild.addView(categoryRecyclerViewChild);
-                        if (response.body().getInfo().getAdvertisement() == null && response.body().getChannels() == null)
-                            Toast.makeText(G.fragmentActivity, "This Page Is Empty", Toast.LENGTH_SHORT).show();
+                        itemContainer.addView(categoryRecyclerViewChild);
                     }
                     if (page == 1) {
                         adapterChannel.setChannelList(response.body().getChannels());
