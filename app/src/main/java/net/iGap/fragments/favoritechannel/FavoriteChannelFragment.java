@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -29,6 +28,7 @@ import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
@@ -71,8 +71,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
 
         emptyRefresh = rootView.findViewById(R.id.empty_iv);
         emptyRefresh.setOnClickListener(v -> {
-            swipeRefreshLayout.setRefreshing(true);
-            emptyRefresh.setVisibility(View.GONE);
+            HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             sendChannelRequest();
         });
 
@@ -98,7 +97,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
                 emptyRefresh.setVisibility(View.INVISIBLE);
-                if (response.body().getData()!=null) {
+                if (response.body().getData() != null) {
                     swipeRefreshLayout.setRefreshing(false);
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         switch (response.body().getData().get(i).getType()) {
@@ -141,8 +140,6 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                         slider.setOnSlideClickListener(position -> {
                                             if (response.body().getData().get(slider.getIndex()).getSlides().get(position).getActionType() == 3) {
                                                 HelperUrl.checkUsernameAndGoToRoom(getActivity(), response.body().getData().get(slider.getIndex()).getSlides().get(position).getmActionLink(), HelperUrl.ChatEntry.chat);
-                                            } else {
-                                                Toast.makeText(G.fragmentActivity, "Empty", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }, 1000);
@@ -221,6 +218,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             public void onFailure(Call<ParentChannel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
                 emptyRefresh.setVisibility(View.VISIBLE);
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
     }

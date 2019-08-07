@@ -24,6 +24,7 @@ import net.iGap.adapter.items.favoritechannel.SliderAdapter;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -59,8 +60,7 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
 
         emptyImage = view.findViewById(R.id.empty_iv_info);
         emptyImage.setOnClickListener(v -> {
-            swipeRefreshLayout.setRefreshing(true);
-            emptyImage.setVisibility(View.GONE);
+            HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             sendChannelRequest();
         });
         swipeRefreshLayout = view.findViewById(R.id.refresh_channelInfo);
@@ -166,6 +166,7 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
             public void onFailure(Call<ChildChannel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
                 emptyImage.setVisibility(View.VISIBLE);
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
     }
