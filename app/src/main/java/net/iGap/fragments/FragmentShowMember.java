@@ -65,6 +65,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelGetMemberList;
@@ -793,7 +794,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                             if (isGroup) {
                                                 new RequestGroupAddAdmin().groupAddAdmin(mRoomID, mContact.peerId);
                                             } else {
-                                                new RequestChannelAddMember().channelAddMember(mRoomID, mContact.peerId);
+                                                new RequestChannelAddAdmin().channelAddAdmin(mRoomID, mContact.peerId);
                                             }
                                             getActivity().onBackPressed();
                                             break;
