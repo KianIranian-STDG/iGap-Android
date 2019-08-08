@@ -28,6 +28,8 @@ import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmStickers;
@@ -112,12 +114,52 @@ public class DialogAddSticker extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));
-
         if (getArguments() != null) {
             groupId = getArguments().getString("GROUP_ID");
             token = getArguments().getString("TOKEN");
         }
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.add_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.add_sticker))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        getDialog().dismiss();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
+                            @Override
+                            public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
+                                progressBar.setVisibility(View.GONE);
+                                if (response.body() != null && response.body().isSuccess()) {
+                                    RealmStickers.updateFavorite(groupId, true);
+                                    if (FragmentChat.onUpdateSticker != null) {
+                                        FragmentChat.onUpdateSticker.update();
+                                        getDialog().dismiss();
+
+                                        HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully) ,false);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<StructStickerResult> call, Throwable t) {
+                                progressBar.setVisibility(View.GONE);
+
+                            }
+                        });
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.add_sticker_toolbar);
+        layoutToolbar.addView(toolbar.getView());
 
         mAPIService = ApiEmojiUtils.getAPIService();
         progressBar = view.findViewById(R.id.progress_stricker);
@@ -127,50 +169,6 @@ public class DialogAddSticker extends DialogFragment {
         rcvAdapter.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         rcvAdapter.setHasFixedSize(true);
         getSticker(groupId);
-        RippleView btnBack = view.findViewById(R.id.fc_sticker_ripple_txtBack);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDialog().dismiss();
-            }
-        });
-
-        TextView txtAddSticker = view.findViewById(R.id.txtAddSticker);
-        txtAddSticker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
-                    @Override
-                    public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                        progressBar.setVisibility(View.GONE);
-                        if (response.body() != null && response.body().isSuccess()) {
-                            RealmStickers.updateFavorite(groupId, true);
-                            if (FragmentChat.onUpdateSticker != null) {
-                                FragmentChat.onUpdateSticker.update();
-                                getDialog().dismiss();
-
-                                HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully) ,false);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<StructStickerResult> call, Throwable t) {
-                        progressBar.setVisibility(View.GONE);
-
-                    }
-                });
-            }
-        });
-
-        TextView iconAddSticker = view.findViewById(R.id.iconAddSticker);
-        iconAddSticker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtAddSticker.performLongClick();
-            }
-        });
 
     }
 
