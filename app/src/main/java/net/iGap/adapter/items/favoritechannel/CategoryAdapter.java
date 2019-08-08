@@ -19,12 +19,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapter.FragmentGridViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.FragmentGridViewHolder> {
     private List<Category> categoryList;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
     public boolean clickable;
 
-    public CategoryItemAdapter(boolean clickable, List<Category> categoryList) {
+    public CategoryAdapter(boolean clickable, List<Category> categoryList) {
         this.clickable = clickable;
         this.categoryList = categoryList;
     }

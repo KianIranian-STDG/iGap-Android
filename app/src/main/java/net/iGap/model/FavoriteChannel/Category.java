@@ -3,7 +3,6 @@ package net.iGap.model.FavoriteChannel;
 import com.google.gson.annotations.SerializedName;
 
 public class Category {
-
     @SerializedName("id")
     private String id;
 
@@ -58,7 +57,6 @@ public class Category {
     public void setTitleEn(String titleEn) {
         this.titleEn = titleEn;
     }
-
 
 
 }

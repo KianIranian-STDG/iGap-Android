@@ -20,7 +20,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChannelInfoItemAdapter extends RecyclerView.Adapter<ChannelInfoItemAdapter.ChannelInfoViewHolder> {
+public class ChannelInfoAdapter extends RecyclerView.Adapter<ChannelInfoAdapter.ChannelInfoViewHolder> {
     private List<Channel> channelList = new ArrayList<>();
     private OnClickedChannelInfoEventCallBack onClickedChannelInfoEventCallBack;
 
