@@ -132,6 +132,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     private String avatarPath;
     private AvatarHandler avatarHandler;
     private boolean isBot = false;
+    private boolean isCloud ;
 
     public void init(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
         this.roomId = roomId;
@@ -470,6 +471,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
 
     public void onImageClick() {
+        if (userId == G.userId) return; //dont work when profile was cloud
         if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
             goToShowAvatarPage.setValue(userId == G.userId);
         }
