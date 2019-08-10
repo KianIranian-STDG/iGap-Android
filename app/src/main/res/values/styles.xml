@@ -11,6 +11,7 @@
         <item name="drawerArrowStyle">@style/MaterialDrawer.DrawerArrowStyle</item>
         <item name="md_medium_font">IRANSansMobile.ttf</item>
         <item name="md_regular_font">IRANSansMobile.ttf</item>
+        <item name="fontFamily">@font/main_font</item>
         <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Material_blackCustom" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Material_blackCustom" parent="BaseTheme">
         <item name="colorAccent">@color/green</item>
         <item name="pageBackgroundTheme">@style/page_background_black</item>
         <item name="textColorTheme">@style/text_style_black</item>
@@ -31,7 +31,7 @@
         <!--<item name="colorAccent">@color/colorOldBlack</item>-->
     </style>
 
-    <style name="Material_lightCustom" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Material_lightCustom" parent="BaseTheme">
         <item name="colorAccent">@color/green</item>
         <item name="pageBackgroundTheme">@style/page_background_light</item>
         <item name="textColorTheme">@style/text_style_light</item>
