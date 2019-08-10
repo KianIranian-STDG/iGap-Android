@@ -600,7 +600,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mHolder.getItemContainer().getChildCount() > 2)
                 mHolder.getItemContainer().removeView(forwardContainer);
 
-            channelForwardIv.setOnClickListener(v -> messageClickListener.onForwardClick(mMessage));
+            channelForwardIv.setOnClickListener(v -> messageClickListener.onForwardClick(structMessage));
         }
 
         /**
