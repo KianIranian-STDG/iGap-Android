@@ -12,6 +12,13 @@ public class PaymentInfo {
     private String vendor;
     @SerializedName("order_id")
     private String orderId;
+    @SerializedName("created_at")
+    private String createdAt;
+    @SerializedName("rrn")
+    private double rrn;
+    @SerializedName("orderId")
+    private String id;
+
 
     public BaseProduct getProduct() {
         return product;
@@ -27,5 +34,17 @@ public class PaymentInfo {
 
     public String getOrderId() {
         return orderId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public double getRrn() {
+        return rrn;
+    }
+
+    public String getId() {
+        return id;
     }
 }

@@ -28,6 +28,7 @@
         <item name="textColorBottomSheet">@style/FabButton_dark</item>
         <item name="iGapButton">@style/iGapButtonDark</item>
         <item name="iGapButtonGray">@style/iGapButtonGrayDark</item>
+        <item name="greenTextIconColor">@color/white</item>
         <!--<item name="colorAccent">@color/colorOldBlack</item>-->
     </style>
 
@@ -51,12 +52,13 @@
         <item name="emojiChat">@style/emojiColorChat_light</item>
         <item name="backgroundSubChatTheme">@style/backgroundSubChat_light</item>
         <item name="fabButtoniGap">@style/FabButton_light</item>
-        <item name="md_dark_theme">false</item>C
+        <item name="md_dark_theme">false</item>
         <item name="backgroundPassCode">@style/backgroundPassCodeLight</item>
         <item name="md_medium_font">IRANSansMobile.ttf</item>
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="iGapButton">@style/iGapButtonLight</item>
         <item name="iGapButtonGray">@style/iGapButtonGrayLight</item>
+        <item name="greenTextIconColor">@color/green</item>
         <!--<item name="colorAccent">@color/white</item>-->
     </style>
 

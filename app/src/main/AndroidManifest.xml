@@ -141,6 +141,7 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="stateHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -165,6 +166,14 @@
                     android:host="join"
                     android:scheme="igap" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="net.iGap.payment" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
 
             <!-- this part add app logo to list of share -->
             <intent-filter>

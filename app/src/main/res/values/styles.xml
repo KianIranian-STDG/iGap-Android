@@ -795,6 +795,10 @@
         <item name="android:theme">?textTitleColorSettingTheme</item>
     </style>
 
+    <style name="greenIconTextViewStyle" parent="baseFontIcon">
+        <item name="android:textColor">?greenTextIconColor</item>
+    </style>
+
     <style name="myIconTextViewStyleGray" parent="baseFontIcon">
         <item name="android:theme">?textSubColorSettingTheme</item>
     </style>

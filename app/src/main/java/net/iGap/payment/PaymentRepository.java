@@ -59,10 +59,10 @@ public class PaymentRepository {
         });
     }
 
-    public void checkOrderStatus(String orderId, ResponseCallback<Object> callback) {
-        paymentApi.requestCheckOrderStatus(orderId).enqueue(new Callback<Object>() {
+    public void checkOrderStatus(String orderId, ResponseCallback<CheckOrderStatusResponse> callback) {
+        paymentApi.requestCheckOrderStatus(orderId).enqueue(new Callback<CheckOrderStatusResponse>() {
             @Override
-            public void onResponse(@NotNull Call<Object> call, @NotNull Response<Object> response) {
+            public void onResponse(@NotNull Call<CheckOrderStatusResponse> call, @NotNull Response<CheckOrderStatusResponse> response) {
                 if (response.code() == 200) {
                     callback.onSuccess(response.body());
                 } else {
@@ -75,7 +75,7 @@ public class PaymentRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<Object> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<CheckOrderStatusResponse> call, @NotNull Throwable t) {
                 t.printStackTrace();
                 callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }

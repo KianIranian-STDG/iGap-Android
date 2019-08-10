@@ -1,6 +1,7 @@
 package net.iGap.api;
 
 import net.iGap.payment.CheckOrderResponse;
+import net.iGap.payment.CheckOrderStatusResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,5 +13,5 @@ public interface PaymentApi {
     Call<CheckOrderResponse> requestCheckOrder(@Path("orderToken") String orderToken);
 
     @GET("order-status/{orderId}")
-    Call<Object> requestCheckOrderStatus(@Path("orderId") String orderId);
+    Call<CheckOrderStatusResponse> requestCheckOrderStatus(@Path("orderId") String orderId);
 }

@@ -7,12 +7,15 @@ import com.google.gson.annotations.SerializedName;
 
 import net.iGap.G;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 public class IGashtLocationItem implements Parcelable {
 
     @SerializedName("id")
     private int id;
     @SerializedName("payment_id")
-    private int paymentId;
+    private String paymentId;
     @SerializedName("warehoff")
     private boolean warehoff;
     @SerializedName("has_QR")
@@ -34,9 +37,9 @@ public class IGashtLocationItem implements Parcelable {
     @SerializedName("text")
     private LocationDetail detail;
 
-    protected IGashtLocationItem(Parcel in) {
+    private IGashtLocationItem(@NotNull Parcel in) {
         id = in.readInt();
-        paymentId = in.readInt();
+        paymentId = in.readString();
         warehoff = in.readByte() != 0;
         hasQR = in.readByte() != 0;
         printPos = in.readByte() != 0;
@@ -50,11 +53,15 @@ public class IGashtLocationItem implements Parcelable {
     }
 
     public static final Creator<IGashtLocationItem> CREATOR = new Creator<IGashtLocationItem>() {
+        @NotNull
+        @Contract("_ -> new")
         @Override
         public IGashtLocationItem createFromParcel(Parcel in) {
             return new IGashtLocationItem(in);
         }
 
+        @NotNull
+        @Contract(value = "_ -> new", pure = true)
         @Override
         public IGashtLocationItem[] newArray(int size) {
             return new IGashtLocationItem[size];
@@ -65,7 +72,7 @@ public class IGashtLocationItem implements Parcelable {
         return id;
     }
 
-    public int getPaymentId() {
+    public String getPaymentId() {
         return paymentId;
     }
 
@@ -139,7 +146,7 @@ public class IGashtLocationItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeInt(paymentId);
+        dest.writeString(paymentId);
         dest.writeByte((byte) (warehoff ? 1 : 0));
         dest.writeByte((byte) (hasQR ? 1 : 0));
         dest.writeByte((byte) (printPos ? 1 : 0));

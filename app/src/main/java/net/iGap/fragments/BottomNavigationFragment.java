@@ -191,10 +191,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     }
 
-    public void checkPassCodeIconVisibility(){
+    public void checkPassCodeIconVisibility() {
         Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
 
-        if (fragment instanceof FragmentMain){
+        if (fragment instanceof FragmentMain) {
             ((FragmentMain) fragment).checkPassCodeIconVisibility();
         }
     }

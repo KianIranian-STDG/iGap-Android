@@ -1940,4 +1940,7 @@ Want to get it?</string>
     <string name="cardtocard_cartnumber_error">Card number must be 16 digits</string>
     <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
     <string name="icon_card_to_card">\ue915</string>
+    <string name="payment_order_id_title">Order ID : %s</string>
+    <string name="payment_rrn_title">Transaction ID: %.0f</string>
+    <string name="mci_topup_payment_title">MCI TopUp</string>
 </resources>
