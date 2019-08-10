@@ -160,5 +160,6 @@
     <item name="cardToCard_icon" type="id" />
     <item name="cardToCard_button" type="id" />
     <item name="cardToCard_innerLayout" type="id" />
+    <item name="more" type="id" />
 
 </resources>

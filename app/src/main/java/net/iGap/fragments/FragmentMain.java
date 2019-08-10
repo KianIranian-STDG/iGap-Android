@@ -15,12 +15,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +45,6 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
-import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
@@ -75,7 +72,6 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
-import net.iGap.proto.ProtoUserContactsBlock;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
@@ -936,6 +932,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
+    public void onToolbarTitleClickListener(View view) {
+        mRecyclerView.smoothScrollToPosition(0);
+    }
+
+    @Override
     public void onRightIconClickListener(View view) {
         Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
         try {
@@ -1422,7 +1423,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         } else {
                             holder.LastMessageTv.setText(subStringInternal(lastMessage));
                         }
+
+                        if (mInfo.getType() == GROUP &&
+                                mInfo.getLastMessage().getReplyTo() == null
+                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.TEXT) {
+                            holder.LastMessageTv.setVisibility(View.GONE);
+                        } else {
+                            holder.LastMessageTv.setVisibility(View.VISIBLE);
+                        }
                     }
+
                 } else {
 
                     holder.lastMessageSender.setVisibility(View.GONE);

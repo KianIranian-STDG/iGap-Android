@@ -58,6 +58,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.IChatItemAttachment;
@@ -581,6 +582,27 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, mMessage.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
             }
         }
+
+        if (type == ProtoGlobal.Room.Type.CHANNEL){
+            ImageView channelForwardIv = new ImageView(holder.itemView.getContext());
+            FrameLayout forwardContainer = new FrameLayout(holder.itemView.getContext());
+
+            if (G.isDarkTheme)
+                channelForwardIv.setImageDrawable(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_channel_forward_dark));
+            else
+                channelForwardIv.setImageDrawable(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_channel_forward_light));
+
+            if (mHolder.getItemContainer().getChildCount() == 1){
+                forwardContainer.addView(channelForwardIv,LayoutCreator.createFrame(23,23,Gravity.BOTTOM, 4, 0, 8, 0));
+                mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+            }
+
+            if (mHolder.getItemContainer().getChildCount() > 2)
+                mHolder.getItemContainer().removeView(forwardContainer);
+
+            channelForwardIv.setOnClickListener(v -> messageClickListener.onForwardClick(mMessage));
+        }
+
         /**
          * set message time
          */
@@ -1350,6 +1372,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (setDefualtImage) {
                     imageViewReservedSpace.setImageResource(R.mipmap.difaultimage);
                 }
+
+                if (holder instanceof VideoWithTextItem.ViewHolder) {
+                    ((VideoWithTextItem.ViewHolder) holder).getMoreButton().setOnClickListener(v -> {
+                        OnClickRow(((VideoWithTextItem.ViewHolder) holder), v);
+                    });
+                }
+
+                if (holder instanceof ImageWithTextItem.ViewHolder) {
+                    ((ImageWithTextItem.ViewHolder) holder).getMoreButton().setOnClickListener(v -> {
+                        OnClickRow(((ImageWithTextItem.ViewHolder) holder), v);
+                    });
+                }
+
+
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) ((IThumbNailItem) holder).getThumbNailImageView();
                 int _with = attachment.getWidth();
