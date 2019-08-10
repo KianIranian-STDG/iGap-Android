@@ -1941,11 +1941,6 @@ Want to get it?</string>
     <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
     <string name="insert_amount_in_rial">insert amount in rial.</string>
     <string name="enter_16_digit_card_number">Enter the 16-digit card number.</string>
-    <string name="icon_sync">ÿ</string>
-    <string name="icon_play">ò</string>
-    <string name="icon_next">Ó</string>
-    <string name="icon_previous">Ô</string>
-    <string name="icon_like">Ö</string>
     <string name="beeptunes_purchase_song">Purchase Song</string>
     <string name="beeptunes_sync_song">Sync Song</string>
     <string name="beeptunesـfavorite_song">Favorite Song</string>

@@ -67,7 +67,7 @@
             android:id="@+id/tv_itemSong_action"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:text="@string/icon_sync"
+            android:text="@string/icon_beeptunes_sync"
             android:textSize="@dimen/standardIconSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

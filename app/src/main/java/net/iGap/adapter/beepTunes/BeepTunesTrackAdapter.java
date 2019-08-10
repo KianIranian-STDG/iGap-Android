@@ -127,10 +127,10 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                 if (track.getId() == BeepTunesPlayerService.playingSongId) {
                     songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));
                 } else {
-                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_beeptunes_play));
                 }
             } else {
-                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_sync));
+                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_beeptunes_sync));
             }
 
             if (G.isAppRtl)
@@ -152,10 +152,10 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                             if (playingSong.isPlay()) {
                                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));
                             } else {
-                                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_beeptunes_play));
                             }
                         else
-                            songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                            songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_beeptunes_play));
 
                     });
 
@@ -180,12 +180,12 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
 
                                     if (downloadSong.getId().equals(track.getId())) {
                                         rotate.cancel();
+                                        songPrwTv.setText(itemView.getContext().getResources().getString(R.string.music_icon));
                                     }
-
 
                                     progressBar.setVisibility(View.GONE);
                                     track.setInStorage(true);
-                                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
+                                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_beeptunes_play));
                                     break;
                                 case STATUS_ERROR:
                                     break;

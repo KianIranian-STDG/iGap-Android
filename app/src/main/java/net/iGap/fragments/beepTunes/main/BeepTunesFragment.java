@@ -81,7 +81,7 @@ public class BeepTunesFragment extends BaseFragment {
                 if (playingSong.isPlay()) {
                     playIconTv.setText(getContext().getResources().getString(R.string.pause_icon));
                 } else {
-                    playIconTv.setText(getContext().getResources().getString(R.string.icon_play));
+                    playIconTv.setText(getContext().getResources().getString(R.string.icon_beeptunes_play));
                 }
 
                 behavior.setState(playingSong.getBehaviorStatus());
