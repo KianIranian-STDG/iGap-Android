@@ -56,7 +56,7 @@ public class LogWalletCardToCard extends AbstractMessage<LogWalletCardToCard, Lo
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        RealmRoomMessageWalletCardToCard realmRoomMessageWalletCardToCard = mMessage.structWallet.getRealmRoomMessageWalletCardToCard();
+        RealmRoomMessageWalletCardToCard realmRoomMessageWalletCardToCard = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletCardToCard();
         holder.titleTxt.setText(R.string.CARD_TRANSFER_MONEY);
         String iGapSkyBlue = "#E642D4F4";
         holder.requestTime.setBackgroundColor(Color.parseColor(iGapSkyBlue));

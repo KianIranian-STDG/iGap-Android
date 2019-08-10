@@ -51,7 +51,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(mMessage));
+        holder.image.setTag(getCacheId(structMessage));
 
         super.bindView(holder, payloads);
 
@@ -63,13 +63,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
                 if (FragmentChat.isInSelectionMode){
                         holder.itemView.performLongClick();
                 } else {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                     } else {
-                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                     }
                 }
             }

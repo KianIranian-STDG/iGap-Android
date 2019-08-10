@@ -56,7 +56,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.structWallet.getType().equals(ProtoGlobal.RoomMessageWallet.Type.UNRECOGNIZED.toString())) {
+        if (mMessage.getRoomMessageWallet().getType().equals(ProtoGlobal.RoomMessageWallet.Type.UNRECOGNIZED.toString())) {
 
             holder.titleTxt.setText(R.string.unknown_message);
 
@@ -85,16 +85,16 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
 
         RealmMoneyTransfer realmMoneyTransfer;
 
-        if (mMessage.structWallet.getType().equals(ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER.toString())) {
+        if (mMessage.getRoomMessageWallet().getType().equals(ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER.toString())) {
             holder.cardNumberRoot.setVisibility(View.GONE);
             holder.rrnNumberRoot.setVisibility(View.GONE);
-            realmMoneyTransfer = mMessage.structWallet.getRealmRoomMessageWalletMoneyTransfer();
+            realmMoneyTransfer = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletMoneyTransfer();
             holder.titleTxt.setText(R.string.WALLET_TRANSFER_MONEY);
             String iGapYellowWallet = "#E6F4D442";
             holder.payTime.setBackgroundColor(Color.parseColor(iGapYellowWallet));
             holder.titleTxt.setBackgroundColor(Color.parseColor(iGapYellowWallet));
         } else {
-            realmMoneyTransfer = mMessage.structWallet.getRealmRoomMessageWalletPayment();
+            realmMoneyTransfer = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletPayment();
             holder.cardNumberRoot.setVisibility(View.VISIBLE);
             holder.rrnNumberRoot.setVisibility(View.VISIBLE);
             String cardNumber = realmMoneyTransfer.getCardNumber();

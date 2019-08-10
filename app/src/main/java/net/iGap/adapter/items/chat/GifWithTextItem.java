@@ -103,7 +103,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(mMessage));
+        holder.image.setTag(getCacheId(structMessage));
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.messageView);
@@ -115,35 +115,35 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             @Override
             public void onClick(View v) {
                 if (!FragmentChat.isInSelectionMode) {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        if (!hasFileSize(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getLocalFilePath() :
-                                mMessage.attachment.getLocalFilePath())) {
-                            messageClickListener.onUploadOrCompressCancel(holder.progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        if (!hasFileSize(mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getLocalFilePath() :
+                                structMessage.getAttachment().getLocalFilePath())) {
+                            messageClickListener.onUploadOrCompressCancel(holder.progress, structMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
                         }
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                     } else {
-                        if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
+                        if (mMessage.getForwardMessage() != null && mMessage.getForwardMessage().getAttachment().isFileExistsOnLocal()) {
                             try {
-                                onPlayPauseGIF(holder, mMessage.forwardedFrom.getAttachment().getLocalFilePath());
+                                onPlayPauseGIF(holder, mMessage.getForwardMessage().getAttachment().getLocalFilePath());
                             } catch (ClassCastException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            if (mMessage.attachment.isFileExistsOnLocal()) {
+                            if (structMessage.getAttachment().isFileExistsOnLocal()) {
                                 try {
-                                    onPlayPauseGIF(holder, mMessage.attachment.getLocalFilePath());
+                                    onPlayPauseGIF(holder, structMessage.getAttachment().getLocalFilePath());
                                 } catch (ClassCastException e) {
                                     e.printStackTrace();
                                 }
                             } else {
-                                if (mMessage.forwardedFrom != null) {
-                                    downLoadFile(holder, mMessage.forwardedFrom.getAttachment(), 0);
+                                if (mMessage.getForwardMessage() != null) {
+                                    downLoadFile(holder, mMessage.getForwardMessage().getAttachment(), 0);
                                 } else {
                                     RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
-                                            equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
+                                            equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
                                     downLoadFile(holder, roomMessage.getAttachment(), 0);
                                 }
                             }

@@ -450,7 +450,7 @@ public class FragmentShowImage extends BaseFragment {
             File file = new File(path);
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                AppUtils.shareItem(intent, StructMessageInfo.convert(getRealm(), roomMessage));
+                AppUtils.shareItem(intent, new StructMessageInfo(roomMessage));
                 if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                     intent.setType("video/*");
                     startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_video_from_igap)));

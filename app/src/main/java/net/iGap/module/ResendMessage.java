@@ -54,7 +54,7 @@ public class ResendMessage implements IResendMessage {
             @Override
             public void execute(Realm realm) {
                 for (StructMessageInfo message : mMessages) {
-                    RealmRoomMessage.deleteMessage(realm, Long.parseLong(message.messageID));
+                    RealmRoomMessage.deleteMessage(realm, message.realmRoomMessage.getMessageId());
                 }
             }
         });
@@ -75,10 +75,10 @@ public class ResendMessage implements IResendMessage {
             public void execute(Realm realm) {
                 for (StructMessageInfo message : mMessages) {
                     if (all) {
-                        RealmRoomMessage.setStatus(realm, Long.parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                        RealmRoomMessage.setStatus(realm, message.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SENDING);
                     } else {
-                        if (message.messageID.equalsIgnoreCase(Long.toString(mSelectedMessageID))) {
-                            RealmRoomMessage.setStatus(realm, Long.parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                        if (message.realmRoomMessage.getMessageId() == mSelectedMessageID) {
+                            RealmRoomMessage.setStatus(realm, message.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SENDING);
                             break;
                         }
                     }
@@ -96,12 +96,12 @@ public class ResendMessage implements IResendMessage {
         for (int i = 0; i < mMessages.size(); i++) {
             final int j = i;
             if (all) {
-                if (FragmentChat.allowResendMessage(Long.parseLong(mMessages.get(j).messageID))) {
+                if (FragmentChat.allowResendMessage(mMessages.get(j).realmRoomMessage.getMessageId())) {
                     G.handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             Realm realm = Realm.getDefaultInstance();
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessages.get(j).messageID)).findFirst();
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
                             if (roomMessage != null) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                                 if (realmRoom != null) {
@@ -123,9 +123,9 @@ public class ResendMessage implements IResendMessage {
                     }, 1000 * j);
                 }
             } else {
-                if (mMessages.get(j).messageID.equalsIgnoreCase(Long.toString(mSelectedMessageID))) {
+                if (mMessages.get(j).realmRoomMessage.getMessageId() == mSelectedMessageID) {
                     if (FragmentChat.allowResendMessage(mSelectedMessageID)) {
-                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessages.get(j).messageID)).findFirst();
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
                         if (roomMessage != null) {
                             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                             if (realmRoom != null) {

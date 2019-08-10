@@ -49,7 +49,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(mMessage));
+        holder.image.setTag(getCacheId(structMessage));
         super.bindView(holder, payloads);
 
         holder.getChatBloke().setBackgroundResource(0);
@@ -61,13 +61,13 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
                 if (FragmentChat.isInSelectionMode) {
                     holder.itemView.performLongClick();
                 } else {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                     } else {
-                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                     }
                 }
             }

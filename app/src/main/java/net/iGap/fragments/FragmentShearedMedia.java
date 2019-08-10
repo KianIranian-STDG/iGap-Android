@@ -439,7 +439,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
                     if (rm != null) {
                         //+Realm realm = Realm.getDefaultInstance();
-                        messageInfos.add(Parcels.wrap(StructMessageInfo.convert(getRealm(), rm)));
+                        messageInfos.add(Parcels.wrap(new StructMessageInfo(rm)));
                     }
                 }
                 FragmentChat.mForwardMessages = messageInfos;

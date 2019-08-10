@@ -1056,7 +1056,6 @@ public class RealmRoomMessage extends RealmObject {
 
         new Thread(() -> {
             try (Realm realm = Realm.getDefaultInstance()) {
-                G.checkTransction("146");
                 realm.executeTransaction(realm1 -> {
                     RealmRoomMessage managedRoomMessage = realm1.copyToRealm(roomMessage);
                     RealmRoom.setLastMessageWithRoomMessage(realm, roomId, managedRoomMessage);

@@ -91,15 +91,15 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getRoomMessageContact() != null) {
-                holder.contactName.setText(mMessage.forwardedFrom.getRoomMessageContact().getFirstName() + " " + mMessage.forwardedFrom.getRoomMessageContact().getLastName());
-                holder.contactNumberTv.setText(mMessage.forwardedFrom.getRoomMessageContact().getLastPhoneNumber());
+        if (mMessage.getForwardMessage() != null) {
+            if (mMessage.getForwardMessage().getRoomMessageContact() != null) {
+                holder.contactName.setText(mMessage.getForwardMessage().getRoomMessageContact().getFirstName() + " " + mMessage.getForwardMessage().getRoomMessageContact().getLastName());
+                holder.contactNumberTv.setText(mMessage.getForwardMessage().getRoomMessageContact().getLastPhoneNumber());
             }
         } else {
-            if (mMessage.userInfo != null) {
-                holder.contactName.setText(mMessage.userInfo.displayName);
-                holder.contactNumberTv.setText(mMessage.userInfo.phone);
+            if (mMessage.getRoomMessageContact() != null) {
+                holder.contactName.setText(mMessage.getRoomMessageContact().getFirstName() + " " + mMessage.getRoomMessageContact().getLastName());
+                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getPhones().first().toString());
             }
         }
     }

@@ -53,14 +53,6 @@ public class RealmRoomMessageContact extends RealmObject {
         return messageContact;
     }
 
-    public static RealmRoomMessageContact put(Realm realm, StructMessageInfo structMessageInfo) {
-        RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class, AppUtils.makeRandomId());
-        realmRoomMessageContact.setFirstName(structMessageInfo.userInfo.firstName);
-        realmRoomMessageContact.setLastName(structMessageInfo.userInfo.lastName);
-        realmRoomMessageContact.addPhone(structMessageInfo.userInfo.phone);
-        return realmRoomMessageContact;
-    }
-
     public long getId() {
         return id;
     }
