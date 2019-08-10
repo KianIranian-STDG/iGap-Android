@@ -1912,7 +1912,7 @@
     <string name="kuknos_login_submit_str">Register</string>
     <string name="kuknos_login_error_empty_str">Enter your ID number</string>
     <string name="kuknos_login_error_invalid_str">Enter a Valid ID number</string>
-    <string name="kuknos_login_error_server_str">Some Server Error</string>
+    <string name="kuknos_login_error_server_str">Server Error: User already exists.</string>
     <string name="kuknos_login_progress_str">Checking...</string>
     <string name="kuknos_Entry_NT_str">New Token Wallet</string>
     <string name="kuknos_Entry_RT_str">Retrieve Token Wallet</string>
@@ -2066,7 +2066,7 @@
     <string name="kuknos_setting_Directory">IGap - Kuknos</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
     <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.
-        Do NOT share it with others.\n Seed Key: 2552SD4546854212313845JHJKHGGFGDGDETGJKLKMBBVGCGHFF</string>
+        Do NOT share it with others. </string>
     <string name="kuknos_setting_copySKeyTitel">Save Seed Key</string>
     <string name="kuknos_setting_copySKeyMessage">Be informed:\n -Your seed key is the only way to access your account.\n -Keep it Safe\n -Do NOT share it with others.\n it will be saved in your Download folder.</string>
     <string name="kuknos_setting_copySKeyBtn">Save</string>
@@ -2079,4 +2079,10 @@
     <string name="kuknos_setting_copySSuccessMessage">Your Seed key is ready and available in Download folder.</string>
     <string name="kuknos_setting_copySSuccessTitle">Success</string>
 
+    <string name="kuknos_login_progress_load">Loading...</string>
+    <string name="kuknos_login_progress_next">Next</string>
+    <string name="kuknos_panel_addAsset">Add Asset</string>
+    <string name="kuknos_login_error_server_ErrorStr">Server Error: No response. please try again later.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateMn">Can NOT generate recovery key. make contact with support.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateKey">Can NOT generate seed key. make contact with support.</string>
 </resources>

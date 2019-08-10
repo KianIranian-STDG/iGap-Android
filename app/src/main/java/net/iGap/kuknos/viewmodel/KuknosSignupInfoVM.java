@@ -2,30 +2,35 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableField;
 import android.os.Handler;
 import android.util.Log;
 
 import net.iGap.R;
+import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
 
 public class KuknosSignupInfoVM extends ViewModel {
 
+    // TODO redundent model if not used
     private MutableLiveData<KuknosSignupM> kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Integer> checkUsernameState;
     private MutableLiveData<Boolean> progressSendDServerState;
-    private String username;
-    private String name;
-    private String family;
-    private String email;
+    private ObservableField<String> username = new ObservableField<>();
+    private ObservableField<String> name = new ObservableField<>();
+    private ObservableField<String> family = new ObservableField<>();
+    private ObservableField<String> email = new ObservableField<>();
     private boolean usernameIsValid = false;
+    UserRepo userRepo = new UserRepo();
 
     public KuknosSignupInfoVM() {
-        //TODO clear hard code
-        name = "Hossein";
-        family = "Amini";
+
+        name.set(userRepo.getUserFirstName());
+        family.set(userRepo.getUserLastName());
+        email.set(userRepo.getUserEmail());
 
         if (kuknosSignupM == null) {
             kuknosSignupM = new MutableLiveData<KuknosSignupM>();
@@ -48,6 +53,8 @@ public class KuknosSignupInfoVM extends ViewModel {
 
     public void onSubmitBtn() {
 
+        Log.d("amini", "onSubmitBtn: " + userRepo.getUserFirstName());
+
         if (!checkEmail()) {
             return;
         }
@@ -63,10 +70,10 @@ public class KuknosSignupInfoVM extends ViewModel {
 
         /*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*/
 
-        if (username == null) {
+        if (username.get() == null) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         }
-        else if (username.isEmpty()) {
+        else if (username.get().isEmpty()) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         }
         else {
@@ -77,8 +84,8 @@ public class KuknosSignupInfoVM extends ViewModel {
 
     private boolean checkEmail() {
         if (email!= null) {
-            if (!email.isEmpty()) {
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            if (!email.get().isEmpty()) {
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.get()).matches()) {
                     error.setValue(new ErrorM(true, "Invalid Email Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
                     return false;
                 }
@@ -143,38 +150,6 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.kuknosSignupM = kuknosSignupM;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getFamily() {
-        return family;
-    }
-
-    public void setFamily(String family) {
-        this.family = family;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
@@ -215,5 +190,35 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.usernameIsValid = usernameIsValid;
     }
 
+    public ObservableField<String> getUsername() {
+        return username;
+    }
 
+    public void setUsername(ObservableField<String> username) {
+        this.username = username;
+    }
+
+    public ObservableField<String> getName() {
+        return name;
+    }
+
+    public void setName(ObservableField<String> name) {
+        this.name = name;
+    }
+
+    public ObservableField<String> getFamily() {
+        return family;
+    }
+
+    public void setFamily(ObservableField<String> family) {
+        this.family = family;
+    }
+
+    public ObservableField<String> getEmail() {
+        return email;
+    }
+
+    public void setEmail(ObservableField<String> email) {
+        this.email = email;
+    }
 }

@@ -2,6 +2,7 @@ package net.iGap.api.apiService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -10,6 +11,12 @@ public class RetrofitFactory {
 
     RetrofitFactory() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        // TODO for API Logging - clear ir
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(interceptor);
+
         builder.addInterceptor(chain -> {
             Request original = chain.request();
             Request request = original.newBuilder()
@@ -44,6 +51,33 @@ public class RetrofitFactory {
     Retrofit getKuknosRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiStatic.KUKNOS_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+        return retrofit;
+    }
+
+    Retrofit getKuknosHorizanRetrofit() {
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        // TODO for API Logging - clear ir
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(interceptor);
+
+        builder.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request request = original.newBuilder()
+                    .header("Content-Type", "application/json")
+                    .method(original.method(), original.body())
+                    .build();
+            return chain.proceed(request);
+        });
+        OkHttpClient httpClient = builder.build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.KUKNOS_Horizan_Server)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();

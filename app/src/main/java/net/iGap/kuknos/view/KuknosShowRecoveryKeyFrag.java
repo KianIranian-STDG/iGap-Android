@@ -61,6 +61,8 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
+        kuknosShowRecoveryKeyVM.initMnemonic();
+
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
@@ -88,16 +90,16 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
-                    if (errorM.getMessage().equals("1")) {
-                        Snackbar snackbar = Snackbar.make(binding.fragKuknosRKSContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                        snackbar.show();
-                    }
+                    Snackbar snackbar = Snackbar.make(binding.fragKuknosRKSContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                        }
+                    });
+                    snackbar.show();
+                    binding.fragKuknosIdSubmit.setEnabled(false);
+                    binding.fragKuknosSIAdvSetting.setEnabled(false);
                 }
             }
         });

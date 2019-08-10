@@ -79,6 +79,20 @@ public class KuknosLoginFrag extends BaseFragment {
         Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        if (kuknosLoginVM.loginStatus()) {
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+            if (fragment == null) {
+                fragment = KuknosPanelFrag.newInstance();
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            popBackStackFragment();
+        }
+        else
+            kuknosLoginVM.getUserInfo();
+
         onErrorObserver();
         onNext();
         progressState();
@@ -95,6 +109,7 @@ public class KuknosLoginFrag extends BaseFragment {
                     if (errorM.getMessage().equals("0")) {
                         binding.fragKuknosIdUserIDHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosIdUserID.requestFocus();
+                        binding.fragKuknosIdUserID.setEnabled(true);
                     }
                     else if (errorM.getMessage().equals("1")){
                         Snackbar snackbar = Snackbar.make(binding.fragKuknosLoginContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
@@ -133,20 +148,34 @@ public class KuknosLoginFrag extends BaseFragment {
     }
 
     private void progressState() {
-        kuknosLoginVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        kuknosLoginVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_str));
-                    binding.fragKuknosIdSubmit.setEnabled(false);
-                    binding.fragKuknosIdUserID.setEnabled(false);
-                    binding.fragKuknosLProgressV.setVisibility(View.VISIBLE);
-                }
-                else {
-                    binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_submit_str));
-                    binding.fragKuknosIdSubmit.setEnabled(true);
-                    binding.fragKuknosIdUserID.setEnabled(true);
-                    binding.fragKuknosLProgressV.setVisibility(View.GONE);
+            public void onChanged(@Nullable Integer integer) {
+                switch (integer) {
+                    case 0:
+                        binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_submit_str));
+                        binding.fragKuknosIdSubmit.setEnabled(true);
+                        binding.fragKuknosIdUserID.setEnabled(true);
+                        binding.fragKuknosLProgressV.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_load));
+                        binding.fragKuknosIdSubmit.setEnabled(false);
+                        binding.fragKuknosIdUserID.setEnabled(false);
+                        binding.fragKuknosLProgressV.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_next));
+                        binding.fragKuknosIdSubmit.setEnabled(true);
+                        binding.fragKuknosIdUserID.setEnabled(false);
+                        binding.fragKuknosLProgressV.setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_str));
+                        binding.fragKuknosIdSubmit.setEnabled(false);
+                        binding.fragKuknosIdUserID.setEnabled(false);
+                        binding.fragKuknosLProgressV.setVisibility(View.VISIBLE);
+                        break;
                 }
             }
         });

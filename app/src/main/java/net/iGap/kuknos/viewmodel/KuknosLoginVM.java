@@ -2,92 +2,116 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.os.Handler;
+import android.databinding.ObservableField;
 import android.text.TextUtils;
+import android.util.Log;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.apiService.ApiResponse;
+import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosLoginM;
-
-import java.util.Objects;
 
 public class KuknosLoginVM extends ViewModel {
 
-    private MutableLiveData<KuknosLoginM> loginData;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-    private MutableLiveData<Boolean> progressState;
-    private String ID;
-    private String userNum;
+    private MutableLiveData<Integer> progressState;
+    private ObservableField<String> ID = new ObservableField<>();
+    private ObservableField<String> userNum = new ObservableField<>();
+    private UserRepo userRepo = new UserRepo();
+    private boolean isRegisteredBefore = false;
 
     public KuknosLoginVM() {
-        // TODO clear hard code
-        userNum = "09376290072";
-        if (loginData == null) {
-            loginData = new MutableLiveData<KuknosLoginM>();
-        }
         if (error == null) {
-            error = new MutableLiveData<ErrorM>();
+            error = new MutableLiveData<>();
         }
         if (nextPage == null) {
-            nextPage = new MutableLiveData<Boolean>();
+            nextPage = new MutableLiveData<>();
             nextPage.setValue(false);
         }
         if (progressState == null) {
-            progressState = new MutableLiveData<Boolean>();
-            progressState.setValue(false);
+            progressState = new MutableLiveData<>();
+            progressState.setValue(0);
         }
+        userNum.set(userRepo.getUserNum());
     }
 
     public void onSubmit() {
-        loginData.setValue(new KuknosLoginM(userNum, ID));
-        if (TextUtils.isEmpty(Objects.requireNonNull(loginData).getValue().getUserID())) {
+        if (TextUtils.isEmpty(ID.get())) {
             error.setValue(new ErrorM(true, "Empty Entry", "0", R.string.kuknos_login_error_empty_str));
         }
-        else if (!loginData.getValue().isUserIDValid()) {
+        else if (ID.get().length() != 10) {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_login_error_invalid_str));
         }
         else {
-            progressState.setValue(true);
-            // TODO call API
-            // Data is Correct & proceed
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //success
-                    progressState.setValue(false);
-                    nextPage.setValue(true);
-                    //error
-                    /*error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
-                    progressState.setValue(false);*/
-                }
-            }, 1000);
+            if (isRegisteredBefore == true)
+                nextPage.setValue(true);
+            else
+                registerUser();
         }
     }
 
+    private void registerUser() {
+        userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknosLoginM>() {
+            @Override
+            public void onResponse(KuknosLoginM kuknosLoginM) {
+                if (kuknosLoginM.getOk() == 1) {
+                    nextPage.setValue(true);
+                }
+            }
+
+            @Override
+            public void onFailed(String error) {
+                if (error.equals("registeredBefore"))
+                    KuknosLoginVM.this.error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
+                else
+                    KuknosLoginVM.this.error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_ErrorStr));
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                if (visibility)
+                    progressState.setValue(3);
+                else
+                    progressState.setValue(0);
+            }
+        });
+    }
+
+    public void getUserInfo() {
+        userRepo.getUserInfo(new ApiResponse<KuknosInfoM>() {
+            @Override
+            public void onResponse(KuknosInfoM kuknosInfoM) {
+                userNum.set(kuknosInfoM.getPhoneNum());
+                ID.set(kuknosInfoM.getNationalID());
+                isRegisteredBefore = true;
+                progressState.setValue(2);
+            }
+
+            @Override
+            public void onFailed(String error) {
+                progressState.setValue(0);
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                if (visibility)
+                    progressState.setValue(1);
+            }
+        });
+    }
+
+    public boolean loginStatus() {
+        if (userRepo.getSeedKey() != null) {
+            if (!userRepo.getSeedKey().equals("-1"))
+                return true;
+        }
+        return false;
+    }
+
     // Setter and Getter
-
-    public String getUserNum() {
-        return userNum;
-    }
-
-    public void setUserNum(String userNum) {
-        this.userNum = userNum;
-    }
-
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
-    public MutableLiveData<KuknosLoginM> getLoginData() {
-        return loginData;
-    }
 
     public MutableLiveData<ErrorM> getError() {
         return error;
@@ -101,19 +125,31 @@ public class KuknosLoginVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public void setLoginData(MutableLiveData<KuknosLoginM> loginData) {
-        this.loginData = loginData;
-    }
-
     public void setError(MutableLiveData<ErrorM> error) {
         this.error = error;
     }
 
-    public MutableLiveData<Boolean> getProgressState() {
+    public ObservableField<String> getID() {
+        return ID;
+    }
+
+    public void setID(ObservableField<String> ID) {
+        this.ID = ID;
+    }
+
+    public ObservableField<String> getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(ObservableField<String> userNum) {
+        this.userNum = userNum;
+    }
+
+    public MutableLiveData<Integer> getProgressState() {
         return progressState;
     }
 
-    public void setProgressState(MutableLiveData<Boolean> progressState) {
+    public void setProgressState(MutableLiveData<Integer> progressState) {
         this.progressState = progressState;
     }
 }

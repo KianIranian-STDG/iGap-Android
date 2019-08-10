@@ -7,19 +7,28 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.google.gson.Gson;
+
+import net.iGap.api.apiService.ApiResponse;
 import net.iGap.helper.HelperCalander;
+import net.iGap.kuknos.service.Repository.PanelRepo;
+import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosWalletBalanceInfoM;
 import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
 
+import org.stellar.sdk.responses.AccountResponse;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class KuknosPanelVM extends ViewModel {
 
-    private MutableLiveData<KuknosWalletsAccountM> kuknosWalletsM;
+    private MutableLiveData<AccountResponse> kuknosWalletsM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Integer> openPage;
+    private PanelRepo panelRepo = new PanelRepo();
 
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
@@ -31,8 +40,8 @@ public class KuknosPanelVM extends ViewModel {
         currency.set("PMN");
 
         if (kuknosWalletsM == null) {
-            kuknosWalletsM = new MutableLiveData<KuknosWalletsAccountM>();
-            kuknosWalletsM.setValue(new KuknosWalletsAccountM());
+            kuknosWalletsM = new MutableLiveData<>();
+            //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
         }
         if (error == null) {
             error = new MutableLiveData<ErrorM>();
@@ -47,7 +56,7 @@ public class KuknosPanelVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        progressState.setValue(true);
+        /*progressState.setValue(true);
         // TODO Hard code in here baby
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -82,14 +91,37 @@ public class KuknosPanelVM extends ViewModel {
 
                 progressState.setValue(false);
             }
-        }, 1000);
+        }, 1000);*/
+        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+            @Override
+            public void onResponse(AccountResponse accountResponse) {
+                Log.d("amini", "onResponse: " + accountResponse.getBalances().length + " " + accountResponse.getBalances()[0].getBalance());
+                kuknosWalletsM.setValue(accountResponse);
+                //spinnerSelect(0);
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressState.setValue(visibility);
+            }
+        });
+    }
+
+    public String convertToJSON(int position) {
+        Gson gson = new Gson();
+        return gson.toJson(kuknosWalletsM.getValue().getBalances()[position]);
     }
 
     public void spinnerSelect(int position) {
         this.position = position;
-        KuknosWalletBalanceInfoM temp = kuknosWalletsM.getValue().getBalanceInfo().get(position);
+        AccountResponse.Balance temp = kuknosWalletsM.getValue().getBalances()[position];
         balance.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp.getBalance()) : temp.getBalance());
-        currency.set(temp.getAssetCode());
+        currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));
     }
 
     public void receiveW() {
@@ -124,16 +156,11 @@ public class KuknosPanelVM extends ViewModel {
         openPage.setValue(1);
     }
 
+    public String getPrivateKeyData() {
+        return panelRepo.getUserInfo();
+    }
+
     // getter and setter
-
-
-    public MutableLiveData<KuknosWalletsAccountM> getKuknosWalletsM() {
-        return kuknosWalletsM;
-    }
-
-    public void setKuknosWalletsM(MutableLiveData<KuknosWalletsAccountM> kuknosWalletsM) {
-        this.kuknosWalletsM = kuknosWalletsM;
-    }
 
     public MutableLiveData<ErrorM> getError() {
         return error;
@@ -181,5 +208,13 @@ public class KuknosPanelVM extends ViewModel {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public MutableLiveData<AccountResponse> getKuknosWalletsM() {
+        return kuknosWalletsM;
+    }
+
+    public void setKuknosWalletsM(MutableLiveData<AccountResponse> kuknosWalletsM) {
+        this.kuknosWalletsM = kuknosWalletsM;
     }
 }

@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModel;
 import android.os.Handler;
 
 import net.iGap.R;
+import net.iGap.kuknos.service.Repository.UserRepo;
+import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosPassM;
 
@@ -21,6 +23,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private String PIN3;
     private String PIN4;
     private boolean completePin = false;
+    private UserRepo userRepo = new UserRepo();
 
     public KuknosSetPassConfirmVM() {
         if (kuknosPassM == null) {
@@ -59,16 +62,21 @@ public class KuknosSetPassConfirmVM extends ViewModel {
 
     public void sendDataToServer() {
         progressState.setValue(true);
-        // TODO: send data to server
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                userRepo.setPIN(PIN);
+                try {
+                    userRepo.generateKeyPairWithMnemonicAndPIN();
+                    //success
+                    nextPage.setValue(true);
+                } catch (WalletException e) {
+                    //error
+                    error.setValue(new ErrorM(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+                    e.printStackTrace();
+                }
                 progressState.setValue(false);
-
-                //success
-                nextPage.setValue(true);
-                //error
 
             }
         }, 1000);

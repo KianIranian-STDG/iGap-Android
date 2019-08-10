@@ -2,20 +2,23 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableField;
 import android.os.Handler;
 
 import net.iGap.R;
+import net.iGap.kuknos.service.Repository.UserRepo;
+import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosRestoreM;
 
 public class KuknosShowRecoveryKeyVM extends ViewModel {
 
-    private MutableLiveData<KuknosRestoreM> kuknosRestoreM;
+    private UserRepo userRepo = new UserRepo();
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> advancedPage;
     private MutableLiveData<Boolean> progressState;
-    private String keys;
+    private ObservableField<String> mnemonic = new ObservableField<>();
 
     public KuknosShowRecoveryKeyVM() {
         if (nextPage == null) {
@@ -24,9 +27,6 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         }
         if (error == null) {
             error = new MutableLiveData<ErrorM>();
-        }
-        if (kuknosRestoreM == null) {
-            kuknosRestoreM = new MutableLiveData<KuknosRestoreM>();
         }
         if (advancedPage == null) {
             advancedPage = new MutableLiveData<Boolean>();
@@ -37,11 +37,21 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         }
     }
 
+    public void initMnemonic() {
+        userRepo.generateMnemonic();
+        if (userRepo.getMnemonic().equals("-1")) {
+            error.setValue(new ErrorM(true, "generate fatal error", "1", R.string.kuknos_RecoverySK_ErrorGenerateMn));
+            return;
+        }
+        mnemonic.set(userRepo.getMnemonic());
+    }
+
     public void onAdvancedSecurity() {
         advancedPage.setValue(true);
     }
 
     public void onNext() {
+
         progressState.setValue(true);
         // TODO call API
         // Data is Correct & proceed
@@ -49,12 +59,16 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //success
+                try {
+                    userRepo.generateKeyPairWithMnemonic();
+                    //success
+                    nextPage.setValue(true);
+                } catch (WalletException e) {
+                    //error
+                    error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+                    e.printStackTrace();
+                }
                 progressState.setValue(false);
-                nextPage.setValue(true);
-                //error
-                /*error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
-                progressState.setValue(false);*/
             }
         }, 1000);
     }
@@ -77,22 +91,6 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public String getKeys() {
-        return keys;
-    }
-
-    public void setKeys(String keys) {
-        this.keys = keys;
-    }
-
-    public MutableLiveData<KuknosRestoreM> getKuknosRestoreM() {
-        return kuknosRestoreM;
-    }
-
-    public void setKuknosRestoreM(MutableLiveData<KuknosRestoreM> kuknosRestoreM) {
-        this.kuknosRestoreM = kuknosRestoreM;
-    }
-
     public MutableLiveData<Boolean> getProgressState() {
         return progressState;
     }
@@ -107,5 +105,13 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
 
     public void setAdvancedPage(MutableLiveData<Boolean> advancedPage) {
         this.advancedPage = advancedPage;
+    }
+
+    public ObservableField<String> getMnemonic() {
+        return mnemonic;
+    }
+
+    public void setMnemonic(ObservableField<String> mnemonic) {
+        this.mnemonic = mnemonic;
     }
 }

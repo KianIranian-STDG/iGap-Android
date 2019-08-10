@@ -1,35 +1,46 @@
 package net.iGap.kuknos.service.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class KuknosLoginM {
 
-    private String userPhoneNum;
-    private String userID;
+    @SerializedName("ok")
+    private int ok;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("message")
+    private String message;
 
-    public KuknosLoginM(String userPhoneNum, String userID) {
-        this.userPhoneNum = userPhoneNum;
-        this.userID = userID;
+    public KuknosLoginM() {
     }
 
-    public String getUserPhoneNum() {
-        return userPhoneNum;
+    public KuknosLoginM(int ok, String name, String message) {
+        this.ok = ok;
+        this.name = name;
+        this.message = message;
     }
 
-    public void setUserPhoneNum(String userPhoneNum) {
-        this.userPhoneNum = userPhoneNum;
+    public String getName() {
+        return name;
     }
 
-    public String getUserID() {
-        return userID;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public String getMessage() {
+        return message;
     }
 
-    public boolean isUserIDValid() {
-        if (userID.length() != 10)
-            return false;
-        else
-            return true;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getOk() {
+        return ok;
+    }
+
+    public void setOk(int ok) {
+        this.ok = ok;
     }
 }

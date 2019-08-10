@@ -111,16 +111,16 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
-                    //TODO clear Log
-                    if (errorM.getMessage().equals("0")){
-                        Snackbar snackbar = Snackbar.make(binding.fragKuknosSPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                        snackbar.show();
+                    Snackbar snackbar = Snackbar.make(binding.fragKuknosSPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                        }
+                    });
+                    snackbar.show();
+                    if (errorM.getMessage().equals("")){
+                        binding.fragKuknosSPSubmit.setEnabled(false);
                     }
                 }
             }

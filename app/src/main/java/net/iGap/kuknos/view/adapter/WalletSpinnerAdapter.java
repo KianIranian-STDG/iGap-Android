@@ -1,10 +1,8 @@
 package net.iGap.kuknos.view.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -18,20 +16,22 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
-import net.iGap.kuknos.service.model.KuknosWalletBalanceInfoM;
+
+import org.stellar.sdk.responses.AccountResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WalletSpinnerAdapter extends BaseAdapter {
 
-    ArrayList<KuknosWalletBalanceInfoM> wallets;
+    ArrayList<AccountResponse.Balance> wallets;
     Context context;
 
-    public WalletSpinnerAdapter(Context context, List<KuknosWalletBalanceInfoM> objects) {
+    public WalletSpinnerAdapter(Context context, List<AccountResponse.Balance> objects) {
         if (wallets == null)
             wallets = new ArrayList<>();
         wallets.addAll(objects);
+        Log.d("amini", "getView size: " + wallets.size() + " " + wallets.get(0).getBuyingLiabilities());
         this.context = context;
     }
 
@@ -40,38 +40,43 @@ public class WalletSpinnerAdapter extends BaseAdapter {
 
         View layout = convertView;
 
+        Log.d("amini", "getView: " + position);
+
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layout = inflater.inflate(R.layout.fragment_kuknos_panel_spin_cell, parent, false);
 
-
         TextView walletName = layout.findViewById(R.id.fragKuknosPtextCell);
-        walletName.setText("" + wallets.get(position).getAssetCode());
-
         ImageView walletPic = layout.findViewById(R.id.fragKuknosPimgCell);
-        Picasso.get()
-                .load(wallets.get(position).getAssetPicURL())
+        /*Picasso.get()
+                .load("www.google.com")
                 .placeholder(R.drawable.ic_tab_wallet_normal)
-                .into(walletPic);
+                .into(walletPic);*/
 
-        if (position == (wallets.size()-1) && position != 0 && wallets.get(position).getAssetCode().equals("Add Asset")) {
+        if (position == (getCount()-1) && position != 0 /*&& wallets.get(position).getAssetCode().equals("Add Asset")*/) {
+            // set
+            walletName.setText(context.getResources().getString(R.string.kuknos_panel_addAsset));
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
+            // config text
             walletName.setTypeface(null, Typeface.BOLD);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-
+            // set style
             ConstraintLayout constraintLayout = layout.findViewById(R.id.fragKuknosPconstraint);
-            LinearLayout linearLayout = layout.findViewById(R.id.fragKuknosPLinear);
-
             constraintLayout.setBackgroundResource(R.drawable.kuknos_s_last_item_style);
-
-            /*ConstraintSet constraintSet = new ConstraintSet();
+            /*
+            LinearLayout linearLayout = layout.findViewById(R.id.fragKuknosPLinear);
+            ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(constraintLayout);
             float biasedValue = 0.5f;
             constraintSet.setHorizontalBias(linearLayout.getId(), biasedValue);
             constraintSet.applyTo(constraintLayout);*/
         } else {
+            // config text
             walletName.setTypeface(null, Typeface.NORMAL);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+            // set
+            Log.d("amini", "getView: asset type" + wallets.get(position).getAssetCode() + " " + wallets.get(position).getAssetCode());
+            walletName.setText("" + (wallets.get(position).getAsset().getType().equals("native") ? "PMN" : wallets.get(position).getAssetCode()));
         }
 
         return layout;
@@ -79,12 +84,12 @@ public class WalletSpinnerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return wallets.size();
+        return wallets.size()+1;
     }
 
     @Override
     public Object getItem(int position) {
-        return wallets.get(position);
+        return null;
     }
 
     @Override

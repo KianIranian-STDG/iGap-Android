@@ -11,6 +11,7 @@
 package net.iGap.realm;
 
 import net.iGap.helper.HelperString;
+import net.iGap.kuknos.service.model.KuknosRealmM;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
 
@@ -34,6 +35,7 @@ public class RealmUserInfo extends RealmObject {
     private boolean importContactLimit;
     private String pushNotificationToken;
     private String representPhoneNumber;
+    private KuknosRealmM kuknosM;
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
@@ -233,6 +235,7 @@ public class RealmUserInfo extends RealmObject {
         } catch (Exception e) {
             this.email = HelperString.getUtf8String(email);
         }
+
     }
 
     public boolean isFingerPrint() {
@@ -356,6 +359,44 @@ public class RealmUserInfo extends RealmObject {
                 }
             }
         });
+    }
+
+    // Kuknos seed key save and get process
+
+
+    public KuknosRealmM getKuknosM() {
+        return kuknosM;
+    }
+
+    public void setKuknosM(KuknosRealmM kuknosM) {
+        this.kuknosM = kuknosM;
+    }
+
+    public static void updateKuknos(KuknosRealmM kuknosM) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosM(kuknosM);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public void createKuknos() {
+        if (kuknosM == null) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    setKuknosM(realm.createObject(KuknosRealmM.class));
+                }
+            });
+            realm.close();
+        }
     }
 
 }

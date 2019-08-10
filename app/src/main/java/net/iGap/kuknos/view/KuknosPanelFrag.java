@@ -36,9 +36,13 @@ import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
+import org.stellar.sdk.responses.AccountResponse;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KuknosPanelFrag extends BaseFragment {
@@ -96,7 +100,7 @@ public class KuknosPanelFrag extends BaseFragment {
         walletSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getBalanceInfo().size()-1))
+                if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getBalances().length-1))
                     kuknosPanelVM.spinnerSelect(position);
                 else {
                     Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
@@ -122,6 +126,8 @@ public class KuknosPanelFrag extends BaseFragment {
         openPage();
         onDataChanged();
         onProgress();
+
+        Log.d("amini", "onClick: secret data  " + kuknosPanelVM.getPrivateKeyData());
     }
 
     private void initialSettingBS() {
@@ -171,13 +177,13 @@ public class KuknosPanelFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosPanelVM.getKuknosWalletsM().observe(getViewLifecycleOwner(), new Observer<KuknosWalletsAccountM>() {
+        kuknosPanelVM.getKuknosWalletsM().observe(getViewLifecycleOwner(), new Observer<AccountResponse>() {
             @Override
-            public void onChanged(@Nullable KuknosWalletsAccountM kuknosWalletsAccountM) {
-                Log.d("amini log", "onChanged: wallet " + kuknosPanelVM.getKuknosWalletsM().getValue().getBalanceInfo().size());
-                if (kuknosWalletsAccountM.getBalanceInfo().size() != 0) {
+            public void onChanged(@Nullable AccountResponse accountResponse) {
+                Log.d("amini log", "onChanged: wallet " + kuknosPanelVM.getKuknosWalletsM().getValue().getBalances().length);
+                if (accountResponse.getBalances().length != 0) {
                     WalletSpinnerAdapter adapter = new WalletSpinnerAdapter(getContext(),
-                            kuknosWalletsAccountM.getBalanceInfo());
+                            Arrays.asList(accountResponse.getBalances()));
                     walletSpinner.setAdapter(adapter);
                 }
             }
@@ -228,7 +234,7 @@ public class KuknosPanelFrag extends BaseFragment {
                         if (fragment == null) {
                             fragment = KuknosSendFrag.newInstance();
                             Bundle b = new Bundle();
-                            b.putParcelable("balanceClientInfo", kuknosPanelVM.getKuknosWalletsM().getValue().getBalanceInfo().get(kuknosPanelVM.getPosition()));
+                            b.putString("balanceClientInfo", kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()));
                             fragment.setArguments(b);
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         }
@@ -322,7 +328,8 @@ public class KuknosPanelFrag extends BaseFragment {
         File myExternalFile = new File(dir, getString(R.string.kuknos_setting_fileName));
         try {
             FileOutputStream fos = new FileOutputStream(myExternalFile);
-            fos.write(getString(R.string.kuknos_setting_fileContent).getBytes());
+            String temp = getString(R.string.kuknos_setting_fileContent) + kuknosPanelVM.getPrivateKeyData();
+            fos.write(temp.getBytes());
             fos.close();
         }
         catch (Exception e) {

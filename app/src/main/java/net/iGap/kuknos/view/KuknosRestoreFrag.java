@@ -30,7 +30,6 @@ public class KuknosRestoreFrag extends BaseFragment {
 
     private FragmentKuknosRestoreBinding binding;
     private KuknosRestoreVM kuknosRestoreVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosRestoreFrag newInstance() {
         KuknosRestoreFrag kuknosRestoreFrag = new KuknosRestoreFrag();
@@ -59,7 +58,7 @@ public class KuknosRestoreFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {

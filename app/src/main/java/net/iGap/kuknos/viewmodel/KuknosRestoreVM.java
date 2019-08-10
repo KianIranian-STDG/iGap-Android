@@ -2,10 +2,13 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableField;
 import android.os.Handler;
 import android.text.TextUtils;
 
 import net.iGap.R;
+import net.iGap.kuknos.service.Repository.UserRepo;
+import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosRestoreM;
 
@@ -13,11 +16,11 @@ import java.util.Objects;
 
 public class KuknosRestoreVM extends ViewModel {
 
-    private MutableLiveData<KuknosRestoreM> kuknosRestoreM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
-    private String keys;
+    private ObservableField<String> keys = new ObservableField<>();
+    private UserRepo userRepo = new UserRepo();
 
     public KuknosRestoreVM() {
         if (nextPage == null) {
@@ -27,9 +30,6 @@ public class KuknosRestoreVM extends ViewModel {
         if (error == null) {
             error = new MutableLiveData<ErrorM>();
         }
-        if (kuknosRestoreM == null) {
-            kuknosRestoreM = new MutableLiveData<KuknosRestoreM>();
-        }
         if (progressState == null) {
             progressState = new MutableLiveData<Boolean>();
             progressState.setValue(false);
@@ -37,30 +37,38 @@ public class KuknosRestoreVM extends ViewModel {
     }
 
     public void onNext() {
-        kuknosRestoreM.setValue(new KuknosRestoreM(keys));
-        if (TextUtils.isEmpty(Objects.requireNonNull(kuknosRestoreM).getValue().getKeys())) {
+        if (TextUtils.isEmpty(keys.get())) {
             error.setValue(new ErrorM(true, "Empty Entry", "0", R.string.kuknos_Restore_Error_empty_str));
         }
-        else if (!kuknosRestoreM.getValue().isValid()) {
+        else if (keys.get().split(" ").length < 12) {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_Restore_Error_invalid_str));
         }
         else {
-            progressState.setValue(true);
-            // TODO call API
-            // Data is Correct & proceed
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //success
-                    progressState.setValue(false);
-                    nextPage.setValue(true);
-                    //error
-                    /*error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
-                    progressState.setValue(false);*/
-                }
-            }, 1000);
+            generateKeypair();
         }
+    }
+
+    private void generateKeypair() {
+        progressState.setValue(true);
+        // TODO call API
+        // Data is Correct & proceed
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                userRepo.setMnemonic(keys.get());
+                try {
+                    userRepo.generateKeyPairWithMnemonic();
+                    //success
+                    nextPage.setValue(true);
+                } catch (WalletException e) {
+                    //error
+                    error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+                    e.printStackTrace();
+                }
+                progressState.setValue(false);
+            }
+        }, 1000);
     }
 
     //Setter and Getter
@@ -81,27 +89,19 @@ public class KuknosRestoreVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public String getKeys() {
-        return keys;
-    }
-
-    public void setKeys(String keys) {
-        this.keys = keys;
-    }
-
-    public MutableLiveData<KuknosRestoreM> getKuknosRestoreM() {
-        return kuknosRestoreM;
-    }
-
-    public void setKuknosRestoreM(MutableLiveData<KuknosRestoreM> kuknosRestoreM) {
-        this.kuknosRestoreM = kuknosRestoreM;
-    }
-
     public MutableLiveData<Boolean> getProgressState() {
         return progressState;
     }
 
     public void setProgressState(MutableLiveData<Boolean> progressState) {
         this.progressState = progressState;
+    }
+
+    public ObservableField<String> getKeys() {
+        return keys;
+    }
+
+    public void setKeys(ObservableField<String> keys) {
+        this.keys = keys;
     }
 }
