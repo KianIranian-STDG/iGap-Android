@@ -2,6 +2,7 @@ package net.iGap.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.module.structs.StructListOfContact;
 
 import java.util.List;
@@ -20,7 +22,6 @@ import java.util.List;
 public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.ViewHolder> {
 
     public String item;
-    public String phone;
     private List<StructListOfContact> mPhoneContactList;
     private Context context;
 
@@ -52,6 +53,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         private TextView title;
         private TextView subtitle;
         private ViewGroup rootView;
+        private View line ;
 
         public ViewHolder(View view) {
             super(view);
@@ -59,28 +61,26 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             rootView = view.findViewById(R.id.liContactItem);
             title = view.findViewById(R.id.title);
             subtitle = view.findViewById(R.id.subtitle);
+            line = view.findViewById(R.id.topLine);
 
         }
 
         void initView(StructListOfContact contact) {
+
+            if (getAdapterPosition() != 0 ) {
+                line.setVisibility(View.VISIBLE);
+            }else {
+                line.setVisibility(View.GONE);
+            }
             title.setText(contact.getDisplayName());
             subtitle.setText(contact.getPhone());
 
-            rootView.setOnClickListener(v -> new MaterialDialog.Builder(G.fragmentActivity)
-                    .title(G.fragmentActivity.getResources()
-                            .getString(R.string.igap))
-                    .content(G.fragmentActivity.getResources().getString(R.string.invite_friend))
-                    .positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel))
-                    .onPositive((dialog, which) -> {
-
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra("address", phone);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, context.getResources().getString(R.string.invitation_message) + G.userId);
-                        sendIntent.setType("text/plain");
-                        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        G.context.startActivity(sendIntent);
-                    }).show());
+            rootView.setOnClickListener(v -> {
+                Intent smsIntent = new Intent(Intent.ACTION_SENDTO , Uri.parse("smsto:" + contact.getPhone()));
+                smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + ActivityMain.userPhoneNumber);
+                smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.context.startActivity(smsIntent);
+            });
         }
     }
 }

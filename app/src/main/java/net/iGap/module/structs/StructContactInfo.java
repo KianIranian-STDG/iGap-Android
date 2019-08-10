@@ -10,6 +10,8 @@
 
 package net.iGap.module.structs;
 
+import android.support.annotation.Nullable;
+
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 
@@ -38,5 +40,17 @@ public class StructContactInfo {
 
     public StructContactInfo() {
 
+    }
+
+    public StructContactInfo(long peerId) {
+        this.peerId = peerId;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof StructContactInfo){
+            return this.peerId == ((StructContactInfo) obj).peerId;
+        }
+        return super.equals(obj);
     }
 }

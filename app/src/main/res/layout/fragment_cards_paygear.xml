@@ -17,12 +17,13 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <ImageView
+        <TextView
             android:id="@+id/imgQrCode"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/qr_logo"
-            android:padding="5dp"/>
+            android:text="@string/scan_qr_code_icon"
+            style="@style/myIconTextViewStyle" />
+
         <TextView
             android:id="@+id/balance_title"
             android:layout_weight="1"
@@ -33,6 +34,18 @@
             android:text="@string/paygear_balance"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"/>
+
+        <ImageView
+            android:id="@+id/reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_refresh_pec"
+            android:tint="@color/green"
+            android:padding="8dp"/>
 
         <ImageView
             android:id="@+id/history"
@@ -208,6 +221,6 @@
         </FrameLayout>
 
     </LinearLayout>
-    
+
 
 </LinearLayout>

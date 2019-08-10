@@ -41,6 +41,7 @@ import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
@@ -610,6 +611,16 @@ public class HelperNotification {
         showPopUp = new ShowPopUp();
     }
 
+    public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            addMessage(roomId, roomMessage, roomType, room, realm);
+        }
+        realm.close();
+
+    }
+
     public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {
 
         if (roomId == FragmentChat.lastChatRoomId) {
@@ -691,7 +702,6 @@ public class HelperNotification {
             if (!G.isAppInFg && !AttachFile.isInAttach) {
                 showPopUp.checkPopUp(popUpMode);
             }
-
 
         }
 

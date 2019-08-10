@@ -13,6 +13,7 @@ package net.iGap.adapter.items;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -64,11 +65,14 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         super.bindView(holder, payloads);
 
         //holder.checkBoxSelect.setChecked(true);
+        holder.topLine.setVisibility(View.GONE);
 
-        if (mContact.isHeader) {
-            holder.topLine.setVisibility(View.VISIBLE);
-        } else {
-            holder.topLine.setVisibility(View.GONE);
+        if (G.selectedLanguage.equals("en")){
+            holder.subtitle.setGravity(Gravity.LEFT);
+            holder.title.setGravity(Gravity.LEFT);
+        }else {
+            holder.subtitle.setGravity(Gravity.RIGHT);
+            holder.title.setGravity(Gravity.RIGHT);
         }
 
         if (mContact.isSelected) {
@@ -100,6 +104,13 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         return new ViewHolder(v);
     }
 
+    public String getBubbleText() {
+        if (mContact == null )
+            return "-";
+        else {
+            return mContact.displayName.toLowerCase().substring(0, 1).toUpperCase();
+        }
+    }
     public interface OnClickAdapter {
         void onclick(long peerId, Uri uri, String displayName, boolean checked);
     }

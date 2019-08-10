@@ -21,6 +21,8 @@ import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 
+import java.util.HashSet;
+
 public class RequestFileDownload {
 
     public static int maxLimitDownload = 0;
@@ -29,7 +31,9 @@ public class RequestFileDownload {
     private final int KB_50 = 50 * 1024;
     private final int KB_100 = 100 * 1024;
 
-    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity) {
+    public static HashSet<String> downloadPending = new HashSet<>();
+
+    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity, Boolean checkDuplicate) {
         ProtoFileDownload.FileDownload.Builder builder = ProtoFileDownload.FileDownload.newBuilder();
 
         if (token == null) {
@@ -42,12 +46,26 @@ public class RequestFileDownload {
         builder.setMaxLimit(getMaxLimitDownload());
         builder.setSelector(selector);
 
+        if (checkDuplicate && downloadPending.contains(token + "" + offset)) {
+            return;
+        }
+
         try {
-            RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
-            RequestQueue.sendRequest(requestWrapper);
+            if (checkDuplicate && G.userLogin) {
+                RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
+                RequestQueue.sendRequest(requestWrapper);
+                downloadPending.add(token + "" + offset);
+            } else {
+                RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
+                RequestQueue.sendRequest(requestWrapper);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity) {
+        download(token, offset, maxLimit, selector, identity, false);
     }
 
     /**

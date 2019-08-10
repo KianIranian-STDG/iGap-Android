@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Material_blackCustom" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Material_blackCustom" parent="BaseTheme">
+        <item name="colorAccent">@color/green</item>
         <item name="pageBackgroundTheme">@style/page_background_black</item>
         <item name="textColorTheme">@style/text_style_black</item>
         <item name="textColorMenuTheme">@style/text_style_menu_dark</item>
@@ -26,10 +27,12 @@
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="textColorBottomSheet">@style/FabButton_dark</item>
         <item name="iGapButton">@style/iGapButtonDark</item>
+        <item name="iGapButtonGray">@style/iGapButtonGrayDark</item>
         <!--<item name="colorAccent">@color/colorOldBlack</item>-->
     </style>
 
-    <style name="Material_lightCustom" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Material_lightCustom" parent="BaseTheme">
+        <item name="colorAccent">@color/green</item>
         <item name="pageBackgroundTheme">@style/page_background_light</item>
         <item name="textColorTheme">@style/text_style_light</item>
         <item name="textColorMenuTheme">@style/text_style_menu_light</item>
@@ -53,6 +56,7 @@
         <item name="md_medium_font">IRANSansMobile.ttf</item>
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="iGapButton">@style/iGapButtonLight</item>
+        <item name="iGapButtonGray">@style/iGapButtonGrayLight</item>
         <!--<item name="colorAccent">@color/white</item>-->
     </style>
 

@@ -25,6 +25,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.BaseMainFragments;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -32,7 +33,7 @@ import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 
-public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
+public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
@@ -103,7 +104,7 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
                     .setFragmentActivity(getActivity())
                     .setPassCodeVisibility(true, R.string.unlock_icon)
                     .setScannerVisibility(true, R.string.scan_qr_code_icon)
-                    .setSearchBoxShown(true, false)
+                  //  .setSearchBoxShown(true, false)
                     .setListener(this);
         }
 
@@ -126,26 +127,26 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
             }
         });
 
-        if (page == 0) {
-            rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
+//        /*if (page == 0) {
+//            rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                    super.onScrolled(recyclerView, dx, dy);
+//
+//                    int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+//
+//                    //check recycler scroll for search box animation
+//                    if (dy <= 0) {
+//                        // Scrolling up
+//                        mHelperToolbar.animateSearchBox(false, position, -2);
+//                    } else {
+//                        // Scrolling down
+//                        mHelperToolbar.animateSearchBox(true, position, -2);
+//                    }
+//                }
+//            });
 
-                    int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-                    //check recycler scroll for search box animation
-                    if (dy <= 0) {
-                        // Scrolling up
-                        mHelperToolbar.animateSearchBox(false, position, -2);
-                    } else {
-                        // Scrolling down
-                        mHelperToolbar.animateSearchBox(true, position, -2);
-                    }
-                }
-            });
-
-        }
+//       }
 
         pullToRefresh.setOnRefreshListener(() -> {
             setRefreshing(true);
@@ -276,5 +277,10 @@ public class DiscoveryFragment extends BaseFragment implements ToolbarListener {
     @Override
     public void onSearchClickListener(View view) {
 
+    }
+
+    @Override
+    public boolean isAllowToBackPressed() {
+        return true;
     }
 }

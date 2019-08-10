@@ -148,12 +148,22 @@ public class FragmentRegistrationNickname extends BaseFragment {
 
         viewModel.goToMain.observe(this, userId -> {
             HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
-            if (getActivity() != null && userId != null) {
+
+            /*if (getActivity() != null && userId != null) {
                 Intent intent = new Intent(getActivity(), ActivityMain.class);
                 intent.putExtra(ARG_USER_ID, userId);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getActivity().startActivity(intent);
                 getActivity().finish();
+            }*/
+
+            if (getArguments() != null && getActivity() != null) {
+                FragmentSyncRegisteredContacts fragment = new FragmentSyncRegisteredContacts();
+                Bundle bundle = new Bundle();
+                bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentRegistrationNickname.this).commitAllowingStateLoss();
             }
         });
     }

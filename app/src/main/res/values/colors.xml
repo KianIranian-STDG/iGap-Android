@@ -9,6 +9,7 @@
     <color name="red">#f23131</color>
     <color name="red_swipe">#ac3328</color>
     <color name="green">@color/setting_items_value_color</color>
+    <color name="green_dark">#2D7A17</color>
     <!--<color name="green">#C4D838</color>-->
     <color name="green_20">#2000B0BF</color>
     <color name="verify_color">#1da1f2</color>
@@ -44,7 +45,8 @@
     //mo
     <!--toolbar-->
 
-    <color name="toolbar_background">#00B0BF</color>
+    <!--<color name="toolbar_background">#00B0BF</color>-->
+    <color name="toolbar_background">@color/green</color>
     <color name="toolbar_transparent">#bf000000</color>
 
     <!--REGISTER PAGE-->
@@ -148,8 +150,8 @@
     <color name="background_checkbox_bottomSheet">#758b8b8b</color>
     <color name="background_check_gps">#85565656</color>
 
-    <color name="background_setting_dark">#2c363f</color>
-    <color name="background_setting_dark_2">#2c363f</color>
+    <color name="background_setting_dark">#2f2f2f</color>
+    <color name="background_setting_dark_2">#2f2f2f</color>
 
     <color name="background_setting_light">#f4f0e8</color>
     <color name="background_setting_light_2">#f7f7f7</color>
@@ -272,5 +274,7 @@
 
     <color name="gray50">#FAFAFA</color>
     <color name="gray100">#F5F5F5</color>
+    <color name="chat_bubble_color">#f5ffec</color>
+    <color name="chat_bubble_color_dark">#565656</color>
 
 </resources>

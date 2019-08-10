@@ -157,6 +157,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public UserProfileViewModel() {
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {
             userInfo.addChangeListener(realmModel -> {
                 Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
@@ -165,47 +166,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 updateUserInfoUI();
             });
         }
-        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-            @Override
-            public void onChangePhoto(final String imagePath) {
-                setUserAvatarPath.postValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
-            }
-
-            @Override
-            public void onChangeInitials(final String initials, final String color) {
-                setUserAvatarPath.postValue(new ChangeImageModel(null, initials, color));
-            }
-        };
-
-        FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
-            long mAvatarId = 0;
-            if (messageOne != null && !messageOne.equals("")) {
-                mAvatarId = Long.parseLong(messageOne);
-            }
-            long finalMAvatarId = mAvatarId;
-            deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
-        };
-
-        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
-            pathSaveImage = path;
-            long lastUploadedAvatarId = idAvatar + 1L;
-            showLoading.set(View.VISIBLE);
-            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress >= 100) {
-                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                    }
-                }
-
-                @Override
-                public void OnError() {
-                    G.handler.post(() -> showLoading.set(View.GONE));
-                }
-            });
-        };
-
-        G.onUserAvatarResponse = this;
     }
 
     public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
@@ -229,6 +189,48 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             getUserCredit();
         }
+
+        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
+            pathSaveImage = path;
+            long lastUploadedAvatarId = idAvatar + 1L;
+            showLoading.set(View.VISIBLE);
+            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress >= 100) {
+                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                    }
+                }
+
+                @Override
+                public void OnError() {
+                    G.handler.post(() -> showLoading.set(View.GONE));
+                }
+            });
+        };
+
+        FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
+            long mAvatarId = 0;
+            if (messageOne != null && !messageOne.equals("")) {
+                mAvatarId = Long.parseLong(messageOne);
+            }
+            long finalMAvatarId = mAvatarId;
+            deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
+        };
+
+        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
+            @Override
+            public void onChangePhoto(final String imagePath) {
+                setUserAvatarPath.postValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
+            }
+
+            @Override
+            public void onChangeInitials(final String initials, final String color) {
+                setUserAvatarPath.postValue(new ChangeImageModel(null, initials, color));
+            }
+        };
+
+        G.onUserAvatarResponse = this;
 
         getIVandScore();
         new RequestUserProfileGetGender().userProfileGetGender();
@@ -367,10 +369,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 G.onChatGetRoom = new OnChatGetRoom() {
                     @Override
                     public void onChatGetRoom(ProtoGlobal.Room room) {
+                        RealmRoom.putOrUpdate(room);
                         G.onChatGetRoom = null;
                         G.handler.post(() -> {
                             showLoading.set(View.GONE);
-                            goToChatPage.postValue(new GoToChatModel(room.getId(),userInfo.getUserId()));
+                            goToChatPage.postValue(new GoToChatModel(room.getId(), userInfo.getUserId()));
                         });
                     }
 
@@ -476,7 +479,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onFAQClick() {
-        goToFAQPage.setValue(HelperCalander.isPersianUnicode ? "https://blog.igap.net/fa" : "https://blog.igap.net");
+        goToFAQPage.setValue("https://blog.igap.net/fa/%d9%be%d8%b1%d8%b3%d8%b4%e2%80%8c%d9%87%d8%a7%db%8c-%d9%85%d8%aa%d8%af%d8%a7%d9%88%d9%84/");
     }
 
     public void onAvatarClick() {
@@ -807,7 +810,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-                G.handler.post(() -> currentScore.set(String.valueOf(score.getScore())));
+                G.handler.post(() -> currentScore.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(score.getScore())) : String.valueOf(score.getScore())));
             }
 
             @Override
@@ -819,6 +822,20 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
         });
+    }
+
+    public boolean checkEditModeForOnBackPressed() {
+        if (isEditProfile.getValue() != null) {
+            if (isEditProfile.getValue()) {
+                isEditProfile.setValue(false);
+                getEditProfileIcon().set(R.string.edit_icon);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -943,7 +960,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         private long peerId;
 
         public GoToChatModel(long roomId, long peerId) {
-            this.roomId = userId;
+            this.roomId = roomId;
             this.peerId = peerId;
         }
 

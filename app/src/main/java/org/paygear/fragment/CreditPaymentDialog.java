@@ -188,9 +188,13 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
             if (mAmount <= selectedCard.balance) {
                 creditPaymentBinding.paygearCardBalanceTitle.setVisibility(View.GONE);
                 creditPaymentBinding.paygearCardBalance.setVisibility(View.GONE);
+                creditPaymentBinding.amountToPayFactor.setVisibility(View.GONE);
+                creditPaymentBinding.amountToPayFactorTitle.setVisibility(View.GONE);
             } else {
                 creditPaymentBinding.paygearCardBalanceTitle.setVisibility(View.VISIBLE);
                 creditPaymentBinding.paygearCardBalance.setVisibility(View.VISIBLE);
+                creditPaymentBinding.amountToPayFactor.setVisibility(View.VISIBLE);
+                creditPaymentBinding.amountToPayFactorTitle.setVisibility(View.VISIBLE);
 
             }
 
@@ -205,6 +209,7 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
             }
             creditPaymentBinding.paygearCardBalance.setText(RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, false));
             creditPaymentBinding.clubCardBalance.setText(RaadCommonUtils.formatPrice(clubAvailableAmount, false));
+            creditPaymentBinding.amountToPayFactor.setText(RaadCommonUtils.formatPrice(mAmount - clubAvailableAmount, false));
             if (mAmount > selectedCard.balance + RaadApp.paygearCard.balance) {
                 creditPaymentBinding.paygearCardBalance.setTextColor(Color.RED);
                 creditPaymentBinding.paygearCardBalanceTitle.setTextColor(Color.RED);

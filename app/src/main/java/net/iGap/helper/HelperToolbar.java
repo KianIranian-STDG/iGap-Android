@@ -122,6 +122,7 @@ public class HelperToolbar {
     private int mPassCodeIcon;
     private int mScannerIcon;
     private int mAnimationOldPositionItem = 0;
+    private boolean isRoundBackground = true;
 
     private HelperToolbar() {
     }
@@ -188,6 +189,11 @@ public class HelperToolbar {
 
     public HelperToolbar setLogoShown(boolean logoShown) {
         this.isLogoShown = logoShown;
+        return this;
+    }
+
+    public HelperToolbar setRoundBackground(boolean isRound) {
+        this.isRoundBackground = isRound;
         return this;
     }
 
@@ -339,6 +345,7 @@ public class HelperToolbar {
         }
 
         if (mTxtLogo != null){
+            mTxtLogo.setOnClickListener(v -> mToolbarListener.onToolbarTitleClickListener(v));
             toolBarTitleHandler();
             checkIGapFont();
         }
@@ -375,7 +382,6 @@ public class HelperToolbar {
         }
 
     }
-
 
     public void resizeSearchBoxWithAnimation(final boolean bigView , final boolean isOpenKeyboard ) {
 
@@ -852,7 +858,7 @@ public class HelperToolbar {
 
             mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ")) {
+        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آي كب")) {
 
             Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
 
@@ -938,6 +944,8 @@ public class HelperToolbar {
                 else if (isShowEditTextForSearch) {
                     closeKeyboard();
                     G.handler.postDelayed(() -> {
+                        if (mToolbarListener!=null)
+                            mToolbarListener.onSearchBoxClosed();
                         resizeSearchBoxWithAnimation(false , false);
                     } , 200);
                 }
@@ -1004,29 +1012,28 @@ public class HelperToolbar {
 
     private void onScannerClickListener() {
 
-//        if (!G.isWalletRegister) {
-//            new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
-//        } else {
-//            Intent intent = new Intent(mContext, WalletActivity.class);
-//            intent.putExtra("Language", "fa");
-//            intent.putExtra("Mobile", "0" + ActivityMain.userPhoneNumber.substring(2));
-//            intent.putExtra("PrimaryColor", G.appBarColor);
-//            intent.putExtra("DarkPrimaryColor", G.appBarColor);
-//            intent.putExtra("AccentColor", G.appBarColor);
-//            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-//            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-//            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-//            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-//            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-//            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-//            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-//            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-//            intent.putExtra("isScan",true);
-//            G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
-//        }
+        if (!G.isWalletRegister) {
+            new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
+        } else {
+            Intent intent = new Intent(mContext, WalletActivity.class);
+            intent.putExtra("Language", "fa");
+            intent.putExtra("Mobile", "0" + ActivityMain.userPhoneNumber.substring(2));
+            intent.putExtra("PrimaryColor", G.appBarColor);
+            intent.putExtra("DarkPrimaryColor", G.appBarColor);
+            intent.putExtra("AccentColor", G.appBarColor);
+            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
+            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
+            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+            intent.putExtra("isScan",true);
+            G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
+        }
 
 
-        new HelperFragment(mFragmentActivity.getSupportFragmentManager(), new BeepTunesFragment()).setReplace(false).load();
     }
 
     private void initViews(ViewMaker view) {
@@ -1274,11 +1281,18 @@ public class HelperToolbar {
                 //contain : buttons , logo
                 mainConstraint = new ConstraintLayout(getContext());
                 mainConstraint.setId(R.id.view_toolbar_main_constraint);
-                if (isDark)
-                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-                else
-                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
 
+                if (isRoundBackground){
+                    if (isDark)
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
+                    else
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
+                }else {
+                    if (isDark)
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect_dark);
+                    else
+                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect);
+                }
                 setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));
                 setRoot.constrainWidth(mainConstraint.getId(), MATCH_CONSTRAINT);
                 setRoot.connect(mainConstraint.getId(), START, PARENT_ID, START);

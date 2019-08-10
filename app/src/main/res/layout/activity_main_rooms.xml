@@ -3,10 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layoutDirection="locale"
+    android:id="@+id/amr_layout_root">
+
+    <include
+        android:id="@+id/empty_icon"
+        layout="@layout/empty_layout"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <HorizontalScrollView
-        android:id="@+id/v0"
+        android:id="@+id/amr_layout_selected_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_search"
@@ -100,7 +111,6 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cl_recycler_view_contact"
-        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -108,7 +118,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/v0" />
+        app:layout_constraintTop_toBottomOf="@id/amr_layout_selected_root" />
 
     <LinearLayout
         android:id="@+id/amr_layout_toolbar"
@@ -116,15 +126,6 @@
         android:layout_height="wrap_content"
         android:minHeight="@dimen/toolbar_height_root_with_search"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/empty_icon"
-        layout="@layout/empty_layout"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

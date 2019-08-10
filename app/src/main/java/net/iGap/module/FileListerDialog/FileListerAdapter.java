@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -181,13 +182,20 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
     @Override
     public void onBindViewHolder(FileListHolder holder, int position) {
         File f = data.get(position);
+
+        if (G.selectedLanguage.equals("en")){
+            holder.name.setGravity(Gravity.LEFT);
+        }else{
+            holder.name.setGravity(Gravity.RIGHT);
+        }
+
         if (f != null) {
             holder.name.setText(f.getName());
         } else if (!unreadableDir) {
             holder.name.setText(G.context.getResources().getString(R.string.Create_new_Folder_here));
-            holder.icon.setImageResource(R.drawable.ic_create_new_folder_black_48dp);
+            holder.icon.setText(G.context.getString(R.string.folder_icon));
         }
-        holder.icon.setColorFilter(Color.parseColor(G.appBarColor));
+
         if (unreadableDir) {
             if (f != null) {
                 if (position == 0) {
@@ -198,18 +206,18 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
             }
         }
         if (position == 0 && f != null && !unreadableDir) {
-            holder.icon.setImageResource(R.drawable.ic_subdirectory_up_black_48dp);
+            holder.icon.setText(G.context.getString(R.string.arrow_up_icon));
         } else if (f != null) {
             if (f.isDirectory())
-                holder.icon.setImageResource(R.drawable.ic_folder_black_48dp);
+                holder.icon.setText(G.context.getString(R.string.folder_icon));
             else if (S.isImage(f))
-                holder.icon.setImageResource(R.drawable.ic_photo_black_48dp);
+                holder.icon.setText(G.context.getString(R.string.photo_icon));
             else if (S.isVideo(f))
-                holder.icon.setImageResource(R.drawable.ic_videocam_black_48dp);
+                holder.icon.setText(G.context.getString(R.string.video_call_icon));
             else if (S.isAudio(f))
-                holder.icon.setImageResource(R.drawable.ic_audiotrack_black_48dp);
+                holder.icon.setText(G.context.getString(R.string.music_icon));
             else
-                holder.icon.setImageResource(R.drawable.ic_insert_drive_file_black_48dp);
+                holder.icon.setText(G.context.getString(R.string.file_icon));
         }
     }
 
@@ -229,7 +237,7 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
     class FileListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView name;
-        ImageView icon;
+        TextView icon;
 
         FileListHolder(View itemView) {
             super(itemView);

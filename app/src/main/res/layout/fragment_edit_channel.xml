@@ -11,7 +11,8 @@
     <android.support.constraint.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layoutDirection="locale">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -57,14 +58,14 @@
                     android:maxLines="1"
                     android:text="@={viewModel.channelName}"
                     android:textSize="@dimen/standardTextSize"
-                    app:emojiSize="@dimen/dp22"
+                    app:emojiSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toTopOf="@id/line"
                     app:layout_constraintLeft_toRightOf="@id/channelAvatar"
                     app:layout_constraintRight_toLeftOf="@id/emojiButton" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/emojiButton"
-                    style="?emojiChat"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp16"
@@ -163,6 +164,7 @@
                     android:layout_width="@dimen/toggles_width"
                     android:layout_height="@dimen/toggles_height"
                     android:checked="@={viewModel.isSignedMessage}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}"
                     app:layout_constraintBottom_toBottomOf="@id/signedMessageTxt"
                     app:layout_constraintEnd_toEndOf="@id/signedMessageTxt"
@@ -202,6 +204,7 @@
                     android:layout_width="@dimen/toggles_width"
                     android:layout_height="@dimen/toggles_height"
                     android:checked="@={viewModel.isReactionMessage}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
                     app:layout_constraintBottom_toBottomOf="@id/rateMessageTxt"
                     app:layout_constraintEnd_toEndOf="@id/rateMessageTxt"

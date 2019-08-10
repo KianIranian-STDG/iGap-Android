@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
@@ -27,7 +28,6 @@ import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
 
 import net.iGap.R;
-import net.iGap.activities.ActivityRegisteration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperFragment;
@@ -45,13 +45,18 @@ public class FragmentActivation extends BaseFragment {
     private FragmentActivationViewModel viewModel;
     private SMSReceiver smsReceiver;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(FragmentActivationViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_activation, container, false);
-        viewModel = new FragmentActivationViewModel(((ActivityRegisteration) getActivity()).repository);
         binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
 
@@ -72,17 +77,17 @@ public class FragmentActivation extends BaseFragment {
             }
         });
 
-        viewModel.verifyCode.observe(this, s -> {
+        viewModel.verifyCode.observe(getViewLifecycleOwner(), s -> {
             if (s != null) {
                 setActivationCode(s);
             }
         });
-        viewModel.showEnteredCodeError.observe(this, aBoolean -> {
+        viewModel.showEnteredCodeError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && getContext() != null) {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.Enter_Code).setMessage(R.string.Toast_Enter_Code).setPositiveButton(R.string.B_ok, null).show();
             }
         });
-        viewModel.currentTimePosition.observe(this, integer -> {
+        viewModel.currentTimePosition.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
                 ConstraintSet set1 = new ConstraintSet();
                 set1.clone(binding.root);
@@ -95,40 +100,40 @@ public class FragmentActivation extends BaseFragment {
                 }
             }
         });
-        viewModel.showWaitDialog.observe(this, waitTimeModel -> {
+        viewModel.showWaitDialog.observe(getViewLifecycleOwner(), waitTimeModel -> {
             if (waitTimeModel != null) {
                 dialogWaitTime(waitTimeModel);
             }
         });
-        viewModel.closeKeyword.observe(this, aBoolean -> {
+        viewModel.closeKeyword.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 hideKeyboard();
             }
         });
-        viewModel.showEnteredCodeErrorServer.observe(this, integer -> {
+        viewModel.showEnteredCodeErrorServer.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null && getContext() != null) {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(integer).setPositiveButton(R.string.ok, null).show();
             }
         });
-        viewModel.clearActivationCode.observe(this, aBoolean -> {
+        viewModel.clearActivationCode.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 clearActivationCode();
             }
         });
 
-        viewModel.goToTwoStepVerificationPage.observe(this, userId -> {
+        viewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
             if (getActivity() != null && userId != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), TwoStepVerificationFragment.newInstant(userId)).setResourceContainer(R.id.ar_layout_root).load(false);
             }
         });
 
-        viewModel.showDialogUserBlocked.observe(this, isShow -> {
+        viewModel.showDialogUserBlocked.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
                 new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
             }
         });
 
-        viewModel.showDialogVerificationCodeExpired.observe(this, isShow -> {
+        viewModel.showDialogVerificationCodeExpired.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
                 new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_EXPIRED).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
             }

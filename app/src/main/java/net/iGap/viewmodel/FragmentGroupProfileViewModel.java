@@ -6,7 +6,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,9 @@ import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnGroupAddMember;
+import net.iGap.interfaces.OnGroupDelete;
 import net.iGap.interfaces.OnGroupKickMember;
+import net.iGap.interfaces.OnGroupLeft;
 import net.iGap.interfaces.OnGroupRemoveUsername;
 import net.iGap.interfaces.OnGroupRevokeLink;
 import net.iGap.interfaces.OnMenuClick;
@@ -38,8 +39,11 @@ import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddModerator;
+import net.iGap.request.RequestGroupDelete;
+import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestUserInfo;
@@ -52,17 +56,10 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
-
 public class FragmentGroupProfileViewModel extends ViewModel {
-
-    private static final int DEFAULT = 0;
-    private static final int ENABLE = 1;
-    private static final int DISABLE = 2;
 
     public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
     public ObservableBoolean isUnMuteNotification = new ObservableBoolean(true);
-    public ObservableInt notificationState = new ObservableInt(R.string.array_Default);
     public ObservableInt noMediaSharedVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoCount = new ObservableInt(0);
@@ -83,6 +80,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public ObservableInt inviteLinkTitle = new ObservableInt(R.string.group_link);
     public ObservableInt showLoading = new ObservableInt(View.GONE);
     public ObservableInt showLink = new ObservableInt(View.GONE);
+    public ObservableInt showLeaveGroup = new ObservableInt(View.GONE);
 
     //ui Observable
     public MutableLiveData<String> groupName = new MutableLiveData<>();
@@ -98,10 +96,11 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     public MutableLiveData<String> groupDescription = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
+    public MutableLiveData<Long> goToCustomNotificationPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showMoreMenu = new MutableLiveData<>();
     public MutableLiveData<Boolean> showEditButton = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showNotificationDialog = new MutableLiveData<>();
     public MutableLiveData<String> showDialogCopyLink = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogLeaveGroup = new MutableLiveData<>();
 
     private RealmRoom realmRoom;
     private boolean isNotJoin;
@@ -123,14 +122,11 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private String memberCount;
     private RealmNotificationSetting realmNotificationSetting;
 
+    public void init(FragmentGroupProfile fragmentGroupProfile, long roomId, boolean isNotJoin) {
 
-    public FragmentGroupProfileViewModel(FragmentGroupProfile fragmentGroupProfile , long roomId, boolean isNotJoin) {
-
-        this.fragment = fragmentGroupProfile ;
+        this.fragment = fragmentGroupProfile;
         this.roomId = roomId;
         this.isNotJoin = isNotJoin;
-
-        realmGroupProfile = Realm.getDefaultInstance();
 
         //group info
         realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -145,18 +141,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                 } else {
                     realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
                 }
-                getRealm();
-                switch (realmNotificationSetting.getNotification()) {
-                    case DEFAULT:
-                        notificationState.set(R.string.array_Default);
-                        break;
-                    case ENABLE:
-                        notificationState.set(R.string.array_enable);
-                        break;
-                    case DISABLE:
-                        notificationState.set(R.string.array_Disable);
-                        break;
-                }
             }
         }
 
@@ -169,6 +153,8 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
+
+        isUnMuteNotification.set(realmRoom.getMute());
 
         inviteLink.set(realmGroupRoom.getInvite_link());
         linkUsername = realmGroupRoom.getUsername();
@@ -185,6 +171,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         //OWNER,ADMIN,MODERATOR,MEMBER can add member to group
         addMemberVisibility.set(View.VISIBLE);
         showEditButton.setValue(role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER);
+        showLeaveGroup.set(role != GroupChatRole.ADMIN && role != GroupChatRole.OWNER ? View.VISIBLE : View.GONE);
 
         showMoreMenu.setValue(!isNotJoin);
 
@@ -194,6 +181,87 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         onGroupAddMemberCallback();
         onGroupKickMemberCallback();
 
+        if (realmRoom != null) {
+            realmRoom.addChangeListener((realmModel, changeSet) -> {
+                if (changeSet != null) {
+                    if (changeSet.isDeleted()) {
+                        goToRoomListPage.setValue(true);
+                    } else if (((RealmRoom) realmModel).isValid()) {
+                        isUnMuteNotification.set(realmRoom.getMute());
+                        String countText = ((RealmRoom) realmModel).getSharedMediaCount();
+
+                        groupName.postValue(realmRoom.getTitle());
+                        groupDescription.postValue(realmRoom.getGroupRoom().getDescription());
+
+                        if (HelperCalander.isPersianUnicode) {
+                            countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
+                        }
+                        if (countText == null || countText.length() == 0) {
+                            noMediaSharedVisibility.set(View.GONE);
+                        } else {
+                            String[] countList = countText.split("\n");
+                            int countOFImage = Integer.parseInt(countList[0]);
+                            int countOFVIDEO = Integer.parseInt(countList[1]);
+                            int countOFAUDIO = Integer.parseInt(countList[2]);
+                            int countOFVOICE = Integer.parseInt(countList[3]);
+                            int countOFGIF = Integer.parseInt(countList[4]);
+                            int countOFFILE = Integer.parseInt(countList[5]);
+                            int countOFLink = Integer.parseInt(countList[6]);
+
+                            if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
+                                noMediaSharedVisibility.set(View.VISIBLE);
+                                if (countOFImage > 0) {
+                                    sharedPhotoVisibility.set(View.VISIBLE);
+                                    sharedPhotoCount.set(countOFImage);
+                                } else {
+                                    sharedPhotoVisibility.set(View.GONE);
+                                }
+                                if (countOFVIDEO > 0) {
+                                    sharedVideoVisibility.set(View.VISIBLE);
+                                    sharedVideoCount.set(countOFVIDEO);
+                                } else {
+                                    sharedVideoVisibility.set(View.GONE);
+                                }
+                                if (countOFAUDIO > 0) {
+                                    sharedAudioVisibility.set(View.VISIBLE);
+                                    sharedAudioCount.set(countOFAUDIO);
+                                } else {
+                                    sharedAudioVisibility.set(View.GONE);
+                                }
+                                if (countOFVOICE > 0) {
+                                    sharedVoiceVisibility.set(View.VISIBLE);
+                                    sharedVoiceCount.set(countOFVOICE);
+                                } else {
+                                    sharedVoiceVisibility.set(View.GONE);
+                                }
+                                if (countOFGIF > 0) {
+                                    sharedGifVisibility.set(View.VISIBLE);
+                                    sharedGifCount.set(countOFGIF);
+                                } else {
+                                    sharedGifVisibility.set(View.GONE);
+                                }
+                                if (countOFFILE > 0) {
+                                    sharedFileVisibility.set(View.VISIBLE);
+                                    sharedFileCount.set(countOFFILE);
+                                } else {
+                                    sharedFileVisibility.set(View.GONE);
+                                }
+                                if (countOFLink > 0) {
+                                    sharedLinkVisibility.set(View.VISIBLE);
+                                    sharedLinkCount.set(countOFLink);
+                                } else {
+                                    sharedLinkVisibility.set(View.GONE);
+                                }
+                            } else {
+                                noMediaSharedVisibility.set(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            noMediaSharedVisibility.set(View.GONE);
+        }
     }
 
     private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom, RealmChannelRoom realmChannelRoom, RealmChatRoom realmChatRoom) {
@@ -228,20 +296,8 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
-    public void onNotificationCheckChange(boolean isUmMute) {
-        if (isUmMute != isUnMuteNotification.get()) {
-            if (isUmMute) {
-                notificationState.set(R.string.array_enable);
-                RealmNotificationSetting.popupNotification(roomId, GROUP, ENABLE);
-            } else {
-                notificationState.set(R.string.array_Disable);
-                RealmNotificationSetting.popupNotification(roomId, GROUP, DISABLE);
-            }
-        }
-    }
-
-    public void onNotificationClick() {
-        showNotificationDialog.setValue(true);
+    public void onNotificationCheckChange() {
+        new RequestClientMuteRoom().muteRoom(roomId, !isUnMuteNotification.get());
     }
 
     public void onInviteLinkClick() {
@@ -254,25 +310,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         isNeedgetContactlist = false;
     }
 
-    public void setNotificationState(int type) {
-        switch (type) {
-            case DEFAULT:
-                notificationState.set(R.string.array_Default);
-                RealmNotificationSetting.popupNotification(roomId, GROUP, DEFAULT);
-                break;
-            case ENABLE:
-                notificationState.set(R.string.array_enable);
-                isUnMuteNotification.set(true);
-                RealmNotificationSetting.popupNotification(roomId, GROUP, ENABLE);
-                break;
-            case DISABLE:
-                notificationState.set(R.string.array_Disable);
-                isUnMuteNotification.set(false);
-                RealmNotificationSetting.popupNotification(roomId, GROUP, DISABLE);
-                break;
-        }
+    public void onCustomNotificationClick() {
+        goToCustomNotificationPage.setValue(roomId);
     }
-
 
     public void sendRequestRemoveGroupUsername() {
         if (G.userLogin) {
@@ -346,6 +386,10 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         goToShowCustomListPage.setValue(userList);
     }
 
+    public void onLeaveGroupClick() {
+        showDialogLeaveGroup.setValue(true);
+    }
+
     private Realm getRealm() {
         if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
             realmGroupProfile = Realm.getDefaultInstance();
@@ -364,95 +408,48 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
-    public void onResume() {
-        if (realmRoom != null) {
-            realmRoom.addChangeListener((realmModel, changeSet) -> {
-                if (changeSet != null) {
-                    if (changeSet.isDeleted()) {
-                        goToRoomListPage.setValue(true);
-                    } else if (((RealmRoom) realmModel).isValid()) {
-                        String countText = ((RealmRoom) realmModel).getSharedMediaCount();
-                        if (HelperCalander.isPersianUnicode) {
-                            countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
-                        }
-                        if (countText == null || countText.length() == 0) {
-                            noMediaSharedVisibility.set(View.GONE);
-                        } else {
-                            String[] countList = countText.split("\n");
-                            int countOFImage = Integer.parseInt(countList[0]);
-                            int countOFVIDEO = Integer.parseInt(countList[1]);
-                            int countOFAUDIO = Integer.parseInt(countList[2]);
-                            int countOFVOICE = Integer.parseInt(countList[3]);
-                            int countOFGIF = Integer.parseInt(countList[4]);
-                            int countOFFILE = Integer.parseInt(countList[5]);
-                            int countOFLink = Integer.parseInt(countList[6]);
-
-                            if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
-                                noMediaSharedVisibility.set(View.VISIBLE);
-                                if (countOFImage > 0) {
-                                    sharedPhotoVisibility.set(View.VISIBLE);
-                                    sharedPhotoCount.set(countOFImage);
-                                } else {
-                                    sharedPhotoVisibility.set(View.GONE);
-                                }
-                                if (countOFVIDEO > 0) {
-                                    sharedVideoVisibility.set(View.VISIBLE);
-                                    sharedVideoCount.set(countOFVIDEO);
-                                } else {
-                                    sharedVideoVisibility.set(View.GONE);
-                                }
-                                if (countOFAUDIO > 0) {
-                                    sharedAudioVisibility.set(View.VISIBLE);
-                                    sharedAudioCount.set(countOFAUDIO);
-                                } else {
-                                    sharedAudioVisibility.set(View.GONE);
-                                }
-                                if (countOFVOICE > 0) {
-                                    sharedVoiceVisibility.set(View.VISIBLE);
-                                    sharedVoiceCount.set(countOFVOICE);
-                                } else {
-                                    sharedVoiceVisibility.set(View.GONE);
-                                }
-                                if (countOFGIF > 0) {
-                                    sharedGifVisibility.set(View.VISIBLE);
-                                    sharedGifCount.set(countOFGIF);
-                                } else {
-                                    sharedGifVisibility.set(View.GONE);
-                                }
-                                if (countOFFILE > 0) {
-                                    sharedFileVisibility.set(View.VISIBLE);
-                                    sharedFileCount.set(countOFFILE);
-                                } else {
-                                    sharedFileVisibility.set(View.GONE);
-                                }
-                                if (countOFLink > 0) {
-                                    sharedLinkVisibility.set(View.VISIBLE);
-                                    sharedLinkCount.set(countOFLink);
-                                } else {
-                                    sharedLinkVisibility.set(View.GONE);
-                                }
-                            } else {
-                                noMediaSharedVisibility.set(View.GONE);
-                            }
-                        }
-                    }
-                }
-            });
-        } else {
-            noMediaSharedVisibility.set(View.GONE);
-        }
-    }
-
-    public void onStop() {
+    @Override
+    protected void onCleared() {
         if (realmRoom != null) {
             realmRoom.removeAllChangeListeners();
         }
-    }
-
-    public void onDestroy() {
         if (realmGroupProfile != null && !realmGroupProfile.isClosed()) {
             realmGroupProfile.close();
         }
+        super.onCleared();
+    }
+
+    public void leaveGroup() {
+        //ToDo:move this code to repository
+        showLoading.set(View.VISIBLE);
+        G.onGroupLeft = new OnGroupLeft() {
+            @Override
+            public void onGroupLeft(final long roomId, long memberId) {
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    showLoading.set(View.GONE);
+                    goToRoomListPage.setValue(true);
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    showLoading.set(View.GONE);
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    showLoading.set(View.GONE);
+                });
+            }
+        };
+        
+        new RequestGroupLeft().groupLeft(roomId);
     }
 
     private void showProgressBar() {
@@ -547,7 +544,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
     }
 
-
     private void initRecycleView() {
 
         onMenuClick = new OnMenuClick() {
@@ -557,8 +553,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
             }
         };
     }
-
-
 
     class CreatePopUpMessage {
 
@@ -650,6 +644,5 @@ public class FragmentGroupProfileViewModel extends ViewModel {
             new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
         }
     }
-
 
 }

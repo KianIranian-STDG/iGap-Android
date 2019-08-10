@@ -55,7 +55,7 @@ import io.realm.Sort;
 
 import static net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
 
-public class FragmentCall extends BaseFragment implements OnCallLogClear, ToolbarListener {
+public class FragmentCall extends BaseMainFragments implements OnCallLogClear, ToolbarListener {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
 
@@ -145,6 +145,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
 
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
 
+        mOffset = 0 ;
         getLogListWithOffset();
 
         mRecyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -527,6 +528,15 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear, Toolba
                 mRecyclerView.getAdapter().notifyItemChanged(pos);
             }
         }
+    }
+
+    @Override
+    public boolean isAllowToBackPressed() {
+        if (mIsMultiSelectEnable){
+            setViewState(false);
+            return false;
+        }
+        return true;
     }
 
     /**

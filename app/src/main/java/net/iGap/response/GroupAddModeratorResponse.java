@@ -10,10 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.helper.HelperMember;
 import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupAddModerator;
 
 public class GroupAddModeratorResponse extends MessageHandler {
@@ -35,28 +33,15 @@ public class GroupAddModeratorResponse extends MessageHandler {
         super.handler();
         ProtoGroupAddModerator.GroupAddModeratorResponse.Builder builder = (ProtoGroupAddModerator.GroupAddModeratorResponse.Builder) message;
         HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MODERATOR.toString());
-
-        if (G.onGroupAddModerator != null) {
-            G.onGroupAddModerator.onGroupAddModerator(builder.getRoomId(), builder.getMemberId());
-        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (G.onGroupAddModerator != null) {
-            G.onGroupAddModerator.onTimeOut();
-        }
     }
 
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-        if (G.onGroupAddModerator != null) {
-            G.onGroupAddModerator.onError(majorCode, minorCode);
-        }
     }
 }

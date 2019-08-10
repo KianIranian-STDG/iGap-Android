@@ -16,8 +16,9 @@
     <string name="text_line_2_introduce_page3">You can have one-on-one or group chats and even create your own channel and add members in order to share information with millions of people.</string>
 
     <!-- Page 4 introduce app -->
-    <string name="text_line_1_introduce_page4">File Transferring</string>
-    <string name="text_line_2_introduce_page4">You have an authority to transfer any file with any size and type or save them on your cloud storage; and then share anything you’d like to with anyone you’d want to.</string>
+    <!--TODO:// complete-->
+    <string name="text_line_1_introduce_page4">iLand</string>
+    <string name="text_line_2_introduce_page4">iGap\'s Smart World</string>
 
     <!-- Page 5 introduce app -->
     <string name="text_line_1_introduce_page5">Voice and video Call</string>
@@ -734,6 +735,11 @@
     <string name="enter_the_code_here">Enter the code here</string>
     <string name="transfer_to">Transfer to</string>
     <string name="transfer_to_wallet">Transfer to wallet</string>
+    <string name="gift_message">Gift Amount *.
+Want to get it?</string>
+    <string name="toast_success_gift">Wait a few moments to apply gift credit.</string>
+
+    <string name="amount_to_pay_factor">Amount to pay factor (Rials) :</string>
     <string name="price">Price</string>
     <string name="amunt">Amount</string>
     <string name="email_optional">Email(optional)</string>
@@ -1021,6 +1027,7 @@
     <string name="who_is_allowed_to_video_call">Who can video call me?</string>
     <string name="miss">Missed Call</string>
     <string name="not_answer">Unanswered Call</string>
+    <string name="un_answered">Unanswered</string>
 
     <string name="nothing">Nothing</string>
     <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all calls?</string>
@@ -1409,7 +1416,7 @@
     <string name="ignore">Ignore</string>
     <string name="permission_auto_start">please select and active iGap from menu to receive messages when even app is not in background</string>
     <string name="dont_show_again">Do not show again</string>
-    <string name="invitation_message">\Hey Join iGap : https://www.igap.net/ I\'m waiting for you!\ \n Reagent ID is : </string>
+    <string name="invitation_message">\Hey Join iGap : https://www.igap.net/ I\'m waiting for you!\ \n Referred Number is : </string>
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">Please enter a valid folder name</string>
     <string name="This_folder_already_exists">"This folder already exists.\n Please provide another name for the folder"</string>
@@ -1472,7 +1479,7 @@
     <string name="terms_condition_title">Terms and Condition</string>
     <string name="warning">Warning</string>
     <string name="accept_terms_and_condition_error_message">forget to accept terms and conditions</string>
-    <string name="welcome_title">Welcome To IGap</string>
+    <string name="welcome_title">Welcome To iGap</string>
     <string name="increase_credit">Increase credit</string>
     <string name="your_rate">Your rate :</string>
     <string name="increase_score">Increase Score</string>
@@ -1560,8 +1567,8 @@
     <string name="destination_sheba_number">Destination IBAN Number</string>
     <string name="trace_no">Trace No</string>
     <string name="reference_code">Reference No</string>
-    <string name="has">دارد</string>
-    <string name="not_has">ندارد</string>
+    <string name="has">Has</string>
+    <string name="not_has">Has not</string>
     <string name="see_details">See Details</string>
     <string name="request_time">Request Time</string>
     <string name="settlement_time">Settlement Time</string>
@@ -1782,10 +1789,10 @@
     <string name="cash_out_two_wallet_hint">Enter Cash out amount then your merchant balance will transfer to your personal wallet</string>
     <string name="cash_to_wallet">to Personal wallet</string>
     <string name="person">person</string>
-    <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
+    <string name="club_balance_not_enough">This Card balance is not enough</string>
     <string name="enter_four_digit_code">Enter Six digits code</string>
     <string name="four_digit_code">Six digit code</string>
-    <string name="show_receipt">مشاهده رسید</string>
+    <string name="show_receipt">Show Receipt</string>
     <string name="reciever_name">Receiver</string>
     <string name="date_time">date and time</string>
     <string name="transaction_type">Transaction Type</string>
@@ -1904,10 +1911,36 @@
     <string name="maximum_poll">You Have Reached Your Vote Limit.</string>
     <string name="before_try">You have already registered your vote.</string>
     <string name="poll_ok">Your vote was successfully recorded.</string>
-    <string name="str_frag_sync_contactTitle">Say Hi to your friends and let them know you are on IGap</string>
-    <string name="str_frag_sync_contactWelcome">Welcome to IGap</string>
+    <string name="str_frag_sync_contactTitle">Say Hi to your friends and let them know you are on iGap</string>
+    <string name="str_frag_sync_contactWelcome">Welcome to iGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
+    <string name="str_frag_sync_error">Something went wrong. Please try again.</string>
     <string name="download_icon">ï</string>
+    <string name="igasht_title">آیگشت</string>
+    <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
+    <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
+    <string name="igasht_add_to_favorite_title">به لیست علاقمندی ها اضافه کن</string>
+    <string name="igasht_buy_ticket_title">خرید بلیط</string>
+    <string name="detail_title">جزئیات</string>
+    <string name="igasht_place_of_visit_title">محل بازدید</string>
+    <string name="igasht_add_new_place_title">اضافه کردن بازدید جدید</string>
+    <string name="igasht_ticket_type_title">Specify the type of ticket</string>
+    <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
+    <string name="igasht_add_ticket_count_button_title">ثبت</string>
+    <string name="igasht_order_ticket_title">%s for %d person</string>
+    <string name="igasht_favorites_title">Favorites</string>
+    <string name="igasht_history_title">History</string>
+    <string name="igasht_total_ticket_price">Total Price: %d Toman</string>
+    <string name="igasht_add_ticket_error">Please Add Ticket</string>
+    <string name="igasht_buy_ticket_successful">Buy Ticket Successful</string>
+    <string name="money_request">Money Request to:</string>
+    <string name="cardtocard_descriotion_error">Description can not be empty</string>
+    <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
+    <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
+    <string name="cardtocard_cartnumber_error">Card number must be 16 digits</string>
+    <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
+    <string name="insert_amount_in_rial">insert amount in rial.</string>
+    <string name="enter_16_digit_card_number">Enter the 16-digit card number.</string>
     <string name="icon_sync">ÿ</string>
     <string name="icon_play">ò</string>
     <string name="icon_next">Ó</string>
@@ -1916,4 +1949,5 @@
     <string name="beeptunes_purchase_song">Purchase Song</string>
     <string name="beeptunes_sync_song">Sync Song</string>
     <string name="beeptunesـfavorite_song">Favorite Song</string>
+
 </resources>

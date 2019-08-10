@@ -36,6 +36,8 @@ import net.iGap.request.RequestGroupLeft;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -74,6 +76,9 @@ public class EditGroupViewModel extends ViewModel {
     private RealmNotificationSetting realmNotificationSetting;
     private int realmNotification = 0;
     private String initials;
+    RealmResults<RealmMember> adminMembers;
+    RealmResults<RealmMember> moderatorMembers;
+
 
     public EditGroupViewModel(Long roomId) {
         this.roomId = roomId;
@@ -120,10 +125,14 @@ public class EditGroupViewModel extends ViewModel {
         }*/
 
         //ToDo: add this code to repository
-        RealmResults<RealmMember> realmMembers = RealmMember.filterRole(realmGroupProfile, roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        RealmResults<RealmMember> moderatorMembers = RealmMember.filterRole(realmGroupProfile, roomId, GROUP, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
-        administratorsCount.set(String.valueOf(realmMembers.size()));
+        adminMembers = RealmMember.filterMember(realmGroupProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderatorMembers = RealmMember.filterMember(realmGroupProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        administratorsCount.set(String.valueOf(adminMembers.size()));
         moderatorsCount.set(String.valueOf(moderatorMembers.size()));
+
+        adminMembers.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(String.valueOf(realmMembers.size())));
+        moderatorMembers.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(String.valueOf(realmMembers.size())));
+
         int t;
         switch (realmGroupRoom.getStartFrom()) {
             case 0:

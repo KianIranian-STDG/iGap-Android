@@ -74,7 +74,6 @@ public class EditChannelFragment extends BaseFragment {
 
     private FragmentEditChannelBinding binding;
     private EditChannelViewModel viewModel;
-    private boolean isInitEmoji = false;
     private boolean isEmojiShow = false;
     private EmojiPopup emojiPopup;
 
@@ -143,10 +142,6 @@ public class EditChannelFragment extends BaseFragment {
 
         viewModel.initEmoji.observe(this, aBoolean -> {
             if (aBoolean != null) {
-                if (!isInitEmoji) {
-                    setUpEmojiPopup();
-                    isInitEmoji = true;
-                }
                 emojiPopup.toggle();
             }
         });
@@ -193,6 +188,8 @@ public class EditChannelFragment extends BaseFragment {
         viewModel.onReactionMessageClickListener.observe(this, isClicked -> {
             binding.rateMessage.setChecked(!binding.rateMessage.isChecked());
         });
+
+        setUpEmojiPopup();
 
     }
 
@@ -555,6 +552,7 @@ public class EditChannelFragment extends BaseFragment {
         }).negativeText(R.string.no).show();
     }
 
+    //Todo: remove code of leave channel
     private void deleteChannel(boolean isOwner) {
         String deleteText = "";
         int title;

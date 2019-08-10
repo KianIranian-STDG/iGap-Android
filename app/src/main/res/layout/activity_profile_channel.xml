@@ -20,8 +20,8 @@
             android:id="@+id/toolbar_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
             android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default=@drawable/shape_toolbar_background}"
+            android:layoutDirection="ltr"
             app:elevation="0dp">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -64,18 +64,18 @@
                         android:layout_toRightOf="@id/toolbar_back" />
 
                     <net.iGap.module.EmojiTextViewE
-                        android:fontFamily="@font/main_font"
                         android:id="@+id/toolbar_txt_name_collapsed"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp8"
+                        android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginEnd="@dimen/dp8"
                         android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_marginStart="@dimen/dp8"
                         android:layout_toStartOf="@id/toolbar_edit"
                         android:layout_toLeftOf="@id/toolbar_edit"
                         android:layout_toEndOf="@id/toolbar_avatar_collapsed_target"
                         android:layout_toRightOf="@id/toolbar_avatar_collapsed_target"
+                        android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
                         android:textColor="@color/white"
@@ -127,11 +127,11 @@
                         android:paddingBottom="@dimen/dp10">
 
                         <net.iGap.module.EmojiTextViewE
-                            android:fontFamily="@font/main_font"
                             android:id="@+id/toolbar_txt_name_expanded"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="left"
+                            android:fontFamily="@font/main_font"
                             android:gravity="bottom|center_horizontal"
                             android:singleLine="true"
                             android:textColor="@color/white"
@@ -139,12 +139,12 @@
                             app:emojiSize="@dimen/largeTextSize" />
 
                         <TextView
-                            android:fontFamily="@font/main_font"
                             android:id="@+id/toolbar_txt_status_expanded"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="left"
                             android:layout_marginTop="@dimen/dp6"
+                            android:fontFamily="@font/main_font"
                             android:singleLine="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/standardTextSize" />
@@ -160,508 +160,534 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
+            android:fillViewport="true"
             android:layoutDirection="locale"
+            android:scrollbars="none"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <android.support.v4.widget.NestedScrollView
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fillViewport="true"
                 android:layoutDirection="locale">
 
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layoutDirection="locale">
+                <net.iGap.module.EmojiTextViewE
+                    android:id="@+id/description"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:padding="8dp"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.haveDescription}"
+                    app:emojiSize="@dimen/standardTextSize"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/description"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:padding="8dp"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.haveDescription}"
-                        app:layout_constraintLeft_toLeftOf="@id/notification"
-                        app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <View
+                    android:id="@+id/divider0"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:visibility="@{viewModel.haveDescription}"
+                    app:layout_constraintLeft_toLeftOf="@id/divider1"
+                    app:layout_constraintRight_toRightOf="@id/divider1"
+                    app:layout_constraintTop_toBottomOf="@id/description"
+                    app:layout_constraintWidth_percent=".95" />
 
-                    <View
-                        android:id="@+id/divider0"
-                        style="?lineColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:visibility="@{viewModel.haveDescription}"
-                        app:layout_constraintLeft_toLeftOf="@id/divider1"
-                        app:layout_constraintRight_toRightOf="@id/divider1"
-                        app:layout_constraintTop_toBottomOf="@id/description"
-                        app:layout_constraintWidth_percent=".95" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/channelInfo"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/info"
+                    android:textSize="@dimen/largeTextSize"
+                    android:visibility="@{viewModel.isVerifiedChannel}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/divider0" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/channelInfo"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:text="@string/info"
-                        android:textSize="@dimen/largeTextSize"
-                        android:visibility="@{viewModel.isVerifiedChannel}"
-                        app:layout_constraintLeft_toLeftOf="@id/notification"
-                        app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toBottomOf="@id/divider0" />
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/channelVerify"
+                    android:layout_width="@dimen/dp24"
+                    android:layout_height="@dimen/dp24"
+                    android:paddingLeft="@dimen/dp4"
+                    android:paddingRight="@dimen/dp4"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.isVerifiedChannel}"
+                    app:layout_constraintStart_toStartOf="@id/channelInfo"
+                    app:layout_constraintTop_toBottomOf="@id/channelInfo"
+                    app:srcCompat="@drawable/ic_verify" />
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/channelVerify"
-                        android:layout_width="@dimen/dp24"
-                        android:layout_height="@dimen/dp24"
-                        android:paddingLeft="@dimen/dp4"
-                        android:paddingRight="@dimen/dp4"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.isVerifiedChannel}"
-                        app:layout_constraintStart_toStartOf="@id/channelInfo"
-                        app:layout_constraintTop_toBottomOf="@id/channelInfo"
-                        app:srcCompat="@drawable/ic_verify" />
+                <android.support.v7.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/dp4"
+                    android:paddingEnd="@dimen/dp4"
+                    android:singleLine="true"
+                    android:text="@string/verify_channel"
+                    android:textColor="@color/verify_color"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.isVerifiedChannel}"
+                    app:layout_constraintBottom_toBottomOf="@id/channelVerify"
+                    app:layout_constraintEnd_toEndOf="@id/channelInfo"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/channelVerify"
+                    app:layout_constraintTop_toTopOf="@id/channelVerify" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/dp4"
-                        android:paddingEnd="@dimen/dp4"
-                        android:singleLine="true"
-                        android:text="@string/verify_channel"
-                        android:textColor="@color/verify_color"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.isVerifiedChannel}"
-                        app:layout_constraintBottom_toBottomOf="@id/channelVerify"
-                        app:layout_constraintEnd_toEndOf="@id/channelInfo"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toEndOf="@id/channelVerify"
-                        app:layout_constraintTop_toTopOf="@id/channelVerify" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/channelLinkStatus"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:padding="4dp"
+                    android:text="@{viewModel.channelLinkTitle}"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.isShowLink}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/channelVerify" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/channelLink"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{()->viewModel.onClickChannelLink()}"
-                        android:padding="4dp"
-                        android:text="@{viewModel.channelLink}"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.isShowLink}"
-                        app:layout_constraintLeft_toLeftOf="@id/notification"
-                        app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toBottomOf="@id/channelVerify" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/channelLinkStatus"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="4dp"
-                        android:text="@{viewModel.channelLinkTitle}"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.isShowLink}"
-                        app:layout_constraintLeft_toLeftOf="@id/notification"
-                        app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toBottomOf="@id/channelLink" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/channelLink"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="@{viewModel.textGravity}"
+                    android:onClick="@{()->viewModel.onClickChannelLink()}"
+                    android:padding="4dp"
+                    android:text="@{viewModel.channelLink}"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.isShowLink}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/channelLinkStatus" />
 
-                    <View
-                        android:id="@+id/divider1"
-                        style="?lineColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:visibility="@{viewModel.isShowLink}"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/channelLinkStatus"
-                        app:layout_constraintWidth_percent=".95" />
+                <View
+                    android:id="@+id/divider1"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:visibility="@{viewModel.isShowLink}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/channelLink"
+                    app:layout_constraintWidth_percent=".95" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/notification"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp8"
-                        android:background="?attr/selectableItemBackground"
-                        android:fontFamily="@font/main_font"
-                        android:onClick="@{()-> viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
-                        android:padding="8dp"
-                        android:text="@string/mute_notification"
-                        android:textSize="@dimen/standardTextSize"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/divider1"
-                        app:layout_constraintWidth_percent=".85" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/notification"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?attr/selectableItemBackground"
+                    android:fontFamily="@font/main_font"
+                    android:onClick="@{()-> viewModel.onNotificationCheckChange()}"
+                    android:padding="8dp"
+                    android:text="@string/mute_notification"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider1"
+                    app:layout_constraintWidth_percent=".85" />
 
-                    <net.iGap.module.CustomToggleButton
-                        android:id="@+id/enableNotification"
-                        android:layout_width="@dimen/toggles_width"
-                        android:layout_height="@dimen/toggles_height"
-                        android:checked="@={viewModel.isMuteNotification}"
-                        android:onCheckedChanged="@{()->viewModel.onNotificationCheckChange(enableNotification.isChecked())}"
-                        app:layout_constraintBottom_toBottomOf="@id/notification"
-                        app:layout_constraintEnd_toEndOf="@id/notification"
-                        app:layout_constraintTop_toTopOf="@id/notification" />
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/enableNotification"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isMuteNotification}"
+                    app:layout_constraintBottom_toBottomOf="@id/notification"
+                    app:layout_constraintEnd_toEndOf="@id/notification"
+                    app:layout_constraintTop_toTopOf="@id/notification" />
 
-                    <View
-                        android:id="@+id/divider2"
-                        style="?lineColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/dp8"
-                        app:layout_constraintLeft_toLeftOf="@id/divider1"
-                        app:layout_constraintRight_toRightOf="@id/divider1"
-                        app:layout_constraintTop_toBottomOf="@id/notification" />
+                <View
+                    android:id="@+id/divider2"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintLeft_toLeftOf="@id/divider1"
+                    app:layout_constraintRight_toRightOf="@id/divider1"
+                    app:layout_constraintTop_toBottomOf="@id/notification" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/members"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:text="@string/member"
-                        android:textSize="@dimen/largeTextSize"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintLeft_toLeftOf="@id/notification"
-                        app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toBottomOf="@id/divider2" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/members"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/member"
+                    android:textSize="@dimen/largeTextSize"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/subscribers"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onSubscribersClick()}"
-                        android:padding="8dp"
-                        android:text="@string/subscribers_title"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintEnd_toStartOf="@id/subscribersCount"
-                        app:layout_constraintStart_toStartOf="@id/members"
-                        app:layout_constraintTop_toBottomOf="@id/members" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/subscribers"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onSubscribersClick()}"
+                    android:padding="8dp"
+                    android:text="@string/subscribers_title"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintEnd_toStartOf="@id/subscribersCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
+                    app:layout_constraintTop_toBottomOf="@id/members" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/subscribersCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{viewModel.subscribersCount}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintBottom_toBottomOf="@id/subscribers"
-                        app:layout_constraintEnd_toEndOf="@id/members"
-                        app:layout_constraintStart_toEndOf="@id/subscribers"
-                        app:layout_constraintTop_toTopOf="@id/subscribers" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/subscribersCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{viewModel.subscribersCount}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintBottom_toBottomOf="@id/subscribers"
+                    app:layout_constraintEnd_toEndOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/subscribers"
+                    app:layout_constraintTop_toTopOf="@id/subscribers" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/administrators"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onAdministratorsClick()}"
-                        android:padding="8dp"
-                        android:text="@string/administrators_title"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintEnd_toStartOf="@id/administratorsCount"
-                        app:layout_constraintStart_toStartOf="@id/members"
-                        app:layout_constraintTop_toBottomOf="@id/subscribers" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/administrators"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onAdministratorsClick()}"
+                    android:padding="8dp"
+                    android:text="@string/administrators_title"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintEnd_toStartOf="@id/administratorsCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
+                    app:layout_constraintTop_toBottomOf="@id/subscribers" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/administratorsCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{viewModel.administratorsCount}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintBottom_toBottomOf="@id/administrators"
-                        app:layout_constraintEnd_toEndOf="@id/members"
-                        app:layout_constraintStart_toEndOf="@id/administrators"
-                        app:layout_constraintTop_toTopOf="@id/administrators" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/administratorsCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{viewModel.administratorsCount}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintBottom_toBottomOf="@id/administrators"
+                    app:layout_constraintEnd_toEndOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/administrators"
+                    app:layout_constraintTop_toTopOf="@id/administrators" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/moderator"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onModeratorClick()}"
-                        android:padding="8dp"
-                        android:text="@string/moderators_title"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
-                        app:layout_constraintStart_toStartOf="@id/members"
-                        app:layout_constraintTop_toBottomOf="@id/administrators" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/moderator"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onModeratorClick()}"
+                    android:padding="8dp"
+                    android:text="@string/moderators_title"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
+                    app:layout_constraintStart_toStartOf="@id/members"
+                    app:layout_constraintTop_toBottomOf="@id/administrators" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/moderatorsCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{viewModel.moderatorsCount}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintBottom_toBottomOf="@id/moderator"
-                        app:layout_constraintEnd_toEndOf="@id/members"
-                        app:layout_constraintStart_toEndOf="@id/moderator"
-                        app:layout_constraintTop_toTopOf="@id/moderator" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/moderatorsCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{viewModel.moderatorsCount}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.showMemberList}"
+                    app:layout_constraintBottom_toBottomOf="@id/moderator"
+                    app:layout_constraintEnd_toEndOf="@id/members"
+                    app:layout_constraintStart_toEndOf="@id/moderator"
+                    app:layout_constraintTop_toTopOf="@id/moderator" />
 
-                    <View
-                        android:id="@+id/divider3"
-                        style="?lineColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/dp8"
-                        android:visibility="@{viewModel.showMemberList}"
-                        app:layout_constraintLeft_toLeftOf="@id/divider1"
-                        app:layout_constraintRight_toRightOf="@id/divider1"
-                        app:layout_constraintTop_toBottomOf="@id/moderator" />
+                <View
+                    android:id="@+id/divider3"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:visibility="@{viewModel.noMediaVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/divider1"
+                    app:layout_constraintRight_toRightOf="@id/divider1"
+                    app:layout_constraintTop_toBottomOf="@id/moderator" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/sharedContentTitle"
-                        style="?textTitleColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp8"
-                        android:padding="8dp"
-                        android:text="@string/chi_shared_Media"
-                        android:textSize="@dimen/largeTextSize"
-                        android:visibility="@{viewModel.noMediaVisibility}"
-                        app:layout_constraintLeft_toLeftOf="@id/notification"
-                        app:layout_constraintRight_toRightOf="@id/notification"
-                        app:layout_constraintTop_toBottomOf="@id/divider3" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/sharedContentTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
+                    android:text="@string/chi_shared_Media"
+                    android:textSize="@dimen/largeTextSize"
+                    android:visibility="@{viewModel.noMediaVisibility}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/divider3" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/photo"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp8"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onClickGroupShearedMedia(1)}"
-                        android:padding="8dp"
-                        android:text="@string/shared_image"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.sharedPhotoVisibility}"
-                        app:layout_constraintEnd_toStartOf="@id/photoCount"
-                        app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/photo"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(1)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_image"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.sharedPhotoVisibility}"
+                    app:layout_constraintEnd_toStartOf="@id/photoCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/photoCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.sharedPhotoVisibility}"
-                        app:layout_constraintBottom_toBottomOf="@id/photo"
-                        app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toTopOf="@id/photo" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/photoCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.sharedPhotoVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/photo"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/photo" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/video"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onClickGroupShearedMedia(2)}"
-                        android:padding="8dp"
-                        android:text="@string/shared_video"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.sharedVideoVisibility}"
-                        app:layout_constraintEnd_toStartOf="@id/photoCount"
-                        app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toBottomOf="@id/photo" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/video"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(2)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_video"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.sharedVideoVisibility}"
+                    app:layout_constraintEnd_toStartOf="@id/photoCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/photo" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/videoCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{String.valueOf(viewModel.sharedVideoCount)}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.sharedVideoVisibility}"
-                        app:layout_constraintBottom_toBottomOf="@id/video"
-                        app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toTopOf="@id/video" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/videoCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedVideoCount)}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.sharedVideoVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/video"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/video" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/audioFiles"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onClickGroupShearedMedia(3)}"
-                        android:padding="8dp"
-                        android:text="@string/shared_audio"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.sharedAudioVisibility}"
-                        app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
-                        app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toBottomOf="@id/video" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/audioFiles"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(3)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_audio"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.sharedAudioVisibility}"
+                    app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/video" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/audioFilesCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{String.valueOf(viewModel.sharedAudioCount)}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.sharedAudioVisibility}"
-                        app:layout_constraintBottom_toBottomOf="@id/audioFiles"
-                        app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toTopOf="@id/audioFiles" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/audioFilesCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedAudioCount)}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.sharedAudioVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/audioFiles"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/audioFiles" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/voiceMessage"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onClickGroupShearedMedia(4)}"
-                        android:padding="8dp"
-                        android:text="@string/shared_voice"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.sharedVoiceVisibility}"
-                        app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
-                        app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toBottomOf="@id/audioFiles" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/voiceMessage"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(4)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_voice"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.sharedVoiceVisibility}"
+                    app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/audioFiles" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/voiceMessageCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.sharedVoiceVisibility}"
-                        app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
-                        app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toTopOf="@id/voiceMessage" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/voiceMessageCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.sharedVoiceVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/voiceMessage" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/gif"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onClickGroupShearedMedia(5)}"
-                        android:padding="8dp"
-                        android:text="@string/shared_gif"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.sharedGifVisibility}"
-                        app:layout_constraintEnd_toStartOf="@id/gifCount"
-                        app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toBottomOf="@id/voiceMessage" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/gif"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(5)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_gif"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.sharedGifVisibility}"
+                    app:layout_constraintEnd_toStartOf="@id/gifCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/voiceMessage" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/gifCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{String.valueOf(viewModel.sharedGifCount)}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.sharedGifVisibility}"
-                        app:layout_constraintBottom_toBottomOf="@id/gif"
-                        app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toTopOf="@id/gif" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/gifCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedGifCount)}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.sharedGifVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/gif"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/gif" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/files"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onClickGroupShearedMedia(6)}"
-                        android:padding="8dp"
-                        android:text="@string/shared_files"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.sharedFileVisibility}"
-                        app:layout_constraintEnd_toStartOf="@id/filesCount"
-                        app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toBottomOf="@id/gif" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/files"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(6)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_files"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.sharedFileVisibility}"
+                    app:layout_constraintEnd_toStartOf="@id/filesCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/gif" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/filesCount"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{String.valueOf(viewModel.sharedFileCount)}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.sharedFileVisibility}"
-                        app:layout_constraintBottom_toBottomOf="@id/files"
-                        app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toTopOf="@id/files" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/filesCount"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedFileCount)}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.sharedFileVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/files"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/files" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/links"
-                        style="?textSubColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:onClick="@{()->viewModel.onClickGroupShearedMedia(7)}"
-                        android:padding="8dp"
-                        android:text="@string/shared_links"
-                        android:textSize="@dimen/standardTextSize"
-                        android:visibility="@{viewModel.sharedLinkVisibility}"
-                        app:layout_constraintEnd_toStartOf="@id/linksCount"
-                        app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toBottomOf="@id/files" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/links"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickGroupShearedMedia(7)}"
+                    android:padding="8dp"
+                    android:text="@string/shared_links"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.sharedLinkVisibility}"
+                    app:layout_constraintEnd_toStartOf="@id/linksCount"
+                    app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toBottomOf="@id/files" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/linksCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/smallTextSize"
-                        android:visibility="@{viewModel.sharedLinkVisibility}"
-                        app:layout_constraintBottom_toBottomOf="@id/links"
-                        app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
-                        app:layout_constraintTop_toTopOf="@id/links" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/linksCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.sharedLinkVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@id/links"
+                    app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
+                    app:layout_constraintTop_toTopOf="@id/links" />
 
-                    <ProgressBar
-                        android:id="@+id/loading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="@{viewModel.showLoading}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </android.support.constraint.ConstraintLayout>
+                <View
+                    android:id="@+id/divider4"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:visibility="@{viewModel.showLeaveChannel}"
+                    app:layout_constraintLeft_toLeftOf="@id/divider1"
+                    app:layout_constraintRight_toRightOf="@id/divider1"
+                    app:layout_constraintTop_toBottomOf="@id/links" />
 
-            </android.support.v4.widget.NestedScrollView>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/leaveChannel"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onLeaveChannelClick()}"
+                    android:padding="@dimen/dp8"
+                    android:text="@string/leave_channel"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/largeTextSize"
+                    android:visibility="@{viewModel.showLeaveChannel}"
+                    app:layout_constraintLeft_toLeftOf="@id/notification"
+                    app:layout_constraintRight_toRightOf="@id/notification"
+                    app:layout_constraintTop_toBottomOf="@id/divider4" />
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.showLoading}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+
 
         </android.support.v4.widget.NestedScrollView>
 
@@ -669,11 +695,11 @@
             android:id="@+id/toolbar_avatar"
             android:layout_width="@dimen/toolbar_profile_avatar_size_expanded"
             android:layout_height="@dimen/toolbar_profile_avatar_size_expanded"
-            android:layoutDirection="ltr"
             android:layout_gravity="top|left"
             android:layout_marginStart="@dimen/dp20"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp70"
+            android:layoutDirection="ltr"
             android:scaleType="centerCrop"
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />

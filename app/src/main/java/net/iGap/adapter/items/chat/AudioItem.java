@@ -32,6 +32,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -355,8 +356,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setSingleLine(true);
             songFileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
-            songFileName.setTextColor(getColor(R.color.white));
             setTextSize(songFileName, R.dimen.smallTextSize);
+            Utils.darkModeHandler(songFileName);
             songFileName.setTypeface(G.typeface_IRANSansMobile);
 
             songArtist = new AppCompatTextView(G.context);

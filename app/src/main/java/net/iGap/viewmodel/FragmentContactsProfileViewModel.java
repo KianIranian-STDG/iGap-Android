@@ -34,6 +34,7 @@ import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChatGetRoom;
@@ -43,14 +44,20 @@ import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import io.realm.ObjectChangeSet;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
+import io.realm.RealmObjectChangeListener;
 
 public class FragmentContactsProfileViewModel extends ViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
 
@@ -76,6 +83,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public ObservableInt sharedFileCount = new ObservableInt(0);
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
+    public ObservableInt userBlockState = new ObservableInt(R.string.block);
     public ObservableInt sharedEmptyVisibility = new ObservableInt(View.VISIBLE);
     public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
@@ -100,6 +108,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> blockDialogListener = new MutableLiveData<>();
 
     public List<String> items;
     private Realm realm;
@@ -204,9 +213,19 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 G.onChatGetRoom = new OnChatGetRoom() {
                     @Override
                     public void onChatGetRoom(final ProtoGlobal.Room room) {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                realmRoom1.setDeleted(true);
+                            }
+                        });
+                        realm.close();
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
+                                G.refreshRealmUi();
                                 goToChatPage.setValue(room.getId());
                                 G.onChatGetRoom = null;
                             }
@@ -249,22 +268,10 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     }
 
     public void onBlockButtonClick() {
+
         //todo: move view code to fragment
-        if (isBlockUser) {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsUnblock().userContactsUnblock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-        } else {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsBlock().userContactsBlock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-        }
+        blockDialogListener.postValue(isBlockUser);
+
     }
 
     public void onSecretChatClick() {
@@ -312,6 +319,15 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
 
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
+        registeredInfo.addChangeListener((RealmObjectChangeListener<RealmRegisteredInfo>) (realmModel, changeSet) -> {
+            if (changeSet != null) {
+                for (int i = 0; i < changeSet.getChangedFields().length; i++) {
+                    if (changeSet.getChangedFields()[i].equals(RealmRegisteredInfoFields.BLOCK_USER)) {
+                        userBlockState.set(realmModel.isBlockUser() ? R.string.un_block_user : R.string.block);
+                    }
+                }
+            }
+        });
 
         if (registeredInfo != null) {
             isBot = registeredInfo.isBot();
@@ -326,6 +342,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             }
 
             isBlockUser = registeredInfo.isBlockUser();
+            userBlockState.set(isBlockUser ? R.string.un_block_user : R.string.block);
             registeredInfo.addChangeListener(element -> isBlockUser = registeredInfo.isBlockUser());
 
             if (registeredInfo.getLastAvatar() != null) {
@@ -518,6 +535,12 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 }
             });
         }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        registeredInfo.removeAllChangeListeners();
     }
 
     //===============================================================================

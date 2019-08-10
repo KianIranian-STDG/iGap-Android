@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
+import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.request.RequestUserIVandGetScore;
@@ -29,9 +30,11 @@ public class UserScoreViewModel extends ViewModel {
         of = "of ";
         if (G.selectedLanguage.equals("fa"))
             of = "از ";
+        else if (G.selectedLanguage.equals("ar"))
+            of = "فی ";
 
-        userRank.setValue("0");
-        totalRank.setValue(of + "0");
+        userRank.setValue(checkPersianNumber("0"));
+        totalRank.setValue(of + checkPersianNumber("0"));
         //Todo:move to repository
         getUserIVandScore();
     }
@@ -46,6 +49,14 @@ public class UserScoreViewModel extends ViewModel {
 
     public LiveData<String> getUserScore() {
         return userScore;
+    }
+
+    private String checkPersianNumber(String text){
+        if (HelperCalander.isPersianUnicode){
+            return HelperCalander.convertToUnicodeFarsiNumber(text);
+        }else {
+            return text;
+        }
     }
 
     public void onScanBarcodeButtonClick() {
@@ -78,16 +89,16 @@ public class UserScoreViewModel extends ViewModel {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
                 userRankPointer.postValue((score.getUserRank() * 360) / score.getTotalRank());
-                userScore.postValue(String.valueOf(score.getScore()));
-                totalRank.postValue(of + score.getTotalRank());
-                userRank.postValue(String.valueOf(score.getUserRank()));
+                userScore.postValue(checkPersianNumber(String.valueOf(score.getScore())));
+                totalRank.postValue(of + checkPersianNumber(String.valueOf(score.getTotalRank())));
+                userRank.postValue(checkPersianNumber(String.valueOf(score.getUserRank())));
                 ivandScore.postValue(score.getScoresList());
             }
 
             @Override
             public void onError(int major, int minor) {
                 userRankPointer.postValue(0);
-                userScore.postValue(String.valueOf(-1));
+                userScore.postValue(checkPersianNumber("-1"));
                 if (major == 5 && minor == 1) {
                     getUserIVandScore();
                 }

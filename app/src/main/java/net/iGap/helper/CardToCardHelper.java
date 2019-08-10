@@ -3,6 +3,7 @@ package net.iGap.helper;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -19,6 +20,7 @@ public class CardToCardHelper {
     public static void CallCardToCard(Activity activity) {
         CallCardToCard(activity, 0);
     }
+
     public static void CallCardToCard(Activity activity, long to_UserId) {
         if (activity == null || activity.isFinishing()) {
             return;
@@ -36,6 +38,7 @@ public class CardToCardHelper {
                         if (!activity.isFinishing()) {
                             Intent intent = new Intent(G.context, CardToCardInitiator.class);
                             intent.putExtra("Token", token);
+
                             activity.startActivityForResult(intent , requestCodeCardToCard);
                             dialog.dismiss();
                         }
@@ -65,6 +68,56 @@ public class CardToCardHelper {
             return;
         }
     }
+
+    public static void NewCallCardToCard(Activity activity, long to_UserId, int amount, String cardNumber) {
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+        toUserId = to_UserId;
+
+        final ProgressDialog dialog = ProgressDialog.show(activity, "",
+                G.context.getString(R.string.please_wait), true);
+        boolean isSend = new RequestMplGetCardToCardToken().mplGetToken(new RequestMplGetCardToCardToken.OnMplCardToCardToken() {
+            @Override
+            public void onToken(String token) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!activity.isFinishing()) {
+                            Intent intent = new Intent(G.context, CardToCardInitiator.class);
+                            intent.putExtra("Token", token);
+                            intent.putExtra("destinationCard", cardNumber);
+                            intent.putExtra("amount", amount);
+                            activity.startActivityForResult(intent , requestCodeCardToCard);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        if (major == 5) {
+                            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
+                        } else {
+                            HelperError.showSnackMessage(G.context.getString(R.string.server_error), false);
+                        }
+                    }
+                });
+            }
+        });
+
+        if (!isSend) {
+            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
+            dialog.dismiss();
+            return;
+        }
+    }
+
 
     public static void setResultOfCardToCard(String data, int retryCount, ProgressDialog dialogg, String messageToShow) {
         if (dialogg == null) {

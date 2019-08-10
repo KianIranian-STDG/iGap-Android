@@ -91,6 +91,7 @@
                         android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
+                        android:visibility="gone"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
                         app:emojiSize="@dimen/standardTextSize" />
@@ -148,13 +149,15 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="locale">
 
-                <android.support.v7.widget.AppCompatTextView
+                <net.iGap.module.EmojiTextViewE
                     android:id="@+id/userBio"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp14"
                     android:paddingTop="@dimen/dp2"
+                    android:textSize="@dimen/standardTextSize"
+                    app:emojiSize="@dimen/standardTextSize"
                     android:text="@{viewModel.bio}"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/enableNotificationLyt"
@@ -475,6 +478,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
                     app:layout_constraintTop_toBottomOf="@id/emptySharedMedia" />
@@ -485,6 +489,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:visibility="gone"
                     android:text="@string/groups_in_common"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/commonGroupCount"
@@ -497,6 +502,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
+                    android:visibility="gone"
                     android:textColor="@color/setting_items_value_color"
                     app:layout_constraintBottom_toBottomOf="@id/commonGroup"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
@@ -520,6 +526,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
                     app:layout_constraintTop_toBottomOf="@id/commonGroupList" />
@@ -532,6 +539,7 @@
                     android:layout_marginTop="16dp"
                     android:text="@string/st_chatBackground"
                     android:textSize="@dimen/standardTextSize"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/line4" />
@@ -552,6 +560,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:visibility="gone"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSecretChatClick()}"
                     android:text="@string/secret_chat"
@@ -599,7 +608,7 @@
                     android:layout_marginBottom="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onBlockButtonClick()}"
-                    android:text="@string/block"
+                    android:text="@{viewModel.userBlockState}"
                     android:textColor="@color/red"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -619,7 +628,7 @@
             android:layout_marginLeft="@dimen/dp14"
             android:layout_marginTop="@dimen/dp80"
             android:scaleType="centerCrop"
-            android:src="@drawable/avatar"
+            android:background="@drawable/shape_background_profile_sample"
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />
 
@@ -640,17 +649,18 @@
                 android:layout_gravity="bottom"
                 android:layout_marginStart="@dimen/dp140"
                 android:layout_marginLeft="@dimen/dp140"
+                android:layout_marginEnd="@dimen/dp70"
+                android:layout_marginRight="@dimen/dp70"
                 android:layout_marginTop="@dimen/dp10"
                 android:orientation="vertical"
                 android:paddingRight="@dimen/dp10">
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/toolbar_txt_name_expanded"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:fontFamily="@font/main_font"
-                    android:gravity="bottom|center_horizontal"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/standardTextSize"
@@ -658,9 +668,9 @@
 
                 <TextView
                     android:id="@+id/toolbar_txt_status_expanded"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp1"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"
@@ -670,9 +680,9 @@
                 <TextView
                     android:id="@+id/toolbar_txt_username_expanded"
                     style="?textSubColorSettingTheme"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp10"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"
@@ -681,9 +691,9 @@
                 <TextView
                     android:id="@+id/toolbar_txt_tel_expanded"
                     style="?textSubColorSettingTheme"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp2"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"

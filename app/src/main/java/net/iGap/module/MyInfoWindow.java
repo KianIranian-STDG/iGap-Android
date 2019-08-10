@@ -170,7 +170,7 @@ public class MyInfoWindow extends InfoWindow {
                 HelperPublicMethod.goToChatRoom(userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
-                        new HelperFragment(mActivity.getSupportFragmentManager(),fragmentiGapMap).remove();
+                      //  new HelperFragment(mActivity.getSupportFragmentManager(),fragmentiGapMap).remove();
                     }
                 }, null);
             }

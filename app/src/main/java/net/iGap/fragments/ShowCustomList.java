@@ -48,6 +48,8 @@ import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.ContactChip;
+import net.iGap.module.FastScroller;
+import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.structs.StructContactInfo;
 
 import java.io.File;
@@ -59,11 +61,6 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     private static List<StructContactInfo> contacts;
     private static OnSelectedList onSelectedList;
     private FastAdapter fastAdapter;
-  //  private TextView txtStatus;
-  //  private TextView txtNumberOfMember;
-    //private EditText edtSearch;
-    private String textString = "";
-    private int sizeTextEdittext = 0;
     private boolean dialogShowing = false;
     private long lastId = 0;
     private int count = 0;
@@ -105,7 +102,6 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
             singleSelect = bundle.getBoolean("SINGLE_SELECT");
         }
 
-
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
@@ -117,30 +113,33 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
 
         LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
         toolbarLayout.addView(mHelperToolbar.getView());
-        //mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.add_new_member));
 
-        TextView btnInviteViaLink = view.findViewById(R.id.fcg_lbl_add_member);
-        btnInviteViaLink.setText(G.context.getResources().getString(R.string.channel_link_hint_revoke));
-        btnInviteViaLink.setOnClickListener( v -> {
+        /**
+         * for some problem in theme we created 2 layout and check theme then add at run time
+         * library does not support change text color or background color at run time until 1.0.8
+         */
+        ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
+        if (G.isDarkTheme){
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark , null));
+        }else {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout , null));
+        }
 
-            //Todo : add action for inviting member
-        });
+        chipsInput = view.findViewById(R.id.chips_input);
 
-        //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
-        chipsInput = (ChipsInput) view.findViewById(R.id.chips_input);
-
-        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
-        final ItemAdapter headerAdapter = new ItemAdapter();
-        final ItemAdapter itemAdapter = new ItemAdapter();
-        fastAdapter = FastAdapter.with(Arrays.asList(headerAdapter, itemAdapter));
+         final ItemAdapter itemAdapter = new ItemAdapter();
+        fastAdapter = FastAdapter.with( itemAdapter);
         fastAdapter.withSelectable(true);
         fastAdapter.setHasStableIds(true);
 
         //get our recyclerView and do basic setup
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView rv = view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+        rv.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setAdapter(stickyHeaderAdapter.wrap(fastAdapter));
+        rv.setAdapter(fastAdapter);
+
+        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+        fastScroller.setRecyclerView(rv);
 
         itemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
             @Override
@@ -175,10 +174,6 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
                 return false;
             }
         });
-
-        //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
-        rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
 
@@ -243,18 +238,9 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
             }
         });
 
-        //so the headers are aware of changes
-        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                decoration.invalidateHeaders();
-            }
-        });
-
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
 
-        refreshView();
     }
 
     private void notifyAdapter(ContactItemGroup item, int position) {
@@ -269,7 +255,6 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
 
             popBackStackFragment();
         }
-        refreshView();
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -350,25 +335,6 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
         }).show();
     }
 
-    private void refreshView() {
-
-        int selectedNumber = 0;
-        textString = "";
-
-        int size = contacts.size();
-
-        for (int i = 0; i < size; i++) {
-            if (contacts.get(i).isSelected) {
-                selectedNumber++;
-                textString += contacts.get(i).displayName + ",";
-            }
-        }
-
-
-        // sizeTextEdittext = textString.length();
-        //edtSearch.setText("");
-    }
-
     private ArrayList<StructContactInfo> getSelectedList() {
 
         ArrayList<StructContactInfo> list = new ArrayList<>();
@@ -397,6 +363,7 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     @Override
     public void onRightIconClickListener(View view) {
 
+        fixChipsLayoutShowingState();
         if (dialogShowing) {
             showDialog();
         } else {
@@ -410,14 +377,22 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     @Override
     public void onPause() {
 
+        fixChipsLayoutShowingState();
+        super.onPause();
+    }
+
+
+    private void fixChipsLayoutShowingState() {
+
         //this code added for close chips layout
-        if (chipsInput != null ) {
+        if (chipsInput != null) {
             try {
-                chipsInput.addChip("" , "" );
-            }catch (Exception e){
+                chipsInput.addChip("", "");
+                chipsInput.removeChipByLabel("");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        super.onPause();
+
     }
 }

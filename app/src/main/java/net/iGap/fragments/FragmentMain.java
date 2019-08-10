@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -111,7 +113,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
-public class FragmentMain extends BaseFragment implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -132,6 +134,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     private ViewGroup mLayoutMultiSelectedActions;
     private TextView mBtnRemoveSelected;
     private RealmResults<RealmRoom> results;
+    private ConstraintLayout root ;
+    private ConstraintSet constraintSet ;
+    private ViewGroup selectLayoutRoot ;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -160,6 +165,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
         tagId = System.currentTimeMillis();
+
+        selectLayoutRoot = view.findViewById(R.id.amr_layout_selected_root);
+        root = view.findViewById(R.id.amr_layout_root);
+        constraintSet = new ConstraintSet();
+        constraintSet.clone(root);
 
         progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
@@ -223,6 +233,32 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
             }
         });
 
+        mBtnReadAllSelected.setOnClickListener(v -> {
+
+            RealmResults<RealmRoom> unreadList = getRealmFragmentMain().where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+
+            if (unreadList.size() == 0) {
+                Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                    .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                    .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                    .onPositive((dialog, which) -> {
+                        dialog.dismiss();
+
+                        for (RealmRoom room : unreadList){
+                            markAsRead(room.getType() , room.getId());
+                        }
+
+                        onLeftIconClickListener(v);
+                    })
+                    .onNegative((dialog, which) -> dialog.dismiss())
+                    .show();
+
+        });
+
         if (G.isDarkTheme) {
             setColorToDarkMode(mBtnRemoveSelected);
             setColorToDarkMode(mBtnClearCacheSelected);
@@ -271,6 +307,9 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         initRecycleView();
 
+        //check is available forward message
+        setForwardMessage(true);
+
         //just check at first time page loaded
         notifyChatRoomsList();
 
@@ -280,12 +319,27 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
 
         try {
             if (mRecyclerView != null) {
+
+                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable){
+                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
+                    return;
+                }
+
+                if (G.isInCall && isChatMultiSelectEnable){
+                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
+                    return;
+                }
+
+                setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_search);
+
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp80), 0, 0);
                 } else if (G.isInCall) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
                 }else if (isChatMultiSelectEnable){
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp10), 0, 0);
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
                 }else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
                 }
@@ -803,12 +857,16 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
     @Override
     public void onLeftIconClickListener(View view) {
 
+        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null){
+            revertToolbarFromForwardMode();
+            return;
+        }
+
         if (isChatMultiSelectEnable) {
             mLayoutMultiSelectedActions.setVisibility(View.GONE);
             /*ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
             marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_search), 0, 10);
             mRecyclerView.setLayoutParams(marginLayoutParams)*/
-            ;
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
             if (G.isLandscape && G.twoPaneMode) {
@@ -848,6 +906,15 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         notifyChatRoomsList();
     }
 
+    public void revertToolbarFromForwardMode() {
+        FragmentChat.mForwardMessages = null ;
+        mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+        mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+        mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
+        if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+        mHelperToolbar.setLeftIcon(R.string.edit_icon);
+    }
+
     @Override
     public void onSearchClickListener(View view) {
         if (getActivity() != null) {
@@ -862,6 +929,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 e.getStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onToolbarTitleClickListener(View view) {
+        mRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
@@ -899,6 +971,14 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    public void checkPassCodeIconVisibility(){
+
+        if (mHelperToolbar != null) {
+            mHelperToolbar.checkPassCodeVisibility();
+        }
+
     }
 
     private void confirmActionForClearHistoryOfSelected() {
@@ -942,6 +1022,11 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         }
     }
 
+    private void setMargin(int mTop){
+        constraintSet.setMargin(selectLayoutRoot.getId() , ConstraintSet.TOP , i_Dp(mTop));
+        constraintSet.applyTo(root);
+    }
+
     private void markAsRead(ProtoGlobal.Room.Type chatType, long roomId) {
 
         G.handler.postDelayed(() -> {
@@ -972,6 +1057,19 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 realm.close();
             }, 250);
         }, 5);
+    }
+
+    @Override
+    public boolean isAllowToBackPressed() {
+        if (isChatMultiSelectEnable){
+            onLeftIconClickListener(null);
+            return false;
+        }else if (FragmentChat.mForwardMessages != null){
+            revertToolbarFromForwardMode();
+            return false;
+        }else {
+            return true;
+        }
     }
 
     public enum MainType {
@@ -1325,7 +1423,16 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                         } else {
                             holder.LastMessageTv.setText(subStringInternal(lastMessage));
                         }
+
+                        if (mInfo.getType() == GROUP &&
+                                mInfo.getLastMessage().getReplyTo() == null
+                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.TEXT) {
+                            holder.LastMessageTv.setVisibility(View.GONE);
+                        } else {
+                            holder.LastMessageTv.setVisibility(View.VISIBLE);
+                        }
                     }
+
                 } else {
 
                     holder.lastMessageSender.setVisibility(View.GONE);
@@ -1377,10 +1484,10 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
                 chatIconTv.setText("");
             } else if (mInfo.getType() == GROUP) {
                 chatIconTv.setVisibility(View.VISIBLE);
-                chatIconTv.setText(";");
+                chatIconTv.setText(R.string.group_icon);
             } else if (mInfo.getType() == CHANNEL) {
                 chatIconTv.setVisibility(View.VISIBLE);
-                chatIconTv.setText(":");
+                chatIconTv.setText(R.string.channel_main_icon);
             } else {
                 chatIconTv.setVisibility(View.GONE);
             }
@@ -1555,4 +1662,20 @@ public class FragmentMain extends BaseFragment implements ToolbarListener, OnCli
         }
     }
 
+    //check state of forward message from chat room and show on toolbar
+    public void setForwardMessage(boolean enable){
+
+        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null){
+            if (enable){
+                mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
+                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+                if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                mHelperToolbar.setLeftIcon(R.string.back_icon);
+            }else {
+                revertToolbarFromForwardMode();
+            }
+        }
+
+    }
 }

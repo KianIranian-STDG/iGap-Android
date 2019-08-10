@@ -17,6 +17,7 @@ import android.view.ViewTreeObserver;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentUserScoreBinding;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -141,8 +142,17 @@ public class FragmentUserScore extends BaseFragment {
                     title.setText(iVandScore.getEnName());
                 }
 
-                count.setText(iVandScore.getScore() + " " + getString(R.string.point));
+                count.setText(checkPersianNumber(String.valueOf(iVandScore.getScore())) + " " + getString(R.string.point));
             }
+
+            private String checkPersianNumber(String text){
+                if (HelperCalander.isPersianUnicode){
+                    return HelperCalander.convertToUnicodeFarsiNumber(text);
+                }else {
+                    return text;
+                }
+            }
+
         }
     }
 }

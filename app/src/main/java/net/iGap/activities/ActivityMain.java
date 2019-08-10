@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -41,6 +42,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.security.ProviderInstaller;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
@@ -98,6 +102,7 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -106,6 +111,8 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.payment.Payment;
+import net.iGap.payment.PaymentFragment;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -141,7 +148,7 @@ import retrofit2.Response;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -150,6 +157,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
     public static final int WALLET_REQUEST_CODE = 1024;
+    private static final int ERROR_DIALOG_REQUEST_CODE = 1;
+
+    private boolean retryProviderInstall;
 
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
@@ -305,6 +315,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
+        if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
+            Log.wtf(this.getClass().getName(), "status: " + intent.getStringExtra("status"));
+            Log.wtf(this.getClass().getName(), "message: " + intent.getStringExtra("message"));
+            Log.wtf(this.getClass().getName(), "orderId: " + intent.getStringExtra("order_id"));
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentById(R.id.viewpager);
+            if (fragment instanceof PaymentFragment) {
+                ((PaymentFragment) fragment).setPaymentResult(new Payment(
+                        intent.getStringExtra("status"),
+                        intent.getStringExtra("message"),
+                        intent.getStringExtra("order_id")
+                ));
+            }
+        }
+
         new HelperGetDataFromOtherApp(this, intent);
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
@@ -342,6 +367,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISOK) {
+            Realm realm = Realm.getDefaultInstance();
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                String token = realmUserInfo.getPushNotificationToken();
+                if (token == null || token.length() < 2) {
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
+                        String mToken = instanceIdResult.getToken();
+                        RealmUserInfo.setPushNotification(mToken);
+                    });
+                }
+            }
+            realm.close();
+
+            initTabStrip();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -500,8 +539,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             isOpenChatBeforeSheare = false;
             checkIntent(getIntent());
-
-            initTabStrip();
 
             initComponent();
 
@@ -838,7 +875,71 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
                 break;
 
+            case ERROR_DIALOG_REQUEST_CODE:
+                // Adding a fragment via GoogleApiAvailability.showErrorDialogFragment
+                // before the instance state is restored throws an error. So instead,
+                // set a flag here, which will cause the fragment to delay until
+                // onPostResume.
+                retryProviderInstall = true;
+                break;
         }
+    }
+
+    /**
+     * This method is only called if the provider is successfully updated
+     * (or is already up-to-date).
+     */
+    @Override
+    public void onProviderInstalled() {
+        // Provider is up-to-date, app can make secure network calls.
+        Log.wtf(this.getClass().getName(), "onProviderInstalled");
+    }
+
+    /**
+     * This method is called if updating fails; the error code indicates
+     * whether the error is recoverable.
+     */
+    @Override
+    public void onProviderInstallFailed(int errorCode, Intent intent) {
+        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
+        if (availability.isUserResolvableError(errorCode)) {
+            // Recoverable error. Show a dialog prompting the user to
+            // install/update/enable Google Play services.
+            availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                // The user chose not to take the recovery action
+                onProviderInstallerNotAvailable();
+            });
+        } else {
+            // Google Play services is not available.
+            onProviderInstallerNotAvailable();
+        }
+    }
+
+    /**
+     * On resume, check to see if we flagged that we need to reinstall the
+     * provider.
+     */
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (retryProviderInstall) {
+            // We can now safely retry installation.
+            ProviderInstaller.installIfNeededAsync(this, this);
+        }
+        retryProviderInstall = false;
+    }
+
+    private void onProviderInstallerNotAvailable() {
+        // This is reached if the provider cannot be updated for some reason.
+        // App should consider all HTTP communication to be vulnerable, and take
+        // appropriate action.
+        new MaterialDialog.Builder(this)
+                .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
+                .titleGravity(GravityEnum.CENTER)
+                .buttonsGravity(GravityEnum.CENTER)
+                .content("برای استفاده از این بخش نیاز به گوگل سرویس است.").contentGravity(GravityEnum.CENTER)
+                .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void checkKeepMedia() {
@@ -921,6 +1022,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    public void checkGoogleUpdate() {
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        ProviderInstaller.installIfNeededAsync(this, this);
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+    }
 
     //*******************************************************************************************************************************************
 
@@ -1134,8 +1240,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                     if (fragment instanceof BottomNavigationFragment) {
-                        if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
-                            finish();
+                        if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
+                            if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                                finish();
+                            }
                         }
                     }
                 }
@@ -1661,5 +1769,24 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void removeAllFragmentFromMain() {
         getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+    }
+
+    /**
+     * base on main fragment structure that onResume just call one in main fragment
+     * we should get bottom nav fragment (contains all startup fragments) and after
+     * that get our fragment from bottom nav fragment and do our job
+     */
+    public void updatePassCodeState() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).checkPassCodeIconVisibility();
+        }
+    }
+
+    public void setForwardMessage(boolean enable){
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).setForwardMessage(enable);
+        }
     }
 }

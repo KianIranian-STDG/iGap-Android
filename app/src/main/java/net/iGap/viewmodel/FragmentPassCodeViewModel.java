@@ -80,6 +80,7 @@ public class FragmentPassCodeViewModel {
     public MutableLiveData<Integer> rippleOkVisibility = new MutableLiveData<>();
     public ObservableField<Integer> layoutModePassCode = new ObservableField<>(View.GONE);
     public ObservableField<Integer> vgToggleFingerPrintVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Boolean> passCodeStateChangeListener = new MutableLiveData<>();
     private Realm realm;
     private boolean isPassCode;
     public boolean isPattern;
@@ -157,6 +158,7 @@ public class FragmentPassCodeViewModel {
 
     private void goToSettingPattern() {
         G.isPassCode = true;
+        passCodeStateChangeListener.postValue(G.isPassCode);
         visibilityPatternLock.set(View.VISIBLE);
         vgTogglePassCodeVisibility.set(View.VISIBLE);
         visibilityChangePass.set(View.VISIBLE);
@@ -235,6 +237,7 @@ public class FragmentPassCodeViewModel {
         editor.apply();
 
         G.isPassCode = false;
+        passCodeStateChangeListener.postValue(G.isPassCode);
         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         edtSetPasswordText.set("");
         realm.executeTransaction(new Realm.Transaction() {
@@ -282,6 +285,7 @@ public class FragmentPassCodeViewModel {
         visibilityTactileFeedback.set(View.GONE);
         isPattern = false;
         G.isPassCode = false;
+        passCodeStateChangeListener.postValue(G.isPassCode);
         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true);
@@ -387,6 +391,8 @@ public class FragmentPassCodeViewModel {
 
                 G.isPassCode = true;
                 ActivityMain.isLock = false;
+                passCodeStateChangeListener.setValue(G.isPassCode);
+
                 HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
                 AppUtils.closeKeyboard(v);
@@ -740,6 +746,7 @@ public class FragmentPassCodeViewModel {
 
                 G.isPassCode = true;
                 ActivityMain.isLock = false;
+                passCodeStateChangeListener.postValue(G.isPassCode);
                 HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
                 realm.executeTransaction(new Realm.Transaction() {

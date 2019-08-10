@@ -1,14 +1,15 @@
 package net.iGap.api.apiService;
 
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.IgashtApi;
 import net.iGap.api.KuknosApi;
-import net.iGap.api.PopularChannelApi;
+import net.iGap.api.FavoriteChannelApi;
 
 public class ApiServiceProvider {
     private static RetrofitFactory factory = new RetrofitFactory();
 
     private static BeepTunesApi beepTunesApi;
-    private static PopularChannelApi channelApi;
+    private static FavoriteChannelApi channelApi;
     private static KuknosApi kuknosApi;
 
     public static BeepTunesApi getBeepTunesClient() {
@@ -18,9 +19,9 @@ public class ApiServiceProvider {
         return beepTunesApi;
     }
 
-    public static PopularChannelApi getChannelApi() {
+    public static FavoriteChannelApi getChannelApi() {
         if (channelApi == null) {
-            channelApi = factory.getChannelRetrofit().create(PopularChannelApi.class);
+            channelApi = factory.getChannelRetrofit().create(FavoriteChannelApi.class);
         }
         return channelApi;
     }
@@ -31,5 +32,4 @@ public class ApiServiceProvider {
         }
         return kuknosApi;
     }
-
 }

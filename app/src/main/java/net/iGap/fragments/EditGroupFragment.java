@@ -56,7 +56,6 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     private EditGroupViewModel viewModel;
     private AttachFile attachFile;
     private EmojiPopup emojiPopup;
-    private boolean isInitEmoji = false;
     private boolean isEmojiShow = false;
 
     public static EditGroupFragment newInstance(long roomId) {
@@ -134,7 +133,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
         });
 
         viewModel.showDialogChatHistory.observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean) {
+            if (getActivity() != null && aBoolean != null && aBoolean) {
                 showDialog();
             }
         });
@@ -143,10 +142,6 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         viewModel.initEmoji.observe(this, aBoolean -> {
             if (aBoolean != null) {
-                if (!isInitEmoji) {
-                    setUpEmojiPopup();
-                    isInitEmoji = true;
-                }
                 emojiPopup.toggle();
             }
         });
@@ -159,11 +154,13 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         viewModel.goToRoomListPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() instanceof ActivityMain && go != null && go) {
-                Log.wtf(this.getClass().getName(),"goToRoomListPage observe");
+                Log.wtf(this.getClass().getName(), "goToRoomListPage observe");
                 ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                 /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
             }
         });
+
+        setUpEmojiPopup();
     }
 
     @Override
@@ -271,7 +268,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void showDialog() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(getActivity()).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 switch (which) {
@@ -286,11 +283,11 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                         break;
                     case 3:
                         dialog.dismiss();
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(getActivity()).title(R.string.customs).positiveText(getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 if (dialog.getInputEditText() != null && dialog.getInputEditText().getEditableText() != null) {
-                                    if (dialog.getInputEditText().getEditableText().length() < 5) {
+                                    if (dialog.getInputEditText().getEditableText().length() > 0 && dialog.getInputEditText().getEditableText().length() < 5) {
                                         viewModel.setChatHistoryStatus(Integer.parseInt(dialog.getInputEditText().getEditableText().toString()));
                                     } else {
                                         viewModel.setChatHistoryStatus(0);
@@ -342,23 +339,27 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void groupLeft() {
-        String text;
-        int title;
-        if (viewModel.role == GroupChatRole.OWNER) {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_delete_this_group);
-            title = R.string.delete_group;
-        } else {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
-            title = R.string.left_group;
-        }
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
-                viewModel.leaveGroup();
-                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        if (getActivity() != null) {
+            int text;
+            int title;
+            if (viewModel.role == GroupChatRole.OWNER) {
+                text = R.string.do_you_want_to_delete_this_group;
+                title = R.string.delete_group;
+            } else {
+                text = R.string.do_you_want_to_leave_this_group;
+                title = R.string.left_group;
             }
-        }).show();
+
+            new MaterialDialog.Builder(getActivity()).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                    viewModel.leaveGroup();
+                    if (getActivity() != null) {
+                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                }
+            }).show();
+        }
     }
 
     @Override

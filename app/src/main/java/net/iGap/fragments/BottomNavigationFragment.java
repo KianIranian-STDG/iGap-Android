@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
@@ -177,6 +176,34 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         } else {
             bottomNavigation.setCurrentItem(2);
             return false;
+        }
+    }
+
+    public boolean isAllowToBackPressed() {
+        Fragment page = getChildFragmentManager().findFragmentById(R.id.viewpager);
+        // based on the current position you can then cast the page to the correct
+        // class and call the method:
+        if (page instanceof BaseMainFragments) {
+            return ((BaseMainFragments) page).isAllowToBackPressed();
+        } else {
+            return true;
+        }
+
+    }
+
+    public void checkPassCodeIconVisibility(){
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
+
+        if (fragment instanceof FragmentMain){
+            ((FragmentMain) fragment).checkPassCodeIconVisibility();
+        }
+    }
+
+    public void setForwardMessage(boolean enable){
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
+
+        if (fragment instanceof FragmentMain){
+            ((FragmentMain) fragment).setForwardMessage(enable);
         }
     }
 }

@@ -37,20 +37,11 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnChannelAddAdmin;
-import net.iGap.interfaces.OnChannelAddModerator;
 import net.iGap.interfaces.OnChannelGetMemberList;
-import net.iGap.interfaces.OnChannelKickAdmin;
-import net.iGap.interfaces.OnChannelKickMember;
-import net.iGap.interfaces.OnChannelKickModerator;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGroupAddAdmin;
-import net.iGap.interfaces.OnGroupAddModerator;
 import net.iGap.interfaces.OnGroupGetMemberList;
-import net.iGap.interfaces.OnGroupKickAdmin;
 import net.iGap.interfaces.OnGroupKickMember;
-import net.iGap.interfaces.OnGroupKickModerator;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -61,11 +52,10 @@ import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.PreCachingLayoutManager;
+import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoChannelGetMemberList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
@@ -76,9 +66,13 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddMember;
+import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelGetMemberList;
+import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddMember;
+import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
@@ -99,7 +93,13 @@ import static net.iGap.G.context;
 import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupAddAdmin, OnGroupKickAdmin, OnGroupAddModerator, OnGroupKickModerator, OnGroupKickMember, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelAddModerator, OnChannelKickModerator, OnChannelKickMember {
+public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupKickMember {
+
+    public enum ShowMemberMode {
+        NONE,
+        SELECT_FOR_ADD_ADMIN,
+        SELECT_FOR_ADD_MODERATOR
+    }
 
     public static final String ROOMIDARGUMENT = "ROOMID_ARGUMENT";
     public static final String MAINROOL = "MAIN_ROOL";
@@ -108,9 +108,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     public static final String ISNEEDGETMEMBERLIST = "IS_NEED_GET_MEMBER_LIST";
     public static final String ISGROUP = "IS_GROUP";
     public static final String ISSHOWADDMEMBER = "IS_SHOW_ADD_MEMBER";
-    public static List<StructMessageInfo> lists = new ArrayList<>();
+    public static final String SHOW_MEMBER_MODE = "SHOW_MEMBER_MODE";
     private OnComplete infoUpdateListenerCount;
-    private static Fragment fragment;
+    private Fragment fragment;
     List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> listMembers = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
     List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> listMembersChannal = new ArrayList<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member>();
     private long mRoomID = 0;
@@ -126,10 +126,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private int mMemberCount = 0;
     private int mCurrentUpdateCount = 0;
     private boolean isFirstFill = true;
+    private ShowMemberMode showMemberMode;
     private int offset = 0;
     private int limit = 30;
     private EndlessRecyclerViewScrollListener scrollListener;
-    private boolean isDeleteMemberList = true;
     private ProtoGlobal.Room.Type roomType;
     private boolean isOne = true;
     private Realm mRealm;
@@ -142,33 +142,19 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
-        Bundle bundle = new Bundle();
-        bundle.putLong(ROOMIDARGUMENT, roomId);
-        bundle.putString(MAINROOL, mainrool);
-        bundle.putLong(USERID, userid);
-        bundle.putString(SELECTEDROLE, selectedRole);
-        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
-        FragmentShowMember fragmentShowMember = new FragmentShowMember();
-        fragmentShowMember.setArguments(bundle);
-        return fragmentShowMember;
+        return newInstance2(null, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, false);
     }
 
     public static FragmentShowMember newInstance2(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup) {
-        fragment = frg;
-        Bundle bundle = new Bundle();
-        bundle.putLong(ROOMIDARGUMENT, roomId);
-        bundle.putString(MAINROOL, mainrool);
-        bundle.putLong(USERID, userid);
-        bundle.putString(SELECTEDROLE, selectedRole);
-        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
-        bundle.putBoolean(ISGROUP, isGroup);
-        FragmentShowMember fragmentShowMember = new FragmentShowMember();
-        fragmentShowMember.setArguments(bundle);
-        return fragmentShowMember;
+        return newInstance3(frg, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, isGroup, true);
     }
 
     public static FragmentShowMember newInstance3(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton) {
-        fragment = frg;
+        return newInstance4(frg, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, isGroup, isShowAddMemberButton, ShowMemberMode.NONE);
+    }
+
+    public static FragmentShowMember newInstance4(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton, ShowMemberMode showMemberMode) {
+
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
         bundle.putString(MAINROOL, mainrool);
@@ -177,8 +163,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
         bundle.putBoolean(ISGROUP, isGroup);
         bundle.putBoolean(ISSHOWADDMEMBER, isShowAddMemberButton);
+        bundle.putString(SHOW_MEMBER_MODE, showMemberMode.toString());
         FragmentShowMember fragmentShowMember = new FragmentShowMember();
         fragmentShowMember.setArguments(bundle);
+        fragmentShowMember.fragment = frg;
         return fragmentShowMember;
     }
 
@@ -199,17 +187,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //G.onGroupAddAdmin = this;
-        //G.onGroupAddModerator = this;
-        //G.onGroupKickAdmin = this;
-        //G.onGroupKickModerator = this;
-        //G.onGroupKickMember = this;
-        //G.onChannelAddAdmin = this;
-        //G.onChannelAddModerator = this;
-        //G.onChannelKickAdmin = this;
-        //G.onChannelKickModerator = this;
-        //G.onChannelKickMember = this;
-
         if (getArguments() != null) {
 
 
@@ -224,20 +201,16 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             mMainRole = getArguments().getString(MAINROOL);
             userID = getArguments().getLong(USERID);
             selectedRole = getArguments().getString(SELECTEDROLE);
-            //isNeedGetMemberList = getArguments().getBoolean(ISNEEDGETMEMBERLIST);
             isNeedGetMemberList = true;
-            Log.i("iGap", "onCreateView: hi" + selectedRole);
 
-            try {
-                isGroup = getArguments().getBoolean(ISGROUP);
-            } catch (Exception e) {
-
+            isGroup = getArguments().getBoolean(ISGROUP);
+            if (!getArguments().getString(SHOW_MEMBER_MODE, "").equals("")) {
+                showMemberMode = ShowMemberMode.valueOf(getArguments().getString(SHOW_MEMBER_MODE, ""));
+            } else {
+                showMemberMode = ShowMemberMode.NONE;
             }
-            try {
-                isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER , true);
-            } catch (Exception e) {
 
-            }
+            isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER , true);
 
             roomType = RealmRoom.detectType(mRoomID);
 
@@ -419,8 +392,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
-
-                RealmMember.deleteAllMembers(mRoomID);
+                RealmMember.deleteAllMembers(mRoomID, selectedRole);
                 if (roomType == GROUP) {
                     new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
                 } else {
@@ -469,6 +441,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
 
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+
         //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
@@ -490,11 +464,32 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_admin));
             mBtnAdd.setText(context.getResources().getString(R.string.add_admin));
+            mBtnAdd.setVisibility(View.GONE);
+            if (realmRoom != null) {
+                if (realmRoom.getGroupRoom() != null && realmRoom.getGroupRoom().getRole() == GroupChatRole.OWNER) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+
+                if (realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+            }
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_modereator));
             mBtnAdd.setText(context.getResources().getString(R.string.add_modereator));
+
+            mBtnAdd.setVisibility(View.GONE);
+            if (realmRoom != null) {
+                if (realmRoom.getGroupRoom() != null && (realmRoom.getGroupRoom().getRole() == GroupChatRole.OWNER || realmRoom.getGroupRoom().getRole() == GroupChatRole.ADMIN)) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+
+                if (realmRoom.getChannelRoom() != null && (realmRoom.getChannelRoom().getRole() == ChannelChatRole.OWNER || realmRoom.getChannelRoom().getRole() == ChannelChatRole.ADMIN)) {
+                    mBtnAdd.setVisibility(View.VISIBLE);
+                }
+            }
 
         }
 
@@ -502,8 +497,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())
                     || selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
-
-                openFragmentForAdd(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
+                openFragmentForAdd(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString(), selectedRole);
 
             } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
 
@@ -528,7 +522,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             @Override
             public void afterTextChanged(final Editable s) {
-                RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRealm, mRoomID, s.toString());
+                RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRealm, mRoomID, s.toString(), getUnselectRow(), selectedRole);
                 mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -627,6 +621,23 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
     }
 
+    private ArrayList<String> getUnselectRow() {
+        ArrayList<String> result = new ArrayList<>();
+        switch (showMemberMode) {
+            case SELECT_FOR_ADD_ADMIN:
+                result.add(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+                result.add(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+                break;
+            case SELECT_FOR_ADD_MODERATOR:
+                result.add(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+                result.add(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+                result.add(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+                break;
+        }
+
+        return result;
+    }
+
     private void fillAdapter() {
 
         if (roomType == GROUP) {
@@ -635,9 +646,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             role = RealmChannelRoom.detectMineRole(mRoomID).toString();
         }
 
-        RealmResults<RealmMember> realmMembers = RealmMember.filterRole(mRealm, mRoomID, roomType, selectedRole);
+        RealmResults<RealmMember> realmMembers = RealmMember.filterMember(mRealm, mRoomID, "", getUnselectRow(), selectedRole);
 
-        if (realmMembers.size() > 0 && G.fragmentActivity != null) {
+        if (G.fragmentActivity != null) {
             mAdapter = new MemberAdapter(realmMembers, roomType, mMainRole, userID);
             mRecyclerView.setAdapter(mAdapter);
 
@@ -654,62 +665,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
      */
 
     @Override
-    public void onGroupAddAdmin(final long roomId, final long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onGroupAddModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onGroupKickAdmin(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onGroupKickModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
     public void onGroupKickMember(long roomId, long memberId) {
         removeMember(roomId, memberId);
     }
 
     @Override
-    public void onChannelAddAdmin(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelAddModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelKickAdmin(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelKickModerator(long roomId, long memberId) {
-        resetMemberState(roomId, memberId);
-    }
-
-    @Override
-    public void onChannelKickMember(long roomId, long memberId) {
-        removeMember(roomId, memberId);
-    }
-
-    @Override
     public void onError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void timeOut() {
 
     }
 
@@ -737,9 +698,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         mRecyclerView.setAdapter(mAdapter);
     }*/
 
-    private void openFragmentForAdd(String SelectedRole) {
+    private void openFragmentForAdd(String SelectedRole, String selectedRule) {
         if (getActivity() != null) {
-            FragmentShowMember fragment1 = FragmentShowMember.newInstance3(fragment, mRoomID, role, G.userId, SelectedRole, true , isGroup , false);
+            ShowMemberMode showMemberMode;
+            if (selectedRule.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
+                showMemberMode = ShowMemberMode.SELECT_FOR_ADD_ADMIN;
+            } else {
+                showMemberMode = ShowMemberMode.SELECT_FOR_ADD_MODERATOR;
+            }
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, G.userId, SelectedRole, true , isGroup , false, showMemberMode);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
         }
     }
@@ -787,292 +754,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
     }
 
-    /**
-     * ***********************************************************************************
-     * *********************************** FastAdapter ***********************************
-     * ***********************************************************************************
-     */
-
-    //public class MemberAdapterA<Item extends MemberItem> extends FastItemAdapter<Item> {
-    //    @Override
-    //    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    //        return super.onCreateViewHolder(parent, viewType);
-    //    }
-    //}
-    //
-    //class MemberItem extends AbstractItem<MemberItem, MemberItem.ViewHolder> {
-    //    RealmMember realmMember;
-    //    public String mainRole;
-    //    public ProtoGlobal.Room.Type roomType;
-    //    public long userId;
-    //    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
-    //
-    //    public MemberItem(ProtoGlobal.Room.Type roomType, String mainRole, long userId) {
-    //        this.roomType = roomType;
-    //        this.mainRole = mainRole;
-    //        this.userId = userId;
-    //    }
-    //
-    //    public MemberItem setInfo(RealmMember realmMember) {
-    //        this.realmMember = realmMember;
-    //        return this;
-    //    }
-    //
-    //    @Override
-    //    public void bindView(final ViewHolder holder, List payloads) throws IllegalStateException {
-    //        super.bindView(holder, payloads);
-    //
-    //        final StructContactInfo mContact = convertRealmToStruct(realmMember);
-    //
-    //        if (mContact == null) {
-    //            return;
-    //        }
-    //
-    //        holder.itemView.setOnClickListener(new View.OnClickListener() {
-    //            @Override
-    //            public void onClick(View v) {
-    //                try {
-    //                    HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
-    //                        @Override
-    //                        public void Allow() {
-    //                            if (mContact.peerId == userID) {
-    //                                new HelperFragment(new FragmentSetting()).setReplace(false).load();
-    //                            } else {
-    //                                new HelperFragment(FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
-    //                            }
-    //                        }
-    //
-    //                        @Override
-    //                        public void deny() {
-    //
-    //                        }
-    //                    });
-    //                } catch (IOException e) {
-    //                    e.printStackTrace();
-    //                }
-    //            }
-    //        });
-    //
-    //        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-    //            @Override
-    //            public boolean onLongClick(View v) {
-    //
-    //                if (fragment instanceof FragmentGroupProfile) {
-    //
-    //                    if (role.equals(GroupChatRole.OWNER.toString())) {
-    //
-    //                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-    //
-    //                            ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
-    //                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-    //
-    //                            ((FragmentGroupProfile) fragment).kickAdmin(mContact.peerId);
-    //                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-    //
-    //                            ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
-    //                        }
-    //                    } else if (role.equals(GroupChatRole.ADMIN.toString())) {
-    //
-    //                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-    //                            ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
-    //                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-    //                            ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
-    //                        }
-    //                    } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
-    //
-    //                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-    //                            ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
-    //                        }
-    //                    }
-    //                } else if (fragment instanceof FragmentChannelProfile) {
-    //
-    //                    if (role.equals(GroupChatRole.OWNER.toString())) {
-    //
-    //                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-    //
-    //                            ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
-    //                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-    //
-    //                            ((FragmentChannelProfile) fragment).kickAdmin(mContact.peerId);
-    //                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-    //
-    //                            ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
-    //                        }
-    //                    } else if (role.equals(GroupChatRole.ADMIN.toString())) {
-    //
-    //                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-    //                            ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
-    //                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-    //                            ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
-    //                        }
-    //                    } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
-    //
-    //                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-    //                            ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
-    //                        }
-    //                    }
-    //                }
-    //
-    //                return true;
-    //            }
-    //        });
-    //
-    //        if (mContact.isHeader) {
-    //            holder.topLine.setVisibility(View.VISIBLE);
-    //        } else {
-    //            holder.topLine.setVisibility(View.GONE);
-    //        }
-    //
-    //        holder.title.setText(mContact.displayName);
-    //
-    //        setRoleStarColor(holder.roleStar, mContact);
-    //
-    //        hashMapAvatar.put(mContact.peerId, holder.image);
-    //
-    //        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-    //            @Override
-    //            public void onAvatarGet(String avatarPath, long userId) {
-    //                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(userId));
-    //            }
-    //
-    //            @Override
-    //            public void onShowInitials(String initials, String color) {
-    //                holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-    //            }
-    //        });
-    //
-    //        if (mContact.status != null) {
-    //            if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-    //                holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, mContact.lastSeen, false));
-    //            } else {
-    //                holder.subtitle.setText(mContact.status);
-    //            }
-    //        }
-    //
-    //        if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-    //            holder.btnMenu.setVisibility(View.INVISIBLE);
-    //        } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-    //
-    //            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString()))) {
-    //                holder.btnMenu.setVisibility(View.INVISIBLE);
-    //            } else {
-    //                showPopup(holder, mContact);
-    //            }
-    //        } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-    //
-    //            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString()))) {
-    //                holder.btnMenu.setVisibility(View.INVISIBLE);
-    //            } else {
-    //                showPopup(holder, mContact);
-    //            }
-    //        } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-    //            showPopup(holder, mContact);
-    //        }
-    //
-    //        /**
-    //         * don't allow for use dialog if this item
-    //         * is for own user
-    //         */
-    //        if (mContact.peerId == mContact.userID) {
-    //            holder.btnMenu.setVisibility(View.INVISIBLE);
-    //        }
-    //    }
-    //
-    //    @Override
-    //    public int getType() {
-    //        return 0;
-    //    }
-    //
-    //    @Override
-    //    public int getLayoutRes() {
-    //        return R.layout.contact_item_group_profile;
-    //    }
-    //
-    //    @Override
-    //    public ViewHolder getViewHolder(View viewGroup) {
-    //        return new ViewHolder(viewGroup);
-    //    }
-    //
-    //    public class ViewHolder extends RecyclerView.ViewHolder {
-    //
-    //        protected CircleImageView image;
-    //        protected CustomTextViewMedium title;
-    //        protected CustomTextViewMedium subtitle;
-    //        protected View topLine;
-    //        protected TextView txtNumberOfSharedMedia;
-    //        protected MaterialDesignTextView roleStar;
-    //        protected MaterialDesignTextView btnMenu;
-    //
-    //        public ViewHolder(View itemView) {
-    //            super(itemView);
-    //
-    //            image = (CircleImageView) itemView.findViewById(R.id.cigp_imv_contact_avatar);
-    //            title = (CustomTextViewMedium) itemView.findViewById(R.id.cigp_txt_contact_name);
-    //            subtitle = (CustomTextViewMedium) itemView.findViewById(R.id.cigp_txt_contact_lastseen);
-    //            topLine = itemView.findViewById(R.id.cigp_view_topLine);
-    //            txtNumberOfSharedMedia = (TextView) itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
-    //            roleStar = (MaterialDesignTextView) itemView.findViewById(R.id.cigp_txt_member_role);
-    //            btnMenu = (MaterialDesignTextView) itemView.findViewById(R.id.cigp_moreButton);
-    //        }
-    //    }
-    //
-    //    private void showPopup(ViewHolder holder, final StructContactInfo mContact) {
-    //        holder.btnMenu.setVisibility(View.VISIBLE);
-    //
-    //        holder.btnMenu.setOnClickListener(new View.OnClickListener() {
-    //            @Override
-    //            public void onClick(View v) {
-    //
-    //                if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-    //                    if (FragmentChannelProfile.onMenuClick != null) {
-    //                        FragmentChannelProfile.onMenuClick.clicked(v, mContact);
-    //                    }
-    //                } else if (roomType == GROUP) {
-    //                    if (FragmentGroupProfile.onMenuClick != null) {
-    //                        FragmentGroupProfile.onMenuClick.clicked(v, mContact);
-    //                    }
-    //                }
-    //            }
-    //        });
-    //    }
-    //
-    //    private void setRoleStarColor(MaterialDesignTextView view, StructContactInfo mContact) {
-    //
-    //        view.setVisibility(View.GONE);
-    //
-    //        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-    //            view.setVisibility(View.VISIBLE);
-    //            view.setTextColor(Color.CYAN);
-    //        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-    //            view.setVisibility(View.VISIBLE);
-    //            view.setTextColor(Color.GREEN);
-    //        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-    //            view.setVisibility(View.VISIBLE);
-    //            view.setTextColor(Color.BLUE);
-    //        }
-    //    }
-    //
-    //    StructContactInfo convertRealmToStruct(RealmMember realmMember) {
-    //        Realm realm = Realm.getDefaultInstance();
-    //        String role = realmMember.getRole();
-    //        long id = realmMember.getPeerId();
-    //        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
-    //        if (realmRegisteredInfo != null) {
-    //            StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
-    //            s.role = role;
-    //            s.avatar = realmRegisteredInfo.getLastAvatar();
-    //            s.initials = realmRegisteredInfo.getInitials();
-    //            s.color = realmRegisteredInfo.getColor();
-    //            s.lastSeen = realmRegisteredInfo.getLastSeen();
-    //            s.status = realmRegisteredInfo.getStatus();
-    //            s.userID = userId;
-    //            return s;
-    //        }
-    //
-    //        realm.close();
-    //        return null;
-    //    }
-    //}
 
     /**
      * **********************************************************************************
@@ -1116,10 +797,31 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                             HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
                                 @Override
                                 public void Allow() {
-                                    if (mContact.peerId == userID) {
-                                        new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
-                                    } else {
-                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                    switch (showMemberMode) {
+                                        case NONE:
+                                            if (mContact.peerId == userID) {
+                                                // bagi:// dont uncomment below line it has some bug
+                                                //new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
+                                            } else {
+                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                            }
+                                            break;
+                                        case SELECT_FOR_ADD_MODERATOR:
+                                            if (isGroup) {
+                                                new RequestGroupAddModerator().groupAddModerator(mRoomID, mContact.peerId);
+                                            } else {
+                                                new RequestChannelAddModerator().channelAddModerator(mRoomID, mContact.peerId);
+                                            }
+                                            getActivity().onBackPressed();
+                                            break;
+                                        case SELECT_FOR_ADD_ADMIN:
+                                            if (isGroup) {
+                                                new RequestGroupAddAdmin().groupAddAdmin(mRoomID, mContact.peerId);
+                                            } else {
+                                                new RequestChannelAddAdmin().channelAddAdmin(mRoomID, mContact.peerId);
+                                            }
+                                            getActivity().onBackPressed();
+                                            break;
                                     }
                                 }
 
@@ -1247,6 +949,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             if (mContact.peerId == mContact.userID) {
                 holder.btnMenu.setVisibility(View.INVISIBLE);
             }
+
+            if (showMemberMode != ShowMemberMode.NONE) {
+                holder.btnMenu.setVisibility(View.GONE);
+            }
         }
 
         private void checkTheme(ViewHolder holder) {
@@ -1278,7 +984,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             });
         }
 
-        private void setRoleStarColor(MaterialDesignTextView view, StructContactInfo mContact) {
+        private void setRoleStarColor(TextView view, StructContactInfo mContact) {
 
             view.setVisibility(View.GONE);
 
@@ -1323,19 +1029,19 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             protected CustomTextViewMedium subtitle;
             protected View topLine;
             protected TextView txtNumberOfSharedMedia;
-            protected MaterialDesignTextView roleStar;
-            protected MaterialDesignTextView btnMenu;
+            protected TextView roleStar;
+            protected TextView btnMenu;
 
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                image = (CircleImageView) itemView.findViewById(R.id.cigp_imv_contact_avatar);
-                title = (CustomTextViewMedium) itemView.findViewById(R.id.cigp_txt_contact_name);
-                subtitle = (CustomTextViewMedium) itemView.findViewById(R.id.cigp_txt_contact_lastseen);
+                image =  itemView.findViewById(R.id.cigp_imv_contact_avatar);
+                title =  itemView.findViewById(R.id.cigp_txt_contact_name);
+                subtitle =  itemView.findViewById(R.id.cigp_txt_contact_lastseen);
                 topLine = itemView.findViewById(R.id.cigp_view_topLine);
-                txtNumberOfSharedMedia = (TextView) itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
-                roleStar = (MaterialDesignTextView) itemView.findViewById(R.id.cigp_txt_member_role);
-                btnMenu = (MaterialDesignTextView) itemView.findViewById(R.id.cigp_moreButton);
+                txtNumberOfSharedMedia =  itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
+                roleStar =  itemView.findViewById(R.id.cigp_txt_member_role);
+                btnMenu =  itemView.findViewById(R.id.cigp_moreButton);
             }
         }
     }

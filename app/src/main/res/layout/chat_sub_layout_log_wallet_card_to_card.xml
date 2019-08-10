@@ -18,7 +18,8 @@
         android:id="@+id/chatSubLayoutLogWalletCardToCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        style="?backgroundColorSettingTheme">
 
         <net.iGap.module.CustomTextViewMedium
             android:id="@+id/titleTxt"
@@ -78,7 +79,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -115,7 +116,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -151,7 +152,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -187,7 +188,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -223,7 +224,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -260,7 +261,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -297,7 +298,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"
@@ -334,7 +335,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                style="?lineColorSettingTheme" />
 
             <net.iGap.module.CustomTextViewMedium
                 style="?textSubColorSettingTheme"

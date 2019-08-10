@@ -283,26 +283,16 @@ public class ViewMaker {
     }
 
     static View makeHeaderTextView(String text) {
-
         EmojiTextViewE textView = new EmojiTextViewE(context);
-
-//        if (G.isDarkTheme) {
-//            textView.setTextColor(Color.BLACK);
-//        } else {
         textView.setTextColor(Color.parseColor(G.textBubble));
-//        }
-
-        textView.setBackgroundResource(R.drawable.rect_radios_top_gray);
         textView.setId(R.id.messageSenderName);
         textView.setGravity(LEFT);
         textView.setPadding(20, 0, 20, 5);
-        //textView.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp220));
         textView.setSingleLine(true);
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(text);
         setTextSize(textView, R.dimen.dp12);
-
         return textView;
     }
 
@@ -900,7 +890,12 @@ public class ViewMaker {
         linearLayout_205.setId(R.id.mainContainer);
         LinearLayout.LayoutParams layout_218 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_205.setLayoutParams(layout_218);
-        linearLayout_205.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+
+        TypedValue rippleView = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, rippleView, true);
+        linearLayout_205.setBackgroundResource(rippleView.resourceId);
+
+        //linearLayout_205.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         CheckBox checkBox = new CheckBox(G.context);
         checkBox.setId(R.id.fcsl_check_box);

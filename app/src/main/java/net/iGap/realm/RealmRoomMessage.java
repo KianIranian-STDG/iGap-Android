@@ -345,20 +345,19 @@ public class RealmRoomMessage extends RealmObject {
 
         if (message == null) {
             message = realm.createObject(RealmRoomMessage.class, messageId);
-            message.setRoomId(roomId);
+        }
+        message.setRoomId(roomId);
+        if (input.hasForwardFrom()) {
+            message.setForwardMessage(putOrUpdate(realm, -1, input.getForwardFrom(), new StructMessageOption().setGap().setForwardOrReply()));
+        }
+        if (input.hasReplyTo()) {
+            message.setReplyTo(putOrUpdate(realm, -1, input.getReplyTo(), new StructMessageOption().setGap().setForwardOrReply()));
+        }
+        message.setShowMessage(true);
 
-            if (input.hasForwardFrom()) {
-                message.setForwardMessage(putOrUpdate(realm, -1, input.getForwardFrom(), new StructMessageOption().setGap().setForwardOrReply()));
-            }
-            if (input.hasReplyTo()) {
-                message.setReplyTo(putOrUpdate(realm, -1, input.getReplyTo(), new StructMessageOption().setGap().setForwardOrReply()));
-            }
-            message.setShowMessage(true);
-
-            if (messageOption.isFromShareMedia()) {
-                message.setPreviousMessageId(input.getMessageId());
-                message.setFutureMessageId(input.getMessageId());
-            }
+        if (messageOption.isFromShareMedia()) {
+            message.setPreviousMessageId(input.getMessageId());
+            message.setFutureMessageId(input.getMessageId());
         }
 
         message.setMessage(input.getMessage());
@@ -650,9 +649,11 @@ public class RealmRoomMessage extends RealmObject {
      *
      * @param messageId messageId for checking
      */
-    public static boolean existMessage(long messageId) {
+    public static boolean existMessageInRoom(long messageId, long roomId) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                .findFirst();
         if (realmRoomMessage != null) {
             realm.close();
             return true;

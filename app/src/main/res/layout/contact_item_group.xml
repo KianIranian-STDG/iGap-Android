@@ -21,8 +21,10 @@
     style="?lineColorSettingTheme" />
 
   <LinearLayout
+      android:id="@+id/cig_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+      android:layoutDirection="locale"
     android:layout_marginTop="@dimen/dp16"
     android:orientation="horizontal">
 
@@ -55,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:gravity="left"
+        android:gravity="start"
         android:singleLine="true"
         android:text="Dominika Faniz"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
@@ -67,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="bottom|left"
+        android:gravity="bottom|start"
         android:singleLine="true"
         android:text="@string/last_seen_recently"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"

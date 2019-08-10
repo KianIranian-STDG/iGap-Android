@@ -325,25 +325,25 @@ public final class AppUtils {
         }
         switch (status) {
             case DELIVERED:
-                iconTextView.setText("ß");
+                iconTextView.setText(R.string.check_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case FAILED:
-                iconTextView.setText(".");
+                iconTextView.setText(R.string.error_icon);
                 iconTextView.setTextColor(context.getResources().getColor(R.color.red));
                 break;
             case SEEN:
-                iconTextView.setText("v");
+                iconTextView.setText(R.string.delivery_icon);
                 iconTextView.setTextColor(context.getResources().getColor(R.color.read_status));
                 break;
             case SENDING:
-                iconTextView.setText("T");
+                iconTextView.setText(R.string.history_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case SENT:
-                iconTextView.setText("ß");
+                iconTextView.setText(R.string.check_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
@@ -373,26 +373,26 @@ public final class AppUtils {
 
         switch (status) {
             case DELIVERED:
-                iconTextView.setText("ß");
+                iconTextView.setText(R.string.check_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case FAILED:
-                iconTextView.setText(".");
+                iconTextView.setText(R.string.error_icon);
                 iconTextView.setTextColor(context.getResources().getColor(R.color.red));
                 break;
             case LISTENED:
             case SEEN:
-                iconTextView.setText("v");
+                iconTextView.setText(R.string.delivery_icon);
                 iconTextView.setTextColor(context.getResources().getColor(R.color.read_status));
                 break;
             case SENDING:
-                iconTextView.setText("T");
+                iconTextView.setText(R.string.history_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case SENT:
-                iconTextView.setText("ß");
+                iconTextView.setText(R.string.check_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;

@@ -279,6 +279,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                     if (progressDialog != null) progressDialog.dismiss();
                     HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                 }
+                break;
             case EventManager.ON_PAYMENT_RESULT_RECIEVED:
 
                 if (progressDialog != null) progressDialog.dismiss();
@@ -317,7 +318,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                         });
                         break;
                 }
-
+                break;
             case EventManager.ON_INIT_PAY_ERROR:
                 if (progressDialog != null) progressDialog.dismiss();
                 break;

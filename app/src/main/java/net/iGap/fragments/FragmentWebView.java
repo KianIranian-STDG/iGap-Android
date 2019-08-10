@@ -161,6 +161,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
+                .setRoundBackground(false)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

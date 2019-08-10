@@ -219,7 +219,7 @@ public class RealmRoom extends RealmObject {
              * if this message not exist set gap otherwise don't change in gap state
              */
             boolean setGap = false;
-            if (!RealmRoomMessage.existMessage(room.getLastMessage().getMessageId())) {
+            if (!RealmRoomMessage.existMessageInRoom(room.getLastMessage().getMessageId(), room.getId())) {
                 setGap = true;
             }
             RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm, room.getId(), room.getLastMessage(), new StructMessageOption());
@@ -1515,7 +1515,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public long getLastScrollPositionMessageId() {
-        if (lastScrollPositionMessageId == 0 || !RealmRoomMessage.existMessage(lastScrollPositionMessageId))
+        if (lastScrollPositionMessageId == 0 || !RealmRoomMessage.existMessageInRoom(lastScrollPositionMessageId, id))
             return 0;
 
         return lastScrollPositionMessageId;

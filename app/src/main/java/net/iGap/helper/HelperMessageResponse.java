@@ -10,12 +10,11 @@
 
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -84,6 +83,7 @@ public class HelperMessageResponse {
                      */
                     new RequestClientGetRoom().clientGetRoom(roomId, null);
                 } else {
+                    room.setDeleted(false);
 
                     /**
                      * update unread count if new messageId that received is bigger than latest messageId that exist
@@ -94,7 +94,8 @@ public class HelperMessageResponse {
                     }
 
                     if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
-                        if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN) {
+                        if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && RealmNotificationRoomMessage.canShowNotif(realm, roomMessage.getMessageId(), roomId)) {
+                            RealmNotificationRoomMessage.putToDataBase(realm, roomMessage.getMessageId(), roomId);
                             HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);
                         }
                     }

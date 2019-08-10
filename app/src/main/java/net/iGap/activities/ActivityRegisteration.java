@@ -14,7 +14,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.StartupActions;
 
@@ -33,7 +32,7 @@ public class ActivityRegisteration extends ActivityEnhanced {
     private static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
     private static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
 
-    public final RegisterRepository repository = new RegisterRepository();
+    private RegisterRepository repository;
 
     // FrameLayout layoutRoot;
 
@@ -42,6 +41,8 @@ public class ActivityRegisteration extends ActivityEnhanced {
         isOnGetPermission = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registeration);
+
+        repository = RegisterRepository.getInstance();
 
         try {
             HelperPermission.getStoragePermision(this, new OnGetPermission() {
@@ -151,17 +152,6 @@ public class ActivityRegisteration extends ActivityEnhanced {
         });
 
     }
-
-    //private void setFraymeSize() {
-    //    DisplayMetrics displayMetrics = new DisplayMetrics();
-    //    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    //    int height = displayMetrics.heightPixels;
-    //    int width = displayMetrics.widthPixels;
-    //    int size = Math.min(width, height) - 50;
-    //    ViewGroup.LayoutParams lp = layoutRoot.getLayoutParams();
-    //    lp.width = size;
-    //    lp.height = size;
-    //}
 
     private void loadFragmentIntroduce() {
         G.handler.postDelayed(new Runnable() {
