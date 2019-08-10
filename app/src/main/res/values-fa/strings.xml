@@ -1935,11 +1935,11 @@
     <string name="str_frag_sync_skipBtn">شروع</string>
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
     <string name="money_request">درخواست پول به:</string>
-    <string name="cardtocard_descriotion_error">Description can not be empty</string>
-    <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
-    <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
-    <string name="cardtocard_cartnumber_error">Card number must be 4 digits</string>
-    <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
+    <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
+    <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خوالی باشد.</string>
+    <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارن ۱۰ هزار ریال میباشد.</string>
+    <string name="cardtocard_cartnumber_error">شماره کارت باید ۱۶ رقم باشد.</string>
+    <string name="cardtocard_cardnumber_error">شماره کارت مقصد نمیتواند خالی باشد.</string>
     <string name="payment_order_id_title">شماره سفارش : %s</string>
     <string name="payment_rrn_title">شماره تراکنش: %.0f</string>
     <string name="mci_topup_payment_title">شارژ همراه اول</string>
