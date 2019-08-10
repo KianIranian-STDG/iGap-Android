@@ -60,14 +60,11 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/cancelIcon"
-        style="@style/myIconToolbarStyle"
+        style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/dp40"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp2"
         android:layout_marginRight="@dimen/dp2"
-        android:gravity="center"
-        android:text="@string/md_close_button"
-        android:textColor="@color/gray_4c"
-        android:textSize="@dimen/dp18" />
+        android:text="@string/close_icon"/>
 
 </LinearLayout>
