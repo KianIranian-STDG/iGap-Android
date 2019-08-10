@@ -103,6 +103,7 @@
   <attr name="textColorTheme" format="reference" />
   <attr name="iGapButton" format="reference" />
   <attr name="iGapButtonGray" format="reference"/>
+  <attr name="greenTextIconColor" format="reference"/>
 
   <!--Menu-->
   <attr name="textColorMenuTheme" format="reference" />

@@ -320,8 +320,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             Log.wtf(this.getClass().getName(), "message: " + intent.getStringExtra("message"));
             Log.wtf(this.getClass().getName(), "orderId: " + intent.getStringExtra("order_id"));
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment fragment = fragmentManager.findFragmentById(R.id.viewpager);
+            Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
             if (fragment instanceof PaymentFragment) {
+                Log.wtf(this.getClass().getName(), "jnjgndgg");
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
                         intent.getStringExtra("message"),

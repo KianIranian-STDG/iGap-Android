@@ -1940,6 +1940,10 @@
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
     <string name="cardtocard_cartnumber_error">Card number must be 4 digits</string>
     <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
+    <string name="payment_order_id_title">شماره سفارش : %s</string>
+    <string name="payment_rrn_title">شماره تراکنش: %.0f</string>
+    <string name="mci_topup_payment_title">شارژ همراه اول</string>
     <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید.</string>
     <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید.</string>
+
 </resources>

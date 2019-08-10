@@ -14,6 +14,8 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.payment.PaymentCallBack;
+import net.iGap.payment.PaymentFragment;
 
 /**
  * this is helper class for open new fragment
@@ -309,5 +311,12 @@ public class HelperFragment {
         } else {
             return R.id.mainFrame;
         }
+    }
+
+    public void loadPayment(String title, String token, PaymentCallBack callBack){
+        fragment = PaymentFragment.getInstance(title,token ,callBack);
+        setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+        replace = false;
+        load();
     }
 }
