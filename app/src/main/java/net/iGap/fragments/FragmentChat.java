@@ -5864,8 +5864,6 @@ public class FragmentChat extends BaseFragment
                         new Thread(() -> {
                             try (Realm realm = Realm.getDefaultInstance()) {
                                 realm.executeTransaction(realm1 -> {
-                                    realm1.copyToRealmOrUpdate(realmAdditional);
-                                    realm1.copyToRealmOrUpdate(realmAttachment);
                                     realm1.copyToRealmOrUpdate(roomMessage);
                                 });
                             }
