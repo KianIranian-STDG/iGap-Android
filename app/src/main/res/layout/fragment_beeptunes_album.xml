@@ -7,14 +7,14 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/ab_album"
+        android:id="@+id/ab_beepTunes_album"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
         app:elevation="0dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/ct_main"
+            android:id="@+id/ct_beepTunes_album"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -31,10 +31,11 @@
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/tb_album"
+                android:id="@+id/tb_beepTunes_album"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_gravity="top"
+                android:layout_gravity="bottom"
+                android:background="@color/colorToolbarBackgroundEnd"
                 app:layout_collapseMode="pin">
 
                 <RelativeLayout
@@ -204,7 +205,7 @@
         android:layout_margin="16dp"
         android:background="@drawable/shape_beeptunes_album_light"
         android:visibility="invisible"
-        app:layout_anchor="@id/ab_album"
+        app:layout_anchor="@id/ab_beepTunes_album"
         app:layout_anchorGravity="bottom|end">
 
         <net.iGap.module.FontIconTextView

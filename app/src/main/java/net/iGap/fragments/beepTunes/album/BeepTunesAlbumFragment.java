@@ -162,6 +162,13 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
             if (getActivity() != null)
                 getActivity().onBackPressed();
         });
+
+        appBarLayout.addOnOffsetChangedListener((appBarLayout1, offset) -> {
+            if (offset == 0)
+                backIcon.setVisibility(View.GONE);
+            else
+                backIcon.setVisibility(View.VISIBLE);
+        });
     }
 
     private void setUpViews() {
@@ -175,7 +182,7 @@ public class BeepTunesAlbumFragment extends BaseFragment implements ToolbarListe
         statusTv = rootView.findViewById(R.id.tv_album_play);
         progressBar = rootView.findViewById(R.id.pb_album_progress);
         otherAlbumTv = rootView.findViewById(R.id.tv_album_artistOtherAlbum);
-        appBarLayout = rootView.findViewById(R.id.ab_album);
+        appBarLayout = rootView.findViewById(R.id.ab_beepTunes_album);
         scrollView = rootView.findViewById(R.id.ns_album);
         toolBarTv = rootView.findViewById(R.id.tv_album_toolBarName);
         backIcon = rootView.findViewById(R.id.tv_album_backIcon);
