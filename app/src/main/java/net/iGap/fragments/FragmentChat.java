@@ -1092,15 +1092,15 @@ public class FragmentChat extends BaseFragment
             rootView.findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
 
-        if (!isBot){
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            if (realmRoom != null)  {
-                if (realmRoom.getMute()) {
-                    txtChannelMute.setText(R.string.unmute);
-                } else {
-                    txtChannelMute.setText(R.string.mute);
-                }
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+
+            isMuteNotification = realmRoom.getMute() ;
+            if (!isBot){
+                txtChannelMute.setText(isMuteNotification ? R.string.unmute : R.string.mute);
             }
+            iconMute.setVisibility(isMuteNotification ? View.VISIBLE : View.GONE);
+
         }
 
         registerListener();
