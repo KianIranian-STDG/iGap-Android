@@ -16,8 +16,11 @@ import android.os.Parcelable;
 import net.iGap.module.MyType;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmChannelExtra;
+import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 
 import org.parceler.Parcels;
 
@@ -127,6 +130,33 @@ public class StructMessageInfo implements Parcelable {
             }
         }
         return 0;
+    }
+
+    public RealmChannelExtra getChannelExtra() {
+        if (realmRoomMessage.getChannelExtra() != null) {
+            return realmRoomMessage.getChannelExtra();
+        } else {
+            new Thread(() -> {
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(realm1 -> {
+                    RealmRoomMessage newMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                    RealmChannelExtra channelExtra = realm1.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                    if (newMessage != null && channelExtra != null) {
+                        newMessage.setChannelExtra(channelExtra);
+                    }
+                });
+                realm.close();
+            }).start();
+
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+            if (realmChannelExtra != null) {
+                realmChannelExtra = realm.copyFromRealm(realmChannelExtra);
+            }
+            realm.close();
+            return realmChannelExtra;
+        }
     }
 
     public boolean isSenderMe() {

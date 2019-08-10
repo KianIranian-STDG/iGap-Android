@@ -215,9 +215,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     if (messageInfo.mMessage.getRoomId() == roomId && messageInfo.mMessage.getMessageId() == messageId) {
                         int pos = items.indexOf(messageInfo);
                         if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                            messageInfo.mMessage.getChannelExtra().setThumbsUp(vote);
+                            messageInfo.structMessage.getChannelExtra().setThumbsUp(vote);
                         } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-                            messageInfo.mMessage.getChannelExtra().setThumbsDown(vote);
+                            messageInfo.structMessage.getChannelExtra().setThumbsDown(vote);
                         }
                         set(pos, messageInfo);
                         break;
@@ -249,11 +249,10 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     set(pos, messageInfo);
                 } else if (messageInfo.mMessage.getMessageId() == messageId) {
                     int pos = items.indexOf(messageInfo);
-                    //bagi may crash
-                    if (messageInfo.mMessage.getChannelExtra() != null) {
-                        messageInfo.mMessage.getChannelExtra().setThumbsUp(voteUp);
-                        messageInfo.mMessage.getChannelExtra().setThumbsDown(voteDown);
-                        messageInfo.mMessage.getChannelExtra().setViewsLabel(viewsLabel);
+                    if (messageInfo.structMessage.getChannelExtra() != null) {
+                        messageInfo.structMessage.getChannelExtra().setThumbsUp(voteUp);
+                        messageInfo.structMessage.getChannelExtra().setThumbsDown(voteDown);
+                        messageInfo.structMessage.getChannelExtra().setViewsLabel(viewsLabel);
                     }
                     set(pos, messageInfo);
                     break;
