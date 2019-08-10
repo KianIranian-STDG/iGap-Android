@@ -1936,7 +1936,7 @@
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
     <string name="money_request">درخواست پول به:</string>
     <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
-    <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خوالی باشد.</string>
+    <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
     <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارن ۱۰ هزار ریال میباشد.</string>
     <string name="cardtocard_cartnumber_error">شماره کارت باید ۱۶ رقم باشد.</string>
     <string name="cardtocard_cardnumber_error">شماره کارت مقصد نمیتواند خالی باشد.</string>
