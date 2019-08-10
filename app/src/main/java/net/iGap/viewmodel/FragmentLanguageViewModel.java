@@ -12,6 +12,8 @@ package net.iGap.viewmodel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
+import android.databinding.ObservableInt;
+import android.util.Log;
 import android.view.View;
 
 import net.iGap.G;
@@ -23,49 +25,75 @@ import net.iGap.module.SHP_SETTING;
 
 import java.util.Locale;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class FragmentLanguageViewModel extends ViewModel {
 
     private SharedPreferences sharedPreferences;
-    private FragmentLanguage fragmentLanguage;
-    private String textLanguage;
-    public MutableLiveData<String> refreshActivityForChangeLanguage = new MutableLiveData<>();
 
+    private ObservableInt isFarsi = new ObservableInt(View.GONE);
+    private ObservableInt isEnglish = new ObservableInt(View.GONE);
+    private ObservableInt isArabic = new ObservableInt(View.GONE);
+    private MutableLiveData<String> refreshActivityForChangeLanguage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
 
-    public FragmentLanguageViewModel(FragmentLanguage fragmentLanguage) {
-        this.fragmentLanguage = fragmentLanguage;
-        getInfo();
+    public FragmentLanguageViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+        String textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+        if (textLanguage != null) {
+            switch (textLanguage) {
+                case "English":
+                    isEnglish.set(View.VISIBLE);
+                    break;
+                case "فارسی":
+                    isFarsi.set(View.VISIBLE);
+                    break;
+                case "العربی":
+                    isArabic.set(View.VISIBLE);
+                    break;
+            }
+        }
     }
 
-    //===============================================================================
-    //================================Event Listeners================================
-    //===============================================================================
+    public ObservableInt getIsFarsi() {
+        return isFarsi;
+    }
 
-    public void onClickEnglish(View v) {
+    public ObservableInt getIsEnglish() {
+        return isEnglish;
+    }
+
+    public ObservableInt getIsArabic() {
+        return isArabic;
+    }
+
+    public MutableLiveData<String> getRefreshActivityForChangeLanguage() {
+        return refreshActivityForChangeLanguage;
+    }
+
+    public MutableLiveData<Boolean> getGoBack() {
+        return goBack;
+    }
+
+    public void onClickEnglish() {
         if (!G.selectedLanguage.equals("en")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "English");
             editor.apply();
             G.selectedLanguage = "en";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = false;
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = false;
             FragmentLanguage.languageChanged = true;
             refreshActivityForChangeLanguage.setValue("en");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
         }
-
-        if (MusicPlayer.updateName != null) {
-            MusicPlayer.updateName.rename();
-        }
-
-        fragmentLanguage.removeFromBaseFragment(fragmentLanguage);
+        goBack.setValue(true);
     }
 
-    public void onClickFarsi(View v) {
+    public void onClickFarsi() {
         if (!G.selectedLanguage.equals("fa")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -79,17 +107,14 @@ public class FragmentLanguageViewModel extends ViewModel {
             G.isAppRtl = true;
             FragmentLanguage.languageChanged = true;
             refreshActivityForChangeLanguage.setValue("fa");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
         }
-
-        if (MusicPlayer.updateName != null) {
-            MusicPlayer.updateName.rename();
-        }
-
-        fragmentLanguage.removeFromBaseFragment(fragmentLanguage);
+        goBack.setValue(true);
     }
 
-    public void onClickArabi(View v) {
-
+    public void onClickArabic() {
         if (!G.selectedLanguage.equals("ar")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -103,36 +128,11 @@ public class FragmentLanguageViewModel extends ViewModel {
             G.isAppRtl = true;
             FragmentLanguage.languageChanged = true;
             refreshActivityForChangeLanguage.setValue("ar");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
         }
-
-        if (MusicPlayer.updateName != null) {
-            MusicPlayer.updateName.rename();
-        }
-
-        fragmentLanguage.removeFromBaseFragment(fragmentLanguage);
+        goBack.setValue(true);
     }
-
-    public boolean isEnglish() {
-        return textLanguage.equals("English");
-    }
-
-    public boolean isFarsi() {
-        return textLanguage.equals("فارسی");
-    }
-
-    public boolean isArabi() {
-        return textLanguage.equals("العربی");
-    }
-
-
-    //===============================================================================
-    //====================================Methods====================================
-    //===============================================================================
-
-    private void getInfo() {
-        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
-    }
-
 
 }
