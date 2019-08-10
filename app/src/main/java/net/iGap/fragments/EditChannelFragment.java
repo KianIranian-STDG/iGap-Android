@@ -74,7 +74,6 @@ public class EditChannelFragment extends BaseFragment {
 
     private FragmentEditChannelBinding binding;
     private EditChannelViewModel viewModel;
-    private boolean isInitEmoji = false;
     private boolean isEmojiShow = false;
     private EmojiPopup emojiPopup;
 
@@ -143,10 +142,6 @@ public class EditChannelFragment extends BaseFragment {
 
         viewModel.initEmoji.observe(this, aBoolean -> {
             if (aBoolean != null) {
-                if (!isInitEmoji) {
-                    setUpEmojiPopup();
-                    isInitEmoji = true;
-                }
                 emojiPopup.toggle();
             }
         });
@@ -193,6 +188,8 @@ public class EditChannelFragment extends BaseFragment {
         viewModel.onReactionMessageClickListener.observe(this, isClicked -> {
             binding.rateMessage.setChecked(!binding.rateMessage.isChecked());
         });
+
+        setUpEmojiPopup();
 
     }
 
