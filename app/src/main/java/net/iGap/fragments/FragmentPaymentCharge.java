@@ -117,6 +117,12 @@ public class FragmentPaymentCharge extends BaseFragment {
                 HelperError.showSnackMessage(getString(errorMessageRes), false);
             }
         });
+
+        viewModel.getShowMciPaymentError().observe(getViewLifecycleOwner(),errorModel->{
+            if (errorModel != null){
+                HelperError.showSnackMessage(errorModel.getMessage(), false);
+            }
+        });
     }
 
     @Override

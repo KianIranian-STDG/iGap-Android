@@ -148,6 +148,10 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
         return showError;
     }
 
+    public MutableLiveData<ErrorModel> getShowMciPaymentError() {
+        return showMciPaymentError;
+    }
+
     public void phoneNumberTextChangeListener(String phoneNumber) {
         showDetail.set(phoneNumber.length() == 11 ? View.VISIBLE : View.GONE);
         setOperator(phoneNumber);
