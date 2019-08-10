@@ -1,9 +1,9 @@
 package net.iGap.adapter.beepTunes;
 
 import android.graphics.PorterDuff;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +18,15 @@ import net.iGap.interfaces.OnTrackAdapter;
 import net.iGap.module.BeepTunesPlayerService;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.PlayingSong;
+import net.iGap.module.api.beepTunes.ProgressDuration;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.realm.Realm;
 
@@ -36,6 +40,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
     private List<Track> tracks = new ArrayList<>();
     private OnTrackAdapter onTrackAdapter;
     private Realm realm;
+    private MediaPlayer mediaPlayer;
 
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
@@ -67,6 +72,11 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
     public void onDestroy() {
         if (realm != null)
             realm.close();
+
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     @FunctionalInterface
@@ -94,12 +104,17 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
             songActionTv = itemView.findViewById(R.id.tv_itemSong_action);
             songPrwTv = itemView.findViewById(R.id.tv_itemSong_prw);
             progressBar = itemView.findViewById(R.id.pb_itemSong);
+            progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
         }
 
         void bindTracks(Track track) {
             realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
             if (realmDownloadSong != null) {
                 track.setInStorage(true);
+                songPrwTv.setText(itemView.getContext().getResources().getString(R.string.music_icon));
+            } else {
+                track.setInStorage(false);
+                songPrwTv.setText(itemView.getContext().getResources().getString(R.string.play_icon));
             }
 
             RotateAnimation rotate = new RotateAnimation(
@@ -123,6 +138,12 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
             else
                 songNameTv.setText(track.getEnglishName());
 
+            songPrwTv.setOnClickListener(v -> {
+                if (!track.isInStorage()) {
+//                    onTrackAdapter.onPreviewClick(track);
+                    playPrw(track);
+                }
+            });
 
             songActionTv.setOnClickListener(v -> {
                 if (track.isInStorage()) {
@@ -137,6 +158,10 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                             songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
 
                     });
+
+                    if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                        mediaPlayer.stop();
+                    }
 
                 } else {
                     track.setSavedName(track.getId() + ".mp3");
@@ -179,12 +204,31 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
             progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
         }
 
+        private void playPrw(Track track) {
+            if (mediaPlayer == null){
+                mediaPlayer = new MediaPlayer();
 
-        private void stopDownload() {
-        }
-
-        private void startDownload() {
-
+                try {
+                    mediaPlayer.setDataSource(track.getPreviewUrl());
+                    mediaPlayer.prepareAsync();
+                    mediaPlayer.setOnPreparedListener(mp -> {
+                        mediaPlayer.start();
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                mediaPlayer.reset();
+                try {
+                    mediaPlayer.setDataSource(track.getPreviewUrl());
+                    mediaPlayer.prepareAsync();
+                    mediaPlayer.setOnPreparedListener(mp -> {
+                        mediaPlayer.start();
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
