@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme_2"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true">
@@ -11,14 +11,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/sfl_recycleview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="@dimen/dp24"
-            android:scrollbars="vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,8 +55,18 @@
                         android:visibility="gone" />
 
                 </LinearLayout>
+
             </android.support.v4.widget.NestedScrollView>
+
         </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sfl_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/dp24"
+            android:scrollbars="vertical" />
 
 
         <android.support.v4.widget.ContentLoadingProgressBar

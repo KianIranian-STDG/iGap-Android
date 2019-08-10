@@ -125,15 +125,15 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             more.setId(R.id.more);
             //more.setBackgroundResource(R.drawable.bg_message_image_time);
             more.setGravity(Gravity.CENTER);
-            more.setText(R.string.more_icon);
+            more.setText(R.string.horizontal_more_icon);
             setTextSize(more , R.dimen.largeTextSize );
             more.setTextColor(G.context.getResources().getColor(R.color.white));
-            more.setPadding(i_Dp(R.dimen.dp8), dpToPx(1), i_Dp(R.dimen.dp8), dpToPx(1));
+            more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));
             FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_50.gravity = Gravity.RIGHT | Gravity.TOP;
-            layout_50.bottomMargin = -dpToPx(2);
+            /*layout_50.bottomMargin = -dpToPx(2);
             layout_50.rightMargin = dpToPx(5);
-            layout_50.topMargin = dpToPx(7);
+            layout_50.topMargin = dpToPx(7);*/
             more.setLayoutParams(layout_50);
             frameLayout.addView(more);
 

@@ -433,6 +433,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     }
 
     public static void startAlphaAnimation(View v, long duration, int visibility) {
+        if (visibility == View.VISIBLE) v.setVisibility(View.VISIBLE);
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);

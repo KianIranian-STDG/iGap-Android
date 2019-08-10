@@ -1232,7 +1232,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 } else {
                     holder.badgeView.setVisibility(View.VISIBLE);
-                    holder.badgeView.getTextView().setText(mInfo.getUnreadCount() + "");
+                    holder.badgeView.getTextView().setText(mInfo.getUnreadCount() > 999 ? "+999" : String.valueOf(mInfo.getUnreadCount()));
 
                     if (mInfo.getMute()) {
                         holder.badgeView.setBadgeColor(getResources().getColor(R.color.gray_9d));

@@ -35,7 +35,7 @@
         android:paddingBottom="@dimen/dp4"
         style="?hintColorSettingTheme"
         android:textSize="@dimen/standardTextSize"
-        app:emojiSize="@dimen/largeTextSize"
+        app:emojiSize="@dimen/xlargeTextSize"
         android:layout_margin="@dimen/dp8"/>
 
     <net.iGap.module.MaterialDesignTextView

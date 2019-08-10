@@ -587,7 +587,6 @@ public class FragmentChat extends BaseFragment
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
-    private String messageEdit = "";
     private boolean isNewBottomSheet = true;
     private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
     /**
@@ -1092,15 +1091,15 @@ public class FragmentChat extends BaseFragment
             rootView.findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
 
-        if (!isBot){
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            if (realmRoom != null)  {
-                if (realmRoom.getMute()) {
-                    txtChannelMute.setText(R.string.unmute);
-                } else {
-                    txtChannelMute.setText(R.string.mute);
-                }
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+
+            isMuteNotification = realmRoom.getMute() ;
+            if (!isBot){
+                txtChannelMute.setText(isMuteNotification ? R.string.unmute : R.string.mute);
             }
+            iconMute.setVisibility(isMuteNotification ? View.VISIBLE : View.GONE);
+
         }
 
         registerListener();
@@ -4663,12 +4662,11 @@ public class FragmentChat extends BaseFragment
             } else if (items.get(position).equals(getString(R.string.edit_item_dialog))) {
                 // edit message
                 // put message text to EditText
-                messageEdit = "";
                 if (message.messageText != null && !message.messageText.isEmpty()) {
                     edtChat.setText(message.messageText);
+                    edtChat.setSelection(edtChat.getText().toString().length());
                     // put message object to edtChat's tag to obtain it later and
                     // found is user trying to edit a message
-                    messageEdit = message.messageText;
                 }
                 edtChat.setTag(message);
                 isEditMessage = true;
