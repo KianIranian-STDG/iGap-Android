@@ -31,20 +31,6 @@
 
     </LinearLayout>
 
-
-    <ProgressBar
-        android:id="@+id/ng_prgWaiting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="@{safeUnbox(fragmentNewGroupVieModel.prgWaiting)}" />
-
-
     <net.iGap.libs.rippleeffect.RippleView
         android:id="@+id/ng_ripple_circle_image"
         rv_centered="true"
@@ -223,6 +209,19 @@
           android:visibility="visible" />
 
     </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/ng_prgWaiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="@{safeUnbox(fragmentNewGroupVieModel.prgWaiting)}" />
 
 
   </android.support.constraint.ConstraintLayout>
