@@ -189,7 +189,7 @@
 
                 <TextView
                     android:id="@+id/ac_txt_hash_counter"
-                    style="?backgroundColorSettingTheme"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"

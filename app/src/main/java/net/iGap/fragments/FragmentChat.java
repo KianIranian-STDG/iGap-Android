@@ -6324,12 +6324,9 @@ public class FragmentChat extends BaseFragment
         btnDownHash = rootView.findViewById(R.id.ac_btn_hash_down);
         txtHashCounter = rootView.findViewById(R.id.ac_txt_hash_counter);
 
-        if (!G.isDarkTheme) {
-            btnUpHash.setTextColor(Color.parseColor(G.appBarColor));
-            btnDownHash.setTextColor(Color.parseColor(G.appBarColor));
-            txtHashCounter.setTextColor(Color.parseColor(G.appBarColor));
+        if (G.isDarkTheme){
+            txtHashCounter.setTextColor(getContext().getResources().getColor(R.color.white));
         }
-
 
         searchHash = new SearchHash();
 
