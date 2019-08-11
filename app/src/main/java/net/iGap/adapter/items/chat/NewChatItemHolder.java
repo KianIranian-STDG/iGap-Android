@@ -12,6 +12,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -53,16 +55,17 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private LinearLayout voteUpContainer;
     private LinearLayout voteDownContainer;
     private LinearLayout messageDetailContainer;
-
-    private boolean inChannel = false;
-    private boolean inChat = false;
-
+    private FrameLayout forwardContainer;
+    private ImageView channelForwardIv;
 
     public NewChatItemHolder(@NonNull View itemView) {
         super(itemView);
 
         ConstraintSet set = new ConstraintSet();
         itemContainer = new LinearLayout(getContext());
+
+        channelForwardIv = new ImageView(getContext());
+        forwardContainer = new FrameLayout(getContext());
 
         voteContainer = new LinearLayout(getContext());
         voteContainer.setId(R.id.ll_chatItem_vote);
@@ -164,6 +167,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
                 LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER,
                         4, 0, 4, 0));
 
+        if (G.isDarkTheme)
+            channelForwardIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_channel_forward_dark));
+        else
+            channelForwardIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_channel_forward_light));
+
+            forwardContainer.addView(channelForwardIv,LayoutCreator.createFrame(26,26,Gravity.BOTTOM, 4, 4, 8, 4));
+            forwardContainer.setVisibility(View.GONE);
 
         set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainHeight(messageDetailContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
@@ -235,6 +245,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         set.applyTo(chatBloke);
         itemContainer.addView(chatBloke);
+        itemContainer.addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
 
         ((ViewGroup) itemView).addView(itemContainer);
 
@@ -388,5 +399,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public void setMessageDetailContainer(LinearLayout messageDetailContainer) {
         this.messageDetailContainer = messageDetailContainer;
+    }
+
+    public FrameLayout getForwardContainer() {
+        return forwardContainer;
+    }
+
+    public ImageView getChannelForwardIv() {
+        return channelForwardIv;
     }
 }

@@ -581,23 +581,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (type == ProtoGlobal.Room.Type.CHANNEL){
-            ImageView channelForwardIv = new ImageView(holder.itemView.getContext());
-            FrameLayout forwardContainer = new FrameLayout(holder.itemView.getContext());
-
-            if (G.isDarkTheme)
-                channelForwardIv.setImageDrawable(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_channel_forward_dark));
-            else
-                channelForwardIv.setImageDrawable(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_channel_forward_light));
-
-            if (mHolder.getItemContainer().getChildCount() == 1){
-                forwardContainer.addView(channelForwardIv,LayoutCreator.createFrame(26,26,Gravity.BOTTOM, 4, 4, 8, 4));
-                mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
-            }
-
-            if (mHolder.getItemContainer().getChildCount() > 2)
-                mHolder.getItemContainer().removeView(forwardContainer);
-
-            channelForwardIv.setOnClickListener(v -> messageClickListener.onForwardClick(mMessage));
+            mHolder.getForwardContainer().setVisibility(View.VISIBLE);
+            mHolder.getChannelForwardIv().setOnClickListener(v -> messageClickListener.onForwardClick(mMessage));
         }
 
         /**
