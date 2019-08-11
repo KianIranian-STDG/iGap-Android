@@ -3073,10 +3073,10 @@ public class FragmentChat extends BaseFragment
                     }
                 } else { // new message has written
                     sendNewMessage();
+                    scrollToEnd();
                 }
 
                 //realmMessage.close();
-                scrollToEnd();
             }
         });
 
