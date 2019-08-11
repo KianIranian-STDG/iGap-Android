@@ -1937,7 +1937,7 @@
     <string name="money_request">درخواست کارت به کارت به:</string>
     <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
     <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
-    <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارن ۱۰ هزار ریال میباشد.</string>
+    <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارت ۱۰ هزار ریال میباشد.</string>
     <string name="cardtocard_cartnumber_error">شماره کارت باید ۱۶ رقم باشد.</string>
     <string name="cardtocard_cardnumber_error">شماره کارت مقصد نمیتواند خالی باشد.</string>
     <string name="payment_order_id_title">شماره سفارش : %s</string>
