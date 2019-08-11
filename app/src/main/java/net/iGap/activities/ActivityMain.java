@@ -1236,17 +1236,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             } else {
-                if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                    super.onBackPressed();
-                } else {
-                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-                    if (fragment instanceof BottomNavigationFragment) {
-                        if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
-                            if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
-                                finish();
+                if (getSupportFragmentManager() != null ) {
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                        if (getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment) {
+                            ((PaymentFragment) getSupportFragmentManager().findFragmentById(R.id.mainFrame)).onBackPressed();
+                        } else {
+                            super.onBackPressed();
+                        }
+                    } else {
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                        if (fragment instanceof BottomNavigationFragment) {
+                            if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
+                                if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                                    finish();
+                                }
                             }
                         }
                     }
+                }else{
+                    super.onBackPressed();
                 }
                 /*if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() < 1) {
                     if (!this.isFinishing()) {

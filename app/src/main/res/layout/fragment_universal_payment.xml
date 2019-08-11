@@ -118,16 +118,30 @@
             android:gravity="center"
             android:text="@{String.valueOf(viewModel.price)}"
             android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/paymentStatus"
+            app:layout_constraintBottom_toTopOf="@id/divider1"
             app:layout_constraintEnd_toEndOf="@id/paymentType"
             app:layout_constraintStart_toStartOf="@id/paymentType" />
 
+        <View
+            android:id="@+id/divider1"
+            style="?lineColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginBottom="@dimen/dp8"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            app:layout_constraintBottom_toTopOf="@id/paymentStatus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".9" />
+
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/paymentStatus"
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@{viewModel.getPaymentStatus()}"
+            android:textStyle="bold"
             android:visibility="@{viewModel.showPaymentErrorMessage}"
             app:layout_constraintBottom_toTopOf="@id/paymentRRN"
             app:layout_constraintEnd_toEndOf="@id/priceTitle"
@@ -142,11 +156,11 @@
             android:gravity="center"
             android:text="@{@string/payment_rrn_title(viewModel.paymentRRN)}"
             android:visibility="@{viewModel.showPaymentErrorMessage}"
-            app:layout_constraintBottom_toTopOf="@id/paymentOrderId"
+            app:layout_constraintBottom_toTopOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="@id/price"
             app:layout_constraintStart_toStartOf="@id/price" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <!--<android.support.v7.widget.AppCompatTextView
             android:id="@+id/paymentOrderId"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -157,7 +171,7 @@
             android:visibility="@{viewModel.showPaymentErrorMessage}"
             app:layout_constraintBottom_toTopOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="@id/paymentType"
-            app:layout_constraintStart_toStartOf="@id/paymentType" />
+            app:layout_constraintStart_toStartOf="@id/paymentType" />-->
 
         <android.support.design.button.MaterialButton
             android:id="@+id/closeButton"
