@@ -322,9 +322,9 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
                                     break;
                             }
 
-                            if (operatorType == OperatorType.HAMRAH_AVAL) {
+                            /*if (operatorType == OperatorType.HAMRAH_AVAL) {
                                 sendRequestChargeMci(phoneNumber.substring(1), (int) price);
-                            } else {
+                            } else {*/
                                 RequestMplGetTopupToken requestMplGetTopupToken = new RequestMplGetTopupToken();
                                 requestMplGetTopupToken.mplGetTopupToken(Long.parseLong(phoneNumber), price, type);
                                 G.onMplResult = error -> {
@@ -334,7 +334,7 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
                                         goBack.setValue(true);
                                     }
                                 };
-                            }
+                            /*}*/
                             hideKeyWord.setValue(true);
                             observeEnabledPayment.set(false);
                         } else {
