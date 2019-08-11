@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_album"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/ab_album"
+        android:id="@+id/ab_beepTunes_album"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
         app:elevation="0dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/ct_main"
+            android:id="@+id/ct_beepTunes_album"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -30,11 +31,44 @@
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/tb_album"
+                android:id="@+id/tb_beepTunes_album"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="56dp"
                 android:layout_gravity="bottom"
-                app:layout_collapseMode="pin" />
+                android:background="@color/colorToolbarBackgroundEnd"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:layoutDirection="ltr"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_album_toolBarName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_toRightOf="@+id/tv_album_backIcon"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/largeTextSize"
+                        android:textStyle="bold"
+                        tools:text="aabolfazl" />
+
+                    <net.iGap.module.FontIconTextView
+                        android:id="@+id/tv_album_backIcon"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layoutDirection="ltr"
+                        android:text="@string/back_icon"
+                        android:textColor="@color/white"
+                        android:textSize="24dp" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -58,11 +92,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="338dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="رگ خواب"
                 android:textSize="@dimen/largeTextSize"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_album_albumeCost"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -117,6 +154,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5" />
 
+            <ProgressBar
+                android:id="@+id/pb_album_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="@+id/rv_album_songs"
+                app:layout_constraintLeft_toLeftOf="@+id/rv_album_songs"
+                app:layout_constraintRight_toRightOf="@+id/rv_album_songs"
+                app:layout_constraintTop_toTopOf="@+id/rv_album_songs" />
+
             <TextView
                 android:id="@+id/tv_album_artistOtherAlbum"
                 android:layout_width="wrap_content"
@@ -157,25 +204,20 @@
         android:layout_gravity="center"
         android:layout_margin="16dp"
         android:background="@drawable/shape_beeptunes_album_light"
-        app:layout_anchor="@id/ab_album"
+        android:visibility="invisible"
+        app:layout_anchor="@id/ab_beepTunes_album"
         app:layout_anchorGravity="bottom|end">
 
         <net.iGap.module.FontIconTextView
-            android:id="@+id/tv_album_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_album_play"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_gravity="center"
-            android:text="@string/download_icon"
+            android:gravity="center"
+            android:text="@string/play_icon"
             android:textColor="@color/white"
-            android:textSize="40dp"
+            android:textSize="45dp"
             android:visibility="invisible" />
 
-        <ProgressBar
-            android:id="@+id/pb_album_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
     </FrameLayout>
-
 </android.support.design.widget.CoordinatorLayout>

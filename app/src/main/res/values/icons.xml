@@ -250,5 +250,12 @@
     <string name="eye_icon">\ue9a4</string>
     <string name="channel_main_icon">\ue916</string>
     <string name="icon_card_to_card">\ue915</string>
+
+    <string name="icon_beeptunes_next">\ue909</string>
+    <string name="icon_beeptunes_play">\ue90a</string>
+    <string name="icon_beeptunes_prv">\ue90b</string>
+    <string name="icon_beeptunes_song">\ue90c</string>
+    <string name="icon_beeptunes_sync">\ue90d</string>
+    <string name="icon_beeptunes_like">\ue954</string>
     <string name="horizontal_more_icon">\ue9b8</string>
 </resources>

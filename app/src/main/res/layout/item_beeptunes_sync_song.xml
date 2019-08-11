@@ -8,7 +8,6 @@
     android:layout_marginRight="@dimen/dp4"
     android:layout_marginBottom="@dimen/dp2"
     android:background="@color/white"
-    android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="4dp"
     app:cardElevation="1dp">
@@ -18,7 +17,7 @@
         android:layout_height="match_parent">
 
         <net.iGap.module.FontIconTextView
-            android:id="@+id/tv_itemSong_prw"
+            android:id="@+id/fontIconTextView"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="16dp"
@@ -33,10 +32,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_itemSong_title"
+            android:id="@+id/tv_syncSong_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -45,45 +44,8 @@
             android:text="همایون شجریان"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_itemSong_price"
-            app:layout_constraintStart_toEndOf="@+id/tv_itemSong_prw"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_itemSong_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="خریداری شده"
-            android:textSize="@dimen/smallTextSize"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_itemSong_action"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <net.iGap.module.FontIconTextView
-            android:id="@+id/tv_itemSong_action"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:text="@string/icon_beeptunes_sync"
-            android:textSize="@dimen/standardIconSize"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ProgressBar
-            android:id="@+id/pb_itemSong"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:max="100"
-            android:progress="0"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

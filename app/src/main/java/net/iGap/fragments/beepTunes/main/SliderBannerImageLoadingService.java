@@ -7,11 +7,6 @@ import com.squareup.picasso.Picasso;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bannerslider.BannerImageLoadingService;
 
-/**
- * @author S.Shahini
- * @since 4/7/18
- */
-
 public class SliderBannerImageLoadingService implements BannerImageLoadingService {
 
     @Override

@@ -9,18 +9,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
+import net.iGap.fragments.beepTunes.main.BeepTunesMainFragment;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.module.api.beepTunes.Album;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
+public class BeepTunesAlbumAdapter extends RecyclerView.Adapter<BeepTunesAlbumAdapter.ItemViewHolder> {
     private List<Album> albums = new ArrayList<>();
-    private BeepTunesFragment.OnItemClick onItemClick;
+    private BeepTunesMainFragment.OnItemClick onItemClick;
 
-    public void setOnItemClick(BeepTunesFragment.OnItemClick onItemClick) {
+    public void setOnItemClick(BeepTunesMainFragment.OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
 

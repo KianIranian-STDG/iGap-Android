@@ -336,6 +336,7 @@
                 android:name="android.provider.CONTACTS_STRUCTURE"
                 android:resource="@xml/contacts" />
         </service>
+        <service android:name=".module.BeepTunesPlayerService" />
     </application>
 
 </manifest>
