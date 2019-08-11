@@ -257,6 +257,7 @@
     <string name="Two_Step_Verification">"تأیید دو مرحله‌ای"</string>
     <string name="Active_Sessions">"نشست های فعال"</string>
     <string name="Account_Self_destruction">"خودتخریبی حساب کاربری"</string>
+    <string name="show_line_pattern">نمایش خطوط الگو</string>
 
     <!-- notification and sound group -->
     <string name="ntg_title_toolbar">"اعلانات و صداها"</string>
