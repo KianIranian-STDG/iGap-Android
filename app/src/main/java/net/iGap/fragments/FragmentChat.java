@@ -2367,7 +2367,7 @@ public class FragmentChat extends BaseFragment
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         sendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) == 1;
 
-        soundInChatPlay = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 0) == 1;
+        soundInChatPlay = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1) == 1;
 
         if (soundInChatPlay)
             soundInChatInit();
