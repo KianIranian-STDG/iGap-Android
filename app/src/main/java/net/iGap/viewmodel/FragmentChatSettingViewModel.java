@@ -30,6 +30,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
     public ObservableBoolean isShowVote = new ObservableBoolean();
     public ObservableBoolean isSenderNameGroup = new ObservableBoolean();
     public ObservableBoolean isSendEnter = new ObservableBoolean();
+    public ObservableBoolean isSoundPlayInChat = new ObservableBoolean();
     public ObservableBoolean isInAppBrowser = new ObservableBoolean();
     public ObservableBoolean isCompress = new ObservableBoolean();
     public ObservableBoolean isTrim = new ObservableBoolean();
@@ -72,6 +73,9 @@ public class FragmentChatSettingViewModel extends ViewModel {
 
         int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         isSendEnter.set(getBoolean(checkedSendByEnter));
+
+        int checkPlaySoundInChat = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1);
+        isSoundPlayInChat.set(getBoolean(checkPlaySoundInChat));
 
         int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
         isInAppBrowser.set(getBoolean(checkedInAppBrowser));
@@ -252,6 +256,10 @@ public class FragmentChatSettingViewModel extends ViewModel {
         isSendEnter.set(!isSendEnter.get());
     }
 
+    public void onPlaySoundClick(View view) {
+        isSoundPlayInChat.set(!isSoundPlayInChat.get());
+    }
+
     public void onCheckedChangedSendEnter(boolean isChecked) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -260,6 +268,18 @@ public class FragmentChatSettingViewModel extends ViewModel {
             editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
         } else {
             editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+        }
+        editor.apply();
+    }
+
+    public void onCheckedChangedPlaySound(boolean isChecked) {
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        isSoundPlayInChat.set(isChecked);
+        if (isChecked) {
+            editor.putInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1);
+        } else {
+            editor.putInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 0);
         }
         editor.apply();
     }
