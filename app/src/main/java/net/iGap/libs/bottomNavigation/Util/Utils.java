@@ -76,11 +76,7 @@ public class Utils {
     }
 
     public static void darkModeHandler(TextView textView) {
-        if (G.isDarkTheme) {
-            textView.setTextColor(textView.getContext().getResources().getColor(R.color.white));
-        } else {
-            textView.setTextColor(textView.getContext().getResources().getColor(R.color.black));
-        }
+        textView.setTextColor(Color.parseColor(G.textTitleTheme));
     }
 
     public static int darkModeHandler(Context context) {
