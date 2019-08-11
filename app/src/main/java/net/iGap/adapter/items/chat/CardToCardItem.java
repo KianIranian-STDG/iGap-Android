@@ -90,7 +90,6 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             setTextSize(messageTv, R.dimen.smallTextSize);
             setTypeFace(messageTv);
 
-
             payButton.setId(R.id.cardToCard_button);
             payButton.setText(getResources().getString(R.string.pay));
             setTextSize(payButton, R.dimen.standardTextSize);
@@ -125,6 +124,17 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
                 cardIcon.setBackground(getDrawable(R.drawable.background_card_to_card_icon));
             }
 
+            set.constrainHeight(payButton.getId(), ConstraintSet.WRAP_CONTENT);
+            set.constrainWidth(payButton.getId(), ConstraintSet.MATCH_CONSTRAINT);
+
+            set.constrainHeight(innerLayout.getId(), ConstraintSet.WRAP_CONTENT);
+            set.constrainWidth(innerLayout.getId(), ConstraintSet.MATCH_CONSTRAINT);
+
+            set.connect(payButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            set.connect(payButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+            set.connect(payButton.getId(), ConstraintSet.TOP, innerLayout.getId(), ConstraintSet.BOTTOM, LayoutCreator.dp(8));
+            set.connect(payButton.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, LayoutCreator.dp(8));
+
             innerLayout.addView(cardToCardAmountTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,
                     Gravity.CENTER, 8, 24, 8, 4));
 
@@ -133,26 +143,14 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             innerLayout.addView(messageTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,
                     Gravity.CENTER, 8, 4, 8, 8));
 
-
-            set.connect(payButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-            set.connect(payButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-            set.connect(payButton.getId(), ConstraintSet.TOP, innerLayout.getId(), ConstraintSet.BOTTOM, LayoutCreator.dp(8));
-            set.connect(payButton.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, LayoutCreator.dp(8));
-
-            set.constrainHeight(payButton.getId(), ConstraintSet.WRAP_CONTENT);
-            set.constrainWidth(payButton.getId(), ConstraintSet.MATCH_CONSTRAINT);
-
-            set.constrainHeight(innerLayout.getId(), ConstraintSet.WRAP_CONTENT);
-            set.constrainWidth(innerLayout.getId(), ConstraintSet.MATCH_CONSTRAINT);
-
             set.constrainHeight(cardIcon.getId(), LayoutCreator.dp(56));
             set.constrainWidth(cardIcon.getId(), LayoutCreator.dp(56));
+
+            set.connect(innerLayout.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, LayoutCreator.dp(30));
 
             set.connect(cardIcon.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
             set.connect(cardIcon.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
             set.connect(cardIcon.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-
-            set.connect(innerLayout.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, LayoutCreator.dp(30));
 
             rootView.addView(innerLayout);
             rootView.addView(payButton);
