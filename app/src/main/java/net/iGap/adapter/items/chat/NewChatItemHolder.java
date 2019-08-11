@@ -52,6 +52,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private LinearLayout viewContainer;
     private LinearLayout voteUpContainer;
     private LinearLayout voteDownContainer;
+    private LinearLayout messageDetailContainer;
 
     private boolean inChannel = false;
     private boolean inChat = false;
@@ -106,7 +107,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         editedIndicatorTv = new AppCompatTextView(getContext());
         editedIndicatorTv.setId(R.id.tv_chatItem_edited);
-        setTextSize(editedIndicatorTv,R.dimen.smallTextSize);
+        setTextSize(editedIndicatorTv,R.dimen.verySmallTextSize);
         setTypeFace(editedIndicatorTv);
         editedIndicatorTv.setText(getResources().getString(R.string.edited));
         editedIndicatorTv.setGravity(LEFT);
@@ -151,7 +152,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         setTextSize(voteDownIv , R.dimen.standardTextSize);
 
-        LinearLayout messageDetailContainer = new LinearLayout(getContext());
+        messageDetailContainer = new LinearLayout(getContext());
         messageDetailContainer.setOrientation(LinearLayout.HORIZONTAL);
         messageDetailContainer.setGravity(CENTER_VERTICAL);
         messageDetailContainer.setId(R.id.ll_chatItem_detailContainer);
@@ -164,7 +165,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
                         4, 0, 4, 0));
 
 
-        set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainHeight(messageDetailContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
 
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
@@ -379,5 +380,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public FontIconTextView getEyeIconTv() {
         return eyeIconTv;
+    }
+
+    public LinearLayout getMessageDetailContainer() {
+        return messageDetailContainer;
+    }
+
+    public void setMessageDetailContainer(LinearLayout messageDetailContainer) {
+        this.messageDetailContainer = messageDetailContainer;
     }
 }
