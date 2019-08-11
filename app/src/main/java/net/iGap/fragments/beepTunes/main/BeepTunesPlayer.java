@@ -184,7 +184,7 @@ public class BeepTunesPlayer extends BaseFragment {
     private void playNextSong(PlayingSong playingSong) {
         if (realmDownloadSongs.size() > 0) {
             for (int i = 0; i < realmDownloadSongs.size(); i++) {
-                if (realmDownloadSongs.get(i).getId().equals(playingSong.getSongId())) {
+                if (realmDownloadSongs.get(i).getId() == playingSong.getSongId()) {
                     int index = i + 1;
                     if (index != realmDownloadSongs.size()) {
                         PlayingSong nextSong = new PlayingSong();
@@ -208,7 +208,7 @@ public class BeepTunesPlayer extends BaseFragment {
     private void playPreviousSong(PlayingSong playingSong) {
         if (realmDownloadSongs.size() > 0) {
             for (int i = 0; i < realmDownloadSongs.size(); i++) {
-                if (realmDownloadSongs.get(i).getId().equals(playingSong.getSongId())) {
+                if (realmDownloadSongs.get(i).getId() == playingSong.getSongId()) {
                     int index = i - 1;
                     if (!(index < 0)) {
                         PlayingSong nextSong = new PlayingSong();
