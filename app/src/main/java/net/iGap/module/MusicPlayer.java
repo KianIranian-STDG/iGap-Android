@@ -918,6 +918,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             } else {
                 if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
                     stopSound();
+                    closeLayoutMediaPlayer();
                 } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
 
                     if (playNextMusic) {
