@@ -60,7 +60,7 @@ public class Theme {
     public static String default_toggleButtonColor = "#00B0BF";
     public static String default_attachmentColor = default_appBarColor;
     public static String default_headerTextColor = "#00B0BF";
-    public static String default_progressColor = "#00B0BF";
+    public static String default_progressColor = "#45B321";
     public static String default_linkColor = "#303F9F";
     public static String default_bubbleChatMusicColor = "#bfefef";
     public static String default_bubbleChatSendColor = "#ccdba1";
@@ -84,7 +84,7 @@ public class Theme {
     public static String default_dark_toggleButtonColor = "#000000";//
     public static String default_dark_attachmentColor = "#cccccc";
     public static String default_dark_headerTextColor = "#ffffff";
-    public static String default_dark_progressColor = "#ffffff";
+    public static String default_dark_progressColor = "#45B321";
     public static String default_dark_linkColor = "#00BCD4";
     public static String default_dark_bubbleChatMusicColor = "#313131";//
     public static String default_dark_bubbleChatSendColor = "#394b4b";
