@@ -11,6 +11,8 @@
 package net.iGap.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -562,16 +564,16 @@ public class FragmentShowAvatars extends BaseFragment {
         }
 
         @Override
-        public Object instantiateItem(View container, final int position) {
+        public Object instantiateItem(ViewGroup container, final int position) {
 
-            LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
-            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
+            LayoutInflater inflater = LayoutInflater.from(container.getContext());
+            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
 
-            final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
-            final ImageView imgPlay = (ImageView) layout.findViewById(R.id.imgPlay);
+            final TouchImageView touchImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
             imgPlay.setVisibility(View.GONE);
 
-            final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
+            final MessageProgress progress = layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
 
             final RealmAttachment ra = avatarList.get(position).getFile();
@@ -585,58 +587,56 @@ public class FragmentShowAvatars extends BaseFragment {
                 progress.withDrawable(R.drawable.ic_download, true);
             }
 
-            if (ra != null) {
-                String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : "";
+            String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : "";
 
-                File file = new File(path);
+            File file = new File(path);
+            if (file.exists()) {
+                loadFileToImageView(touchImageView, file);
+                progress.setVisibility(View.GONE);
+            } else {
+                path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
+                file = new File(path);
                 if (file.exists()) {
-                    G.imageLoader.displayImage(suitablePath(path), touchImageView);
-                    progress.setVisibility(View.GONE);
+                    loadFileToImageView(touchImageView, file);
                 } else {
-                    path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
-                    file = new File(path);
-                    if (file.exists()) {
-                        G.imageLoader.displayImage(suitablePath(path), touchImageView);
-                    } else {
-                        // if thumpnail not exist download it
-                        ProtoFileDownload.FileDownload.Selector selector = null;
-                        long fileSize = 0;
+                    // if thumpnail not exist download it
+                    ProtoFileDownload.FileDownload.Selector selector = null;
+                    long fileSize = 0;
 
-                        if (ra.getSmallThumbnail() != null) {
-                            selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                            fileSize = ra.getSmallThumbnail().getSize();
-                        } else if (ra.getLargeThumbnail() != null) {
-                            selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
-                            fileSize = ra.getLargeThumbnail().getSize();
-                        }
+                    if (ra.getSmallThumbnail() != null) {
+                        selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                        fileSize = ra.getSmallThumbnail().getSize();
+                    } else if (ra.getLargeThumbnail() != null) {
+                        selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+                        fileSize = ra.getLargeThumbnail().getSize();
+                    }
 
-                        final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_TEMP, true);
+                    final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_TEMP, true);
 
-                        if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.getInstance().startDownload(  ProtoGlobal.RoomMessageType.IMAGE,System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
+                    if (selector != null && fileSize > 0) {
+                        HelperDownloadFile.getInstance().startDownload(  ProtoGlobal.RoomMessageType.IMAGE,System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(final String path, int progress) {
 
-                                    if (progress == 100) {
+                                if (progress == 100) {
 
-                                        G.currentActivity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (touchImageView != null) {
-                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
-                                                }
-
+                                    G.currentActivity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (touchImageView != null) {
+                                                loadFileToImageView(touchImageView, new File(path));
                                             }
-                                        });
-                                    }
-                                }
 
-                                @Override
-                                public void OnError(String token) {
-
+                                        }
+                                    });
                                 }
-                            });
-                        }
+                            }
+
+                            @Override
+                            public void OnError(String token) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -675,8 +675,18 @@ public class FragmentShowAvatars extends BaseFragment {
                 }
             });
 
-            ((ViewGroup) container).addView(layout);
+            container.addView(layout);
             return layout;
+        }
+
+        private void loadFileToImageView(ImageView imageView, File file) {
+            if (imageView == null)
+                return;
+            Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            if (myBitmap == null) {
+                return;
+            }
+            imageView.setImageBitmap(myBitmap);
         }
 
         private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView) {
@@ -705,7 +715,7 @@ public class FragmentShowAvatars extends BaseFragment {
                         public void run() {
                             progress.withProgress(progres);
                             if (progres == 100) {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                loadFileToImageView(touchImageView, new File(path));
                             }
                         }
                     });
