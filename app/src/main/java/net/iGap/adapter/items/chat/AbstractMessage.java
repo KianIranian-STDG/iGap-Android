@@ -430,7 +430,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             int maxsize = 0;
             withTextHolder.removeButtonLayout();
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
-                maxsize = G.maxChatBox;
+                maxsize = G.maxChatBox - 16;
             }
             if (maxsize > 0)
                 withTextHolder.messageView.setMaxWidth(maxsize);
@@ -590,7 +590,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 channelForwardIv.setImageDrawable(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_channel_forward_light));
 
             if (mHolder.getItemContainer().getChildCount() == 1){
-                forwardContainer.addView(channelForwardIv,LayoutCreator.createFrame(23,23,Gravity.BOTTOM, 4, 0, 8, 0));
+                forwardContainer.addView(channelForwardIv,LayoutCreator.createFrame(26,26,Gravity.BOTTOM, 4, 4, 8, 4));
                 mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
             }
 
