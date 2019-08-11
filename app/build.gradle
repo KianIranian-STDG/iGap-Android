@@ -174,7 +174,7 @@ dependencies {
     releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain7'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta7'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -204,7 +204,7 @@ dependencies {
     implementation 'android.arch.lifecycle:common-java8:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
+    implementation project(":stellar-sdk")
 }
 
 configurations.all {

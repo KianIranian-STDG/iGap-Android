@@ -20,6 +20,7 @@ import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
 import org.stellar.sdk.responses.AccountResponse;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class KuknosPanelVM extends ViewModel {
@@ -95,9 +96,8 @@ public class KuknosPanelVM extends ViewModel {
         panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
             @Override
             public void onResponse(AccountResponse accountResponse) {
-                Log.d("amini", "onResponse: " + accountResponse.getBalances().length + " " + accountResponse.getBalances()[0].getBalance());
                 kuknosWalletsM.setValue(accountResponse);
-                //spinnerSelect(0);
+                spinnerSelect(0);
             }
 
             @Override
@@ -120,7 +120,9 @@ public class KuknosPanelVM extends ViewModel {
     public void spinnerSelect(int position) {
         this.position = position;
         AccountResponse.Balance temp = kuknosWalletsM.getValue().getBalances()[position];
-        balance.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp.getBalance()) : temp.getBalance());
+        DecimalFormat df = new DecimalFormat("#,###.00");
+        balance.set(HelperCalander.isPersianUnicode ?
+                HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
         currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));
     }
 

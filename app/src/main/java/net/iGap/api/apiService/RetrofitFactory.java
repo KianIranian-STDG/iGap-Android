@@ -1,5 +1,7 @@
 package net.iGap.api.apiService;
 
+import org.stellar.sdk.responses.GsonSingleton;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -78,7 +80,7 @@ public class RetrofitFactory {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiStatic.KUKNOS_Horizan_Server)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(GsonSingleton.getInstance()))
                 .client(httpClient)
                 .build();
         return retrofit;

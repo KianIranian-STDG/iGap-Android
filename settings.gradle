@@ -1,2 +1,3 @@
-include ':app', ':paygearcore', ':pecpayment-release'
+include ':app', ':paygearcore', ':pecpayment-release', ':stellar-sdk'
 include ':lvl'
+project(':stellar-sdk').projectDir = new File('libs/stellar-sdk')

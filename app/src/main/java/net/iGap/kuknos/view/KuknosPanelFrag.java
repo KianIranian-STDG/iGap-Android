@@ -100,7 +100,7 @@ public class KuknosPanelFrag extends BaseFragment {
         walletSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getBalances().length-1))
+                if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getBalances().length))
                     kuknosPanelVM.spinnerSelect(position);
                 else {
                     Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
@@ -180,7 +180,6 @@ public class KuknosPanelFrag extends BaseFragment {
         kuknosPanelVM.getKuknosWalletsM().observe(getViewLifecycleOwner(), new Observer<AccountResponse>() {
             @Override
             public void onChanged(@Nullable AccountResponse accountResponse) {
-                Log.d("amini log", "onChanged: wallet " + kuknosPanelVM.getKuknosWalletsM().getValue().getBalances().length);
                 if (accountResponse.getBalances().length != 0) {
                     WalletSpinnerAdapter adapter = new WalletSpinnerAdapter(getContext(),
                             Arrays.asList(accountResponse.getBalances()));

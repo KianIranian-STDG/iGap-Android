@@ -31,7 +31,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
         if (wallets == null)
             wallets = new ArrayList<>();
         wallets.addAll(objects);
-        Log.d("amini", "getView size: " + wallets.size() + " " + wallets.get(0).getBuyingLiabilities());
+        wallets.add(new AccountResponse.Balance("", "Add Asset", "", "", "","","",false,0));
         this.context = context;
     }
 
@@ -53,7 +53,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
                 .placeholder(R.drawable.ic_tab_wallet_normal)
                 .into(walletPic);*/
 
-        if (position == (getCount()-1) && position != 0 /*&& wallets.get(position).getAssetCode().equals("Add Asset")*/) {
+        if (position == (getCount()-1) && position != 0 && wallets.get(position).getAssetCode().equals("Add Asset")) {
             // set
             walletName.setText(context.getResources().getString(R.string.kuknos_panel_addAsset));
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
@@ -84,7 +84,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return wallets.size()+1;
+        return wallets.size();
     }
 
     @Override

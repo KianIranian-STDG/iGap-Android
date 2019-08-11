@@ -1,0 +1,21 @@
+# Java class files
+*.class
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
+/local.properties
+
+# Eclipse project files
+.settings
+.classpath
+.project 
+
+# Gradle
+.gradle
+build
+
+# Mac
+.DS_Store
