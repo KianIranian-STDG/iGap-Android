@@ -2421,7 +2421,7 @@
     <string name="ivnalid_data_provided">قيم الإدخال غير صحيحة.</string>
     <string name="secret_chat">محادثة سرية</string>
     <string name="new_message_notif">پیام جدید</string>
-    <string name="card_to_card">بطاقة إلى بطاقة</string>
+    <string name="card_to_card">طلب بطاقة إلى بطاقة</string>
     <string name="your_device_is_root">آسف! جهازك هو الجذر.</string>
 
 
@@ -2876,7 +2876,7 @@
     <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
     <string name="str_frag_sync_skipBtn">البدء</string>
     <string name="str_frag_sync_error">هناك خطأ ما. حاول مرة اخرى.</string>
-    <string name="money_request">درخواست پول به:</string>
+    <string name="money_request">طلب بطاقة إلى بطاقة إلى:</string>
     <string name="cardtocard_descriotion_error">Description can not be empty</string>
     <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>

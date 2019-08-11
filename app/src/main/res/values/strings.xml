@@ -1472,7 +1472,7 @@ Want to get it?</string>
     <string name="ivnalid_data_provided">Input values are incorrect.</string>
     <string name="secret_chat">Secret Chat</string>
     <string name="new_message_notif">New Message</string>
-    <string name="card_to_card">Card to Card</string>
+    <string name="card_to_card">Request card to card</string>
     <string name="your_device_is_root">Sorry! Your device is root.</string>
     <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
     <string name="change_language_title">Change Language</string>
@@ -1933,7 +1933,7 @@ Want to get it?</string>
     <string name="igasht_total_ticket_price">Total Price: %d Toman</string>
     <string name="igasht_add_ticket_error">Please Add Ticket</string>
     <string name="igasht_buy_ticket_successful">Buy Ticket Successful</string>
-    <string name="money_request">Money Request to:</string>
+    <string name="money_request">Card To Card Request to:</string>
     <string name="cardtocard_descriotion_error">Description can not be empty</string>
     <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>

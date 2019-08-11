@@ -1476,7 +1476,7 @@
     <string name="ivnalid_data_provided">مقادیر ورودی اشتباه است.</string>
     <string name="secret_chat">گفتگوی خصوصی</string>
     <string name="new_message_notif">پیام جدید</string>
-    <string name="card_to_card">کارت به کارت</string>
+    <string name="card_to_card">درخواست کارت به کارت</string>
     <string name="your_device_is_root">متاسفانه دستگاه شما روت است.</string>
 
 
@@ -1934,7 +1934,7 @@
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
     <string name="str_frag_sync_skipBtn">شروع</string>
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
-    <string name="money_request">درخواست پول به:</string>
+    <string name="money_request">درخواست کارت به کارت به:</string>
     <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
     <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
     <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارن ۱۰ هزار ریال میباشد.</string>
