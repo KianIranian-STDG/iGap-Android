@@ -5,36 +5,36 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmDownloadSong extends RealmObject {
     @PrimaryKey
-    private Long id;
+    private long id;
     private String path;
     private String displayName;
     private String englishDisplayName;
     private String savedName;
-    private Long artistId;
-    private Long albumId;
+    private long artistId;
+    private long albumId;
     private boolean isFavorite = false;
 
-    public Long getArtistId() {
+    public long getArtistId() {
         return artistId;
     }
 
-    public void setArtistId(Long artistId) {
+    public void setArtistId(long artistId) {
         this.artistId = artistId;
     }
 
-    public Long getAlbumId() {
+    public long getAlbumId() {
         return albumId;
     }
 
-    public void setAlbumId(Long albumId) {
+    public void setAlbumId(long albumId) {
         this.albumId = albumId;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
