@@ -11,6 +11,7 @@
 package net.iGap.request;
 
 import net.iGap.proto.ProtoChatGetRoom;
+import net.iGap.proto.ProtoGlobal;
 
 public class RequestChatGetRoom {
 
@@ -18,6 +19,22 @@ public class RequestChatGetRoom {
         ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom = ProtoChatGetRoom.ChatGetRoom.newBuilder();
         chatGetRoom.setPeerId(peerId);
         RequestWrapper requestWrapper = new RequestWrapper(200, chatGetRoom);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public interface OnChatRoomReady {
+        void onReady(ProtoGlobal.Room room);
+        void onError(int major, int minor);
+    }
+
+    public void chatGetRoom(long peerId, OnChatRoomReady onChatRoomReady) {
+        ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom = ProtoChatGetRoom.ChatGetRoom.newBuilder();
+        chatGetRoom.setPeerId(peerId);
+        RequestWrapper requestWrapper = new RequestWrapper(200, chatGetRoom, onChatRoomReady);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

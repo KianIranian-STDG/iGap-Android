@@ -16,14 +16,15 @@ import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestChatGetRoom;
 
 public class ChatGetRoomResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public ChatGetRoomResponse(int actionId, Object protoClass, String identity) {
+    public ChatGetRoomResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.actionId = actionId;
@@ -35,22 +36,26 @@ public class ChatGetRoomResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse = (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
+        if (identity instanceof RequestChatGetRoom.OnChatRoomReady) {
 
-        /**
-         * before client just get roomId from server and send that with receiver
-         * and later get room info . but now client receive room with complete
-         * info , but now i send roomId like before . i do that for don't change
-         * other code . because i guess don't need for this actions.
-         *
-         * hint : we can set another interface for another state.
-         */
-
-        if ((chatGetRoomResponse.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) || identity != null) {
-            RealmRoom.putOrUpdate(chatGetRoomResponse.getRoom());
-
+            ((RequestChatGetRoom.OnChatRoomReady) identity).onReady(chatGetRoomResponse.getRoom());
         } else {
-            if (G.onChatGetRoom != null) {
-                G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom());
+            /**
+             * before client just get roomId from server and send that with receiver
+             * and later get room info . but now client receive room with complete
+             * info , but now i send roomId like before . i do that for don't change
+             * other code . because i guess don't need for this actions.
+             *
+             * hint : we can set another interface for another state.
+             */
+
+            if ((chatGetRoomResponse.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) || identity != null) {
+                RealmRoom.putOrUpdate(chatGetRoomResponse.getRoom());
+
+            } else {
+                if (G.onChatGetRoom != null) {
+                    G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom());
+                }
             }
         }
     }
@@ -58,6 +63,10 @@ public class ChatGetRoomResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        if (identity instanceof RequestChatGetRoom.OnChatRoomReady) {
+            return;
+        }
+
         if (G.onChatGetRoom != null) {
             G.onChatGetRoom.onChatGetRoomTimeOut();
         }
@@ -69,8 +78,12 @@ public class ChatGetRoomResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        if (G.onChatGetRoom != null) {
-            G.onChatGetRoom.onChatGetRoomError(majorCode, minorCode);
+        if (identity instanceof RequestChatGetRoom.OnChatRoomReady) {
+            ((RequestChatGetRoom.OnChatRoomReady) identity).onError(majorCode, minorCode);
+        } else {
+            if (G.onChatGetRoom != null) {
+                G.onChatGetRoom.onChatGetRoomError(majorCode, minorCode);
+            }
         }
     }
 }

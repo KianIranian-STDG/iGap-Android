@@ -9193,56 +9193,42 @@ public class FragmentChat extends BaseFragment
         if (forwardList != null && forwardList.size() > 0) {
 
             final int[] count = {0};
+            for (int i = 0; i < forwardList.size(); i++) {
+                new RequestChatGetRoom().chatGetRoom(forwardList.get(i).getId(), new RequestChatGetRoom.OnChatRoomReady() {
+                    @Override
+                    public void onReady(ProtoGlobal.Room room) {
+                        if (!multiForwardList.contains(room.getId())) {
+                            multiForwardList.add(room.getId());
+                            RealmRoom.putOrUpdate(room);
+                        }
 
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-
-                    if (!multiForwardList.contains(room.getId())) {
-                        multiForwardList.add(room.getId());
-                        RealmRoom.putOrUpdate(room);
+                        count[0]++;
+                        if (count[0] >= forwardList.size()) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    G.refreshRealmUi();
+                                    bottomSheetDialogForward.dismiss();
+                                    hideProgress();
+                                    forwardList.clear();
+                                    manageForwardedMessage();
+                                }
+                            });
+                        }
                     }
 
-                    count[0]++;
-                    if (count[0] >= forwardList.size()) {
-                        G.onChatGetRoom = null;
-                        forwardList.clear();
-                        manageForwardedMessage();
-
+                    @Override
+                    public void onError(int major, int minor) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 bottomSheetDialogForward.dismiss();
                                 hideProgress();
+                                error(G.fragmentActivity.getResources().getString(R.string.faild));
                             }
                         });
-
-
                     }
-                }
-
-                @Override
-                public void onChatGetRoomTimeOut() {
-
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            bottomSheetDialogForward.dismiss();
-                            hideProgress();
-                            error(G.fragmentActivity.getResources().getString(R.string.faild));
-                        }
-                    });
-
-
-                }
-            };
-
-            for (int i = 0; i < forwardList.size(); i++) {
-                new RequestChatGetRoom().chatGetRoom(forwardList.get(i).getId());
+                });
             }
 
 
