@@ -5,12 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;
@@ -24,6 +26,20 @@ public class BadgeView extends FrameLayout {
         init();
     }
 
+    public BadgeView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public BadgeView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    public BadgeView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
 
     private void init() {
         textView = new TextView(getContext());

@@ -117,6 +117,7 @@ import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
+import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
@@ -165,6 +166,7 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -523,7 +525,7 @@ public class FragmentChat extends BaseFragment
     private TextView txtSpamClose;
     private TextView send;
     private TextView txtCountItem;
-    private TextView txtNewUnreadMessage;
+    private BadgeView txtNewUnreadMessage;
     private TextView imvCancelForward;
     private TextView btnUp;
     private TextView btnDown;
@@ -2774,8 +2776,14 @@ public class FragmentChat extends BaseFragment
             }
         });
 
+        //added run time -> counter of un read messages
         llScrollNavigate = rootView.findViewById(R.id.ac_ll_scrool_navigate);
-        txtNewUnreadMessage = rootView.findViewById(R.id.cs_txt_unread_message);
+        txtNewUnreadMessage = new BadgeView(getContext());
+        txtNewUnreadMessage.getTextView().setTypeface(G.typeface_IRANSansMobile);
+        txtNewUnreadMessage.getTextView().setSingleLine();
+        txtNewUnreadMessage.getTextView().setFilters(new InputFilter[] { new InputFilter.LengthFilter(5) });//set max length
+        txtNewUnreadMessage.setBadgeColor(G.isDarkTheme ? Color.parseColor(Theme.default_notificationColor) : Color.parseColor(G.notificationColor));
+        llScrollNavigate.addView(txtNewUnreadMessage,LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT , LayoutCreator.WRAP_CONTENT , Gravity.CENTER | Gravity.TOP));
 
         G.handler.post(new Runnable() {
             @Override
@@ -2784,12 +2792,6 @@ public class FragmentChat extends BaseFragment
                 manageForwardedMessage();
             }
         });
-
-        if (G.isDarkTheme) {
-            AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(Theme.default_notificationColor));
-        } else {
-            AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(G.notificationColor));
-        }
 
         MaterialDesignTextView txtNavigationLayout = rootView.findViewById(R.id.ac_txt_down_navigation);
         AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));
@@ -2841,7 +2843,7 @@ public class FragmentChat extends BaseFragment
                     firstUnreadMessageInChat = null;
                     countNewMessage = 0;
                     txtNewUnreadMessage.setVisibility(View.GONE);
-                    txtNewUnreadMessage.setText(countNewMessage + "");
+                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 } else {
                     setDownBtnGone();
                     /**
@@ -2924,7 +2926,7 @@ public class FragmentChat extends BaseFragment
 //                                }
 //                            });
 
-                    txtNewUnreadMessage.setText(countNewMessage + "");
+                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                     if (countNewMessage == 0) {
                         txtNewUnreadMessage.setVisibility(View.GONE);
 
@@ -4371,7 +4373,7 @@ public class FragmentChat extends BaseFragment
         if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
             countNewMessage = 0;
             txtNewUnreadMessage.setVisibility(View.GONE);
-            txtNewUnreadMessage.setText(countNewMessage + "");
+            txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
 
             firstUnreadMessageInChat = null;
         }
@@ -5249,7 +5251,7 @@ public class FragmentChat extends BaseFragment
         resetMessagingValue();
         countNewMessage = 0;
         txtNewUnreadMessage.setVisibility(View.GONE);
-        txtNewUnreadMessage.setText(countNewMessage + "");
+        txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
         getMessages();
     }
 
@@ -5625,7 +5627,7 @@ public class FragmentChat extends BaseFragment
             countNewMessage++;
             setDownBtnVisible();
             if (txtNewUnreadMessage != null) {
-                txtNewUnreadMessage.setText(countNewMessage + "");
+                txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 txtNewUnreadMessage.setVisibility(View.VISIBLE);
             }
         }
@@ -8459,7 +8461,7 @@ public class FragmentChat extends BaseFragment
             if (hasUnread()) {
                 countNewMessage = unreadCount;
                 txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                txtNewUnreadMessage.setText(countNewMessage + "");
+                txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 setDownBtnVisible();
                 firstUnreadMessageInChat = firstUnreadMessage;
             }
