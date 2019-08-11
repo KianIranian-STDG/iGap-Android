@@ -1,17 +1,13 @@
 package net.iGap.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -19,23 +15,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDataUsage;
 import net.iGap.interfaces.DataUsageListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.structs.DataUsageStruct;
-import net.iGap.realm.RealmDataUsage;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-import static net.iGap.G.context;
-import static net.iGap.adapter.items.chat.ViewMaker.setTypeFace;
 import static net.iGap.libs.bottomNavigation.Util.Utils.darkModeHandler;
 import static net.iGap.libs.bottomNavigation.Util.Utils.darkModeHandlerGray;
-import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;
 
 public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -252,4 +239,7 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    private void setTypeFace(TextView textView){
+        textView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/IRANSansMobile.ttf"));
+    }
 }
