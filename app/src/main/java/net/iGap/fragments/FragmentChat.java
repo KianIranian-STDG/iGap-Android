@@ -19,6 +19,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -627,6 +629,14 @@ public class FragmentChat extends BaseFragment
     private ViewGroup layoutToolbar;
     private boolean isPinAvailable = false;
 
+    private SoundPool soundPool;
+    private boolean soundInChatPlay = false;
+    private boolean sendMessageLoaded;
+    private boolean receiveMessageLoaded;
+    private int sendMessageSound;
+    private int receiveMessageSound;
+    private String TAG = "messageSound";
+
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
             realmChat = Realm.getDefaultInstance();
@@ -846,6 +856,30 @@ public class FragmentChat extends BaseFragment
 
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot){
             sendMoney.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void soundInChatInit(){
+        if (soundInChatPlay){
+            try {
+                if (soundPool == null){
+                    soundPool = new SoundPool(3, AudioManager.STREAM_SYSTEM, 0);
+                }
+
+                if (sendMessageSound == 0 && !sendMessageLoaded) {
+                    sendMessageLoaded = true;
+                    sendMessageSound = soundPool.load(getContext(), R.raw.send_message_sound, 1);
+                }
+
+                if (receiveMessageSound == 0 && !receiveMessageLoaded) {
+                    receiveMessageLoaded = true;
+                    receiveMessageSound = soundPool.load(getContext(), R.raw.receive_message_sound, 1);
+                }
+
+            } catch (Exception e) {
+                Log.i(TAG, "soundPool error: " + e.getMessage());
+            }
+
         }
     }
 
@@ -2332,6 +2366,11 @@ public class FragmentChat extends BaseFragment
          */
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         sendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) == 1;
+
+        soundInChatPlay = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 0) == 1;
+
+        if (soundInChatPlay)
+            soundInChatInit();
 
         /**
          * set background
@@ -3907,6 +3946,10 @@ public class FragmentChat extends BaseFragment
                 }
             });
         }
+
+        if (soundPool != null && sendMessageSound != 0)
+            playSendSound(roomId, roomMessage,chatType);
+
     }
 
     @Override
@@ -3915,6 +3958,9 @@ public class FragmentChat extends BaseFragment
         if (roomMessage.getMessageId() <= biggestMessageId) {
             return;
         }
+
+        if (soundPool != null && sendMessageSound != 0)
+            playReceiveSound(roomId, roomMessage,roomType);
 
         if (isBot) {
 
@@ -4138,6 +4184,26 @@ public class FragmentChat extends BaseFragment
         }
 
         realm.close();
+    }
+
+    private void playReceiveSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+        if (sendMessageSound != 0 && !isPaused) {
+            try {
+                soundPool.play(sendMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
+            } catch (Exception e) {
+                Log.i(TAG, "playReceiveSound: " + e.getMessage());
+            }
+        }
+    }
+
+    private void playSendSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+        if (receiveMessageSound != 0 && !isPaused) {
+            try {
+                soundPool.play(receiveMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
+            } catch (Exception e) {
+                Log.i(TAG, "playReceiveSound: " + e.getMessage());
+            }
+        }
     }
 
     private StructWebView getUrlWebView(String additionalData) {
