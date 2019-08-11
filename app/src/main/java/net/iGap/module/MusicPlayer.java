@@ -1715,7 +1715,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             try {
 
                 if (myWallpaperManager.isSetWallpaperAllowed()) {
-                    myWallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
+                    myWallpaperManager.setImageData(bitmap, null, true, WallpaperManager.FLAG_LOCK);
                 }
 
             } catch (Exception e) {
@@ -1732,7 +1732,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 if (myWallpaperManager.isSetWallpaperAllowed()) {
 
                     if (orginalWallPaper != null) {
-                        myWallpaperManager.setBitmap(orginalWallPaper, null, true, WallpaperManager.FLAG_LOCK);
+                        myWallpaperManager.setImageData(orginalWallPaper, null, true, WallpaperManager.FLAG_LOCK);
                     } else {
                         myWallpaperManager.clear(WallpaperManager.FLAG_LOCK);
                     }

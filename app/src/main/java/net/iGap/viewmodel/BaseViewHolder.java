@@ -1,18 +1,26 @@
 package net.iGap.viewmodel;
 
+import net.iGap.fragments.BaseFragment;
+
 public interface BaseViewHolder {
     default void onCreateViewModel() {
     }
 
-    default void onStart() {
+    default void onStartFragment(BaseFragment fragment) {
     }
 
-    default void onDestroy() {
+    default void onDestroyFragment(BaseFragment fragment) {
     }
 
-    default void onPause() {
+    default void onPauseFragment(BaseFragment fragment) {
     }
 
-    default void onResume() {
+    default void onResumeFragment(BaseFragment fragment) {
+    }
+
+    default void onCreateFragment(BaseFragment fragment) {
+    }
+
+    default void onDestroyViewModel() {
     }
 }

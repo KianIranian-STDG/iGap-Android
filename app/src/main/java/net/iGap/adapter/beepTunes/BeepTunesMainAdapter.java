@@ -1,5 +1,6 @@
 package net.iGap.adapter.beepTunes;
 
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
+import net.iGap.fragments.beepTunes.main.BeepTunesMainFragment;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.Datum;
@@ -18,22 +19,21 @@ import net.iGap.module.api.beepTunes.Slide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BeepTunesMainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Datum> data = new ArrayList<>();
     private static final int ROW = 0;
     private static final int AD = 1;
-
     private static final String TYPE_AD = "advertisement";
     private static final String TYPE_ROW = "beepTunesCategory";
-    private BeepTunesFragment.OnItemClick onItemClick;
+    private List<Datum> data = new ArrayList<>();
+    private BeepTunesMainFragment.OnItemClick onItemClick;
 
     public void setData(List<Datum> data) {
         this.data = data;
         notifyDataSetChanged();
     }
 
-    public void setOnItemClick(BeepTunesFragment.OnItemClick onItemClick) {
+    public void setOnItemClick(BeepTunesMainFragment.OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
 
@@ -69,6 +69,9 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case AD:
                 SlideViewHolder slideViewHolder = (SlideViewHolder) viewHolder;
+                String[] scales = data.get(i).getInfo().getScale().split(":");
+                float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+                slideViewHolder.itemView.getLayoutParams().height = Math.round(height);
                 slideViewHolder.bindSlid(data.get(i).getSlides(), data.get(i).getInfo().getPlaybackTime());
                 break;
         }
@@ -98,28 +101,27 @@ public class BeepTunesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         void bindSlid(List<Slide> slides, long interval) {
+
             slider.postDelayed(() -> {
                 slider.setAdapter(new BeepTunesBannerSliderAdapter(slides));
                 slider.setSelectedSlide(0);
                 slider.setInterval((int) interval);
-            }, 1500);
+            }, 100);
         }
     }
 
     class RowViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView recyclerView;
         private TextView headerTv;
-        private ItemAdapter adapter;
+        private BeepTunesAlbumAdapter adapter;
 
         RowViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.rv_rowItem);
             headerTv = itemView.findViewById(R.id.tv_rowItem_header);
             recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
-            adapter = new ItemAdapter();
+            adapter = new BeepTunesAlbumAdapter();
             recyclerView.setAdapter(adapter);
-
-
         }
 
         void bindRow(List<Album> albums) {

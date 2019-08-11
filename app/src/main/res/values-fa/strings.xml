@@ -1945,5 +1945,9 @@
     <string name="mci_topup_payment_title">شارژ همراه اول</string>
     <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید.</string>
     <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید.</string>
+    <string name="str_frag_sync_skip_btn">شروع برنامه</string>
+    <string name="beeptunes_purchase_song">آهنگ های خریداری شده</string>
+    <string name="beeptunes_sync_song">آهنگ های بارگیری شده</string>
+    <string name="beeptunesـfavorite_song">آهنگ های مورد علاقه</string>
 
 </resources>

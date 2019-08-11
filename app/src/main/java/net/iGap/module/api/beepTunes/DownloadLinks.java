@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class DownloadLinks {
 
-    @SerializedName("H360")
+    @SerializedName("H320")
     private String h360;
     @SerializedName("L128")
     private String l128;
     @SerializedName("L64")
     private String l64;
 
-    public String getH360() {
+    public String getH320() {
         return h360;
     }
 

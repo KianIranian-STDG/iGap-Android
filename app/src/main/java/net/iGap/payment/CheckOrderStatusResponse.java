@@ -23,6 +23,6 @@ public class CheckOrderStatusResponse {
     }
 
     public boolean isPaymentSuccess() {
-        return status.equals("SUCCESS");
+        return status.equals("پرداخت با موفقیت انجام شد");
     }
 }

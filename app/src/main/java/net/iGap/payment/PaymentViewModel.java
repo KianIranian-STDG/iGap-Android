@@ -11,6 +11,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.helper.HelperCalander;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,9 +28,9 @@ public class PaymentViewModel extends ViewModel {
     private ObservableField<String> paymentType = new ObservableField<>();
     private ObservableField<String> title = new ObservableField<>();
     private ObservableField<String> description = new ObservableField<>();
-    private ObservableField<String> paymentOrderId = new ObservableField<>();
+    /*private ObservableField<String> paymentOrderId = new ObservableField<>();*/
     private ObservableField<String> paymentStatus = new ObservableField<>();
-    private ObservableDouble price = new ObservableDouble();
+    private ObservableField<String> price = new ObservableField<>();
     private ObservableDouble paymentRRN = new ObservableDouble();
     private MutableLiveData<String> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
@@ -107,11 +108,11 @@ public class PaymentViewModel extends ViewModel {
         return paymentStatus;
     }
 
-    public ObservableField<String> getPaymentOrderId() {
+    /*public ObservableField<String> getPaymentOrderId() {
         return paymentOrderId;
-    }
+    }*/
 
-    public ObservableDouble getPrice() {
+    public ObservableField<String> getPrice() {
         return price;
     }
 
@@ -165,7 +166,7 @@ public class PaymentViewModel extends ViewModel {
             paymentStateIcon.set(R.string.close_icon);
             paymentStatusTextColor.set(R.color.red);
             paymentStatus.set(payment.getMessage());
-            paymentOrderId.set(payment.getOrderId());
+            /*paymentOrderId.set(payment.getOrderId());*/
         }
     }
 
@@ -186,7 +187,8 @@ public class PaymentViewModel extends ViewModel {
                 showMainView.set(View.VISIBLE);
                 showButtons.set(View.VISIBLE);
                 description.set(data.getInfo().getProduct().getDescription());
-                price.set(data.getInfo().getPrice());
+                String tmp = String.valueOf(data.getInfo().getPrice());
+                price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
                 title.set(data.getInfo().getProduct().getTitle());
                 orderDetail = data;
             }
@@ -216,9 +218,10 @@ public class PaymentViewModel extends ViewModel {
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
                 description.set(data.getPaymentInfo().getProduct().getDescription());
-                price.set(data.getPaymentInfo().getPrice());
+                String tmp = String.valueOf(data.getPaymentInfo().getPrice());
+                price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
                 title.set(data.getPaymentInfo().getProduct().getTitle());
-                paymentOrderId.set(data.getPaymentInfo().getId());
+                /*paymentOrderId.set(data.getPaymentInfo().getId());*/
                 paymentStatus.set(data.getStatus());
                 if (data.isPaymentSuccess()) {
                     paymentStatusTextColor.set(R.color.green);

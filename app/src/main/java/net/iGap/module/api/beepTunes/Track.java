@@ -37,6 +37,36 @@ public class Track {
     @Expose
     private String type;
 
+    private String savedName;
+
+    private int downloadStatus = DownloadSong.STATUS_CANCEL;
+
+    private boolean inStorage = false;
+
+    public boolean isInStorage() {
+        return inStorage;
+    }
+
+    public void setInStorage(boolean inStorage) {
+        this.inStorage = inStorage;
+    }
+
+    public String getSavedName() {
+        return savedName;
+    }
+
+    public void setSavedName(String savedName) {
+        this.savedName = savedName;
+    }
+
+    public int getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(int downloadStatus) {
+        this.downloadStatus = downloadStatus;
+    }
+
     public Long getAlbumId() {
         return albumId;
     }
