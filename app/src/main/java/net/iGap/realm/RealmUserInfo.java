@@ -35,6 +35,7 @@ public class RealmUserInfo extends RealmObject {
     private boolean importContactLimit;
     private String pushNotificationToken;
     private String representPhoneNumber;
+    private String accessToken;
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
@@ -83,6 +84,20 @@ public class RealmUserInfo extends RealmObject {
                 } else {
                     realmUserInfo = realm.createObject(RealmUserInfo.class);
                     realmUserInfo.setPushNotificationToken(pushToken);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void insertAccessToken(final String accessToken) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.accessToken = accessToken;
                 }
             }
         });
@@ -343,6 +358,14 @@ public class RealmUserInfo extends RealmObject {
 
     public void setRepresentPhoneNumber(String representPhoneNumber) {
         this.representPhoneNumber = representPhoneNumber;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
     }
 
     public static void setRepresentPhoneNumber(Realm realm, String representPhoneNumber) {

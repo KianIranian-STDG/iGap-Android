@@ -584,6 +584,11 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 36
 
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfo != null) {
+                realmUserInfo.addField("accessToken", String.class);
+            }
+
             RealmObjectSchema realmDownloadSong = schema.create(RealmDownloadSong.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.REQUIRED)
                     .addField("path", String.class)
