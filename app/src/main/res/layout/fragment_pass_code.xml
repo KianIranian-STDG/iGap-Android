@@ -255,7 +255,7 @@
                     android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityDescription) ,default= visible}">
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        style="?textBackgroundColor"
+                        style="?textSubColorSettingTheme"
                         android:fontFamily="@font/main_font"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -354,7 +354,7 @@
                     android:layout_height="match_parent">
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        style="?textTitleColorSettingTheme"
+                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/main_font"
@@ -406,7 +406,7 @@
                     android:layout_height="match_parent">
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        style="?textTitleColorSettingTheme"
+                        style="?textSubColorSettingTheme"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
