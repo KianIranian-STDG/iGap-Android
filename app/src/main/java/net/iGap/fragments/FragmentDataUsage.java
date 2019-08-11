@@ -40,7 +40,6 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     private long totalReceivedByte;
     private boolean type;
     private DataUsageAdapter adapter;
-    private RelativeLayout rvMainDataUsage;
     private HelperToolbar mHelperToolbar;
 
     public static FragmentDataUsage newInstance() {
@@ -68,12 +67,6 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fdu_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
-
-
-        rvMainDataUsage = (RelativeLayout) view.findViewById(R.id.rvMainDataUsage);
-        rvMainDataUsage.setBackgroundColor(G.getThemeBackgroundColor());
-
-
 
         type = getArguments().getBoolean("TYPE", false);
 

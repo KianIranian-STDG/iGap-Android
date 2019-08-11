@@ -2008,6 +2008,8 @@
 
     <string name="two_step_pass_code">قفل الدخول إلى البرنامج</string>
 
+    <string name="show_line_pattern">إظهار نمط الخط</string>
+
     <string name="unlock_with_fingerPrint">فتح القفل بواسطة البصمة</string>
 
     <string name="change_pass_code">تغيير الرمز </string>
