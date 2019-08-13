@@ -190,7 +190,6 @@ import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatDelete;
 import net.iGap.interfaces.OnChatDeleteMessageResponse;
 import net.iGap.interfaces.OnChatEditMessageResponse;
-import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.interfaces.OnChatSendMessage;
@@ -4187,7 +4186,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void playReceiveSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        if (sendMessageSound != 0 && !isPaused) {
+        if (roomId == this.mRoomId && sendMessageSound != 0 && !isPaused) {
             try {
                 soundPool.play(sendMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
             } catch (Exception e) {
@@ -4197,7 +4196,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void playSendSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        if (receiveMessageSound != 0 && !isPaused) {
+        if (roomId == this.mRoomId && receiveMessageSound != 0 && !isPaused) {
             try {
                 soundPool.play(receiveMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
             } catch (Exception e) {
