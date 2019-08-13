@@ -168,12 +168,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
                         4, 0, 4, 0));
 
         if (G.isDarkTheme)
-            channelForwardIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_channel_forward_dark));
+            channelForwardIv.setImageResource(R.drawable.ic_channel_forward_dark);
         else
-            channelForwardIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_channel_forward_light));
+            channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);
 
-            forwardContainer.addView(channelForwardIv,LayoutCreator.createFrame(26,26,Gravity.BOTTOM, 4, 4, 8, 4));
-            forwardContainer.setVisibility(View.GONE);
+        forwardContainer.addView(channelForwardIv, LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
+        forwardContainer.setVisibility(View.GONE);
 
         set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainHeight(messageDetailContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
