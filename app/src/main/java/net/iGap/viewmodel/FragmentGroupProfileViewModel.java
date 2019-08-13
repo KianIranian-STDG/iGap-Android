@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentGroupProfile;
@@ -271,7 +272,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public void onClickRippleMenu() {
         List<Integer> items = new ArrayList<>();
         items.add(R.string.clear_history);
-        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+        if (role == GroupChatRole.OWNER) {
             if (isPrivate) {
                 items.add(R.string.group_title_convert_to_public);
             } else {
@@ -399,11 +400,15 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
     public void setTextGroupLik() {
         if (isPrivate) {
-            showLink.set(View.GONE);
             inviteLinkTitle.set(R.string.group_link);
+            if (role == GroupChatRole.OWNER) {
+                showLink.set(View.VISIBLE);
+            } else {
+                showLink.set(View.GONE);
+            }
         } else {
             showLink.set(View.VISIBLE);
-            inviteLink.set(linkUsername);
+            inviteLink.set(Config.IGAP_LINK_PREFIX + linkUsername);
             inviteLinkTitle.set(R.string.st_username);
         }
     }
@@ -448,7 +453,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                 });
             }
         };
-        
+
         new RequestGroupLeft().groupLeft(roomId);
     }
 

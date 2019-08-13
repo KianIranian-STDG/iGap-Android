@@ -88,6 +88,7 @@
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
+                        android:visibility="gone"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
@@ -254,7 +255,6 @@
                     app:layout_constraintRight_toRightOf="@id/notification"
                     app:layout_constraintTop_toBottomOf="@id/channelVerify" />
 
-
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelLink"
                     style="?textSubColorSettingTheme"
@@ -314,7 +314,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
-                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
                     app:layout_constraintTop_toBottomOf="@id/notification" />
@@ -428,7 +427,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
-                    android:visibility="@{viewModel.noMediaVisibility}"
+                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />

@@ -203,10 +203,8 @@ public class FragmentChannelProfile extends BaseFragment {
                         .widgetColor(Color.parseColor(G.appBarColor))
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog1, which) -> {
-                            String copy;
-                            copy = Config.IGAP_LINK_PREFIX + link;
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                            ClipData clip = ClipData.newPlainText("LINK_GROUP", Config.IGAP_LINK_PREFIX + link);
                             clipboard.setPrimaryClip(clip);
                         })
                         .build();
