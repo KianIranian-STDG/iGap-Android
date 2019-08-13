@@ -338,10 +338,10 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
                             hideKeyWord.setValue(true);
                             observeEnabledPayment.set(false);
                         } else {
-                            showError.setValue(R.string.error);
+                            showError.setValue(R.string.charge_price_error_message);
                         }
                     } else {
-                        showError.setValue(R.string.error);
+                        showError.setValue(R.string.charge_type_error_message);
                     }
                 } else {
                     showError.setValue(R.string.please_select_operator);

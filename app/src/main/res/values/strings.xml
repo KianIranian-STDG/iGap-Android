@@ -1948,5 +1948,6 @@ Want to get it?</string>
     <string name="beeptunes_sync_song">Sync Song</string>
     <string name="beeptunesـfavorite_song">Favorite Song</string>
     <string name="play_sound_in_chat">Play Message Sound In Chat</string>
-
+    <string name="charge_type_error_message">Please Select Charge Type</string>
+    <string name="charge_price_error_message">Please select Charge Price</string>
 </resources>

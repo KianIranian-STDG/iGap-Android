@@ -1951,5 +1951,7 @@
     <string name="beeptunes_sync_song">آهنگ های بارگیری شده</string>
     <string name="beeptunesـfavorite_song">آهنگ های مورد علاقه</string>
     <string name="play_sound_in_chat">پخش صدای ارسال پیام در گفتگو</string>
+    <string name="charge_type_error_message">لطفا نوع شارژ را انتخاب کنید.</string>
+    <string name="charge_price_error_message">لطفا مبلغ شارژ را انتخاب کنید.</string>
 
 </resources>
