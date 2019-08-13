@@ -5328,7 +5328,7 @@ public class FragmentChat extends BaseFragment
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
         ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
         for (int item : mAdapter.getSelections()) {
-            messageInfos.add(Parcels.wrap(mAdapter.getAdapterItem(item).mMessage));
+            messageInfos.add(Parcels.wrap(mAdapter.getAdapterItem(item).structMessage));
         }
         return messageInfos;
     }
