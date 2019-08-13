@@ -19,7 +19,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitFactory {
-    private OkHttpClient httpClient;
+    public OkHttpClient httpClient;
 
     public RetrofitFactory() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
