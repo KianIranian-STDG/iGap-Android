@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -47,14 +48,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Fragme
     }
 
     public class FragmentGridViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView channelImageGrid;
+        private ImageView channelImageGrid;
         private TextView channelTitleGrid;
         private CardView root;
         private LinearLayout linearLayout;
 
         public FragmentGridViewHolder(@NonNull View itemView) {
             super(itemView);
-            channelImageGrid = itemView.findViewById(R.id.circle_item_popular_rv_grid);
+            channelImageGrid = itemView.findViewById(R.id.iv_item_popular_rv_grid);
             channelTitleGrid = itemView.findViewById(R.id.tv_item_popular_rv_grid);
 
             linearLayout = itemView.findViewById(R.id.ll_item_pop_card_category);

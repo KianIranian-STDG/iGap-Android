@@ -21,8 +21,6 @@ public class Channel {
     @SerializedName("title")
     private String mTitle;
     @SerializedName("title_en")
-    private String mTitleEn;
-    @SerializedName("titleEn")
     private String TitleEn;
     @SerializedName("type")
     private String mType;
@@ -79,13 +77,6 @@ public class Channel {
         this.mType = mType;
     }
 
-    public String getmTitleEn() {
-        return mTitleEn;
-    }
-
-    public void setmTitleEn(String mTitleEn) {
-        this.mTitleEn = mTitleEn;
-    }
 
     public String getTitleEn() {
         return TitleEn;

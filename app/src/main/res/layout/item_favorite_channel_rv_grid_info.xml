@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_item_pop_category"
+    android:id="@+id/card_item_pop_grid"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dp2"
@@ -17,21 +17,21 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ll_item_pop_card_category"
+            android:id="@+id/ll_item_pop_card_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_favorite_channel_dark_item"
             android:gravity="center_horizontal">
 
-            <ImageView
-                android:id="@+id/iv_item_popular_rv_grid"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circle_item_popular_rv_grid_linear"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"
                 android:layout_margin="@dimen/dp10" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_item_popular_rv_grid"
+            android:id="@+id/tv_item_popular_rv_grid_linear"
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
