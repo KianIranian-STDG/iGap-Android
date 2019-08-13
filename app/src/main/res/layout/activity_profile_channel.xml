@@ -31,7 +31,7 @@
                 android:minHeight="@dimen/toolbar_height"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-                <RelativeLayout
+                <android.support.constraint.ConstraintLayout
                     android:id="@+id/toolbar_collapsed"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/toolbar_height"
@@ -46,42 +46,42 @@
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/dp4"
                         android:layout_marginLeft="@dimen/dp4"
-                        android:text="@string/back_icon" />
+                        android:text="@string/back_icon"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <Space
                         android:id="@+id/toolbar_avatar_collapsed_target"
                         android:layout_width="@dimen/toolbar_profile_avatar_size_collapsed"
                         android:layout_height="@dimen/toolbar_profile_avatar_size_collapsed"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dp6"
                         android:layout_marginRight="@dimen/dp6"
-                        android:layout_toEndOf="@id/toolbar_back"
-                        android:layout_toRightOf="@id/toolbar_back" />
+                        app:layout_constraintLeft_toRightOf="@id/toolbar_back"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"/>
 
                     <net.iGap.module.EmojiTextViewE
                         android:id="@+id/toolbar_txt_name_collapsed"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/dp8"
                         android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginEnd="@dimen/dp8"
                         android:layout_marginRight="@dimen/dp8"
-                        android:layout_toStartOf="@id/toolbar_edit"
-                        android:layout_toLeftOf="@id/toolbar_edit"
-                        android:layout_toEndOf="@id/toolbar_avatar_collapsed_target"
-                        android:layout_toRightOf="@id/toolbar_avatar_collapsed_target"
                         android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
                         android:visibility="gone"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
-                        app:emojiSize="@dimen/standardTextSize" />
+                        app:emojiSize="@dimen/standardTextSize"
+                        app:layout_constraintLeft_toRightOf="@id/toolbar_avatar_collapsed_target"
+                        app:layout_constraintRight_toLeftOf="@id/toolbar_edit"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"/>
 
                     <TextView
                         android:id="@+id/toolbar_more"
@@ -89,25 +89,27 @@
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
                         android:visibility="gone"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp4"
-                        android:text="@string/more_icon" />
+                        android:text="@string/more_icon"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"/>
 
                     <TextView
                         android:id="@+id/toolbar_edit"
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/toolbar_more"
-                        android:layout_toLeftOf="@id/toolbar_more"
                         android:text="@string/edit_icon"
-                        android:visibility="gone" />
+                        android:layout_marginRight="@dimen/dp4"
+                        android:layout_marginEnd="@dimen/dp4"
+                        android:visibility="visible"
+                        app:layout_constraintRight_toLeftOf="@id/toolbar_more"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"/>
 
-                </RelativeLayout>
+                </android.support.constraint.ConstraintLayout>
 
                 <FrameLayout
                     android:id="@+id/toolbar_expanded"
