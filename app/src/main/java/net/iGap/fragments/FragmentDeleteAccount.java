@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,8 +41,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnUserDelete;
 import net.iGap.interfaces.OnUserGetDeleteToken;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EditTextAdjustPan;
@@ -53,12 +56,12 @@ import net.iGap.request.RequestUserGetDeleteToken;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentDeleteAccount extends BaseFragment {
+public class FragmentDeleteAccount extends BaseFragment implements ToolbarListener {
 
     private String regex = null;
     private String smsMessage = null;
     private EditTextAdjustPan edtDeleteAccount;
-    private RippleView txtSet;
+
     private CountDownTimer countDownTimer;
     private String phone;
     private ViewGroup ltTime;
@@ -92,7 +95,15 @@ public class FragmentDeleteAccount extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.fda_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.Destruction_Code))
+                .setListener(this);
+
+        ((ViewGroup) view.findViewById(R.id.toolbar)).addView(toolbar.getView());
 
         G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
             @Override
@@ -130,16 +141,6 @@ public class FragmentDeleteAccount extends BaseFragment {
             }
         });
 
-        RippleView txtBack = (RippleView) view.findViewById(R.id.stda_ripple_back);
-        txtBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                removeFromBaseFragment(FragmentDeleteAccount.this);
-            }
-        });
-
         prgWaiting = (ProgressBar) view.findViewById(R.id.stda_prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
 
@@ -148,91 +149,9 @@ public class FragmentDeleteAccount extends BaseFragment {
         TextView txtPhoneNumber = (TextView) view.findViewById(R.id.stda_txt_phoneNumber);
         if (phone != null) txtPhoneNumber.setText("" + phone);
 
-        txtSet = (RippleView) view.findViewById(R.id.stda_ripple_set);
-        txtSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (edtDeleteAccount.getText().length() > 0) {
-
-                    new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.delete_account))
-                            .titleColor(G.context.getResources().getColor(android.R.color.black))
-                            .content(R.string.sure_delete_account).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                    //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
-                                    String verificationCode = edtDeleteAccount.getText().toString();
-                                    if (verificationCode != null && !verificationCode.isEmpty() && isFirstClick) {
-
-                                        isFirstClick = false;
-                                        G.onUserDelete = new OnUserDelete() {
-                                            @Override
-                                            public void onUserDeleteResponse() {
-                                                hideProgressBar();
-
-                                            }
-
-                                            @Override
-                                            public void Error(final int majorCode, final int minorCode, final int time) {
-
-                                                hideProgressBar();
-                                                isFirstClick = true;
-                                                G.handler.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (dialog.isShowing()) dialog.dismiss();
-                                                        switch (majorCode) {
-                                                            case 158:
-                                                                dialogWaitTime(R.string.USER_DELETE_MAX_TRY_LOCK, time, majorCode);
-                                                                break;
-                                                        }
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void TimeOut() {
-                                                hideProgressBar();
-                                                isFirstClick = true;
-                                                G.handler.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-
-                                                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
-                                                    }
-                                                });
-                                            }
-                                        };
-
-                                        showProgressBar();
-                                        new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
-                                    }
-                                }
-                            }).show();
-                } else {
-
-
-                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_enter_code_for_verify), false);
-
-                }
-            }
-        });
-
         edtDeleteAccount = (EditTextAdjustPan) view.findViewById(R.id.stda_edt_dleteAccount);
 
         final View viewLineBottom = view.findViewById(R.id.stda_line_below_editText);
-        txtSet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewLineBottom.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewLineBottom.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
 
         final TextView txtTimerLand = (TextView) view.findViewById(R.id.stda_txt_time);
 
@@ -421,5 +340,80 @@ public class FragmentDeleteAccount extends BaseFragment {
             }
         };
         countWaitTimer.start();
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        removeFromBaseFragment(FragmentDeleteAccount.this);
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+        if (edtDeleteAccount.getText().length() > 0) {
+
+            new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.delete_account))
+                    .titleColor(G.context.getResources().getColor(android.R.color.black))
+                    .content(R.string.sure_delete_account).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
+                            String verificationCode = edtDeleteAccount.getText().toString();
+                            if (verificationCode != null && !verificationCode.isEmpty() && isFirstClick) {
+
+                                isFirstClick = false;
+                                G.onUserDelete = new OnUserDelete() {
+                                    @Override
+                                    public void onUserDeleteResponse() {
+                                        hideProgressBar();
+
+                                    }
+
+                                    @Override
+                                    public void Error(final int majorCode, final int minorCode, final int time) {
+
+                                        hideProgressBar();
+                                        isFirstClick = true;
+                                        G.handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (dialog.isShowing()) dialog.dismiss();
+                                                switch (majorCode) {
+                                                    case 158:
+                                                        dialogWaitTime(R.string.USER_DELETE_MAX_TRY_LOCK, time, majorCode);
+                                                        break;
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void TimeOut() {
+                                        hideProgressBar();
+                                        isFirstClick = true;
+                                        G.handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
+                                            }
+                                        });
+                                    }
+                                };
+
+                                showProgressBar();
+                                new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+                            }
+                        }
+                    }).show();
+        } else {
+
+
+            HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_enter_code_for_verify), false);
+
+        }
     }
 }

@@ -59,7 +59,7 @@
     <string name="md_Mute">\uf57f</string>  <!-- igap_volume-low  -->
     <string name="md_clearHistory">\uf2da</string>  <!-- igap_history  -->
     <string name="md_exit_app">\uf206</string>  <!-- igap_exit-to-app  -->
-    <string name="md_delete_acc">\uf377</string>  <!-- igap_minus-circle-outline  -->
+    <string name="md_delete_acc">\ue924</string>  <!-- igap_minus-circle-outline  -->
     <string name="md_go_back_left_arrow">\uf04d</string>  <!-- igap_arrow-left  -->
     <string name="md_channel_icon">\ue900</string> <!-- igap_channel  -->
     <string name="md_trending_flat">\uf534</string>  <!-- igap_trending-neutral  -->
