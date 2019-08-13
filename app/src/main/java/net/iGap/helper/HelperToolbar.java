@@ -858,7 +858,7 @@ public class HelperToolbar {
 
             mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آي كب")) {
+        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آیکب")) {
 
             Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
 
@@ -1011,7 +1011,6 @@ public class HelperToolbar {
     }
 
     private void onScannerClickListener() {
-
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
         } else {
@@ -1032,8 +1031,6 @@ public class HelperToolbar {
             intent.putExtra("isScan",true);
             G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
         }
-
-
     }
 
     private void initViews(ViewMaker view) {

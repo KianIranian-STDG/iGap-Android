@@ -104,7 +104,7 @@ public class HelperGetAction {
                     if (struct.roomId == roomId && struct.action == latestAction) {
                         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, struct.userId);
                         if (realmRegisteredInfo != null) {
-                            concatenatedNames.append(realmRegisteredInfo.getDisplayName()).append(",");
+                            concatenatedNames.append(realmRegisteredInfo.getDisplayName()).append(" , ");
                         }
                     }
                 }

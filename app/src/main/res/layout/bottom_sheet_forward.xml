@@ -80,7 +80,7 @@
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/txtSend"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="@dimen/dp48"
         android:gravity="center"
         android:text="@string/send"
         android:textColor="@color/white"

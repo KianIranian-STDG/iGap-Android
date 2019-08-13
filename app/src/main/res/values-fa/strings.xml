@@ -19,7 +19,7 @@
     <!--TODO:// complete-->
     <!-- Page 4 introduce app -->
     <string name="text_line_1_introduce_page4">"آیلند"</string>
-    <string name="text_line_2_introduce_page4">"سرزمین هوشمند آیگپ"</string>
+    <string name="text_line_2_introduce_page4">"آیلند! سرزمین بی حد و مرز\nکه کلی اتفاق شگفت انگیز مثل گرفتن تاکسی، الوپیک، پرداخت قبض و رزرو تور و هتل توش افتاده. و تازه می تونی کلی بازی کنی، فیلم ببینی و موزیک گوش بدی."</string>
 
 
     <!-- Page 5 introduce app -->
@@ -101,7 +101,7 @@
     <string name="contact_message">پیام مخاطب</string>
     <string name="gif_message">پیام متحرک</string>
     <string name="voice_message">پیغام صوتی</string>
-    <string name="typing">درحال تایپ…</string>
+    <string name="typing">درحال نوشتن…</string>
     <string name="sending_image">درحال ارسال تصویر…</string>
     <string name="capturing_image">درحال گرفتن تصویر…</string>
     <string name="sending_video">درحال ارسال ویدئو…</string>
@@ -257,6 +257,7 @@
     <string name="Two_Step_Verification">"تأیید دو مرحله‌ای"</string>
     <string name="Active_Sessions">"نشست های فعال"</string>
     <string name="Account_Self_destruction">"خودتخریبی حساب کاربری"</string>
+    <string name="show_line_pattern">نمایش خطوط الگو</string>
 
     <!-- notification and sound group -->
     <string name="ntg_title_toolbar">"اعلانات و صداها"</string>
@@ -629,7 +630,7 @@
     <string name="times">زمان‌ها</string>
     <string name="info">اطلاعات</string>
     <string name="description">توضیحات</string>
-    <string name="type_message">تایپ کردن پیام</string>
+    <string name="type_message">نوشتن پیام</string>
     <string name="place">مکان</string>
     <string name="minutes">دقیقه‌ها</string>
     <string name="channel_link">پیوند کانال</string>
@@ -1444,7 +1445,7 @@
     <string name="remove_sticker">حذف استیکر</string>
     <string name="remove_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را حذف کنید؟</string>
     <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
-    <string name="Add">اضافه</string>
+    <string name="Add">افزودن</string>
     <string name="Remove">حذف</string>
 
     <string name="try_later">چند ثانیه بعد امتحان کنید</string>
@@ -1476,7 +1477,7 @@
     <string name="ivnalid_data_provided">مقادیر ورودی اشتباه است.</string>
     <string name="secret_chat">گفتگوی خصوصی</string>
     <string name="new_message_notif">پیام جدید</string>
-    <string name="card_to_card">کارت به کارت</string>
+    <string name="card_to_card">درخواست کارت به کارت</string>
     <string name="your_device_is_root">متاسفانه دستگاه شما روت است.</string>
 
 
@@ -1893,7 +1894,7 @@
     <string name="location_dialog_message">آیا می خواهید از موقعیت مکانی شما استفاده شود؟</string>
     <string name="recent_action">اقدامات اخیر</string>
     <string name="sign_channel_message_description">اسامی مدیران را به پیامهایی که ارسال کرده اید اضافه کنید.</string>
-    <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
+    <string name="reaction_message_detail">نام مدیرها را به پیامهایی که ارسال می کنند اضافه کنید.</string>
     <string name="chat_history_for_new_member_title">تاریخچه گپ برای اعضای جدید</string>
     <string name="permissions_title">مجوزها</string>
     <string name="all">همه</string>
@@ -1934,12 +1935,23 @@
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
     <string name="str_frag_sync_skipBtn">شروع</string>
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
-    <string name="money_request">درخواست پول به:</string>
-    <string name="cardtocard_descriotion_error">Description can not be empty</string>
-    <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
-    <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
-    <string name="cardtocard_cartnumber_error">Card number must be 4 digits</string>
-    <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
+    <string name="money_request">درخواست کارت به کارت به:</string>
+    <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
+    <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
+    <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارت ۱۰ هزار ریال میباشد.</string>
+    <string name="cardtocard_cartnumber_error">شماره کارت باید ۱۶ رقم باشد.</string>
+    <string name="cardtocard_cardnumber_error">شماره کارت مقصد نمیتواند خالی باشد.</string>
+    <string name="payment_order_id_title">شماره سفارش : %s</string>
+    <string name="payment_rrn_title">شماره تراکنش: %.0f</string>
+    <string name="mci_topup_payment_title">شارژ همراه اول</string>
     <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید.</string>
     <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید.</string>
+    <string name="str_frag_sync_skip_btn">شروع برنامه</string>
+    <string name="beeptunes_purchase_song">آهنگ های خریداری شده</string>
+    <string name="beeptunes_sync_song">آهنگ های بارگیری شده</string>
+    <string name="beeptunesـfavorite_song">آهنگ های مورد علاقه</string>
+    <string name="play_sound_in_chat">پخش صدای ارسال پیام در گفتگو</string>
+    <string name="charge_type_error_message">لطفا نوع شارژ را انتخاب کنید.</string>
+    <string name="charge_price_error_message">لطفا مبلغ شارژ را انتخاب کنید.</string>
+
 </resources>

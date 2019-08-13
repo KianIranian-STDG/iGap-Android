@@ -1,17 +1,13 @@
 package net.iGap.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -19,17 +15,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDataUsage;
 import net.iGap.interfaces.DataUsageListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.structs.DataUsageStruct;
-import net.iGap.realm.RealmDataUsage;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-import static net.iGap.G.context;
+import static net.iGap.libs.bottomNavigation.Util.Utils.darkModeHandler;
+import static net.iGap.libs.bottomNavigation.Util.Utils.darkModeHandlerGray;
 
 public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -157,120 +150,96 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class BaseHolder extends RecyclerView.ViewHolder {
         TextView txtTitle, txtSentNum, txtReceivedNum, txtByteSentNum, txtByteReceivedNum, txtByteReceived, txtByteSent, txtReceived, txtSent;
-        CardView rootBaseCard;
-        View view1, view2, view3;
 
         public BaseHolder(View itemView) {
             super(itemView);
-            txtByteReceivedNum = (TextView) itemView.findViewById(R.id.txtByteReceivedNum);
-            txtByteReceivedNum.setTypeface(G.typeface_IRANSansMobile);
-           // txtByteReceivedNum.setTextColor(Color.parseColor(G.textSubTheme));
+            txtByteReceivedNum = itemView.findViewById(R.id.txtByteReceivedNum);
+            setTypeFace(txtByteReceivedNum);
 
-            txtTitle = (TextView) itemView.findViewById(R.id.txtTitle);
-            txtTitle.setTypeface(G.typeface_IRANSansMobile);
+            txtTitle = itemView.findViewById(R.id.txtTitle);
+            setTypeFace(txtTitle);
+            darkModeHandler(txtTitle);
 
+            txtSentNum = itemView.findViewById(R.id.txtSentNum);
+            setTypeFace(txtSentNum);
 
+            txtReceivedNum = itemView.findViewById(R.id.txtReceivedNum);
+            setTypeFace(txtReceivedNum);
 
-            txtSentNum = (TextView) itemView.findViewById(R.id.txtSentNum);
-            txtSentNum.setTypeface(G.typeface_IRANSansMobile);
-        //    txtSentNum.setTextColor(Color.parseColor(G.textSubTheme));
+            txtByteSentNum = itemView.findViewById(R.id.txtByteSentNum);
+            setTypeFace(txtByteSentNum);
 
-            txtReceivedNum = (TextView) itemView.findViewById(R.id.txtReceivedNum);
-            txtReceivedNum.setTypeface(G.typeface_IRANSansMobile);
-         //   txtReceivedNum.setTextColor(Color.parseColor(G.textSubTheme));
-
-            txtByteSentNum = (TextView) itemView.findViewById(R.id.txtByteSentNum);
-            txtByteSentNum.setTypeface(G.typeface_IRANSansMobile);
-       //     txtByteSentNum.setTextColor(Color.parseColor(G.textSubTheme));
-
-
-            txtByteReceived = (TextView) itemView.findViewById(R.id.txtByteReceived);
+            txtByteReceived = itemView.findViewById(R.id.txtByteReceived);
             txtByteReceived.setText(context.getResources().getString(R.string.bytes_received));
-            txtByteReceived.setTypeface(G.typeface_IRANSansMobile);
-            txtByteReceived.setTextColor(Color.parseColor(G.textTitleTheme));
+            setTypeFace(txtByteReceived);
+            darkModeHandlerGray(txtByteReceived);
 
-            txtByteSent = (TextView) itemView.findViewById(R.id.txtByteSent);
+            txtByteSent = itemView.findViewById(R.id.txtByteSent);
             txtByteSent.setText(context.getResources().getString(R.string.bytes_sent));
-            txtByteSent.setTypeface(G.typeface_IRANSansMobile);
-            txtByteSent.setTextColor(Color.parseColor(G.textTitleTheme));
+            setTypeFace(txtByteSent);
+            darkModeHandlerGray(txtByteSent);
 
-            txtReceived = (TextView) itemView.findViewById(R.id.txtReceived);
+            txtReceived = itemView.findViewById(R.id.txtReceived);
             txtReceived.setText(context.getResources().getString(R.string.received));
-            txtReceived.setTypeface(G.typeface_IRANSansMobile);
-            txtReceived.setTextColor(Color.parseColor(G.textTitleTheme));
+            setTypeFace(txtReceived);
+            darkModeHandlerGray(txtReceived);
 
-            txtSent = (TextView) itemView.findViewById(R.id.txtSent);
+            txtSent = itemView.findViewById(R.id.txtSent);
             txtSent.setText(context.getResources().getString(R.string.sent));
-            txtSent.setTypeface(G.typeface_IRANSansMobile);
-            txtSent.setTextColor(Color.parseColor(G.textTitleTheme));
+            setTypeFace(txtSent);
+            darkModeHandlerGray(txtSent);
 
-            rootBaseCard = itemView.findViewById(R.id.rootBaseCard);
-            rootBaseCard.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
-
-
-            view1 = itemView.findViewById(R.id.view1);
-            view2 = itemView.findViewById(R.id.view2);
-            view3 = itemView.findViewById(R.id.view3);
-
-            view1.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
-            view2.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
-            view3.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
-
+            View line = itemView.findViewById(R.id.line);
+            darkModeHandlerGray(line);
         }
     }
 
     public class TotalViewHolder extends RecyclerView.ViewHolder {
         TextView txtTotalSentByte, txtTotalReceivedByte, txtTotalReceived, txtTotalSent, txtTitle;
-        CardView rootDataUsageTotal;
-
 
         public TotalViewHolder(View itemView) {
             super(itemView);
             txtTotalSentByte = itemView.findViewById(R.id.txtTotalSentByte);
-         //   txtTotalSentByte.setTextColor(Color.parseColor(G.textSubTheme));
-            txtTotalSentByte.setTypeface(G.typeface_IRANSansMobile);
+            setTypeFace(txtTotalSentByte);
 
             txtTotalReceivedByte = itemView.findViewById(R.id.txtTotalReceivedByte);
-        //    txtTotalReceivedByte.setTextColor(Color.parseColor(G.textSubTheme));
-            txtTotalReceivedByte.setTypeface(G.typeface_IRANSansMobile);
-
-
+            setTypeFace(txtTotalReceivedByte);
 
             txtTotalReceived = itemView.findViewById(R.id.txtTotalReceived);
             txtTotalReceived.setText(context.getResources().getString(R.string.total_received));
-            txtTotalReceived.setTypeface(G.typeface_IRANSansMobile);
-            txtTotalReceived.setTextColor(Color.parseColor(G.textTitleTheme));
+            setTypeFace(txtTotalReceived);
+            darkModeHandlerGray(txtTotalReceived);
 
             txtTotalSent = itemView.findViewById(R.id.txtTotalSent);
             txtTotalSent.setText(context.getResources().getString(R.string.total_sent));
-            txtTotalSent.setTypeface(G.typeface_IRANSansMobile);
-            txtTotalSent.setTextColor(Color.parseColor(G.textTitleTheme));
+            setTypeFace(txtTotalSent);
+            darkModeHandlerGray(txtTotalSent);
 
             txtTitle = itemView.findViewById(R.id.txtTitle);
             txtTitle.setText(context.getResources().getString(R.string.total));
-            txtTitle.setTypeface(G.typeface_IRANSansMobile);
+            darkModeHandler(txtTitle);
+            setTypeFace(txtTitle);
 
-            rootDataUsageTotal = itemView.findViewById(R.id.rootDataUsageTotal);
-            rootDataUsageTotal.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
-
-
+            View line = itemView.findViewById(R.id.line);
+            darkModeHandlerGray(line);
         }
     }
 
     public class ClearDataHolder extends RecyclerView.ViewHolder {
         TextView txtClearData;
         RelativeLayout rvClearDataUsage;
-        CardView rootDataUsageReset;
 
         public ClearDataHolder(View itemView) {
             super(itemView);
             txtClearData = itemView.findViewById(R.id.txtClearData);
-            txtClearData.setTypeface(G.typeface_IRANSansMobile);
+            setTypeFace(txtClearData);
+            darkModeHandler(txtClearData);
 
             rvClearDataUsage = itemView.findViewById(R.id.rvClearDataUsage);
-            rootDataUsageReset = itemView.findViewById(R.id.rootDataUsageReset);
-            rootDataUsageReset.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
         }
     }
 
+    private void setTypeFace(TextView textView){
+        textView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/IRANSansMobile.ttf"));
+    }
 }

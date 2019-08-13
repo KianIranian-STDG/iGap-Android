@@ -66,7 +66,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public ObservableBoolean btnChoseCountryEnable = new ObservableBoolean(true);
     public ObservableBoolean edtPhoneNumberEnable = new ObservableBoolean(true);
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
-    public ObservableInt viewVisibility = new ObservableInt(View.GONE);
+    public ObservableInt viewVisibility = new ObservableInt(View.INVISIBLE);
 
     public ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
     private boolean termsAndConditionIsChecked = false;

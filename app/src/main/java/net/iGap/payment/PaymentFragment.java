@@ -12,6 +12,7 @@ import android.provider.Browser;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiStatic;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
@@ -35,14 +37,20 @@ public class PaymentFragment extends Fragment {
 
     private PaymentViewModel viewModel;
     private FragmentUniversalPaymentBinding binding;
+    private PaymentCallBack callBack;
 
-    public static PaymentFragment getInstance(String type, String token) {
+    public static PaymentFragment getInstance(String type, String token, PaymentCallBack paymentCallBack) {
         PaymentFragment fragment = new PaymentFragment();
+        fragment.setCallBack(paymentCallBack);
         Bundle bundle = new Bundle();
         bundle.putString(TOKEN, token);
         bundle.putString(TYPE, type);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void setCallBack(PaymentCallBack callBack) {
+        this.callBack = callBack;
     }
 
     @Override
@@ -77,10 +85,11 @@ public class PaymentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
-            if (getActivity() != null && isGoBack != null && isGoBack) {
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
+            if (getActivity() != null && paymentResult != null) {
                 //todo: set callback for cancel payment
-                getActivity().onBackPressed();
+                getActivity().getSupportFragmentManager().popBackStack();
+                callBack.onPaymentFinished(paymentResult);
             }
         });
 
@@ -94,7 +103,7 @@ public class PaymentFragment extends Fragment {
             if (getActivity() != null && webLink != null) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
                 Bundle bundle = new Bundle();
-                bundle.putString("Authorization", ApiStatic.USER_TOKEN);
+                bundle.putString("Authorization", G.getApiToken());
                 browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
                 startActivity(browserIntent);
             }
@@ -119,6 +128,7 @@ public class PaymentFragment extends Fragment {
     }
 
     public void setPaymentResult(Payment paymentModel) {
+        Log.wtf(this.getClass().getName(), "setPaymentResult");
         viewModel.setPaymentResult(paymentModel);
     }
 
@@ -133,5 +143,9 @@ public class PaymentFragment extends Fragment {
                     .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
                     .show();
         }
+    }
+
+    public void onBackPressed(){
+        viewModel.onCloseClick();
     }
 }

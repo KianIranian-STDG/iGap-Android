@@ -235,7 +235,13 @@ public class IGashtRepository {
     }
 
     public void removeFromVoucherList(IGashtServiceAmount amount) {
+        Log.wtf(this.getClass().getName(),"selectedServiceList count: "+selectedServiceList.size());
         selectedServiceList.remove(new IGashtVouchers(amount.getVoucherTypeId(), amount.getCount()));
+        Log.wtf(this.getClass().getName(),"selectedServiceList count: "+selectedServiceList.size());
+    }
+
+    public void clearSelectedServiceList(){
+        selectedServiceList.clear();
     }
 
     public boolean hasVoucher() {

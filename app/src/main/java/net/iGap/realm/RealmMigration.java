@@ -14,6 +14,7 @@ import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
+import io.realm.annotations.PrimaryKey;
 
 import static net.iGap.Config.REALM_LATEST_MIGRATION_VERSION;
 
@@ -569,7 +570,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 35
+        if (oldVersion == 35) {
 
             RealmObjectSchema realmNotificationRoomMessage = schema.create(RealmNotificationRoomMessage.class.getSimpleName())
                     .addField("roomId", long.class, FieldAttribute.REQUIRED)
@@ -577,6 +578,28 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("createTime", long.class, FieldAttribute.REQUIRED);
 
             realmNotificationRoomMessage.addPrimaryKey("messageId");
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 36
+
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfo != null) {
+                realmUserInfo.addField("accessToken", String.class);
+            }
+
+            RealmObjectSchema realmDownloadSong = schema.create(RealmDownloadSong.class.getSimpleName())
+                    .addField("id", long.class, FieldAttribute.REQUIRED)
+                    .addField("path", String.class)
+                    .addField("displayName", String.class)
+                    .addField("englishDisplayName", String.class)
+                    .addField("savedName", String.class)
+                    .addField("artistId", long.class, FieldAttribute.REQUIRED)
+                    .addField("albumId", long.class, FieldAttribute.REQUIRED)
+                    .addField("isFavorite", boolean.class, FieldAttribute.REQUIRED);
+
+            realmDownloadSong.addPrimaryKey("id");
 
             oldVersion++;
         }

@@ -1,7 +1,11 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,34 +18,44 @@ import net.iGap.activities.ActivityEnhanced;
 import net.iGap.databinding.FragmentLanguageBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentLanguageViewModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentLanguage extends BaseFragment {
 
-    private HelperToolbar mHelperToolbar;
     public static boolean languageChanged = false;
-    private FragmentLanguageViewModel fragmentLanguageViewModel;
-    private FragmentLanguageBinding fragmentLanguageBinding;
+    private FragmentLanguageViewModel viewModel;
+    private FragmentLanguageBinding binding;
 
-
-    public FragmentLanguage() {
-        // Required empty public constructor
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentLanguageViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
+            }
+        }).get(FragmentLanguageViewModel.class);
     }
-
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentLanguageBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_language, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_language, container, false);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
         if (getArguments() != null && getArguments().containsKey("canSwipeBack")) {
-            return fragmentLanguageBinding.getRoot();
+            return binding.getRoot();
         } else {
-            return attachToSwipeBack(fragmentLanguageBinding.getRoot());
+            return attachToSwipeBack(binding.getRoot());
         }
     }
 
@@ -49,20 +63,7 @@ public class FragmentLanguage extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
-        initToolbar();
-
-        fragmentLanguageViewModel.refreshActivityForChangeLanguage.observe(this, language -> {
-            if (getActivity() instanceof ActivityEnhanced && language != null) {
-                ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
-            }
-        });
-
-    }
-
-    private void initToolbar() {
-
-        mHelperToolbar = HelperToolbar.create()
+        binding.flLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
@@ -76,14 +77,22 @@ public class FragmentLanguage extends BaseFragment {
                             popBackStackFragment();
                         }
                     }
-                });
+                }).getView());
 
-        fragmentLanguageBinding.flLayoutToolbar.addView(mHelperToolbar.getView());
+        viewModel.getRefreshActivityForChangeLanguage().observe(getViewLifecycleOwner(), language -> {
+            if (getActivity() instanceof ActivityEnhanced && language != null) {
+                G.updateResources(getActivity());
+                ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
+            }
+        });
+
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
+            if (isGoBack != null && isGoBack) {
+                removeFromBaseFragment(this);
+            }
+        });
+
     }
 
-    private void initDataBinding() {
-        fragmentLanguageViewModel = new FragmentLanguageViewModel(this);
-        fragmentLanguageBinding.setFragmentLanguageViewModel(fragmentLanguageViewModel);
 
-    }
 }

@@ -15,7 +15,7 @@ public class Category {
     @SerializedName("slug")
     private String slug;
 
-    @SerializedName("titleEn")
+    @SerializedName("title_en")
     private String titleEn;
 
     public String getId() {

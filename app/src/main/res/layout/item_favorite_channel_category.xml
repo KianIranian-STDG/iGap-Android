@@ -23,8 +23,8 @@
             android:background="@drawable/shape_favorite_channel_dark_item"
             android:gravity="center_horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circle_item_popular_rv_grid"
+            <ImageView
+                android:id="@+id/iv_item_popular_rv_grid"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"
                 android:layout_margin="@dimen/dp10" />

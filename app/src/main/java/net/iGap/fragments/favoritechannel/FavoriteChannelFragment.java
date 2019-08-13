@@ -22,11 +22,14 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.favoritechannel.CategoryAdapter;
 import net.iGap.adapter.items.favoritechannel.ChannelAdapter;
+import net.iGap.adapter.items.favoritechannel.ImageLoadingService;
 import net.iGap.adapter.items.favoritechannel.SliderAdapter;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.helper.HelperError;
@@ -86,8 +89,9 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
         toolbar.addView(helperToolbar.getView());
         swipeRefresh.setRefreshing(true);
         swipeRefresh.setOnRefreshListener(() -> {
-            itemContainer.removeAllViews();
-            sendChannelRequest();
+//            itemContainer.removeAllViews();
+//            sendChannelRequest();
+            swipeRefresh.setRefreshing(false);
         });
 
         emptyRefresh.setOnClickListener(v -> {
@@ -108,7 +112,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                             case ParentChannel.TYPE_SLIDE:
                                 /**response for slider**/
                                 if (response.body().getData().get(i).getInfo().getScale() != null && response.body().getData().get(i).getSlides() != null) {
-                                    BannerSlider.init(new SliderBannerImageLoadingService());
+                                    BannerSlider.init(new ImageLoadingService());
                                     BannerSlider slider = new BannerSlider(G.fragmentActivity);
                                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     CardView.LayoutParams cardParamse = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -225,6 +229,11 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             public void onFailure(Call<ParentChannel> call, Throwable t) {
                 swipeRefresh.setRefreshing(false);
                 emptyRefresh.setVisibility(View.VISIBLE);
+                if (new ErrorHandler().checkHandShakeFailure(t)){
+                    if (getActivity() instanceof ActivityMain){
+                        ((ActivityMain) getActivity()).checkGoogleUpdate();
+                    }
+                }
                 HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });

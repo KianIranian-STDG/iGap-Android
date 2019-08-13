@@ -433,7 +433,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             int maxsize = 0;
             withTextHolder.removeButtonLayout();
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.getForwardMessage() != null) {
-                maxsize = G.maxChatBox;
+                maxsize = G.maxChatBox - 16;
             }
             if (maxsize > 0)
                 withTextHolder.messageView.setMaxWidth(maxsize);
@@ -584,23 +584,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (type == ProtoGlobal.Room.Type.CHANNEL){
-            ImageView channelForwardIv = new ImageView(holder.itemView.getContext());
-            FrameLayout forwardContainer = new FrameLayout(holder.itemView.getContext());
-
-            if (G.isDarkTheme)
-                channelForwardIv.setImageDrawable(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_channel_forward_dark));
-            else
-                channelForwardIv.setImageDrawable(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_channel_forward_light));
-
-            if (mHolder.getItemContainer().getChildCount() == 1){
-                forwardContainer.addView(channelForwardIv,LayoutCreator.createFrame(23,23,Gravity.BOTTOM, 4, 0, 8, 0));
-                mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
-            }
-
-            if (mHolder.getItemContainer().getChildCount() > 2)
-                mHolder.getItemContainer().removeView(forwardContainer);
-
-            channelForwardIv.setOnClickListener(v -> messageClickListener.onForwardClick(structMessage));
+            mHolder.getForwardContainer().setVisibility(View.VISIBLE);
+            mHolder.getChannelForwardIv().setOnClickListener(v -> messageClickListener.onForwardClick(structMessage));
         }
 
         /**

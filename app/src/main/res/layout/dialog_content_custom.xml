@@ -14,17 +14,12 @@
     android:layout_height="wrap_content">
 
     <net.iGap.module.MaterialDesignTextView
-
       android:id="@+id/iconDialogTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
       android:text="@string/md_muted"
-      android:textAppearance="@style/TextIconAppearance.all"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp26"
-
-      />
+        style="@style/myIconTextViewStyle"
+      android:textSize="@dimen/dp26" />
 
     <TextView
       android:id="@+id/txtDialogTitle"

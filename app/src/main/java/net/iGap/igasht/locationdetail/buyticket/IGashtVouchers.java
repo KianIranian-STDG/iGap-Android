@@ -1,5 +1,7 @@
 package net.iGap.igasht.locationdetail.buyticket;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -23,5 +25,13 @@ public class IGashtVouchers {
 
     public int getCount() {
         return count;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof IGashtVouchers){
+            return voucherId == ((IGashtVouchers) obj).getVoucherId();
+        }
+        return super.equals(obj);
     }
 }

@@ -59,7 +59,7 @@
     <string name="md_Mute">\uf57f</string>  <!-- igap_volume-low  -->
     <string name="md_clearHistory">\uf2da</string>  <!-- igap_history  -->
     <string name="md_exit_app">\uf206</string>  <!-- igap_exit-to-app  -->
-    <string name="md_delete_acc">\uf377</string>  <!-- igap_minus-circle-outline  -->
+    <string name="md_delete_acc">\ue924</string>  <!-- igap_minus-circle-outline  -->
     <string name="md_go_back_left_arrow">\uf04d</string>  <!-- igap_arrow-left  -->
     <string name="md_channel_icon">\ue900</string> <!-- igap_channel  -->
     <string name="md_trending_flat">\uf534</string>  <!-- igap_trending-neutral  -->
@@ -250,4 +250,12 @@
     <string name="eye_icon">\ue9a4</string>
     <string name="channel_main_icon">\ue916</string>
     <string name="icon_card_to_card">\ue915</string>
+
+    <string name="icon_beeptunes_next">\ue909</string>
+    <string name="icon_beeptunes_play">\ue90a</string>
+    <string name="icon_beeptunes_prv">\ue90b</string>
+    <string name="icon_beeptunes_song">\ue90c</string>
+    <string name="icon_beeptunes_sync">\ue90d</string>
+    <string name="icon_beeptunes_like">\ue954</string>
+    <string name="horizontal_more_icon">\ue9b8</string>
 </resources>

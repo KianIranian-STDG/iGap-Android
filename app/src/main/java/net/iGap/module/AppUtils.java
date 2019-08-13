@@ -325,7 +325,7 @@ public final class AppUtils {
         }
         switch (status) {
             case DELIVERED:
-                iconTextView.setText(R.string.check_icon);
+                iconTextView.setText(R.string.delivery_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
@@ -373,7 +373,7 @@ public final class AppUtils {
 
         switch (status) {
             case DELIVERED:
-                iconTextView.setText(R.string.check_icon);
+                iconTextView.setText(R.string.delivery_icon);
                 iconTextView.setTextColor(context.getResources()
                         .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;

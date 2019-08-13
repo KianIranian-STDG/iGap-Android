@@ -12,43 +12,180 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/greenStatus">
+        android:background="@color/greenStatus"
+        android:clickable="true"
+        android:focusable="true">
 
         <View
             android:id="@+id/v"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@{context.getResources().getDrawable(viewModel.background)}"
-            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/paymentType" />
 
-        <ProgressBar
-            android:id="@+id/loadingView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.showLoadingView}"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentStateIcon"
+            style="@style/baseFontIcon"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:background="@drawable/circle_white"
+            android:text="@{viewModel.paymentStateIcon}"
+            android:textColor="@{context.getResources().getColor(viewModel.paymentStatusTextColor)}"
+            app:layout_constraintBottom_toTopOf="@id/v"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/v" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/retryView"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{()->viewModel.onRetryClick()}"
-            android:text="@string/retry_icon"
+            android:id="@+id/paymentType"
+            style="?textSubColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp36"
+            android:text="@{viewModel.paymentType}"
+            android:textSize="@dimen/standardTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/title"
+            app:layout_constraintEnd_toEndOf="@id/acceptButton"
+            app:layout_constraintStart_toStartOf="@id/cancelButton"
+            app:layout_constraintWidth_percent=".85" />
+
+        <View
+            android:id="@+id/divider"
+            style="?lineColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginBottom="@dimen/dp8"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".9" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/title"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:gravity="center"
+            android:text="@{viewModel.title}"
             android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.showRetryView}"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintEnd_toEndOf="@id/paymentType"
+            app:layout_constraintStart_toStartOf="@id/paymentType" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/description"
+            style="?textSubColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:gravity="center"
+            android:text="@{viewModel.description}"
+            android:textSize="@dimen/standardTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/priceTitle"
+            app:layout_constraintEnd_toEndOf="@id/paymentType"
+            app:layout_constraintStart_toStartOf="@id/paymentType" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/priceTitle"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/price"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/price"
+            app:layout_constraintEnd_toEndOf="@id/paymentType"
+            app:layout_constraintStart_toStartOf="@id/paymentType" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/price"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:gravity="center"
+            android:text="@{String.valueOf(viewModel.price)}"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/divider1"
+            app:layout_constraintEnd_toEndOf="@id/paymentType"
+            app:layout_constraintStart_toStartOf="@id/paymentType" />
+
+        <View
+            android:id="@+id/divider1"
+            style="?lineColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginBottom="@dimen/dp8"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            app:layout_constraintBottom_toTopOf="@id/paymentStatus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".9" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentStatus"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@{viewModel.getPaymentStatus()}"
+            android:textStyle="bold"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            app:layout_constraintBottom_toTopOf="@id/paymentRRN"
+            app:layout_constraintEnd_toEndOf="@id/priceTitle"
+            app:layout_constraintStart_toStartOf="@id/priceTitle" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentRRN"
+            style="?textSubColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:gravity="center"
+            android:text="@{@string/payment_rrn_title(viewModel.paymentRRN)}"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            app:layout_constraintBottom_toTopOf="@id/cancelButton"
+            app:layout_constraintEnd_toEndOf="@id/price"
+            app:layout_constraintStart_toStartOf="@id/price" />
+
+        <!--<android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentOrderId"
+            style="?textSubColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:gravity="center"
+            android:text="@{@string/payment_order_id_title(viewModel.paymentOrderId)}"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            app:layout_constraintBottom_toTopOf="@id/cancelButton"
+            app:layout_constraintEnd_toEndOf="@id/paymentType"
+            app:layout_constraintStart_toStartOf="@id/paymentType" />-->
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/closeButton"
+            style="?iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:onClick="@{()->viewModel.onCloseClick()}"
+            android:text="@string/close"
+            android:visibility="@{viewModel.showPaymentErrorMessage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintWidth_percent=".5" />
 
         <android.support.design.button.MaterialButton
             android:id="@+id/cancelButton"
@@ -62,12 +199,11 @@
             android:layout_marginBottom="@dimen/dp8"
             android:onClick="@{()->viewModel.onCancelClick()}"
             android:text="@string/cancel"
-            android:visibility="@{viewModel.showMainView}"
+            android:visibility="@{viewModel.showButtons}"
             app:backgroundTint="@color/red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/acceptButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".3" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <android.support.design.button.MaterialButton
             android:id="@+id/acceptButton"
@@ -79,120 +215,38 @@
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
             android:onClick="@{()->viewModel.onAcceptClick()}"
-            android:text="@string/payment"
-            android:visibility="@{viewModel.showMainView}"
+            android:text="@string/pay"
+            android:visibility="@{viewModel.showButtons}"
             app:backgroundTint="@color/green"
             app:layout_constraintBottom_toBottomOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cancelButton"
             app:layout_constraintTop_toTopOf="@id/cancelButton" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/price"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp8"
-            android:gravity="center"
-            android:text="@{String.valueOf(viewModel.price)}"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/cancelButton"
-            app:layout_constraintEnd_toEndOf="@id/acceptButton"
-            app:layout_constraintStart_toStartOf="@id/cancelButton" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/priceTitle"
-            style="?textTitleColorSettingTheme"
+        <ProgressBar
+            android:id="@+id/loadingView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/price"
-            android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/price"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/description"
-            style="?textSubColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp8"
-            android:text="@{viewModel.description}"
-            android:textSize="@dimen/standardTextSize"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/priceTitle"
-            app:layout_constraintEnd_toEndOf="@id/acceptButton"
-            app:layout_constraintStart_toStartOf="@id/cancelButton" />
-
-        <View
-            android:id="@+id/divider"
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp1"
-            android:layout_marginBottom="@dimen/dp8"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/title"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp8"
-            android:gravity="center"
-            android:text="@{viewModel.title}"
-            android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/divider"
-            app:layout_constraintEnd_toEndOf="@id/acceptButton"
-            app:layout_constraintStart_toStartOf="@id/cancelButton" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/paymentType"
-            style="?textSubColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp16"
-            android:textSize="@dimen/standardTextSize"
-            android:text="@{viewModel.paymentType}"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/title"
-            app:layout_constraintEnd_toEndOf="@id/acceptButton"
-            app:layout_constraintStart_toStartOf="@id/cancelButton" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/errorMessage"
-            style="?textSubColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/dp8"
-            android:text="@{viewModel.paymentErrorMessage}"
-            android:visibility="@{viewModel.showPaymentErrorMessage}"
-            app:layout_constraintBottom_toTopOf="@id/paymentOrderId"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toBottomOf="@id/v"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/v"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="@id/v" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/paymentOrderId"
-            style="?textSubColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/dp8"
-            android:text="@{viewModel.paymentOrderId}"
-            android:visibility="@{viewModel.showPaymentErrorMessage}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/retryView"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{()->viewModel.onRetryClick()}"
+            android:text="@string/retry_icon"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showRetryView}"
+            app:layout_constraintBottom_toBottomOf="@id/v"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/errorMessage" />
+            app:layout_constraintTop_toTopOf="@id/v" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

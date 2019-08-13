@@ -29,25 +29,33 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
+            android:layoutDirection="ltr"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_userProfile_userName"
+            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="8dp"
-            android:text="ابوالفضل عباسی"
-            app:layout_constraintBottom_toTopOf="@+id/tv_userProfile_userScore"
-            app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layoutDirection="ltr"
+            android:text="Abolfazl Abbasi"
+            android:textSize="@dimen/largeTextSize"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_userProfile_userImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_userProfile_userImage"
+            app:layout_constraintTop_toTopOf="@+id/iv_userProfile_userImage" />
 
         <TextView
             android:id="@+id/tv_userProfile_userScore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="امتیاز کاربر: 150"
             app:layout_constraintBottom_toBottomOf="@+id/iv_userProfile_userImage"
             app:layout_constraintStart_toStartOf="@+id/tv_userProfile_userName" />
 
@@ -61,19 +69,116 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_userProfile_userImage"
             tools:layout_editor_absoluteX="8dp" />
 
-        <TextView
-            android:id="@+id/tv_userProfile_downloads"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="32dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp16"
-            android:text="لیست دانلود ها"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view4"
-            tools:layout_editor_absoluteX="8dp" />
+
     </android.support.constraint.ConstraintLayout>
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_beepTunesProfile_perchesSong"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <net.iGap.module.FontIconTextView
+            android:id="@+id/fontIconTextView2"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="@string/icon_music"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center_vertical"
+            android:text="@string/beeptunes_purchase_song"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fontIconTextView2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_beepTunesProfile_syncSong"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <net.iGap.module.FontIconTextView
+            android:id="@+id/fontIconTextView3"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="@string/icon_beeptunes_sync"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:text="@string/beeptunes_sync_song"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fontIconTextView3"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_beepTunesProfile_favoriteSong"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <net.iGap.module.FontIconTextView
+            android:id="@+id/fontIconTextView4"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="@string/icon_beeptunes_like"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:text="@string/beeptunesـfavorite_song"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fontIconTextView4"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 </LinearLayout>

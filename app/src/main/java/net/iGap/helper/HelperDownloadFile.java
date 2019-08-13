@@ -24,8 +24,11 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
+import net.iGap.api.apiService.ApiStatic;
 import net.iGap.interfaces.OnFileDownloadResponse;
+import net.iGap.interfaces.OnSongDownload;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -40,6 +43,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HelperDownloadFile {
 
+
+    private static final String TAG = "aabolfazl";
 
     public interface UpdateListener {
         void OnProgress(String path, int progress);
@@ -450,32 +455,25 @@ public class HelperDownloadFile {
                 });
     }
 
-    public static void startDownloadManager(String path, String url, String name) {
-
-        int downId = PRDownloader.download(url, path, name)
+    public static void startDownloadManager(DownloadSong song, OnSongDownload onSongDownload) {
+        song.setDownloadId(PRDownloader.download(song.getUrl(), song.getPath(), song.getSavedName())
+                .setHeader("Authorization", G.getApiToken())
                 .build()
-                .setOnStartOrResumeListener(() -> {
-
-                })
-                .setOnPauseListener(() -> {
-
-                })
-                .setOnCancelListener(() -> {
-
-                })
-                .setOnProgressListener(progress -> {
-
-                })
+                .setOnStartOrResumeListener(() -> onSongDownload.startOrResume(song))
+                .setOnPauseListener(() -> onSongDownload.pauseDownload(song))
+                .setOnCancelListener(() -> onSongDownload.cancelDownload(song))
+                .setOnProgressListener(progress -> onSongDownload.progressDownload(song, progress))
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-
+                        onSongDownload.completeDownload(song);
                     }
 
                     @Override
                     public void onError(Error error) {
+                        onSongDownload.downloadError(song, error);
                     }
-                });
+                }));
     }
 
     private void requestDownloadFile(final StructDownLoad item) {

@@ -127,7 +127,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private static long countOFGIF = 0;
     private static long countOFFILE = 0;
     private static long countOFLink = 0;
-    public ArrayList<Long> SelectedList = new ArrayList<>();
+    public ArrayList<StructShearedMedia> SelectedList = new ArrayList<>();
     public ArrayList<Long> bothDeleteMessageId = new ArrayList<>();
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
     private RealmResults<RealmRoomMessage> mRealmList;
@@ -417,7 +417,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             @Override
             public void onClick(View view) {
                 if (SelectedList.size() == 1) {
-                    long messageId = SelectedList.get(0);
+                    long messageId = SelectedList.get(0).messageId;
                     RealmRoomMessage.setGap(messageId);
                     goToPositionFromShardMedia.goToPosition(messageId);
                     goToPosition = true;
@@ -433,14 +433,14 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             @Override
             public void onClick(View view) {
                 ArrayList<Parcelable> messageInfos = new ArrayList<>(SelectedList.size());
-                RealmRoomMessage rm;
-                for (Long Id : SelectedList) {
+                //RealmRoomMessage rm;
+                for (StructShearedMedia media : SelectedList) {
 
-                    rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
-                    if (rm != null) {
+                    //rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
+                    //if (rm != null) {
                         //+Realm realm = Realm.getDefaultInstance();
-                        messageInfos.add(Parcels.wrap(new StructMessageInfo(rm)));
-                    }
+                        messageInfos.add(Parcels.wrap(new StructMessageInfo(media.item)));
+                    //}
                 }
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();
@@ -474,7 +474,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                                 bothDeleteMessageId = null;
                             }
                             if (realmRoom != null) {
-                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
+                                ArrayList<Long> selectedListForDel = new ArrayList<>();
+
+                                for (StructShearedMedia item : SelectedList){
+                                    selectedListForDel.add(item.messageId);
+                                }
+                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
                             }
                             resetItems();
                         }
@@ -486,7 +491,14 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             bothDeleteMessageId = null;
                             if (realmRoom != null) {
-                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
+                                //TODO:// optimize code
+                                ArrayList<Long> selectedListForDel = new ArrayList<>() ;
+
+
+                                for (StructShearedMedia item : SelectedList){
+                                    selectedListForDel.add(item.messageId);
+                                }
+                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
                             }
                             resetItems();
                         }
@@ -501,8 +513,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     private void resetItems() {
-        for (Long Id : SelectedList) {
-            list.add(Id);
+        for (StructShearedMedia item : SelectedList) {
+            list.add(item.messageId);
         }
 
         switch (mFilter) {
@@ -1164,6 +1176,21 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         String messageTime;
         long messageId;
         boolean isToday = false;
+
+        public StructShearedMedia() {
+        }
+
+        public StructShearedMedia(long messageId) {
+            this.messageId = messageId;
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj instanceof StructShearedMedia){
+                return this.messageId == ((StructShearedMedia) obj).messageId;
+            }
+            return super.equals(obj);
+        }
     }
 
     private class PreCashGridLayout extends GridLayoutManager {
@@ -1263,7 +1290,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 // set blue back ground for selected file
                 FrameLayout layout = holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
-                if (SelectedList.indexOf(mList.get(position).messageId) >= 0) {
+                if (SelectedList.indexOf(new StructShearedMedia(mList.get(position).messageId)) != -1) {
                     layout.setForeground(getContext().getResources().getDrawable(R.drawable.selected_item_foreground));
                 } else {
                     layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
@@ -1293,10 +1320,10 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             Long messageId = mList.get(position).messageId;
 
-            int index = SelectedList.indexOf(messageId);
+            int index = SelectedList.indexOf(new StructShearedMedia(messageId));
 
-            if (index >= 0) {
-                SelectedList.remove(index);
+            if (index != -1) {
+                SelectedList.remove(mList.get(position));
                 numberOfSelected--;
                 if (bothDeleteMessageId.contains(messageId)) {
                     bothDeleteMessageId.remove(messageId);
@@ -1306,7 +1333,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     isSelectedMode = false;
                 }
             } else {
-                SelectedList.add(messageId);
+                SelectedList.add(mList.get(position));
 
                 if (RealmRoomMessage.isBothDelete(RealmRoomMessage.getMessageTime(messageId))) {
                     if (bothDeleteMessageId == null) {

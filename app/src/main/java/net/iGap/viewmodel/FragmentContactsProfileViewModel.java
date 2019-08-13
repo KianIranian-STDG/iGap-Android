@@ -132,6 +132,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     private String avatarPath;
     private AvatarHandler avatarHandler;
     private boolean isBot = false;
+    private boolean isCloud ;
 
     public void init(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
         this.roomId = roomId;
@@ -319,17 +320,16 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
 
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
-        registeredInfo.addChangeListener((RealmObjectChangeListener<RealmRegisteredInfo>) (realmModel, changeSet) -> {
-            if (changeSet != null) {
-                for (int i = 0; i < changeSet.getChangedFields().length; i++) {
-                    if (changeSet.getChangedFields()[i].equals(RealmRegisteredInfoFields.BLOCK_USER)) {
-                        userBlockState.set(realmModel.isBlockUser() ? R.string.un_block_user : R.string.block);
+        if (registeredInfo != null) {
+            registeredInfo.addChangeListener((RealmObjectChangeListener<RealmRegisteredInfo>) (realmModel, changeSet) -> {
+                if (changeSet != null) {
+                    for (int i = 0; i < changeSet.getChangedFields().length; i++) {
+                        if (changeSet.getChangedFields()[i].equals(RealmRegisteredInfoFields.BLOCK_USER)) {
+                            userBlockState.set(realmModel.isBlockUser() ? R.string.un_block_user : R.string.block);
+                        }
                     }
                 }
-            }
-        });
-
-        if (registeredInfo != null) {
+            });
             isBot = registeredInfo.isBot();
             if (isBot || userId == G.userId) {
                 callVisibility.setValue(View.GONE);
@@ -456,6 +456,12 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         setAvatar.setValue(userId != G.userId);
         //todo: change it
         FragmentShearedMedia.getCountOfSharedMedia(shearedId);
+
+        if (registeredInfo == null) {
+            callVisibility.setValue(View.GONE);
+            menuVisibility.setValue(View.GONE);
+            videoCallVisibility.setValue(View.GONE);
+        }
     }
 
     private void startInitCallbacks() {
@@ -470,6 +476,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
 
     public void onImageClick() {
+        if (userId == G.userId) return; //dont work when profile was cloud
         if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
             goToShowAvatarPage.setValue(userId == G.userId);
         }
@@ -540,7 +547,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     @Override
     protected void onCleared() {
         super.onCleared();
-        registeredInfo.removeAllChangeListeners();
+        if (registeredInfo != null) {
+            registeredInfo.removeAllChangeListeners();
+        }
     }
 
     //===============================================================================

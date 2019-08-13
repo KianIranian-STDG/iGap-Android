@@ -175,32 +175,6 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/img_icCall"
-        android:layout_width="@dimen/igap_hint_images"
-        android:layout_height="@dimen/igap_hint_images"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_call" />
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textEmptyCal"
-        style="?textTitleColorSettingTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp20"
-        android:layout_marginBottom="@dimen/dp52"
-        android:text="@string/empty_call"
-        android:textSize="@dimen/dp18"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/img_icCall" />
-
     <android.support.constraint.Group
         android:id="@+id/empty_layout"
         android:layout_width="0dp"
@@ -227,4 +201,32 @@
         app:layout_constraintBottom_toBottomOf="@id/fc_recycler_view_call"
         app:layout_constraintEnd_toEndOf="@id/fc_recycler_view_call"
         app:layout_constraintStart_toStartOf="@id/fc_recycler_view_call" />
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/img_icCall"
+        android:layout_width="@dimen/igap_hint_images"
+        android:layout_height="@dimen/igap_hint_images"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fc_top_buttons"
+        app:srcCompat="@drawable/ic_call" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textEmptyCal"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp20"
+        android:layout_marginBottom="@dimen/dp52"
+        android:text="@string/empty_call"
+        android:textSize="@dimen/dp18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_icCall" />
+
 </android.support.constraint.ConstraintLayout>

@@ -176,10 +176,10 @@ public class FragmentChannelProfileViewModel extends ViewModel
         if (isPrivate) {
             channelLink.set(mRoom.getChannelRoom().getInviteLink());
             channelLinkTitle.set(R.string.channel_link);
-            if (role == ChannelChatRole.MEMBER) {
-                isShowLink.set(View.GONE);
-            } else {
+            if (role == ChannelChatRole.OWNER) {
                 isShowLink.set(View.VISIBLE);
+            } else {
+                isShowLink.set(View.GONE);
             }
         } else {
             channelLink.set(mRoom.getChannelRoom().getUsername());

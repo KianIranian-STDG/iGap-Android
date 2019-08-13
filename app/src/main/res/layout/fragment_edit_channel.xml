@@ -164,6 +164,7 @@
                     android:layout_width="@dimen/toggles_width"
                     android:layout_height="@dimen/toggles_height"
                     android:checked="@={viewModel.isSignedMessage}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}"
                     app:layout_constraintBottom_toBottomOf="@id/signedMessageTxt"
                     app:layout_constraintEnd_toEndOf="@id/signedMessageTxt"
@@ -203,6 +204,7 @@
                     android:layout_width="@dimen/toggles_width"
                     android:layout_height="@dimen/toggles_height"
                     android:checked="@={viewModel.isReactionMessage}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
                     app:layout_constraintBottom_toBottomOf="@id/rateMessageTxt"
                     app:layout_constraintEnd_toEndOf="@id/rateMessageTxt"
@@ -321,20 +323,6 @@
                     app:layout_constraintStart_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/members" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/recentAction"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:onClick="@{()->viewModel.onRecentActionClick()}"
-                    android:padding="8dp"
-                    android:text="@string/recent_action"
-                    android:textSize="@dimen/smallTextSize"
-                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
-                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/members" />
-
                 <View
                     android:id="@+id/line4"
                     style="?lineColorSettingTheme"
@@ -343,7 +331,7 @@
                     android:layout_marginTop="@dimen/dp16"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recentAction"
+                    app:layout_constraintTop_toBottomOf="@id/membersCount"
                     app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView

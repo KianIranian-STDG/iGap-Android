@@ -7,8 +7,10 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -24,24 +26,53 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.MciApi;
+import net.iGap.api.PaymentApi;
+import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.errorhandler.ErrorHandler;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.databinding.FragmentPaymentChargeBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.interfaces.OnMplResult;
+import net.iGap.model.MciPurchaseResponse;
 import net.iGap.proto.ProtoMplGetTopupToken;
 import net.iGap.request.RequestMplGetTopupToken;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class FragmentPaymentChargeViewModel {
+
+public class FragmentPaymentChargeViewModel extends ViewModel {
+
+    private ObservableInt showDetail = new ObservableInt(View.GONE);
+    private ObservableInt observeTarabord = new ObservableInt(View.GONE);
+    private ObservableBoolean observeEnabledPayment = new ObservableBoolean(true);
+
+    private MutableLiveData<Integer> onOpereatorChange = new MutableLiveData<>();
+    private MutableLiveData<Integer> onPriceChange = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    private MutableLiveData<String> goToPaymentPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> needUpdate = new MutableLiveData<>();
+    private MutableLiveData<ErrorModel> showMciPaymentError = new MutableLiveData<>();
+    private MutableLiveData<Boolean> hideKeyWord = new MutableLiveData<>();
+    private MutableLiveData<Integer> showError = new MutableLiveData<>();
+
+    private int selectedChargeTypePosition = 0;
+    private int selectedPricePosition = 0;
 
     public enum OperatorType {
         HAMRAH_AVAL, IRANCELL, RITEL;
     }
 
-    HashMap<String, OperatorType> phoneMap = new HashMap<String, OperatorType>() {
+    private HashMap<String, OperatorType> phoneMap = new HashMap<String, OperatorType>() {
         {
             put("0910", OperatorType.HAMRAH_AVAL);
             put("0911", OperatorType.HAMRAH_AVAL);
@@ -74,30 +105,59 @@ public class FragmentPaymentChargeViewModel {
         }
     };
 
-    private FragmentPaymentChargeBinding fragmentPaymentChargeBinding;
     private OperatorType operatorType;
 
-    public ObservableInt observeTarabord = new ObservableInt(View.GONE);
-    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
-    public ObservableBoolean observeEnabledPayment = new ObservableBoolean(true);
 
-    public ObservableInt observeChargeTypeHint = new ObservableInt(View.VISIBLE);
-    public ObservableInt observePriceHint = new ObservableInt(View.VISIBLE);
+    public FragmentPaymentChargeViewModel() {
 
-
-    public FragmentPaymentChargeViewModel(FragmentPaymentChargeBinding fragmentPaymentChargeBinding) {
-        this.fragmentPaymentChargeBinding = fragmentPaymentChargeBinding;
-
-        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green_sticker);
-        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
-        observeBackGround.set(myIcon);
-        setAdapterOperatorType();
     }
 
+    public ObservableInt getShowDetail() {
+        return showDetail;
+    }
 
-    //****************************************************************************************
+    public ObservableInt getObserveTarabord() {
+        return observeTarabord;
+    }
 
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    public ObservableBoolean getObserveEnabledPayment() {
+        return observeEnabledPayment;
+    }
+
+    public MutableLiveData<Integer> getOnOpereatorChange() {
+        return onOpereatorChange;
+    }
+
+    public MutableLiveData<Integer> getOnPriceChange() {
+        return onPriceChange;
+    }
+
+    public MutableLiveData<Boolean> getGoBack() {
+        return goBack;
+    }
+
+    public MutableLiveData<String> getGoToPaymentPage() {
+        return goToPaymentPage;
+    }
+
+    public MutableLiveData<Boolean> getHideKeyWord() {
+        return hideKeyWord;
+    }
+
+    public MutableLiveData<Integer> getShowError() {
+        return showError;
+    }
+
+    public MutableLiveData<ErrorModel> getShowMciPaymentError() {
+        return showMciPaymentError;
+    }
+
+    public void phoneNumberTextChangeListener(String phoneNumber) {
+        showDetail.set(phoneNumber.length() == 11 ? View.VISIBLE : View.GONE);
+        setOperator(phoneNumber);
+    }
+
+    /*public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() == 11) {
             if (fragmentPaymentChargeBinding.fpcCheckBoxTrabord.isChecked()) {
                 fragmentPaymentChargeBinding.fpcCheckBoxTrabord.setChecked(false);
@@ -105,27 +165,25 @@ public class FragmentPaymentChargeViewModel {
                 setOperator(s.toString());
             }
         }
-    }
+    }*/
 
-    public void checkBoxTarabordChanged(View v, boolean checked) {
+    public void checkBoxTarabordChanged(boolean checked, String phoneNumber) {
         if (checked) {
             observeTarabord.set(View.VISIBLE);
-            fragmentPaymentChargeBinding.fpcSpinnerOperator.setSelection(0);
-
+            /*fragmentPaymentChargeBinding.fpcSpinnerOperator.setSelection(0);*/
         } else {
             observeTarabord.set(View.GONE);
-            setOperator(fragmentPaymentChargeBinding.fpcEditTextPhoneNumber.getText().toString());
+            setOperator(phoneNumber);
         }
     }
 
-    public void onItemSelecteSpinerOperator(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemSelecteSpinerOperator(int position) {
         switch (position) {
             case 0:
                 operatorType = null;
-                fragmentPaymentChargeBinding.fpcSpinnerChargeType.setAdapter(null);
-                fragmentPaymentChargeBinding.fpcSpinnerPrice.setAdapter(null);
-                observeChargeTypeHint.set(View.VISIBLE);
-                observePriceHint.set(View.VISIBLE);
+                onOpereatorChange.setValue(null);
+                selectedChargeTypePosition = 0;
+                onPriceChange.setValue(null);
                 break;
             case 1:
                 setAdapterValue(OperatorType.HAMRAH_AVAL);
@@ -137,6 +195,14 @@ public class FragmentPaymentChargeViewModel {
                 setAdapterValue(OperatorType.RITEL);
                 break;
         }
+    }
+
+    public void onItemSelecteSpinerType(int position) {
+        selectedChargeTypePosition = position;
+    }
+
+    public void onItemSelecteSpinerPrice(int position) {
+        selectedPricePosition = position;
     }
 
     //******************************************************************************************************
@@ -153,45 +219,26 @@ public class FragmentPaymentChargeViewModel {
         }
     }
 
-    private void setAdapterValue(OperatorType operator) {
+    private void setAdapterValue(@NotNull OperatorType operator) {
         switch (operator) {
             case HAMRAH_AVAL:
                 operatorType = OperatorType.HAMRAH_AVAL;
-                onOpereatorChange(R.array.charge_type_hamrahe_aval);
-                onPriceChange(R.array.charge_price);
+                onOpereatorChange.setValue(R.array.charge_type_hamrahe_aval);
+                onPriceChange.setValue(R.array.charge_price);
                 break;
             case IRANCELL:
                 operatorType = OperatorType.IRANCELL;
-                onOpereatorChange(R.array.charge_type_irancell);
-                onPriceChange(R.array.charge_price_irancell);
+                onOpereatorChange.setValue(R.array.charge_type_irancell);
+                onPriceChange.setValue(R.array.charge_price_irancell);
                 break;
             case RITEL:
                 operatorType = OperatorType.RITEL;
-                onOpereatorChange(R.array.charge_type_ritel);
-                onPriceChange(R.array.charge_price);
+                onOpereatorChange.setValue(R.array.charge_type_ritel);
+                onPriceChange.setValue(R.array.charge_price);
                 break;
         }
     }
 
-    private void onOpereatorChange(int arrayId) {
-        MySpinnerAdapter adapter1 = new MySpinnerAdapter(G.context,R.layout.spinner_item_custom,Arrays.asList(G.context.getResources().getTextArray(arrayId)));
-        fragmentPaymentChargeBinding.fpcSpinnerChargeType.setAdapter(adapter1);
-        fragmentPaymentChargeBinding.fpcSpinnerChargeType.setSelection(0);
-        observeChargeTypeHint.set(View.GONE);
-    }
-
-    private void onPriceChange(int arrayId) {
-        MySpinnerAdapter adapter = new MySpinnerAdapter(G.context,R.layout.spinner_item_custom,Arrays.asList(G.context.getResources().getTextArray(arrayId)));
-        fragmentPaymentChargeBinding.fpcSpinnerPrice.setAdapter(adapter);
-        fragmentPaymentChargeBinding.fpcSpinnerPrice.setSelection(0);
-        observePriceHint.set(View.GONE);
-    }
-
-    private void setAdapterOperatorType() {
-        MySpinnerAdapter adapter = new MySpinnerAdapter(G.context, R.layout.spinner_item_custom, Arrays.asList(G.context.getResources().getTextArray(R.array.phone_operator)));
-        fragmentPaymentChargeBinding.fpcSpinnerOperator.setAdapter(adapter);
-        fragmentPaymentChargeBinding.fpcSpinnerOperator.setSelection(0);
-    }
 
     public static boolean isNumeric(String strNum) {
         try {
@@ -202,142 +249,135 @@ public class FragmentPaymentChargeViewModel {
         return true;
     }
 
-    public void onBuyClick(View v) {
 
-        if (!G.userLogin) {
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-            return;
-        }
+    public void onBuyClick(String phoneNumber) {
 
-        String phoneNumber = fragmentPaymentChargeBinding.fpcEditTextPhoneNumber.getText().toString().replace(" ","");
+        if (G.userLogin) {
+            if (isNumeric(phoneNumber) && phoneNumber.length() == 11) {
+                if (operatorType != null) {
+                    if (selectedChargeTypePosition > 0) {
+                        if (selectedPricePosition > 0) {
+                            ProtoMplGetTopupToken.MplGetTopupToken.Type type = null;
+                            switch (operatorType) {
+                                case HAMRAH_AVAL:
+                                    type = ProtoMplGetTopupToken.MplGetTopupToken.Type.MCI;
+                                    break;
+                                case IRANCELL:
+                                    switch (selectedChargeTypePosition) {
+                                        case 1:
+                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_PREPAID;
+                                            break;
+                                        case 2:
+                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_WOW;
+                                            break;
+                                        case 3:
+                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_WIMAX;
+                                            break;
+                                        case 4:
+                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_POSTPAID;
+                                            break;
+                                    }
+                                    break;
+                                case RITEL:
+                                    type = ProtoMplGetTopupToken.MplGetTopupToken.Type.RIGHTEL;
+                                    break;
+                            }
+                            long price = 0;
+                            boolean isIranCell = operatorType == OperatorType.IRANCELL;
+                            switch (selectedPricePosition) {
+                                case 1:
+                                    if (isIranCell) {
+                                        price = 10900;
+                                    } else {
+                                        price = 10000;
+                                    }
+                                    break;
+                                case 2:
+                                    if (isIranCell) {
+                                        price = 21180;
+                                    } else {
+                                        price = 20000;
+                                    }
+                                    break;
+                                case 3:
+                                    if (isIranCell) {
+                                        price = 54500;
+                                    } else {
+                                        price = 50000;
+                                    }
+                                    break;
+                                case 4:
+                                    if (isIranCell) {
+                                        price = 109000;
+                                    } else {
+                                        price = 100000;
+                                    }
+                                    break;
+                                case 5:
+                                    if (isIranCell) {
+                                        price = 218000;
+                                    } else {
+                                        price = 200000;
+                                    }
+                                    break;
+                            }
 
-        if (!isNumeric(phoneNumber) || phoneNumber.length() != 11) {
-            HelperError.showSnackMessage(G.context.getResources().getString(R.string.phone_number_is_not_valid), false);
-            return;
-        }
-
-        ProtoMplGetTopupToken.MplGetTopupToken.Type type = null;
-
-        if (operatorType == null) {
-            HelperError.showSnackMessage(G.context.getResources().getString(R.string.please_select_operator), false);
-            return;
-        }
-
-        switch (operatorType) {
-            case HAMRAH_AVAL:
-                type = ProtoMplGetTopupToken.MplGetTopupToken.Type.MCI;
-                break;
-            case IRANCELL:
-                switch (fragmentPaymentChargeBinding.fpcSpinnerChargeType.getSelectedItemId() + "") {
-                    case "0":
-                        type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_PREPAID;
-                        break;
-                    case "1":
-                        type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_WOW;
-                        break;
-                    case "2":
-                        type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_WIMAX;
-                        break;
-                    case "3":
-                        type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_POSTPAID;
-                        break;
-                }
-                break;
-            case RITEL:
-                type = ProtoMplGetTopupToken.MplGetTopupToken.Type.RIGHTEL;
-                break;
-        }
-
-
-        long price = 0;
-
-        boolean isIranCell = operatorType == OperatorType.IRANCELL;
-
-        switch (fragmentPaymentChargeBinding.fpcSpinnerPrice.getSelectedItemId() + "") {
-            case "0":
-                if (isIranCell) {
-                    price = 10900;
+                            /*if (operatorType == OperatorType.HAMRAH_AVAL) {
+                                sendRequestChargeMci(phoneNumber.substring(1), (int) price);
+                            } else {*/
+                                RequestMplGetTopupToken requestMplGetTopupToken = new RequestMplGetTopupToken();
+                                requestMplGetTopupToken.mplGetTopupToken(Long.parseLong(phoneNumber), price, type);
+                                G.onMplResult = error -> {
+                                    if (error) {
+                                        observeEnabledPayment.set(true);
+                                    } else {
+                                        goBack.setValue(true);
+                                    }
+                                };
+                            /*}*/
+                            hideKeyWord.setValue(true);
+                            observeEnabledPayment.set(false);
+                        } else {
+                            showError.setValue(R.string.charge_price_error_message);
+                        }
+                    } else {
+                        showError.setValue(R.string.charge_type_error_message);
+                    }
                 } else {
-                    price = 10000;
+                    showError.setValue(R.string.please_select_operator);
                 }
-                break;
-            case "1":
-                if (isIranCell) {
-                    price = 21180;
-                } else {
-                    price = 20000;
-                }
-                break;
-            case "2":
-                if (isIranCell) {
-                    price = 54500;
-                } else {
-                    price = 50000;
-                }
-                break;
-            case "3":
-                if (isIranCell) {
-                    price = 109000;
-                } else {
-                    price = 100000;
-                }
-                break;
-            case "4":
-                if (isIranCell) {
-                    price = 218000;
-                } else {
-                    price = 200000;
-                }
-                break;
+            } else {
+                showError.setValue(R.string.phone_number_is_not_valid);
+            }
+        } else {
+            showError.setValue(R.string.there_is_no_connection_to_server);
         }
+    }
 
-        G.onMplResult = new OnMplResult() {
+    private void sendRequestChargeMci(String phoneNumber, int price) {
+        new RetrofitFactory().getMciRetrofit().create(MciApi.class).topUpPurchase(phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
             @Override
-            public void onResult(boolean error) {
-
-                if (error) {
-                    observeEnabledPayment.set(true);
+            public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
+                observeEnabledPayment.set(true);
+                if (response.code() == 200) {
+                    goToPaymentPage.setValue(response.body().getToken());
                 } else {
-                    fragmentPaymentChargeBinding.getBackHandler().onBack();
+                    try {
+                        showMciPaymentError.setValue(new ErrorHandler().getError(response.code(), response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-            }
-        };
-
-        RequestMplGetTopupToken requestMplGetTopupToken = new RequestMplGetTopupToken();
-        requestMplGetTopupToken.mplGetTopupToken(Long.parseLong(phoneNumber), price, type);
-
-        observeEnabledPayment.set(false);
-    }
-
-
-    private static class MySpinnerAdapter extends ArrayAdapter<CharSequence> {
-
-        private MySpinnerAdapter(Context context, int resource, List<CharSequence> items) {
-            super(context, resource, items);
-        }
-
-        // Affects default (closed) state of the spinner
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView view = (TextView) super.getView(position, convertView, parent);
-            view.setTypeface(G.typeface_IRANSansMobile);
-
-            if (position == 0) {
-                view.setTextColor(G.context.getResources().getColor(R.color.gray));
             }
 
-            return view;
-        }
-
-        // Affects opened state of the spinner
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            TextView view = (TextView) super.getDropDownView(position, convertView, parent);
-            view.setTypeface(G.typeface_IRANSansMobile);
-            view.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
-            return view;
-        }
+            @Override
+            public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
+                t.printStackTrace();
+                observeEnabledPayment.set(true);
+                if (new ErrorHandler().checkHandShakeFailure(t)) {
+                    needUpdate.setValue(true);
+                }
+            }
+        });
     }
-
 }

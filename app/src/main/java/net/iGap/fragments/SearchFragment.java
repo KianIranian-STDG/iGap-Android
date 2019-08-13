@@ -655,10 +655,13 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
             goToRoomWithRealm(realmRoom, type, id);
         } else if (type == SearchType.room) {
-
-            HelperUrl.checkUsernameAndGoToRoom(getActivity(), userName, HelperUrl.ChatEntry.profile);
-            popBackStackFragment();
-
+            if (userName != null && userName.length() > 1) {
+                HelperUrl.checkUsernameAndGoToRoom(getActivity(), userName, HelperUrl.ChatEntry.profile);
+                popBackStackFragment();
+            } else {
+                realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                goToRoomWithRealm(realmRoom, type, id);
+            }
         }
         realm.close();
 
@@ -680,10 +683,19 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    RealmRoom.putOrUpdate(room);
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
+                            room2.setDeleted(true);
+                        }
+                    });
+                    realm.close();
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            G.refreshRealmUi();
                             if (G.fragmentActivity != null) {
                                 removeFromBaseFragment(SearchFragment.this);
                             }

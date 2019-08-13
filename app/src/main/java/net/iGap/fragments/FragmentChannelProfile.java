@@ -203,10 +203,8 @@ public class FragmentChannelProfile extends BaseFragment {
                         .widgetColor(Color.parseColor(G.appBarColor))
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog1, which) -> {
-                            String copy;
-                            copy = Config.IGAP_LINK_PREFIX + link;
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                            ClipData clip = ClipData.newPlainText("LINK_GROUP", Config.IGAP_LINK_PREFIX + link);
                             clipboard.setPrimaryClip(clip);
                         })
                         .build();
@@ -299,6 +297,8 @@ public class FragmentChannelProfile extends BaseFragment {
     }
 
     public static void startAlphaAnimation(View v, long duration, int visibility) {
+        if (visibility == View.VISIBLE) v.setVisibility(View.VISIBLE);
+
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);

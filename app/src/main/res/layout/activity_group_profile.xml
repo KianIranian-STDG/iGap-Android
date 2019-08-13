@@ -82,6 +82,7 @@
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
+                        android:visibility="gone"
                         app:emojiSize="@dimen/standardTextSize" />
 
                     <TextView
@@ -186,20 +187,31 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent=".9" />
 
+                <View
+                    android:id="@+id/divider"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:visibility="@{viewModel.haveDescription}"
+                    app:layout_constraintEnd_toEndOf="@id/divider1"
+                    app:layout_constraintStart_toStartOf="@id/divider1"
+                    app:layout_constraintTop_toBottomOf="@id/description"
+                    app:layout_constraintWidth_percent=".95" />
+
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/inviteLink"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:paddingTop="4dp"
+                    android:paddingTop="@dimen/dp8"
                     android:paddingBottom="4dp"
                     android:text="@{viewModel.inviteLink}"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/description"
+                    app:layout_constraintTop_toBottomOf="@id/inviteLinkTitle"
                     app:layout_constraintWidth_percent=".9" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -207,6 +219,7 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
                     android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp8"
                     android:text="@{viewModel.inviteLinkTitle}"
@@ -214,28 +227,28 @@
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="@+id/inviteLink"
                     app:layout_constraintStart_toStartOf="@id/inviteLink"
-                    app:layout_constraintTop_toBottomOf="@id/inviteLink" />
+                    app:layout_constraintTop_toBottomOf="@id/divider" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onInviteLinkClick()}"
-                    app:layout_constraintBottom_toBottomOf="@id/inviteLinkTitle"
+                    app:layout_constraintBottom_toBottomOf="@id/inviteLink"
                     app:layout_constraintEnd_toEndOf="@id/inviteLink"
                     app:layout_constraintStart_toStartOf="@id/inviteLink"
-                    app:layout_constraintTop_toTopOf="@id/inviteLink" />
+                    app:layout_constraintTop_toTopOf="@id/inviteLinkTitle" />
 
                 <View
                     android:id="@+id/divider0"
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:visibility="@{viewModel.haveDescription}"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="@id/divider1"
                     app:layout_constraintStart_toStartOf="@id/divider1"
-                    app:layout_constraintTop_toBottomOf="@id/inviteLinkTitle"
+                    app:layout_constraintTop_toBottomOf="@id/inviteLink"
                     app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -243,7 +256,7 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onNotificationCheckChange()}"
                     android:paddingTop="@dimen/dp8"
@@ -285,7 +298,7 @@
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notificationAndSound"
@@ -298,7 +311,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginBottom="@dimen/dp8"
-                    android:paddingTop="8dp"
+                    android:paddingTop="@dimen/dp8"
                     android:text="@string/chi_shared_Media"
                     android:textSize="@dimen/largeTextSize"
                     android:visibility="@{viewModel.noMediaSharedVisibility}"

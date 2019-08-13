@@ -19,6 +19,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -117,6 +119,7 @@ import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
+import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
@@ -165,6 +168,7 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -186,7 +190,6 @@ import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatDelete;
 import net.iGap.interfaces.OnChatDeleteMessageResponse;
 import net.iGap.interfaces.OnChatEditMessageResponse;
-import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.interfaces.OnChatSendMessage;
@@ -525,7 +528,7 @@ public class FragmentChat extends BaseFragment
     private TextView txtSpamClose;
     private TextView send;
     private TextView txtCountItem;
-    private TextView txtNewUnreadMessage;
+    private BadgeView txtNewUnreadMessage;
     private TextView imvCancelForward;
     private TextView btnUp;
     private TextView btnDown;
@@ -589,7 +592,6 @@ public class FragmentChat extends BaseFragment
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
-    private String messageEdit = "";
     private boolean isNewBottomSheet = true;
     private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
     /**
@@ -627,6 +629,14 @@ public class FragmentChat extends BaseFragment
     private HelperToolbar mHelperToolbar;
     private ViewGroup layoutToolbar;
     private boolean isPinAvailable = false;
+
+    private SoundPool soundPool;
+    private boolean soundInChatPlay = false;
+    private boolean sendMessageLoaded;
+    private boolean receiveMessageLoaded;
+    private int sendMessageSound;
+    private int receiveMessageSound;
+    private String TAG = "messageSound";
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -847,6 +857,30 @@ public class FragmentChat extends BaseFragment
 
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot){
             sendMoney.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void soundInChatInit(){
+        if (soundInChatPlay){
+            try {
+                if (soundPool == null){
+                    soundPool = new SoundPool(3, AudioManager.STREAM_SYSTEM, 0);
+                }
+
+                if (sendMessageSound == 0 && !sendMessageLoaded) {
+                    sendMessageLoaded = true;
+                    sendMessageSound = soundPool.load(getContext(), R.raw.send_message_sound, 1);
+                }
+
+                if (receiveMessageSound == 0 && !receiveMessageLoaded) {
+                    receiveMessageLoaded = true;
+                    receiveMessageSound = soundPool.load(getContext(), R.raw.receive_message_sound, 1);
+                }
+
+            } catch (Exception e) {
+                Log.i(TAG, "soundPool error: " + e.getMessage());
+            }
+
         }
     }
 
@@ -1094,15 +1128,15 @@ public class FragmentChat extends BaseFragment
             rootView.findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
 
-        if (!isBot){
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            if (realmRoom != null)  {
-                if (realmRoom.getMute()) {
-                    txtChannelMute.setText(R.string.unmute);
-                } else {
-                    txtChannelMute.setText(R.string.mute);
-                }
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+
+            isMuteNotification = realmRoom.getMute() ;
+            if (!isBot){
+                txtChannelMute.setText(isMuteNotification ? R.string.unmute : R.string.mute);
             }
+            iconMute.setVisibility(isMuteNotification ? View.VISIBLE : View.GONE);
+
         }
 
         registerListener();
@@ -2331,6 +2365,11 @@ public class FragmentChat extends BaseFragment
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         sendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) == 1;
 
+        soundInChatPlay = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1) == 1;
+
+        if (soundInChatPlay)
+            soundInChatInit();
+
         /**
          * set background
          */
@@ -2775,8 +2814,14 @@ public class FragmentChat extends BaseFragment
             }
         });
 
+        //added run time -> counter of un read messages
         llScrollNavigate = rootView.findViewById(R.id.ac_ll_scrool_navigate);
-        txtNewUnreadMessage = rootView.findViewById(R.id.cs_txt_unread_message);
+        txtNewUnreadMessage = new BadgeView(getContext());
+        txtNewUnreadMessage.getTextView().setTypeface(G.typeface_IRANSansMobile);
+        txtNewUnreadMessage.getTextView().setSingleLine();
+        txtNewUnreadMessage.getTextView().setFilters(new InputFilter[] { new InputFilter.LengthFilter(5) });//set max length
+        txtNewUnreadMessage.setBadgeColor(G.isDarkTheme ? Color.parseColor(Theme.default_notificationColor) : Color.parseColor(G.notificationColor));
+        llScrollNavigate.addView(txtNewUnreadMessage,LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT , LayoutCreator.WRAP_CONTENT , Gravity.CENTER | Gravity.TOP));
 
         G.handler.post(new Runnable() {
             @Override
@@ -2785,12 +2830,6 @@ public class FragmentChat extends BaseFragment
                 manageForwardedMessage();
             }
         });
-
-        if (G.isDarkTheme) {
-            AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(Theme.default_notificationColor));
-        } else {
-            AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(G.notificationColor));
-        }
 
         MaterialDesignTextView txtNavigationLayout = rootView.findViewById(R.id.ac_txt_down_navigation);
         AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));
@@ -2842,7 +2881,7 @@ public class FragmentChat extends BaseFragment
                     firstUnreadMessageInChat = null;
                     countNewMessage = 0;
                     txtNewUnreadMessage.setVisibility(View.GONE);
-                    txtNewUnreadMessage.setText(countNewMessage + "");
+                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 } else {
                     setDownBtnGone();
                     /**
@@ -2925,7 +2964,7 @@ public class FragmentChat extends BaseFragment
 //                                }
 //                            });
 
-                    txtNewUnreadMessage.setText(countNewMessage + "");
+                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                     if (countNewMessage == 0) {
                         txtNewUnreadMessage.setVisibility(View.GONE);
 
@@ -3071,10 +3110,10 @@ public class FragmentChat extends BaseFragment
                     }
                 } else { // new message has written
                     sendNewMessage();
+                    scrollToEnd();
                 }
 
                 //realmMessage.close();
-                scrollToEnd();
             }
         });
 
@@ -3905,6 +3944,10 @@ public class FragmentChat extends BaseFragment
                 }
             });
         }
+
+        if (soundPool != null && sendMessageSound != 0)
+            playSendSound(roomId, roomMessage,chatType);
+
     }
 
     @Override
@@ -3913,6 +3956,9 @@ public class FragmentChat extends BaseFragment
         if (roomMessage.getMessageId() <= biggestMessageId) {
             return;
         }
+
+        if (soundPool != null && sendMessageSound != 0)
+            playReceiveSound(roomId, roomMessage,roomType);
 
         if (isBot) {
 
@@ -4136,6 +4182,28 @@ public class FragmentChat extends BaseFragment
         }
 
         realm.close();
+    }
+
+    private void playReceiveSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+        if (roomType == CHAT)
+            if (roomId == this.mRoomId && sendMessageSound != 0 && !isPaused) {
+                try {
+                    soundPool.play(sendMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
+                } catch (Exception e) {
+                    Log.i(TAG, "playReceiveSound: " + e.getMessage());
+                }
+            }
+    }
+
+    private void playSendSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+        if (roomType == CHAT)
+            if (roomId == this.mRoomId && receiveMessageSound != 0 && !isPaused) {
+            try {
+                soundPool.play(receiveMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
+            } catch (Exception e) {
+                Log.i(TAG, "playReceiveSound: " + e.getMessage());
+            }
+        }
     }
 
     private StructWebView getUrlWebView(String additionalData) {
@@ -4367,7 +4435,7 @@ public class FragmentChat extends BaseFragment
         if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == messageInfo.realmRoomMessage.getMessageId()) {
             countNewMessage = 0;
             txtNewUnreadMessage.setVisibility(View.GONE);
-            txtNewUnreadMessage.setText(countNewMessage + "");
+            txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
 
             firstUnreadMessageInChat = null;
         }
@@ -4666,12 +4734,11 @@ public class FragmentChat extends BaseFragment
             } else if (items.get(position).equals(getString(R.string.edit_item_dialog))) {
                 // edit message
                 // put message text to EditText
-                messageEdit = "";
                 if (message.realmRoomMessage.getMessage() != null && !message.realmRoomMessage.getMessage().isEmpty()) {
                     edtChat.setText(message.realmRoomMessage.getMessage());
+                    edtChat.setSelection(edtChat.getText().toString().length());
                     // put message object to edtChat's tag to obtain it later and
                     // found is user trying to edit a message
-                    messageEdit = message.realmRoomMessage.getMessage();
                 }
                 edtChat.setTag(message);
                 isEditMessage = true;
@@ -5254,7 +5321,7 @@ public class FragmentChat extends BaseFragment
         resetMessagingValue();
         countNewMessage = 0;
         txtNewUnreadMessage.setVisibility(View.GONE);
-        txtNewUnreadMessage.setText(countNewMessage + "");
+        txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
         getMessages();
     }
 
@@ -5511,7 +5578,9 @@ public class FragmentChat extends BaseFragment
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentGroupProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
                 }
             } else if (chatType == CHANNEL) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChannelProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
+                if(!isNotJoin){
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChannelProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
+                }
             }
         }
     }
@@ -5631,7 +5700,7 @@ public class FragmentChat extends BaseFragment
             countNewMessage++;
             setDownBtnVisible();
             if (txtNewUnreadMessage != null) {
-                txtNewUnreadMessage.setText(countNewMessage + "");
+                txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 txtNewUnreadMessage.setVisibility(View.VISIBLE);
             }
         }
@@ -6352,12 +6421,9 @@ public class FragmentChat extends BaseFragment
         btnDownHash = rootView.findViewById(R.id.ac_btn_hash_down);
         txtHashCounter = rootView.findViewById(R.id.ac_txt_hash_counter);
 
-        if (!G.isDarkTheme) {
-            btnUpHash.setTextColor(Color.parseColor(G.appBarColor));
-            btnDownHash.setTextColor(Color.parseColor(G.appBarColor));
-            txtHashCounter.setTextColor(Color.parseColor(G.appBarColor));
+        if (G.isDarkTheme){
+            txtHashCounter.setTextColor(getContext().getResources().getColor(R.color.white));
         }
-
 
         searchHash = new SearchHash();
 
@@ -8526,7 +8592,7 @@ public class FragmentChat extends BaseFragment
             if (hasUnread()) {
                 countNewMessage = unreadCount;
                 txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                txtNewUnreadMessage.setText(countNewMessage + "");
+                txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 setDownBtnVisible();
                 firstUnreadMessageInChat = firstUnreadMessage;
             }
@@ -9258,56 +9324,42 @@ public class FragmentChat extends BaseFragment
         if (forwardList != null && forwardList.size() > 0) {
 
             final int[] count = {0};
+            for (int i = 0; i < forwardList.size(); i++) {
+                new RequestChatGetRoom().chatGetRoom(forwardList.get(i).getId(), new RequestChatGetRoom.OnChatRoomReady() {
+                    @Override
+                    public void onReady(ProtoGlobal.Room room) {
+                        if (!multiForwardList.contains(room.getId())) {
+                            multiForwardList.add(room.getId());
+                            RealmRoom.putOrUpdate(room);
+                        }
 
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-
-                    if (!multiForwardList.contains(room.getId())) {
-                        multiForwardList.add(room.getId());
-                        RealmRoom.putOrUpdate(room);
+                        count[0]++;
+                        if (count[0] >= forwardList.size()) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    G.refreshRealmUi();
+                                    bottomSheetDialogForward.dismiss();
+                                    hideProgress();
+                                    forwardList.clear();
+                                    manageForwardedMessage();
+                                }
+                            });
+                        }
                     }
 
-                    count[0]++;
-                    if (count[0] >= forwardList.size()) {
-                        G.onChatGetRoom = null;
-                        forwardList.clear();
-                        manageForwardedMessage();
-
+                    @Override
+                    public void onError(int major, int minor) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 bottomSheetDialogForward.dismiss();
                                 hideProgress();
+                                error(G.fragmentActivity.getResources().getString(R.string.faild));
                             }
                         });
-
-
                     }
-                }
-
-                @Override
-                public void onChatGetRoomTimeOut() {
-
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            bottomSheetDialogForward.dismiss();
-                            hideProgress();
-                            error(G.fragmentActivity.getResources().getString(R.string.faild));
-                        }
-                    });
-
-
-                }
-            };
-
-            for (int i = 0; i < forwardList.size(); i++) {
-                new RequestChatGetRoom().chatGetRoom(forwardList.get(i).getId());
+                });
             }
 
 

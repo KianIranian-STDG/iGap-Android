@@ -12,16 +12,11 @@ public class BaseViewModel extends ViewModel implements BaseViewHolder {
     @Override
     protected void onCleared() {
         super.onCleared();
-        onDestroy();
+        onDestroyViewModel();
     }
 
     @Override
     public void onCreateViewModel() {
-
-    }
-
-    @Override
-    public void onDestroy() {
 
     }
 }

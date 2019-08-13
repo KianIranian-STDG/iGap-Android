@@ -362,7 +362,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
-            btnPlayMusic.setText("#");
+            btnPlayMusic.setText(R.string.play_icon);
             btnPlayMusic.setTextColor(getColor(R.color.voice_item));
             setTextSize(btnPlayMusic, R.dimen.dp36);
 

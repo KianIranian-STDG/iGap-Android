@@ -76,4 +76,10 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
                 paymentError.setValue(true);
         }
     }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        repository.clearSelectedServiceList();
+    }
 }

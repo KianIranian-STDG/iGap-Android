@@ -1,273 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-        <import type="android.graphics.Color" />
-
         <import type="android.view.View" />
 
-        <import type="net.iGap.G" />
-
         <variable
-            name="fragmentPaymentChargeViewModel"
+            name="viewModel"
             type="net.iGap.viewmodel.FragmentPaymentChargeViewModel" />
-
-        <variable
-            name="backHandler"
-            type="net.iGap.interfaces.IBackHandler" />
     </data>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
-        android:layoutDirection="locale"
-        android:orientation="vertical"
-        tools:ignore="MissingPrefix">
+        android:layoutDirection="locale">
 
         <LinearLayout
             android:id="@+id/fpc_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/phoneNumberIcon"
+            style="@style/greenIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_margin="@dimen/dp16"
+            android:text="@string/md_dialpad"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fpc_toolbar" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp16"
-                android:layoutDirection="locale"
-                android:orientation="vertical">
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/phoneNumberEditText"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            android:afterTextChanged="@{(phoneNumber)->viewModel.phoneNumberTextChangeListener(phoneNumber.toString())}"
+            android:background="@drawable/background_cancel_money_action"
+            android:gravity="center"
+            android:hint="@string/phone_number"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:padding="8dp"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:textSize="@dimen/dp16"
+            app:layout_constraintBottom_toBottomOf="@id/phoneNumberIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/phoneNumberIcon"
+            app:layout_constraintTop_toTopOf="@id/phoneNumberIcon" />
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/phoneNumberExample"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:text="@string/ex_mobile_phone"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dp10"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
+            app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp68"
-                    android:orientation="horizontal">
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/fpc_checkBox_trabord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:button="@drawable/check_box_background"
+            android:onCheckedChanged="@{(view,isChecked)->viewModel.checkBoxTarabordChanged(isChecked,phoneNumberEditText.getEditableText().toString())}"
+            android:text="@string/trabord"
+            android:textSize="@dimen/dp16"
+            style="?textTitleColorSettingTheme"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+            app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
 
-                    <net.iGap.module.MaterialDesignTextView
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="@dimen/dp44"
-                        android:gravity="center"
-                        android:text="@string/md_dialpad"
-                        android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                        android:textSize="@dimen/dp22"
-                        android:textStyle="bold" />
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/operatorIcon"
+            style="@style/greenIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="@string/md_format_list_bulleted"
+            android:textStyle="bold"
+            android:visibility="@{viewModel.observeTarabord}"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+            app:layout_constraintEnd_toEndOf="@id/phoneNumberIcon"
+            app:layout_constraintTop_toBottomOf="@id/fpc_checkBox_trabord" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/fpc_spinner_operator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp44"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelecteSpinerOperator(position)}"
+            android:visibility="@{viewModel.observeTarabord}"
+            app:layout_constraintBottom_toBottomOf="@id/operatorIcon"
+            app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
+            app:layout_constraintTop_toTopOf="@id/operatorIcon" />
 
-                        <EditText
-                            android:id="@+id/fpc_editText_phone_number"
-                            style="?hintColorSettingTheme"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp44"
-                            android:background="@drawable/background_cancel_money_action"
-                            android:hint="@string/phone_number"
-                            android:inputType="phone"
-                            android:gravity="center"
-                            android:maxLength="11"
-                            android:minHeight="@dimen/dp44"
-                            android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}"
-                            android:paddingLeft="@dimen/dp10"
-                            android:paddingRight="@dimen/dp10"
-                            android:textSize="@dimen/dp16">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_cancel_money_action"
+            android:visibility="@{viewModel.observeTarabord}"
+            app:layout_constraintBottom_toBottomOf="@id/fpc_spinner_operator"
+            app:layout_constraintEnd_toEndOf="@id/fpc_spinner_operator"
+            app:layout_constraintStart_toStartOf="@id/fpc_spinner_operator"
+            app:layout_constraintTop_toTopOf="@id/fpc_spinner_operator" />
 
-                            <requestFocus />
-                        </EditText>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/chargeTypeIcon"
+            style="@style/greenIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="@string/md_format_list_bulleted"
+            android:textStyle="bold"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintEnd_toEndOf="@id/phoneNumberIcon"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+            app:layout_constraintTop_toBottomOf="@id/operatorIcon" />
 
-                        <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:paddingLeft="@dimen/dp10"
-                            android:paddingRight="@dimen/dp10"
-                            android:text="@string/ex_mobile_phone"
-                            android:textColor="@color/gray"
-                            android:textSize="@dimen/dp10" />
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/fpc_spinner_ChargeType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp44"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelecteSpinerType(position)}"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintBottom_toBottomOf="@id/chargeTypeIcon"
+            app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
+            app:layout_constraintTop_toTopOf="@id/chargeTypeIcon" />
 
-                    </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_cancel_money_action"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintBottom_toBottomOf="@id/fpc_spinner_ChargeType"
+            app:layout_constraintEnd_toEndOf="@id/fpc_spinner_ChargeType"
+            app:layout_constraintStart_toStartOf="@id/fpc_spinner_ChargeType"
+            app:layout_constraintTop_toTopOf="@id/fpc_spinner_ChargeType" />
 
-                </LinearLayout>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/priceIcon"
+            style="@style/greenIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="@string/coin_icon"
+            android:textStyle="bold"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintEnd_toEndOf="@id/phoneNumberIcon"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+            app:layout_constraintTop_toBottomOf="@id/chargeTypeIcon" />
 
-                <CheckBox
-                    android:id="@+id/fpc_checkBox_trabord"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginLeft="@dimen/dp8"
-                    android:layout_marginTop="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp8"
-                    android:layout_marginBottom="@dimen/dp4"
-                    android:button="@drawable/check_box_background"
-                    android:onCheckedChanged="@{fragmentPaymentChargeViewModel::checkBoxTarabordChanged}"
-                    android:text="@string/trabord"
-                    android:textColor="@{G.isDarkTheme ?Color.WHITE:@color/gray_4c,default=@color/gray_4c}"
-                    android:textSize="@dimen/dp16" />
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/fpc_spinner_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp44"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelecteSpinerPrice(position)}"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintBottom_toBottomOf="@id/priceIcon"
+            app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
+            app:layout_constraintTop_toTopOf="@id/priceIcon" />
 
-                <!--android:buttonTint="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_cancel_money_action"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintBottom_toBottomOf="@id/fpc_spinner_price"
+            app:layout_constraintEnd_toEndOf="@id/fpc_spinner_price"
+            app:layout_constraintStart_toStartOf="@id/fpc_spinner_price"
+            app:layout_constraintTop_toTopOf="@id/fpc_spinner_price" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
-                    android:layout_marginBottom="@dimen/dp6"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="@{fragmentPaymentChargeViewModel.observeTarabord , default = gone}">
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:indeterminate="true"
+            android:visibility="@{viewModel.observeEnabledPayment ? View.INVISIBLE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/priceIcon" />
 
-                    <net.iGap.module.MaterialDesignTextView
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/md_format_list_bulleted"
-                        android:textAppearance="@style/TextIconAppearance.menu"
-                        android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                        android:textSize="@dimen/dp26"
-                        android:textStyle="bold" />
+        <android.support.design.button.MaterialButton
+            style="?iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:enabled="@{viewModel.observeEnabledPayment}"
+            android:onClick="@{()->viewModel.onBuyClick(phoneNumberEditText.getEditableText().toString())}"
+            android:text="@string/buy"
+            android:visibility="@{viewModel.showDetail}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loadingView"
+            app:layout_constraintWidth_percent=".6" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/background_cancel_money_action"
-                        android:gravity="center">
-
-                        <Spinner
-                            android:id="@+id/fpc_spinner_operator"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:minHeight="@dimen/dp44"
-                            android:onItemSelected="@{fragmentPaymentChargeViewModel::onItemSelecteSpinerOperator}" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
-                    android:layout_marginBottom="@dimen/dp6"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <net.iGap.module.MaterialDesignTextView
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/md_format_list_bulleted"
-                        android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                        android:textSize="@dimen/dp22"
-                        android:textStyle="bold" />
-
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/background_cancel_money_action">
-
-                        <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:padding="@dimen/dp4"
-                            android:text="@string/charge_type"
-                            android:textColor="@color/gray"
-                            android:textSize="@dimen/dp16"
-                            android:visibility="@{fragmentPaymentChargeViewModel.observeChargeTypeHint}" />
-
-                        <Spinner
-                            android:id="@+id/fpc_spinner_ChargeType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:minHeight="@dimen/dp44" />
-                    </FrameLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp52"
-                    android:layout_marginBottom="@dimen/dp6"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <net.iGap.module.MaterialDesignTextView
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/coin_icon"
-                        android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                        android:textSize="@dimen/dp22"
-                        android:textStyle="bold" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/background_cancel_money_action">
-
-                        <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:padding="@dimen/dp4"
-                            android:text="@string/price"
-                            android:textColor="@color/gray"
-                            android:textSize="@dimen/dp16"
-                            android:visibility="@{fragmentPaymentChargeViewModel.observePriceHint}" />
-
-                        <Spinner
-                            android:id="@+id/fpc_spinner_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:minHeight="@dimen/dp44" />
-
-                    </FrameLayout>
-
-                </LinearLayout>
-
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:visibility="@{fragmentPaymentChargeViewModel.observeEnabledPayment ? View.GONE :View.VISIBLE}" />
-
-                <android.support.design.button.MaterialButton
-                    style="?iGapButton"
-                    android:layout_width="@dimen/dp180"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dp20"
-                    android:layout_marginBottom="@dimen/dp40"
-                    android:enabled="@{fragmentPaymentChargeViewModel.observeEnabledPayment}"
-                    android:onClick="@{fragmentPaymentChargeViewModel::onBuyClick}"
-                    android:text="@string/buy" />
-
-
-            </LinearLayout>
-        </ScrollView>
-
-
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>

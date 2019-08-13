@@ -37,7 +37,7 @@ public class ChannelInfoAdapter extends RecyclerView.Adapter<ChannelInfoAdapter.
     @NonNull
     @Override
     public ChannelInfoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
+        View view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_rv_grid_info, viewGroup, false);
         return new ChannelInfoViewHolder(view);
     }
 
@@ -59,13 +59,13 @@ public class ChannelInfoAdapter extends RecyclerView.Adapter<ChannelInfoAdapter.
 
         public ChannelInfoViewHolder(@NonNull View itemView) {
             super(itemView);
-            circleImageView = itemView.findViewById(R.id.circle_item_popular_rv_grid);
-            textView = itemView.findViewById(R.id.tv_item_popular_rv_grid);
-            linearLayout = itemView.findViewById(R.id.ll_item_pop_card_category);
+            linearLayout = itemView.findViewById(R.id.ll_item_pop_card_info);
             if (G.isDarkTheme) {
                 linearLayout.setBackgroundResource(R.drawable.shape_favorite_channel_dark_item_them);
             }
-            root = itemView.findViewById(R.id.card_item_pop_category);
+            circleImageView = itemView.findViewById(R.id.circle_item_popular_rv_grid_linear);
+            textView = itemView.findViewById(R.id.tv_item_popular_rv_grid_linear);
+            root = itemView.findViewById(R.id.card_item_pop_grid);
             Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
 
         }

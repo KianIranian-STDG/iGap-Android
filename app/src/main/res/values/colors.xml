@@ -35,6 +35,7 @@
     <color name="white">#ffffff</color>
     <color name="default_shadow_color">#88757575</color>
     <color name="transparent">#00000000</color>
+    <color name="transparent_player">#CB000000</color>
 
     <color name="notification_text">@color/gray_4c</color>
     <color name="notification_background">@color/white</color>
@@ -269,6 +270,10 @@
 
     <color name="default_indicator_color_selected">#eeee</color>
     <color name="default_indicator_color_unselected">#66eeeeee</color>
+    <color name="beeptunes_primary">#00D20E</color>
+
+    <color name="gray50">#FAFAFA</color>
+    <color name="gray100">#F5F5F5</color>
     <color name="chat_bubble_color">#f5ffec</color>
     <color name="chat_bubble_color_dark">#565656</color>
 

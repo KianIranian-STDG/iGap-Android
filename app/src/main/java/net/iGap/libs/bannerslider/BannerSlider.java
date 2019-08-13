@@ -133,7 +133,6 @@ public class BannerSlider extends FrameLayout {
     }
 
     public void onImageSlideChange(int position) {
-        Log.d(TAG, "onImageSlideChange() called with: position = [" + position + "]");
         selectedSlidePosition = position;
         int userSlidePosition = positionController.getUserSlidePosition(position);
         if (slideIndicatorsGroup != null)

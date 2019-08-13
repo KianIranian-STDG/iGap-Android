@@ -60,7 +60,7 @@ public class Theme {
     public static String default_toggleButtonColor = "#00B0BF";
     public static String default_attachmentColor = default_appBarColor;
     public static String default_headerTextColor = "#00B0BF";
-    public static String default_progressColor = "#00B0BF";
+    public static String default_progressColor = "#45B321";
     public static String default_linkColor = "#303F9F";
     public static String default_bubbleChatMusicColor = "#bfefef";
     public static String default_bubbleChatSendColor = "#ccdba1";
@@ -84,7 +84,7 @@ public class Theme {
     public static String default_dark_toggleButtonColor = "#000000";//
     public static String default_dark_attachmentColor = "#cccccc";
     public static String default_dark_headerTextColor = "#ffffff";
-    public static String default_dark_progressColor = "#ffffff";
+    public static String default_dark_progressColor = "#45B321";
     public static String default_dark_linkColor = "#00BCD4";
     public static String default_dark_bubbleChatMusicColor = "#313131";//
     public static String default_dark_bubbleChatSendColor = "#394b4b";
@@ -133,6 +133,14 @@ public class Theme {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+
+        if (G.themeColor != DEFAULT && G.themeColor != DARK) {
+            G.themeColor = DEFAULT;
+            SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
+            editor.apply();
+        }
 
         switch (G.themeColor) {
             case CUSTOM:

@@ -29,8 +29,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 123
-        versionName "2.0.0.newUi123"
+        versionCode 126
+        versionName "2.0.0"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -91,6 +91,15 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Token", "\"fd0txl\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Char {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Token", "\"u2cuct\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -194,7 +203,7 @@ dependencies {
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.mindorks.android:prdownloader:0.5.0'
+    implementation 'com.mindorks.android:prdownloader:0.6.0'
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
     implementation('com.github.KianIranian-STDG:Compress:1.3.1') {
@@ -209,6 +218,7 @@ dependencies {
     release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
+    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta8'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'

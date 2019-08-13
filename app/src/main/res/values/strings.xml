@@ -18,7 +18,7 @@
     <!-- Page 4 introduce app -->
     <!--TODO:// complete-->
     <string name="text_line_1_introduce_page4">iLand</string>
-    <string name="text_line_2_introduce_page4">iGap\'s Smart World</string>
+    <string name="text_line_2_introduce_page4">iLand! without limitation\nwith wonderful events as taking a taxi, pay bills and booking hotels and flights . Oh Also you can play games, watch films and listen to music</string>
 
     <!-- Page 5 introduce app -->
     <string name="text_line_1_introduce_page5">Voice and video Call</string>
@@ -1472,7 +1472,7 @@ Want to get it?</string>
     <string name="ivnalid_data_provided">Input values are incorrect.</string>
     <string name="secret_chat">Secret Chat</string>
     <string name="new_message_notif">New Message</string>
-    <string name="card_to_card">Card to Card</string>
+    <string name="card_to_card">Request card to card</string>
     <string name="your_device_is_root">Sorry! Your device is root.</string>
     <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
     <string name="change_language_title">Change Language</string>
@@ -1933,12 +1933,21 @@ Want to get it?</string>
     <string name="igasht_total_ticket_price">Total Price: %d Toman</string>
     <string name="igasht_add_ticket_error">Please Add Ticket</string>
     <string name="igasht_buy_ticket_successful">Buy Ticket Successful</string>
-    <string name="money_request">Money Request to:</string>
+    <string name="money_request">Card To Card Request to:</string>
     <string name="cardtocard_descriotion_error">Description can not be empty</string>
     <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
     <string name="cardtocard_cartnumber_error">Card number must be 16 digits</string>
     <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
+    <string name="payment_order_id_title">Order ID : %s</string>
+    <string name="payment_rrn_title">Transaction ID: %.0f</string>
+    <string name="mci_topup_payment_title">MCI TopUp</string>
     <string name="insert_amount_in_rial">insert amount in rial.</string>
     <string name="enter_16_digit_card_number">Enter the 16-digit card number.</string>
+    <string name="beeptunes_purchase_song">Purchase Song</string>
+    <string name="beeptunes_sync_song">Sync Song</string>
+    <string name="beeptunesـfavorite_song">Favorite Song</string>
+    <string name="play_sound_in_chat">Play Message Sound In Chat</string>
+    <string name="charge_type_error_message">Please Select Charge Type</string>
+    <string name="charge_price_error_message">Please select Charge Price</string>
 </resources>

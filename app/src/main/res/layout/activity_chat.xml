@@ -114,22 +114,6 @@
                         style="@style/myIconToolbarStyle"
                         android:textColor="@color/white" />
 
-
-                    <TextView
-                        android:id="@+id/cs_txt_unread_message"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|center"
-                        android:background="@drawable/oval_red"
-                        android:gravity="center"
-                        android:minWidth="@dimen/dp20"
-                        android:minHeight="@dimen/dp20"
-                        android:singleLine="true"
-                        android:text="1"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/dp10"
-                        android:visibility="gone" />
-
                 </FrameLayout>
 
                 <TextView
@@ -205,7 +189,7 @@
 
                 <TextView
                     android:id="@+id/ac_txt_hash_counter"
-                    style="?backgroundColorSettingTheme"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"

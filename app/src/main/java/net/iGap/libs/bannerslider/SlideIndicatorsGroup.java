@@ -25,7 +25,6 @@ import java.util.List;
  * @since 11/26/16
  */
 class SlideIndicatorsGroup extends LinearLayout implements OnSlideChangeListener {
-    private static final String TAG = "SlideIndicatorsGroup";
     private final Context context;
     private int slidesCount;
     private Drawable selectedSlideIndicator;
@@ -131,7 +130,6 @@ class SlideIndicatorsGroup extends LinearLayout implements OnSlideChangeListener
 
     @Override
     public void onSlideChange(int selectedSlidePosition) {
-        Log.i(TAG, "onSlideChange: " + selectedSlidePosition);
         for (int i = 0; i < indicatorShapes.size(); i++) {
             if (i == selectedSlidePosition) {
                 indicatorShapes.get(i).onCheckedChange(true);

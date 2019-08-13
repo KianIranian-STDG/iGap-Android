@@ -56,7 +56,6 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     private EditGroupViewModel viewModel;
     private AttachFile attachFile;
     private EmojiPopup emojiPopup;
-    private boolean isInitEmoji = false;
     private boolean isEmojiShow = false;
 
     public static EditGroupFragment newInstance(long roomId) {
@@ -143,10 +142,6 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         viewModel.initEmoji.observe(this, aBoolean -> {
             if (aBoolean != null) {
-                if (!isInitEmoji) {
-                    setUpEmojiPopup();
-                    isInitEmoji = true;
-                }
                 emojiPopup.toggle();
             }
         });
@@ -164,6 +159,8 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                 /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
             }
         });
+
+        setUpEmojiPopup();
     }
 
     @Override
