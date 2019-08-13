@@ -1426,7 +1426,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                         if (mInfo.getType() == GROUP &&
                                 mInfo.getLastMessage().getReplyTo() == null
-                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.TEXT) {
+                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.TEXT
+                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.LOG
+                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.VOICE
+                                || mInfo.getLastMessage().getForwardMessage() != null
+                                && mInfo.getLastMessage().getForwardMessage().getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                             holder.LastMessageTv.setVisibility(View.GONE);
                         } else {
                             holder.LastMessageTv.setVisibility(View.VISIBLE);
