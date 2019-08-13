@@ -25,6 +25,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiStatic;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
@@ -102,7 +103,7 @@ public class PaymentFragment extends Fragment {
             if (getActivity() != null && webLink != null) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
                 Bundle bundle = new Bundle();
-                bundle.putString("Authorization", ApiStatic.USER_TOKEN);
+                bundle.putString("Authorization", G.getApiToken());
                 browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
                 startActivity(browserIntent);
             }

@@ -47,6 +47,7 @@ import net.iGap.module.ClearMessagesUtil;
 import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
 
 import org.paygear.RaadApp;
@@ -420,6 +421,19 @@ public class G extends Application {
         } else {
             return Color.parseColor(color);
         }
+    }
+
+    public static String getApiToken() {
+        Realm realm = Realm.getDefaultInstance();
+        String result = "";
+
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo != null) {
+            result = realmUserInfo.getAccessToken();
+        }
+        realm.close();
+        return result;
+
     }
 
     public static void refreshRealmUi() {

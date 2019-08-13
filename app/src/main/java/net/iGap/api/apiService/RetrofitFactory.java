@@ -4,6 +4,7 @@ import android.os.Build;
 import android.util.Log;
 
 import net.iGap.BuildConfig;
+import net.iGap.G;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class RetrofitFactory {
         builder.addInterceptor(chain -> {
             Request original = chain.request();
             Request request = original.newBuilder()
-                    .header("Authorization", ApiStatic.USER_TOKEN)
+                    .header("Authorization", G.getApiToken())
                     .header("Content-Type", "application/json")
                     .method(original.method(), original.body())
                     .build();
