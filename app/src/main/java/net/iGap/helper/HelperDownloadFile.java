@@ -524,15 +524,18 @@ public class HelperDownloadFile {
                 } catch (IOException e) {
                 }
             }
-            switch (item.selector) {
-                case FILE:
-                    RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
-                    break;
-                case SMALL_THUMBNAIL:
-                case LARGE_THUMBNAIL:
-                    RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
-                    break;
-            }
+            new Thread(() -> {
+                switch (item.selector) {
+                    case FILE:
+                        RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
+                        break;
+                    case SMALL_THUMBNAIL:
+                    case LARGE_THUMBNAIL:
+                        RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
+                        break;
+                }
+            }).start();
+
         }
     }
 

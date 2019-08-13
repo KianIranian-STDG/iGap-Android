@@ -126,7 +126,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
     SpannableString myText;
-    private RealmAttachment realmAttachment;
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
@@ -244,11 +243,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (realmRoom22 != null && realmRoom22.isValid())
             this.realmRoom = getRealmChat().copyFromRealm(realmRoom22);
 
-        RealmRoomMessage f = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
-                equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
-        if (f != null) {
-            realmAttachment = f.getAttachment();
-        }
         if (mMessage.getForwardMessage() != null) {
             myText = new SpannableString(mMessage.getForwardMessage().getMessage());
         } else if (mMessage.getMessage() != null) {
@@ -373,6 +367,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
+        structMessage.addAttachmentChangeListener(getRealmChat(), mAdapter, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
         mHolder.getItemContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -599,7 +594,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getMessageTimeTv().setText(time);
         }
 
-        prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
+        prepareAttachmentIfNeeded(holder, structMessage.getAttachment(), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
 
         /**
          * show vote layout for channel otherwise hide layout also get message state for channel
@@ -1450,18 +1445,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             return;
                         }
                         _Progress.setVisibility(View.GONE);
-                        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
-                        thumbnailView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (FragmentChat.isInSelectionMode) {
-                                    holder.itemView.performLongClick();
-                                }
-                            }
-                        });
-
-                        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
-
+//                        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
+//                        thumbnailView.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                if (FragmentChat.isInSelectionMode) {
+//                                    holder.itemView.performLongClick();
+//                                }
+//                            }
+//                        });
+//
+//                        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
+//
                         _Progress.withDrawable(null, true);
 
                         switch (messageType) {
@@ -1477,23 +1472,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             case FILE_TEXT:
                             case IMAGE:
                             case IMAGE_TEXT:
-                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        forOnCLick(holder, attachment);
-                                    }
-                                });
+//                                thumbnailView.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        forOnCLick(holder, attachment);
+//                                    }
+//                                });
                                 break;
                             case VOICE:
                                 break;
                             case GIF:
                             case GIF_TEXT:
-                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        forOnCLick(holder, attachment);
-                                    }
-                                });
+//                                thumbnailView.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        forOnCLick(holder, attachment);
+//                                    }
+//                                });
 
                                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 0) {
@@ -1635,9 +1630,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     } else {
                                         type = mMessage.getMessageType().toString().toLowerCase();
                                     }
-                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.THUMBNAIL);
-                                    }
+//                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
+//                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.THUMBNAIL);
+//                                    }
                                 }
                             });
                         }
@@ -1697,7 +1692,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                                 MusicPlayer.downloadNewItem = true;
                                             }
                                         }
-                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
+//                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
                                     }
                                 }
                             }

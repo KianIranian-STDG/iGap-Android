@@ -12,10 +12,18 @@ package net.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import net.iGap.adapter.MessagesAdapter;
+import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.module.MyType;
+import net.iGap.module.enums.LocalFileType;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -25,8 +33,8 @@ import net.iGap.realm.RealmRoomMessageFields;
 import org.parceler.Parcels;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
-import static net.iGap.G.themeColor;
 import static net.iGap.G.userId;
 
 /**
@@ -43,6 +51,9 @@ public class StructMessageInfo implements Parcelable {
     public String initials;
 
     public RealmRoomMessage realmRoomMessage;
+
+    private RealmAttachment liverRealmAttachment;
+    private RealmChangeListener<RealmAttachment> realmAttachmentRealmChangeListener;
 
     public String songArtist;
     public long songLength;
@@ -130,6 +141,42 @@ public class StructMessageInfo implements Parcelable {
             }
         }
         return 0;
+    }
+
+    public  <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(Realm realm, MessagesAdapter<AbstractMessage> mAdapter, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
+        removeAttachmentChangeListener();
+
+        if (getAttachment() == null) {
+            return;
+        }
+
+        liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirst();
+        if (liverRealmAttachment != null) {
+            realmAttachmentRealmChangeListener = realmAttachment -> {
+                realmRoomMessage.setAttachment(realm.copyFromRealm(realmAttachment));
+
+                if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
+                    itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
+                } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
+                    itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
+                } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
+                    if (realmAttachment.isThumbnailExistsOnLocal()) {
+                        itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    }
+                }
+
+                //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
+            };
+            liverRealmAttachment.addChangeListener(realmAttachmentRealmChangeListener);
+        }
+    }
+
+    private void removeAttachmentChangeListener() {
+        if (liverRealmAttachment != null && realmAttachmentRealmChangeListener!= null) {
+            liverRealmAttachment.removeChangeListener(realmAttachmentRealmChangeListener);
+            liverRealmAttachment = null;
+            realmAttachmentRealmChangeListener = null;
+        }
     }
 
     public RealmChannelExtra getChannelExtra() {
