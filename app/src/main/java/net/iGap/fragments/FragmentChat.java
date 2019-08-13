@@ -4186,17 +4186,19 @@ public class FragmentChat extends BaseFragment
     }
 
     private void playReceiveSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        if (roomId == this.mRoomId && sendMessageSound != 0 && !isPaused) {
-            try {
-                soundPool.play(sendMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
-            } catch (Exception e) {
-                Log.i(TAG, "playReceiveSound: " + e.getMessage());
+        if (roomType == CHAT)
+            if (roomId == this.mRoomId && sendMessageSound != 0 && !isPaused) {
+                try {
+                    soundPool.play(sendMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
+                } catch (Exception e) {
+                    Log.i(TAG, "playReceiveSound: " + e.getMessage());
+                }
             }
-        }
     }
 
     private void playSendSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        if (roomId == this.mRoomId && receiveMessageSound != 0 && !isPaused) {
+        if (roomType == CHAT)
+            if (roomId == this.mRoomId && receiveMessageSound != 0 && !isPaused) {
             try {
                 soundPool.play(receiveMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
             } catch (Exception e) {
