@@ -60,6 +60,7 @@ import io.realm.net_iGap_realm_RealmRoomMessageRealmProxy;
 
 import static net.iGap.fragments.FragmentChat.compressingFiles;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
+import static net.iGap.fragments.FragmentChat.realmChat;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -1050,14 +1051,14 @@ public class RealmRoomMessage extends RealmObject {
         if (replyMessageId > 0) {
             RealmRoomMessage messageToReplay = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
             if (messageToReplay != null) {
-                roomMessage.setReplyTo(messageToReplay);
+                roomMessage.setReplyTo(realmChat.copyFromRealm(messageToReplay));
             }
         }
 
         new Thread(() -> {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(realm1 -> {
-                    RealmRoomMessage managedRoomMessage = realm1.copyToRealm(roomMessage);
+                    RealmRoomMessage managedRoomMessage = realm1.copyToRealmOrUpdate(roomMessage);
                     RealmRoom.setLastMessageWithRoomMessage(realm, roomId, managedRoomMessage);
                     if (RealmRoom.detectType(roomId) == CHANNEL) {
                         RealmChannelExtra.putDefault(realm, roomId, messageId);
