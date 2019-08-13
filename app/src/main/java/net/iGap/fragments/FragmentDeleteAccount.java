@@ -148,6 +148,7 @@ public class FragmentDeleteAccount extends BaseFragment implements ToolbarListen
 
         TextView txtPhoneNumber = (TextView) view.findViewById(R.id.stda_txt_phoneNumber);
         if (phone != null) txtPhoneNumber.setText("" + phone);
+        else txtPhoneNumber.setText(getString(R.string.unknown));
 
         edtDeleteAccount = (EditTextAdjustPan) view.findViewById(R.id.stda_edt_dleteAccount);
 
