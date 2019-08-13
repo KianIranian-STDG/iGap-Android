@@ -1950,6 +1950,6 @@
     <string name="beeptunes_purchase_song">آهنگ های خریداری شده</string>
     <string name="beeptunes_sync_song">آهنگ های بارگیری شده</string>
     <string name="beeptunesـfavorite_song">آهنگ های مورد علاقه</string>
-    <string name="play_sound_in_chat">پخش صدای ارسال پیام در چت</string>
+    <string name="play_sound_in_chat">پخش صدای ارسال پیام در گفتگو</string>
 
 </resources>
