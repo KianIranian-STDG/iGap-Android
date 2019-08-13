@@ -683,7 +683,15 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    RealmRoom.putOrUpdate(room);
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
+                            room2.setDeleted(true);
+                        }
+                    });
+                    realm.close();
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
