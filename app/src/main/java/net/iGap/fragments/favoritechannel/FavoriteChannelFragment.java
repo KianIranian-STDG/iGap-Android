@@ -89,8 +89,9 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
         toolbar.addView(helperToolbar.getView());
         swipeRefresh.setRefreshing(true);
         swipeRefresh.setOnRefreshListener(() -> {
-            itemContainer.removeAllViews();
-            sendChannelRequest();
+//            itemContainer.removeAllViews();
+//            sendChannelRequest();
+            swipeRefresh.setRefreshing(false);
         });
 
         emptyRefresh.setOnClickListener(v -> {

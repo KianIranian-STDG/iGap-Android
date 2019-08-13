@@ -75,10 +75,10 @@ public class FavoriteChannelInfoFragment extends BaseFragment {
         });
         swipeRefresh.setRefreshing(true);
         swipeRefresh.setOnRefreshListener(() -> {
-            itemContainer.removeAllViews();
-            page = 1;
-            sendChannelRequest();
-
+//            itemContainer.removeAllViews();
+//            page = 1;
+//            sendChannelRequest();
+            swipeRefresh.setRefreshing(false);
         });
 
     }
