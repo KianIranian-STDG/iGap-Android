@@ -9,7 +9,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
@@ -101,7 +99,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
     }
 
     public void sendChannelRequest() {
-        api.getParentChannel().enqueue(new Callback<ParentChannel>() {
+        api.getFirstPage().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
                 emptyRefresh.setVisibility(View.INVISIBLE);
@@ -154,7 +152,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                 }
                                 break;
 
-                            case ParentChannel.TYPE_CHANNEL:
+                            case ParentChannel.CHANNEL_FEATURED_CATEGORY:
                                 /**response for channel**/
                                 if (response.body().getData().get(i).getChannels() != null) {
                                     View channelView = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_channelcountainer, null);
@@ -198,7 +196,7 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
                                 }
                                 break;
 
-                            case ParentChannel.TYPE_CATEGORY:
+                            case ParentChannel.CHANNEL_NORMAL_CATEGORY:
                                 /**response for category**/
                                 if (response.body().getData().get(i).getCategories() != null) {
                                     RecyclerView categoryRecyclerView = new RecyclerView(G.fragmentActivity);

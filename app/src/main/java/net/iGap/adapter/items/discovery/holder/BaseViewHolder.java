@@ -35,14 +35,13 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
-import net.iGap.fragments.favoritechannel.FavoriteChannelFragment;
+import net.iGap.fragments.favoritechannel.PopularChannelFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
-import net.iGap.igasht.provinceselect.IGashtProvinceFragment;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
@@ -72,32 +71,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     BaseViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView);
         this.activity = activity;
-    }
-
-    public abstract void bindView(DiscoveryItem item);
-
-    void loadImage(ImageView imageView, String url) {
-        if (url.endsWith(".gif")) {
-            Glide.with(imageView.getContext())
-                    .asGif()
-                    .load(url)
-                    .apply(new RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(Target.SIZE_ORIGINAL))
-                    .into(imageView);
-        } else {
-            Glide.with(imageView.getContext()).load(url)
-                    .apply(new RequestOptions()
-                            .fitCenter()
-                            .format(DecodeFormat.PREFER_ARGB_8888)
-                            .override(Target.SIZE_ORIGINAL)).into(imageView);
-        }
-    }
-
-    void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return;
-        }
-        mLastClickTime = SystemClock.elapsedRealtime();
-        handleDiscoveryFieldsClickStatic(discoveryField, activity);
     }
 
     public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity) {
@@ -333,7 +306,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case UNRECOGNIZED:
                 break;
             case FAVORITE_CHANNEL:
-                new HelperFragment(activity.getSupportFragmentManager(), new FavoriteChannelFragment()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelFragment()).setReplace(false).load();
                 break;
         }
     }
@@ -348,6 +321,32 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
+    }
+
+    public abstract void bindView(DiscoveryItem item);
+
+    void loadImage(ImageView imageView, String url) {
+        if (url.endsWith(".gif")) {
+            Glide.with(imageView.getContext())
+                    .asGif()
+                    .load(url)
+                    .apply(new RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(Target.SIZE_ORIGINAL))
+                    .into(imageView);
+        } else {
+            Glide.with(imageView.getContext()).load(url)
+                    .apply(new RequestOptions()
+                            .fitCenter()
+                            .format(DecodeFormat.PREFER_ARGB_8888)
+                            .override(Target.SIZE_ORIGINAL)).into(imageView);
+        }
+    }
+
+    void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        handleDiscoveryFieldsClickStatic(discoveryField, activity);
     }
 
 }

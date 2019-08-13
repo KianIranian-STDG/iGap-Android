@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ParentChannel {
     public static final String TYPE_SLIDE = "advertisement";
-    public static final String TYPE_CHANNEL = "channelFeaturedCategory";
-    public static final String TYPE_CATEGORY = "channelNormalCategory";
+    public static final String CHANNEL_FEATURED_CATEGORY = "channelFeaturedCategory";
+    public static final String CHANNEL_NORMAL_CATEGORY = "channelNormalCategory";
 
 
     @SerializedName("data")

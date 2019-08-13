@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 public interface FavoriteChannelApi {
 
     @GET(" ")
-    Call<ParentChannel> getParentChannel();
+    Call<ParentChannel> getFirstPage();
 
     @GET("category/{categoryId}")
     Call<ChildChannel> getChildChannel(
