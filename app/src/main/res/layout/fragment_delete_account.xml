@@ -42,6 +42,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="?hintColorSettingTheme"
         android:layout_margin="@dimen/dp20">
 
         <net.iGap.module.EditTextAdjustPan

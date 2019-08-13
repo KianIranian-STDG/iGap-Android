@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.databinding.FragmentSettingBinding;
@@ -233,7 +234,7 @@ public class FragmentSetting extends BaseFragment {
                 if (getActivity() != null) {
                     FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
                     Bundle bundle = new Bundle();
-                    bundle.putString("PHONE", viewModel.phoneNumber);
+                    bundle.putString("PHONE", ActivityMain.userPhoneNumber);
                     fragmentDeleteAccount.setArguments(bundle);
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragmentDeleteAccount).setReplace(false).load();
                 }
