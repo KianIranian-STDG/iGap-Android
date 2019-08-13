@@ -93,6 +93,15 @@ android {
             buildConfigField "String", "Token", "\"fd0txl\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        release_Char {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Token", "\"u2cuct\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 
     lintOptions {
@@ -209,6 +218,7 @@ dependencies {
     release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
+    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta8'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
