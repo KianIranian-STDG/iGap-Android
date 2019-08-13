@@ -571,7 +571,7 @@ public class EditChannelFragment extends BaseFragment {
                 new RequestChannelLeft().channelLeft(viewModel.roomId);
             }
             binding.loading.setVisibility(View.VISIBLE);
-            G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            /*G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);*/
         }).negativeText(R.string.no).show();
     }
 
