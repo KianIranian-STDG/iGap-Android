@@ -134,7 +134,7 @@ public class Theme {
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
-        if (G.themeColor != DEFAULT && !G.isDarkTheme) {
+        if (G.themeColor != DEFAULT && G.themeColor != DARK) {
             G.themeColor = DEFAULT;
             SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
