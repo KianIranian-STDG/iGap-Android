@@ -687,6 +687,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            G.refreshRealmUi();
                             if (G.fragmentActivity != null) {
                                 removeFromBaseFragment(SearchFragment.this);
                             }
