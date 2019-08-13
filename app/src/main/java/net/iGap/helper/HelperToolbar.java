@@ -858,7 +858,7 @@ public class HelperToolbar {
 
             mTxtLogo.setTypeface(tfFontIcon);
             mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آي كب")) {
+        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آیکب")) {
 
             Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
 

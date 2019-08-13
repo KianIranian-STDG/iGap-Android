@@ -18,7 +18,7 @@
     <!-- Page 4 introduce app -->
     <!--TODO:// complete-->
     <string name="text_line_1_introduce_page4">iLand</string>
-    <string name="text_line_2_introduce_page4">iGap\'s Smart World</string>
+    <string name="text_line_2_introduce_page4">iLand! without limitation\nwith wonderful events as taking a taxi, pay bills and booking hotels and flights . Oh Also you can play games, watch films and listen to music</string>
 
     <!-- Page 5 introduce app -->
     <string name="text_line_1_introduce_page5">Voice and video Call</string>
