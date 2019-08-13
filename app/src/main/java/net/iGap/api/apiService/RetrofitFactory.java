@@ -1,7 +1,5 @@
 package net.iGap.api.apiService;
 
-import org.stellar.sdk.responses.GsonSingleton;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -59,11 +57,13 @@ public class RetrofitFactory {
         return retrofit;
     }
 
+
+    // TODO clean this comment
+/*
     Retrofit getKuknosHorizanRetrofit() {
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        // TODO for API Logging - clear ir
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addInterceptor(interceptor);
@@ -80,9 +80,9 @@ public class RetrofitFactory {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiStatic.KUKNOS_Horizan_Server)
-                .addConverterFactory(GsonConverterFactory.create(GsonSingleton.getInstance()))
+                .addConverterFactory(GsonConverterFactory.create(*//*GsonSingleton.getInstance()*//*))
                 .client(httpClient)
                 .build();
         return retrofit;
-    }
+    }*/
 }

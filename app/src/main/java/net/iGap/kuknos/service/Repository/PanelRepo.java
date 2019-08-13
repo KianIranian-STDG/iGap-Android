@@ -27,6 +27,6 @@ public class PanelRepo {
     }
 
     public void getAccountInfo(ApiResponse<AccountResponse> apiResponse){
-        kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), apiResponse);
+        kuknosAPIRepository.getUserAccount2(userRepo.getAccountID(), apiResponse);
     }
 }

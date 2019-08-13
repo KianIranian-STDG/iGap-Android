@@ -34,11 +34,13 @@ public class ApiServiceProvider {
         return kuknosApi;
     }
 
-    public static KuknosHorizenApi getKuknosHorizonClient() {
+    //todo clean this comment
+
+    /*public static KuknosHorizenApi getKuknosHorizonClient() {
         if (kuknosHorizenApi == null) {
             kuknosHorizenApi = factory.getKuknosHorizanRetrofit().create(KuknosHorizenApi.class);
         }
         return kuknosHorizenApi;
-    }
+    }*/
 
 }

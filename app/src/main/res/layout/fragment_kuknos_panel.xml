@@ -134,6 +134,23 @@
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintTop_toBottomOf="@id/fragKuknosPCredit" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosPError"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/kuknos_panelStr_firstUser"
+                    android:gravity="center"
+                    android:textSize="@dimen/dp16"
+                    android:textStyle="bold"
+                    android:textColor="@color/red"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPBalanceCircle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintWidth_percent="0.9"/>
+
                 <android.support.constraint.Group
                     android:id="@+id/fragKuknosPBalanceHolder"
                     android:layout_width="wrap_content"
@@ -157,7 +174,7 @@
                     android:onClick="@{()->viewmodel.receiveW()}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPSend"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPBalanceCircle"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPError"
                     app:layout_constraintWidth_percent="0.3"
                     app:layout_constraintHorizontal_chainStyle="packed"/>
 

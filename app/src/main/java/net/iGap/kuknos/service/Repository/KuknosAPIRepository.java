@@ -25,7 +25,7 @@ import retrofit2.Response;
 
 public class KuknosAPIRepository {
     private KuknosApi apiService = ApiServiceProvider.getKuknosClient();
-    private KuknosHorizenApi apiHorizenService = ApiServiceProvider.getKuknosHorizonClient();
+    //private KuknosHorizenApi apiHorizenService = ApiServiceProvider.getKuknosHorizonClient();
 
     public void getUserAuthentication(String phoneNum, String nID, ApiResponse<KuknosLoginM> apiResponse) {
         apiResponse.setProgressIndicator(true);
@@ -65,7 +65,14 @@ public class KuknosAPIRepository {
         });
     }
 
-    public void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
+    public void getUserAccount2(String userID, ApiResponse<AccountResponse> apiResponse) {
+        KuknosAPIAsync<AccountResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.USER_ACCOUNT);
+        temp.execute(userID);
+    }
+
+    // todo clean this comment - old mudule
+
+    /*public void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
         apiResponse.setProgressIndicator(true);
         apiHorizenService.getUserAccount(userID).enqueue(new Callback<AccountResponse>() {
             @Override
@@ -80,6 +87,6 @@ public class KuknosAPIRepository {
                 apiResponse.setProgressIndicator(false);
             }
         });
-    }
+    }*/
 
 }

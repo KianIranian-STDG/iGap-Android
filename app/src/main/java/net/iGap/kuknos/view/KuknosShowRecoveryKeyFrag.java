@@ -112,9 +112,9 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                 if (nextPage == true) {
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
                     if (fragment == null) {
-                        fragment = KuknosPanelFrag.newInstance();
+                        fragment = KuknosSetPassFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

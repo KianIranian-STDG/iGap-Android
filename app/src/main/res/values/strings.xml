@@ -1963,7 +1963,7 @@
     <string name="kuknos_panelStr_setting">Setting</string>
     <string name="kuknos_develop">developing</string>
     <string name="kuknos_recieve_title">For receiving credit from others, you must send your wallet ID to others.</string>
-    <string name="kuknos_recieve_walletID">Your wallet Address is:\n DERFDSJKLI...</string>
+    <string name="kuknos_recieve_walletID">Your wallet Address is:</string>
     <string name="kuknos_recieve_copyBtn">Copy Wallet Address</string>
     <string name="kuknos_recieve_copyToast">Wallet Address copied in clipboard.</string>
     <string name="kuknos_send_title">Send Token</string>
@@ -2085,4 +2085,7 @@
     <string name="kuknos_login_error_server_ErrorStr">Server Error: No response. please try again later.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateMn">Can NOT generate recovery key. make contact with support.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateKey">Can NOT generate seed key. make contact with support.</string>
+    <string name="kuknos_recieve_walletCopy">My Kuknos wallet address is: \n</string>
+    <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
+    <string name="kuknos_panelStr_firstUser">Account was not found or it has no credits. Use Receive menu to get credits.</string>
 </resources>

@@ -184,6 +184,7 @@ public class KuknosPanelFrag extends BaseFragment {
                     WalletSpinnerAdapter adapter = new WalletSpinnerAdapter(getContext(),
                             Arrays.asList(accountResponse.getBalances()));
                     walletSpinner.setAdapter(adapter);
+                    binding.fragKuknosPError.setVisibility(View.GONE);
                 }
             }
         });
@@ -195,6 +196,9 @@ public class KuknosPanelFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
+                    if (errorM.getMessage().equals("0")){
+                        binding.fragKuknosPError.setVisibility(View.VISIBLE);
+                    }
                     if (errorM.getMessage().equals("1")){
                         Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                         snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {

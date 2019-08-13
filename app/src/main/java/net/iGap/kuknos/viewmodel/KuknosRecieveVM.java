@@ -2,40 +2,36 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
+import net.iGap.kuknos.service.Repository.UserRepo;
 
 public class KuknosRecieveVM extends ViewModel {
 
-    MutableLiveData<String> clientKey;
-    MutableLiveData<String> qrCodeURl;
-    // TODO get data
-    // we will get byte array and we should save it and then use it -> refer to register fragment
+    private ObservableField<String> clientKey = new ObservableField<>();
+    private UserRepo userRepo = new UserRepo();
 
     public KuknosRecieveVM() {
-        if (clientKey == null) {
-            clientKey = new MutableLiveData<>();
-            //TODO hard code here
-            clientKey.setValue("amini");
-        }
-        if (qrCodeURl == null) {
-            qrCodeURl = new MutableLiveData<>();
-        }
+        initData();
+    }
+
+    public void initData() {
+        clientKey.set(userRepo.getAccountID());
     }
 
     // Setter and Getter
 
-    public MutableLiveData<String> getClientKey() {
+    public ObservableField<String> getClientKey() {
         return clientKey;
     }
 
-    public void setClientKey(MutableLiveData<String> clientKey) {
+    public void setClientKey(ObservableField<String> clientKey) {
         this.clientKey = clientKey;
-    }
-
-    public MutableLiveData<String> getQrCodeURl() {
-        return qrCodeURl;
-    }
-
-    public void setQrCodeURl(MutableLiveData<String> qrCodeURl) {
-        this.qrCodeURl = qrCodeURl;
     }
 }

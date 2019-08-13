@@ -69,9 +69,22 @@
                     app:layout_constraintWidth_percent="0.4"
                     app:layout_constraintDimensionRatio="1:1"/>
 
+                <ProgressBar
+                    android:id="@+id/fragKuknosPProgressV"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="gone"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintWidth_percent="0.2"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosRcQrCode"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosRcQrCode"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosRcQrCode"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosRcQrCode"/>
+
                 <android.support.v7.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
-                    android:id="@+id/fragKuknosRcWalletID"
+                    android:id="@+id/fragKuknosRcWalletIDT"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -82,6 +95,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosRcQrCode"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosRcWalletID"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@={viewmodel.clientKey}"
+                    android:textSize="@dimen/dp18"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosRcWalletIDT"
                     app:layout_constraintWidth_percent="0.7" />
 
                 <android.support.design.button.MaterialButton

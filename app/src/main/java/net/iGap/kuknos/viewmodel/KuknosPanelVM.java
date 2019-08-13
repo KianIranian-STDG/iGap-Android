@@ -57,42 +57,6 @@ public class KuknosPanelVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        /*progressState.setValue(true);
-        // TODO Hard code in here baby
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // hard code
-                KuknosWalletBalanceInfoM temp = new KuknosWalletBalanceInfoM("200.00",
-                        "curr1", "PMN",
-                        "www.google.com");
-                KuknosWalletBalanceInfoM temp2 = new KuknosWalletBalanceInfoM("300.00",
-                        "curr1", "Doller",
-                        "https://cdn1.vectorstock.com/i/1000x1000/45/45/dollar-sign-icon-usd-currency-symbol-vector-2874545.jpg");
-                KuknosWalletBalanceInfoM temp3 = new KuknosWalletBalanceInfoM("220.00",
-                        "curr1", "Euro",
-                        "www.google.com");
-                KuknosWalletBalanceInfoM temp4 = new KuknosWalletBalanceInfoM("110.00",
-                        "curr1", "SHHL",
-                        "https://png.pngtree.com/element_our/20190528/ourlarge/pngtree-url-small-icon-opened-in-the-browser-image_1132270.jpg");
-                KuknosWalletBalanceInfoM temp5 = new KuknosWalletBalanceInfoM("",
-                        "", "Add Asset",
-                        "www.google.com");
-
-                ArrayList<KuknosWalletBalanceInfoM> Ttemp = new ArrayList<>();
-                Ttemp.add(temp);
-                Ttemp.add(temp2);
-                Ttemp.add(temp3);
-                Ttemp.add(temp4);
-                Ttemp.add(temp5);
-                KuknosWalletsAccountM Atemp = new KuknosWalletsAccountM("", "", Ttemp);
-                kuknosWalletsM.setValue(Atemp);
-                spinnerSelect(0);
-
-                progressState.setValue(false);
-            }
-        }, 1000);*/
         panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
             @Override
             public void onResponse(AccountResponse accountResponse) {
@@ -101,8 +65,10 @@ public class KuknosPanelVM extends ViewModel {
             }
 
             @Override
-            public void onFailed(String error) {
-
+            public void onFailed(String errorM) {
+                balance.set("0.0");
+                currency.set("currency");
+                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
             }
 
             @Override
