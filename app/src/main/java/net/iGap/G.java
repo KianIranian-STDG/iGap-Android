@@ -425,11 +425,11 @@ public class G extends Application {
 
     public static String getApiToken() {
         Realm realm = Realm.getDefaultInstance();
-        String result = "";
+        String result = "Bearer ";
 
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
-            result = realmUserInfo.getAccessToken();
+            result += realmUserInfo.getAccessToken();
         }
         realm.close();
         return result;
