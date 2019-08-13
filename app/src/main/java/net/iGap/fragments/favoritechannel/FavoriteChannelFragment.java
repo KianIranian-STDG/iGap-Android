@@ -22,12 +22,14 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.favoritechannel.CategoryAdapter;
 import net.iGap.adapter.items.favoritechannel.ChannelAdapter;
 import net.iGap.adapter.items.favoritechannel.ImageLoadingService;
 import net.iGap.adapter.items.favoritechannel.SliderAdapter;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.helper.HelperError;
@@ -226,6 +228,11 @@ public class FavoriteChannelFragment extends BaseFragment implements ToolbarList
             public void onFailure(Call<ParentChannel> call, Throwable t) {
                 swipeRefresh.setRefreshing(false);
                 emptyRefresh.setVisibility(View.VISIBLE);
+                if (new ErrorHandler().checkHandShakeFailure(t)){
+                    if (getActivity() instanceof ActivityMain){
+                        ((ActivityMain) getActivity()).checkGoogleUpdate();
+                    }
+                }
                 HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
