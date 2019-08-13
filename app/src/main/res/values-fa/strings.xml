@@ -101,7 +101,7 @@
     <string name="contact_message">پیام مخاطب</string>
     <string name="gif_message">پیام متحرک</string>
     <string name="voice_message">پیغام صوتی</string>
-    <string name="typing">درحال تایپ…</string>
+    <string name="typing">درحال نوشتن…</string>
     <string name="sending_image">درحال ارسال تصویر…</string>
     <string name="capturing_image">درحال گرفتن تصویر…</string>
     <string name="sending_video">درحال ارسال ویدئو…</string>
@@ -630,7 +630,7 @@
     <string name="times">زمان‌ها</string>
     <string name="info">اطلاعات</string>
     <string name="description">توضیحات</string>
-    <string name="type_message">تایپ کردن پیام</string>
+    <string name="type_message">نوشتن پیام</string>
     <string name="place">مکان</string>
     <string name="minutes">دقیقه‌ها</string>
     <string name="channel_link">پیوند کانال</string>
