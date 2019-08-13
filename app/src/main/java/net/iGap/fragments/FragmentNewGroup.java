@@ -780,6 +780,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 txtPhone.setVisibility(View.INVISIBLE);
                 chSelected.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.VISIBLE);
+                btnRemove.setTypeface(G.typeface_IRANSansMobile);
                 txtName.setText(data.displayName);
                 avatarHandler.getAvatar(new ParamWithAvatarType(imgAvatar, data.peerId).avatarType(AvatarHandler.AvatarType.USER));
 

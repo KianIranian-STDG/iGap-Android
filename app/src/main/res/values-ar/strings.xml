@@ -11,46 +11,47 @@
 
     <string name="text_line_2_introduce_page1">"علاقات دون حدود"</string>
 
-    <string name="text_line_3_introduce_page1">"إصنع عالمك بواسطة آي كب ."</string>
+    <string name="text_line_3_introduce_page1">"إصنع عالمك بواسطة آیکب ."</string>
 
-    <string name="text_line_4_introduce_page1">" إنضمامك إلى مجموعة مستخدمي "آي كب" لايستغرق إلّا بضع دقائق ."</string>
+    <string name="text_line_4_introduce_page1">" إنضمامك إلى مجموعة مستخدمي "آیکب" لايستغرق إلّا بضع دقائق ."</string>
 
     <!-- Page 2 introduce app -->
 
 
-    <string name="text_line_1_introduce_page2">"الأمان في آي كب"</string>
+    <string name="text_line_1_introduce_page2">"الأمان في آیکب"</string>
 
-    <string name="text_line_2_introduce_page2">"تطبيق آي كب يوفّر لك اتصالا آمناً و موثوقاً به بينك و بين أصدقائك و أسرتك. و كذلك يوفّر تطبيق آي كب الحدّ الأقصى للأمان في الحفاظ على خصوصيتك بواسطة استخدام خوارزمية تشفير متميزة في نقل البيانات."</string>
+    <string name="text_line_2_introduce_page2">"تطبيق آیکب يوفّر لك اتصالا آمناً و موثوقاً به بينك و بين أصدقائك و أسرتك. و كذلك يوفّر تطبيق آیکب الحدّ الأقصى للأمان في الحفاظ على خصوصيتك بواسطة استخدام خوارزمية تشفير متميزة في نقل البيانات."</string>
 
     <!-- Page 3 introduce app -->
 
 
-    <string name="text_line_1_introduce_page3">"المحادثة في آي كب"</string>
+    <string name="text_line_1_introduce_page3">"المحادثة في آیکب"</string>
 
-    <string name="text_line_2_introduce_page3">"يمكنك المحادثة في آي كب بين شخصين أو بين مجموعة من الأشخاص و كُن مرتاح البال أنّ محادثاتك متوفّرة لديك دائماً، إضافة إلى ذلك يمكنك انشاء القنوات و الانضمام إليها و اشتراك معلوماتك مع ملايين الأشخاص من المستخدمين الآخرين.."</string>
+    <string name="text_line_2_introduce_page3">"يمكنك المحادثة في آیکب بين شخصين أو بين مجموعة من الأشخاص و كُن مرتاح البال أنّ محادثاتك متوفّرة لديك دائماً، إضافة إلى ذلك يمكنك انشاء القنوات و الانضمام إليها و اشتراك معلوماتك مع ملايين الأشخاص من المستخدمين الآخرين.."</string>
 
     <!-- Page 4 introduce app -->
 
     <!--TODO:// translate-->
-    <string name="text_line_1_introduce_page4">"iLand"</string>
+    <string name="text_line_1_introduce_page4">"آیلند"</string>
 
-    <string name="text_line_2_introduce_page4">"test"</string>
+    <string name="text_line_2_introduce_page4">آیلند! على سبيل المثال لا الحصر\n
+مع الأحداث الكبرى مثل أخذ سيارة أجرة ، ودفع الفواتير وحجز الفنادق والرحلات الجوية يمكنك أيضًا ممارسة الألعاب ومشاهدة الأفلام والاستماع إلى الموسيقى</string>
 
     <!-- Page 5 introduce app -->
 
 
-    <string name="text_line_1_introduce_page5">"الصوت والفيديو مكالمة في آي كب"</string>
+    <string name="text_line_1_introduce_page5">"الصوت والفيديو مكالمة في آیکب"</string>
 
-    <string name="text_line_2_introduce_page5">"يمكنك الصوت والفيديو مكالمة بشكل مجان و آمن تماماً بواسطة استخدام تطبيق آي كب و بالتالي التوفير في تكاليفك. إضافة إلى ذلك إنّ الصوت والفيديو مكالمة لطبيق آي كب هو من نوع p2p و لاتتدخّل حتى مزود خدمة الانترنت في هذه الاتصال"</string>
+    <string name="text_line_2_introduce_page5">"يمكنك الصوت والفيديو مكالمة بشكل مجان و آمن تماماً بواسطة استخدام تطبيق آیکب و بالتالي التوفير في تكاليفك. إضافة إلى ذلك إنّ الصوت والفيديو مكالمة لطبيق آیکب هو من نوع p2p و لاتتدخّل حتى مزود خدمة الانترنت في هذه الاتصال"</string>
 
     <!-- Page 6 introduce app -->
 
 
     <string name="btn_start_page6">"إبدأ الآن "</string>
 
-    <string name="text_line_1_introduce_page6">"كلّ شيء مجان في آي كب!"</string>
+    <string name="text_line_1_introduce_page6">"كلّ شيء مجان في آیکب!"</string>
 
-    <string name="text_line_2_introduce_page6">"آي كب كان ولايزال مجانا. فتعالوا لانتمهّل أكثر من هذا. فاصنع عالمك بواسطة آي كب الآن."</string>
+    <string name="text_line_2_introduce_page6">"آیکب كان ولايزال مجانا. فتعالوا لانتمهّل أكثر من هذا. فاصنع عالمك بواسطة آیکب الآن."</string>
 
 
     <string name="text_line_1_introduce_page7">ميزة قريبة</string>
@@ -100,9 +101,9 @@
 
     <string name="Re_Enter_Verify_Code_Please">"من فضلك أدخل رمز التأكيد يدوياً"</string>
 
-    <string name="verify_socket_message">‫قد  دخلت حسابك بواسطة جهاز آخر، قد أرسل آي كب رمز التفعيل بواسطة نظام الاعلان إلى حسابك، من فضلك تحقّق في الجهاز الآخر و ادخل الرمز يدوياً..</string>
+    <string name="verify_socket_message">‫قد  دخلت حسابك بواسطة جهاز آخر، قد أرسل آیکب رمز التفعيل بواسطة نظام الاعلان إلى حسابك، من فضلك تحقّق في الجهاز الآخر و ادخل الرمز يدوياً..</string>
     ‬‬‬‬‬‬
-    <string name="verify_time_out_message">"تطبيق آي كب يعرف رسالة التأكيد و يقوم بادخالها تلقائياَ و إلّا يتمّ استلامه بواسطتكم و يمكنكم ادخاله يدوياً. في حال عدم استلام رمز التأكيد قم باختيار اعادة الارسال. ."</string>
+    <string name="verify_time_out_message">"تطبيق آیکب يعرف رسالة التأكيد و يقوم بادخالها تلقائياَ و إلّا يتمّ استلامه بواسطتكم و يمكنكم ادخاله يدوياً. في حال عدم استلام رمز التأكيد قم باختيار اعادة الارسال. ."</string>
 
     <string name="verify_invalid_code_message">مع الأسف إنّ رمز التأكيد غير صالح، من فضلك أدخل رمز التأكيد الصالح .</string>
 
@@ -144,7 +145,7 @@
 
     <string name="Destruction_Des">أنت الآن في حال تدمير حسابك، رقم هاتفك هو  : </string>
 
-    <string name="iGap_autofill_Destruction_Code">آي كب يعرف الرمز بشكل آلي ويقوم بملء الفراغ، في حال عدم ملء الفراغ قُم بملئها يدوياً.</string>
+    <string name="iGap_autofill_Destruction_Code">آیکب يعرف الرمز بشكل آلي ويقوم بملء الفراغ، في حال عدم ملء الفراغ قُم بملئها يدوياً.</string>
 
     <!-- Message Type and Status -->
 
@@ -221,9 +222,9 @@
     <!-- Public String -->
 
 
-    <string name="app_name">"آي كب"</string>
+    <string name="app_name">آیکب</string>
 
-    <string name="call_name">الاتصال الصوتي لتطبيق آي كب</string>
+    <string name="call_name">الاتصال الصوتي لتطبيق آیکب</string>
 
     <string name="chat">"المحادثة "</string>
 
@@ -231,9 +232,9 @@
 
     <string name="channel">"القناة"</string>
 
-    <string name="igap">"آي كب"</string>
+    <string name="igap">آیکب</string>
 
-    <string name="igapChanel">"آي كب"</string>
+    <string name="igapChanel">آیکب</string>
 
     <string name="search">"البحث "</string>
 
@@ -366,7 +367,7 @@
 
     <string name="st_ask_question">"إسأل سؤالاً"</string>
 
-    <string name="st_About_iGap">"حول آي كب"</string>
+    <string name="st_About_iGap">"حول آیکب"</string>
 
     <string name="st_privacy_policy">"سياسات الخصوصية "</string>
 
@@ -404,7 +405,7 @@
 
     <string name="st_title_Events">"الأحداث"</string>
 
-    <string name="st_Contact_joined_igap">"قد انضمّت جهة اتصال إلى آي كب في الآونة الأخيرة"</string>
+    <string name="st_Contact_joined_igap">"قد انضمّت جهة اتصال إلى آیکب في الآونة الأخيرة"</string>
 
     <string name="st_pinned_message">"الرسائل الملصقة"</string>
 
@@ -504,7 +505,7 @@
 
     <string name="fac_Open_in_Chrome">"الفتح في متصفح كروم "</string>
 
-    <string name="fac_Powered_by_iGap">"المقوّى بواسطة تطبيق آي كب"</string>
+    <string name="fac_Powered_by_iGap">"المقوّى بواسطة تطبيق آیکب"</string>
 
     <string name="menu_add_contact">"إنشاء جهة الاتصال "</string>
 
@@ -987,7 +988,7 @@
 
     <string name="Invite_Friends">دعوة الأصدقاء</string>
 
-    <string name="iGap_FAQ">‫الأسئلة الشائعة لآي كب</string>
+    <string name="iGap_FAQ">‫الأسئلة الشائعة لآیکب</string>
     ‬‬‬‬‬‬
     <string name="Documents">الوثاشق</string>
 
@@ -1257,13 +1258,13 @@
 
     <string name="server_do_not_response">لم يتم استلام الرد من مزود خدمة الانترنت.</string>
 
-    <string name="share_image_from_igap">اشتراك الصورة من آي كب </string>
+    <string name="share_image_from_igap">اشتراك الصورة من آیکب </string>
 
-    <string name="share_video_from_igap">اشتراك الفيديو من آي كب </string>
+    <string name="share_video_from_igap">اشتراك الفيديو من آیکب </string>
 
     <string name="TERMINATE">الإلغاء </string>
 
-    <string name="iGap_version">إصدار أندرويد آي كب </string>
+    <string name="iGap_version">إصدار أندرويد آیکب </string>
 
     <string name="do_you_want_left_this">هل أنت واثق من مغادرة المكون المختار؟ </string>
 
@@ -1323,16 +1324,16 @@
 
     <string name="enter_the_code_here">أدخل الرمز هنا.</string>
 
-    <string name="transfer_to">انتقال به</string>
+    <string name="transfer_to">الانتقال إلى</string>
 
     <string name="transfer_to_wallet">نقل إلى المحفظة</string>
 
-    <string name="gift_message">اعتبار هدیه به مبلغ *.
-مایل به دریافت آن هستید؟</string>
+    <string name="gift_message">مبلغ رصيد الهدية *.
+تريد الحصول عليها؟</string>
 
-    <string name="toast_success_gift">برای اعمال اعتبار هدیه چند لحظه صبر کنید.</string>
+    <string name="toast_success_gift">انتظر لحظة حتى يتم التحقق من صحة الهدية.</string>
 
-    <string name="amount_to_pay_factor">مبلغ قابل پرداخت فاکتور (ریال) :</string>
+    <string name="amount_to_pay_factor">فاتورة مستحقة الدفع (ریال) :</string>
 
     <string name="price">السعر </string>
 
@@ -1456,9 +1457,9 @@
 
     <string name="prefix">"بواسطة"</string>
 
-    <string name="USER_JOINED">"إنضمّ إلى آي كب "</string>
+    <string name="USER_JOINED">"إنضمّ إلى آیکب "</string>
 
-    <string name="USER_DELETED">" غادر آي كب "</string>
+    <string name="USER_DELETED">" غادر آیکب "</string>
 
     <string name="ROOM_CREATED">"تم الإنشاء "</string>
 
@@ -1508,11 +1509,11 @@
 
     <string name="permission_sms">اذن الرسائل </string>
 
-    <string name="st_privacy_blog">المدونة الرسمية لآي كب </string>
+    <string name="st_privacy_blog">المدونة الرسمية لآیکب </string>
 
     <string name="st_privacy_create_ticket">طلب الدعم </string>
 
-    <string name="st_privacy_iGap_home">الصفحة الرسمية لآي كب </string>
+    <string name="st_privacy_iGap_home">الصفحة الرسمية لآیکب </string>
 
     <string name="channel_public_hint_revoke">الرابط العام للقناة </string>
 
@@ -1584,9 +1585,9 @@
 
     <string name="room_not_exist">لم يتمّ العثور على أية صفحة بهذا الرمز</string>
 
-    <string name="app_theme">لون موضوع آي كب </string>
+    <string name="app_theme">لون موضوع آیکب </string>
 
-    <string name="app_notif_color">لون الإشعارات في آي كب </string>
+    <string name="app_notif_color">لون الإشعارات في آیکب </string>
     g>
     <string name="theme">الألوان</string>
 
@@ -1686,7 +1687,7 @@
 
     <string name="igap_nearby">أصدقاء الجوار </string>
 
-    <string name="igap_call">الاتصال الصوتي لآي كب </string>
+    <string name="igap_call">الاتصال الصوتي لآیکب </string>
 
     <string name="No_messages_here_yet">لا توجد رسالة حالياً </string>
 
@@ -1825,7 +1826,7 @@
 
     <string name="e_906_1">لا يجوز لك الاتصال بهذه الجهة.</string>
 
-    <string name="iGap_has_crashed">قد عالج آي كب الخطأ غير المتوقع !</string>
+    <string name="iGap_has_crashed">قد عالج آیکب الخطأ غير المتوقع !</string>
 
     <string name="iGap_has_crashed_reload">إعادة البدء </string>
 
@@ -1952,9 +1953,9 @@
 
     <string name="keep_media">حفظ الوسائط </string>
 
-    <string name="invite_friend">لم تنضمّ هذه الجهة إلى آي كب بعد. هل ترغب في دعوته؟</string>
+    <string name="invite_friend">لم تنضمّ هذه الجهة إلى آیکب بعد. هل ترغب في دعوته؟</string>
 
-    <string name="clean_up_description">تنظيف قاعدة البيانات يؤدي إلى حذف الرسائل النصية المحفوظة في الذاكرة المختبئة و تضغيط قاعدة البيانات من أجل توفير الفضاء الداخلي. و آي كب بحاجة إلى بعض المعلومات من أجل التنفيذ فبالتالي لا يتمّ تفريغ قاعدة البيانات بشكل كامل و لا يصل إلى مستوى الصفر. هذا الأمر يستغرق بضع دقائق.</string>
+    <string name="clean_up_description">تنظيف قاعدة البيانات يؤدي إلى حذف الرسائل النصية المحفوظة في الذاكرة المختبئة و تضغيط قاعدة البيانات من أجل توفير الفضاء الداخلي. و آیکب بحاجة إلى بعض المعلومات من أجل التنفيذ فبالتالي لا يتمّ تفريغ قاعدة البيانات بشكل كامل و لا يصل إلى مستوى الصفر. هذا الأمر يستغرق بضع دقائق.</string>
 
     <string name="list_contacts">قائمة جهات اتصالك</string>
 
