@@ -5573,7 +5573,9 @@ public class FragmentChat extends BaseFragment
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentGroupProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
                 }
             } else if (chatType == CHANNEL) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChannelProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
+                if(!isNotJoin){
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChannelProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
+                }
             }
         }
     }
