@@ -11,8 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
@@ -23,6 +21,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -42,7 +41,6 @@ import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
-import net.iGap.igasht.provinceselect.IGashtProvinceFragment;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
@@ -304,14 +302,15 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 dialPhoneNumber(activity, discoveryField.value, activity);
                 break;
             case SHOW_ALERT:/** tested **/
-                new MaterialDialog.Builder(activity).content(discoveryField.value).positiveText(R.string.dialog_ok)
+            new HelperFragment(activity.getSupportFragmentManager(),new BuyInternetPackageFragment()).setReplace(false).load(true);
+                /*new MaterialDialog.Builder(activity).content(discoveryField.value).positiveText(R.string.dialog_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                             }
                         })
-                        .show();
+                        .show();*/
                 break;
             case STREAM_PLAY:
                 // coming soon
