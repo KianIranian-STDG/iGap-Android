@@ -64,10 +64,7 @@
       android:layout_height="match_parent"
       android:layout_marginLeft="@dimen/dp2"
       android:layout_marginRight="@dimen/dp2"
-      android:gravity="center"
-      android:textSize="@dimen/dp18"
-      android:text="@string/md_close_button"
-      android:textColor="@color/gray_300"
-      android:textAppearance="@style/TextIconAppearance.all" />
+      android:text="@string/close_icon"
+      style="@style/myIconToolbarStyle"/>
 
 </LinearLayout>
