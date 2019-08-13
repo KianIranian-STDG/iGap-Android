@@ -194,7 +194,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         viewModel.showMenu.observe(getViewLifecycleOwner(), menuList -> {
             if (getActivity() != null && menuList != null) {
                 new TopSheetDialog(getActivity()).setListDataWithResourceId(menuList, -1, position -> {
-                    if (menuList.get(position).equals(getString(R.string.clear_history))) {
+                    if (menuList.get(position) == R.string.clear_history) {
                         new MaterialDialog.Builder(getActivity()).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -203,7 +203,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                                 }
                             }
                         }).negativeText(R.string.no).show();
-                    } else if (menuList.get(position).equals(getString(R.string.group_title_convert_to_public)) || menuList.get(position).equals(getString(R.string.group_title_convert_to_private))) {
+                    } else if (menuList.get(position) == R.string.group_title_convert_to_public || menuList.get(position) == R.string.group_title_convert_to_private) {
                         viewModel.convertMenuClick();
                     }
                 }).show();
