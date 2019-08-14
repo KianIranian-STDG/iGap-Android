@@ -359,7 +359,7 @@ public class RealmRoomMessage extends RealmObject {
         message.setEdited(input.getEdited());
 
         if (input.hasAttachment()) {
-            message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT, input.getMessageType()));
+            message.setAttachment(RealmAttachment.build(realm, input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT, input.getMessageType()));
 
             if (message.getAttachment().getSmallThumbnail() == null) {
                 long smallId = SUID.id().get();

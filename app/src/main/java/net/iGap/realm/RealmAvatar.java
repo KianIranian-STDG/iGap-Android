@@ -57,7 +57,7 @@ public class RealmAvatar extends RealmObject {
         if (avatar == null) {
             avatar = realm.createObject(RealmAvatar.class, input.getId());
             avatar.setOwnerId(ownerId);
-            avatar.setFile(RealmAttachment.build(input.getFile(), AttachmentFor.AVATAR, null));
+            avatar.setFile(RealmAttachment.build(realm, input.getFile(), AttachmentFor.AVATAR, null));
         }
         return avatar;
     }
@@ -68,7 +68,7 @@ public class RealmAvatar extends RealmObject {
             realmAvatar = realm.createObject(RealmAvatar.class, input.getId());
         }
         realmAvatar.setOwnerId(ownerId);
-        realmAvatar.setFile(RealmAttachment.build(input.getFile(), AttachmentFor.AVATAR, null));
+        realmAvatar.setFile(RealmAttachment.build(realm, input.getFile(), AttachmentFor.AVATAR, null));
 
         return realmAvatar;
     }

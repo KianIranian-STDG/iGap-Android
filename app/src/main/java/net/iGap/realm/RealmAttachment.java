@@ -105,8 +105,7 @@ public class RealmAttachment extends RealmObject {
         return realmAttachment;
     }
 
-    public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor, @Nullable ProtoGlobal.RoomMessageType messageType) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmAttachment build(Realm realm, ProtoGlobal.File file, AttachmentFor attachmentFor, @Nullable ProtoGlobal.RoomMessageType messageType) {
 
         RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
         if (realmAttachment == null) {
@@ -211,8 +210,6 @@ public class RealmAttachment extends RealmObject {
                 }
             }
         }
-
-        realm.close();
 
         return realmAttachment;
     }
