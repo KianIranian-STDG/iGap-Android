@@ -62,42 +62,42 @@ public class LogWalletCardToCard extends AbstractMessage<LogWalletCardToCard, Lo
         holder.requestTime.setBackgroundColor(Color.parseColor(iGapSkyBlue));
         holder.titleTxt.setBackgroundColor(Color.parseColor(iGapSkyBlue));
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageWalletCardToCard.getFromUserId());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageWalletCardToCard.getFromUserId());
 
-        String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletCardToCard.getRequestTime()) + " " + "-" + " " +
-                TimeUtils.toLocal(realmRoomMessageWalletCardToCard.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletCardToCard.getRequestTime()) + " " + "-" + " " +
+                    TimeUtils.toLocal(realmRoomMessageWalletCardToCard.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
 
-        String fromDisplayName = "";
-        if (mRealmRegisteredInfoFrom != null) {
-            fromDisplayName = mRealmRegisteredInfoFrom.getDisplayName();
+            String fromDisplayName = "";
+            if (mRealmRegisteredInfoFrom != null) {
+                fromDisplayName = mRealmRegisteredInfoFrom.getDisplayName();
+            }
+
+            holder.fromUserId.setText(fromDisplayName);
+            holder.toUserId.setText(realmRoomMessageWalletCardToCard.getCardOwnerName());
+            holder.amount.setText(DirectPayHelper.convertNumberToPriceRial(realmRoomMessageWalletCardToCard.getAmount()));
+            String traceNumber = String.valueOf(realmRoomMessageWalletCardToCard.getTraceNumber());
+            String rrn = String.valueOf(realmRoomMessageWalletCardToCard.getRrn());
+            String destCardNumber = realmRoomMessageWalletCardToCard.getDestCardNumber();
+            String sourceCardNumber = realmRoomMessageWalletCardToCard.getSourceCardNumber();
+
+            if (HelperCalander.isPersianUnicode) {
+                traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
+                rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
+                persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
+                destCardNumber = HelperCalander.convertToUnicodeFarsiNumber(destCardNumber);
+                sourceCardNumber = HelperCalander.convertToUnicodeFarsiNumber(sourceCardNumber);
+            }
+            holder.bankName.setText(realmRoomMessageWalletCardToCard.getBankName());
+            holder.destBankName.setText(realmRoomMessageWalletCardToCard.getDestBankName());
+            holder.destCardNumber.setText(destCardNumber);
+            holder.sourceCardNumber.setText(sourceCardNumber);
+
+            holder.traceNumber.setText(traceNumber);
+            holder.rrn.setText(rrn);
+            holder.requestTime.setText(persianCalender);
+
         }
-
-        holder.fromUserId.setText(fromDisplayName);
-        holder.toUserId.setText(realmRoomMessageWalletCardToCard.getCardOwnerName());
-        holder.amount.setText(DirectPayHelper.convertNumberToPriceRial(realmRoomMessageWalletCardToCard.getAmount()));
-        String traceNumber = String.valueOf(realmRoomMessageWalletCardToCard.getTraceNumber());
-        String rrn = String.valueOf(realmRoomMessageWalletCardToCard.getRrn());
-        String destCardNumber = realmRoomMessageWalletCardToCard.getDestCardNumber();
-        String sourceCardNumber = realmRoomMessageWalletCardToCard.getSourceCardNumber();
-
-        if (HelperCalander.isPersianUnicode) {
-            traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
-            rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
-            persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
-            destCardNumber = HelperCalander.convertToUnicodeFarsiNumber(destCardNumber);
-            sourceCardNumber = HelperCalander.convertToUnicodeFarsiNumber(sourceCardNumber);
-        }
-        holder.bankName.setText(realmRoomMessageWalletCardToCard.getBankName());
-        holder.destBankName.setText(realmRoomMessageWalletCardToCard.getDestBankName());
-        holder.destCardNumber.setText(destCardNumber);
-        holder.sourceCardNumber.setText(sourceCardNumber);
-
-        holder.traceNumber.setText(traceNumber);
-        holder.rrn.setText(rrn);
-        holder.requestTime.setText(persianCalender);
-
-        realm.close();
     }
 
     @NotNull

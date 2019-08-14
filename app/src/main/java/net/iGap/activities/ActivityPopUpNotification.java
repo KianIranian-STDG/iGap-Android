@@ -203,23 +203,20 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         color = mList.get(position).color;
         txtName.setText(mList.get(position).name);
 
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
-        if (realmRegisteredInfo != null) {
-            if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                } else {
+                    txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                }
             } else {
-                txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                txtLastSeen.setText("");
             }
-        } else {
-            txtLastSeen.setText("");
+
+            setAvatar(realmRegisteredInfo);
         }
-
-        setAvatar(realmRegisteredInfo);
-
-        realm.close();
-
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

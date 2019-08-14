@@ -368,18 +368,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISOK) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null) {
-                String token = realmUserInfo.getPushNotificationToken();
-                if (token == null || token.length() < 2) {
-                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
-                        String mToken = instanceIdResult.getToken();
-                        RealmUserInfo.setPushNotification(mToken);
-                    });
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null) {
+                    String token = realmUserInfo.getPushNotificationToken();
+                    if (token == null || token.length() < 2) {
+                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
+                            String mToken = instanceIdResult.getToken();
+                            RealmUserInfo.setPushNotification(mToken);
+                        });
+                    }
                 }
             }
-            realm.close();
 
             initTabStrip();
             IntentFilter intentFilter = new IntentFilter();
@@ -1425,25 +1425,24 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                if (room != null && realmRoomMessage != null) {
-                    /**
-                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                     */
-                    if (room.getUnreadCount() <= 1) {
-                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                        room.setFirstUnreadMessage(realmRoomMessage);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                    if (room != null && realmRoomMessage != null) {
+                        /**
+                         * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                         */
+                        if (room.getUnreadCount() <= 1) {
+                            realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                            room.setFirstUnreadMessage(realmRoomMessage);
+                        }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
 
         /**
          * don't send update status for own message

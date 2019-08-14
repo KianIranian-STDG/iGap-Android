@@ -275,15 +275,14 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         }
 
         private void getContactInfo(String userPhoneNumber) {
-            Realm realm = Realm.getDefaultInstance();
-            contactId = RealmRegisteredInfo.getUserInfo(realm, userPhoneNumber);
+            try (Realm realm = Realm.getDefaultInstance()) {
+                contactId = RealmRegisteredInfo.getUserInfo(realm, userPhoneNumber);
 
-            if (contactId > 0)
-                contactStatus = IN_CONTACT_AND_HAVE_IGAP;
-            else
-                contactStatus = NOT_CONTACT_AND_HAVE_NOT_IGAP;
-
-            realm.close();
+                if (contactId > 0)
+                    contactStatus = IN_CONTACT_AND_HAVE_IGAP;
+                else
+                    contactStatus = NOT_CONTACT_AND_HAVE_NOT_IGAP;
+            }
 
             Log.i("aabolfazl", "getContactInfo: " + contactStatus);
         }

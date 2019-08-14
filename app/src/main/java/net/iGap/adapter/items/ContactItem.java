@@ -66,23 +66,24 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         }
 
         holder.title.setText(mContact.displayName);
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mContact.peerId);
-        if (realmRegisteredInfo != null) {
 
-            if (realmRegisteredInfo.getStatus() != null) {
-                if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, realmRegisteredInfo.getLastSeen(), false));
-                } else {
-                    holder.subtitle.setText(realmRegisteredInfo.getStatus());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mContact.peerId);
+            if (realmRegisteredInfo != null) {
+
+                if (realmRegisteredInfo.getStatus() != null) {
+                    if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                        holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, realmRegisteredInfo.getLastSeen(), false));
+                    } else {
+                        holder.subtitle.setText(realmRegisteredInfo.getStatus());
+                    }
+                }
+
+                if (HelperCalander.isPersianUnicode) {
+                    holder.subtitle.setText(holder.subtitle.getText().toString());
                 }
             }
-
-            if (HelperCalander.isPersianUnicode) {
-                holder.subtitle.setText(holder.subtitle.getText().toString());
-            }
         }
-        realm.close();
 
         setAvatar(holder);
     }

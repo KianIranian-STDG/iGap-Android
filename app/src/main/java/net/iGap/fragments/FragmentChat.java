@@ -1169,15 +1169,14 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom.setCount(realm, mRoomId, 0);
-            }
-        });
-        realm.close();
-
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom.setCount(realm, mRoomId, 0);
+                }
+            });
+        }
     }
 
     @Override
