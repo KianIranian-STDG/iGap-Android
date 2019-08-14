@@ -487,7 +487,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                     @Override
                     public void run() {
                         setMemberCount(roomIdUser);
-                        //+Realm realm = Realm.getDefaultInstance();
                         RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
 
                         if (realmRegistered == null) {
@@ -495,7 +494,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                                 new RequestUserInfo().userInfo(userId, roomId + "");
                             }
                         }
-                        //realm.close();
                     }
                 });
             }
