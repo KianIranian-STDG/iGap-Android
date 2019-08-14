@@ -89,7 +89,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     private int offset;
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<RealmRoomMessage> mediaList;
-    private Realm mRealm;
+    private static Realm mRealm;
     private RecyclerView.OnScrollListener onScrollListener;
     private boolean canUpdateAfterDownload = false;
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
