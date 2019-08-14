@@ -3,9 +3,11 @@ package net.iGap.kuknos.service.Repository;
 import android.util.Log;
 
 import net.iGap.api.apiService.ApiResponse;
+import net.iGap.kuknos.service.model.KuknosSendM;
 
 import org.stellar.sdk.Server;
 import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.SubmitTransactionResponse;
 
 import java.io.IOException;
 
@@ -27,6 +29,18 @@ public class PanelRepo {
     }
 
     public void getAccountInfo(ApiResponse<AccountResponse> apiResponse){
-        kuknosAPIRepository.getUserAccount2(userRepo.getAccountID(), apiResponse);
+        kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), apiResponse);
+    }
+
+    public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse){
+        kuknosAPIRepository.paymentUser(model, apiResponse);
+    }
+
+    public UserRepo getUserRepo() {
+        return userRepo;
+    }
+
+    public void setUserRepo(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 }

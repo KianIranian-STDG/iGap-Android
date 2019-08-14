@@ -399,4 +399,17 @@ public class RealmUserInfo extends RealmObject {
         }
     }
 
+    public void deleteKuknos() {
+        if (kuknosM != null) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    kuknosM.deleteFromRealm();
+                }
+            });
+            realm.close();
+        }
+    }
+
 }

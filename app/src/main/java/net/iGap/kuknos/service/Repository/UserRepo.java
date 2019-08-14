@@ -129,6 +129,10 @@ public class UserRepo {
 
     // Realm and Data
 
+    public void deleteAccount() {
+        userInfo.deleteKuknos();
+    }
+
     private void updateUserInfo() {
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
         closeRealm();

@@ -9,6 +9,7 @@ import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosLoginM;
+import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
@@ -18,6 +19,7 @@ import net.iGap.module.api.beepTunes.SearchTrack;
 import net.iGap.module.api.beepTunes.TrackInfo;
 
 import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.SubmitTransactionResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,9 +67,14 @@ public class KuknosAPIRepository {
         });
     }
 
-    public void getUserAccount2(String userID, ApiResponse<AccountResponse> apiResponse) {
+    public void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
         KuknosAPIAsync<AccountResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.USER_ACCOUNT);
         temp.execute(userID);
+    }
+
+    public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
+        KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
+        temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
     }
 
     // todo clean this comment - old mudule

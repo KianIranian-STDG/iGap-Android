@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.os.Handler;
 
 import net.iGap.R;
+import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 
 public class KuknosLogoutVM extends ViewModel {
@@ -14,6 +15,7 @@ public class KuknosLogoutVM extends ViewModel {
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Boolean> nextPage;
+    private UserRepo userRepo = new UserRepo();
 
     public KuknosLogoutVM() {
         if (error == null)
@@ -41,12 +43,9 @@ public class KuknosLogoutVM extends ViewModel {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                userRepo.deleteAccount();
                 progressState.setValue(false);
-
-                //success
-                //nextPage.setValue(true);
-                //error
-                error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
+                nextPage.setValue(true);
             }
         }, 1000);
     }
@@ -64,6 +63,10 @@ public class KuknosLogoutVM extends ViewModel {
         }
         if (PIN.get().length() != 4) {
             error.setValue(new ErrorM(true, "wrong length pin", "0", R.string.kuknos_viewRecoveryEP_wrongPIN));
+            return false;
+        }
+        if (!PIN.get().equals(userRepo.getPIN())) {
+            error.setValue(new ErrorM(true, "wrong length pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
             return false;
         }
         return true;

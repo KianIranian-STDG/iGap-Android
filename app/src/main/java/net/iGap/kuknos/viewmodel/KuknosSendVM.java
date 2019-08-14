@@ -6,14 +6,26 @@ import android.databinding.ObservableField;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import net.iGap.R;
+import net.iGap.api.apiService.ApiResponse;
+import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.KuknosWalletBalanceInfoM;
 
+import org.stellar.sdk.KeyPair;
+import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.SubmitTransactionResponse;
+import org.stellar.sdk.xdr.TransactionResult;
+import org.stellar.sdk.xdr.TransactionResultCode;
+
+import java.io.IOException;
+
 public class KuknosSendVM extends ViewModel {
 
-    private MutableLiveData<KuknosSendM> kuknosSendM;
+    private KuknosSendM kuknosSendM;
     private MutableLiveData<ErrorM> errorM;
     private MutableLiveData<ErrorM> payResult;
     private MutableLiveData<Boolean> progressState;
@@ -21,12 +33,13 @@ public class KuknosSendVM extends ViewModel {
     private ObservableField<String> text = new ObservableField<>();
     private ObservableField<String> amount = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
-    private KuknosWalletBalanceInfoM balanceInfoM;
+    private AccountResponse.Balance balanceInfoM;
     private MutableLiveData<Boolean> openQrScanner;
+    private PanelRepo panelRepo = new PanelRepo();
 
     public KuknosSendVM() {
         if (kuknosSendM == null)
-            kuknosSendM = new MutableLiveData<>();
+            kuknosSendM = new KuknosSendM();
         if (errorM == null)
             errorM = new MutableLiveData<>();
         if (payResult == null)
@@ -63,7 +76,21 @@ public class KuknosSendVM extends ViewModel {
             errorM.setValue(new ErrorM(true, "Invalid WalletID", "0", R.string.kuknos_send_walletIDError));
             return false;
         }
+        if (!checkKeyPairExsit()) {
+            errorM.setValue(new ErrorM(true, "Invalid WalletID", "0", R.string.kuknos_send_walletIDError2));
+            return false;
+        }
         return true;
+    }
+
+    private boolean checkKeyPairExsit() {
+        try {
+            KeyPair keyPair = KeyPair.fromAccountId(walletID.get());
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean checkAmount() {
@@ -94,37 +121,54 @@ public class KuknosSendVM extends ViewModel {
     }
 
     private void sendDataServer() {
-        progressState.setValue(true);
-        // TODO: send data to server
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progressState.setValue(false);
+        kuknosSendM.setAmount(amount.get());
+        kuknosSendM.setSrc(panelRepo.getUserRepo().getSeedKey());
+        kuknosSendM.setDest(walletID.get());
+        kuknosSendM.setMemo((text.get()==null ? "" : text.get()));
 
-                //success
-                payResult.setValue(new ErrorM(false, "", "", R.string.kuknos_send_successServer));
-                //error
-                //payResult.setValue(new ErrorM(true, "", "", R.string.kuknos_send_errorServer));
+        Gson gson = new Gson();
+
+        panelRepo.paymentUser(kuknosSendM, new ApiResponse<SubmitTransactionResponse>() {
+            @Override
+            public void onResponse(SubmitTransactionResponse accountResponse) {
+                if (accountResponse.isSuccess())
+                    payResult.setValue(new ErrorM(false, "", "", R.string.kuknos_send_successServer));
+                else {
+                    //TransactionResult.TransactionResultResult.
+                    accountResponse.getExtras().getResultCodes().getTransactionResultCode();
+                }
             }
-        }, 1000);
+
+            @Override
+            public void onFailed(String error) {
+                if (error == null || error.length() == 0)
+                    payResult.setValue(new ErrorM(true, "", "", R.string.kuknos_send_errorServer));
+                else
+                    payResult.setValue(new ErrorM(true, "", "", Integer.parseInt(error)));
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressState.setValue(visibility);
+            }
+        });
     }
 
     // Setter and Getter
 
     public String getAssetCode() {
-        return kuknosSendM.getValue().getAssetcode();
+        return kuknosSendM.getAssetcode();
     }
 
     public void setAssetCode(String assetCode) {
-        kuknosSendM.setValue(new KuknosSendM("","","",assetCode));
+        kuknosSendM = new KuknosSendM();
     }
 
-    public MutableLiveData<KuknosSendM> getKuknosSendM() {
+    public KuknosSendM getKuknosSendM() {
         return kuknosSendM;
     }
 
-    public void setKuknosSendM(MutableLiveData<KuknosSendM> kuknosSendM) {
+    public void setKuknosSendM(KuknosSendM kuknosSendM) {
         this.kuknosSendM = kuknosSendM;
     }
 
@@ -176,13 +220,10 @@ public class KuknosSendVM extends ViewModel {
         this.payResult = payResult;
     }
 
-    public KuknosWalletBalanceInfoM getBalanceInfoM() {
-        return balanceInfoM;
-    }
-
-    public void setBalanceInfoM(KuknosWalletBalanceInfoM balanceInfoM) {
-        this.balanceInfoM = balanceInfoM;
-        this.currency.set(balanceInfoM.getAssetCode());
+    public void setBalanceInfoM(String balanceInfoM) {
+        Gson gson = new Gson();
+        this.balanceInfoM = gson.fromJson(balanceInfoM, AccountResponse.Balance.class);
+        this.currency.set((this.balanceInfoM.getAsset().getType().equals("native") ? "PMN" : this.balanceInfoM.getAssetCode()));
     }
 
     public ObservableField<String> getCurrency() {

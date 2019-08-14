@@ -2,35 +2,37 @@ package net.iGap.kuknos.service.model;
 
 public class KuknosSendM {
 
-    private String RWalletID;
-    private String text;
+    private String src;
+    private String dest;
+    private String memo;
     private String amount;
     private String assetcode;
 
     public KuknosSendM() {
     }
 
-    public KuknosSendM(String RWalletID, String text, String amount, String assetcode) {
-        this.RWalletID = RWalletID;
-        this.text = text;
-        this.amount = amount;
-        this.assetcode = assetcode;
+    public String getSrc() {
+        return src;
     }
 
-    public String getRWalletID() {
-        return RWalletID;
+    public void setSrc(String src) {
+        this.src = src;
     }
 
-    public void setRWalletID(String RWalletID) {
-        this.RWalletID = RWalletID;
+    public String getDest() {
+        return dest;
     }
 
-    public String getText() {
-        return text;
+    public void setDest(String dest) {
+        this.dest = dest;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 
     public String getAmount() {

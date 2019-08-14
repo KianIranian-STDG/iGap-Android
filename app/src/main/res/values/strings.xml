@@ -2088,4 +2088,13 @@
     <string name="kuknos_recieve_walletCopy">My Kuknos wallet address is: \n</string>
     <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
     <string name="kuknos_panelStr_firstUser">Account was not found or it has no credits. Use Receive menu to get credits.</string>
+    <string name="Kuknos_transaction_error1">Transaction is not successful. Please try again later.</string>
+    <string name="Kuknos_transaction_error2">Server Error. Please try again later.</string>
+    <string name="Kuknos_transaction_error3">Transaction Sequence has NOT found. Please try again later.</string>
+    <string name="Kuknos_transaction_error4">Authentication Failed. Please try again later.</string>
+    <string name="Kuknos_transaction_error5">Destination account does NOT exist.</string>
+    <string name="Kuknos_transaction_error6">Transaction fee is not enough. Please try again later.</string>
+    <string name="Kuknos_transaction_error7">Your credit is not enough.</string>
+    <string name="Kuknos_transaction_error8">Something went wrong. Please try again later.</string>
+    <string name="kuknos_send_walletIDError2">Wallet Address is NOT valid.</string>
 </resources>

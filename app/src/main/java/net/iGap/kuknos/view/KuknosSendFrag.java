@@ -60,7 +60,7 @@ public class KuknosSendFrag extends BaseFragment {
         binding.setLifecycleOwner(this);
 
         Bundle b = getArguments();
-        kuknosSignupInfoVM.setBalanceInfoM(b.getParcelable("balanceClientInfo"));
+        kuknosSignupInfoVM.setBalanceInfoM(b.getString("balanceClientInfo"));
 
         return binding.getRoot();
 
