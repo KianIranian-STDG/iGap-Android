@@ -138,7 +138,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
             RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
             if (realmGroupRoom != null) {
                 if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                    setRealm(Realm.getDefaultInstance(), realmGroupRoom, null, null);
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        setRealm(realm, realmGroupRoom, null, null);
+                    }
                 } else {
                     realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
                 }
