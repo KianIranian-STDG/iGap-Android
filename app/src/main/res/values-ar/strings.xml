@@ -2890,10 +2890,22 @@
     <string name="mci_topup_payment_title">شارژ همراه اول</string>
     <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید.</string>
     <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید.</string>
+    <string name="buy_internet_package_type_title">نوع الحزمة</string>
+    <string name="buy_internet_package_time_type_title">زمن</string>
+    <string name="buy_internet_package_volume_type_title">الصوت</string>
+    <string name="buy_internet_package_volume_filter_gb_title">%.2f GB</string>
+    <string name="buy_internet_package_volume_filter_mb_title">%.2f MB</string>
+    <string name="buy_internet_package_daily_filter_title">%.0f يوم</string>
+    <string name="buy_internet_package_weekly_filter_title">%.0f أسبوع</string>
+    <string name="buy_internet_package_month_filter_title">%.0f شهر</string>
+    <string name="buy_internet_package_year_filter_title">%.0f عام</string>
+    <string name="buy_internet_package_choose_title">اختيار البند</string>
     <string name="beeptunes_purchase_song">Purchase Song</string>
     <string name="beeptunes_sync_song">Sync Song</string>
     <string name="beeptunesـfavorite_song">Favorite Song</string>
     <string name="play_sound_in_chat">تشغيل رسالة إرسال صوت في الدردشة</string>
     <string name="charge_type_error_message">يرجى اختيار نوع الشحن.</string>
     <string name="charge_price_error_message">يرجى تحديد مبلغ التهمة.</string>
+
+
 </resources>

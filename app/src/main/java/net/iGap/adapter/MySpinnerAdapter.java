@@ -1,37 +1,96 @@
 package net.iGap.adapter;
 
-import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+
+import net.iGap.R;
+import net.iGap.internetpackage.MciInternetPackageFilter;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class MySpinnerAdapter extends ArrayAdapter<CharSequence> {
+public class MySpinnerAdapter extends BaseAdapter {
 
-    public MySpinnerAdapter(Context context, int resource, List<CharSequence> items) {
-        super(context, resource, items);
+    private List<MciInternetPackageFilter> items;
+
+    public MySpinnerAdapter(List<MciInternetPackageFilter> items) {
+        this.items = items;
     }
 
-    // Affects default (closed) state of the spinner
-    /*@Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        TextView view = (TextView) super.getView(position, convertView, parent);
-        view.setTypeface(G.typeface_IRANSansMobile);
+    @Override
+    public int getCount() {
+        return items != null ? items.size() + 1 : 0;
+    }
 
-        if (position == 0) {
-            view.setTextColor(G.context.getResources().getColor(R.color.gray));
+    @Override
+    public MciInternetPackageFilter getItem(int position) {
+        return items.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        viewHolder holder;
+
+        if (convertView == null) {
+
+            holder = new viewHolder();
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spinner_item_custom, parent, false);
+
+            holder.txtTitle = convertView.findViewById(R.id.itemTitle);
+            convertView.setTag(holder);
+        } else {
+            holder = (viewHolder) convertView.getTag();
         }
 
-        return view;
-    }*/
+        String tmp;
+        if (position == 0) {
+            tmp = holder.txtTitle.getContext().getString(R.string.buy_internet_package_choose_title);
+        } else {
+            if (items.get(position - 1).getCategory().getType().equals("duration")) {
+                tmp = String.format(holder.txtTitle.getContext().getString(getStringDurationResId(items.get(position - 1))), items.get(position - 1).getCategory().getValue());
+            } else {
+                tmp = String.format(holder.txtTitle.getContext().getString(getStringTrafficResId(items.get(position - 1))), items.get(position - 1).getCategory().getValue());
+            }
+        }
 
-    /*// Affects opened state of the spinner
-    @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        TextView view = (TextView) super.getDropDownView(position, convertView, parent);
-        view.setTypeface(G.typeface_IRANSansMobile);
-        view.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
-        return view;
-    }*/
+        holder.txtTitle.setText(tmp);
+        return convertView;
+    }
+
+    private class viewHolder {
+        AppCompatTextView txtTitle;
+    }
+
+    private int getStringTrafficResId(@NotNull MciInternetPackageFilter filter) {
+        if (filter.getCategory().getSubType().equals("GB")) {
+            return R.string.buy_internet_package_volume_filter_gb_title;
+        } else {
+            return R.string.buy_internet_package_volume_filter_mb_title;
+        }
+    }
+
+    private int getStringDurationResId(MciInternetPackageFilter filter) {
+        switch (filter.getCategory().getSubType()) {
+            case "MONTH":
+                return R.string.buy_internet_package_month_filter_title;
+            case "DAY":
+                return R.string.buy_internet_package_daily_filter_title;
+            case "WEEK":
+                return R.string.buy_internet_package_weekly_filter_title;
+            case "YEAR":
+                return R.string.buy_internet_package_year_filter_title;
+            default:
+                return R.string.buy_internet_package_daily_filter_title;
+        }
+    }
+
 }

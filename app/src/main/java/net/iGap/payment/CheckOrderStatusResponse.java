@@ -6,13 +6,10 @@ public class CheckOrderStatusResponse {
 
     @SerializedName("status")
     private String status;
+    @SerializedName("message")
+    private String message;
     @SerializedName("info")
     private PaymentInfo paymentInfo;
-
-    public CheckOrderStatusResponse(String status, PaymentInfo baseProduct) {
-        this.status = status;
-        this.paymentInfo = baseProduct;
-    }
 
     public String getStatus() {
         return status;
@@ -22,7 +19,11 @@ public class CheckOrderStatusResponse {
         return paymentInfo;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     public boolean isPaymentSuccess() {
-        return status.equals("پرداخت با موفقیت انجام شد");
+        return status.equals("SUCCESS");
     }
 }

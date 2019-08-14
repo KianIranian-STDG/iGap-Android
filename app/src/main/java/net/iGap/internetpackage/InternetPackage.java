@@ -1,0 +1,37 @@
+package net.iGap.internetpackage;
+
+import com.google.gson.annotations.SerializedName;
+
+public class InternetPackage {
+
+    @SerializedName("type")
+    private String type;
+    @SerializedName("cost")
+    private int cost;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("traffic")
+    private String trafficId;
+    @SerializedName("duration")
+    private String durationId;
+
+    public String getTrafficId() {
+        return trafficId;
+    }
+
+    public String getDurationId() {
+        return durationId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+}

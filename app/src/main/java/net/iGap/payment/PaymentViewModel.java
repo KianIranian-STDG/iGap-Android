@@ -222,7 +222,7 @@ public class PaymentViewModel extends ViewModel {
                 price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
                 title.set(data.getPaymentInfo().getProduct().getTitle());
                 /*paymentOrderId.set(data.getPaymentInfo().getId());*/
-                paymentStatus.set(data.getStatus());
+                paymentStatus.set(data.getMessage());
                 if (data.isPaymentSuccess()) {
                     paymentStatusTextColor.set(R.color.green);
                     paymentStateIcon.set(R.string.check_icon);

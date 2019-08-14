@@ -35,6 +35,7 @@ import net.iGap.databinding.FragmentPaymentChargeBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.interfaces.OnMplResult;
 import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.OperatorType;
 import net.iGap.proto.ProtoMplGetTopupToken;
 import net.iGap.request.RequestMplGetTopupToken;
 
@@ -67,10 +68,6 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
 
     private int selectedChargeTypePosition = 0;
     private int selectedPricePosition = 0;
-
-    public enum OperatorType {
-        HAMRAH_AVAL, IRANCELL, RITEL;
-    }
 
     private HashMap<String, OperatorType> phoneMap = new HashMap<String, OperatorType>() {
         {
