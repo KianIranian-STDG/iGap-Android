@@ -90,6 +90,7 @@
             app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
 
         <RadioGroup
+            android:id="@+id/typeGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onCheckedChanged="@{(group,checkId)->viewModel.onCheckedListener(checkId)}"
@@ -169,7 +170,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
             android:enabled="@{viewModel.enabledPaymentButton}"
-            android:onClick="@{()->viewModel.onBuyClick()}"
+            android:onClick="@{()->viewModel.onBuyClick(phoneNumberEditText.getEditableText().toString())}"
             android:text="@string/buy"
             android:visibility="@{viewModel.showPayButton}"
             app:layout_constraintEnd_toEndOf="parent"

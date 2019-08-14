@@ -2,8 +2,10 @@ package net.iGap.api;
 
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.internetpackage.InternetPackage;
-import net.iGap.internetpackage.MciInternetPackageFilterResponse;
+import net.iGap.internetpackage.MciInternetPackageFilter;
 import net.iGap.model.MciPurchaseResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -14,17 +16,18 @@ import retrofit2.http.POST;
 public interface MciApi {
 
     @FormUrlEncoded
-    @POST("auth/token")
-    Call<Object> getAuth(@Field("refresh_token") String refresh_token);
-
-    @FormUrlEncoded
     @POST("topup/purchase")
     Call<MciPurchaseResponse> topUpPurchase(@Field("tel_num") String phoneNumber,
                                             @Field("cost") int cost);
 
-    @GET("internet-package/sub-filter")
-    Call<MciInternetPackageFilterResponse> getInternetPackageFilterList();
+    @GET("internet-package/categories")
+    Call<List<MciInternetPackageFilter>> getInternetPackageFilterList();
 
-    @GET("internet-package/packages")
+    @GET("internet-package/packages/categorized")
     Call<BaseIGashtResponse<InternetPackage>> getInternetPackageList();
+
+    @FormUrlEncoded
+    @POST("internet-package/purchase")
+    Call<MciPurchaseResponse> internetPackagePurchase(@Field("tel_num") String phoneNumber,
+                                                      @Field("type") String internetPackageType);
 }

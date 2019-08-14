@@ -15,6 +15,7 @@ import net.iGap.adapter.MySpinnerAdapter;
 import net.iGap.databinding.FragmentBuyInternetPackageBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -46,7 +47,7 @@ public class BuyInternetPackageFragment extends BaseFragment {
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.buy_charge))
+                .setDefaultTitle(getString(R.string.buy_internet_package_title))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -57,29 +58,53 @@ public class BuyInternetPackageFragment extends BaseFragment {
                 }).getView());
 
         viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessageResId -> {
-            if (errorMessageResId != null){
+            if (errorMessageResId != null) {
                 HelperError.showSnackMessage(getString(errorMessageResId), false);
             }
         });
 
         viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
-            if (errorMessage != null){
+            if (errorMessage != null) {
                 HelperError.showSnackMessage(errorMessage.getMessage(), false);
             }
         });
 
         viewModel.getTypeList().observe(getViewLifecycleOwner(), typeList -> {
-            if (getContext() != null) {
-                if (typeList != null) {
-                    binding.filterType.setAdapter(new MySpinnerAdapter(typeList));
-                }
+            hideKeyboard();
+            if (typeList != null) {
+                binding.filterType.setAdapter(new MySpinnerAdapter(typeList));
+            } else {
                 binding.filterType.setSelection(0);
             }
         });
 
+        viewModel.getInternetPackageFiltered().observe(getViewLifecycleOwner(), packageList -> {
+            if (packageList != null) {
+                binding.packageList.setAdapter(new InternetPackageListAdapter(packageList));
+            } else {
+                binding.packageList.setSelection(0);
+            }
+        });
+
         viewModel.getNeedUpdateGooglePlay().observe(getViewLifecycleOwner(), isNeed -> {
-            if (getActivity() instanceof ActivityMain && isNeed != null && isNeed){
+            if (getActivity() instanceof ActivityMain && isNeed != null && isNeed) {
                 ((ActivityMain) getActivity()).checkGoogleUpdate();
+            }
+        });
+
+        viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
+            if (getActivity() != null && token != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), token, result -> {
+                    if (getActivity()!= null && result.isSuccess()) {
+                        getActivity().onBackPressed();
+                    }
+                });
+            }
+        });
+
+        viewModel.getClearTypeChecked().observe(getViewLifecycleOwner(),isCleared->{
+            if (isCleared != null && isCleared){
+                binding.typeGroup.clearCheck();
             }
         });
     }

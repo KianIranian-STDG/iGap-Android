@@ -1,32 +1,34 @@
 package net.iGap.adapter;
 
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import net.iGap.R;
-import net.iGap.internetpackage.TypeFilter;
+import net.iGap.internetpackage.MciInternetPackageFilter;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class MySpinnerAdapter extends BaseAdapter {
 
-    private TypeFilter items;
+    private List<MciInternetPackageFilter> items;
 
-    public MySpinnerAdapter(TypeFilter items) {
+    public MySpinnerAdapter(List<MciInternetPackageFilter> items) {
         this.items = items;
-        Log.wtf(this.getClass().getName(), "Count: " + items.getThreshold());
     }
 
     @Override
     public int getCount() {
-        return items != null ? items.getFilterList().size() + 1 : 0;
+        return items != null ? items.size() + 1 : 0;
     }
 
     @Override
-    public String getItem(int position) {
-        return items.getFilterList().get(position);
+    public MciInternetPackageFilter getItem(int position) {
+        return items.get(position);
     }
 
     @Override
@@ -53,14 +55,10 @@ public class MySpinnerAdapter extends BaseAdapter {
         if (position == 0) {
             tmp = holder.txtTitle.getContext().getString(R.string.buy_internet_package_choose_title);
         } else {
-            if (items.isDaily()) {
-                tmp = String.format(holder.txtTitle.getContext().getString(R.string.buy_internet_package_daily_filter_title), items.getFilterList().get(position - 1));
+            if (items.get(position - 1).getCategory().getType().equals("duration")) {
+                tmp = String.format(holder.txtTitle.getContext().getString(getStringDurationResId(items.get(position - 1))), items.get(position - 1).getCategory().getValue());
             } else {
-                if (position < items.getThreshold()) {
-                    tmp = String.format(holder.txtTitle.getContext().getString(R.string.buy_internet_package_volume_filter_mb_title), items.getFilterList().get(position - 1));
-                } else {
-                    tmp = String.format(holder.txtTitle.getContext().getString(R.string.buy_internet_package_volume_filter_gb_title), items.getFilterList().get(position - 1));
-                }
+                tmp = String.format(holder.txtTitle.getContext().getString(getStringTrafficResId(items.get(position - 1))), items.get(position - 1).getCategory().getValue());
             }
         }
 
@@ -70,6 +68,29 @@ public class MySpinnerAdapter extends BaseAdapter {
 
     private class viewHolder {
         AppCompatTextView txtTitle;
+    }
+
+    private int getStringTrafficResId(@NotNull MciInternetPackageFilter filter) {
+        if (filter.getCategory().getSubType().equals("GB")) {
+            return R.string.buy_internet_package_volume_filter_gb_title;
+        } else {
+            return R.string.buy_internet_package_volume_filter_mb_title;
+        }
+    }
+
+    private int getStringDurationResId(MciInternetPackageFilter filter) {
+        switch (filter.getCategory().getSubType()) {
+            case "MONTH":
+                return R.string.buy_internet_package_month_filter_title;
+            case "DAY":
+                return R.string.buy_internet_package_daily_filter_title;
+            case "WEEK":
+                return R.string.buy_internet_package_weekly_filter_title;
+            case "YEAR":
+                return R.string.buy_internet_package_year_filter_title;
+            default:
+                return R.string.buy_internet_package_daily_filter_title;
+        }
     }
 
 }

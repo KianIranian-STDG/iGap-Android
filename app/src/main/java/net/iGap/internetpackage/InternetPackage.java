@@ -8,10 +8,20 @@ public class InternetPackage {
     private String type;
     @SerializedName("cost")
     private int cost;
-    @SerializedName("systems")
-    private String systems;
     @SerializedName("description")
     private String description;
+    @SerializedName("traffic")
+    private String trafficId;
+    @SerializedName("duration")
+    private String durationId;
+
+    public String getTrafficId() {
+        return trafficId;
+    }
+
+    public String getDurationId() {
+        return durationId;
+    }
 
     public String getType() {
         return type;
@@ -19,10 +29,6 @@ public class InternetPackage {
 
     public int getCost() {
         return cost;
-    }
-
-    public String getSystems() {
-        return systems;
     }
 
     public String getDescription() {

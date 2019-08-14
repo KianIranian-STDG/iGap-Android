@@ -9,7 +9,10 @@ import android.view.View;
 import net.iGap.R;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +30,11 @@ public class BuyInternetPackageViewModel extends ViewModel {
     private ObservableBoolean enabledPaymentButton = new ObservableBoolean(true);
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<ErrorModel> showRequestErrorMessage = new MutableLiveData<>();
-    private MutableLiveData<TypeFilter> typeList = new MutableLiveData<>();
+    private MutableLiveData<List<MciInternetPackageFilter>> typeList = new MutableLiveData<>();
     private MutableLiveData<List<InternetPackage>> internetPackageFiltered = new MutableLiveData<>();
     private MutableLiveData<Boolean> needUpdateGooglePlay = new MutableLiveData<>();
+    private MutableLiveData<String> goToPaymentPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> clearTypeChecked = new MutableLiveData<>();
 
     private HashMap<String, OperatorType> phoneMap = new HashMap<String, OperatorType>() {
         {
@@ -64,10 +69,12 @@ public class BuyInternetPackageViewModel extends ViewModel {
         }
     };
     private MciInternetPackageRepository repository;
-    private MciInternetPackageFilterResponse filterResponse;
+    private List<MciInternetPackageFilter> daysFilter;
+    private List<MciInternetPackageFilter> trafficFilter;
     private List<InternetPackage> packageList;
     private List<InternetPackage> packageListFiltered;
     private boolean isDaily;
+    private String selectedPackageType;
 
     public BuyInternetPackageViewModel() {
         repository = MciInternetPackageRepository.getInstance();
@@ -110,7 +117,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
         return showErrorMessage;
     }
 
-    public MutableLiveData<TypeFilter> getTypeList() {
+    public MutableLiveData<List<MciInternetPackageFilter>> getTypeList() {
         return typeList;
     }
 
@@ -120,6 +127,18 @@ public class BuyInternetPackageViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> getNeedUpdateGooglePlay() {
         return needUpdateGooglePlay;
+    }
+
+    public MutableLiveData<String> getGoToPaymentPage() {
+        return goToPaymentPage;
+    }
+
+    public MutableLiveData<List<InternetPackage>> getInternetPackageFiltered() {
+        return internetPackageFiltered;
+    }
+
+    public MutableLiveData<Boolean> getClearTypeChecked() {
+        return clearTypeChecked;
     }
 
     public void phoneNumberTextChangeListener(String phoneNumber) {
@@ -136,6 +155,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
                 showErrorMessage.setValue(R.string.error);
             }
         } else {
+            clearTypeChecked.setValue(true);
             showDetail.set(View.GONE);
             showFilterType.set(View.GONE);
             showPackageList.set(View.GONE);
@@ -144,16 +164,14 @@ public class BuyInternetPackageViewModel extends ViewModel {
     }
 
     public void onCheckedListener(int checkedId) {
-        showFilterType.set(View.VISIBLE);
         if (checkedId == R.id.timeType) {
+            showFilterType.set(View.VISIBLE);
             isDaily = true;
-            typeList.setValue(new TypeFilter(filterResponse.getDaily(),true,-1));
-        } else {
+            typeList.setValue(daysFilter);
+        } else if (checkedId == R.id.volumeType) {
+            showFilterType.set(View.VISIBLE);
             isDaily = false;
-            List<String> tmp = new ArrayList<>();
-            tmp.addAll(filterResponse.getMb());
-            tmp.addAll(filterResponse.getGb());
-            typeList.setValue(new TypeFilter(tmp,false,filterResponse.getMb().size()));
+            typeList.setValue(trafficFilter);
         }
         showPackageList.set(View.GONE);
         showPayButton.set(View.GONE);
@@ -161,15 +179,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
 
     public void onItemSelectedTypeFilter(int position) {
         if (position != 0) {
-            if (isDaily){
-                getPackageListWithFilter(" " + filterResponse.getDaily().get(position) + " روزه ");
-            }else{
-                if (position <= filterResponse.getMb().size()){
-                    getPackageListWithFilter(" " + filterResponse.getMb().get(position-1) + " مگ");
-                }else{
-                    getPackageListWithFilter(" " + filterResponse.getGb().get(position - filterResponse.getMb().size()) + "گیگابایت ");
-                }
-            }
+            getPackageListWithFilter(position - 1);
             showPackageList.set(View.VISIBLE);
             internetPackageFiltered.setValue(packageListFiltered);
         } else {
@@ -180,14 +190,42 @@ public class BuyInternetPackageViewModel extends ViewModel {
 
     public void onItemSelectedPackageList(int position) {
         if (position != 0) {
+            selectedPackageType = packageListFiltered.get(position - 1).getType();
             showPayButton.set(View.VISIBLE);
         } else {
             showPayButton.set(View.GONE);
         }
     }
 
-    public void onBuyClick() {
+    public void onBuyClick(String phoneNumber) {
+        if (selectedPackageType != null && selectedPackageType.length() > 0) {
+            enabledPaymentButton.set(false);
+            showLoadingView.set(View.VISIBLE);
+            repository.purchaseInternetPackage(phoneNumber.substring(1), selectedPackageType, new ResponseCallback<MciPurchaseResponse>() {
+                @Override
+                public void onSuccess(MciPurchaseResponse data) {
+                    showLoadingView.set(View.INVISIBLE);
+                    enabledPaymentButton.set(true);
+                    goToPaymentPage.setValue(data.getToken());
+                }
 
+                @Override
+                public void onError(ErrorModel error) {
+                    showLoadingView.set(View.INVISIBLE);
+                    showRequestErrorMessage.setValue(error);
+                    enabledPaymentButton.set(true);
+                }
+
+                @Override
+                public void onFailed(boolean handShakeError) {
+                    showLoadingView.set(View.INVISIBLE);
+                    needUpdateGooglePlay.setValue(handShakeError);
+                    enabledPaymentButton.set(true);
+                }
+            });
+        } else {
+            showErrorMessage.setValue(R.string.error);
+        }
     }
 
     public void onRetryClick() {
@@ -198,11 +236,12 @@ public class BuyInternetPackageViewModel extends ViewModel {
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showRetryView.set(View.GONE);
-        if (filterResponse == null) {
-            repository.getFilterListData(new ResponseCallback<MciInternetPackageFilterResponse>() {
+        if (daysFilter == null || trafficFilter == null) {
+            repository.getFilterListData(new ResponseCallback<List<MciInternetPackageFilter>>() {
                 @Override
-                public void onSuccess(MciInternetPackageFilterResponse data) {
-                    filterResponse = data;
+                public void onSuccess(List<MciInternetPackageFilter> data) {
+                    getFilterListDuration(data);
+                    getFilterListTraffic(data);
                     getData();
                 }
 
@@ -247,25 +286,58 @@ public class BuyInternetPackageViewModel extends ViewModel {
 
     private void requestError(ErrorModel error) {
         showRetryView.set(View.VISIBLE);
-        showMainView.set(View.GONE);
         showLoadingView.set(View.INVISIBLE);
         showRequestErrorMessage.setValue(error);
     }
 
     private void onFailedHandler(boolean isNeedUpdateGooglePlay) {
-        showLoadingView.set(View.GONE);
+        showLoadingView.set(View.INVISIBLE);
         showRetryView.set(View.VISIBLE);
-        showMainView.set(View.GONE);
         needUpdateGooglePlay.setValue(isNeedUpdateGooglePlay);
     }
 
-    private void getPackageListWithFilter(String keyword){
-        packageListFiltered = new ArrayList<>();
-        for (int i = 0;i<packageList.size();i++){
-            if (packageList.get(i).getDescription().contains(keyword)){
-                packageListFiltered.add(packageList.get(i));
+    private void getPackageListWithFilter(int position) {
+        MciInternetPackageFilter tmp;
+        if (isDaily) {
+            tmp = daysFilter.get(position);
+        } else {
+            tmp = trafficFilter.get(position);
+        }
+        packageListFiltered = getPackageList(tmp);
+    }
+
+    private void getFilterListDuration(@NotNull List<MciInternetPackageFilter> data) {
+        daysFilter = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getCategory().getType().equals("duration")) {
+                daysFilter.add(data.get(i));
             }
         }
+    }
+
+    private void getFilterListTraffic(@NotNull List<MciInternetPackageFilter> data) {
+        trafficFilter = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getCategory().getType().equals("traffic")) {
+                trafficFilter.add(data.get(i));
+            }
+        }
+    }
+
+    private List<InternetPackage> getPackageList(MciInternetPackageFilter filter) {
+        List<InternetPackage> tmp = new ArrayList<>();
+        for (int i = 0; i < packageList.size(); i++) {
+            if (isDaily) {
+                if (packageList.get(i).getDurationId().equals(filter.getId())) {
+                    tmp.add(packageList.get(i));
+                }
+            } else {
+                if (packageList.get(i).getTrafficId().equals(filter.getId())) {
+                    tmp.add(packageList.get(i));
+                }
+            }
+        }
+        return tmp;
     }
 
     @Override
