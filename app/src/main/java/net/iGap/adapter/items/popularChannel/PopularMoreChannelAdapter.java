@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -83,6 +84,10 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
 
             CardView root = itemView.findViewById(R.id.card_item_pop_grid);
             Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
+            LinearLayout linearLayout = itemView.findViewById(R.id.ll_item_pop_card_info);
+            if (G.isDarkTheme) {
+                linearLayout.setBackgroundResource(R.drawable.shape_favorite_channel_dark_item_them);
+            }
         }
 
     }
