@@ -220,9 +220,7 @@ public class FragmentUserProfile extends BaseMainFragments {
         viewModel.setUserAvatarPath.observe(getViewLifecycleOwner(), changeImageModel -> {
             if (changeImageModel != null) {
                 if (changeImageModel.getImagePath() == null || !new File(changeImageModel.getImagePath()).exists()) {
-                    //Realm realm1 = Realm.getDefaultInstance();
                     binding.fupUserImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) binding.fupUserImage.getContext().getResources().getDimension(R.dimen.dp100), changeImageModel.getInitials(), changeImageModel.getColor()));
-                    //realm1.close();
                 } else {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(changeImageModel.getImagePath()), binding.fupUserImage);
                 }

@@ -74,42 +74,39 @@ public class HelperGetAction {
                 }
             }
             if (count == 1) {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, latestStruct.userId);
+                    if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName().length() > 0) {
+                        String action;
 
-                Realm realm = Realm.getDefaultInstance();
-
-                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, latestStruct.userId);
-                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName().length() > 0) {
-                    String action;
-
-                    if (HelperCalander.isPersianUnicode) {
-                        action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
+                        if (HelperCalander.isPersianUnicode) {
+                            action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
+                        } else {
+                            action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.fragmentActivity.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
+                        }
+                        return action;
                     } else {
-                        action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.fragmentActivity.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
+                        return null;
                     }
-                    realm.close();
-                    return action;
-                } else {
-                    realm.close();
-                    return null;
                 }
+
+
             } else if (count < Config.GROUP_SHOW_ACTIONS_COUNT) {
 
                 StringBuilder concatenatedNames = new StringBuilder();
 
-                Realm realm = Realm.getDefaultInstance();
-
-                Iterator<StructAction> iterator = structActions.iterator();
-                while (iterator.hasNext()) {
-                    StructAction struct = iterator.next();
-                    if (struct.roomId == roomId && struct.action == latestAction) {
-                        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, struct.userId);
-                        if (realmRegisteredInfo != null) {
-                            concatenatedNames.append(realmRegisteredInfo.getDisplayName()).append(" , ");
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    Iterator<StructAction> iterator = structActions.iterator();
+                    while (iterator.hasNext()) {
+                        StructAction struct = iterator.next();
+                        if (struct.roomId == roomId && struct.action == latestAction) {
+                            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, struct.userId);
+                            if (realmRegisteredInfo != null) {
+                                concatenatedNames.append(realmRegisteredInfo.getDisplayName()).append(" , ");
+                            }
                         }
                     }
                 }
-
-                realm.close();
 
                 if ((concatenatedNames.length() == 0) || concatenatedNames.length() == 0) {
                     return null;

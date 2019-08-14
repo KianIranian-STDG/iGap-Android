@@ -121,12 +121,12 @@ public class LoginActions {
             @Override
             public void run() {
                 if (G.isSecure) {
-                    Realm realm = Realm.getDefaultInstance();
-                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
-                        new RequestUserLogin().userLogin(userInfo.getToken());
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                        if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
+                            new RequestUserLogin().userLogin(userInfo.getToken());
+                        }
                     }
-                    realm.close();
                 } else {
                     login();
                 }

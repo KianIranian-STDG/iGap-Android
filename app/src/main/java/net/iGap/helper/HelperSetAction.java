@@ -95,16 +95,15 @@ public class HelperSetAction {
             if (roomId == 0 || messageId == 0) {
                 return;
             }
-
-            Realm realm = Realm.getDefaultInstance();
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (realmRoom != null && realmRoom.getType() != null) {
-                chatType = realmRoom.getType();
-                realm.close();
-            } else {
-                realm.close();
-                return;
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null && realmRoom.getType() != null) {
+                    chatType = realmRoom.getType();
+                } else {
+                    return;
+                }
             }
+
         }
 
         /**

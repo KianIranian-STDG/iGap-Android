@@ -4022,159 +4022,159 @@ public class FragmentChat extends BaseFragment
 
         }
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
-        if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
-            if (roomMessage.getAuthor().getUser() != null) {
+            if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
+                if (roomMessage.getAuthor().getUser() != null) {
 
-                RealmRoomMessage messageCopy = realm.copyFromRealm(realmRoomMessage);
+                    RealmRoomMessage messageCopy = realm.copyFromRealm(realmRoomMessage);
 
-                if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
-                    // I'm in the room
-                    if (roomId == mRoomId) {
-                        // I'm in the room, so unread messages count is 0. it means, I read all messages
+                    if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
+                        // I'm in the room
+                        if (roomId == mRoomId) {
+                            // I'm in the room, so unread messages count is 0. it means, I read all messages
 
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        if (room != null) {
-                            /**
-                             * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                             */
-                            if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
-                                firstUnreadMessage = realm.copyFromRealm(realmRoomMessage);
-                            }
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-
-                                    RealmRoom.setCountWithCallBack(realm, mRoomId,0);
-                                }
-                            });
-                        }
-
-
-                        /**
-                         * when user receive message, I send update status as SENT to the message sender
-                         * but imagine user is not in the room (or he is in another room) and received
-                         * some messages when came back to the room with new messages, I make new update
-                         * status request as SEEN to the message sender
-                         */
-
-                        //Start ClientCondition OfflineSeen
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                                if (realmClientCondition != null) {
-                                    realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, messageId));
-                                }
-                            }
-                        });
-                        /**
-                         * I'm in the room, so unread messages count is 0. it means, I read all messages
-                         */
-
-
-                        if (!isNotJoin) {
-                            // make update status to message sender that i've read his message
-
-                            StructBackGroundSeen _BackGroundSeen = null;
-
-                            ProtoGlobal.RoomMessageStatus roomMessageStatus;
-                            if (G.isAppInFg && isEnd() && !isPaused) {
-
-
-                                if (messageCopy.isValid() && !messageCopy.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                                    messageCopy.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                            if (room != null) {
+                                /**
+                                 * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                                 */
+                                if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
+                                    firstUnreadMessage = realm.copyFromRealm(realmRoomMessage);
                                 }
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
 
-                                        RealmRoom.setCount(realm, mRoomId, 0);
-                                        realm.copyToRealmOrUpdate(messageCopy);
+                                        RealmRoom.setCountWithCallBack(realm, mRoomId,0);
                                     }
                                 });
-
-                                roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
-                            } else {
-
-                                roomMessageStatus = ProtoGlobal.RoomMessageStatus.DELIVERED;
-
-                                _BackGroundSeen = new StructBackGroundSeen();
-                                _BackGroundSeen.messageID = roomMessage.getMessageId();
-                                _BackGroundSeen.roomType = roomType;
                             }
 
-                            if (chatType == CHAT) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
 
-                                if (_BackGroundSeen != null) {
-                                    backGroundSeenList.add(_BackGroundSeen);
+                            /**
+                             * when user receive message, I send update status as SENT to the message sender
+                             * but imagine user is not in the room (or he is in another room) and received
+                             * some messages when came back to the room with new messages, I make new update
+                             * status request as SEEN to the message sender
+                             */
+
+                            //Start ClientCondition OfflineSeen
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                                    if (realmClientCondition != null) {
+                                        realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, messageId));
+                                    }
                                 }
-                            } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+                            });
+                            /**
+                             * I'm in the room, so unread messages count is 0. it means, I read all messages
+                             */
 
-                                if (_BackGroundSeen != null) {
-                                    backGroundSeenList.add(_BackGroundSeen);
+
+                            if (!isNotJoin) {
+                                // make update status to message sender that i've read his message
+
+                                StructBackGroundSeen _BackGroundSeen = null;
+
+                                ProtoGlobal.RoomMessageStatus roomMessageStatus;
+                                if (G.isAppInFg && isEnd() && !isPaused) {
+
+
+                                    if (messageCopy.isValid() && !messageCopy.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                        messageCopy.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                    }
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+
+                                            RealmRoom.setCount(realm, mRoomId, 0);
+                                            realm.copyToRealmOrUpdate(messageCopy);
+                                        }
+                                    });
+
+                                    roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
+                                } else {
+
+                                    roomMessageStatus = ProtoGlobal.RoomMessageStatus.DELIVERED;
+
+                                    _BackGroundSeen = new StructBackGroundSeen();
+                                    _BackGroundSeen.messageID = roomMessage.getMessageId();
+                                    _BackGroundSeen.roomType = roomType;
+                                }
+
+                                if (chatType == CHAT) {
+                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+
+                                    if (_BackGroundSeen != null) {
+                                        backGroundSeenList.add(_BackGroundSeen);
+                                    }
+                                } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
+                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+
+                                    if (_BackGroundSeen != null) {
+                                        backGroundSeenList.add(_BackGroundSeen);
+                                    }
+                                }
+                            }
+
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (addToView) {
+                                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), messageCopy))), false);
+                                        if (isShowLayoutUnreadMessage) {
+                                            removeLayoutUnreadMessage();
+                                        }
+                                    }
+
+                                    setBtnDownVisible(messageCopy);
+
+                                }
+                            });
+
+                            /**
+                             * when client load item from unread and don't come down let's not add the message
+                             * to the list and after insuring that not any more message in DOWN can add message
+                             */
+
+                        } else {
+                            if (!isNotJoin) {
+                                // user has received the message, so I make a new delivered update status request
+                                if (roomType == CHAT) {
+                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                                } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                                 }
                             }
                         }
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (addToView) {
-                                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), messageCopy))), false);
-                                    if (isShowLayoutUnreadMessage) {
-                                        removeLayoutUnreadMessage();
-                                    }
-                                }
-
-                                setBtnDownVisible(messageCopy);
-
-                            }
-                        });
-
-                        /**
-                         * when client load item from unread and don't come down let's not add the message
-                         * to the list and after insuring that not any more message in DOWN can add message
-                         */
-
                     } else {
-                        if (!isNotJoin) {
-                            // user has received the message, so I make a new delivered update status request
-                            if (roomType == CHAT) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                            } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                            }
-                        }
-                    }
-                } else {
 
-                    if (roomId == mRoomId) {
-                        // I'm sender . but another account sent this message and i received it.
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (addToView) {
-                                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), messageCopy))), false);
-                                    if (isShowLayoutUnreadMessage) {
-                                        removeLayoutUnreadMessage();
+                        if (roomId == mRoomId) {
+                            // I'm sender . but another account sent this message and i received it.
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (addToView) {
+                                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), messageCopy))), false);
+                                        if (isShowLayoutUnreadMessage) {
+                                            removeLayoutUnreadMessage();
+                                        }
                                     }
+
+                                    setBtnDownVisible(messageCopy);
                                 }
+                            });
 
-                                setBtnDownVisible(messageCopy);
-                            }
-                        });
-
+                        }
                     }
                 }
             }
-        }
 
-        realm.close();
+        }
     }
 
     private void playReceiveSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
@@ -4349,12 +4349,12 @@ public class FragmentChat extends BaseFragment
             JSONObject jObject = new JSONObject(message.additionalData.additionalData);
             String groupId = jObject.getString("groupId");
             String token = jObject.getString("token");
-            Realm realm = Realm.getDefaultInstance();
-            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-            if (realmStickers == null || !realmStickers.isFavorite()) {
-                openFragmentAddStickerToFavorite(groupId, token);
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
+                if (realmStickers == null || !realmStickers.isFavorite()) {
+                    openFragmentAddStickerToFavorite(groupId, token);
+                }
             }
-            realm.close();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -5441,14 +5441,14 @@ public class FragmentChat extends BaseFragment
      * @param fakeMessageId messageId that create when created this message
      */
     private void makeFailed(final long fakeMessageId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
-            }
-        });
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
+                }
+            });
+        }
     }
 
     private void showErrorDialog(final int time) {
@@ -7929,129 +7929,130 @@ public class FragmentChat extends BaseFragment
         final StructMessageInfo finalMessageInfo = messageInfo;
         final long finalMessageId = messageId;
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                if (room != null) {
-                    room.setDeleted(false);
-                }
-
-                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, finalMessageId);
-
-                roomMessage.setMessageType(finalMessageType);
-                roomMessage.setMessage(getWrittenMessage());
-
-                RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
-                RealmRoomMessage.isEmojiInText(roomMessage, getWrittenMessage());
-
-                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                roomMessage.setRoomId(mRoomId);
-                roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
-                roomMessage.setUserId(senderID);
-                roomMessage.setAuthorHash(G.authorHash);
-                roomMessage.setShowMessage(true);
-                roomMessage.setCreateTime(updateTime);
-                if (isReply()) {
-                    if (finalMessageInfo != null && finalMessageInfo.replayTo != null) {
-                        roomMessage.setReplyTo(finalMessageInfo.replayTo);
-                    }
-                }
-
-                /**
-                 * make channel extra if room is channel
-                 */
-                if (chatType == CHANNEL) {
-                    StructChannelExtra structChannelExtra = StructChannelExtra.makeDefaultStructure(finalMessageId, mRoomId);
-                    finalMessageInfo.channelExtra = structChannelExtra;
-                    RealmChannelExtra.convert(realm, structChannelExtra);
-                    //roomMessage.setChannelExtra(RealmChannelExtra.convert(realm, structChannelExtra));
-                }
-
-                if (finalMessageType == CONTACT) {
-                    roomMessage.setRoomMessageContact(RealmRoomMessageContact.put(realm, finalMessageInfo));
-                }
-
-                if (finalMessageType != CONTACT) {
-                    finalMessageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
-                }
-
-                String makeThumbnailFilePath = "";
-                if (finalMessageType == VIDEO || finalMessageType == VIDEO_TEXT) {
-                    //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
-                    boolean compress = false;
-                    if (compressedPath.get(finalFilePath) != null) {
-                        compress = compressedPath.get(finalFilePath);
-                    }
-                    if (compress) {
-                        makeThumbnailFilePath = finalFilePath;
-                    } else {
-                        makeThumbnailFilePath = mainVideoPath;
-                    }
-                }
-
-                if (finalMessageType == VIDEO || finalMessageType == VIDEO_TEXT) {
-                    Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(makeThumbnailFilePath, MediaStore.Video.Thumbnails.MINI_KIND);
-                    if (bitmap != null) {
-                        String path = AndroidUtils.saveBitmap(bitmap);
-                        roomMessage.getAttachment().setLocalThumbnailPath(path);
-                        roomMessage.getAttachment().setWidth(bitmap.getWidth());
-                        roomMessage.getAttachment().setHeight(bitmap.getHeight());
-
-                        finalMessageInfo.attachment.setLocalFilePath(roomMessage.getMessageId(), finalFilePath);
-                        finalMessageInfo.attachment.width = bitmap.getWidth();
-                        finalMessageInfo.attachment.height = bitmap.getHeight();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    if (room != null) {
+                        room.setDeleted(false);
                     }
 
-                    //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
-                    boolean compress = false;
-                    if (compressedPath.get(finalFilePath) != null) {
-                        compress = compressedPath.get(finalFilePath);
-                    }
-                    if (compress) {
-                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
-                            @Override
-                            public void OnProgress(int progress, FileUploadStructure struct) {
-                                {
-                                    insertItemAndUpdateAfterStartUpload(progress, struct);
-                                }
-                            }
+                    RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, finalMessageId);
 
-                            @Override
-                            public void OnError() {
+                    roomMessage.setMessageType(finalMessageType);
+                    roomMessage.setMessage(getWrittenMessage());
 
-                            }
-                        });
-                    } else {
-                        compressingFiles.put(finalMessageId, null);
-                        StructUploadVideo uploadVideo = new StructUploadVideo();
-                        uploadVideo.filePath = finalFilePath;
-                        uploadVideo.roomId = mRoomId;
-                        uploadVideo.messageId = finalMessageId;
-                        uploadVideo.messageType = finalMessageType;
-                        uploadVideo.message = getWrittenMessage();
-                        if (isReply()) {
-                            uploadVideo.replyMessageId = parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID);
-                        } else {
-                            uploadVideo.replyMessageId = 0;
+                    RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+                    RealmRoomMessage.isEmojiInText(roomMessage, getWrittenMessage());
+
+                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                    roomMessage.setRoomId(mRoomId);
+                    roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
+                    roomMessage.setUserId(senderID);
+                    roomMessage.setAuthorHash(G.authorHash);
+                    roomMessage.setShowMessage(true);
+                    roomMessage.setCreateTime(updateTime);
+                    if (isReply()) {
+                        if (finalMessageInfo != null && finalMessageInfo.replayTo != null) {
+                            roomMessage.setReplyTo(finalMessageInfo.replayTo);
                         }
-                        structUploadVideos.add(uploadVideo);
-
-                        finalMessageInfo.attachment.compressing = G.fragmentActivity.getResources().getString(R.string.compressing);
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
-                            }
-                        });
                     }
-                }
 
-                RealmRoom.setLastMessageWithRoomMessage(realm, roomMessage.getRoomId(), roomMessage);
-            }
-        });
-        realm.close();
+                    /**
+                     * make channel extra if room is channel
+                     */
+                    if (chatType == CHANNEL) {
+                        StructChannelExtra structChannelExtra = StructChannelExtra.makeDefaultStructure(finalMessageId, mRoomId);
+                        finalMessageInfo.channelExtra = structChannelExtra;
+                        RealmChannelExtra.convert(realm, structChannelExtra);
+                        //roomMessage.setChannelExtra(RealmChannelExtra.convert(realm, structChannelExtra));
+                    }
+
+                    if (finalMessageType == CONTACT) {
+                        roomMessage.setRoomMessageContact(RealmRoomMessageContact.put(realm, finalMessageInfo));
+                    }
+
+                    if (finalMessageType != CONTACT) {
+                        finalMessageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
+                    }
+
+                    String makeThumbnailFilePath = "";
+                    if (finalMessageType == VIDEO || finalMessageType == VIDEO_TEXT) {
+                        //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
+                        boolean compress = false;
+                        if (compressedPath.get(finalFilePath) != null) {
+                            compress = compressedPath.get(finalFilePath);
+                        }
+                        if (compress) {
+                            makeThumbnailFilePath = finalFilePath;
+                        } else {
+                            makeThumbnailFilePath = mainVideoPath;
+                        }
+                    }
+
+                    if (finalMessageType == VIDEO || finalMessageType == VIDEO_TEXT) {
+                        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(makeThumbnailFilePath, MediaStore.Video.Thumbnails.MINI_KIND);
+                        if (bitmap != null) {
+                            String path = AndroidUtils.saveBitmap(bitmap);
+                            roomMessage.getAttachment().setLocalThumbnailPath(path);
+                            roomMessage.getAttachment().setWidth(bitmap.getWidth());
+                            roomMessage.getAttachment().setHeight(bitmap.getHeight());
+
+                            finalMessageInfo.attachment.setLocalFilePath(roomMessage.getMessageId(), finalFilePath);
+                            finalMessageInfo.attachment.width = bitmap.getWidth();
+                            finalMessageInfo.attachment.height = bitmap.getHeight();
+                        }
+
+                        //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
+                        boolean compress = false;
+                        if (compressedPath.get(finalFilePath) != null) {
+                            compress = compressedPath.get(finalFilePath);
+                        }
+                        if (compress) {
+                            HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
+                                @Override
+                                public void OnProgress(int progress, FileUploadStructure struct) {
+                                    {
+                                        insertItemAndUpdateAfterStartUpload(progress, struct);
+                                    }
+                                }
+
+                                @Override
+                                public void OnError() {
+
+                                }
+                            });
+                        } else {
+                            compressingFiles.put(finalMessageId, null);
+                            StructUploadVideo uploadVideo = new StructUploadVideo();
+                            uploadVideo.filePath = finalFilePath;
+                            uploadVideo.roomId = mRoomId;
+                            uploadVideo.messageId = finalMessageId;
+                            uploadVideo.messageType = finalMessageType;
+                            uploadVideo.message = getWrittenMessage();
+                            if (isReply()) {
+                                uploadVideo.replyMessageId = parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID);
+                            } else {
+                                uploadVideo.replyMessageId = 0;
+                            }
+                            structUploadVideos.add(uploadVideo);
+
+                            finalMessageInfo.attachment.compressing = G.fragmentActivity.getResources().getString(R.string.compressing);
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
+                                }
+                            });
+                        }
+                    }
+
+                    RealmRoom.setLastMessageWithRoomMessage(realm, roomMessage.getRoomId(), roomMessage);
+                }
+            });
+        }
+
 
         if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
             if (finalMessageType != CONTACT) {
